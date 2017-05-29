@@ -24,7 +24,8 @@ for j=0:0.1:1
 end
 %figure; imagesc(u);
 
-plot(error);
+plot(error), title('Network loss');
+xlabel('Iteration'), ylabel('Loss');
 
 round(u*10)
 
