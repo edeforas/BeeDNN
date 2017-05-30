@@ -2,12 +2,12 @@
 
 clear net;
 
-net.layer{1}=create_layer(1,100,'sigmoid');
-net.layer{2}=create_layer(100,100,'sigmoid');
-net.layer{3}=create_layer(100,1,'sigmoid');
+net.layer{1}=create_layer(1,10,'sigmoid');
+net.layer{2}=create_layer(10,10,'sigmoid');
+net.layer{3}=create_layer(10,1,'tanh');
 net.learning_rate=0.1;
 net.momentum=0.1;
-net.nbiter=500;
+net.nbiter=5000;
 net.stoperror=0.05;
 
 samples=0:0.5:10;
