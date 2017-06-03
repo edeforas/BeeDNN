@@ -9,7 +9,7 @@ net.momentum=0.01;
 net.nbiter=5000;
 net.stoperror=0.05;
 
-samples=[0 0 1 1;  \
+samples=[0 0 1 1;  ...
          0 1 0 1];
          
 truth=[0 1 1 0];

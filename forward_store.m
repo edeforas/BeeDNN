@@ -9,7 +9,7 @@ function [out,netout]=forward_store(net,data)
     layer=net.layer{i};
     
     netout.layer{i}.in=[out;1];
-    outweight=layer.weight*out;
+    outweight=layer.weight*[out;1];
     out=activation(layer.func,outweight);
 
     netout.layer{i}.out=out;

@@ -6,9 +6,11 @@ net.layer{1}=create_layer(2,1,'sigmoid');
 net.learning_rate=4;
 net.momentum=0.9;
 net.nbiter=1000;
-net.stoperror=0.01;
+net.stoperror=0.005;
 
-samples=[0 0 1 1; 0 1 0 1];  % todo transpose samples
+samples=[0 0 1 1; ...
+         0 1 0 1];
+         
 truth=[0.5 0 1 0.5];
 
 [net,error]=learn(net,samples,truth);

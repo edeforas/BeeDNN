@@ -9,7 +9,7 @@ function [net,error]=one_step_learn(netin,in,out_truth)
   for i=nlayer:-1:1
 	
     layer=net.layer{i};
-    weight_layer=layer.weight;
+   % weight_layer=layer.weight;
     func=layer.func;
     outweight=layer.outweight;
 
