@@ -1,5 +1,7 @@
 %simple NN backpropagation on 1D sin regression
 
+disp 'please wait, 10000 iterations...';
+
 clear net;
 
 net.layer{1}=create_layer(1,10,'sigmoid');
@@ -7,7 +9,7 @@ net.layer{2}=create_layer(10,10,'sigmoid');
 net.layer{3}=create_layer(10,1,'tanh');
 net.learning_rate=0.1;
 net.momentum=0.1;
-net.nbiter=5000;
+net.nbiter=10000;
 net.stoperror=0.05;
 
 samples=0:0.5:10;
