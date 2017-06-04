@@ -8,8 +8,8 @@ function [out,netout]=forward_store(net,data)
   for i=1:nlayer
     layer=net.layer{i};
     
-    netout.layer{i}.in=out;
-    outweight=layer.weight*out;
+    netout.layer{i}.in=[out;1];
+    outweight=layer.weight*[out;1];
     out=activation(layer.func,outweight);
 
     netout.layer{i}.out=out;

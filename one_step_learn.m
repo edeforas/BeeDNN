@@ -9,7 +9,7 @@ function [net,error]=one_step_learn(netin,in,out_truth)
   for i=nlayer:-1:1
 	
     layer=net.layer{i};
-    weight_layer=layer.weight;
+   % weight_layer=layer.weight;
     func=layer.func;
     outweight=layer.outweight;
 
@@ -19,7 +19,8 @@ function [net,error]=one_step_learn(netin,in,out_truth)
     else
        % hidden layer
        a=  (net.layer{i+1}.weight') *  delta; % use of previous delta
-       b=   activation_derivation(layer.func,outweight); 
+       a=a(1:rows(a)-1,:); % do not use last weight (use only for bias)
+       b=activation_derivation(layer.func,outweight); 
        delta=a.*b;
     end
     
