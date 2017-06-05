@@ -1,6 +1,5 @@
-function [out,netout]=forward_store(net,data)
+function [out,net]=forward_feed(net,data)
   
-  netout=net;
   nlayer=size(net.layer)(2);
   
   out=data;
@@ -8,12 +7,12 @@ function [out,netout]=forward_store(net,data)
   for i=1:nlayer
     layer=net.layer{i};
     
-    netout.layer{i}.in=[out;1];
+    net.layer{i}.in=[out;1];
     outweight=layer.weight*[out;1];
     out=activation(layer.func,outweight);
 
-    netout.layer{i}.out=out;
-    netout.layer{i}.outweight=outweight;
+    net.layer{i}.out=out;
+    net.layer{i}.outweight=outweight;
     
   end
 end

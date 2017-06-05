@@ -1,7 +1,7 @@
-function [net,error]=one_step_learn(netin,in,out_truth)
+function [net,error]=backward(net,error) %todo use truth and last out stored in net?
   
-  [out,net]=forward_store(netin,in);
-  error=out-out_truth;
+  %[out,net]=forward_store(netin,in);
+  %error=out-out_truth;
   
   learning_rate=net.learning_rate;
   nlayer=size(net.layer)(2);
