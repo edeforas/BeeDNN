@@ -8,6 +8,7 @@ net.learning_rate=2;
 net.momentum=0.9;
 net.nbiter=500;
 net.stoperror=0.05;
+net.batch_size=4;
 
 samples=[0 0 1 1;  ...
          0 1 0 1];
