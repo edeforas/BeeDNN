@@ -17,7 +17,7 @@ function [net,error]=learn(net,samples,truth,nbiter)
       
       net=backpropagation(net,err);
 
-		max_error=max(max_error,abs(err));
+		  max_error=max(max_error,abs(err));
     end
     error=[error, max_error];
    

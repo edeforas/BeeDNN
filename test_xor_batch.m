@@ -1,14 +1,15 @@
 %simple NN backpropagation on 2D xor function return 1 if a!=b 0 otherwise
 
 clear net;
+rand("seed",0);
 
 net.layer{1}=create_layer(2,3,'sigmoid');
 net.layer{2}=create_layer(3,1,'sigmoid');
 net.learning_rate=2;
-net.momentum=0.9;
-net.nbiter=500;
-net.stoperror=0.05;
-net.batch_size=4;
+net.momentum=0;%0.9;
+net.nbiter=1000;
+net.stoperror=0;
+net.batch_size=1;
 
 samples=[0 0 1 1;  ...
          0 1 0 1];
