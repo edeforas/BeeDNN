@@ -1,10 +1,10 @@
-function [net,error]=learn(net,samples,truth,nbiter)
-  nbiter=net.nbiter;
+function [net,error]=learn(net,samples,truth)
+  epochs=net.epochs;
   stoperror=net.stoperror;
   
   nbsamples=columns(samples);
   error=[];
-  for i=1:nbiter
+  for i=1:net.epochs
   
     %randomly permute samples
     idxperm=randperm(nbsamples);

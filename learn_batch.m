@@ -1,5 +1,5 @@
-function [net,error]=learn_batch(net,samples,truth,nbiter)
-  nbiter=net.nbiter;
+function [net,error]=learn_batch(net,samples,truth)
+
   stoperror=net.stoperror;
   nlayer=size(net.layer)(2);
  
@@ -17,7 +17,7 @@ function [net,error]=learn_batch(net,samples,truth,nbiter)
 	end
   
   error=[];
-  for i=1:nbiter
+  for i=1:net.epochs
   
     %randomly permute samples
     idxperm=randperm(nbsamples);

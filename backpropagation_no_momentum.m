@@ -24,7 +24,7 @@ function [net,error]=backpropagation_no_momentum(net,error) %todo use truth and 
     end
     
     dE=delta*(layer.in');
-    net.layer{i}.dE=dE;    
+    net.layer{i}.dE=dE;
     net.layer{i}.weight=net.layer{i}.weight-learning_rate*dE;
  
   end  

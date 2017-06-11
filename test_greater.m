@@ -3,9 +3,9 @@
 clear net;
 
 net.layer{1}=create_layer(2,1,'sigmoid');
-net.learning_rate=2;
+net.learning_rate=4;
 net.momentum=0.5;
-net.nbiter=1000;
+net.epochs=1000;
 net.stoperror=0.05;
 
 samples=[0 0 1 1; ...
