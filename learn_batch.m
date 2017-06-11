@@ -42,11 +42,11 @@ function [net,error]=learn_batch(net,samples,truth,nbiter)
       % iterate over all samples in batch
 	    for u=1:columns(sample_batch)
   		  [out,netbatch]=forward_feed(net,sample_batch(:,u));
-        err=out-truth_batch(:,u);
+        err=(out-truth_batch(:,u));
         netbatch=backpropagation_no_momentum(netbatch,err);
   	    max_batch_error=max(abs(err),max_batch_error);
 
-        %add dE from net
+        %add dE from net to netaccum
 		    for i=1:nlayer
 			    netaccum.layer{i}.dE=netaccum.layer{i}.dE+netbatch.layer{i}.dE;    
 		    end
@@ -55,7 +55,7 @@ function [net,error]=learn_batch(net,samples,truth,nbiter)
     	  
       % compute average, apply momentum, update weight
 	    for i=1:nlayer
-		    netaccum.layer{i}.dE=netaccum.layer{i}.dE/columns(sample_batch);   
+		 %   netaccum.layer{i}.dE=netaccum.layer{i}.dE/columns(nbsamples);   % do we divide by columns(nbsamples) ?
 		    net.layer{i}.dE=netaccum.layer{i}.dE+net.momentum*net.layer{i}.dE;
 		    net.layer{i}.weight=net.layer{i}.weight-net.learning_rate*net.layer{i}.dE;
 	    end
