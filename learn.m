@@ -15,7 +15,7 @@ function [net,error]=learn(net,samples,truth,nbiter)
   		[out,net]=forward_feed(net,samples(:,idxperm(u)));
       err=out-truth(:,idxperm(u));
       
-      net=backward(net,err);
+      net=backpropagation(net,err);
 
 		  max_error=max(max_error,abs(err));
     end

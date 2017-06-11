@@ -8,15 +8,16 @@ net.learning_rate=2;
 net.momentum=0.5;
 net.nbiter=1000;
 net.stoperror=0.05;
+net.batch_size=4;
 
 samples=[0 0 1 1;  ...
          0 1 0 1];
          
 truth=[0 1 1 0];
 
-[net,error]=learn(net,samples,truth);
+[net,error]=learn_batch(net,samples,truth);
 
-plot(error), title('Xor Network loss');
+plot(error), title('Xor batch Network loss');
 xlabel('Iteration'), ylabel('Loss');
 
 %test with binary values

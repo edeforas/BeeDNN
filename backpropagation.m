@@ -1,4 +1,4 @@
-function [net,error]=backward(net,error) %todo use truth and last out stored in net?
+function [net,error]=backpropagation(net,error) %todo use truth and last out stored in net?
   
   %[out,net]=forward_store(netin,in);
   %error=out-out_truth;
@@ -27,10 +27,10 @@ function [net,error]=backward(net,error) %todo use truth and last out stored in 
     dE=delta*(layer.in');
     
     % momentum as in: http://distill.pub/2017/momentum/
-    if isfield(layer,"last_dE")
-      dE=dE+net.momentum*layer.last_dE;
+    if isfield(layer,"dE")
+      dE=dE+net.momentum*layer.dE;
     end
-    net.layer{i}.last_dE=dE;
+    net.layer{i}.dE=dE;
     
     net.layer{i}.weight=net.layer{i}.weight-learning_rate*dE;
  
