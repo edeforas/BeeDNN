@@ -4,8 +4,8 @@ clear net;
 
 net.layer{1}=create_layer(2,3,'sigmoid');
 net.layer{2}=create_layer(3,1,'sigmoid');
-net.learning_rate=2;
-net.momentum=0.5;
+net.learning_rate=4;
+net.momentum=0.1;
 net.epochs=1000;
 net.stoperror=0.05;
 
