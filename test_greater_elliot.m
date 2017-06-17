@@ -2,30 +2,19 @@
 
 clear net;
 
-net.layer{1}=create_layer(2,1,'sigmoid');
+net.layer{1}=create_layer(2,1,'elliot');
 net.learning_rate=4;
 net.momentum=0.5;
-net.epochs=1000;
+net.epochs=2000;
 net.stoperror=0.05;
+net.batch_size=4; 
 
 samples=[0 0 1 1; ...
          0 1 0 1];
          
 truth=[0.5 0 1 0.5];
 
-[net,error]=learn(net,samples,truth);
-
-%show result
-%u=[];
-%for j=0:0.1:1
-%  v=[];
-%  for i=0:0.1:1
-%      v=[v,forward(net,[i; j])];
-%  end
-%  u=[v;u];
-%end
-%figure; imagesc(u);
-%round(u*10)
+[net,error]=learn_batch(net,samples,truth);
 
 plot(error), title('Network loss');
 xlabel('Iteration'), ylabel('Loss');
