@@ -26,6 +26,27 @@ function out=activation_derivation(func,data)
     out=0.5 ./((1 + abs(out)).*(1 + abs(out)));
   end
   
+  if(strcmp(func,'atan'))
+    out=1./(1+out.*out);
+  end
+  
+  if(strcmp(func,'softsign'))
+    out=1+abs(out);
+    out=1./(out.*out);
+  end
+
+  if(strcmp(func,'gauss'))
+    out=-2.*out.*exp(-out.*out);
+  end
+
+  if(strcmp(func,'elu'))
+    alpha=1;
+    outn=out(out<0);
+    out(out>0)=1;
+    out(out<0)=alpha*(exp(outn)-1)+alpha;
+  end
+  
+  
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

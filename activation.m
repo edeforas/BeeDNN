@@ -24,6 +24,24 @@ function out=activation(func,data)
     out=0.5 .* (out ./ (1 + abs(out))) + 0.5;
   end
   
+  if(strcmp(func,'atan'))
+    out=atan(out);
+  end
+
+  if(strcmp(func,'softsign'))
+    out=out./(1+abs(out));
+  end
+
+  if(strcmp(func,'gauss'))
+    out=exp(-out.*out);
+  end
+
+  if(strcmp(func,'elu'))
+    alpha=1;
+    outn=out(out<0);
+    out(out<0)=alpha.*(exp(outn)-1);
+  end
+  
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
