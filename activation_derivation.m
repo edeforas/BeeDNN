@@ -46,7 +46,9 @@ function out=activation_derivation(func,data)
     out(out<0)=alpha*(exp(outn)-1)+alpha;
   end
   
-  
+  if(strcmp(func,'linear'))
+    out=1;
+  end
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

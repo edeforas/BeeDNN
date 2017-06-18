@@ -41,6 +41,10 @@ function out=activation(func,data)
     outn=out(out<0);
     out(out<0)=alpha.*(exp(outn)-1);
   end
+
+  if(strcmp(func,'linear'))
+    % nothing to do
+  end
   
 end
 
