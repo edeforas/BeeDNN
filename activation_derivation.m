@@ -47,7 +47,7 @@ function out=activation_derivation(func,data)
   end
   
   if(strcmp(func,'linear'))
-    out=1;
+    out=out*0+1;
   end
 end
 

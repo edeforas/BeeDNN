@@ -14,7 +14,7 @@ samples=[0 0 1 1; ...
          
 truth=[0.5 0 1 0.5];
 
-[net,error]=learn_batch(net,samples,truth);
+[net,error]=learn(net,samples,truth);
 
 plot(error), title('Network loss');
 xlabel('Iteration'), ylabel('Loss');

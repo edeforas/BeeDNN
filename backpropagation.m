@@ -9,7 +9,6 @@ function [net,error]=backpropagation(net,error) %todo use truth and last out sto
   for i=nlayer:-1:1
 	
     layer=net.layer{i};
-   % weight_layer=layer.weight;
     func=layer.func;
     outweight=layer.outweight;
 
@@ -25,15 +24,8 @@ function [net,error]=backpropagation(net,error) %todo use truth and last out sto
     end
     
     dE=delta*(layer.in');
-    
-    % momentum as in: http://distill.pub/2017/momentum/
-    if isfield(layer,"dE")
-      dE=dE+net.momentum*layer.dE;
-    end
     net.layer{i}.dE=dE;
-    
     net.layer{i}.weight=net.layer{i}.weight-learning_rate*dE;
  
-  end
-  
+  end  
 end

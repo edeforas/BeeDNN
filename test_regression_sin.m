@@ -15,7 +15,7 @@ net.batch_size=10;
 samples=0:0.1:6.3;
 truth=sin(samples);
 
-[net,error]=learn_batch(net,samples,truth);
+[net,error]=learn(net,samples,truth);
 
 figure;
 plot(error), title('Network loss');
