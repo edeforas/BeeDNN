@@ -1,11 +1,14 @@
-function [net,error]=learn_batch(net,samples,truth)
+function [net,error]=learn(net,samples,truth)
+
+  net=init_weight(net);
 
   stoperror=net.stoperror;
   nlayer=size(net.layer)(2);
  
-  batch_size=1;
   if(isfield(net,"batch_size"))
     batch_size=net.batch_size;
+  else
+      batch_size=1;
   end
   
   nbsamples=columns(samples);
@@ -43,7 +46,7 @@ function [net,error]=learn_batch(net,samples,truth)
 	    for u=1:columns(sample_batch)
   		  [out,netbatch]=forward_feed(net,sample_batch(:,u));
         err=(out-truth_batch(:,u));
-        netbatch=backpropagation_no_momentum(netbatch,err);
+        netbatch=backpropagation(netbatch,err);
   	    max_batch_error=max(abs(err),max_batch_error);
 
         %add dE from net to netaccum

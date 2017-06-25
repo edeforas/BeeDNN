@@ -29,6 +29,7 @@ for i=j
 end
   
 figure; hold on;
-plot(j,v,'r;DNN_result;');
+plot(j,v,'r;DNN result;');
 s=sin(j);
 plot(j,s,'b;Truth;');
+hold off;
