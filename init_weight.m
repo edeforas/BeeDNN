@@ -8,7 +8,14 @@ function net=init_weight(net)
     layer=net.layer{i};
 	  w=layer.weight;
     fan_in=columns(w);
-    net.layer{i}.weight=((rand(rows(w),fan_in)-0.5)*2)/sqrt(fan_in);
+    fan_out=rows(w);
+    r=sqrt(6/(fan_in+fan_out));
+    
+    if strcmp(layer.func,'sigmoid')
+      r=r*4;
+    end %todo add more function special case
+    
+    net.layer{i}.weight=((rand(fan_out,fan_in)-0.5)*2)*r;    
   end
 
 end
