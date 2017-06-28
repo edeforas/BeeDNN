@@ -1,51 +1,61 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function out=activation(func,data)
-  out=data;
-  
+function y=activation(func,x)
+
   if(strcmp(func,'relu'))
-    out(out<0)=0;
+  y=x;
+  y(y<0)=0;
   end
   
   if(strcmp(func,'sigmoid'))
-    out=1./(1.+exp(-out));
+  y=1./(1.+exp(-x));
   end
 
   if(strcmp(func,'softplus'))
-    out=log(1+exp(out));
+  y=log(1+exp(x));
   end
 
   if(strcmp(func,'tanh'))
-    out=tanh(out);
+  y=tanh(x);
   end
   
   if(strcmp(func,'elliot'))
-    out=0.5 .* (out ./ (1 + abs(out))) + 0.5;
+  y=0.5 .* (x ./ (1 + abs(x))) + 0.5;
   end
   
   if(strcmp(func,'atan'))
-    out=atan(out);
+  y=atan(x);
   end
 
   if(strcmp(func,'softsign'))
-    out=out./(1+abs(out));
+  y=x./(1+abs(x));
   end
 
   if(strcmp(func,'gauss'))
-    out=exp(-out.*out);
+  y=exp(-x.*x);
   end
 
   if(strcmp(func,'elu'))
-    alpha=1;
-    outn=out(out<0);
-    out(out<0)=alpha.*(exp(outn)-1);
+%    alpha=1;
+%  out=data; TODO
+%  outn=out(out<0);
+%    out(out<0)=alpha.*(exp(outn)-1);
+  end
+
+  if(strcmp(func,'selu'))
+  lambda = 1.05070;
+  alpha  = 1.67326;
+  
+  s=x;
+  sn=s(s<0);
+  s(x<0)=alpha*(exp(sn)-1);
+  y=lambda*s;
   end
 
   if(strcmp(func,'linear'))
-    % nothing to do
+  y=x;
   end
-  
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
