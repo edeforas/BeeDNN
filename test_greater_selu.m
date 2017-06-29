@@ -3,7 +3,7 @@
 clear net;
 
 net.layer{1}=create_layer(2,2,'selu');
-net.layer{2}=create_layer(2,1,'sigmoid');
+net.layer{2}=create_layer(2,1,'selu');
 net.learning_rate=0.05;
 net.momentum=0.5;
 net.epochs=500;
