@@ -11,7 +11,7 @@ function [net,error]=learn(net,samples,truth)
       batch_size=1;
   end
   
-  nbsamples=columns(samples);
+  nbsamples=rows(samples);
   nb_batch=ceil(nbsamples/batch_size);
 
   % init dE
@@ -31,8 +31,8 @@ function [net,error]=learn(net,samples,truth)
     for i=1:nb_batch;
       end_batch=min(start_batch+batch_size-1,nbsamples);
       
-      sample_batch=samples(:,idxperm(start_batch:end_batch));
-      truth_batch=truth(:,idxperm(start_batch:end_batch)); 
+      sample_batch=samples(idxperm(start_batch:end_batch),:);
+      truth_batch=truth(idxperm(start_batch:end_batch),:); 
     
       max_batch_error=0;
       
@@ -43,9 +43,9 @@ function [net,error]=learn(net,samples,truth)
 	    end
 	  
       % iterate over all samples in batch
-	    for u=1:columns(sample_batch)
-  		  [out,netbatch]=forward_feed(net,sample_batch(:,u));
-        err=(out-truth_batch(:,u));
+	    for u=1:rows(sample_batch)
+  		  [out,netbatch]=forward_feed(net,sample_batch(u,:));
+        err=(out-truth_batch(u,:));
         netbatch=backpropagation(netbatch,err);
   	    max_batch_error=max(abs(err),max_batch_error);
 

@@ -17,13 +17,14 @@ function [net,error]=backpropagation(net,error) %todo use truth and last out sto
        delta=error.*activation_derivation(layer.func,outweight);
     else
        % hidden layer
-       a=  (net.layer{i+1}.weight') *  delta; % use of previous delta
-       a=a(1:rows(a)-1,:); % do not use last weight (use only for bias)
+       a=  delta*(net.layer{i+1}.weight') ;%*  delta; % use of previous delta
+%       a=a(1:rows(a)-1,:); % do not use last weight (use only for bias)
+       a=a(:,1:columns(a)-1); % do not use last weight (use only for bias)
        b=activation_derivation(layer.func,outweight); 
        delta=a.*b;
     end
     
-    dE=delta*(layer.in');
+    dE=(layer.in')*delta;
     net.layer{i}.dE=dE;
     net.layer{i}.weight=net.layer{i}.weight-learning_rate*dE;
  

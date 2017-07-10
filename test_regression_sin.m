@@ -12,7 +12,7 @@ net.epochs=1000;
 net.stoperror=0.05;
 net.batch_size=10;
 
-samples=0:0.1:6.3;
+samples=(0:0.1:6.3)';
 truth=sin(samples);
 
 [net,error]=learn(net,samples,truth);

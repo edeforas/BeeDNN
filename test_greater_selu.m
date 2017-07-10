@@ -10,17 +10,15 @@ net.epochs=500;
 net.stoperror=0.05;
 net.batch_size=4;
 
-samples=[0 0 1 1; ...
-         0 1 0 1];
+samples=[0 0;0 1; 1 0 ;1 1];
          
-truth=[0.5 0 1 0.5];
-
+truth=[0.5 ; 0 ; 1 ; 0.5];
 [net,error]=learn(net,samples,truth);
 
 plot(error), title('Network loss');
 xlabel('Iteration'), ylabel('Loss');
 
-forward(net,[0;0])
-forward(net,[1;0])
-forward(net,[0;1])
-forward(net,[1;1])
+forward(net,[0 0])
+forward(net,[1 0])
+forward(net,[0 1])
+forward(net,[1 1])
