@@ -9,8 +9,9 @@ int main()
 {
     Net n;
 
-    DenseLayer l1(2,3,ActivationSigmoid());
-    DenseLayer l2(3,1,ActivationSigmoid());
+    ActivationSigmoid ac;
+    DenseLayer l1(2,3,ac);
+    DenseLayer l2(3,1,ac);
 
     n.add(&l1);
     n.add(&l2);

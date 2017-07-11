@@ -1,7 +1,7 @@
 #include "ActivationSigmoid.h"
-#include <math.h>
+#include <cmath>
 
-ActivationSigmoid::ActivationSigmoid():Activation ()
+ActivationSigmoid::ActivationSigmoid(): Activation()
 { }
 
 ActivationSigmoid::~ActivationSigmoid()

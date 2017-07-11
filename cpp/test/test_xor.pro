@@ -8,7 +8,9 @@ SOURCES += test_xor.cpp \
     ../Net.cpp \
     ../DenseLayer.cpp \
     ../Layer.cpp \
-    ../Activation.cpp
+    ../Activation.cpp \
+    ../ActivationRelu.cpp \
+    ../ActivationTanh.cpp
 
 INCLUDEPATH+=..
 
@@ -18,4 +20,6 @@ HEADERS += \
     ../DenseLayer.h \
     ../Layer.h \
     ../Matrix.h \
-    ../Net.h
+    ../Net.h \
+    ../ActivationRelu.h \
+    ../ActivationTanh.h

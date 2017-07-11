@@ -19,8 +19,8 @@ public:
     virtual Matrix& get_weight();
 
 private:
-	Matrix _weight;
-//    const Activation& _activ; todo restore
+    Matrix _weight;
+    const Activation& _activ;
     int _iInSize, _iOutSize;
 };
 
