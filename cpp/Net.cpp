@@ -1,9 +1,10 @@
 
 #include "Net.h"
 #include "Matrix.h"
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 Net::Net()
-{}
+{ }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 Net::~Net()
 {
@@ -39,42 +40,57 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
 {
     TrainResult tr;
 
-    //for now, no minibatch, no momentum, no early abort, no samples shuffle, just plain batch sgd learning
+    // todo add momentum
+    // todo add early abort
+    // todo add samples shuffle
+
     if(bInit)
         for(unsigned int i=0;i<_layers.size();i++)
         {
             _layers[i]->init_weight();
         }
 
+    int iBatchSize=topt.batchSize;
+    int iNbSamples=mSamples.rows();
+    if(iBatchSize>iNbSamples)
+        iBatchSize=iNbSamples;
+
     for(int iEpoch=0;iEpoch<topt.epochs;iEpoch++)
     {
         for(unsigned int i=0;i<_layers.size();i++)
             _layers[i]->init_DE();
 
-        //max_error=0
+        int iBatchStart=0;
 
-        for(int iSample=0;iSample<mSamples.rows();iSample++)
+        while(iBatchStart<iNbSamples)
         {
-            //compute one sample error
-            Matrix mOut;
-            const Matrix& mSample=mSamples.row(iSample);
-            forward_feed(mSample,mOut);
-            Matrix mError=mOut-mTruth.row(iSample);
+            int iBatchEnd=iBatchStart+iBatchSize;
 
-            //now backpropagate error, sum dE
-            backpropagation(mError,topt.learningRate);//todo
+            for(int iSample=iBatchStart;iSample<iBatchEnd;iSample++)
+            {
+                //compute one sample error
+                Matrix mOut;
+                const Matrix& mSample=mSamples.row(iSample);
+                forward_feed(mSample,mOut);
+                Matrix mError=mOut-mTruth.row(iSample);
 
-            //update error ??
-        }
+                //now backpropagate error, sum dE
+                backpropagation(mError,topt.learningRate);//todo, use learning rate in this fcn?
 
-        //update weight
-        for(unsigned int iL=0;iL<_layers.size();iL++)
-        {
-            Layer& l=*_layers[iL];
-            l.get_weight()-=l.dE.scalarMult(topt.learningRate);
-            //            net.layer{i}.dE=netaccum.layer{i}.dE+net.momentum*net.layer{i}.dE;
-            //            net.layer{i}.weight=net.layer{i}.weight-net.learning_rate*net.layer{i}.dE;
+                //update error ??
+            }
 
+            //update weight
+            for(unsigned int iL=0;iL<_layers.size();iL++)
+            {
+                Layer& l=*_layers[iL];
+                l.get_weight()-=l.dE.scalarMult(topt.learningRate);
+                //            net.layer{i}.dE=netaccum.layer{i}.dE+net.momentum*net.layer{i}.dE;
+                //            net.layer{i}.weight=net.layer{i}.weight-net.learning_rate*net.layer{i}.dE;
+
+            }
+
+            iBatchStart=iBatchEnd;
         }
     }
 

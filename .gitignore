@@ -14,6 +14,12 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 
+# compiled files
+*build-*
+
+#qtcreator file
+*.user
+
 # Windows shortcuts
 *.lnk
 

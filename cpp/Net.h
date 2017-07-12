@@ -10,11 +10,20 @@ using namespace std;
 class TrainOption
 {
 public:
+    TrainOption()
+    {
+        epochs=1000;
+        maxError=0;
+        batchSize=32;
+        learningRate=0.1;
+        momentum=0.05;
+    }
+
     int  epochs;
     double maxError;
-    int batchSize; //32
-    double learningRate; //0.1
-    double momentum; //0.05
+    int batchSize;
+    double learningRate;
+    double momentum;
 };
 
 class TrainResult

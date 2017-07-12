@@ -24,8 +24,6 @@ int main()
 
     TrainOption tOpt;
     tOpt.epochs=5000;
-    //tOpt.maxError= 0.05;
-    tOpt.learningRate=0.1;
 
     TrainResult tr=n.train(mSamples,mTruth,tOpt);
     cout << "Loss=" << tr.loss << " MaxError=" << tr.maxError << " MaxEpoch=" << tr.maxEpoch << endl;

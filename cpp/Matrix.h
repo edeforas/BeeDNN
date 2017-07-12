@@ -17,7 +17,7 @@ public:
         _bDelete=false;
     }
 
-    Matrix(int iRows,int iColumns)
+    Matrix(int iRows,int iColumns=1)
     {
         assert(iColumns>=0);
         assert(iRows>=0);
@@ -80,7 +80,12 @@ public:
         return _iColumns;
     }
     
-    void resize(int iRows,int iColumns)
+    int size() const
+    {
+        return _iSize;
+    }
+
+    void resize(int iRows,int iColumns) // slow function!
     {
         assert(iColumns>=0);
         assert(iRows>=0);
@@ -189,12 +194,12 @@ public:
         return *this;
     }
 
-    Matrix operator*(double b) const
+    Matrix operator*(double b) const // slow function!
     {
         return Matrix(*this).operator*=(b);
     }
 
-    Matrix& operator*=(const Matrix& b)
+    Matrix& operator*=(const Matrix& b) // slow function!
     {
         assert(columns()==b.rows());
 
@@ -240,7 +245,7 @@ public:
         return out;
     }
 
-    Matrix transpose() const
+    Matrix transpose() const // slow function!
     {
         Matrix out(_iColumns,_iRows);
 
@@ -251,7 +256,7 @@ public:
         return out;
     }
 
-    Matrix concat(const Matrix & b)
+    Matrix concat(const Matrix & b) // slow function!
     {
         assert(b.rows()==rows());
 
@@ -268,7 +273,7 @@ public:
         return mT;
     }
 
-    Matrix operator*(const Matrix& a) const
+    Matrix operator*(const Matrix& a) const  // slow function!
     {
         return Matrix(*this).operator*=(a);
     }
@@ -287,7 +292,7 @@ public:
         return Matrix(_data,_iRows-1,_iColumns);
     }
     
-    const Matrix without_last_column() const
+    const Matrix without_last_column() const // slow function!
     {
         assert(_iColumns>0);
 
@@ -300,10 +305,24 @@ public:
         return m;
     }
 
-    int size() const
-    {
-        return _iSize;
-    }
+	bool is_vector() const
+	{
+        return (_iRows==1) || (_iColumns==1);
+	}
+	
+	Matrix rand_perm(int iSize) const //create a vector of index shuffled
+	{
+		Matrix m(iSize);
+		
+		//create ordered vector
+		for(int i=0;i<iSize;i++)
+			m._data[i]=i;
+		
+		//now bubble shuffle
+		//..
+		
+		return m;
+	}
     
 private:
     int _iRows,_iColumns,_iSize;
