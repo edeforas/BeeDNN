@@ -42,7 +42,6 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
 
     // todo add momentum
     // todo add early abort
-    // todo add samples shuffle
 
     if(bInit)
         for(unsigned int i=0;i<_layers.size();i++)
@@ -60,6 +59,7 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
         for(unsigned int i=0;i<_layers.size();i++)
             _layers[i]->init_DE();
 
+        Matrix mShuffle=Matrix::rand_perm(iNbSamples);
         int iBatchStart=0;
 
         while(iBatchStart<iNbSamples)
@@ -70,9 +70,9 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
             {
                 //compute one sample error
                 Matrix mOut;
-                const Matrix& mSample=mSamples.row(iSample);
+                const Matrix& mSample=mSamples.row((int)mShuffle(iSample));
                 forward_feed(mSample,mOut);
-                Matrix mError=mOut-mTruth.row(iSample);
+                Matrix mError=mOut-mTruth.row((int)mShuffle(iSample));
 
                 //now backpropagate error, sum dE
                 backpropagation(mError,topt.learningRate);//todo, use learning rate in this fcn?

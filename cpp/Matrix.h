@@ -310,7 +310,7 @@ public:
         return (_iRows==1) || (_iColumns==1);
 	}
 	
-	Matrix rand_perm(int iSize) const //create a vector of index shuffled
+    static Matrix rand_perm(int iSize) //create a vector of index shuffled
 	{
 		Matrix m(iSize);
 		
@@ -319,7 +319,13 @@ public:
 			m._data[i]=i;
 		
 		//now bubble shuffle
-		//..
+		for(int i=0;i<iSize;i++)
+		{
+			int iNewPos=rand()%iSize;
+            double dVal=m._data[iNewPos];
+            m._data[iNewPos]=m._data[i];
+            m._data[i]=dVal;
+		}
 		
 		return m;
 	}
