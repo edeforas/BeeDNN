@@ -22,7 +22,7 @@ void DenseLayer::forward(const Matrix& mMatIn,Matrix& mMatOut) const
     // apply activation
     for(int i=0;i<mMatOut.size();i++)
     {
-        mMatOut(i)=_activ.forward(mMatOut(i)); //todo keep matrix in layer, do not resize
+        mMatOut(i)=_activ.apply(mMatOut(i)); //todo keep matrix in layer, do not resize
     }
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -38,7 +38,7 @@ void DenseLayer::forward_feed(const Matrix& mMatIn,Matrix& mMatOut)
     // apply activation
     for(int i=0;i<mMatOut.size();i++)
     {
-        mMatOut(i)=_activ.forward(mMatOut(i)); //todo keep matrix in layer, do not resize
+        mMatOut(i)=_activ.apply(mMatOut(i)); //todo keep matrix in layer, do not resize
     }
     out=mMatOut;
 }
@@ -68,7 +68,7 @@ Matrix DenseLayer::get_weight_activation_derivation()
     Matrix mOut=outWeight;
     for(int i=0;i<mOut.size();i++)
     {
-        mOut(i)=_activ.backward(outWeight(i),out(i));
+        mOut(i)=_activ.derivation(outWeight(i),out(i));
     }
 
     return mOut;

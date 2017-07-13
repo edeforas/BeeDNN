@@ -1,13 +1,13 @@
-#ifndef ActivationTanh_
-#define ActivationTanh_
+#ifndef ActivationSelu_
+#define ActivationSelu_
 
 #include "Activation.h"
 
-class ActivationTanh : public Activation
+class ActivationSelu : public Activation
 {
 public:
-    ActivationTanh();
-    virtual ~ActivationTanh();
+    ActivationSelu();
+    virtual ~ActivationSelu();
     virtual string name() const;
 
     virtual double apply(double x) const;

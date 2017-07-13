@@ -10,8 +10,8 @@ public:
     virtual ~ActivationRelu();
     virtual string name() const;
 
-    virtual double forward(double x) const;
-    virtual double backward(double x,double y) const;
+    virtual double apply(double x) const;
+    virtual double derivation(double x,double y) const;
 };
 
 #endif
