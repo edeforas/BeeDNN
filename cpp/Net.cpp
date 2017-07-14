@@ -1,4 +1,3 @@
-
 #include "Net.h"
 #include "Matrix.h"
 
@@ -26,68 +25,75 @@ void Net::forward(const Matrix& mIn,Matrix& mOut) const
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::forward_feed(const Matrix& mIn,Matrix& mOut)
-{
-    Matrix mTemp=mIn;
-    for(unsigned int i=0;i<_layers.size();i++)
-    {
-        _layers[i]->forward_feed(mTemp,mOut);
-        mTemp=mOut;
-    }
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
-TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOption& topt,bool bInit)
+TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOption& topt)
 {
     TrainResult tr;
 
-    // todo add momentum
     // todo add early abort
 
-    if(bInit)
-        for(unsigned int i=0;i<_layers.size();i++)
-        {
-            _layers[i]->init_weight();
-        }
+    for(unsigned int i=0;i<_layers.size();i++)
+        _layers[i]->init();
 
     int iBatchSize=topt.batchSize;
     int iNbSamples=mSamples.rows();
     if(iBatchSize>iNbSamples)
         iBatchSize=iNbSamples;
 
+    // init error accumulation and momentum
+    vector<Matrix> sumDE, sumDEMomentum;
+    for(unsigned int i=0;i<_layers.size();i++)
+    {
+        sumDE.push_back(_layers[i]->dE*0); //todo something cleaner
+        sumDEMomentum.push_back(_layers[i]->dE*0);
+    }
+
     for(int iEpoch=0;iEpoch<topt.epochs;iEpoch++)
     {
-        for(unsigned int i=0;i<_layers.size();i++)
-            _layers[i]->init_DE();
-
         Matrix mShuffle=Matrix::rand_perm(iNbSamples);
-        int iBatchStart=0;
 
+        int iBatchStart=0;
         while(iBatchStart<iNbSamples)
         {
+            // init error accumulation
+            for(unsigned int i=0;i<_layers.size();i++)
+                sumDE[i].setZero();
+
             int iBatchEnd=iBatchStart+iBatchSize;
+            if(iBatchEnd>iNbSamples)
+                iBatchEnd=iNbSamples;
 
             for(int iSample=iBatchStart;iSample<iBatchEnd;iSample++)
             {
                 //compute one sample error
-                Matrix mOut;
+
+                //forward pass with save
                 const Matrix& mSample=mSamples.row((int)mShuffle(iSample));
-                forward_feed(mSample,mOut);
+                Matrix mOut, mTemp=mSample;
+                for(unsigned int i=0;i<_layers.size();i++)
+                {
+                    _layers[i]->forward_save(mTemp,mOut);
+                    mTemp=mOut; //todo avoid using a temp matrix
+                }
+
+                //compute and backpropagate error, sum dE
                 Matrix mError=mOut-mTruth.row((int)mShuffle(iSample));
+                backpropagation(mError);
 
-                //now backpropagate error, sum dE
-                backpropagation(mError,topt.learningRate);//todo, use learning rate in this fcn?
-
-                //update error ??
+                //sum error
+                for(unsigned int i=0;i<_layers.size();i++)
+                    sumDE[i]+=_layers[i]->dE;
             }
 
             //update weight
             for(unsigned int iL=0;iL<_layers.size();iL++)
             {
                 Layer& l=*_layers[iL];
-                l.get_weight()-=l.dE.scalarMult(topt.learningRate);
-                //            net.layer{i}.dE=netaccum.layer{i}.dE+net.momentum*net.layer{i}.dE;
-                //            net.layer{i}.weight=net.layer{i}.weight-net.learning_rate*net.layer{i}.dE;
 
+                //update weight with momentum: weight -= learning_rate*dE+momentum*oldDE;
+                l.get_weight()-=sumDE[iL]*topt.learningRate+sumDEMomentum[iL]*topt.momentum;
+
+                // update momentum
+                sumDEMomentum[iL]=sumDE[iL];
             }
 
             iBatchStart=iBatchEnd;
@@ -97,7 +103,7 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
     return tr;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::backpropagation(const Matrix &mError, double dlearningRate)
+void Net::backpropagation(const Matrix &mError)
 {
     Matrix mDelta;
     for (int iL=_layers.size()-1;iL>=0;iL--)
@@ -113,7 +119,7 @@ void Net::backpropagation(const Matrix &mError, double dlearningRate)
         else
         {
             //hidden layer
-            //a=  delta*(net.layer{i+1}.weight') ;%*  delta; % use of previous delta
+            //a=  delta*(net.layer{i+1}.weight') (use of previous delta)
             Matrix a=mDelta*(_layers[iL+1]->get_weight().transpose());
 
             //a=a(:,1:columns(a)-1); % do not use last weight (use only for bias)
@@ -124,13 +130,7 @@ void Net::backpropagation(const Matrix &mError, double dlearningRate)
 
         //dE=(layer.in')*delta;
         Matrix mOne(1,1); mOne.setConstant(1);
-        Matrix mDE=(l.in.concat(mOne).transpose())*mDelta;
-
-        //net.layer{i}.dE=dE;
-        l.dE+=mDE;
-
-        //net.layer{i}.weight=net.layer{i}.weight-learning_rate*dE;
-        l.get_weight()-=mDE.scalarMult(dlearningRate);
+        l.dE=(l.in.concat(mOne).transpose())*mDelta;
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////

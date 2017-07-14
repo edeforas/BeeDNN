@@ -8,12 +8,11 @@ class Layer
 public:
     Layer();
     virtual ~Layer();
+    virtual void init() =0;
 
     virtual void forward(const Matrix& mMatIn,Matrix& mMatOut) const =0;
-    virtual void forward_feed(const Matrix& mMatIn,Matrix& mMatOut) =0;
+    virtual void forward_save(const Matrix& mMatIn,Matrix& mMatOut) =0;
 
-    virtual void init_weight() =0;
-    virtual void init_DE() =0;
     virtual Matrix get_weight_activation_derivation() =0;
     virtual Matrix& get_weight() =0;
 

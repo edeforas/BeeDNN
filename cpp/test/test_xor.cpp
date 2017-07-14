@@ -23,7 +23,9 @@ int main()
     const Matrix mTruth(dTruths,4,1);
 
     TrainOption tOpt;
-    tOpt.epochs=5000;
+    tOpt.learningRate=1.;
+    tOpt.batchSize=1;
+    tOpt.momentum=0.9;
 
     TrainResult tr=n.train(mSamples,mTruth,tOpt);
     cout << "Loss=" << tr.loss << " MaxError=" << tr.maxError << " MaxEpoch=" << tr.maxEpoch << endl;

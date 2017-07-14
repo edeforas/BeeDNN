@@ -9,12 +9,12 @@ class DenseLayer : public Layer
 {
 public:
     DenseLayer(int iInSize,int iOutSize,const Activation& activ);
+    ~DenseLayer();
+    virtual void init();
 
     virtual void forward(const Matrix& mMatin, Matrix &mMatOut) const;
-    virtual void forward_feed(const Matrix& mMatin, Matrix &mMatOut);
+    virtual void forward_save(const Matrix& mMatin, Matrix &mMatOut);
 
-    virtual void init_weight();
-    virtual void init_DE();
     virtual Matrix get_weight_activation_derivation();
     virtual Matrix& get_weight();
 

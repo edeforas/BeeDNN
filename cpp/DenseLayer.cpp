@@ -13,6 +13,25 @@ DenseLayer::DenseLayer(int iInSize,int iOutSize,const Activation& activ): Layer(
     _weight.resize(_iInSize+1,_iOutSize); //+1 for bias
 }
 ///////////////////////////////////////////////////////////////////////////////
+DenseLayer::~DenseLayer()
+{ }
+///////////////////////////////////////////////////////////////////////////////
+void DenseLayer::init()
+{
+    double a =sqrt(6./(_iInSize+_iOutSize));
+
+    if(_activ.name()=="sigmoid")
+        a*=4.;
+
+    for(int i=0;i<_weight.size();i++)
+    {
+        _weight(i)=((double)rand()/RAND_MAX-0.5)*2.*a;
+    }
+
+    dE.resize(_iInSize+1,_iOutSize);
+    dE.setZero();
+}
+///////////////////////////////////////////////////////////////////////////////
 void DenseLayer::forward(const Matrix& mMatIn,Matrix& mMatOut) const
 {
     // compute out=[in 1]*weight; todo use MAC
@@ -26,7 +45,7 @@ void DenseLayer::forward(const Matrix& mMatIn,Matrix& mMatOut) const
     }
 }
 ///////////////////////////////////////////////////////////////////////////////
-void DenseLayer::forward_feed(const Matrix& mMatIn,Matrix& mMatOut)
+void DenseLayer::forward_save(const Matrix& mMatIn,Matrix& mMatOut)
 {
     in=mMatIn;
     // compute out=[in 1]*weight; todo use MAC
@@ -41,25 +60,6 @@ void DenseLayer::forward_feed(const Matrix& mMatIn,Matrix& mMatOut)
         mMatOut(i)=_activ.apply(mMatOut(i)); //todo keep matrix in layer, do not resize
     }
     out=mMatOut;
-}
-///////////////////////////////////////////////////////////////////////////////
-void DenseLayer::init_weight()
-{
-    double a =sqrt(6./(_iInSize+_iOutSize));
-
-    if(_activ.name()=="sigmoid")
-        a*=4.;
-
-    for(int i=0;i<_weight.size();i++)
-    {
-        _weight(i)=((double)rand()/RAND_MAX-0.5)*2.*a;
-    }
-}
-
-void DenseLayer::init_DE()
-{
-    dE.resize(_iInSize+1,_iOutSize);
-    dE.setZero();
 }
 
 Matrix DenseLayer::get_weight_activation_derivation()

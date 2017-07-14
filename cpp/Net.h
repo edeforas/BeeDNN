@@ -42,12 +42,11 @@ public:
 
     void add(Layer *l);
 
-    TrainResult train(const Matrix& mSamples,const Matrix& mTruth,const TrainOption& topt,bool bInit=true);
+    TrainResult train(const Matrix& mSamples, const Matrix& mTruth, const TrainOption& topt);
     void forward(const Matrix& mIn,Matrix& mOut) const;
 
 private:
-    void forward_feed(const Matrix& mIn,Matrix& mOut);
-    void backpropagation(const Matrix& mError,double dlearningRate);
+    void backpropagation(const Matrix& mError);
     vector<Layer*> _layers;
 };
 

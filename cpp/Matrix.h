@@ -115,7 +115,7 @@ public:
 
     void setZero()
     {
-        setConstant(0);
+        setConstant(0.);
     }
 
     double& operator()(int iR,int iC)
