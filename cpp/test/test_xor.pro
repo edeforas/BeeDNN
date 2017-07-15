@@ -11,7 +11,8 @@ SOURCES += test_xor.cpp \
     ../Activation.cpp \
     ../ActivationRelu.cpp \
     ../ActivationTanh.cpp \
-    ../ActivationSelu.cpp
+    ../ActivationSelu.cpp \
+    ../ActivationLinear.cpp
 
 INCLUDEPATH+=..
 
@@ -24,4 +25,5 @@ HEADERS += \
     ../Net.h \
     ../ActivationRelu.h \
     ../ActivationTanh.h \
-    ../ActivationSelu.h
+    ../ActivationSelu.h \
+    ../ActivationLinear.h

@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui widgets
 
 TARGET = test_xor_qt
 TEMPLATE = app
@@ -12,7 +12,8 @@ SOURCES += main.cpp\
     ../../ActivationTanh.cpp \
     ../../DenseLayer.cpp \
     ../../Layer.cpp \
-    ../../Net.cpp
+    ../../Net.cpp \
+    ../../ActivationLinear.cpp
 
 HEADERS  += mainwindow.h \
     ../../Activation.h \
@@ -23,7 +24,8 @@ HEADERS  += mainwindow.h \
     ../../DenseLayer.h \
     ../../Layer.h \
     ../../Matrix.h \
-    ../../Net.h
+    ../../Net.h \
+    ../../ActivationLinear.h
 
 FORMS    += mainwindow.ui
 

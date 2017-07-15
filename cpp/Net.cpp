@@ -1,5 +1,8 @@
 #include "Net.h"
+#include "Layer.h"
 #include "Matrix.h"
+
+#include <cmath>
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 Net::Net()
@@ -47,8 +50,11 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
         sumDEMomentum.push_back(_layers[i]->dE*0);
     }
 
+    tr.computedEpochs=topt.epochs;
     for(int iEpoch=0;iEpoch<topt.epochs;iEpoch++)
     {
+        double dMaxError=0.;
+
         Matrix mShuffle=Matrix::rand_perm(iNbSamples);
 
         int iBatchStart=0;
@@ -77,6 +83,12 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
 
                 //compute and backpropagate error, sum dE
                 Matrix mError=mOut-mTruth.row((int)mShuffle(iSample));
+
+                // check early abort max error
+                for(int i=0;i<mError.size();i++)
+                    if(fabs(mError(i))>dMaxError)
+                        dMaxError=abs(mError(i));
+
                 backpropagation(mError);
 
                 //sum error
@@ -97,6 +109,14 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
             }
 
             iBatchStart=iBatchEnd;
+        }
+
+        //early abort test on maxError
+        tr.maxError=dMaxError;
+        if(dMaxError<topt.earlyAbortMaxError)
+        {
+            tr.computedEpochs=iEpoch;
+            break;
         }
     }
 
@@ -125,7 +145,7 @@ void Net::backpropagation(const Matrix &mError)
             //a=a(:,1:columns(a)-1); % do not use last weight (use only for bias)
             //b=activation_derivation(layer.func,outweight);
             //delta=a.*b;
-            mDelta=(a.without_last_column()).elementProduct(mAD);
+            mDelta=(a.without_last_column()).elementProduct(mAD); //todo optimise
         }
 
         //dE=(layer.in')*delta;

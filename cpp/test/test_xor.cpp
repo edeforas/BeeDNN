@@ -23,12 +23,13 @@ int main()
     const Matrix mTruth(dTruths,4,1);
 
     TrainOption tOpt;
+    tOpt.earlyAbortMaxError=0.05;
     tOpt.learningRate=1.;
     tOpt.batchSize=1;
     tOpt.momentum=0.9;
 
     TrainResult tr=n.train(mSamples,mTruth,tOpt);
-    cout << "Loss=" << tr.loss << " MaxError=" << tr.maxError << " MaxEpoch=" << tr.maxEpoch << endl;
+    cout << "Loss=" << tr.loss << " MaxError=" << tr.maxError << " ComputedEpochs=" << tr.computedEpochs << endl;
 
     Matrix m00,m01,m10,m11;
 

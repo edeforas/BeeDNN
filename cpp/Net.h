@@ -4,7 +4,7 @@
 #include <vector>
 using namespace std;
 
-#include "Layer.h"
+class Layer;
 #include "Matrix.h"
 
 class TrainOption
@@ -13,14 +13,14 @@ public:
     TrainOption()
     {
         epochs=1000;
-        maxError=0;
+        earlyAbortMaxError=0.;
         batchSize=32;
         learningRate=0.1;
         momentum=0.05;
     }
 
     int  epochs;
-    double maxError;
+    double earlyAbortMaxError;
     int batchSize;
     double learningRate;
     double momentum;
@@ -31,7 +31,7 @@ class TrainResult
 public:
     double loss;
     double maxError;
-    int maxEpoch;
+    int computedEpochs;
 };
 
 class Net

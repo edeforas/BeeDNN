@@ -41,6 +41,7 @@ void MainWindow::on_pushButton_clicked()
     tOpt.batchSize=ui->leBatchSize->text().toInt();
     tOpt.momentum=ui->leMomentum->text().toDouble();
     tOpt.epochs=ui->leEpochs->text().toInt();
+    tOpt.earlyAbortMaxError=ui->leEarlyAbortMaxError->text().toDouble();
 
     TrainResult tr=n.train(mSamples,mTruth,tOpt); //todo
     (void)tr; //todo
@@ -57,8 +58,12 @@ void MainWindow::on_pushButton_clicked()
     ui->leXOR10->setText(QString::number(m10(0)));
     ui->leXOR01->setText(QString::number(m01(0)));
     ui->leXOR11->setText(QString::number(m11(0)));
-    double loss = 0; // todo net.get_loss<mse>(input_data, desired_out);
-    ui->leMSE->setText(QString::number(loss));
+
+    ui->leMSE->setText(QString::number(0)); // todo
+
+    ui->leMaxError->setText(QString::number(tr.maxError));
+
+    ui->leComputedEpochs->setText(QString::number(tr.computedEpochs));
 
     QApplication::restoreOverrideCursor();
 }
