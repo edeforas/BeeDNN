@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "ActivationManager.h"
+
 #include <QMainWindow>
 
 namespace Ui {
@@ -22,6 +24,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+
+    ActivationManager _activ;
 };
 
 #endif // MAINWINDOW_H

@@ -1,15 +1,18 @@
 #include "DenseLayer.h"
 
+#include <cassert> // for rand
 #include <cstdlib> // for rand
 #include <cmath> // for sqrt
+
 #include "Activation.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-DenseLayer::DenseLayer(int iInSize,int iOutSize,const Activation& activ): Layer(),
+DenseLayer::DenseLayer(int iInSize,int iOutSize,const Activation* activ): Layer(),
     _activ(activ),
     _iInSize(iInSize),
     _iOutSize(iOutSize)
 {
+    assert(activ);
     _weight.resize(_iInSize+1,_iOutSize); //+1 for bias
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -20,7 +23,7 @@ void DenseLayer::init()
 {
     double a =sqrt(6./(_iInSize+_iOutSize));
 
-    if(_activ.name()=="Sigmoid")
+    if(_activ->name()=="Sigmoid")
         a*=4.;
 
     for(int i=0;i<_weight.size();i++)
@@ -41,7 +44,7 @@ void DenseLayer::forward(const Matrix& mMatIn,Matrix& mMatOut) const
     // apply activation
     for(int i=0;i<mMatOut.size();i++)
     {
-        mMatOut(i)=_activ.apply(mMatOut(i)); //todo keep matrix in layer, do not resize
+        mMatOut(i)=_activ->apply(mMatOut(i)); //todo keep matrix in layer, do not resize
     }
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -57,7 +60,7 @@ void DenseLayer::forward_save(const Matrix& mMatIn,Matrix& mMatOut)
     // apply activation
     for(int i=0;i<mMatOut.size();i++)
     {
-        mMatOut(i)=_activ.apply(mMatOut(i)); //todo keep matrix in layer, do not resize
+        mMatOut(i)=_activ->apply(mMatOut(i)); //todo keep matrix in layer, do not resize
     }
     out=mMatOut;
 }
@@ -68,7 +71,7 @@ Matrix DenseLayer::get_weight_activation_derivation()
     Matrix mOut=outWeight;
     for(int i=0;i<mOut.size();i++)
     {
-        mOut(i)=_activ.derivation(outWeight(i),out(i));
+        mOut(i)=_activ->derivation(outWeight(i),out(i));
     }
 
     return mOut;

@@ -2,7 +2,6 @@
 #include "ui_mainwindow.h"
 
 #include "Net.h"
-#include "ActivationSigmoid.h"
 #include "DenseLayer.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -10,6 +9,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    vector<string> vsActivations;
+    _activ.list_all(vsActivations);
+
+    for(unsigned int i=0;i<vsActivations.size();i++)
+    {
+        ui->cbActivationLayer1->addItem(vsActivations[i].c_str());
+        ui->cbActivationLayer2->addItem(vsActivations[i].c_str());
+    }
 }
 
 MainWindow::~MainWindow()
@@ -23,9 +31,10 @@ void MainWindow::on_pushButton_clicked()
 
     Net n;
 
-    ActivationSigmoid ac;
-    DenseLayer l1(2,3,ac);
-    DenseLayer l2(3,1,ac);
+    Activation* pActivLayer1=_activ.get_activation(ui->cbActivationLayer1->currentText().toStdString());
+    Activation* pActivLayer2=_activ.get_activation(ui->cbActivationLayer2->currentText().toStdString());
+    DenseLayer l1(2,3,pActivLayer1);
+    DenseLayer l2(3,1,pActivLayer2);
 
     n.add(&l1);
     n.add(&l2);

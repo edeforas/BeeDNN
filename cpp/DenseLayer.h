@@ -2,13 +2,14 @@
 #define DenseLayer_
 
 #include "Layer.h"
-#include "Activation.h"
 #include "Matrix.h"
+
+class Activation;
 
 class DenseLayer : public Layer
 {
 public:
-    DenseLayer(int iInSize,int iOutSize,const Activation& activ);
+    DenseLayer(int iInSize,int iOutSize,const Activation* activ);
     ~DenseLayer();
     virtual void init();
 
@@ -20,7 +21,7 @@ public:
 
 private:
     Matrix _weight;
-    const Activation& _activ;
+    const Activation* _activ;
     int _iInSize, _iOutSize;
 };
 

@@ -10,8 +10,8 @@ int main()
     Net n;
 
     ActivationSigmoid ac;
-    DenseLayer l1(2,3,ac);
-    DenseLayer l2(3,1,ac);
+    DenseLayer l1(2,3,&ac);
+    DenseLayer l2(3,1,&ac);
 
     n.add(&l1);
     n.add(&l2);

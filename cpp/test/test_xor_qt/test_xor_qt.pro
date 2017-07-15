@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     ../../ActivationElliot.cpp \
     ../../ActivationGauss.cpp \
     ../../ActivationSoftPlus.cpp \
-    ../../ActivationSoftSign.cpp
+    ../../ActivationSoftSign.cpp \
+    ../../ActivationManager.cpp
 
 HEADERS  += mainwindow.h \
     ../../Activation.h \
@@ -35,7 +36,8 @@ HEADERS  += mainwindow.h \
     ../../ActivationElliot.h \
     ../../ActivationGauss.h \
     ../../ActivationSoftPlus.h \
-    ../../ActivationSoftSign.h
+    ../../ActivationSoftSign.h \
+    ../../ActivationManager.h
 
 FORMS    += mainwindow.ui
 
