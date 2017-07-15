@@ -9,7 +9,7 @@ ActivationTanh::~ActivationTanh()
 
 string ActivationTanh::name() const
 {
-    return "tanh";
+    return "Tanh";
 }
 
 double ActivationTanh::apply(double x) const

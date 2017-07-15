@@ -13,7 +13,12 @@ SOURCES += main.cpp\
     ../../DenseLayer.cpp \
     ../../Layer.cpp \
     ../../Net.cpp \
-    ../../ActivationLinear.cpp
+    ../../ActivationLinear.cpp \
+    ../../ActivationAtan.cpp \
+    ../../ActivationElliot.cpp \
+    ../../ActivationGauss.cpp \
+    ../../ActivationSoftPlus.cpp \
+    ../../ActivationSoftSign.cpp
 
 HEADERS  += mainwindow.h \
     ../../Activation.h \
@@ -25,7 +30,12 @@ HEADERS  += mainwindow.h \
     ../../Layer.h \
     ../../Matrix.h \
     ../../Net.h \
-    ../../ActivationLinear.h
+    ../../ActivationLinear.h \
+    ../../ActivationAtan.h \
+    ../../ActivationElliot.h \
+    ../../ActivationGauss.h \
+    ../../ActivationSoftPlus.h \
+    ../../ActivationSoftSign.h
 
 FORMS    += mainwindow.ui
 

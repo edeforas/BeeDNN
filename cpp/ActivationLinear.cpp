@@ -8,7 +8,7 @@ ActivationLinear::~ActivationLinear()
 
 string ActivationLinear::name() const
 {
-    return "linear";
+    return "Linear";
 }
 
 double ActivationLinear::apply(double x) const
@@ -20,5 +20,5 @@ double ActivationLinear::derivation(double x,double y) const
 {
     (void)x;
     (void)y;
-    return 1;
+    return 1.;
 }

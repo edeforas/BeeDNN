@@ -12,7 +12,7 @@ ActivationSelu::~ActivationSelu()
 
 string ActivationSelu::name() const
 {
-    return "selu";
+    return "Selu";
 }
 
 double ActivationSelu::apply(double x) const
@@ -31,5 +31,4 @@ double ActivationSelu::derivation(double x,double y) const
 		return SELU_LAMBDA;
 	else
 		return y+SELU_LAMBDA*SELU_ALPHA; //optimisation of f'(x) using y=f(x) in case of selu
-
 }

@@ -36,13 +36,6 @@ function y=activation(func,x)
   y=exp(-x.*x);
   end
 
-  if(strcmp(func,'elu'))
-%    alpha=1;
-%  out=data; TODO
-%  outn=out(out<0);
-%    out(out<0)=alpha.*(exp(outn)-1);
-  end
-
   if(strcmp(func,'selu'))
   lambda = 1.05070;
   alpha  = 1.67326;

@@ -43,9 +43,7 @@ void MainWindow::on_pushButton_clicked()
     tOpt.epochs=ui->leEpochs->text().toInt();
     tOpt.earlyAbortMaxError=ui->leEarlyAbortMaxError->text().toDouble();
 
-    TrainResult tr=n.train(mSamples,mTruth,tOpt); //todo
-    (void)tr; //todo
-    //cout << "Loss=" << tr.loss << " MaxError=" << tr.maxError << " MaxEpoch=" << tr.maxEpoch << endl;
+    TrainResult tr=n.train(mSamples,mTruth,tOpt);
 
     Matrix m00,m01,m10,m11;
 
@@ -60,9 +58,7 @@ void MainWindow::on_pushButton_clicked()
     ui->leXOR11->setText(QString::number(m11(0)));
 
     ui->leMSE->setText(QString::number(0)); // todo
-
     ui->leMaxError->setText(QString::number(tr.maxError));
-
     ui->leComputedEpochs->setText(QString::number(tr.computedEpochs));
 
     QApplication::restoreOverrideCursor();

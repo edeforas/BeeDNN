@@ -9,7 +9,7 @@ ActivationSigmoid::~ActivationSigmoid()
 
 string ActivationSigmoid::name() const
 {
-    return "sigmoid";
+    return "Sigmoid";
 }
 
 double ActivationSigmoid::apply(double x) const

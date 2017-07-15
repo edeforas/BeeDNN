@@ -40,13 +40,6 @@ function out=activation_derivation(func,x)
     out=-2.*x.*exp(-x.*x);
   end
 
-  if(strcmp(func,'elu'))
-%    alpha=1; TODO
-%    outn=out(out<0);
-%    out(out>0)=1;
-%    out(out<0)=alpha*(exp(outn)-1)+alpha;
-  end
-
   if(strcmp(func,'selu'))
     lambda = 1.05070;
   alpha  = 1.67326;

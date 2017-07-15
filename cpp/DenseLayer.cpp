@@ -20,7 +20,7 @@ void DenseLayer::init()
 {
     double a =sqrt(6./(_iInSize+_iOutSize));
 
-    if(_activ.name()=="sigmoid")
+    if(_activ.name()=="Sigmoid")
         a*=4.;
 
     for(int i=0;i<_weight.size();i++)
