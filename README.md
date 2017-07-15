@@ -1,18 +1,21 @@
 # test_DNN
 
-Test_DNN is a small set of Octave/Matlab functions to play/learn with DNN algorithms.
+Test_DNN is a small set of functions to play/learn with DNN algorithms.
 
 The goal is to have a minimal, clear and concise samples and API so everybody can contribute and play with DNN.
 No dependencies needed, every algorithm rewritten. 
 
-Implemented: 
+Implemented:
 - dense layer
 - mini batch learn
 - momentum
-- many activation functions
+- several activation functions
+- early abort
 
-Just run test_* to test.
 
-C++ API (work in progress, not finished), easy test with QtCreator
+In mfiles/ folder, the Octave/Matlab functions for prototyping (Just run test_* to test)
 
-Then, for real applications, TensorFlow, Caffe or tiny-dnn are good choices.
+in cpp/ folder, a C++ implementation, with console tests and in Qt.
+
+
+Later, for real applications, TensorFlow, Caffe or tiny-dnn are good choices.
