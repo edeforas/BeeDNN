@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QMessageBox>
 
 #include "Net.h"
 #include "DenseLayer.h"
@@ -18,6 +19,8 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->cbActivationLayer1->addItem(vsActivations[i].c_str());
         ui->cbActivationLayer2->addItem(vsActivations[i].c_str());
     }
+    ui->cbActivationLayer1->setCurrentText("Sigmoid");
+    ui->cbActivationLayer2->setCurrentText("Sigmoid");
 }
 
 MainWindow::~MainWindow()
@@ -31,10 +34,11 @@ void MainWindow::on_pushButton_clicked()
 
     Net n;
 
+    int iNbHiddenNeurons=ui->sbNbNeurons->value();
     Activation* pActivLayer1=_activ.get_activation(ui->cbActivationLayer1->currentText().toStdString());
     Activation* pActivLayer2=_activ.get_activation(ui->cbActivationLayer2->currentText().toStdString());
-    DenseLayer l1(2,3,pActivLayer1);
-    DenseLayer l2(3,1,pActivLayer2);
+    DenseLayer l1(2,iNbHiddenNeurons,pActivLayer1);
+    DenseLayer l2(iNbHiddenNeurons,1,pActivLayer2);
 
     n.add(&l1);
     n.add(&l2);
@@ -73,7 +77,20 @@ void MainWindow::on_pushButton_clicked()
     QApplication::restoreOverrideCursor();
 }
 
-void MainWindow::on_Close_clicked()
+void MainWindow::on_actionQuit_triggered()
 {
     close();
+}
+
+void MainWindow::on_actionAbout_triggered()
+{
+    QMessageBox mb;
+    QString qsText="Xor Net Demo";
+    qsText+= "\n";
+    qsText+= "\n GitHub: https://github.com/edeforas/test_DNN";
+    qsText+= "\n by Etienne de Foras";
+    qsText+="\n email: etienne.deforas@gmail.com";
+
+    mb.setText(qsText);
+    mb.exec();
 }
