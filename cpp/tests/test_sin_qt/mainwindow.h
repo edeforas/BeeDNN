@@ -24,7 +24,7 @@ private slots:
     void on_actionAbout_triggered();
 
 private:
-    void drawLoss(vector<double> vdLoss);
+    void drawLoss(vector<double> vdLoss,vector<double> vdMaxError);
     Ui::MainWindow *ui;
 
     ActivationManager _activ;

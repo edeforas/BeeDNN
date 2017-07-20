@@ -16,6 +16,7 @@ public:
     {
         epochs=1000;
         earlyAbortMaxError=0.;
+        earlyAbortMeanError=0.;
         batchSize=32;
         learningRate=0.1;
         momentum=0.05;
@@ -24,6 +25,7 @@ public:
 
     int  epochs;
     double earlyAbortMaxError;
+    double earlyAbortMeanError;
     int batchSize;
     double learningRate;
     double momentum;

@@ -53,7 +53,7 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
  //   tr.computedEpochs=topt.epochs;
     for(int iEpoch=0;iEpoch<topt.epochs;iEpoch++)
     {
-        double dMaxError=0.;
+        double dMaxError=0., dMeanError=0.;
 
         Matrix mShuffle=Matrix::rand_perm(iNbSamples);
 
@@ -86,8 +86,12 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
 
                 // check early abort max error
                 for(int i=0;i<mError.size();i++)
+                {
                     if(fabs(mError(i))>dMaxError)
-                        dMaxError=abs(mError(i));
+                        dMaxError=fabs(mError(i));
+
+                    dMeanError+=fabs(mError(i));
+                }
 
                 backpropagation(mError);
 
@@ -101,6 +105,8 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
             {
                 Layer& l=*_layers[iL];
 
+                sumDE[iL]/=(double)(iBatchEnd-iBatchStart);
+
                 //update weight with momentum: weight -= learning_rate*dE+momentum*oldDE;
                 l.get_weight()-=sumDE[iL]*topt.learningRate+sumDEMomentum[iL]*topt.momentum;
 
@@ -111,15 +117,21 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
             iBatchStart=iBatchEnd;
         }
 
-
-        //early abort test on maxError
+        //early abort test on error
         tr.computedEpochs=iEpoch;
         tr.maxError=dMaxError;
+        tr.loss=dMeanError/(iNbSamples*mTruth.size()); //same as mean error?
 
         if(topt.observer)
             topt.observer->stepEpoch(tr);
 
         if(dMaxError<topt.earlyAbortMaxError)
+        {
+            tr.computedEpochs=iEpoch;
+            break;
+        }
+
+        if(tr.loss<topt.earlyAbortMeanError)
         {
             tr.computedEpochs=iEpoch;
             break;

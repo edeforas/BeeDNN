@@ -8,16 +8,17 @@
 #include "DenseLayer.h"
 
 //////////////////////////////////////////////////////////////////////////
-// call back class to observe loss evolution
+// callback class to observe loss evolution
 class LossObserver: public TrainObserver
 {
 public:
     virtual void stepEpoch(const TrainResult & tr)
     {
-        vdLoss.push_back(tr.maxError);
+        vdLoss.push_back(tr.loss);
+        vdMaxError.push_back(tr.maxError);
     }
 
-    vector<double> vdLoss;
+    vector<double> vdLoss,vdMaxError;
 };
 //////////////////////////////////////////////////////////////////////////
 MainWindow::MainWindow(QWidget *parent) :
@@ -35,11 +36,10 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->cbActivationLayer2->addItem(vsActivations[i].c_str());
         ui->cbActivationLayer3->addItem(vsActivations[i].c_str());
     }
-    ui->cbActivationLayer1->setCurrentText("Tanh");
-    ui->cbActivationLayer2->setCurrentText("Tanh");
-    ui->cbActivationLayer3->setCurrentText("Tanh");
+    ui->cbActivationLayer1->setCurrentText("Gauss");
+    ui->cbActivationLayer2->setCurrentText("Gauss");
+    ui->cbActivationLayer3->setCurrentText("Linear");
 
-    ui->gvLearningCurve->setScene(new QGraphicsScene);
 }
 //////////////////////////////////////////////////////////////////////////
 MainWindow::~MainWindow()
@@ -50,7 +50,6 @@ MainWindow::~MainWindow()
 void MainWindow::on_pushButton_clicked()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    ui->gvLearningCurve->scene()->clear();
 
     LossObserver lossCB;
 
@@ -82,6 +81,7 @@ void MainWindow::on_pushButton_clicked()
     TrainOption tOpt;
     tOpt.epochs=ui->leEpochs->text().toInt();
     tOpt.earlyAbortMaxError=ui->leEarlyAbortMaxError->text().toDouble();
+    tOpt.earlyAbortMeanError=ui->leEarlyAbortMeanError->text().toDouble(); //same as loss?
     tOpt.learningRate=ui->leLearningRate->text().toDouble();;
     tOpt.batchSize=ui->leBatchSize->text().toInt();
     tOpt.momentum=ui->leMomentum->text().toDouble();
@@ -89,35 +89,49 @@ void MainWindow::on_pushButton_clicked()
 
     TrainResult tr=n.train(mSamples,mTruth,tOpt);
 
-    ui->leMSE->setText(QString::number(0)); // todo
+    ui->leMSE->setText(QString::number(tr.loss));
     ui->leMaxError->setText(QString::number(tr.maxError));
     ui->leComputedEpochs->setText(QString::number(tr.computedEpochs));
 
-    drawLoss(lossCB.vdLoss);
+    drawLoss(lossCB.vdLoss,lossCB.vdMaxError);
 
     QApplication::restoreOverrideCursor();
 }
 //////////////////////////////////////////////////////////////////////////
-void MainWindow::drawLoss(vector<double> vdLoss)
+void MainWindow::drawLoss(vector<double> vdLoss,vector<double> vdMaxError)
 {
-    QGraphicsScene* qs= ui->gvLearningCurve->scene();
+    QGraphicsScene* qs=new QGraphicsScene;
 
-    QPolygonF poly;
-    QPolygonF polyZero;
+    ui->gvLearningCurve->setScene(qs);   //gives ownership
 
-    for(int i=0;i<vdLoss.size();i++)
+    QPainterPath painterLoss;
+    QPainterPath painterMax;
+    QPainterPath painterZero;
+
+    for(unsigned int i=0;i<vdLoss.size();i++)
     {
-        poly.append(QPointF(i,-vdLoss[i])); //up side down
-        polyZero.append(QPointF(i,0));
+        painterLoss.lineTo(QPointF(i,-vdLoss[i]*1000)); //up side down
+        painterMax.lineTo(QPointF(i,-vdMaxError[i])); //up side down *1000
     }
 
-    QPen qp;
-    qp.setCosmetic(true);
+    painterZero.moveTo(QPointF(0,0));
+    painterZero.lineTo(QPointF(vdLoss.size()-1,0));
 
-    qs->addPolygon(poly,qp);
-    qs->addPolygon(polyZero,qp,Qt::black);
+    QPen penBlack(Qt::black);
+    QPen penRed(Qt::red);
+    QPen penBlue(Qt::blue);
+
+    penBlack.setCosmetic(true);
+    penRed.setCosmetic(true);
+    penBlue.setCosmetic(true);
+
+    qs->addPath(painterLoss,penBlue);
+    qs->addPath(painterMax,penRed);
+    qs->addPath(painterZero,penBlack);
 
     ui->gvLearningCurve->fitInView(qs->itemsBoundingRect());
+    ui->gvLearningCurve->scale(0.8,0.8);
+
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionQuit_triggered()

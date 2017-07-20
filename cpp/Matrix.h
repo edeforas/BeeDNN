@@ -194,6 +194,19 @@ public:
         return *this;
     }
 
+    Matrix& operator/=(double b)
+    {
+        for(int i=0;i<_iSize;i++)
+            _data[i]/=b;
+
+        return *this;
+    }
+
+    Matrix operator/(double b) const // slow function!
+    {
+        return Matrix(*this).operator/=(b);
+    }
+
     Matrix operator*(double b) const // slow function!
     {
         return Matrix(*this).operator*=(b);

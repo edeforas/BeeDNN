@@ -33,7 +33,7 @@
        </sizepolicy>
       </property>
       <property name="title">
-       <string>Learning Curve</string>
+       <string>Loss Curve: Max=Red Mean=Blue*1000.</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
@@ -43,6 +43,9 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="dragMode">
+          <enum>QGraphicsView::ScrollHandDrag</enum>
          </property>
         </widget>
        </item>
@@ -267,7 +270,7 @@
        <item>
         <widget class="QLineEdit" name="leMomentum">
          <property name="text">
-          <string>0.05</string>
+          <string>0.01</string>
          </property>
         </widget>
        </item>
@@ -275,6 +278,20 @@
      </item>
      <item row="2" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout_6">
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>EarlyAbortMeanError</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="leEarlyAbortMeanError">
+         <property name="text">
+          <string>0.</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QLabel" name="label_14">
          <property name="text">
@@ -324,7 +341,7 @@
        <item>
         <widget class="QLineEdit" name="leBatchSize">
          <property name="text">
-          <string>1</string>
+          <string>10</string>
          </property>
         </widget>
        </item>
