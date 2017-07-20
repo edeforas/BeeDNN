@@ -14,11 +14,10 @@ string ActivationGauss::name() const
 
 double ActivationGauss::apply(double x) const
 {
-	return exp(-x*x);	
+	return exp(-x*x);
 }
 
 double ActivationGauss::derivation(double x,double y) const
 {
-    (void)y;
-    return -2.*x*exp(-x*x); //todo optimize
+    return -2.*x*y; //derivate using f(x)
 }

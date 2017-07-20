@@ -26,7 +26,7 @@ function [net,error]=backpropagation(net,error) %todo use truth and last out sto
     
     dE=(layer.in')*delta;
     net.layer{i}.dE=dE;
-    net.layer{i}.weight=net.layer{i}.weight-learning_rate*dE;
+ %   net.layer{i}.weight=net.layer{i}.weight-learning_rate*dE;
  
   end  
 end

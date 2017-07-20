@@ -50,7 +50,7 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
         sumDEMomentum.push_back(_layers[i]->dE*0);
     }
 
-    tr.computedEpochs=topt.epochs;
+ //   tr.computedEpochs=topt.epochs;
     for(int iEpoch=0;iEpoch<topt.epochs;iEpoch++)
     {
         double dMaxError=0.;
@@ -111,8 +111,14 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
             iBatchStart=iBatchEnd;
         }
 
+
         //early abort test on maxError
+        tr.computedEpochs=iEpoch;
         tr.maxError=dMaxError;
+
+        if(topt.observer)
+            topt.observer->stepEpoch(tr);
+
         if(dMaxError<topt.earlyAbortMaxError)
         {
             tr.computedEpochs=iEpoch;
