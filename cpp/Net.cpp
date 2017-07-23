@@ -50,7 +50,6 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
         sumDEMomentum.push_back(_layers[i]->dE*0);
     }
 
- //   tr.computedEpochs=topt.epochs;
     for(int iEpoch=0;iEpoch<topt.epochs;iEpoch++)
     {
         double dMaxError=0., dMeanError=0.;
@@ -118,7 +117,7 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
         }
 
         //early abort test on error
-        tr.computedEpochs=iEpoch;
+        tr.computedEpochs=iEpoch+1;
         tr.maxError=dMaxError;
         tr.loss=dMeanError/(iNbSamples*mTruth.size()); //same as mean error?
 
@@ -167,7 +166,7 @@ void Net::backpropagation(const Matrix &mError)
         }
 
         //dE=(layer.in')*delta;
-        Matrix mOne(1,1); mOne.setConstant(1);
+        Matrix mOne(1,1); mOne.setConstant(1.);
         l.dE=(l.in.concat(mOne).transpose())*mDelta;
     }
 }

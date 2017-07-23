@@ -3,6 +3,7 @@
 #include <QMessageBox>
 #include <QGraphicsScene>
 #include <QGraphicsPolygonItem>
+#include "SimpleCurve.h"
 
 #include "Net.h"
 #include "DenseLayer.h"
@@ -94,44 +95,62 @@ void MainWindow::on_pushButton_clicked()
     ui->leComputedEpochs->setText(QString::number(tr.computedEpochs));
 
     drawLoss(lossCB.vdLoss,lossCB.vdMaxError);
+    drawRegression(n);
 
     QApplication::restoreOverrideCursor();
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::drawLoss(vector<double> vdLoss,vector<double> vdMaxError)
 {
-    QGraphicsScene* qs=new QGraphicsScene;
+    SimpleCurve* qs=new SimpleCurve;
 
-    ui->gvLearningCurve->setScene(qs);   //gives ownership
-
-    QPainterPath painterLoss;
-    QPainterPath painterMax;
-    QPainterPath painterZero;
+    vector<double> x,loss,maxError;
 
     for(unsigned int i=0;i<vdLoss.size();i++)
     {
-        painterLoss.lineTo(QPointF(i,-vdLoss[i]*1000)); //up side down
-        painterMax.lineTo(QPointF(i,-vdMaxError[i])); //up side down *1000
+        x.push_back(i);
+        loss.push_back(-vdLoss[i]*1000.); // //up side down *1000
+        maxError.push_back(-vdMaxError[i]); //up side down
     }
 
-    painterZero.moveTo(QPointF(0,0));
-    painterZero.lineTo(QPointF(vdLoss.size()-1,0));
+    qs->addCurve(x,loss,Qt::red);
+    qs->addCurve(x,maxError,Qt::black);
 
     QPen penBlack(Qt::black);
-    QPen penRed(Qt::red);
-    QPen penBlue(Qt::blue);
-
     penBlack.setCosmetic(true);
-    penRed.setCosmetic(true);
-    penBlue.setCosmetic(true);
+    qs->addLine(0,0,vdLoss.size()-1,0,penBlack);
 
-    qs->addPath(painterLoss,penBlue);
-    qs->addPath(painterMax,penRed);
-    qs->addPath(painterZero,penBlack);
-
+    ui->gvLearningCurve->setScene(qs); //take ownership
     ui->gvLearningCurve->fitInView(qs->itemsBoundingRect());
     ui->gvLearningCurve->scale(0.8,0.8);
+}
+//////////////////////////////////////////////////////////////////////////
+void MainWindow::drawRegression(const Net& n)
+{
+    SimpleCurve* qs=new SimpleCurve;
 
+    //create ref sample hi-res and net output
+    vector<double> vTruth(640);
+    vector<double> vSamples(640);
+    vector<double> vRegression(640);
+    Matrix mIn(1),mOut;
+
+    for(unsigned int i=0;i<640;i++)
+    {
+        double x=(double)i/100.;
+        mIn(0)=x;
+        vTruth[i]=sin(x);
+        vSamples[i]=x;
+        n.forward(mIn,mOut);
+        vRegression[i]=mOut(0);
+    }
+
+    qs->addCurve(vSamples,vTruth,Qt::red);
+    qs->addCurve(vSamples,vRegression,Qt::blue);
+
+    ui->gvRegression->setScene(qs); //take ownership
+    ui->gvRegression->fitInView(qs->itemsBoundingRect());
+    ui->gvRegression->scale(0.8,0.8);
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionQuit_triggered()

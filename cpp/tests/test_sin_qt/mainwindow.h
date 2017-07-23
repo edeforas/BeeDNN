@@ -9,6 +9,8 @@ namespace Ui {
 class MainWindow;
 }
 
+class Net;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -25,6 +27,7 @@ private slots:
 
 private:
     void drawLoss(vector<double> vdLoss,vector<double> vdMaxError);
+    void drawRegression(const Net& n);
     Ui::MainWindow *ui;
 
     ActivationManager _activ;
