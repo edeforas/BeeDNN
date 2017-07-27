@@ -12,10 +12,6 @@ Implemented:
 - several activation functions
 - early abort
 
+in src/ folder, a C++ implementation, with console test and in Qt.
 
-In mfiles/ folder, the Octave/Matlab functions for prototyping (Just run test_* to test)
-
-in cpp/ folder, a C++ implementation, with console tests and in Qt.
-
-
-Later, for real applications, TensorFlow, Caffe or tiny-dnn are good choices.
+Later, for industrial applications, TensorFlow, Caffe or tiny-dnn are good choices.

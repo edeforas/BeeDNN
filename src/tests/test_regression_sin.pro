@@ -3,8 +3,7 @@ CONFIG += console c++11
 CONFIG -= app_bundle
 CONFIG -= qt
 
-SOURCES += test_sin.cpp \
-    ../ActivationSigmoid.cpp \
+SOURCES += ../ActivationSigmoid.cpp \
     ../Net.cpp \
     ../DenseLayer.cpp \
     ../Layer.cpp \
@@ -12,7 +11,8 @@ SOURCES += test_sin.cpp \
     ../ActivationRelu.cpp \
     ../ActivationTanh.cpp \
     ../ActivationSelu.cpp \
-    ../ActivationLinear.cpp
+    ../ActivationLinear.cpp \
+    test_regression_sin.cpp
 
 INCLUDEPATH+=..
 
