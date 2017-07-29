@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     ../../ActivationSoftPlus.cpp \
     ../../ActivationSoftSign.cpp \
     ../../ActivationManager.cpp \
-    SimpleCurve.cpp
+    SimpleCurve.cpp \
+    ../../ActivationElu.cpp
 
 HEADERS  += mainwindow.h \
     ../../Activation.h \
@@ -39,7 +40,8 @@ HEADERS  += mainwindow.h \
     ../../ActivationSoftPlus.h \
     ../../ActivationSoftSign.h \
     ../../ActivationManager.h \
-    SimpleCurve.h
+    SimpleCurve.h \
+    ../../ActivationElu.h
 
 FORMS    += mainwindow.ui
 
