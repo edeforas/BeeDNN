@@ -227,7 +227,7 @@ double MainWindow::compute_truth(double x)
         return exp(-x*x);
 
     if(sFunction=="Rectangular")
-        return (((int)x)+(x<0.))+1 & 1 ;
+        return ((((int)x)+(x<0.))+1) & 1 ;
 
     return 0.;
 }
