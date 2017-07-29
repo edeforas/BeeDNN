@@ -1,6 +1,6 @@
 #include "DenseLayer.h"
 
-#include <cassert> // for rand
+#include <cassert>
 #include <cstdlib> // for rand
 #include <cmath> // for sqrt
 
@@ -28,7 +28,7 @@ void DenseLayer::init()
 
     for(int i=0;i<_weight.size();i++)
     {
-        _weight(i)=((double)rand()/RAND_MAX-0.5)*2.*a;
+        _weight(i)=((double)rand()/(double)RAND_MAX-0.5)*2.*a;
     }
 
     dE.resize(_iInSize+1,_iOutSize);

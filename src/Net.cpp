@@ -72,7 +72,8 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
                 //compute one sample error
 
                 //forward pass with save
-                const Matrix& mSample=mSamples.row((int)mShuffle(iSample));
+                int iIndexSample=mShuffle(iSample);
+                const Matrix& mSample=mSamples.row(iIndexSample);
                 Matrix mOut, mTemp=mSample;
                 for(unsigned int i=0;i<_layers.size();i++)
                 {
@@ -81,7 +82,7 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
                 }
 
                 //compute and backpropagate error, sum dE
-                Matrix mError=mOut-mTruth.row((int)mShuffle(iSample));
+                Matrix mError=mOut-mTruth.row(iIndexSample);
 
                 // check early abort max error
                 for(int i=0;i<mError.size();i++)

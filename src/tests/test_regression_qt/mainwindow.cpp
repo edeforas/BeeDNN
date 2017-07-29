@@ -168,6 +168,10 @@ void MainWindow::drawRegression(const Net& n)
     qs->addCurve(vSamples,vTruth,Qt::red);
     qs->addCurve(vSamples,vRegression,Qt::blue);
 
+    QPen penBlack(Qt::black);
+    penBlack.setCosmetic(true);
+    qs->addLine(dInputMin,0,dInputMax,0,penBlack);
+
     ui->gvRegression->setScene(qs); //take ownership
     ui->gvRegression->fitInView(qs->itemsBoundingRect());
     ui->gvRegression->scale(0.8,0.8);
