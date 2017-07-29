@@ -41,6 +41,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->cbActivationLayer2->setCurrentText("Gauss");
     ui->cbActivationLayer3->setCurrentText("Linear");
 
+    ui->cbFunction->addItem("Sin");
+    ui->cbFunction->addItem("Abs");
+    ui->cbFunction->addItem("Parabolic");
+    ui->cbFunction->addItem("Gamma");
+    ui->cbFunction->addItem("Exp");
+    ui->cbFunction->addItem("Sqrt");
+    ui->cbFunction->addItem("Ln");
+    ui->cbFunction->addItem("Gauss");
 }
 //////////////////////////////////////////////////////////////////////////
 MainWindow::~MainWindow()
@@ -69,7 +77,7 @@ void MainWindow::on_pushButton_clicked()
     n.add(&l2);
     n.add(&l3);
 
-    int iNbPoint=10;
+    int iNbPoint=ui->leNbPointsLearn->text().toInt();
     double dInputMin=ui->leInputMin->text().toDouble();
     double dInputMax=ui->leInputMax->text().toDouble();
     double dStep=(dInputMax-dInputMin)/(double)iNbPoint;
@@ -81,7 +89,7 @@ void MainWindow::on_pushButton_clicked()
 
     for( int i=0;i<iNbPoint;i++)
     {
-        mTruth(i)=sin(dVal);
+        mTruth(i)=compute_truth(dVal);
         mSamples(i)=dVal;
         dVal+=dStep;
     }
@@ -137,7 +145,7 @@ void MainWindow::drawRegression(const Net& n)
     SimpleCurve* qs=new SimpleCurve;
 
     //create ref sample hi-res and net output
-    unsigned int iNbPoint=100;
+    unsigned int iNbPoint=(unsigned int)(ui->leNbPointsTest->text().toInt());
     double dInputMin=ui->leInputMin->text().toDouble();
     double dInputMax=ui->leInputMax->text().toDouble();
     double dStep=(dInputMax-dInputMin)/(double)iNbPoint;
@@ -150,7 +158,7 @@ void MainWindow::drawRegression(const Net& n)
     for(unsigned int i=0;i<iNbPoint;i++)
     {
         mIn(0)=dVal;
-        vTruth[i]=-sin(dVal);
+        vTruth[i]=-compute_truth(dVal);
         vSamples[i]=dVal;
         n.forward(mIn,mOut);
         vRegression[i]=-mOut(0);
@@ -173,7 +181,7 @@ void MainWindow::on_actionQuit_triggered()
 void MainWindow::on_actionAbout_triggered()
 {
     QMessageBox mb;
-    QString qsText="Sin Net Demo";
+    QString qsText="Regression Net Demo";
     qsText+= "\n";
     qsText+= "\n GitHub: https://github.com/edeforas/test_DNN";
     qsText+= "\n by Etienne de Foras";
@@ -183,3 +191,37 @@ void MainWindow::on_actionAbout_triggered()
     mb.exec();
 }
 //////////////////////////////////////////////////////////////////////////
+double MainWindow::compute_truth(double x)
+{
+    //function not optimized but not mandatory
+
+    string sFunction=ui->cbFunction->currentText().toStdString();
+
+    if(sFunction=="Sin")
+        return sin(x);
+
+    if(sFunction=="Abs")
+        return fabs(x);
+
+    if(sFunction=="Parabolic")
+        return x*x;
+
+    if(sFunction=="Gamma")
+        return tgamma(x);
+
+    if(sFunction=="Exp")
+        return exp(x);
+
+    if(sFunction=="Sqrt")
+        return sqrt(x);
+
+    if(sFunction=="Ln")
+        return log(x);
+
+    if(sFunction=="Gauss")
+        return exp(-x*x);
+
+    return 0.;
+}
+//////////////////////////////////////////////////////////////////////////
+
