@@ -2,7 +2,6 @@
 #include "ui_mainwindow.h"
 #include <QMessageBox>
 #include <QGraphicsScene>
-#include <QGraphicsPolygonItem>
 #include "SimpleCurve.h"
 
 #include "Net.h"
@@ -50,6 +49,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->cbFunction->addItem("Ln");
     ui->cbFunction->addItem("Gauss");
     ui->cbFunction->addItem("Rectangular");
+
+    resizeDocks({ui->dockWidget},{0},Qt::Horizontal);
 }
 //////////////////////////////////////////////////////////////////////////
 MainWindow::~MainWindow()
