@@ -49,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->cbFunction->addItem("Sqrt");
     ui->cbFunction->addItem("Ln");
     ui->cbFunction->addItem("Gauss");
+    ui->cbFunction->addItem("Rectangular");
 }
 //////////////////////////////////////////////////////////////////////////
 MainWindow::~MainWindow()
@@ -80,7 +81,7 @@ void MainWindow::on_pushButton_clicked()
     int iNbPoint=ui->leNbPointsLearn->text().toInt();
     double dInputMin=ui->leInputMin->text().toDouble();
     double dInputMax=ui->leInputMax->text().toDouble();
-    double dStep=(dInputMax-dInputMin)/(double)iNbPoint;
+    double dStep=(dInputMax-dInputMin)/(double)(iNbPoint-1);
 
     //create ref sample
     Matrix mTruth(iNbPoint);
@@ -148,7 +149,7 @@ void MainWindow::drawRegression(const Net& n)
     unsigned int iNbPoint=(unsigned int)(ui->leNbPointsTest->text().toInt());
     double dInputMin=ui->leInputMin->text().toDouble();
     double dInputMax=ui->leInputMax->text().toDouble();
-    double dStep=(dInputMax-dInputMin)/(double)iNbPoint;
+    double dStep=(dInputMax-dInputMin)/(double)(iNbPoint-1);
     vector<double> vTruth(iNbPoint);
     vector<double> vSamples(iNbPoint);
     vector<double> vRegression(iNbPoint);
@@ -224,6 +225,9 @@ double MainWindow::compute_truth(double x)
 
     if(sFunction=="Gauss")
         return exp(-x*x);
+
+    if(sFunction=="Rectangular")
+        return (((int)x)+(x<0.))+1 & 1 ;
 
     return 0.;
 }
