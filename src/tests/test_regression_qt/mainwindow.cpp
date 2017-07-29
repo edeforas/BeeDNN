@@ -69,14 +69,21 @@ void MainWindow::on_pushButton_clicked()
     n.add(&l2);
     n.add(&l3);
 
+    int iNbPoint=10;
+    double dInputMin=ui->leInputMin->text().toDouble();
+    double dInputMax=ui->leInputMax->text().toDouble();
+    double dStep=(dInputMax-dInputMin)/(double)iNbPoint;
+
     //create ref sample
-    Matrix mTruth(64);
-    Matrix mSamples(64);
-    for( int i=0;i<64;i++)
+    Matrix mTruth(iNbPoint);
+    Matrix mSamples(iNbPoint);
+    double dVal=dInputMin;
+
+    for( int i=0;i<iNbPoint;i++)
     {
-        double x=(double)i/10.;
-        mTruth(i)=sin(x);
-        mSamples(i)=x;
+        mTruth(i)=sin(dVal);
+        mSamples(i)=dVal;
+        dVal+=dStep;
     }
 
     TrainOption tOpt;
@@ -130,19 +137,24 @@ void MainWindow::drawRegression(const Net& n)
     SimpleCurve* qs=new SimpleCurve;
 
     //create ref sample hi-res and net output
-    vector<double> vTruth(640);
-    vector<double> vSamples(640);
-    vector<double> vRegression(640);
+    unsigned int iNbPoint=100;
+    double dInputMin=ui->leInputMin->text().toDouble();
+    double dInputMax=ui->leInputMax->text().toDouble();
+    double dStep=(dInputMax-dInputMin)/(double)iNbPoint;
+    vector<double> vTruth(iNbPoint);
+    vector<double> vSamples(iNbPoint);
+    vector<double> vRegression(iNbPoint);
     Matrix mIn(1),mOut;
+    double dVal=dInputMin;
 
-    for(unsigned int i=0;i<640;i++)
+    for(unsigned int i=0;i<iNbPoint;i++)
     {
-        double x=(double)i/100.;
-        mIn(0)=x;
-        vTruth[i]=sin(x);
-        vSamples[i]=x;
+        mIn(0)=dVal;
+        vTruth[i]=-sin(dVal);
+        vSamples[i]=dVal;
         n.forward(mIn,mOut);
-        vRegression[i]=mOut(0);
+        vRegression[i]=-mOut(0);
+        dVal+=dStep;
     }
 
     qs->addCurve(vSamples,vTruth,Qt::red);
