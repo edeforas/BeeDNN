@@ -5,6 +5,7 @@
 #include "ActivationGauss.h"
 #include "ActivationLinear.h"
 #include "ActivationRelu.h"
+#include "ActivationLeakyRelu.h"
 #include "ActivationElu.h"
 #include "ActivationSelu.h"
 #include "ActivationSoftPlus.h"
@@ -19,6 +20,7 @@ ActivationManager::ActivationManager()
     _vActivations.push_back(new ActivationGauss);
     _vActivations.push_back(new ActivationLinear);
     _vActivations.push_back(new ActivationRelu);
+    _vActivations.push_back(new ActivationLeakyRelu);
     _vActivations.push_back(new ActivationElu);
     _vActivations.push_back(new ActivationSelu);
     _vActivations.push_back(new ActivationSoftPlus);

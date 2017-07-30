@@ -19,5 +19,5 @@ double ActivationRelu::apply(double x) const
 double ActivationRelu::derivation(double x,double y) const
 {
     (void)x;
-    return y>=0. ? 1. : 0.; //f'(x) computed with y=f(x)
+    return y>=0. ? 1. : 0.;
 }

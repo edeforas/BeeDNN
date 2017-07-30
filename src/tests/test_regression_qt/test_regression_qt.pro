@@ -1,5 +1,5 @@
 QT       += core gui widgets
-TARGET = test_sin_qt
+TARGET = test_regression_qt
 TEMPLATE = app
 CONFIG += c++14
 
@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     ../../ActivationSoftSign.cpp \
     ../../ActivationManager.cpp \
     SimpleCurve.cpp \
-    ../../ActivationElu.cpp
+    ../../ActivationElu.cpp \
+    ../../ActivationLeakyRelu.cpp
 
 HEADERS  += mainwindow.h \
     ../../Activation.h \
@@ -41,7 +42,8 @@ HEADERS  += mainwindow.h \
     ../../ActivationSoftSign.h \
     ../../ActivationManager.h \
     SimpleCurve.h \
-    ../../ActivationElu.h
+    ../../ActivationElu.h \
+    ../../ActivationLeakyRelu.h
 
 FORMS    += mainwindow.ui
 
