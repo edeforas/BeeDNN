@@ -50,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->cbFunction->addItem("Gauss");
     ui->cbFunction->addItem("Rectangular");
 
-    resizeDocks({ui->dockWidget},{0},Qt::Horizontal);
+    resizeDocks({ui->dockWidget},{1},Qt::Horizontal);
 }
 //////////////////////////////////////////////////////////////////////////
 MainWindow::~MainWindow()
