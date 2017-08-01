@@ -39,7 +39,7 @@ void DenseLayer::forward(const Matrix& mMatIn,Matrix& mMatOut) const
 {
     // compute out=[in 1]*weight; todo use MAC
     mMatOut=mMatIn*(_weight.without_last_row());
-    mMatOut=mMatOut+_weight.row(_iInSize);
+    mMatOut+=_weight.row(_iInSize);
 
     // apply activation
     for(int i=0;i<mMatOut.size();i++)
@@ -53,7 +53,7 @@ void DenseLayer::forward_save(const Matrix& mMatIn,Matrix& mMatOut)
     in=mMatIn;
     // compute out=[in 1]*weight; todo use MAC
     mMatOut=mMatIn*_weight.without_last_row();
-    mMatOut=mMatOut+_weight.row(_iInSize);
+    mMatOut+=_weight.row(_iInSize);
 
     outWeight=mMatOut;
 
@@ -64,7 +64,7 @@ void DenseLayer::forward_save(const Matrix& mMatIn,Matrix& mMatOut)
     }
     out=mMatOut;
 }
-
+///////////////////////////////////////////////////////////////////////////////
 Matrix DenseLayer::get_weight_activation_derivation()
 {
     // apply activation derivation on outweight
@@ -76,8 +76,9 @@ Matrix DenseLayer::get_weight_activation_derivation()
 
     return mOut;
 }
-
+///////////////////////////////////////////////////////////////////////////////
 Matrix& DenseLayer::get_weight()
 {
     return _weight;
 }
+///////////////////////////////////////////////////////////////////////////////

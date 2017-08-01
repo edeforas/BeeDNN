@@ -32,8 +32,6 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
 {
     TrainResult tr;
 
-    // todo add early abort
-
     for(unsigned int i=0;i<_layers.size();i++)
         _layers[i]->init();
 
@@ -125,17 +123,11 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
         if(topt.observer)
             topt.observer->stepEpoch(tr);
 
-        if(dMaxError<topt.earlyAbortMaxError)
-        {
-            tr.computedEpochs=iEpoch;
+        if( dMaxError<topt.earlyAbortMaxError)
             break;
-        }
 
-        if(tr.loss<topt.earlyAbortMeanError)
-        {
-            tr.computedEpochs=iEpoch;
+        if (tr.loss<topt.earlyAbortMeanError)
             break;
-        }
     }
 
     return tr;
