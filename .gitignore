@@ -23,6 +23,9 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+#data files
+*ubyte
+
 # =========================
 # Operating System Files
 # =========================

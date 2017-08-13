@@ -3,17 +3,17 @@
 using namespace std;
 
 #include "Net.h"
-#include "ActivationTanh.h"
+#include "Activation.h"
 #include "DenseLayer.h"
 
 int main()
 {
     Net n;
 
-    ActivationTanh ac;
-    DenseLayer l1(1,20,&ac);
-    DenseLayer l2(20,20,&ac);
-    DenseLayer l3(20,1,&ac);
+    ActivationManager am;
+    DenseLayer l1(1,20,am.get_activation("Tanh"));
+    DenseLayer l2(20,20,am.get_activation("Tanh"));
+    DenseLayer l3(20,1,am.get_activation("Tanh"));
 
     n.add(&l1);
     n.add(&l2);

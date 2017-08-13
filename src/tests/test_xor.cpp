@@ -2,16 +2,16 @@
 using namespace std;
 
 #include "Net.h"
-#include "ActivationSigmoid.h"
+#include "Activation.h"
 #include "DenseLayer.h"
 
 int main()
 {
     Net n;
 
-    ActivationSigmoid ac;
-    DenseLayer l1(2,3,&ac);
-    DenseLayer l2(3,1,&ac);
+    ActivationManager am;
+    DenseLayer l1(2,3,am.get_activation("Sigmoid"));
+    DenseLayer l2(3,1,am.get_activation("Sigmoid"));
 
     n.add(&l1);
     n.add(&l2);
