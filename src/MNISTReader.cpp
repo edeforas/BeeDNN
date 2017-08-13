@@ -3,6 +3,8 @@
 #include <fstream>
 using namespace std;
 
+//TODO clean everything , fix warnings (at least it works)
+
 ////////////////////////////////////////////////////////////////////////////////////
 bool MNISTReader::read_from_folder(const string& sFolder,Matrix& mRefImages,Matrix& mRefLabels,Matrix& mTestImages,Matrix& mTestLabels)
 {
@@ -30,37 +32,40 @@ bool MNISTReader::read_matrix(string sName,Matrix& m)
 {
     // file format and data at : http://yann.lecun.com/exdb/mnist/
 
-    fstream ifs(sName,ios::binary);
+    ifstream ifs(sName, ios::binary|ios::in );
+
     if(!ifs)
         return false;
 
-    unsigned short usMagic;
-    ifs >> usMagic;
+    short usMagic;
+    ifs.read((char*)(&usMagic),2);
     if(usMagic!=0)
         return false;
 
-    unsigned char ucType;
-    ifs >> ucType;
+    char ucType;
+    ifs.read((char*)(&ucType),1);
     if(ucType!=0x08)
         return false; //only byte format for now
 
     unsigned char ucNbDim;
-    ifs >> ucNbDim;
+    ifs.read((char*)(&ucNbDim),1);
     if(ucNbDim==0x01)
     {
         // one vector data
         unsigned int uiSize;
-        ifs >> uiSize;
+        ifs.read((char*)(&uiSize),4); swap_int(uiSize);
 
         m.resize(1,uiSize);
 
+        char* pVector=new char[uiSize];
+        ifs.read((char*)(pVector),uiSize);
+        double* pData=m.data();
         for(unsigned int i=0;i<uiSize;i++)
         {
-            unsigned char ucData; //todo: read batch
-            ifs >> ucData;
-            m(i)=ucData;
+            *pData++=pVector[i];
         }
 
+        delete[] pVector;
         return true;
     }
 
@@ -68,24 +73,40 @@ bool MNISTReader::read_matrix(string sName,Matrix& m)
     {
         // image list data , will be flattened, one row by image
         unsigned int uiNbImages,uiNbRows,uiNbColumns;
-        ifs >> uiNbImages >> uiNbRows >> uiNbColumns;
+        ifs.read((char*)(&uiNbImages),4); swap_int(uiNbImages);
+        ifs.read((char*)(&uiNbRows),4); swap_int(uiNbRows);
+        ifs.read((char*)(&uiNbColumns),4); swap_int(uiNbColumns);
+
         unsigned int uiSize=uiNbRows*uiNbColumns;
 
         m.resize(uiNbImages,uiSize);
+
+        char* pImage=new char[uiSize];
+
         for(unsigned int iImage=0;iImage<uiNbImages;iImage++)
         {
+            ifs.read(pImage,uiSize);
             double * pData=m.row(iImage).data();
             for(unsigned int i=0;i<uiSize;i++)
             {
-                unsigned char ucData; //todo: read batch
-                ifs >> ucData;
-                *pData++=ucData;
+                *pData++=pImage[i];
             }
         }
 
+        delete[] pImage;
         return true;
     }
 
     return false;
+}
+////////////////////////////////////////////////////////////////////////////////////
+void MNISTReader::swap_int(unsigned int & i)
+{
+    unsigned char c1=(unsigned char)(i & 0xFF);
+    unsigned char c2=(unsigned char)((i >> 8) & 0xFF);
+    unsigned char c3=(unsigned char)((i >>16 )& 0xFF);
+    unsigned char c4=(unsigned char)((i>> 24) & 0xFF);
+
+    i=(c1<<24)+(c2<<16)+(c3<<8)+c4;
 }
 ////////////////////////////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 #ifndef _Matrix_
 #define _Matrix_
 
-#include <assert.h>
+#include <cassert>
 
 //todo add more tests and optimize
 
@@ -17,11 +17,8 @@ public:
         _bDelete=false;
     }
 
-    Matrix(int iRows,int iColumns=1)
-    {
-        assert(iColumns>=0);
-        assert(iRows>=0);
-        
+    Matrix(unsigned int iRows,unsigned int iColumns=1)
+    {       
         _iRows=iRows;
         _iColumns=iColumns;
         _iSize=_iRows*_iColumns;
@@ -29,11 +26,8 @@ public:
         _bDelete=true;
     }
     
-    Matrix(double* pData,int iRows,int iColumns)
-    {
-        assert(iColumns>=0);
-        assert(iRows>=0);
-        
+    Matrix(double* pData,unsigned int iRows,unsigned int iColumns)
+    {      
         _iRows=iRows;
         _iColumns=iColumns;
         _iSize=_iRows*_iColumns;
@@ -49,7 +43,7 @@ public:
         _data=new double[_iSize];
         _bDelete=true;
 
-        for(int i=0;i<size();i++)
+        for(unsigned int i=0;i<size();i++)
             _data[i]=a(i);
     //todo use or merge with operator=()(a); ??
     }
@@ -64,32 +58,29 @@ public:
     {
         resize(b.rows(),b.columns());
         
-        for(int i=0;i<size();i++)
+        for(unsigned int i=0;i<size();i++)
             operator()(i)=b(i);
         
         return *this;
     }
     
-    int rows() const
+    unsigned int rows() const
     {
         return _iRows;
     }
 
-    int columns() const
+    unsigned int columns() const
     {
         return _iColumns;
     }
     
-    int size() const
+    unsigned int size() const
     {
         return _iSize;
     }
 
-    void resize(int iRows,int iColumns) // slow function!
+    void resize(unsigned int iRows,unsigned int iColumns) // slow function!
     {
-        assert(iColumns>=0);
-        assert(iRows>=0);
-
         if((iColumns==_iColumns) && ( iRows==_iRows))
             return;
         
@@ -119,7 +110,7 @@ public:
 
     void set_constant(double b)
     {
-        for(int i=0;i<_iSize;i++)
+        for(unsigned int i=0;i<_iSize;i++)
             _data[i]=b;
     }
 
@@ -128,34 +119,28 @@ public:
         set_constant(0.);
     }
 
-    double& operator()(int iR,int iC)
+    double& operator()(unsigned int iR,unsigned int iC)
     {
-        assert(iR>=0);
-        assert(iC>=0);
         assert(iR<_iRows);
         assert(iC<_iColumns);
         return *(_data+iR*_iColumns+iC);
     }
     
-    const double& operator()(int iR,int iC) const
+    const double& operator()(unsigned int iR,unsigned int iC) const
     {
-        assert(iR>=0);
-        assert(iC>=0);
         assert(iR<_iRows);
         assert(iC<_iColumns);
         return *(_data+iR*_iColumns+iC);
     }
     
-    double& operator()(int iX)
+    double& operator()(unsigned int iX)
     {
-        assert(iX>=0);
         assert(iX<_iSize);
         return *(_data+iX);
     }
     
-    const double& operator()(int iX) const
+    const double& operator()(unsigned int iX) const
     {
-        assert(iX>=0);
         assert(iX<_iSize);
         return *(_data+iX);
     }
@@ -165,7 +150,7 @@ public:
         assert(_iRows==a.rows());
         assert(_iColumns==a.columns());
 
-        for(int i=0;i<_iSize;i++)
+        for(unsigned int i=0;i<_iSize;i++)
             _data[i]+=a(i);
         return *this;
     }
@@ -183,7 +168,7 @@ public:
         assert(_iRows==a.rows());
         assert(_iColumns==a.columns());
 
-        for(int i=0;i<_iSize;i++)
+        for(unsigned int i=0;i<_iSize;i++)
             _data[i]-=a(i);
         return *this;
     }
@@ -198,7 +183,7 @@ public:
     
     Matrix& operator*=(double b)
     {
-        for(int i=0;i<_iSize;i++)
+        for(unsigned int i=0;i<_iSize;i++)
             _data[i]*=b;
 
         return *this;
@@ -206,7 +191,7 @@ public:
 
     Matrix& operator/=(double b)
     {
-        for(int i=0;i<_iSize;i++)
+        for(unsigned int i=0;i<_iSize;i++)
             _data[i]/=b;
 
         return *this;
@@ -229,13 +214,13 @@ public:
         Matrix a(*this);
         resize(a._iRows,b._iColumns);
 
-        for(int r=0;r<_iRows;r++)
+        for(unsigned int r=0;r<_iRows;r++)
         {
-            for(int c=0;c<_iColumns;c++)
+            for(unsigned int c=0;c<_iColumns;c++)
             {
                 double temp=0.;
 
-                for(int k=0;k<a._iColumns;k++)
+                for(unsigned int k=0;k<a._iColumns;k++)
                     temp+=a(r,k)*b(k,c);
 
                 operator()(r,c)=temp;
@@ -252,7 +237,7 @@ public:
 
         Matrix out(*this);
 
-        for(int i=0;i<_iSize;i++)
+        for(unsigned int i=0;i<_iSize;i++)
             out(i)*=m(i);
 
         return out;
@@ -262,7 +247,7 @@ public:
     {
         Matrix out(*this);
 
-        for(int i=0;i<_iSize;i++)
+        for(unsigned int i=0;i<_iSize;i++)
             out(i)*=d;
 
         return out;
@@ -272,8 +257,8 @@ public:
     {
         Matrix out(_iColumns,_iRows);
 
-        for(int r=0;r<_iRows;r++)
-            for(int c=0;c<_iColumns;c++)
+        for(unsigned int r=0;r<_iRows;r++)
+            for(unsigned int c=0;c<_iColumns;c++)
                 out(c,r)=operator()(r,c);
 
         return out;
@@ -285,12 +270,12 @@ public:
 
         Matrix mT(_iRows,_iColumns+b._iColumns);
 
-        for(int r=0;r<_iRows;r++)
-            for(int c=0;c<_iColumns;c++)
+        for(unsigned int r=0;r<_iRows;r++)
+            for(unsigned int c=0;c<_iColumns;c++)
                 mT(r,c)=operator()(r,c);
 
-        for(int r=0;r<b.rows();r++)
-            for(int c=0;c<b.columns();c++)
+        for(unsigned int r=0;r<b.rows();r++)
+            for(unsigned int c=0;c<b.columns();c++)
                 mT(r,c+_iColumns)=b(r,c);
 
         return mT;
@@ -302,18 +287,16 @@ public:
     }
 
 
-    Matrix row(int iRow)
+    Matrix row(unsigned int iRow)
     {
-        assert(iRow>=0);
         assert(iRow<_iRows);
 
         return Matrix(_data+iRow*_iColumns,1,_iColumns);
     }
 
     
-    const Matrix row(int iRow) const
+    const Matrix row(unsigned int iRow) const
     {
-        assert(iRow>=0);
         assert(iRow<_iRows);
 
         return Matrix(_data+iRow*_iColumns,1,_iColumns);
@@ -331,8 +314,8 @@ public:
 
         Matrix m(_iRows,_iColumns-1);
 
-        for(int r=0;r<_iRows;r++)
-            for(int c=0;c<_iColumns-1;c++)
+        for(unsigned int r=0;r<_iRows;r++)
+            for(unsigned int c=0;c<_iColumns-1;c++)
                 m(r,c)=operator()(r,c);
 
         return m;
@@ -343,16 +326,16 @@ public:
         return (_iRows==1) || (_iColumns==1);
 	}
 	
-    static Matrix rand_perm(int iSize) //create a vector of index shuffled
+    static Matrix rand_perm(unsigned int iSize) //create a vector of index shuffled
 	{
 		Matrix m(iSize);
 		
 		//create ordered vector
-		for(int i=0;i<iSize;i++)
+        for(unsigned int i=0;i<iSize;i++)
 			m._data[i]=i;
 		
 		//now bubble shuffle
-		for(int i=0;i<iSize;i++)
+        for(unsigned int i=0;i<iSize;i++)
 		{
 			int iNewPos=rand()%iSize;
             double dVal=m._data[iNewPos];
@@ -364,7 +347,7 @@ public:
 	}
     
 private:
-    int _iRows,_iColumns,_iSize;
+    unsigned int _iRows,_iColumns,_iSize;
     double* _data;
     bool _bDelete;
 };

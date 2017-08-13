@@ -83,7 +83,7 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
                 Matrix mError=mOut-mTruth.row(iIndexSample);
 
                 // check early abort max error
-                for(int i=0;i<mError.size();i++)
+                for(unsigned int i=0;i<mError.size();i++)
                 {
                     if(fabs(mError(i))>dMaxError)
                         dMaxError=fabs(mError(i));

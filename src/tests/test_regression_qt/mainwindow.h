@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "ActivationManager.h"
+#include "Activation.h"
 
 #include <QMainWindow>
 
