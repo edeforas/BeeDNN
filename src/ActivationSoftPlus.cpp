@@ -14,7 +14,7 @@ string ActivationSoftPlus::name() const
 
 double ActivationSoftPlus::apply(double x) const
 {
-    return log(1.+exp(x));
+    return log1p(exp(x));
 }
 
 double ActivationSoftPlus::derivation(double x,double y) const

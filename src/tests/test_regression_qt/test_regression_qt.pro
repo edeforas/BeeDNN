@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     ../../ActivationManager.cpp \
     SimpleCurve.cpp \
     ../../ActivationElu.cpp \
-    ../../ActivationLeakyRelu.cpp
+    ../../ActivationLeakyRelu.cpp \
+    ../../MNISTReader.cpp
 
 HEADERS  += mainwindow.h \
     ../../Activation.h \
@@ -43,7 +44,8 @@ HEADERS  += mainwindow.h \
     ../../ActivationManager.h \
     SimpleCurve.h \
     ../../ActivationElu.h \
-    ../../ActivationLeakyRelu.h
+    ../../ActivationLeakyRelu.h \
+    ../../MNISTReader.h
 
 FORMS    += mainwindow.ui
 

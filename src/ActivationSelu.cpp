@@ -20,7 +20,7 @@ double ActivationSelu::apply(double x) const
 	if(x>=0.)
 		return SELU_LAMBDA*x;
 	else
-		return SELU_LAMBDA*SELU_ALPHA*(exp(x)-1.);
+		return SELU_LAMBDA*SELU_ALPHA*expm1(x);
 }
 
 double ActivationSelu::derivation(double x,double y) const

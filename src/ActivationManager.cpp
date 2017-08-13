@@ -35,7 +35,7 @@ ActivationManager::~ActivationManager()
         delete _vActivations[i];
 }
 
-Activation* ActivationManager::get_activation(string sName) //do not delete: manager own it.
+Activation* ActivationManager::get_activation(const string& sName) //do not delete: manager own it.
 {
     for(unsigned int i=0; i<_vActivations.size();i++)
     {

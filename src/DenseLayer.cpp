@@ -32,7 +32,7 @@ void DenseLayer::init()
     }
 
     dE.resize(_iInSize+1,_iOutSize);
-    dE.setZero();
+    dE.set_zero();
 }
 ///////////////////////////////////////////////////////////////////////////////
 void DenseLayer::forward(const Matrix& mMatIn,Matrix& mMatOut) const

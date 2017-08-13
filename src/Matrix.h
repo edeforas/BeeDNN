@@ -107,15 +107,25 @@ public:
         _data=new double[_iSize];
     }
     
-    void setConstant(double b)
+    double* data()
+    {
+        return _data;
+    }
+
+    const double* data() const
+    {
+        return _data;
+    }
+
+    void set_constant(double b)
     {
         for(int i=0;i<_iSize;i++)
             _data[i]=b;
     }
 
-    void setZero()
+    void set_zero()
     {
-        setConstant(0.);
+        set_constant(0.);
     }
 
     double& operator()(int iR,int iC)
@@ -235,7 +245,7 @@ public:
         return *this;
     }
 
-    Matrix elementProduct(const Matrix& m) const
+    Matrix element_product(const Matrix& m) const
     {
         assert(columns()==m.columns());
         assert(rows()==m.rows());
@@ -248,7 +258,7 @@ public:
         return out;
     }
 
-    Matrix scalarMult(double d) const
+    Matrix scalar_mult(double d) const
     {
         Matrix out(*this);
 
@@ -290,6 +300,16 @@ public:
     {
         return Matrix(*this).operator*=(a);
     }
+
+
+    Matrix row(int iRow)
+    {
+        assert(iRow>=0);
+        assert(iRow<_iRows);
+
+        return Matrix(_data+iRow*_iColumns,1,_iColumns);
+    }
+
     
     const Matrix row(int iRow) const
     {

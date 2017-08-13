@@ -17,7 +17,7 @@ double ActivationElu::apply(double x) const
 	if(x>=0.)
 		return x;
 	else
-		return (exp(x)-1.);
+		return expm1(x);
 }
 
 double ActivationElu::derivation(double x,double y) const

@@ -59,7 +59,7 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
         {
             // init error accumulation
             for(unsigned int i=0;i<_layers.size();i++)
-                sumDE[i].setZero();
+                sumDE[i].set_zero();
 
             int iBatchEnd=iBatchStart+iBatchSize;
             if(iBatchEnd>iNbSamples)
@@ -144,7 +144,7 @@ void Net::backpropagation(const Matrix &mError)
         if((unsigned int)iL==_layers.size()-1)
         {
             //last layer
-            mDelta=mError.elementProduct(mAD); //  delta=error.*mAD;
+            mDelta=mError.element_product(mAD); //  delta=error.*mAD;
         }
         else
         {
@@ -155,11 +155,11 @@ void Net::backpropagation(const Matrix &mError)
             //a=a(:,1:columns(a)-1); % do not use last weight (use only for bias)
             //b=activation_derivation(layer.func,outweight);
             //delta=a.*b;
-            mDelta=(a.without_last_column()).elementProduct(mAD); //todo optimise
+            mDelta=(a.without_last_column()).element_product(mAD); //todo optimise
         }
 
         //dE=(layer.in')*delta;
-        Matrix mOne(1,1); mOne.setConstant(1.);
+        Matrix mOne(1,1); mOne.set_constant(1.);
         l.dE=(l.in.concat(mOne).transpose())*mDelta;
     }
 }
