@@ -7,12 +7,22 @@ using namespace std;
 #include "DenseLayer.h"
 #include "MNISTReader.h"
 
+class LossObserver: public TrainObserver
+{
+public:
+    virtual void stepEpoch(const TrainResult & tr)
+    {
+        cout << "epoch=" << tr.computedEpochs << " loss=" << tr.loss << endl;
+    }
+};
+
 int main()
 {
     Net n;
-
+    LossObserver lo;
     Matrix mRefImages,mRefLabels, mTestImages,MTestLabels;
 
+    cout << "loading MNIST database..." << endl;
     MNISTReader mr;
     if(!mr.read_from_folder(".",mRefImages,mRefLabels, mTestImages,MTestLabels))
     {
@@ -20,33 +30,31 @@ int main()
         return -1;
     }
 
+    // normalize input data
+    mRefImages=mRefImages/128.-1.;
+    mTestImages=mTestImages/128.-1.;
+
     ActivationManager am;
-    DenseLayer l1(1,20,am.get_activation("Tanh"));
-    DenseLayer l2(20,20,am.get_activation("Tanh"));
-    DenseLayer l3(20,1,am.get_activation("Tanh"));
+    DenseLayer l1(784,20,am.get_activation("Tanh"));
+    DenseLayer l2(20,10,am.get_activation("Tanh"));
+    DenseLayer l3(10,1,am.get_activation("Tanh"));
 
     n.add(&l1);
     n.add(&l2);
     n.add(&l3);
-/*
-	Matrix mTruth(64);
-	Matrix mSamples(64);
-	for( int i=0;i<64;i++)
-	{
-		double x=(double)i/10.;
-		mTruth(i)=sin(x);
-		mSamples(i)=x;
-	}
 
     TrainOption tOpt;
-    tOpt.epochs=10000;
+    tOpt.epochs=10;
     tOpt.earlyAbortMaxError=0.05;
     tOpt.learningRate=0.1;
-    tOpt.batchSize=1;
+    tOpt.batchSize=48;
     tOpt.momentum=0.05;
+    tOpt.observer=&lo;
 
-    TrainResult tr=n.train(mSamples,mTruth,tOpt);
-    cout << "Loss=" << tr.loss << " MaxError=" << tr.maxError << " ComputedEpochs=" << tr.computedEpochs << endl;
-*/
+    cout << "training..." << endl;
+    TrainResult tr=n.train(mRefImages,mRefLabels,tOpt);
+
+    cout << "end of learning" << endl;
+    //todo test
     return 0;
 }

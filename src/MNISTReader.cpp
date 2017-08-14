@@ -55,7 +55,7 @@ bool MNISTReader::read_matrix(string sName,Matrix& m)
         unsigned int uiSize;
         ifs.read((char*)(&uiSize),4); swap_int(uiSize);
 
-        m.resize(1,uiSize);
+        m.resize(uiSize,1);
 
         char* pVector=new char[uiSize];
         ifs.read((char*)(pVector),uiSize);

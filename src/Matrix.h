@@ -18,7 +18,7 @@ public:
     }
 
     Matrix(unsigned int iRows,unsigned int iColumns=1)
-    {       
+    {
         _iRows=iRows;
         _iColumns=iColumns;
         _iSize=_iRows*_iColumns;
@@ -27,7 +27,7 @@ public:
     }
     
     Matrix(double* pData,unsigned int iRows,unsigned int iColumns)
-    {      
+    {
         _iRows=iRows;
         _iColumns=iColumns;
         _iSize=_iRows*_iColumns;
@@ -45,7 +45,7 @@ public:
 
         for(unsigned int i=0;i<size();i++)
             _data[i]=a(i);
-    //todo use or merge with operator=()(a); ??
+        //todo use or merge with operator=()(a); ??
     }
 
     ~Matrix()
@@ -163,6 +163,17 @@ public:
         return Matrix(*this).operator+=(a);
     }
 
+    Matrix& operator+=(double d)
+    {
+        for(unsigned int i=0;i<_iSize;i++)
+            _data[i]+=d;
+        return *this;
+    }
+    Matrix operator+( double d ) const
+    {
+        return Matrix(*this).operator+=(d);
+    }
+
     Matrix& operator-=(const Matrix& a)
     {
         assert(_iRows==a.rows());
@@ -172,13 +183,23 @@ public:
             _data[i]-=a(i);
         return *this;
     }
-
     Matrix operator-( const Matrix& a ) const
     {
         assert(_iRows==a.rows());
         assert(_iColumns==a.columns());
 
         return Matrix(*this).operator-=(a);
+    }
+
+    Matrix& operator-=(double d)
+    {
+        for(unsigned int i=0;i<_iSize;i++)
+            _data[i]-=d;
+        return *this;
+    }
+    Matrix operator-( double d ) const
+    {
+        return Matrix(*this).operator-=(d);
     }
     
     Matrix& operator*=(double b)
@@ -321,30 +342,30 @@ public:
         return m;
     }
 
-	bool is_vector() const
-	{
+    bool is_vector() const
+    {
         return (_iRows==1) || (_iColumns==1);
-	}
-	
+    }
+
     static Matrix rand_perm(unsigned int iSize) //create a vector of index shuffled
-	{
-		Matrix m(iSize);
-		
-		//create ordered vector
+    {
+        Matrix m(iSize);
+
+        //create ordered vector
         for(unsigned int i=0;i<iSize;i++)
-			m._data[i]=i;
-		
-		//now bubble shuffle
+            m._data[i]=i;
+
+        //now bubble shuffle
         for(unsigned int i=0;i<iSize;i++)
-		{
-			int iNewPos=rand()%iSize;
+        {
+            int iNewPos=rand()%iSize;
             double dVal=m._data[iNewPos];
             m._data[iNewPos]=m._data[i];
             m._data[i]=dVal;
-		}
-		
-		return m;
-	}
+        }
+
+        return m;
+    }
     
 private:
     unsigned int _iRows,_iColumns,_iSize;
