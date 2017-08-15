@@ -38,3 +38,27 @@ Matrix index_to_position(const Matrix& mIndex, unsigned int uiMaxPosition)
     return mPos;
 }
 
+Matrix argmax(const Matrix& m)
+{
+    if(m.columns()==0)
+        return m;
+
+    Matrix mResult(m.rows(),1);
+
+    for(unsigned int iR=0;iR<m.rows();iR++)
+    {
+        double d=m(iR,0);
+        unsigned int iIndex=0;
+
+        for(unsigned int iC=1;iC<m.columns();iC++)
+        {    if(m(iR,iC)>d)
+            {
+                d=m(iR,iC);
+                iIndex=iC;
+            }
+        }
+        mResult(iR)=iIndex;
+    }
+
+    return mResult;
+}

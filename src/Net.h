@@ -57,6 +57,8 @@ public:
     TrainResult train(const Matrix& mSamples, const Matrix& mTruth, const TrainOption& topt);
     void forward(const Matrix& mIn,Matrix& mOut) const;
 
+    void classify(const Matrix& mIn,Matrix& mClass) const; // todo move in classification problem
+
 private:
     void backpropagation(const Matrix& mError);
     vector<Layer*> _layers;

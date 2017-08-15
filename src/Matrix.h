@@ -264,6 +264,19 @@ public:
         return out;
     }
 
+    Matrix element_divide(const Matrix& m) const
+    {
+        assert(columns()==m.columns());
+        assert(rows()==m.rows());
+
+        Matrix out(*this);
+
+        for(unsigned int i=0;i<_iSize;i++)
+            out(i)/=m(i);
+
+        return out;
+    }
+
     Matrix scalar_mult(double d) const
     {
         Matrix out(*this);
@@ -345,7 +358,28 @@ public:
 
         return Matrix(_data+iRow*_iColumns,1,_iColumns);
     }
-    
+
+
+    Matrix row_sum() const
+    {
+        Matrix r(_iRows,1);
+
+        for(unsigned int i=0;i<_iRows;i++)
+            r(i)=row(i).sum();
+
+        return r;
+    }
+
+    Matrix diag() const
+    {
+        Matrix r(_iRows,1);
+
+        for(unsigned int i=0;i<_iRows;i++)
+            r(i)=operator()(i,i);
+
+        return r;
+    }
+
     const Matrix without_last_row() const
     {
         assert(_iRows>0);

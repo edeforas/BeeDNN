@@ -7,6 +7,19 @@ using namespace std;
 #include "DenseLayer.h"
 #include "MNISTReader.h"
 #include "MatrixUtil.h"
+#include "ConfusionMatrix.h"
+
+void disp(const Matrix& m)
+{
+    for(unsigned int r=0;r<m.rows();r++)
+    {
+        for(unsigned int c=0;c<m.columns();c++)
+            cout << m(r,c) << " ";
+        cout << endl;
+    }
+}
+
+
 
 class LossObserver: public TrainObserver
 {
@@ -21,11 +34,11 @@ int main()
 {
     Net n;
     LossObserver lo;
-    Matrix mRefImages,mRefLabels, mTestImages,mTestLabels;
+    Matrix mRefImages,mRefLabels,mRefLabelsIndex, mTestImages,mTestLabels,mTestLabelsIndex;
 
     cout << "loading MNIST database..." << endl;
     MNISTReader mr;
-    if(!mr.read_from_folder(".",mRefImages,mRefLabels, mTestImages,mTestLabels))
+    if(!mr.read_from_folder(".",mRefImages,mRefLabelsIndex, mTestImages,mTestLabelsIndex))
     {
         cout << "MNIST samples not found, please check the *-ubyte files are in exectuable folder" << endl;
         return -1;
@@ -36,8 +49,8 @@ int main()
     mTestImages=mTestImages/128.-1.;
 
     //transform truth as a probabilty vector (one column by class)
-    mRefLabels=index_to_position(mRefLabels,10);
-    mTestLabels=index_to_position(mTestLabels,10);
+    mRefLabels=index_to_position(mRefLabelsIndex,10);
+    mTestLabels=index_to_position(mTestLabelsIndex,10);
 
     ActivationManager am;
     DenseLayer l1(784,20,am.get_activation("Tanh"));
@@ -60,10 +73,26 @@ int main()
 
     n.train(mRefImages,mRefLabels,tOpt);
 
-    cout << "end of learning" << endl;
+    cout << "end of learning." << endl;
 
-    //todo compute on test db
-    //todo compute conf matrix
+    //compute stat on ref db
 
+    cout << "testing ..."<< endl;
+
+    Matrix mClass;
+    n.classify(mRefImages,mClass);
+
+    disp(mClass);
+
+    ConfusionMatrix cm;
+    ClassificationResult cr=cm.compute(mRefLabelsIndex,mClass,10);
+
+    cout << "% of gooddetection=" << cr.goodclassificationPercent << endl;
+
+    cout << "ConfusionMatrix=" << endl;
+    disp(cr.mConfMat);
+    cout << endl;
+
+    cout << "end of test." << endl;
     return 0;
 }

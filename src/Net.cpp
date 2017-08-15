@@ -25,7 +25,20 @@ void Net::forward(const Matrix& mIn,Matrix& mOut) const
     for(unsigned int i=0;i<_layers.size();i++)
     {
         _layers[i]->forward(mTemp,mOut);
-        mTemp=mOut;
+        mTemp=mOut; //todo avoid resize
+    }
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void Net::classify(const Matrix& mIn,Matrix& mClass) const
+{
+    // todo merge with forward
+    mClass.resize(mIn.rows(),1); //todo  put int NetClassification problem
+
+    Matrix mOut;
+    for(unsigned int i=0;i<mIn.rows();i++)
+    {
+        forward(mIn.row(i),mOut);
+        mClass(i)=argmax(mOut)(0); //weird
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
