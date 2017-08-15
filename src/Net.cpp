@@ -1,6 +1,7 @@
 #include "Net.h"
 #include "Layer.h"
 #include "Matrix.h"
+#include "MatrixUtil.h"
 
 #include <cmath>
 
@@ -52,7 +53,7 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
     {
         double dMaxError=0., dMeanError=0.;
 
-        Matrix mShuffle=Matrix::rand_perm(iNbSamples);
+        Matrix mShuffle=rand_perm(iNbSamples);
 
         int iBatchStart=0;
         while(iBatchStart<iNbSamples)

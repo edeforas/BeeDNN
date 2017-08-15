@@ -24,7 +24,7 @@ public:
 
     Activation* get_activation(const string& sName); //do not delete: manager own it.
 
-    void list_all(vector<string>& allActivationNames);
+    void list_all(vector<string>& allActivationNames) const;
 
 private:
     vector<Activation*> _vActivations;

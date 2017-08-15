@@ -297,7 +297,7 @@ Activation* ActivationManager::get_activation(const string& sName) //do not dele
     return 0;
 }
 
-void ActivationManager::list_all(vector<string>& allActivationNames)
+void ActivationManager::list_all(vector<string>& allActivationNames) const
 {
     allActivationNames.clear();
     for(unsigned int i=0; i<_vActivations.size();i++)

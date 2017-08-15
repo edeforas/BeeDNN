@@ -7,7 +7,8 @@ SOURCES += ../Net.cpp \
     ../DenseLayer.cpp \
     ../Layer.cpp \
     ../Activation.cpp \
-    test_regression_sin.cpp
+    test_regression_sin.cpp \
+    ../MatrixUtil.cpp
 
 INCLUDEPATH+=..
 
@@ -16,4 +17,5 @@ HEADERS += \
     ../DenseLayer.h \
     ../Layer.h \
     ../Matrix.h \
-    ../Net.h
+    ../Net.h \
+    ../MatrixUtil.h

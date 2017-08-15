@@ -6,9 +6,9 @@ using namespace std;
 void disp(const Matrix& m)
 {
     cout << "rows=" << m.rows() << " columns=" << m.columns() << endl;
-    for(int r=0;r<m.rows();r++)
+    for(unsigned int r=0;r<m.rows();r++)
     {
-        for(int c=0;c<m.columns();c++)
+        for(unsigned int c=0;c<m.columns();c++)
             cout << m(r,c) << " ";
         cout << endl;
     }

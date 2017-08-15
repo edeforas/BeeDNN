@@ -8,7 +8,8 @@ SOURCES += ../Net.cpp \
     ../Layer.cpp \
     ../Activation.cpp \
     test_classification_MNIST.cpp \
-    ../MNISTReader.cpp
+    ../MNISTReader.cpp \
+    ../MatrixUtil.cpp
 
 INCLUDEPATH+=..
 
@@ -18,4 +19,5 @@ HEADERS += \
     ../Layer.h \
     ../Matrix.h \
     ../Net.h \
-    ../MNISTReader.h
+    ../MNISTReader.h \
+    ../MatrixUtil.h

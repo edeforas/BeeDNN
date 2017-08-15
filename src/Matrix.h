@@ -274,6 +274,29 @@ public:
         return out;
     }
 
+	double sum() const
+    {
+		double dSum=0.;
+        for(unsigned int i=0;i<_iSize;i++)
+            dSum+=_data[i];
+
+        return dSum;
+    }
+	
+	double max() const
+    {
+        if(_iSize==0)
+			return 0.; //not clean
+		
+		double dMax=_data[0];
+        for(unsigned int i=1;i<_iSize;i++)
+            if(_data[i]>dMax)
+				dMax=_data[i];
+
+        return dMax;
+    }
+	
+	
     Matrix transpose() const // slow function!
     {
         Matrix out(_iColumns,_iRows);
@@ -345,26 +368,6 @@ public:
     bool is_vector() const
     {
         return (_iRows==1) || (_iColumns==1);
-    }
-
-    static Matrix rand_perm(unsigned int iSize) //create a vector of index shuffled
-    {
-        Matrix m(iSize);
-
-        //create ordered vector
-        for(unsigned int i=0;i<iSize;i++)
-            m._data[i]=i;
-
-        //now bubble shuffle
-        for(unsigned int i=0;i<iSize;i++)
-        {
-            int iNewPos=rand()%iSize;
-            double dVal=m._data[iNewPos];
-            m._data[iNewPos]=m._data[i];
-            m._data[i]=dVal;
-        }
-
-        return m;
     }
     
 private:

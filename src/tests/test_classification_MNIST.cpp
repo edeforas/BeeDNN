@@ -6,13 +6,14 @@ using namespace std;
 #include "Activation.h"
 #include "DenseLayer.h"
 #include "MNISTReader.h"
+#include "MatrixUtil.h"
 
 class LossObserver: public TrainObserver
 {
 public:
     virtual void stepEpoch(const TrainResult & tr)
     {
-        cout << "epoch=" << tr.computedEpochs << " loss=" << tr.loss << endl;
+        cout << "epoch=" << tr.computedEpochs << " loss=" << tr.loss << " maxerror=" << tr.maxError << endl;
     }
 };
 
@@ -20,11 +21,11 @@ int main()
 {
     Net n;
     LossObserver lo;
-    Matrix mRefImages,mRefLabels, mTestImages,MTestLabels;
+    Matrix mRefImages,mRefLabels, mTestImages,mTestLabels;
 
     cout << "loading MNIST database..." << endl;
     MNISTReader mr;
-    if(!mr.read_from_folder(".",mRefImages,mRefLabels, mTestImages,MTestLabels))
+    if(!mr.read_from_folder(".",mRefImages,mRefLabels, mTestImages,mTestLabels))
     {
         cout << "MNIST samples not found, please check the *-ubyte files are in exectuable folder" << endl;
         return -1;
@@ -34,10 +35,14 @@ int main()
     mRefImages=mRefImages/128.-1.;
     mTestImages=mTestImages/128.-1.;
 
+    //transform truth as a probabilty vector (one column by class)
+    mRefLabels=index_to_position(mRefLabels,10);
+    mTestLabels=index_to_position(mTestLabels,10);
+
     ActivationManager am;
     DenseLayer l1(784,20,am.get_activation("Tanh"));
     DenseLayer l2(20,10,am.get_activation("Tanh"));
-    DenseLayer l3(10,1,am.get_activation("Tanh"));
+    DenseLayer l3(10,10,am.get_activation("Tanh"));
 
     n.add(&l1);
     n.add(&l2);
@@ -52,9 +57,13 @@ int main()
     tOpt.observer=&lo;
 
     cout << "training..." << endl;
-    TrainResult tr=n.train(mRefImages,mRefLabels,tOpt);
+
+    n.train(mRefImages,mRefLabels,tOpt);
 
     cout << "end of learning" << endl;
-    //todo test
+
+    //todo compute on test db
+    //todo compute conf matrix
+
     return 0;
 }
