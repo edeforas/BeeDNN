@@ -1,5 +1,4 @@
 #include <iostream>
-#include <chrono>
 using namespace std;
 
 #include "Net.h"
@@ -27,8 +26,9 @@ class LossObserver: public TrainObserver
 public:
     virtual void stepEpoch(const TrainResult & tr)
     {
-        cout << "epoch=" << tr.computedEpochs << " loss=" << tr.loss << " maxerror=" << tr.maxError << endl;
-/*
+        cout << "epoch=" << tr.computedEpochs << " duration=" << tr.epochDuration << " loss=" << tr.loss << " maxerror=" << tr.maxError << endl;
+		
+		/*
         Matrix mClass;
         n.classify(mRefImages,mClass);
 

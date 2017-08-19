@@ -4,6 +4,7 @@
 #include "MatrixUtil.h"
 
 #include <iostream>
+#include <chrono>
 using namespace std;
 
 #include <cmath>
@@ -68,6 +69,9 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
 
     for(int iEpoch=0;iEpoch<topt.epochs;iEpoch++)
     {
+        //compute epoch duration
+        auto beginDuration = std::chrono::steady_clock::now();
+
         double dMaxError=0., dMeanError=0.;
 
         Matrix mShuffle=rand_perm(iNbSamples);
@@ -134,8 +138,12 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
             iBatchStart=iBatchEnd;
         }
 
+
+        auto endDuration = std::chrono::steady_clock::now();
+
         //early abort test on error
         tr.computedEpochs=iEpoch+1;
+        tr.epochDuration=std::chrono::duration_cast<std::chrono::microseconds> (endDuration-beginDuration).count()/1.e6;
         tr.maxError=dMaxError;
         tr.loss=dMeanError/(iNbSamplesSubSampled*mTruth.size()); //same as mean error?
 

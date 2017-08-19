@@ -40,6 +40,7 @@ public:
     double loss;
     double maxError;
     int computedEpochs;
+    double epochDuration;
 };
 
 class TrainObserver
