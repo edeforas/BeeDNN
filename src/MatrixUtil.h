@@ -9,4 +9,6 @@ Matrix index_to_position(const Matrix& mIndex, unsigned int uiMaxPosition);
 
 Matrix argmax(const Matrix& m);
 
+Matrix decimate(const Matrix& m, unsigned int iRatio);
+
 #endif

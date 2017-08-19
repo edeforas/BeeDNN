@@ -1,7 +1,6 @@
 #include "ConfusionMatrix.h"
-
-
-ClassificationResult ConfusionMatrix::compute(Matrix mRef,Matrix mTest,unsigned int iNbClass)
+///////////////////////////////////////////////////////////////////////////////
+ClassificationResult ConfusionMatrix::compute(const Matrix& mRef,const Matrix& mTest,unsigned int iNbClass)
 {
     ClassificationResult cr;
     cr.mConfMat.resize(iNbClass,iNbClass);
@@ -21,6 +20,4 @@ ClassificationResult ConfusionMatrix::compute(Matrix mRef,Matrix mTest,unsigned 
 
     return cr;
 }
-
-
-
+///////////////////////////////////////////////////////////////////////////////

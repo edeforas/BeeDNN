@@ -1,5 +1,5 @@
 #include <iostream>
-#include <cmath>
+#include <chrono>
 using namespace std;
 
 #include "Net.h"
@@ -8,6 +8,9 @@ using namespace std;
 #include "MNISTReader.h"
 #include "MatrixUtil.h"
 #include "ConfusionMatrix.h"
+
+Net n;
+Matrix mRefImages, mRefLabels, mRefLabelsIndex, mTestImages, mTestLabels, mTestLabelsIndex;
 
 void disp(const Matrix& m)
 {
@@ -19,22 +22,31 @@ void disp(const Matrix& m)
     }
 }
 
-
-
 class LossObserver: public TrainObserver
 {
 public:
     virtual void stepEpoch(const TrainResult & tr)
     {
         cout << "epoch=" << tr.computedEpochs << " loss=" << tr.loss << " maxerror=" << tr.maxError << endl;
+/*
+        Matrix mClass;
+        n.classify(mRefImages,mClass);
+
+        ConfusionMatrix cm;
+        ClassificationResult cr=cm.compute(mRefLabelsIndex,mClass,10);
+
+        cout << "% of gooddetection=" << cr.goodclassificationPercent << endl;
+
+        cout << "ConfusionMatrix=" << endl;
+        disp(cr.mConfMat);
+        cout << endl;
+*/
     }
 };
 
 int main()
 {
-    Net n;
     LossObserver lo;
-    Matrix mRefImages,mRefLabels,mRefLabelsIndex, mTestImages,mTestLabels,mTestLabelsIndex;
 
     cout << "loading MNIST database..." << endl;
     MNISTReader mr;
@@ -45,53 +57,69 @@ int main()
     }
 
     // normalize input data
-    mRefImages=mRefImages/128.-1.;
-    mTestImages=mTestImages/128.-1.;
+    mTestImages/=255.;
+    mRefImages/=255.;
 
     //transform truth as a probabilty vector (one column by class)
     mRefLabels=index_to_position(mRefLabelsIndex,10);
     mTestLabels=index_to_position(mTestLabelsIndex,10);
 
     ActivationManager am;
-    DenseLayer l1(784,20,am.get_activation("Tanh"));
-    DenseLayer l2(20,10,am.get_activation("Tanh"));
-    DenseLayer l3(10,10,am.get_activation("Tanh"));
+    DenseLayer l1(784,512,am.get_activation("Relu"));
+    DenseLayer l2(512,512,am.get_activation("Relu"));
+    DenseLayer l3(512,10,am.get_activation("Relu"));
 
     n.add(&l1);
     n.add(&l2);
     n.add(&l3);
 
     TrainOption tOpt;
-    tOpt.epochs=10;
+    tOpt.epochs=100;
     tOpt.earlyAbortMaxError=0.05;
     tOpt.learningRate=0.1;
-    tOpt.batchSize=48;
-    tOpt.momentum=0.05;
+    tOpt.batchSize=128;
+    tOpt.momentum=0.1;
     tOpt.observer=&lo;
+    tOpt.subSamplingRatio=50; //use shuffled 1/50 sample for train
 
     cout << "training..." << endl;
 
     n.train(mRefImages,mRefLabels,tOpt);
 
-    cout << "end of learning." << endl;
-
-    //compute stat on ref db
-
+    cout << "end of training." << endl;
     cout << "testing ..."<< endl;
 
-    Matrix mClass;
-    n.classify(mRefImages,mClass);
+    // test on full learning dDB
+    {
+        cout << " result on full learning DB:" << endl;
+        Matrix mClass;
+        n.classify(mRefImages,mClass);
 
-    disp(mClass);
+        ConfusionMatrix cm;
+        ClassificationResult cr=cm.compute(mRefLabelsIndex,mClass,10);
 
-    ConfusionMatrix cm;
-    ClassificationResult cr=cm.compute(mRefLabelsIndex,mClass,10);
+        cout << "% of gooddetection=" << cr.goodclassificationPercent << endl;
 
-    cout << "% of gooddetection=" << cr.goodclassificationPercent << endl;
+        cout << "ConfusionMatrix=" << endl;
+        disp(cr.mConfMat);
+        cout << endl;
+    }
 
-    cout << "ConfusionMatrix=" << endl;
-    disp(cr.mConfMat);
-    cout << endl;
+    // test on full test dDB
+    {
+        cout << " result on full test DB:" << endl;
+        Matrix mClass;
+        n.classify(mTestImages,mClass);
+
+        ConfusionMatrix cm;
+        ClassificationResult cr=cm.compute(mTestLabelsIndex,mClass,10);
+
+        cout << "% of gooddetection=" << cr.goodclassificationPercent << endl;
+
+        cout << "ConfusionMatrix=" << endl;
+        disp(cr.mConfMat);
+        cout << endl;
+    }
 
     cout << "end of test." << endl;
     return 0;

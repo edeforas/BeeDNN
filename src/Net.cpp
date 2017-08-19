@@ -3,6 +3,9 @@
 #include "Matrix.h"
 #include "MatrixUtil.h"
 
+#include <iostream>
+using namespace std;
+
 #include <cmath>
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,10 +52,11 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
     for(unsigned int i=0;i<_layers.size();i++)
         _layers[i]->init();
 
-    int iBatchSize=topt.batchSize;
-    int iNbSamples=mSamples.rows();
-    if(iBatchSize>iNbSamples)
-        iBatchSize=iNbSamples;
+    unsigned int iBatchSize=topt.batchSize;
+    unsigned int iNbSamples=mSamples.rows();
+    unsigned int iNbSamplesSubSampled=iNbSamples/topt.subSamplingRatio;
+    if(iBatchSize>iNbSamplesSubSampled)
+        iBatchSize=iNbSamplesSubSampled;
 
     // init error accumulation and momentum
     vector<Matrix> sumDE, sumDEMomentum;
@@ -68,18 +72,19 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
 
         Matrix mShuffle=rand_perm(iNbSamples);
 
-        int iBatchStart=0;
-        while(iBatchStart<iNbSamples)
+
+        unsigned int iBatchStart=0;
+        while(iBatchStart<iNbSamplesSubSampled)
         {
             // init error accumulation
             for(unsigned int i=0;i<_layers.size();i++)
                 sumDE[i].set_zero();
 
-            int iBatchEnd=iBatchStart+iBatchSize;
-            if(iBatchEnd>iNbSamples)
-                iBatchEnd=iNbSamples;
+            unsigned int iBatchEnd=iBatchStart+iBatchSize;
+            if(iBatchEnd>iNbSamplesSubSampled)
+                iBatchEnd=iNbSamplesSubSampled;
 
-            for(int iSample=iBatchStart;iSample<iBatchEnd;iSample++)
+            for(unsigned int iSample=iBatchStart;iSample<iBatchEnd;iSample++)
             {
                 //compute one sample error
 
@@ -132,7 +137,7 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
         //early abort test on error
         tr.computedEpochs=iEpoch+1;
         tr.maxError=dMaxError;
-        tr.loss=dMeanError/(iNbSamples*mTruth.size()); //same as mean error?
+        tr.loss=dMeanError/(iNbSamplesSubSampled*mTruth.size()); //same as mean error?
 
         if(topt.observer)
             topt.observer->stepEpoch(tr);

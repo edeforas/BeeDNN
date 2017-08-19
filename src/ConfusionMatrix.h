@@ -12,10 +12,7 @@ struct ClassificationResult
 class ConfusionMatrix
 {
 public:
-    ClassificationResult compute(Matrix mRef,Matrix mTest,unsigned int iNbClass);
-
-
-
+    ClassificationResult compute(const Matrix& mRef, const Matrix& mTest, unsigned int iNbClass);
 };
 
 #endif

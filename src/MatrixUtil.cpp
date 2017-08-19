@@ -51,7 +51,8 @@ Matrix argmax(const Matrix& m)
         unsigned int iIndex=0;
 
         for(unsigned int iC=1;iC<m.columns();iC++)
-        {    if(m(iR,iC)>d)
+        {
+            if(m(iR,iC)>d)
             {
                 d=m(iR,iC);
                 iIndex=iC;
@@ -62,3 +63,16 @@ Matrix argmax(const Matrix& m)
 
     return mResult;
 }
+
+Matrix decimate(const Matrix& m, unsigned int iRatio)
+{
+	unsigned int iNewSize=m.rows()/iRatio;
+	
+	Matrix mDecimated(iNewSize,m.columns());
+	
+    for(unsigned int i=0;i<iNewSize;i++)
+		mDecimated.row(i)=m.row(i*iRatio);
+	
+	return mDecimated;
+}
+
