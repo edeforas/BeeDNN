@@ -9,9 +9,9 @@ using namespace std;
 #include "ConfusionMatrix.h"
 
 Net n;
-Matrix mRefImages, mRefLabels, mRefLabelsIndex, mTestImages, mTestLabels, mTestLabelsIndex;
+MatrixFloat mRefImages, mRefLabels, mRefLabelsIndex, mTestImages, mTestLabels, mTestLabelsIndex;
 
-void disp(const Matrix& m)
+void disp(const MatrixFloat& m)
 {
     for(unsigned int r=0;r<m.rows();r++)
     {
@@ -29,15 +29,15 @@ public:
         cout << "epoch=" << tr.computedEpochs << " duration=" << tr.epochDuration << " loss=" << tr.loss << " maxerror=" << tr.maxError << endl;
 		
 		/*
-        Matrix mClass;
+        MatrixFloat mClass;
         n.classify(mRefImages,mClass);
 
-        ConfusionMatrix cm;
+        ConfusionMatrixFloat cm;
         ClassificationResult cr=cm.compute(mRefLabelsIndex,mClass,10);
 
         cout << "% of gooddetection=" << cr.goodclassificationPercent << endl;
 
-        cout << "ConfusionMatrix=" << endl;
+        cout << "ConfusionMatrixFloat=" << endl;
         disp(cr.mConfMat);
         cout << endl;
 */
@@ -92,7 +92,7 @@ int main()
     // test on full learning dDB
     {
         cout << " result on full learning DB:" << endl;
-        Matrix mClass;
+        MatrixFloat mClass;
         n.classify(mRefImages,mClass);
 
         ConfusionMatrix cm;
@@ -100,7 +100,7 @@ int main()
 
         cout << "% of gooddetection=" << cr.goodclassificationPercent << endl;
 
-        cout << "ConfusionMatrix=" << endl;
+        cout << "ConfusionMatrixFloat=" << endl;
         disp(cr.mConfMat);
         cout << endl;
     }
@@ -108,7 +108,7 @@ int main()
     // test on full test dDB
     {
         cout << " result on full test DB:" << endl;
-        Matrix mClass;
+        MatrixFloat mClass;
         n.classify(mTestImages,mClass);
 
         ConfusionMatrix cm;
@@ -116,7 +116,7 @@ int main()
 
         cout << "% of gooddetection=" << cr.goodclassificationPercent << endl;
 
-        cout << "ConfusionMatrix=" << endl;
+        cout << "ConfusionMatrixFloat=" << endl;
         disp(cr.mConfMat);
         cout << endl;
     }

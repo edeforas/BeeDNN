@@ -12,8 +12,8 @@ public:
     virtual ~Activation();
     virtual string name() const =0;
 
-    virtual double apply(double x) const =0;
-    virtual double derivation(double x,double y) const =0;
+    virtual float apply(float x) const =0;
+    virtual float derivation(float x,float y) const =0;
 };
 
 class ActivationManager

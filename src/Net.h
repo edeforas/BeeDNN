@@ -40,7 +40,7 @@ public:
     double loss;
     double maxError;
     int computedEpochs;
-    double epochDuration;
+    double epochDuration; //in second
 };
 
 class TrainObserver
@@ -57,13 +57,13 @@ public:
 
     void add(Layer *l);
 
-    TrainResult train(const Matrix& mSamples, const Matrix& mTruth, const TrainOption& topt);
-    void forward(const Matrix& mIn,Matrix& mOut) const;
+    TrainResult train(const MatrixFloat& mSamples, const MatrixFloat& mTruth, const TrainOption& topt);
+    void forward(const MatrixFloat& mIn,MatrixFloat& mOut) const;
 
-    void classify(const Matrix& mIn,Matrix& mClass) const; // todo move in classification problem
+    void classify(const MatrixFloat& mIn,MatrixFloat& mClass) const; // todo move in classification problem
 
 private:
-    void backpropagation(const Matrix& mError);
+    void backpropagation(const MatrixFloat& mError);
     vector<Layer*> _layers;
 };
 

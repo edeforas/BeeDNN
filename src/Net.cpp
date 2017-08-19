@@ -23,9 +23,9 @@ void Net::add(Layer* l)
     _layers.push_back(l);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::forward(const Matrix& mIn,Matrix& mOut) const
+void Net::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 {
-    Matrix mTemp=mIn;
+    MatrixFloat mTemp=mIn;
     for(unsigned int i=0;i<_layers.size();i++)
     {
         _layers[i]->forward(mTemp,mOut);
@@ -33,12 +33,12 @@ void Net::forward(const Matrix& mIn,Matrix& mOut) const
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::classify(const Matrix& mIn,Matrix& mClass) const
+void Net::classify(const MatrixFloat& mIn,MatrixFloat& mClass) const
 {
     // todo merge with forward
     mClass.resize(mIn.rows(),1); //todo  put int NetClassification problem
 
-    Matrix mOut;
+    MatrixFloat mOut;
     for(unsigned int i=0;i<mIn.rows();i++)
     {
         forward(mIn.row(i),mOut);
@@ -46,7 +46,7 @@ void Net::classify(const Matrix& mIn,Matrix& mClass) const
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOption& topt)
+TrainResult Net::train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const TrainOption& topt)
 {
     TrainResult tr;
 
@@ -60,7 +60,7 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
         iBatchSize=iNbSamplesSubSampled;
 
     // init error accumulation and momentum
-    vector<Matrix> sumDE, sumDEMomentum;
+    vector<MatrixFloat> sumDE, sumDEMomentum;
     for(unsigned int i=0;i<_layers.size();i++)
     {
         sumDE.push_back(_layers[i]->dE*0); //todo something cleaner
@@ -74,7 +74,7 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
 
         double dMaxError=0., dMeanError=0.;
 
-        Matrix mShuffle=rand_perm(iNbSamples);
+        MatrixFloat mShuffle=rand_perm(iNbSamples);
 
 
         unsigned int iBatchStart=0;
@@ -94,16 +94,16 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
 
                 //forward pass with save
                 int iIndexSample=(int)mShuffle(iSample);
-                const Matrix& mSample=mSamples.row(iIndexSample);
-                Matrix mOut, mTemp=mSample;
+                const MatrixFloat& mSample=mSamples.row(iIndexSample);
+                MatrixFloat mOut, mTemp=mSample;
                 for(unsigned int i=0;i<_layers.size();i++)
                 {
                     _layers[i]->forward_save(mTemp,mOut);
-                    mTemp=mOut; //todo avoid using a temp matrix
+                    mTemp=mOut; //todo avoid using a temp MatrixFloat
                 }
 
                 //compute and backpropagate error, sum dE
-                Matrix mError=mOut-mTruth.row(iIndexSample);
+                MatrixFloat mError=mOut-mTruth.row(iIndexSample);
 
                 // check early abort max error
                 for(unsigned int i=0;i<mError.size();i++)
@@ -160,13 +160,13 @@ TrainResult Net::train(const Matrix& mSamples,const Matrix& mTruth,const TrainOp
     return tr;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::backpropagation(const Matrix &mError)
+void Net::backpropagation(const MatrixFloat &mError)
 {
-    Matrix mDelta;
+    MatrixFloat mDelta;
     for (int iL=_layers.size()-1;iL>=0;iL--)
     {
         Layer& l=*_layers[iL];
-        Matrix mAD=l.get_weight_activation_derivation();
+        MatrixFloat mAD=l.get_weight_activation_derivation();
 
         if((unsigned int)iL==_layers.size()-1)
         {
@@ -177,7 +177,7 @@ void Net::backpropagation(const Matrix &mError)
         {
             //hidden layer
             //a=  delta*(net.layer{i+1}.weight') (use of previous delta)
-            Matrix a=mDelta*(_layers[iL+1]->get_weight().transpose());
+            MatrixFloat a=mDelta*(_layers[iL+1]->get_weight().transpose());
 
             //a=a(:,1:columns(a)-1); % do not use last weight (use only for bias)
             //b=activation_derivation(layer.func,outweight);
@@ -186,7 +186,7 @@ void Net::backpropagation(const Matrix &mError)
         }
 
         //dE=(layer.in')*delta;
-        Matrix mOne(1,1); mOne.set_constant(1.);
+        MatrixFloat mOne(1,1); mOne.set_constant(1.);
         l.dE=(l.in.concat(mOne).transpose())*mDelta;
     }
 }

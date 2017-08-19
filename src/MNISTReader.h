@@ -9,8 +9,8 @@ using namespace std;
 class MNISTReader
 {
 public:
-    bool read_from_folder(const string& sFolder,Matrix& mRefImages,Matrix& mRefLabels,Matrix& mTestImages,Matrix& mTestLabels);
-    bool read_matrix(string sName,Matrix& m);
+    bool read_from_folder(const string& sFolder,MatrixFloat& mRefImages,MatrixFloat& mRefLabels,MatrixFloat& mTestImages,MatrixFloat& mTestLabels);
+    bool read_Matrix(string sName,MatrixFloat& m);
 
 private:
     void swap_int(unsigned int &i);

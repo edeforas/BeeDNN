@@ -3,7 +3,7 @@ using namespace std;
 
 #include "Matrix.h"
 
-void disp(const Matrix& m)
+void disp(const MatrixFloat& m)
 {
     cout << "rows=" << m.rows() << " columns=" << m.columns() << endl;
     for(unsigned int r=0;r<m.rows();r++)
@@ -17,16 +17,16 @@ void disp(const Matrix& m)
 
 int main()
 {
-    double a[]={ 4 , 5 , 6, 7 };
-    double b[]={ 2, 3};
+    float a[]={ 4 , 5 , 6, 7 };
+    float b[]={ 2, 3};
 
-    const Matrix mA(a,2,2);
-    const Matrix mB(b,2,1);
+    const MatrixFloat mA(a,2,2);
+    const MatrixFloat mB(b,2,1);
 
-    const Matrix mAT=mA.transpose();
+    const MatrixFloat mAT=mA.transpose();
     disp(mAT);
 
-    Matrix prod=mA*mB;
+    MatrixFloat prod=mA*mB;
 
     disp(prod);
 

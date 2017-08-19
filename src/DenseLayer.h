@@ -13,14 +13,14 @@ public:
     ~DenseLayer();
     virtual void init();
 
-    virtual void forward(const Matrix& mMatin, Matrix &mMatOut) const;
-    virtual void forward_save(const Matrix& mMatin, Matrix &mMatOut);
+    virtual void forward(const MatrixFloat& mMatin, MatrixFloat &mMatOut) const;
+    virtual void forward_save(const MatrixFloat& mMatin, MatrixFloat &mMatOut);
 
-    virtual Matrix get_weight_activation_derivation();
-    virtual Matrix& get_weight();
+    virtual MatrixFloat get_weight_activation_derivation();
+    virtual MatrixFloat& get_weight();
 
 private:
-    Matrix _weight;
+    MatrixFloat _weight;
     const Activation* _activ;
     int _iInSize, _iOutSize;
 };

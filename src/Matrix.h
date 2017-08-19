@@ -5,10 +5,11 @@
 
 //todo add more tests and optimize
 
+template <class T>
 class Matrix
 {
 public:
-    Matrix()
+    Matrix<T>()
     {
         _iRows=0;
         _iColumns=0;
@@ -17,16 +18,16 @@ public:
         _bDelete=false;
     }
 
-    Matrix(unsigned int iRows,unsigned int iColumns=1)
+    Matrix<T>(unsigned int iRows,unsigned int iColumns=1)
     {
         _iRows=iRows;
         _iColumns=iColumns;
         _iSize=_iRows*_iColumns;
-        _data=new double[_iSize];
+        _data=new T[_iSize];
         _bDelete=true;
     }
     
-    Matrix(double* pData,unsigned int iRows,unsigned int iColumns)
+    Matrix<T>(T* pData,unsigned int iRows,unsigned int iColumns)
     {
         _iRows=iRows;
         _iColumns=iColumns;
@@ -35,12 +36,12 @@ public:
         _bDelete=false;
     }
     
-    Matrix(const Matrix &a)
+    Matrix<T>(const Matrix<T> &a)
     {
         _iRows=a._iRows;
         _iColumns=a._iColumns;
         _iSize=_iRows*_iColumns;
-        _data=new double[_iSize];
+        _data=new T[_iSize];
         _bDelete=true;
 
         for(unsigned int i=0;i<size();i++)
@@ -48,13 +49,13 @@ public:
         //todo use or merge with operator=()(a); ??
     }
 
-    ~Matrix()
+    ~Matrix<T>()
     {
         if(_bDelete)
             delete [] _data;
     }
     
-    Matrix& operator=( const Matrix& b)
+    Matrix<T>& operator=( const Matrix<T>& b)
     {
         resize(b.rows(),b.columns());
         
@@ -95,20 +96,20 @@ public:
         else
             _bDelete=true;
 
-        _data=new double[_iSize];
+        _data=new T[_iSize];
     }
     
-    double* data()
+    T* data()
     {
         return _data;
     }
 
-    const double* data() const
+    const T* data() const
     {
         return _data;
     }
 
-    void set_constant(double b)
+    void set_constant(T b)
     {
         for(unsigned int i=0;i<_iSize;i++)
             _data[i]=b;
@@ -119,33 +120,33 @@ public:
         set_constant(0.);
     }
 
-    double& operator()(unsigned int iR,unsigned int iC)
+    T& operator()(unsigned int iR,unsigned int iC)
     {
         assert(iR<_iRows);
         assert(iC<_iColumns);
         return *(_data+iR*_iColumns+iC);
     }
     
-    const double& operator()(unsigned int iR,unsigned int iC) const
+    const T& operator()(unsigned int iR,unsigned int iC) const
     {
         assert(iR<_iRows);
         assert(iC<_iColumns);
         return *(_data+iR*_iColumns+iC);
     }
     
-    double& operator()(unsigned int iX)
+    T& operator()(unsigned int iX)
     {
         assert(iX<_iSize);
         return *(_data+iX);
     }
     
-    const double& operator()(unsigned int iX) const
+    const T& operator()(unsigned int iX) const
     {
         assert(iX<_iSize);
         return *(_data+iX);
     }
     
-    Matrix& operator+=(const Matrix& a)
+    Matrix<T>& operator+=(const Matrix<T>& a)
     {
         assert(_iRows==a.rows());
         assert(_iColumns==a.columns());
@@ -155,26 +156,26 @@ public:
         return *this;
     }
     
-    Matrix operator+( const Matrix& a ) const
+    Matrix<T> operator+( const Matrix<T>& a ) const
     {
         assert(_iRows==a.rows());
         assert(_iColumns==a.columns());
 
-        return Matrix(*this).operator+=(a);
+        return Matrix<T>(*this).operator+=(a);
     }
 
-    Matrix& operator+=(double d)
+    Matrix<T>& operator+=(T d)
     {
         for(unsigned int i=0;i<_iSize;i++)
             _data[i]+=d;
         return *this;
     }
-    Matrix operator+( double d ) const
+    Matrix<T> operator+(T d ) const
     {
-        return Matrix(*this).operator+=(d);
+        return Matrix<T>(*this).operator+=(d);
     }
 
-    Matrix& operator-=(const Matrix& a)
+    Matrix<T>& operator-=(const Matrix<T>& a)
     {
         assert(_iRows==a.rows());
         assert(_iColumns==a.columns());
@@ -183,26 +184,26 @@ public:
             _data[i]-=a(i);
         return *this;
     }
-    Matrix operator-( const Matrix& a ) const
+    Matrix<T> operator-( const Matrix<T>& a ) const
     {
         assert(_iRows==a.rows());
         assert(_iColumns==a.columns());
 
-        return Matrix(*this).operator-=(a);
+        return Matrix<T>(*this).operator-=(a);
     }
 
-    Matrix& operator-=(double d)
+    Matrix<T>& operator-=(T d)
     {
         for(unsigned int i=0;i<_iSize;i++)
             _data[i]-=d;
         return *this;
     }
-    Matrix operator-( double d ) const
+    Matrix<T> operator-(T d ) const
     {
-        return Matrix(*this).operator-=(d);
+        return Matrix<T>(*this).operator-=(d);
     }
     
-    Matrix& operator*=(double b)
+    Matrix<T>& operator*=(T b)
     {
         for(unsigned int i=0;i<_iSize;i++)
             _data[i]*=b;
@@ -210,7 +211,7 @@ public:
         return *this;
     }
 
-    Matrix& operator/=(double b)
+    Matrix<T>& operator/=(T b)
     {
         for(unsigned int i=0;i<_iSize;i++)
             _data[i]/=b;
@@ -218,28 +219,28 @@ public:
         return *this;
     }
 
-    Matrix operator/(double b) const // slow function!
+    Matrix<T> operator/(T b) const // slow function!
     {
-        return Matrix(*this).operator/=(b);
+        return Matrix<T>(*this).operator/=(b);
     }
 
-    Matrix operator*(double b) const // slow function!
+    Matrix<T> operator*(T b) const // slow function!
     {
-        return Matrix(*this).operator*=(b);
+        return Matrix<T>(*this).operator*=(b);
     }
 
-    Matrix& operator*=(const Matrix& b) // slow function!
+    Matrix<T>& operator*=(const Matrix<T>& b) // slow function!
     {
         assert(columns()==b.rows());
 
-        Matrix a(*this);
+        Matrix<T> a(*this);
         resize(a._iRows,b._iColumns);
 
         for(unsigned int r=0;r<_iRows;r++)
         {
             for(unsigned int c=0;c<_iColumns;c++)
             {
-                double temp=0.;
+                T temp=0.;
 
                 for(unsigned int k=0;k<a._iColumns;k++)
                     temp+=a(r,k)*b(k,c);
@@ -251,12 +252,12 @@ public:
         return *this;
     }
 
-    Matrix element_product(const Matrix& m) const
+    Matrix<T> element_product(const Matrix<T>& m) const
     {
         assert(columns()==m.columns());
         assert(rows()==m.rows());
 
-        Matrix out(*this);
+        Matrix<T> out(*this);
 
         for(unsigned int i=0;i<_iSize;i++)
             out(i)*=m(i);
@@ -264,12 +265,12 @@ public:
         return out;
     }
 
-    Matrix element_divide(const Matrix& m) const
+    Matrix<T> element_divide(const Matrix<T>& m) const
     {
         assert(columns()==m.columns());
         assert(rows()==m.rows());
 
-        Matrix out(*this);
+        Matrix<T> out(*this);
 
         for(unsigned int i=0;i<_iSize;i++)
             out(i)/=m(i);
@@ -277,9 +278,9 @@ public:
         return out;
     }
 
-    Matrix scalar_mult(double d) const
+    Matrix<T> scalar_mult(T d) const
     {
-        Matrix out(*this);
+        Matrix<T> out(*this);
 
         for(unsigned int i=0;i<_iSize;i++)
             out(i)*=d;
@@ -287,21 +288,21 @@ public:
         return out;
     }
 
-	double sum() const
+    T sum() const
     {
-		double dSum=0.;
+        T dSum=0.;
         for(unsigned int i=0;i<_iSize;i++)
             dSum+=_data[i];
 
         return dSum;
     }
 	
-	double max() const
+    T max() const
     {
         if(_iSize==0)
 			return 0.; //not clean
 		
-		double dMax=_data[0];
+        T dMax=_data[0];
         for(unsigned int i=1;i<_iSize;i++)
             if(_data[i]>dMax)
 				dMax=_data[i];
@@ -310,9 +311,9 @@ public:
     }
 	
 	
-    Matrix transpose() const // slow function!
+    Matrix<T> transpose() const // slow function!
     {
-        Matrix out(_iColumns,_iRows);
+        Matrix<T> out(_iColumns,_iRows);
 
         for(unsigned int r=0;r<_iRows;r++)
             for(unsigned int c=0;c<_iColumns;c++)
@@ -321,11 +322,11 @@ public:
         return out;
     }
 
-    Matrix concat(const Matrix & b) // slow function!
+    Matrix<T> concat(const Matrix<T> & b) // slow function!
     {
         assert(b.rows()==rows());
 
-        Matrix mT(_iRows,_iColumns+b._iColumns);
+        Matrix<T> mT(_iRows,_iColumns+b._iColumns);
 
         for(unsigned int r=0;r<_iRows;r++)
             for(unsigned int c=0;c<_iColumns;c++)
@@ -338,31 +339,31 @@ public:
         return mT;
     }
 
-    Matrix operator*(const Matrix& a) const  // slow function!
+    Matrix<T> operator*(const Matrix<T>& a) const  // slow function!
     {
-        return Matrix(*this).operator*=(a);
+        return Matrix<T>(*this).operator*=(a);
     }
 
 
-    Matrix row(unsigned int iRow)
+    Matrix<T> row(unsigned int iRow)
     {
         assert(iRow<_iRows);
 
-        return Matrix(_data+iRow*_iColumns,1,_iColumns);
+        return Matrix<T>(_data+iRow*_iColumns,1,_iColumns);
     }
 
     
-    const Matrix row(unsigned int iRow) const
+    const Matrix<T> row(unsigned int iRow) const
     {
         assert(iRow<_iRows);
 
-        return Matrix(_data+iRow*_iColumns,1,_iColumns);
+        return Matrix<T>(_data+iRow*_iColumns,1,_iColumns);
     }
 
 
-    Matrix row_sum() const
+    Matrix<T> row_sum() const
     {
-        Matrix r(_iRows,1);
+        Matrix<T> r(_iRows,1);
 
         for(unsigned int i=0;i<_iRows;i++)
             r(i)=row(i).sum();
@@ -370,9 +371,9 @@ public:
         return r;
     }
 
-    Matrix diag() const
+    Matrix<T> diag() const
     {
-        Matrix r(_iRows,1);
+        Matrix<T> r(_iRows,1);
 
         for(unsigned int i=0;i<_iRows;i++)
             r(i)=operator()(i,i);
@@ -380,17 +381,17 @@ public:
         return r;
     }
 
-    const Matrix without_last_row() const
+    const Matrix<T> without_last_row() const
     {
         assert(_iRows>0);
-        return Matrix(_data,_iRows-1,_iColumns);
+        return Matrix<T>(_data,_iRows-1,_iColumns);
     }
     
-    const Matrix without_last_column() const // slow function!
+    const Matrix<T> without_last_column() const // slow function!
     {
         assert(_iColumns>0);
 
-        Matrix m(_iRows,_iColumns-1);
+        Matrix<T> m(_iRows,_iColumns-1);
 
         for(unsigned int r=0;r<_iRows;r++)
             for(unsigned int c=0;c<_iColumns-1;c++)
@@ -406,8 +407,12 @@ public:
     
 private:
     unsigned int _iRows,_iColumns,_iSize;
-    double* _data;
+    T* _data;
     bool _bDelete;
 };
+
+
+typedef Matrix<double> MatrixDouble;
+typedef Matrix<float> MatrixFloat;
 
 #endif

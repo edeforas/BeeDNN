@@ -1,12 +1,10 @@
-
 #include <cassert>
 
 #include "MatrixUtil.h"
-
-
-Matrix rand_perm(unsigned int iSize) //create a vector of index shuffled
+///////////////////////////////////////////////////////////////////////////
+MatrixFloat rand_perm(unsigned int iSize) //create a vector of index shuffled
 {
-    Matrix m(iSize);
+    MatrixFloat m(iSize);
 
     //create ordered vector
     for(unsigned int i=0;i<iSize;i++)
@@ -23,11 +21,11 @@ Matrix rand_perm(unsigned int iSize) //create a vector of index shuffled
 
     return m;
 }
-
-Matrix index_to_position(const Matrix& mIndex, unsigned int uiMaxPosition)
+///////////////////////////////////////////////////////////////////////////
+MatrixFloat index_to_position(const MatrixFloat& mIndex, unsigned int uiMaxPosition)
 {
     unsigned int uiNbRows=mIndex.rows();
-    Matrix mPos(uiNbRows,uiMaxPosition);
+    MatrixFloat mPos(uiNbRows,uiMaxPosition);
     mPos.set_zero();
 
     for(unsigned int i=0;i<uiNbRows;i++)
@@ -37,13 +35,13 @@ Matrix index_to_position(const Matrix& mIndex, unsigned int uiMaxPosition)
 
     return mPos;
 }
-
-Matrix argmax(const Matrix& m)
+///////////////////////////////////////////////////////////////////////////
+MatrixFloat argmax(const MatrixFloat& m)
 {
     if(m.columns()==0)
         return m;
 
-    Matrix mResult(m.rows(),1);
+    MatrixFloat mResult(m.rows(),1);
 
     for(unsigned int iR=0;iR<m.rows();iR++)
     {
@@ -63,16 +61,16 @@ Matrix argmax(const Matrix& m)
 
     return mResult;
 }
-
-Matrix decimate(const Matrix& m, unsigned int iRatio)
+///////////////////////////////////////////////////////////////////////////
+MatrixFloat decimate(const MatrixFloat& m, unsigned int iRatio)
 {
 	unsigned int iNewSize=m.rows()/iRatio;
 	
-	Matrix mDecimated(iNewSize,m.columns());
+    MatrixFloat mDecimated(iNewSize,m.columns());
 	
     for(unsigned int i=0;i<iNewSize;i++)
 		mDecimated.row(i)=m.row(i*iRatio);
 	
 	return mDecimated;
 }
-
+///////////////////////////////////////////////////////////////////////////

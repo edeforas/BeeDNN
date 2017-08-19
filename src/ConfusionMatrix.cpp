@@ -1,6 +1,6 @@
 #include "ConfusionMatrix.h"
 ///////////////////////////////////////////////////////////////////////////////
-ClassificationResult ConfusionMatrix::compute(const Matrix& mRef,const Matrix& mTest,unsigned int iNbClass)
+ClassificationResult ConfusionMatrix::compute(const MatrixFloat& mRef,const MatrixFloat& mTest,unsigned int iNbClass)
 {
     ClassificationResult cr;
     cr.mConfMat.resize(iNbClass,iNbClass);
@@ -11,10 +11,10 @@ ClassificationResult ConfusionMatrix::compute(const Matrix& mRef,const Matrix& m
         cr.mConfMat((unsigned int)mRef(i),(unsigned int)mTest(i))++;
     }
 
-    Matrix mDiag=cr.mConfMat.diag();
-    Matrix mSum=cr.mConfMat.row_sum();
+    MatrixFloat mDiag=cr.mConfMat.diag();
+    MatrixFloat mSum=cr.mConfMat.row_sum();
 
-    Matrix mGoodClassification=mDiag.element_divide(mSum)*100.;
+    MatrixFloat mGoodClassification=mDiag.element_divide(mSum)*100.;
 
     cr.goodclassificationPercent=mGoodClassification.sum()/iNbClass;
 

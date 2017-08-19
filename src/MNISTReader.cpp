@@ -6,29 +6,29 @@ using namespace std;
 //TODO clean everything , fix warnings (at least it works)
 
 ////////////////////////////////////////////////////////////////////////////////////
-bool MNISTReader::read_from_folder(const string& sFolder,Matrix& mRefImages,Matrix& mRefLabels,Matrix& mTestImages,Matrix& mTestLabels)
+bool MNISTReader::read_from_folder(const string& sFolder,MatrixFloat& mRefImages,MatrixFloat& mRefLabels,MatrixFloat& mTestImages,MatrixFloat& mTestLabels)
 {
     string sRefImages=sFolder+"\\train-images.idx3-ubyte";
     string sRefLabels=sFolder+"\\train-labels.idx1-ubyte";
     string sTestImages=sFolder+"\\t10k-images.idx3-ubyte";
     string sTestLabels=sFolder+"\\t10k-labels.idx1-ubyte";
 
-    if(!read_matrix(sRefImages, mRefImages))
+    if(!read_Matrix(sRefImages, mRefImages))
         return false;
 
-    if(!read_matrix(sRefLabels, mRefLabels))
+    if(!read_Matrix(sRefLabels, mRefLabels))
         return false;
 
-    if(!read_matrix(sTestImages, mTestImages))
+    if(!read_Matrix(sTestImages, mTestImages))
         return false;
 
-    if(!read_matrix(sTestLabels, mTestLabels))
+    if(!read_Matrix(sTestLabels, mTestLabels))
         return false;
 
     return true;
 }
 ////////////////////////////////////////////////////////////////////////////////////
-bool MNISTReader::read_matrix(string sName,Matrix& m)
+bool MNISTReader::read_Matrix(string sName,MatrixFloat& m)
 {
     // file format and data at : http://yann.lecun.com/exdb/mnist/
 
@@ -59,7 +59,7 @@ bool MNISTReader::read_matrix(string sName,Matrix& m)
 
         char* pVector=new char[uiSize];
         ifs.read((char*)(pVector),uiSize);
-        double* pData=m.data();
+        float* pData=m.data();
         for(unsigned int i=0;i<uiSize;i++)
         {
             *pData++=pVector[i];
@@ -86,7 +86,7 @@ bool MNISTReader::read_matrix(string sName,Matrix& m)
         for(unsigned int iImage=0;iImage<uiNbImages;iImage++)
         {
             ifs.read(pImage,uiSize);
-            double * pData=m.row(iImage).data();
+            float * pData=m.row(iImage).data();
             for(unsigned int i=0;i<uiSize;i++)
             {
                 *pData++=pImage[i];

@@ -19,8 +19,8 @@ int main()
     n.add(&l2);
     n.add(&l3);
 
-	Matrix mTruth(64);
-	Matrix mSamples(64);
+    MatrixFloat mTruth(64);
+    MatrixFloat mSamples(64);
 	for( int i=0;i<64;i++)
 	{
 		double x=(double)i/10.;

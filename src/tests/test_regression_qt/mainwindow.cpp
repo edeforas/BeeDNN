@@ -85,8 +85,8 @@ void MainWindow::on_pushButton_clicked()
     double dStep=(dInputMax-dInputMin)/(double)(iNbPoint-1);
 
     //create ref sample
-    Matrix mTruth(iNbPoint);
-    Matrix mSamples(iNbPoint);
+    MatrixFloat mTruth(iNbPoint);
+    MatrixFloat mSamples(iNbPoint);
     double dVal=dInputMin;
 
     for( int i=0;i<iNbPoint;i++)
@@ -148,14 +148,14 @@ void MainWindow::drawRegression(const Net& n)
 
     //create ref sample hi-res and net output
     unsigned int iNbPoint=(unsigned int)(ui->leNbPointsTest->text().toInt());
-    double dInputMin=ui->leInputMin->text().toDouble();
-    double dInputMax=ui->leInputMax->text().toDouble();
-    double dStep=(dInputMax-dInputMin)/(double)(iNbPoint-1);
+    float dInputMin=ui->leInputMin->text().toDouble();
+    float dInputMax=ui->leInputMax->text().toDouble();
+    float dStep=(dInputMax-dInputMin)/(double)(iNbPoint-1);
     vector<double> vTruth(iNbPoint);
     vector<double> vSamples(iNbPoint);
     vector<double> vRegression(iNbPoint);
-    Matrix mIn(1),mOut;
-    double dVal=dInputMin;
+    MatrixFloat mIn(1),mOut;
+    float dVal=dInputMin;
 
     for(unsigned int i=0;i<iNbPoint;i++)
     {

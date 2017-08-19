@@ -10,17 +10,17 @@ public:
     virtual ~Layer();
     virtual void init() =0;
 
-    virtual void forward(const Matrix& mMatIn,Matrix& mMatOut) const =0;
-    virtual void forward_save(const Matrix& mMatIn,Matrix& mMatOut) =0;
+    virtual void forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const =0;
+    virtual void forward_save(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) =0;
 
-    virtual Matrix get_weight_activation_derivation() =0;
-    virtual Matrix& get_weight() =0;
+    virtual MatrixFloat get_weight_activation_derivation() =0;
+    virtual MatrixFloat& get_weight() =0;
 
     //learning variables, todo clean up / remove
-    Matrix in; //in
-    Matrix out; //fcn(in*weight)
-    Matrix outWeight; // in*weight
-    Matrix dE;
+    MatrixFloat in; //in
+    MatrixFloat out; //fcn(in*weight)
+    MatrixFloat outWeight; // in*weight
+    MatrixFloat dE;
 };
 
 #endif

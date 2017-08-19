@@ -16,11 +16,11 @@ int main()
     n.add(&l1);
     n.add(&l2);
 
-    double dSamples[]={ 0 , 0 , 0 , 1 , 1 , 0 , 1 , 1};
-    double dTruths[]={ 0 , 1 , 1, 0 };
+    float dSamples[]={ 0 , 0 , 0 , 1 , 1 , 0 , 1 , 1};
+    float dTruths[]={ 0 , 1 , 1, 0 };
 
-    const Matrix mSamples(dSamples,4,2);
-    const Matrix mTruth(dTruths,4,1);
+    const MatrixFloat mSamples(dSamples,4,2);
+    const MatrixFloat mTruth(dTruths,4,1);
 
     TrainOption tOpt;
     tOpt.earlyAbortMaxError=0.05;
@@ -31,7 +31,7 @@ int main()
     TrainResult tr=n.train(mSamples,mTruth,tOpt);
     cout << "Loss=" << tr.loss << " MaxError=" << tr.maxError << " ComputedEpochs=" << tr.computedEpochs << endl;
 
-    Matrix m00,m01,m10,m11;
+    MatrixFloat m00,m01,m10,m11;
 
     n.forward(mSamples.row(0),m00);
     n.forward(mSamples.row(1),m01);

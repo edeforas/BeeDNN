@@ -3,12 +3,12 @@
 
 #include "Matrix.h"
 
-Matrix rand_perm(unsigned int iSize); //create a vector of index shuffled
+MatrixFloat rand_perm(unsigned int iSize); //create a vector of index shuffled
 
-Matrix index_to_position(const Matrix& mIndex, unsigned int uiMaxPosition);
+MatrixFloat index_to_position(const MatrixFloat& mIndex, unsigned int uiMaxPosition);
 
-Matrix argmax(const Matrix& m);
+MatrixFloat argmax(const MatrixFloat& m);
 
-Matrix decimate(const Matrix& m, unsigned int iRatio);
+MatrixFloat decimate(const MatrixFloat& m, unsigned int iRatio);
 
 #endif

@@ -6,13 +6,13 @@
 struct ClassificationResult
 {
     double goodclassificationPercent;
-    Matrix mConfMat;
+    MatrixFloat mConfMat;
 };
 
 class ConfusionMatrix
 {
 public:
-    ClassificationResult compute(const Matrix& mRef, const Matrix& mTest, unsigned int iNbClass);
+    ClassificationResult compute(const MatrixFloat& mRef, const MatrixFloat& mTest, unsigned int iNbClass);
 };
 
 #endif

@@ -16,12 +16,12 @@ public:
         return "Atan";
     }
 
-    double apply(double x) const
+    float apply(float x) const
     {
         return atan(x);
     }
 
-    double derivation(double x,double y) const
+    float derivation(float x,float y) const
     {
         (void)y;
         return 1./(1+x*x);
@@ -36,12 +36,12 @@ public:
         return "Elliot";
     }
 
-    double apply(double x) const
+    float apply(float x) const
     {
         return 0.5*(x/(1.+fabs(x)))+0.5;
     }
 
-    double derivation(double x,double y) const
+    float derivation(float x,float y) const
     {
         (void)y;
         return 0.5/((1.+fabs(x))*(1.+fabs(x))); //todo optimize
@@ -56,12 +56,12 @@ public:
         return "Gauss";
     }
 
-    double apply(double x) const
+    float apply(float x) const
     {
         return exp(-x*x);
     }
 
-    double derivation(double x,double y) const
+    float derivation(float x,float y) const
     {
         return -2.*x*y; //derivate using f(x)
     }
@@ -75,12 +75,12 @@ public:
         return "Linear";
     }
 
-    double apply(double x) const
+    float apply(float x) const
     {
         return x;
     }
 
-    double derivation(double x,double y) const
+    float derivation(float x,float y) const
     {
         (void)x;
         (void)y;
@@ -96,12 +96,12 @@ public:
         return "Relu";
     }
 
-    double apply(double x) const
+    float apply(float x) const
     {
         return x>=0. ? x : 0.;
     }
 
-    double derivation(double x,double y) const
+    float derivation(float x,float y) const
     {
         (void)x;
         return y>=0. ? 1. : 0.;
@@ -116,12 +116,12 @@ public:
         return "LeakyRelu";
     }
 
-    double apply(double x) const
+    float apply(float x) const
     {
         return x>=0. ? x : 0.01*x;
     }
 
-    double derivation(double x,double y) const
+    float derivation(float x,float y) const
     {
         (void)x;
         return y>=0. ? 1. : 0.01;
@@ -136,7 +136,7 @@ public:
         return "Elu";
     }
 
-    double apply(double x) const
+    float apply(float x) const
     {
         if(x>=0.)
             return x;
@@ -144,7 +144,7 @@ public:
             return expm1(x);
     }
 
-    double derivation(double x,double y) const
+    float derivation(float x,float y) const
     {
         (void)x;
 
@@ -165,7 +165,7 @@ public:
         return "Selu";
     }
 
-    double apply(double x) const
+    float apply(float x) const
     {
         if(x>=0.)
             return SELU_LAMBDA*x;
@@ -173,7 +173,7 @@ public:
             return SELU_LAMBDA*SELU_ALPHA*expm1(x);
     }
 
-    double derivation(double x,double y) const
+    float derivation(float x,float y) const
     {
         (void)x;
 
@@ -192,12 +192,12 @@ public:
         return "SoftPlus";
     }
 
-    double apply(double x) const
+    float apply(float x) const
     {
         return log1p(exp(x));
     }
 
-    double derivation(double x,double y) const
+    float derivation(float x,float y) const
     {
         (void)y;
         return 1./(1.+exp(-x));
@@ -212,12 +212,12 @@ public:
         return "SoftSign";
     }
 
-    double apply(double x) const
+    float apply(float x) const
     {
         return x/(1.+fabs(x));
     }
 
-    double derivation(double x,double y) const
+    float derivation(float x,float y) const
     {
         (void)y;
         return 1./((1.+fabs(x))*(1.+fabs(x))); //todo optimize
@@ -233,11 +233,11 @@ public:
         return "Sigmoid";
     }
 
-    double apply(double x) const
+    float apply(float x) const
     {
         return 1./(1.+exp(-x));
     }
-    double derivation(double x,double y) const
+    float derivation(float x,float y) const
     {
         (void)x;
         return y*(1.-y); //optimisation of f'(x) using y=f(x) in case of sigmoid
@@ -252,11 +252,11 @@ public:
         return "Tanh";
     }
 
-    double apply(double x) const
+    float apply(float x) const
     {
         return tanh(x);
     }
-    double derivation(double x,double y) const
+    float derivation(float x,float y) const
     {
         (void)x;
         return 1.-y*y; //optimisation of f'(x) using y=f(x) in case of tanh
