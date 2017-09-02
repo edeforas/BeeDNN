@@ -1,14 +1,16 @@
-#ifndef DenseLayer_
-#define DenseLayer_
+#ifndef ActivationLayer_
+#define ActivationLayer_
 
 #include "Layer.h"
 #include "Matrix.h"
 
-class DenseLayer : public Layer
+class Activation;
+
+class ActivationLayer : public Layer
 {
 public:
-    DenseLayer(int iInSize,int iOutSize);
-    ~DenseLayer();
+    ActivationLayer(int iInSize,int iOutSize,const Activation* activ);
+    ~ActivationLayer();
     virtual void init();
 
     virtual void forward(const MatrixFloat& mMatin, MatrixFloat &mMatOut) const;
@@ -19,6 +21,7 @@ public:
 
 private:
     MatrixFloat _weight;
+    const Activation* _activ;
     int _iInSize, _iOutSize;
 };
 

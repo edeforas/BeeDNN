@@ -10,7 +10,8 @@ SOURCES += ../Net.cpp \
     test_classification_MNIST.cpp \
     ../MNISTReader.cpp \
     ../MatrixUtil.cpp \
-    ../ConfusionMatrix.cpp
+    ../ConfusionMatrix.cpp \
+    ../ActivationLayer.cpp
 
 INCLUDEPATH+=..
 
@@ -22,4 +23,5 @@ HEADERS += \
     ../Net.h \
     ../MNISTReader.h \
     ../MatrixUtil.h \
-    ../ConfusionMatrix.h
+    ../ConfusionMatrix.h \
+    ../ActivationLayer.h

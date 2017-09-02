@@ -5,7 +5,7 @@
 #include "SimpleCurve.h"
 
 #include "Net.h"
-#include "DenseLayer.h"
+#include "ActivationLayer.h"
 
 //////////////////////////////////////////////////////////////////////////
 // callback class to observe loss evolution
@@ -71,9 +71,9 @@ void MainWindow::on_pushButton_clicked()
     Activation* pActivLayer1=_activ.get_activation(ui->cbActivationLayer1->currentText().toStdString());
     Activation* pActivLayer2=_activ.get_activation(ui->cbActivationLayer2->currentText().toStdString());
     Activation* pActivLayer3=_activ.get_activation(ui->cbActivationLayer3->currentText().toStdString());
-    DenseLayer l1(1,iNbHiddenNeurons2,pActivLayer1);
-    DenseLayer l2(iNbHiddenNeurons2,iNbHiddenNeurons3,pActivLayer2);
-    DenseLayer l3(iNbHiddenNeurons3,1,pActivLayer3);
+    ActivationLayer l1(1,iNbHiddenNeurons2,pActivLayer1);
+    ActivationLayer l2(iNbHiddenNeurons2,iNbHiddenNeurons3,pActivLayer2);
+    ActivationLayer l3(iNbHiddenNeurons3,1,pActivLayer3);
 
     n.add(&l1);
     n.add(&l2);

@@ -3,15 +3,15 @@ using namespace std;
 
 #include "Net.h"
 #include "Activation.h"
-#include "DenseLayer.h"
+#include "ActivationLayer.h"
 
 int main()
 {
     Net n;
 
     ActivationManager am;
-    DenseLayer l1(2,3,am.get_activation("Sigmoid"));
-    DenseLayer l2(3,1,am.get_activation("Sigmoid"));
+    ActivationLayer l1(2,3,am.get_activation("Sigmoid"));
+    ActivationLayer l2(3,1,am.get_activation("Sigmoid"));
 
     n.add(&l1);
     n.add(&l2);

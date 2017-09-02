@@ -11,7 +11,8 @@ SOURCES += main.cpp\
     ../../Net.cpp \
     SimpleCurve.cpp \
     ../../MatrixUtil.cpp \
-    ../../MNISTReader.cpp
+    ../../MNISTReader.cpp \
+    ../../ActivationLayer.cpp
 
 HEADERS  += mainwindow.h \
     ../../Activation.h \
@@ -21,7 +22,8 @@ HEADERS  += mainwindow.h \
     ../../MatrixUtil.h \
     ../../Net.h \
     SimpleCurve.h \
-    ../../MNISTReader.h
+    ../../MNISTReader.h \
+    ../../ActivationLayer.h
 
 FORMS    += mainwindow.ui
 

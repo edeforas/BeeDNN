@@ -3,7 +3,7 @@ using namespace std;
 
 #include "Net.h"
 #include "Activation.h"
-#include "DenseLayer.h"
+#include "ActivationLayer.h"
 #include "MNISTReader.h"
 #include "MatrixUtil.h"
 #include "ConfusionMatrix.h"
@@ -65,9 +65,9 @@ int main()
     mTestLabels=index_to_position(mTestLabelsIndex,10);
 
     ActivationManager am;
-    DenseLayer l1(784,512,am.get_activation("Relu"));
-    DenseLayer l2(512,512,am.get_activation("Relu"));
-    DenseLayer l3(512,10,am.get_activation("Relu"));
+    ActivationLayer l1(784,512,am.get_activation("Relu"));
+    ActivationLayer l2(512,512,am.get_activation("Relu"));
+    ActivationLayer l3(512,10,am.get_activation("Relu"));
 
     n.add(&l1);
     n.add(&l2);
