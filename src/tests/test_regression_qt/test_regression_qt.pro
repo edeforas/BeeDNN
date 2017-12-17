@@ -6,7 +6,6 @@ CONFIG += c++14
 SOURCES += main.cpp\
         mainwindow.cpp \
     ../../Activation.cpp \
-    ../../DenseLayer.cpp \
     ../../Layer.cpp \
     ../../Net.cpp \
     SimpleCurve.cpp \
@@ -16,7 +15,6 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     ../../Activation.h \
-    ../../DenseLayer.h \
     ../../Layer.h \
     ../../Matrix.h \
     ../../MatrixUtil.h \

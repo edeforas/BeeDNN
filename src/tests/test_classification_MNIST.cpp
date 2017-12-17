@@ -52,7 +52,7 @@ int main()
     MNISTReader mr;
     if(!mr.read_from_folder(".",mRefImages,mRefLabelsIndex, mTestImages,mTestLabelsIndex))
     {
-        cout << "MNIST samples not found, please check the *-ubyte files are in exectuable folder" << endl;
+        cout << "MNIST samples not found, please check the *-ubyte files are in executable folder" << endl;
         return -1;
     }
 

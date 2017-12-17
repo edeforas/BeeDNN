@@ -263,7 +263,6 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
-
 ActivationManager::ActivationManager()
 {
     _vActivations.push_back(new ActivationAtan);
@@ -279,13 +278,13 @@ ActivationManager::ActivationManager()
     _vActivations.push_back(new ActivationSigmoid);
     _vActivations.push_back(new ActivationTanh);
 }
-
+//////////////////////////////////////////////////////////////////////////////
 ActivationManager::~ActivationManager()
 {
     for(unsigned int i=0; i<_vActivations.size();i++)
         delete _vActivations[i];
 }
-
+//////////////////////////////////////////////////////////////////////////////
 Activation* ActivationManager::get_activation(const string& sName) //do not delete: manager own it.
 {
     for(unsigned int i=0; i<_vActivations.size();i++) //todo use map
@@ -296,10 +295,11 @@ Activation* ActivationManager::get_activation(const string& sName) //do not dele
 
     return 0;
 }
-
+//////////////////////////////////////////////////////////////////////////////
 void ActivationManager::list_all(vector<string>& allActivationNames) const
 {
     allActivationNames.clear();
     for(unsigned int i=0; i<_vActivations.size();i++)
         allActivationNames.push_back(_vActivations[i]->name());
 }
+//////////////////////////////////////////////////////////////////////////////
