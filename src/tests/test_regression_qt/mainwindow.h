@@ -19,11 +19,16 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+protected:
+    virtual void resizeEvent( QResizeEvent *e );
+
 private slots:
     void on_pushButton_clicked();
     void on_actionQuit_triggered();
 
     void on_actionAbout_triggered();
+
+    void on_tabWidget_currentChanged(int index);
 
 private:
     void drawLoss(vector<double> vdLoss,vector<double> vdMaxError);

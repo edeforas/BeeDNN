@@ -113,6 +113,7 @@ void MainWindow::on_pushButton_clicked()
 
     drawLoss(lossCB.vdLoss,lossCB.vdMaxError);
     drawRegression(n);
+    resizeEvent(0);
 
     QApplication::restoreOverrideCursor();
 }
@@ -138,8 +139,6 @@ void MainWindow::drawLoss(vector<double> vdLoss,vector<double> vdMaxError)
     qs->addLine(0,0,vdLoss.size()-1,0,penBlack);
 
     ui->gvLearningCurve->setScene(qs); //take ownership
-    ui->gvLearningCurve->fitInView(qs->itemsBoundingRect());
-    ui->gvLearningCurve->scale(0.8,0.8);
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::drawRegression(const Net& n)
@@ -175,8 +174,6 @@ void MainWindow::drawRegression(const Net& n)
     qs->addLine(dInputMin,0,dInputMax,0,penBlack);
 
     ui->gvRegression->setScene(qs); //take ownership
-    ui->gvRegression->fitInView(qs->itemsBoundingRect());
-    ui->gvRegression->scale(0.8,0.8);
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionQuit_triggered()
@@ -233,4 +230,28 @@ double MainWindow::compute_truth(double x)
     return 0.;
 }
 //////////////////////////////////////////////////////////////////////////
+void MainWindow::resizeEvent( QResizeEvent *e )
+{
+    (void)e;
 
+    QGraphicsScene* qsr=ui->gvRegression->scene();
+    if(qsr)
+    {
+        ui->gvRegression->fitInView(qsr->itemsBoundingRect());
+        ui->gvRegression->scale(0.9,0.9);
+    }
+
+    QGraphicsScene* qsl=ui->gvLearningCurve->scene();
+    if(qsl)
+    {
+        ui->gvLearningCurve->fitInView(qsl->itemsBoundingRect());
+        ui->gvLearningCurve->scale(0.9,0.9);
+    }
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::on_tabWidget_currentChanged(int index)
+{
+    (void)index;
+    resizeEvent(0);
+}
+//////////////////////////////////////////////////////////////////////////////
