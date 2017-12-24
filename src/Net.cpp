@@ -5,9 +5,8 @@
 
 #include <iostream>
 #include <chrono>
-using namespace std;
-
 #include <cmath>
+using namespace std;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 Net::Net()
@@ -139,11 +138,11 @@ TrainResult Net::train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,con
         }
 
 
-        auto endDuration = std::chrono::steady_clock::now();
+        auto endDuration = chrono::steady_clock::now();
 
         //early abort test on error
         tr.computedEpochs=iEpoch+1;
-        tr.epochDuration=std::chrono::duration_cast<std::chrono::microseconds> (endDuration-beginDuration).count()/1.e6;
+        tr.epochDuration=chrono::duration_cast<chrono::microseconds> (endDuration-beginDuration).count()/1.e6;
         tr.maxError=dMaxError;
         tr.loss=dMeanError/(iNbSamplesSubSampled*mTruth.size()); //same as mean error?
 

@@ -262,6 +262,41 @@ public:
         return 1.-y*y; //optimisation of f'(x) using y=f(x) in case of tanh
     }
 };
+
+
+
+//////////////////////////////////////////////////////////////////////////////
+#define VPARABLU (1)
+class ActivationParablu: public Activation
+{
+public:
+    string name() const
+    {
+        return "Parablu";
+    }
+
+    float apply(float x) const
+    {
+		if(x<0.)
+			return 0;
+		
+        if(x>2.*VPARABLU)
+            return x-VPARABLU;
+		
+        return x*x/(4*VPARABLU);
+    }
+    float derivation(float x,float y) const
+    {
+        (void)y;
+		if(x<0.)
+			return 0.;
+		
+        if(x>2.*VPARABLU)
+			return 1.;
+		
+        return x/(2*VPARABLU); //todo optimiser
+    }
+};
 //////////////////////////////////////////////////////////////////////////////
 ActivationManager::ActivationManager()
 {
@@ -277,7 +312,8 @@ ActivationManager::ActivationManager()
     _vActivations.push_back(new ActivationSoftSign);
     _vActivations.push_back(new ActivationSigmoid);
     _vActivations.push_back(new ActivationTanh);
-}
+    _vActivations.push_back(new ActivationParablu);
+	}
 //////////////////////////////////////////////////////////////////////////////
 ActivationManager::~ActivationManager()
 {
