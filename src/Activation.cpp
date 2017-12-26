@@ -266,7 +266,6 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////////////
-#define VPARABLU (1)
 class ActivationParablu: public Activation
 {
 public:
@@ -280,10 +279,10 @@ public:
 		if(x<0.)
 			return 0;
 		
-        if(x>2.*VPARABLU)
-            return x-VPARABLU;
+        if(x>2.)
+            return x-1.;
 		
-        return x*x/(4*VPARABLU);
+        return x*x/4.;
     }
     float derivation(float x,float y) const
     {
@@ -291,10 +290,10 @@ public:
 		if(x<0.)
 			return 0.;
 		
-        if(x>2.*VPARABLU)
+        if(x>2.)
 			return 1.;
 		
-        return x/(2*VPARABLU); //todo optimiser
+        return x/2.;
     }
 };
 //////////////////////////////////////////////////////////////////////////////
