@@ -262,9 +262,6 @@ public:
         return 1.-y*y; //optimisation of f'(x) using y=f(x) in case of tanh
     }
 };
-
-
-
 //////////////////////////////////////////////////////////////////////////////
 class ActivationParablu: public Activation
 {
@@ -276,24 +273,24 @@ public:
 
     float apply(float x) const
     {
-		if(x<0.)
-			return 0;
-		
-        if(x>2.)
-            return x-1.;
-		
-        return x*x/4.;
+        if(x<0.)
+            return 0;
+
+        if(x>0.5)
+            return x-0.25;
+
+        return x*x;
     }
     float derivation(float x,float y) const
     {
         (void)y;
-		if(x<0.)
-			return 0.;
-		
-        if(x>2.)
-			return 1.;
-		
-        return x/2.;
+        if(x<0.)
+            return 0.;
+
+        if(x>0.5)
+            return 1.;
+
+        return x+x;//2.*x
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -312,7 +309,7 @@ ActivationManager::ActivationManager()
     _vActivations.push_back(new ActivationSigmoid);
     _vActivations.push_back(new ActivationTanh);
     _vActivations.push_back(new ActivationParablu);
-	}
+}
 //////////////////////////////////////////////////////////////////////////////
 ActivationManager::~ActivationManager()
 {
