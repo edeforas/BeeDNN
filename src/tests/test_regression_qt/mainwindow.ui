@@ -192,6 +192,13 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QCheckBox" name="cbExtrapole">
+         <property name="text">
+          <string>Extrapole2x</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>

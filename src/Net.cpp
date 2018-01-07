@@ -75,7 +75,6 @@ TrainResult Net::train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,con
 
         MatrixFloat mShuffle=rand_perm(iNbSamples);
 
-
         unsigned int iBatchStart=0;
         while(iBatchStart<iNbSamplesSubSampled)
         {
@@ -136,7 +135,6 @@ TrainResult Net::train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,con
 
             iBatchStart=iBatchEnd;
         }
-
 
         auto endDuration = chrono::steady_clock::now();
 

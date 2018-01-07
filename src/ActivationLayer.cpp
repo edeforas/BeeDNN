@@ -7,10 +7,9 @@
 #include "Activation.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-ActivationLayer::ActivationLayer(int iInSize,int iOutSize,const Activation* activ): Layer(),
-    _activ(activ),
-    _iInSize(iInSize),
-    _iOutSize(iOutSize)
+ActivationLayer::ActivationLayer(int iInSize,int iOutSize,const Activation* activ):
+    Layer(iInSize,iOutSize),
+    _activ(activ)
 {
     assert(activ);
     _weight.resize(_iInSize+1,_iOutSize); //+1 for bias
@@ -65,7 +64,7 @@ void ActivationLayer::forward_save(const MatrixFloat& mMatIn,MatrixFloat& mMatOu
     out=mMatOut;
 }
 ///////////////////////////////////////////////////////////////////////////////
-MatrixFloat ActivationLayer::get_weight_activation_derivation()
+MatrixFloat ActivationLayer::get_weight_activation_derivation() const
 {
     // apply activation derivation on outweight
     MatrixFloat mOut=outWeight;

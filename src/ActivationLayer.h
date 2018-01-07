@@ -16,13 +16,12 @@ public:
     virtual void forward(const MatrixFloat& mMatin, MatrixFloat &mMatOut) const;
     virtual void forward_save(const MatrixFloat& mMatin, MatrixFloat &mMatOut);
 
-    virtual MatrixFloat get_weight_activation_derivation();
+    virtual MatrixFloat get_weight_activation_derivation() const;
     virtual MatrixFloat& get_weight();
 
 private:
     MatrixFloat _weight;
     const Activation* _activ;
-    int _iInSize, _iOutSize;
 };
 
 #endif

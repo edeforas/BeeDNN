@@ -147,23 +147,33 @@ void MainWindow::drawRegression(const Net& n)
 
     //create ref sample hi-res and net output
     unsigned int iNbPoint=(unsigned int)(ui->leNbPointsTest->text().toInt());
-    float dInputMin=ui->leInputMin->text().toDouble();
-    float dInputMax=ui->leInputMax->text().toDouble();
-    float dStep=(dInputMax-dInputMin)/(double)(iNbPoint-1);
-    vector<double> vTruth(iNbPoint);
-    vector<double> vSamples(iNbPoint);
-    vector<double> vRegression(iNbPoint);
+    float fInputMin=ui->leInputMin->text().toDouble();
+    float fInputMax=ui->leInputMax->text().toDouble();
+    bool bExtrapole=ui->cbExtrapole->isChecked();
+    vector<double> vTruth;
+    vector<double> vSamples;
+    vector<double> vRegression;
     MatrixFloat mIn(1),mOut;
-    float dVal=dInputMin;
+
+    if(bExtrapole)
+    {
+        float fBorder=(fInputMax-fInputMin)/2.;
+        fInputMin-=fBorder;
+        fInputMax+=fBorder;
+        iNbPoint*=2;
+    }
+
+    float fVal=fInputMin;
+    float fStep=(fInputMax-fInputMin)/(double)(iNbPoint-1);
 
     for(unsigned int i=0;i<iNbPoint;i++)
     {
-        mIn(0)=dVal;
-        vTruth[i]=-compute_truth(dVal);
-        vSamples[i]=dVal;
+        mIn(0)=fVal;
+        vTruth.push_back(-compute_truth(fVal));
+        vSamples.push_back(fVal);
         n.forward(mIn,mOut);
-        vRegression[i]=-mOut(0);
-        dVal+=dStep;
+        vRegression.push_back(-mOut(0));
+        fVal+=fStep;
     }
 
     qs->addCurve(vSamples,vTruth,Qt::red);
@@ -171,7 +181,7 @@ void MainWindow::drawRegression(const Net& n)
 
     QPen penBlack(Qt::black);
     penBlack.setCosmetic(true);
-    qs->addLine(dInputMin,0,dInputMax,0,penBlack);
+    qs->addLine(fInputMin,0,fInputMax,0,penBlack);
 
     ui->gvRegression->setScene(qs); //take ownership
 }
