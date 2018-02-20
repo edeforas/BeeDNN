@@ -23,17 +23,17 @@ int main()
     MatrixFloat mSamples(64);
 	for( int i=0;i<64;i++)
 	{
-		double x=(double)i/10.;
+        float x=i/10.f;
 		mTruth(i)=sin(x);
-		mSamples(i)=x;
+        mSamples(i)=x;
 	}
 
     TrainOption tOpt;
     tOpt.epochs=10000;
     tOpt.earlyAbortMaxError=0.05;
-    tOpt.learningRate=0.1;
+    tOpt.learningRate=0.1f;
     tOpt.batchSize=1;
-    tOpt.momentum=0.05;
+    tOpt.momentum=0.05f;
 
     TrainResult tr=n.train(mSamples,mTruth,tOpt);
     cout << "Loss=" << tr.loss << " MaxError=" << tr.maxError << " ComputedEpochs=" << tr.computedEpochs << endl;

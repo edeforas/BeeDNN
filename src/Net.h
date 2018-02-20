@@ -18,8 +18,8 @@ public:
         earlyAbortMaxError=0.;
         earlyAbortMeanError=0.;
         batchSize=32;
-        learningRate=0.1;
-        momentum=0.1;
+        learningRate=0.1f;
+        momentum=0.1f;
         subSamplingRatio=1;
         observer=0;
     }
@@ -28,8 +28,8 @@ public:
     double earlyAbortMaxError;
     double earlyAbortMeanError;
     int batchSize;
-    double learningRate;
-    double momentum;
+    float learningRate;
+    float momentum;
     int subSamplingRatio; //1 to keep everything in training ; 2 , to keep half (shuffled) and soon on
     TrainObserver* observer;
 };

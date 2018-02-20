@@ -20,14 +20,14 @@ ActivationLayer::~ActivationLayer()
 ///////////////////////////////////////////////////////////////////////////////
 void ActivationLayer::init()
 {
-    float a =sqrt(6./(_iInSize+_iOutSize));
+    float a =sqrtf(6.f/(_iInSize+_iOutSize));
 
     if(_activ->name()=="Sigmoid")
-        a*=4.;
+        a*=4.f;
 
     for(unsigned int i=0;i<_weight.size();i++)
     {
-        _weight(i)=((float)rand()/(float)RAND_MAX-0.5)*2.*a;
+        _weight(i)=((float)rand()/(float)RAND_MAX-0.5f)*2.f*a;
     }
 
     dE.resize(_iInSize+1,_iOutSize);
@@ -48,7 +48,7 @@ void ActivationLayer::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) co
 }
 ///////////////////////////////////////////////////////////////////////////////
 void ActivationLayer::forward_save(const MatrixFloat& mMatIn,MatrixFloat& mMatOut)
-{
+{ //todo remove this, use forward() instead
     in=mMatIn;
     // compute out=[in 1]*weight; todo use MAC
     mMatOut=mMatIn*_weight.without_last_row();

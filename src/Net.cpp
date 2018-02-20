@@ -124,7 +124,7 @@ TrainResult Net::train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,con
             {
                 Layer& l=*_layers[iL];
 
-                sumDE[iL]/=(double)(iBatchEnd-iBatchStart);
+                sumDE[iL]/=(float)(iBatchEnd-iBatchStart);
 
                 //update weight with momentum: weight -= learning_rate*dE+momentum*oldDE;
                 l.get_weight()-=sumDE[iL]*topt.learningRate+sumDEMomentum[iL]*topt.momentum;
@@ -160,12 +160,12 @@ TrainResult Net::train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,con
 void Net::backpropagation(const MatrixFloat &mError)
 {
     MatrixFloat mDelta;
-    for (int iL=_layers.size()-1;iL>=0;iL--)
+    for (int iL=(int)(_layers.size()-1);iL>=0;iL--)
     {
         Layer& l=*_layers[iL];
         MatrixFloat mAD=l.get_weight_activation_derivation();
 
-        if((unsigned int)iL==_layers.size()-1)
+        if(iL==(int)(_layers.size()-1))
         {
             //last layer
             mDelta=mError.element_product(mAD); //  delta=error.*mAD;

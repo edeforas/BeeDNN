@@ -1,4 +1,5 @@
 #include <cassert>
+#include <cstdlib>
 
 #include "MatrixUtil.h"
 ///////////////////////////////////////////////////////////////////////////
@@ -8,7 +9,7 @@ MatrixFloat rand_perm(unsigned int iSize) //create a vector of index shuffled
 
     //create ordered vector
     for(unsigned int i=0;i<iSize;i++)
-        m(i)=i;
+        m(i)=(float)i;
 
     //now bubble shuffle
     for(unsigned int i=0;i<iSize;i++)
@@ -16,7 +17,7 @@ MatrixFloat rand_perm(unsigned int iSize) //create a vector of index shuffled
         unsigned int iNewPos=rand()%iSize;
         double dVal=m(iNewPos);
         m(iNewPos)=m(i);
-        m(i)=dVal;
+        m(i)=(float)dVal;
     }
 
     return m;
@@ -56,7 +57,7 @@ MatrixFloat argmax(const MatrixFloat& m)
                 iIndex=iC;
             }
         }
-        mResult(iR)=iIndex;
+        mResult(iR)=(float)iIndex;
     }
 
     return mResult;

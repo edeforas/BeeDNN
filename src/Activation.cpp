@@ -24,7 +24,7 @@ public:
     float derivation(float x,float y) const
     {
         (void)y;
-        return 1./(1+x*x);
+        return 1.f/(1+x*x);
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -38,13 +38,13 @@ public:
 
     float apply(float x) const
     {
-        return 0.5*(x/(1.+fabs(x)))+0.5;
+        return 0.5f*(x/(1.f+fabs(x)))+0.5f;
     }
 
     float derivation(float x,float y) const
     {
         (void)y;
-        return 0.5/((1.+fabs(x))*(1.+fabs(x))); //todo optimize
+        return 0.5f/((1.f+fabs(x))*(1.f+fabs(x))); //todo optimize
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -58,12 +58,12 @@ public:
 
     float apply(float x) const
     {
-        return exp(-x*x);
+        return expf(-x*x);
     }
 
     float derivation(float x,float y) const
     {
-        return -2.*x*y; //derivate using f(x)
+        return -2.f*x*y; //derivate using f(x)
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -98,13 +98,13 @@ public:
 
     float apply(float x) const
     {
-        return x>=0. ? x : 0.;
+        return x>=0.f ? x : 0.f;
     }
 
     float derivation(float x,float y) const
     {
         (void)x;
-        return y>=0. ? 1. : 0.;
+        return y>=0.f ? 1.f : 0.f;
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -118,13 +118,13 @@ public:
 
     float apply(float x) const
     {
-        return x>=0. ? x : 0.01*x;
+        return x>=0.f ? x : 0.01f*x;
     }
 
     float derivation(float x,float y) const
     {
         (void)x;
-        return y>=0. ? 1. : 0.01;
+        return y>=0.f ? 1.f : 0.01f;
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -148,15 +148,15 @@ public:
     {
         (void)x;
 
-        if(y>=0.)
-            return 1.;
+        if(y>=0.f)
+            return 1.f;
         else
-            return y+1.; //optimisation of f'(x) using y=f(x) in case of Elu
+            return y+1.f; //optimisation of f'(x) using y=f(x) in case of Elu
     }
 };
 //////////////////////////////////////////////////////////////////////////////
-#define SELU_LAMBDA 1.05070
-#define SELU_ALPHA 1.67326
+#define SELU_LAMBDA 1.05070f
+#define SELU_ALPHA 1.67326f
 class ActivationSelu: public Activation
 {
 public:
@@ -167,7 +167,7 @@ public:
 
     float apply(float x) const
     {
-        if(x>=0.)
+        if(x>=0.f)
             return SELU_LAMBDA*x;
         else
             return SELU_LAMBDA*SELU_ALPHA*expm1(x);
@@ -177,7 +177,7 @@ public:
     {
         (void)x;
 
-        if(y>=0.)
+        if(y>=0.f)
             return SELU_LAMBDA;
         else
             return y+SELU_LAMBDA*SELU_ALPHA; //optimisation of f'(x) using y=f(x) in case of selu
@@ -200,7 +200,7 @@ public:
     float derivation(float x,float y) const
     {
         (void)y;
-        return 1./(1.+exp(-x));
+        return 1.f/(1.f+exp(-x));
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -214,13 +214,13 @@ public:
 
     float apply(float x) const
     {
-        return x/(1.+fabs(x));
+        return x/(1.f+fabs(x));
     }
 
     float derivation(float x,float y) const
     {
         (void)y;
-        return 1./((1.+fabs(x))*(1.+fabs(x))); //todo optimize
+        return 1.f/((1.f+fabs(x))*(1.f+fabs(x))); //todo optimize
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -235,12 +235,12 @@ public:
 
     float apply(float x) const
     {
-        return 1./(1.+exp(-x));
+        return 1.f/(1.f+expf(-x));
     }
     float derivation(float x,float y) const
     {
         (void)x;
-        return y*(1.-y); //optimisation of f'(x) using y=f(x) in case of sigmoid
+        return y*(1.f-y); //optimisation of f'(x) using y=f(x) in case of sigmoid
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -259,7 +259,7 @@ public:
     float derivation(float x,float y) const
     {
         (void)x;
-        return 1.-y*y; //optimisation of f'(x) using y=f(x) in case of tanh
+        return 1.f-y*y; //optimisation of f'(x) using y=f(x) in case of tanh
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -273,22 +273,22 @@ public:
 
     float apply(float x) const
     {
-        if(x<0.)
-            return 0;
+        if(x<0.f)
+            return 0.f;
 
-        if(x>0.5)
-            return x-0.25;
+        if(x>0.5f)
+            return x-0.25f;
 
         return x*x;
     }
     float derivation(float x,float y) const
     {
         (void)y;
-        if(x<0.)
-            return 0.;
+        if(x<0.f)
+            return 0.f;
 
-        if(x>0.5)
-            return 1.;
+        if(x>0.5f)
+            return 1.f;
 
         return x+x;//2.*x
     }

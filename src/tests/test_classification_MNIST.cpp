@@ -28,19 +28,17 @@ public:
     {
         cout << "epoch=" << tr.computedEpochs << " duration=" << tr.epochDuration << " loss=" << tr.loss << " maxerror=" << tr.maxError << endl;
 		
-		/*
         MatrixFloat mClass;
-        n.classify(mRefImages,mClass);
+        n.classify(mTestImages,mClass);
 
-        ConfusionMatrixFloat cm;
-        ClassificationResult cr=cm.compute(mRefLabelsIndex,mClass,10);
+        ConfusionMatrix cm;
+        ClassificationResult cr=cm.compute(mTestLabelsIndex,mClass,10);
 
-        cout << "% of gooddetection=" << cr.goodclassificationPercent << endl;
+        cout << "% of good detection=" << cr.goodclassificationPercent << endl;
 
         cout << "ConfusionMatrixFloat=" << endl;
         disp(cr.mConfMat);
         cout << endl;
-*/
     }
 };
 
@@ -65,20 +63,22 @@ int main()
     mTestLabels=index_to_position(mTestLabelsIndex,10);
 
     ActivationManager am;
-    ActivationLayer l1(784,512,am.get_activation("Relu"));
-    ActivationLayer l2(512,512,am.get_activation("Relu"));
-    ActivationLayer l3(512,10,am.get_activation("Relu"));
+    ActivationLayer l1(784,400,am.get_activation("Tanh"));
+    ActivationLayer l2(400,100,am.get_activation("Tanh"));
+    ActivationLayer l3(100,50,am.get_activation("Tanh"));
+    ActivationLayer l4(50,10,am.get_activation("Tanh"));
 
     n.add(&l1);
     n.add(&l2);
     n.add(&l3);
+    n.add(&l4);
 
     TrainOption tOpt;
     tOpt.epochs=100;
     tOpt.earlyAbortMaxError=0.05;
-    tOpt.learningRate=0.1;
+    tOpt.learningRate=0.1f;
     tOpt.batchSize=128;
-    tOpt.momentum=0.1;
+    tOpt.momentum=0.1f;
     tOpt.observer=&lo;
     tOpt.subSamplingRatio=50; //use shuffled 1/50 sample for train
 
