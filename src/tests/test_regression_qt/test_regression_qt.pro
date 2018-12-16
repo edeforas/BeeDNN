@@ -11,7 +11,10 @@ SOURCES += main.cpp\
     SimpleCurve.cpp \
     ../../MatrixUtil.cpp \
     ../../MNISTReader.cpp \
-    ../../ActivationLayer.cpp
+    ../../ActivationLayer.cpp \
+    NNEngineTestDnn.cpp \
+    NNEngineTinyDnn.cpp \
+    NNEngine.cpp
 
 HEADERS  += mainwindow.h \
     ../../Activation.h \
@@ -21,8 +24,14 @@ HEADERS  += mainwindow.h \
     ../../Net.h \
     SimpleCurve.h \
     ../../MNISTReader.h \
-    ../../ActivationLayer.h
+    ../../ActivationLayer.h \
+    NNEngine.h \
+    NNEngineTestDnn.h \
+    NNEngineTinyDnn.h
 
 FORMS    += mainwindow.ui
 
 INCLUDEPATH += ..\..\
+
+#TinyDNN
+INCLUDEPATH += $$(TINY_DNN_PATH)

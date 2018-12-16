@@ -26,7 +26,7 @@ class LossObserver: public TrainObserver
 public:
     virtual void stepEpoch(const TrainResult & tr)
     {
-        cout << "epoch=" << tr.computedEpochs << " duration=" << tr.epochDuration << " loss=" << tr.loss << " maxerror=" << tr.maxError << endl;
+        cout << "epoch=" << tr.computedEpochs << " duration=" << tr.epochDuration << "s loss=" << tr.loss << " maxerror=" << tr.maxError << endl;
 		
         MatrixFloat mClass;
         n.classify(mTestImages,mClass);
@@ -55,41 +55,39 @@ int main()
     }
 
     // normalize input data
-    mTestImages/=255.;
-    mRefImages/=255.;
+    mTestImages/=256.f;
+    mRefImages/=256.f;
 
     //transform truth as a probabilty vector (one column by class)
     mRefLabels=index_to_position(mRefLabelsIndex,10);
     mTestLabels=index_to_position(mTestLabelsIndex,10);
 
     ActivationManager am;
-    ActivationLayer l1(784,400,am.get_activation("Tanh"));
-    ActivationLayer l2(400,100,am.get_activation("Tanh"));
-    ActivationLayer l3(100,50,am.get_activation("Tanh"));
-    ActivationLayer l4(50,10,am.get_activation("Tanh"));
+    ActivationLayer l1(784,200,am.get_activation("Tanh"));
+    ActivationLayer l2(200,50,am.get_activation("Tanh"));
+    ActivationLayer l3(50,10,am.get_activation("Tanh"));
 
     n.add(&l1);
     n.add(&l2);
     n.add(&l3);
-    n.add(&l4);
 
     TrainOption tOpt;
     tOpt.epochs=100;
     tOpt.earlyAbortMaxError=0.05;
-    tOpt.learningRate=0.1f;
+    tOpt.learningRate=0.2f;
     tOpt.batchSize=128;
     tOpt.momentum=0.1f;
     tOpt.observer=&lo;
-    tOpt.subSamplingRatio=50; //use shuffled 1/50 sample for train
+    //tOpt.subSamplingRatio=50; //use shuffled 1/50 sample for train
 
     cout << "training..." << endl;
 
     n.train(mRefImages,mRefLabels,tOpt);
 
     cout << "end of training." << endl;
-    cout << "testing ..."<< endl;
+    cout << "computing perfs ..."<< endl;
 
-    // test on full learning dDB
+    // perfs on learning dDB
     {
         cout << " result on full learning DB:" << endl;
         MatrixFloat mClass;
@@ -98,14 +96,14 @@ int main()
         ConfusionMatrix cm;
         ClassificationResult cr=cm.compute(mRefLabelsIndex,mClass,10);
 
-        cout << "% of gooddetection=" << cr.goodclassificationPercent << endl;
+        cout << "% of good detection=" << cr.goodclassificationPercent << endl;
 
-        cout << "ConfusionMatrixFloat=" << endl;
+        cout << "ConfusionMatrix=" << endl;
         disp(cr.mConfMat);
         cout << endl;
     }
 
-    // test on full test dDB
+    // perfs on test dDB
     {
         cout << " result on full test DB:" << endl;
         MatrixFloat mClass;
