@@ -9,7 +9,7 @@ public:
     NNEngine();
     virtual ~NNEngine();
 
-    virtual void predict(const MatrixFloat pIn, MatrixFloat pOut)=0;
+    virtual void predict(const MatrixFloat mIn, MatrixFloat mOut)=0;
 };
 
 #endif

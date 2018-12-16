@@ -16,7 +16,7 @@ public:
     NNEngineTinyDnn();
     virtual ~NNEngineTinyDnn();
 
-    virtual void predict(const MatrixFloat pIn, MatrixFloat pOut);
+    virtual void predict(const MatrixFloat mIn, MatrixFloat mOut);
 
 private:
     tiny_dnn::network<tiny_dnn::sequential>* _pNet;

@@ -54,6 +54,15 @@ public:
         if(_bDelete)
             delete [] _data;
     }
+
+    void assign(T* first,T* last)
+    {
+        resize((last-first)/sizeof(T),1);
+        for(unsigned int i=0;i<size();i++)
+            operator()(i)=*first++;
+
+        //todo  check and optimize
+    }
     
     Matrix<T>& operator=( const Matrix<T>& b)
     {

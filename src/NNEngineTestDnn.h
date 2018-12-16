@@ -11,7 +11,7 @@ public:
     NNEngineTestDnn();
     virtual ~NNEngineTestDnn();
 
-    virtual void predict(const MatrixFloat pIn, MatrixFloat pOut);
+    virtual void predict(const MatrixFloat mIn, MatrixFloat mOut);
 
 private:
     Net* _pNet;
