@@ -4,6 +4,10 @@
 #include <QGraphicsScene>
 #include "SimpleCurve.h"
 
+#include "DNNEngine.h"
+#include "DNNEngineTestDnn.h"
+#include "DNNEngineTinyDnn.h"
+
 #include "Net.h"
 #include "ActivationLayer.h"
 

@@ -1,20 +1,20 @@
-#include "NNEngineTestDnn.h"
+#include "DNNEngineTestDnn.h"
 
 #include "Net.h"
 #include "ActivationLayer.h"
 
 //////////////////////////////////////////////////////////////////////////////
-NNEngineTestDnn::NNEngineTestDnn()
+DNNEngineTestDnn::DNNEngineTestDnn()
 {
 	_pNet=new Net;
 }
 //////////////////////////////////////////////////////////////////////////////
-NNEngineTestDnn::~NNEngineTestDnn()
+DNNEngineTestDnn::~DNNEngineTestDnn()
 {
 	delete _pNet;
 }
 //////////////////////////////////////////////////////////////////////////////
-void NNEngineTestDnn::predict(const MatrixFloat mIn, MatrixFloat mOut)
+void DNNEngineTestDnn::predict(const MatrixFloat mIn, MatrixFloat mOut)
 {
    _pNet->forward(mIn,mOut);
 }

@@ -1,19 +1,19 @@
-#include "NNEngineTinyDnn.h"
+#include "DNNEngineTinyDnn.h"
 
 #include "tiny_dnn/tiny_dnn.h"
 
 //////////////////////////////////////////////////////////////////////////////
-NNEngineTinyDnn::NNEngineTinyDnn()
+DNNEngineTinyDnn::DNNEngineTinyDnn()
 {
 	_pNet=new tiny_dnn::network<tiny_dnn::sequential>;
 }
 //////////////////////////////////////////////////////////////////////////////
-NNEngineTinyDnn::~NNEngineTinyDnn()
+DNNEngineTinyDnn::~DNNEngineTinyDnn()
 {
     delete _pNet;
 }
 //////////////////////////////////////////////////////////////////////////////
-void NNEngineTinyDnn::predict(const MatrixFloat mIn, MatrixFloat mOut)
+void DNNEngineTinyDnn::predict(const MatrixFloat mIn, MatrixFloat mOut)
 {
     tiny_dnn::vec_t vIn;
     vIn.assign(mIn.data(),mIn.data()+mIn.size());

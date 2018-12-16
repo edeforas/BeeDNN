@@ -1,7 +1,7 @@
-#ifndef NNEngineTinyDnn_
-#define NNEngineTinyDnn_
+#ifndef DNNEngineTinyDnn_
+#define DNNEngineTinyDnn_
 
-#include "NNEngine.h"
+#include "DNNEngine.h"
 
 // forward declaration of tiny_dnn
 namespace tiny_dnn {
@@ -10,11 +10,11 @@ class network;
 class sequential;
 }
 
-class NNEngineTinyDnn : public NNEngine
+class DNNEngineTinyDnn : public DNNEngine
 {
 public:
-    NNEngineTinyDnn();
-    virtual ~NNEngineTinyDnn();
+    DNNEngineTinyDnn();
+    virtual ~DNNEngineTinyDnn();
 
     virtual void predict(const MatrixFloat mIn, MatrixFloat mOut);
 
