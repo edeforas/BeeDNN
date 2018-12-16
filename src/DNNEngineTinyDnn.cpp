@@ -13,6 +13,12 @@ DNNEngineTinyDnn::~DNNEngineTinyDnn()
     delete _pNet;
 }
 //////////////////////////////////////////////////////////////////////////////
+void DNNEngineTinyDnn::clear()
+{
+    delete _pNet;
+    _pNet=new tiny_dnn::network<tiny_dnn::sequential>;
+}
+//////////////////////////////////////////////////////////////////////////////
 void DNNEngineTinyDnn::predict(const MatrixFloat mIn, MatrixFloat mOut)
 {
     tiny_dnn::vec_t vIn;

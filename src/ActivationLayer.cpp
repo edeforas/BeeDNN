@@ -66,7 +66,7 @@ void ActivationLayer::forward_save(const MatrixFloat& mMatIn,MatrixFloat& mMatOu
 ///////////////////////////////////////////////////////////////////////////////
 MatrixFloat ActivationLayer::get_weight_activation_derivation() const
 {
-    // apply activation derivation on outweight
+    // apply activation derivation on outWeight
     MatrixFloat mOut=outWeight;
     for(unsigned int i=0;i<mOut.size();i++)
     {

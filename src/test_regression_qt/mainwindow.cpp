@@ -55,11 +55,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->cbFunction->addItem("Rectangular");
 
     resizeDocks({ui->dockWidget},{1},Qt::Horizontal);
+
+    _pEngine=new DNNEngineTestDnn;
 }
 //////////////////////////////////////////////////////////////////////////
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete _pEngine;
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::on_pushButton_clicked()
@@ -67,6 +70,10 @@ void MainWindow::on_pushButton_clicked()
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     LossObserver lossCB;
+
+    _pEngine->clear();
+
+
 
     Net n;
 
@@ -267,5 +274,17 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 {
     (void)index;
     resizeEvent(0);
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::on_cbEngine_currentTextChanged(const QString &arg1)
+{
+    delete _pEngine;
+
+    if(arg1=="testDNN")
+        _pEngine=new DNNEngineTestDnn;
+
+    if(arg1=="tiny-dnn")
+        _pEngine=new DNNEngineTinyDnn;
+
 }
 //////////////////////////////////////////////////////////////////////////////

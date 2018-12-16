@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+class DNNEngine;
+
 #include "Activation.h"
 
 #include <QMainWindow>
@@ -30,12 +32,15 @@ private slots:
 
     void on_tabWidget_currentChanged(int index);
 
+    void on_cbEngine_currentTextChanged(const QString &arg1);
+
 private:
     void drawLoss(vector<double> vdLoss,vector<double> vdMaxError);
     void drawRegression(const Net& n);
     double compute_truth(double x);
     Ui::MainWindow *ui;
 
+    DNNEngine* _pEngine;
     ActivationManager _activ;
 };
 

@@ -11,6 +11,8 @@ public:
     DNNEngineTestDnn();
     virtual ~DNNEngineTestDnn();
 
+    virtual void clear();
+
     virtual void predict(const MatrixFloat mIn, MatrixFloat mOut);
 
 private:

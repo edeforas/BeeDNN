@@ -16,6 +16,8 @@ public:
     DNNEngineTinyDnn();
     virtual ~DNNEngineTinyDnn();
 
+    virtual void clear();
+
     virtual void predict(const MatrixFloat mIn, MatrixFloat mOut);
 
 private:

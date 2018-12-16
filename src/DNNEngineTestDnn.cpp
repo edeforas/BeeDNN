@@ -14,6 +14,12 @@ DNNEngineTestDnn::~DNNEngineTestDnn()
 	delete _pNet;
 }
 //////////////////////////////////////////////////////////////////////////////
+void DNNEngineTestDnn::clear()
+{
+    delete _pNet;
+    _pNet=new Net;
+}
+//////////////////////////////////////////////////////////////////////////////
 void DNNEngineTestDnn::predict(const MatrixFloat mIn, MatrixFloat mOut)
 {
    _pNet->forward(mIn,mOut);
