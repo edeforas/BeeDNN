@@ -20,7 +20,7 @@ void DNNEngineTestDnn::clear()
     _pNet=new Net;
 }
 //////////////////////////////////////////////////////////////////////////////
-void DNNEngineTestDnn::predict(const MatrixFloat mIn, MatrixFloat mOut)
+void DNNEngineTestDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
 {
    _pNet->forward(mIn,mOut);
 }

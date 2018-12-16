@@ -19,7 +19,7 @@ void DNNEngineTinyDnn::clear()
     _pNet=new tiny_dnn::network<tiny_dnn::sequential>;
 }
 //////////////////////////////////////////////////////////////////////////////
-void DNNEngineTinyDnn::predict(const MatrixFloat mIn, MatrixFloat mOut)
+void DNNEngineTinyDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
 {
     tiny_dnn::vec_t vIn;
     vIn.assign(mIn.data(),mIn.data()+mIn.size());

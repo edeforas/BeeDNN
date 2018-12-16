@@ -13,7 +13,7 @@ public:
 
     virtual void clear();
 
-    virtual void predict(const MatrixFloat mIn, MatrixFloat mOut);
+    virtual void predict(const MatrixFloat& mIn, MatrixFloat& mOut);
 
 private:
     Net* _pNet;

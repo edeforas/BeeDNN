@@ -11,7 +11,7 @@ public:
 
     virtual void clear()=0;
 
-    virtual void predict(const MatrixFloat mIn, MatrixFloat mOut)=0;
+    virtual void predict(const MatrixFloat& mIn, MatrixFloat& mOut)=0;
 
 };
 

@@ -18,7 +18,7 @@ public:
 
     virtual void clear();
 
-    virtual void predict(const MatrixFloat mIn, MatrixFloat mOut);
+    virtual void predict(const MatrixFloat& mIn, MatrixFloat& mOut);
 
 private:
     tiny_dnn::network<tiny_dnn::sequential>* _pNet;
