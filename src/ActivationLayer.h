@@ -4,12 +4,15 @@
 #include "Layer.h"
 #include "Matrix.h"
 
+#include <string>
+using namespace std;
+
 class Activation;
 
 class ActivationLayer : public Layer
 {
 public:
-    ActivationLayer(int iInSize,int iOutSize,const Activation* activ);
+    ActivationLayer(int iInSize,int iOutSize, string sActivation);
     ~ActivationLayer();
     virtual void init();
 

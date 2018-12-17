@@ -12,6 +12,7 @@ public:
     virtual ~DNNEngineTestDnn();
 
     virtual void clear();
+    virtual void add_layer_and_activation(int inSize,int outSize, eLayerType layer, string sActivation);
 
     virtual void predict(const MatrixFloat& mIn, MatrixFloat& mOut);
 

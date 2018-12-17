@@ -293,45 +293,49 @@ public:
         return x+x;//2.*x
     }
 };
+
 //////////////////////////////////////////////////////////////////////////////
-ActivationManager::ActivationManager()
+Activation* get_activation(string sActivation)
 {
-    _vActivations.push_back(new ActivationAtan);
-    _vActivations.push_back(new ActivationElliot);
-    _vActivations.push_back(new ActivationGauss);
-    _vActivations.push_back(new ActivationLinear);
-    _vActivations.push_back(new ActivationRelu);
-    _vActivations.push_back(new ActivationLeakyRelu);
-    _vActivations.push_back(new ActivationElu);
-    _vActivations.push_back(new ActivationSelu);
-    _vActivations.push_back(new ActivationSoftPlus);
-    _vActivations.push_back(new ActivationSoftSign);
-    _vActivations.push_back(new ActivationSigmoid);
-    _vActivations.push_back(new ActivationTanh);
-    _vActivations.push_back(new ActivationParablu);
-}
-//////////////////////////////////////////////////////////////////////////////
-ActivationManager::~ActivationManager()
-{
-    for(unsigned int i=0; i<_vActivations.size();i++)
-        delete _vActivations[i];
-}
-//////////////////////////////////////////////////////////////////////////////
-Activation* ActivationManager::get_activation(const string& sName) //do not delete: manager own it.
-{
-    for(unsigned int i=0; i<_vActivations.size();i++) //todo use map
-    {
-        if(_vActivations[i]->name()==sName)
-            return _vActivations[i];
-    }
+    if(sActivation=="Tanh")
+        return new ActivationTanh;
+
+    if(sActivation=="Sigmoid")
+        return new ActivationSigmoid;
+
+    if(sActivation=="Relu")
+        return new ActivationRelu;
+
+    if(sActivation=="Linear")
+        return new ActivationLinear;
+
+    if(sActivation=="Atan")
+        return new ActivationAtan;
+
+    if(sActivation=="Elliot")
+        return new ActivationElliot;
+
+    if(sActivation=="Gauss")
+        return new ActivationGauss;
+
+    if(sActivation=="LeakyRelu")
+        return new ActivationLeakyRelu;
+
+    if(sActivation=="Elu")
+        return new ActivationElu;
+
+    if(sActivation=="Selu")
+        return new ActivationSelu;
+
+    if(sActivation=="SoftPlus")
+        return new ActivationSoftPlus;
+
+    if(sActivation=="SoftSign")
+        return new ActivationSoftSign;
+
+    if(sActivation=="Parablu")
+        return new ActivationParablu;
 
     return 0;
-}
-//////////////////////////////////////////////////////////////////////////////
-void ActivationManager::list_all(vector<string>& allActivationNames) const
-{
-    allActivationNames.clear();
-    for(unsigned int i=0; i<_vActivations.size();i++)
-        allActivationNames.push_back(_vActivations[i]->name());
 }
 //////////////////////////////////////////////////////////////////////////////

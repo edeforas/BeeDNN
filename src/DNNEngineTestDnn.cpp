@@ -11,13 +11,16 @@ DNNEngineTestDnn::DNNEngineTestDnn()
 //////////////////////////////////////////////////////////////////////////////
 DNNEngineTestDnn::~DNNEngineTestDnn()
 {
-	delete _pNet;
+    clear();
 }
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTestDnn::clear()
+{ }
+//////////////////////////////////////////////////////////////////////////////
+void DNNEngineTestDnn::add_layer_and_activation(int inSize,int outSize, eLayerType layer, string sActivation)
 {
-    delete _pNet;
-    _pNet=new Net;
+    (void)layer;
+    _pNet->add(new ActivationLayer(inSize,outSize,sActivation));
 }
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTestDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)

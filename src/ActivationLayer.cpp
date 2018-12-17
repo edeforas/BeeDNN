@@ -7,16 +7,18 @@
 #include "Activation.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-ActivationLayer::ActivationLayer(int iInSize,int iOutSize,const Activation* activ):
-    Layer(iInSize,iOutSize),
-    _activ(activ)
+ActivationLayer::ActivationLayer(int iInSize,int iOutSize,string sActivation):
+    Layer(iInSize,iOutSize)
 {
+    _activ=get_activation(sActivation);
     assert(activ);
     _weight.resize(_iInSize+1,_iOutSize); //+1 for bias
 }
 ///////////////////////////////////////////////////////////////////////////////
 ActivationLayer::~ActivationLayer()
-{ }
+{
+    delete _activ;
+}
 ///////////////////////////////////////////////////////////////////////////////
 void ActivationLayer::init()
 {

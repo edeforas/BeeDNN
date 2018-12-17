@@ -2,7 +2,6 @@
 #define Activation_
 
 #include <string>
-#include <vector>
 using namespace std;
 
 class Activation
@@ -16,18 +15,6 @@ public:
     virtual float derivation(float x,float y) const =0;
 };
 
-class ActivationManager
-{
-public:
-    ActivationManager();
-    virtual ~ActivationManager();
-
-    Activation* get_activation(const string& sName); //do not delete: manager own it.
-
-    void list_all(vector<string>& allActivationNames) const;
-
-private:
-    vector<Activation*> _vActivations;
-};
+Activation* get_activation(string sActivation);
 
 #endif

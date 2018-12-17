@@ -41,7 +41,6 @@ private:
     Ui::MainWindow *ui;
 
     DNNEngine* _pEngine;
-    ActivationManager _activ;
 };
 
 #endif // MAINWINDOW_H

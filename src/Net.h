@@ -55,8 +55,9 @@ public:
     Net();
     virtual ~Net();
 
+	void clear();
     void add(Layer *l);
-
+	
     TrainResult train(const MatrixFloat& mSamples, const MatrixFloat& mTruth, const TrainOption& topt);
     void forward(const MatrixFloat& mIn,MatrixFloat& mOut) const;
 

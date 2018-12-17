@@ -19,6 +19,11 @@ void DNNEngineTinyDnn::clear()
     _pNet=new tiny_dnn::network<tiny_dnn::sequential>;
 }
 //////////////////////////////////////////////////////////////////////////////
+void DNNEngineTinyDnn::add_layer_and_activation(int inSize,int outSize, eLayerType layer, string sActivation)
+{
+
+}
+//////////////////////////////////////////////////////////////////////////////
 void DNNEngineTinyDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
 {
     tiny_dnn::vec_t vIn;
