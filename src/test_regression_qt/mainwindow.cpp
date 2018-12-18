@@ -32,19 +32,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     vector<string> vsActivations;
-    vsActivations.push_back("Tanh");
-    vsActivations.push_back("Sigmoid");
-    vsActivations.push_back("Relu");
-    vsActivations.push_back("Linear");
-    vsActivations.push_back("Atan");
-    vsActivations.push_back("Elliot");
-    vsActivations.push_back("Gauss");
-    vsActivations.push_back("LeakyRelu");
-    vsActivations.push_back("Elu");
-    vsActivations.push_back("Selu");
-    vsActivations.push_back("SoftPlus");
-    vsActivations.push_back("SoftSign");
-    vsActivations.push_back("Parablu");
+
+    list_activations_available( vsActivations);
+
 
     for(unsigned int i=0;i<vsActivations.size();i++)
     {
@@ -84,8 +74,6 @@ void MainWindow::on_pushButton_clicked()
     LossObserver lossCB;
 
     _pEngine->clear();
-
-
 
     Net n;
 

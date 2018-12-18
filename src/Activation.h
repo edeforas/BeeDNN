@@ -2,6 +2,7 @@
 #define Activation_
 
 #include <string>
+#include <vector>
 using namespace std;
 
 class Activation
@@ -16,5 +17,6 @@ public:
 };
 
 Activation* get_activation(string sActivation);
+void list_activations_available(vector<string>& vsActivations);
 
 #endif
