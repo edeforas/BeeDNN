@@ -11,7 +11,7 @@ ActivationLayer::ActivationLayer(int iInSize,int iOutSize,string sActivation):
     Layer(iInSize,iOutSize)
 {
     _activ=get_activation(sActivation);
-    assert(activ);
+    assert(_activ);
     _weight.resize(_iInSize+1,_iOutSize); //+1 for bias
 }
 ///////////////////////////////////////////////////////////////////////////////

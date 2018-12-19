@@ -10,10 +10,9 @@ int main()
 {
     Net n;
 
-    ActivationManager am;
-    ActivationLayer l1(1,20,am.get_activation("Tanh"));
-    ActivationLayer l2(20,20,am.get_activation("Tanh"));
-    ActivationLayer l3(20,1,am.get_activation("Tanh"));
+    ActivationLayer l1(1,20,"Tanh");
+    ActivationLayer l2(20,20,"Tanh");
+    ActivationLayer l3(20,1,"Tanh");
 
     n.add(&l1);
     n.add(&l2);

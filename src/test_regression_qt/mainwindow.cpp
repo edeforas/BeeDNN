@@ -73,8 +73,6 @@ void MainWindow::on_pushButton_clicked()
 
     LossObserver lossCB;
 
-    _pEngine->clear();
-
     Net n;
 
     int iNbHiddenNeurons2=ui->sbNbNeurons2->value();
@@ -82,10 +80,14 @@ void MainWindow::on_pushButton_clicked()
     ActivationLayer l1(1,iNbHiddenNeurons2,ui->cbActivationLayer1->currentText().toStdString());
     ActivationLayer l2(iNbHiddenNeurons2,iNbHiddenNeurons3,ui->cbActivationLayer2->currentText().toStdString());
     ActivationLayer l3(iNbHiddenNeurons3,1,ui->cbActivationLayer3->currentText().toStdString());
-
     n.add(&l1);
     n.add(&l2);
     n.add(&l3);
+
+    _pEngine->clear();
+    _pEngine->add_layer_and_activation(1,iNbHiddenNeurons2,FullyConnected,ui->cbActivationLayer1->currentText().toStdString());;
+    _pEngine->add_layer_and_activation(iNbHiddenNeurons2,iNbHiddenNeurons3,FullyConnected,ui->cbActivationLayer2->currentText().toStdString());
+    _pEngine->add_layer_and_activation(iNbHiddenNeurons3,1,FullyConnected,ui->cbActivationLayer3->currentText().toStdString());
 
     int iNbPoint=ui->leNbPointsLearn->text().toInt();
     double dInputMin=ui->leInputMin->text().toDouble();

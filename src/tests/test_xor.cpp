@@ -9,9 +9,8 @@ int main()
 {
     Net n;
 
-    ActivationManager am;
-    ActivationLayer l1(2,3,am.get_activation("Sigmoid"));
-    ActivationLayer l2(3,1,am.get_activation("Sigmoid"));
+    ActivationLayer l1(2,3,"Sigmoid");
+    ActivationLayer l2(3,1,"Sigmoid");
 
     n.add(&l1);
     n.add(&l2);

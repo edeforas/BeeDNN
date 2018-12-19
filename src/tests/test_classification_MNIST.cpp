@@ -62,10 +62,9 @@ int main()
     mRefLabels=index_to_position(mRefLabelsIndex,10);
     mTestLabels=index_to_position(mTestLabelsIndex,10);
 
-    ActivationManager am;
-    ActivationLayer l1(784,200,am.get_activation("Tanh"));
-    ActivationLayer l2(200,50,am.get_activation("Tanh"));
-    ActivationLayer l3(50,10,am.get_activation("Tanh"));
+    ActivationLayer l1(784,200,"Tanh");
+    ActivationLayer l2(200,50,"Tanh");
+    ActivationLayer l3(50,10,"Tanh");
 
     n.add(&l1);
     n.add(&l2);
