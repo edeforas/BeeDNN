@@ -57,7 +57,7 @@ public:
 
     void assign(T* first,T* last)
     {
-        resize((last-first)/(int)sizeof(T),1);
+        resize(1,(last-first));
         for(unsigned int i=0;i<size();i++)
             operator()(i)=*first++;
 

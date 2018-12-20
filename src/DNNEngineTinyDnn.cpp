@@ -79,8 +79,7 @@ DNNTrainResult DNNEngineTinyDnn::train(const MatrixFloat& mSamples,const MatrixF
     DNNTrainResult dtr;
     return dtr;
 
-    /*
- *
+ /*
 
   // this lambda function will be called after each epoch
   auto on_enumerate_epoch = [&]() {
@@ -93,9 +92,6 @@ DNNTrainResult DNNEngineTinyDnn::train(const MatrixFloat& mSamples,const MatrixF
               << std::endl;
   };
 
- *
- * */
-
+ */
 }
 //////////////////////////////////////////////////////////////////////////////
-
