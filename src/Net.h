@@ -49,6 +49,7 @@ public:
     virtual void stepEpoch(const TrainResult & tr)=0;
 };
 
+
 class Net
 {
 public:

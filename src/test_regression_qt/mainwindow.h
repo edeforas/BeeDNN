@@ -36,7 +36,7 @@ private slots:
 
 private:
     void drawLoss(vector<double> vdLoss,vector<double> vdMaxError);
-    void drawRegression(const Net& n);
+    void drawRegression();
     double compute_truth(double x);
     Ui::MainWindow *ui;
 

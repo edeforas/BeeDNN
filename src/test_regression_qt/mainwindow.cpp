@@ -73,21 +73,16 @@ void MainWindow::on_pushButton_clicked()
 
     LossObserver lossCB;
 
-    Net n;
-
     int iNbHiddenNeurons2=ui->sbNbNeurons2->value();
     int iNbHiddenNeurons3=ui->sbNbNeurons3->value();
-    ActivationLayer l1(1,iNbHiddenNeurons2,ui->cbActivationLayer1->currentText().toStdString());
-    ActivationLayer l2(iNbHiddenNeurons2,iNbHiddenNeurons3,ui->cbActivationLayer2->currentText().toStdString());
-    ActivationLayer l3(iNbHiddenNeurons3,1,ui->cbActivationLayer3->currentText().toStdString());
-    n.add(&l1);
-    n.add(&l2);
-    n.add(&l3);
+    string sActivation1=ui->cbActivationLayer1->currentText().toStdString();
+    string sActivation2=ui->cbActivationLayer2->currentText().toStdString();
+    string sActivation3=ui->cbActivationLayer3->currentText().toStdString();
 
     _pEngine->clear();
-    _pEngine->add_layer_and_activation(1,iNbHiddenNeurons2,FullyConnected,ui->cbActivationLayer1->currentText().toStdString());;
-    _pEngine->add_layer_and_activation(iNbHiddenNeurons2,iNbHiddenNeurons3,FullyConnected,ui->cbActivationLayer2->currentText().toStdString());
-    _pEngine->add_layer_and_activation(iNbHiddenNeurons3,1,FullyConnected,ui->cbActivationLayer3->currentText().toStdString());
+    _pEngine->add_layer_and_activation(1,iNbHiddenNeurons2,FullyConnected,sActivation1);
+    _pEngine->add_layer_and_activation(iNbHiddenNeurons2,iNbHiddenNeurons3,FullyConnected,sActivation2);
+    _pEngine->add_layer_and_activation(iNbHiddenNeurons3,1,FullyConnected,sActivation3);
 
     int iNbPoint=ui->leNbPointsLearn->text().toInt();
     double dInputMin=ui->leInputMin->text().toDouble();
@@ -106,23 +101,23 @@ void MainWindow::on_pushButton_clicked()
         dVal+=dStep;
     }
 
-    TrainOption tOpt;
-    tOpt.epochs=ui->leEpochs->text().toInt();
-    tOpt.earlyAbortMaxError=ui->leEarlyAbortMaxError->text().toDouble();
-    tOpt.earlyAbortMeanError=ui->leEarlyAbortMeanError->text().toDouble(); //same as loss?
-    tOpt.learningRate=ui->leLearningRate->text().toDouble();;
-    tOpt.batchSize=ui->leBatchSize->text().toInt();
-    tOpt.momentum=ui->leMomentum->text().toDouble();
-    tOpt.observer=&lossCB;
+    DNNTrainOption dto;
+    dto.epochs=ui->leEpochs->text().toInt();
+    dto.earlyAbortMaxError=ui->leEarlyAbortMaxError->text().toDouble();
+    dto.earlyAbortMeanError=ui->leEarlyAbortMeanError->text().toDouble(); //same as loss?
+    dto.learningRate=ui->leLearningRate->text().toDouble();
+    dto.batchSize=ui->leBatchSize->text().toInt();
+    dto.momentum=ui->leMomentum->text().toDouble();
+    dto.observer=0;//&lossCB;
 
-    TrainResult tr=n.train(mSamples,mTruth,tOpt);
+    DNNTrainResult dtr =_pEngine->train(mSamples,mTruth,dto);
 
-    ui->leMSE->setText(QString::number(tr.loss));
-    ui->leMaxError->setText(QString::number(tr.maxError));
-    ui->leComputedEpochs->setText(QString::number(tr.computedEpochs));
+    ui->leMSE->setText(QString::number(dtr.loss));
+    ui->leMaxError->setText(QString::number(dtr.maxError));
+    ui->leComputedEpochs->setText(QString::number(dtr.computedEpochs));
 
     drawLoss(lossCB.vdLoss,lossCB.vdMaxError);
-    drawRegression(n);
+    drawRegression();
     resizeEvent(0);
 
     QApplication::restoreOverrideCursor();
@@ -151,7 +146,7 @@ void MainWindow::drawLoss(vector<double> vdLoss,vector<double> vdMaxError)
     ui->gvLearningCurve->setScene(qs); //take ownership
 }
 //////////////////////////////////////////////////////////////////////////
-void MainWindow::drawRegression(const Net& n)
+void MainWindow::drawRegression()
 {
     SimpleCurve* qs=new SimpleCurve;
 
@@ -181,7 +176,7 @@ void MainWindow::drawRegression(const Net& n)
         mIn(0)=fVal;
         vTruth.push_back(-compute_truth(fVal));
         vSamples.push_back(fVal);
-        n.forward(mIn,mOut);
+        _pEngine->predict(mIn,mOut);
         vRegression.push_back(-mOut(0));
         fVal+=fStep;
     }

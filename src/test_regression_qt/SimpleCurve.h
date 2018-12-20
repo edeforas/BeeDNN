@@ -15,6 +15,9 @@ public:
 	
     void addCurve(const vector<double>& vdX, const vector<double>& vdY,Qt::GlobalColor=Qt::black);
 
+    void addXAxis();
+    void addYAxis();
+
     virtual void wheelEvent(QGraphicsSceneWheelEvent* wheelEvent);
 
 };
