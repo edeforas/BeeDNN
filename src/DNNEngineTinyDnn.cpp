@@ -5,7 +5,7 @@
 //////////////////////////////////////////////////////////////////////////////
 DNNEngineTinyDnn::DNNEngineTinyDnn()
 {
-	_pNet=new tiny_dnn::network<tiny_dnn::sequential>;
+    _pNet=new tiny_dnn::network<tiny_dnn::sequential>;
 }
 //////////////////////////////////////////////////////////////////////////////
 DNNEngineTinyDnn::~DNNEngineTinyDnn()
@@ -56,31 +56,45 @@ void DNNEngineTinyDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
 //////////////////////////////////////////////////////////////////////////////
 DNNTrainResult DNNEngineTinyDnn::train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
 {
+    assert(mSamples.rows()==mTruth.rows());
+
+    tiny_dnn::adamax opt;
+
+    std::vector<tiny_dnn::vec_t> vSamples;
+    std::vector<tiny_dnn::vec_t> vTruth;
+
+    for(int i=0;i<mSamples.rows();i++)
+    {
+        tiny_dnn::vec_t tS;
+        tS.assign(mSamples.row(i).data(),mSamples.row(i).data()+mSamples.columns());
+        vSamples.push_back(tS);
+
+        tiny_dnn::vec_t tT;
+        tT.assign(mTruth.row(i).data(),mTruth.row(i).data()+mTruth.columns());
+        vTruth.push_back(tT);
+    }
+
+    _pNet->fit<tiny_dnn::mse>(opt, vSamples, vTruth, dto.batchSize, dto.epochs, []() {},[]() {});//  on_enumerate_epoch);
+
+    DNNTrainResult dtr;
+    return dtr;
+
     /*
-    TrainOption tOpt;
+ *
 
-    tOpt.epochs=dto.epochs;
-    tOpt.earlyAbortMaxError=dto.earlyAbortMaxError;
-    tOpt.earlyAbortMeanError=dto.earlyAbortMeanError;
-    tOpt.learningRate=dto.learningRate;
-    tOpt.batchSize=dto.batchSize;
-    tOpt.momentum=dto.momentum;
-    tOpt.observer=0;//dto.observer;
-*/
-    /*
-    epochs=1000;
-    earlyAbortMaxError=0.;
-    earlyAbortMeanError=0.;
-    batchSize=32;
-    learningRate=0.1f;
-    momentum=0.1f;
-    subSamplingRatio=1;
+  // this lambda function will be called after each epoch
+  auto on_enumerate_epoch = [&]() {
+    // compute loss and disp 1/100 of the time
+    iEpoch++;
+    if (iEpoch % 100) return;
 
-    TrainResult tr=_pNet->train(mSamples,mTruth,tOpt);
-*/
-DNNTrainResult dtr;
+    double loss = net.get_loss<tiny_dnn::mse>(X, sinusX);
+    std::cout << "epoch=" << iEpoch << "/" << epochs << " loss=" << loss
+              << std::endl;
+  };
 
-return dtr;
+ *
+ * */
 
 }
 //////////////////////////////////////////////////////////////////////////////

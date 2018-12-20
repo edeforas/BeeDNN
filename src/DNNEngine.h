@@ -39,7 +39,6 @@ public:
     DNNTrainObserver* observer;
 };
 
-
 class DNNTrainResult
 {
 public:
@@ -55,9 +54,6 @@ public:
     virtual void stepEpoch(const DNNTrainResult & tr)=0;
 };
 
-
-
-
 class DNNEngine
 {
 public:
@@ -69,10 +65,7 @@ public:
 
     virtual DNNTrainResult train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)=0;
 
-
-
     virtual void predict(const MatrixFloat& mIn, MatrixFloat& mOut)=0;
-
 };
 
 #endif
