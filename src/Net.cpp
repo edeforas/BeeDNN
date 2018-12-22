@@ -19,7 +19,7 @@ Net::~Net()
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::clear()
 {
-	_layers.clear();
+    _layers.clear();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add(Layer* l)
@@ -54,8 +54,11 @@ TrainResult Net::train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,con
 {
     TrainResult tr;
 
-    for(unsigned int i=0;i<_layers.size();i++)
-        _layers[i]->init();
+    if(!topt.bTrainMore)
+    {
+        for(unsigned int i=0;i<_layers.size();i++)
+            _layers[i]->init();
+    }
 
     unsigned int iBatchSize=topt.batchSize;
     unsigned int iNbSamples=mSamples.rows();

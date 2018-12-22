@@ -39,6 +39,7 @@ DNNTrainResult DNNEngineTestDnn::train(const MatrixFloat& mSamples,const MatrixF
     tOpt.learningRate=dto.learningRate;
     tOpt.batchSize=dto.batchSize;
     tOpt.momentum=dto.momentum;
+    tOpt.bTrainMore=dto.bTrainMore;
     tOpt.observer=0;//dto.observer;
 
     TrainResult tr=_pNet->train(mSamples,mTruth,tOpt);

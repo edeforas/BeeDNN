@@ -485,7 +485,7 @@
        <item>
         <widget class="QLineEdit" name="leEpochs">
          <property name="text">
-          <string>10000</string>
+          <string>100</string>
          </property>
         </widget>
        </item>
@@ -506,11 +506,22 @@
       </layout>
      </item>
      <item row="3" column="0">
-      <widget class="QPushButton" name="pushButton">
-       <property name="text">
-        <string>Train &amp;&amp; Test</string>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout_12">
+       <item>
+        <widget class="QPushButton" name="pushButton">
+         <property name="text">
+          <string>Train &amp;&amp; Test</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnTrainMore">
+         <property name="text">
+          <string>Train More</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </widget>
@@ -530,6 +541,27 @@
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_4">
     <layout class="QGridLayout" name="gridLayout_6">
+     <item row="2" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout_14">
+       <item>
+        <widget class="QLabel" name="label_23">
+         <property name="text">
+          <string>Time by Epochs</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="leTimeByEpoch"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_24">
+         <property name="text">
+          <string>s</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
      <item row="1" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>

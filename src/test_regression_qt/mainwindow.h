@@ -34,10 +34,13 @@ private slots:
 
     void on_cbEngine_currentTextChanged(const QString &arg1);
 
+    void on_btnTrainMore_clicked();
+
 private:
     void drawLoss(vector<double> vdLoss,vector<double> vdMaxError);
     void drawRegression();
     double compute_truth(double x);
+    void train_and_test(bool bReset);
     Ui::MainWindow *ui;
 
     DNNEngine* _pEngine;

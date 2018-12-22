@@ -22,6 +22,7 @@ public:
         momentum=0.1f;
         subSamplingRatio=1;
         observer=0;
+        bTrainMore=false;
     }
 
     int  epochs;
@@ -30,6 +31,7 @@ public:
     int batchSize;
     float learningRate;
     float momentum;
+    bool bTrainMore;
     int subSamplingRatio; //1 to keep everything in training ; 2 , to keep half (shuffled) and soon on
     TrainObserver* observer;
 };
@@ -41,6 +43,7 @@ public:
     double maxError;
     int computedEpochs;
     double epochDuration; //in second
+
 };
 
 class TrainObserver

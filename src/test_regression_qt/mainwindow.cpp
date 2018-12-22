@@ -42,8 +42,8 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->cbActivationLayer2->addItem(vsActivations[i].c_str());
         ui->cbActivationLayer3->addItem(vsActivations[i].c_str());
     }
-    ui->cbActivationLayer1->setCurrentText("Gauss");
-    ui->cbActivationLayer2->setCurrentText("Gauss");
+    ui->cbActivationLayer1->setCurrentText("Tanh");
+    ui->cbActivationLayer2->setCurrentText("Tanh");
     ui->cbActivationLayer3->setCurrentText("Linear");
 
     ui->cbFunction->addItem("Sin");
@@ -69,20 +69,28 @@ MainWindow::~MainWindow()
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::on_pushButton_clicked()
 {
+    train_and_test(true);
+}
+//////////////////////////////////////////////////////////////////////////
+void MainWindow::train_and_test(bool bReset)
+{
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     LossObserver lossCB;
 
-    int iNbHiddenNeurons2=ui->sbNbNeurons2->value();
-    int iNbHiddenNeurons3=ui->sbNbNeurons3->value();
-    string sActivation1=ui->cbActivationLayer1->currentText().toStdString();
-    string sActivation2=ui->cbActivationLayer2->currentText().toStdString();
-    string sActivation3=ui->cbActivationLayer3->currentText().toStdString();
+    if(bReset)
+    {
+        int iNbHiddenNeurons2=ui->sbNbNeurons2->value();
+        int iNbHiddenNeurons3=ui->sbNbNeurons3->value();
+        string sActivation1=ui->cbActivationLayer1->currentText().toStdString();
+        string sActivation2=ui->cbActivationLayer2->currentText().toStdString();
+        string sActivation3=ui->cbActivationLayer3->currentText().toStdString();
 
-    _pEngine->clear();
-    _pEngine->add_layer_and_activation(1,iNbHiddenNeurons2,FullyConnected,sActivation1);
-    _pEngine->add_layer_and_activation(iNbHiddenNeurons2,iNbHiddenNeurons3,FullyConnected,sActivation2);
-    _pEngine->add_layer_and_activation(iNbHiddenNeurons3,1,FullyConnected,sActivation3);
+        _pEngine->clear();
+        _pEngine->add_layer_and_activation(1,iNbHiddenNeurons2,FullyConnected,sActivation1);
+        _pEngine->add_layer_and_activation(iNbHiddenNeurons2,iNbHiddenNeurons3,FullyConnected,sActivation2);
+        _pEngine->add_layer_and_activation(iNbHiddenNeurons3,1,FullyConnected,sActivation3);
+    }
 
     int iNbPoint=ui->leNbPointsLearn->text().toInt();
     double dInputMin=ui->leInputMin->text().toDouble();
@@ -109,12 +117,14 @@ void MainWindow::on_pushButton_clicked()
     dto.batchSize=ui->leBatchSize->text().toInt();
     dto.momentum=ui->leMomentum->text().toDouble();
     dto.observer=0;//&lossCB;
+    dto.bTrainMore=!bReset;
 
     DNNTrainResult dtr =_pEngine->train(mSamples,mTruth,dto);
 
     ui->leMSE->setText(QString::number(dtr.loss));
     ui->leMaxError->setText(QString::number(dtr.maxError));
     ui->leComputedEpochs->setText(QString::number(dtr.computedEpochs));
+    ui->leTimeByEpoch->setText(QString::number(dtr.epochDuration));
 
     drawLoss(lossCB.vdLoss,lossCB.vdMaxError);
     drawRegression();
@@ -280,5 +290,10 @@ void MainWindow::on_cbEngine_currentTextChanged(const QString &arg1)
     if(arg1=="tiny-dnn")
         _pEngine=new DNNEngineTinyDnn;
 
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::on_btnTrainMore_clicked()
+{
+    train_and_test(false);
 }
 //////////////////////////////////////////////////////////////////////////////
