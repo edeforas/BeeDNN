@@ -4,7 +4,6 @@
 #include <string>
 using namespace std;
 
-
 #include "Matrix.h"
 
 enum eLayerType
@@ -34,10 +33,13 @@ public:
     double earlyAbortMaxError;
     double earlyAbortMeanError;
     int batchSize;
+
+    //momentum settings
     float learningRate;
     float momentum;
+
     int subSamplingRatio; //1 to keep everything in training ; 2 , to keep half (shuffled) and soon on
-    bool bTrainMore;
+    bool bTrainMore; //set to true to refine weight instead of reset
     DNNTrainObserver* observer;
 };
 
@@ -65,9 +67,13 @@ public:
     virtual void clear()=0;
     virtual void add_layer_and_activation(int inSize,int outSize, eLayerType layer, string sActivation)=0;
 
-    virtual DNNTrainResult train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)=0;
+    virtual DNNTrainResult train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto);
+    virtual int train_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)=0;
 
     virtual void predict(const MatrixFloat& mIn, MatrixFloat& mOut)=0;
+
+private:
+    int _iComputedEpochs;
 };
 
 #endif

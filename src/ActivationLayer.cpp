@@ -10,21 +10,21 @@
 ActivationLayer::ActivationLayer(int iInSize,int iOutSize,string sActivation):
     Layer(iInSize,iOutSize)
 {
-    _activ=get_activation(sActivation);
-    assert(_activ);
+    _pActiv=get_activation(sActivation);
+    assert(_pActiv);
     _weight.resize(_iInSize+1,_iOutSize); //+1 for bias
 }
 ///////////////////////////////////////////////////////////////////////////////
 ActivationLayer::~ActivationLayer()
 {
-    delete _activ;
+    delete _pActiv;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void ActivationLayer::init()
 {
     float a =sqrtf(6.f/(_iInSize+_iOutSize));
 
-    if(_activ->name()=="Sigmoid")
+    if(_pActiv->name()=="Sigmoid")
         a*=4.f;
 
     for(unsigned int i=0;i<_weight.size();i++)
@@ -45,7 +45,7 @@ void ActivationLayer::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) co
     // apply activation
     for(unsigned int i=0;i<mMatOut.size();i++)
     {
-        mMatOut(i)=_activ->apply(mMatOut(i)); //todo keep MatrixFloat in layer, do not resize
+        mMatOut(i)=_pActiv->apply(mMatOut(i)); //todo keep MatrixFloat in layer, do not resize
     }
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -61,7 +61,7 @@ void ActivationLayer::forward_save(const MatrixFloat& mMatIn,MatrixFloat& mMatOu
     // apply activation
     for(unsigned int i=0;i<mMatOut.size();i++)
     {
-        mMatOut(i)=_activ->apply(mMatOut(i)); //todo keep MatrixFloat in layer, do not resize
+        mMatOut(i)=_pActiv->apply(mMatOut(i)); //todo keep MatrixFloat in layer, do not resize
     }
     out=mMatOut;
 }
@@ -72,7 +72,7 @@ MatrixFloat ActivationLayer::get_weight_activation_derivation() const
     MatrixFloat mOut=outWeight;
     for(unsigned int i=0;i<mOut.size();i++)
     {
-        mOut(i)=_activ->derivation(outWeight(i),out(i));
+        mOut(i)=_pActiv->derivation(outWeight(i),out(i));
     }
 
     return mOut;

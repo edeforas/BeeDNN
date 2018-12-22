@@ -93,6 +93,11 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string>Topology</string>
+       </attribute>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -541,27 +546,6 @@
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_4">
     <layout class="QGridLayout" name="gridLayout_6">
-     <item row="2" column="0">
-      <layout class="QHBoxLayout" name="horizontalLayout_14">
-       <item>
-        <widget class="QLabel" name="label_23">
-         <property name="text">
-          <string>Time by Epochs</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="leTimeByEpoch"/>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_24">
-         <property name="text">
-          <string>s</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
      <item row="1" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
@@ -578,6 +562,23 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_23">
+         <property name="text">
+          <string>Time/Epochs</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="leTimeByEpoch"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_24">
+         <property name="text">
+          <string>s</string>
          </property>
         </widget>
        </item>

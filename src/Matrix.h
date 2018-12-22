@@ -57,7 +57,7 @@ public:
 
     void assign(T* first,T* last)
     {
-        resize(1,(last-first));
+        resize(1,(unsigned int)(last-first));
         for(unsigned int i=0;i<size();i++)
             operator()(i)=*first++;
 
@@ -93,7 +93,7 @@ public:
     {
         if((iColumns==_iColumns) && ( iRows==_iRows))
             return;
-        
+
         _iRows=iRows;
         _iColumns=iColumns;
         _iSize=_iRows*_iColumns;

@@ -36,22 +36,11 @@ public:
     TrainObserver* observer;
 };
 
-class TrainResult
-{
-public:
-    double loss;
-    double maxError;
-    int computedEpochs;
-    double epochDuration; //in second
-
-};
-
 class TrainObserver
 {
 public:
-    virtual void stepEpoch(const TrainResult & tr)=0;
+ //   virtual void stepEpoch(const TrainResult & tr)=0;
 };
-
 
 class Net
 {
@@ -62,7 +51,9 @@ public:
 	void clear();
     void add(Layer *l);
 	
-    TrainResult train(const MatrixFloat& mSamples, const MatrixFloat& mTruth, const TrainOption& topt);
+    // return the number of epochs
+    int train(const MatrixFloat& mSamples, const MatrixFloat& mTruth, const TrainOption& topt);
+
     void forward(const MatrixFloat& mIn,MatrixFloat& mOut) const;
 
     void classify(const MatrixFloat& mIn,MatrixFloat& mClass) const; // todo move in classification problem

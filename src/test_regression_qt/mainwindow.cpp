@@ -10,7 +10,7 @@
 
 #include "Net.h"
 #include "ActivationLayer.h"
-
+/*
 //////////////////////////////////////////////////////////////////////////
 // callback class to observe loss evolution
 class LossObserver: public TrainObserver
@@ -25,6 +25,7 @@ public:
     vector<double> vdLoss,vdMaxError;
 };
 //////////////////////////////////////////////////////////////////////////
+*/
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -76,7 +77,7 @@ void MainWindow::train_and_test(bool bReset)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    LossObserver lossCB;
+    //LossObserver lossCB;
 
     if(bReset)
     {
@@ -126,7 +127,7 @@ void MainWindow::train_and_test(bool bReset)
     ui->leComputedEpochs->setText(QString::number(dtr.computedEpochs));
     ui->leTimeByEpoch->setText(QString::number(dtr.epochDuration));
 
-    drawLoss(lossCB.vdLoss,lossCB.vdMaxError);
+    //drawLoss(lossCB.vdLoss,lossCB.vdMaxError);
     drawRegression();
     resizeEvent(0);
 
@@ -197,7 +198,8 @@ void MainWindow::drawRegression()
     QPen penBlack(Qt::black);
     penBlack.setCosmetic(true);
     qs->addLine(fInputMin,0,fInputMax,0,penBlack);
-
+    qs->addXAxis();
+    qs->addYAxis();
     ui->gvRegression->setScene(qs); //take ownership
 }
 //////////////////////////////////////////////////////////////////////////

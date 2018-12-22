@@ -21,28 +21,26 @@ void DNNEngineTinyDnn::clear()
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTinyDnn::add_layer_and_activation(int inSize,int outSize, eLayerType layer, string sActivation)
 {
+    (void)layer; //for now
+
     *_pNet << tiny_dnn::fully_connected_layer(inSize, outSize);
 
     if(sActivation=="Tanh")
         *_pNet <<  tiny_dnn::tanh_layer();
-
-    if(sActivation=="Sigmoid")
+    else if(sActivation=="Sigmoid")
         *_pNet <<  tiny_dnn::sigmoid_layer();
-
-    if(sActivation=="Relu")
+    else if(sActivation=="Relu")
         *_pNet <<  tiny_dnn::relu_layer();
-
-    if(sActivation=="SoftPlus")
+    else if(sActivation=="SoftPlus")
         *_pNet <<  tiny_dnn::softplus_layer();
-
-    if(sActivation=="SoftPlus")
+    else if(sActivation=="SoftPlus")
         *_pNet <<  tiny_dnn::softplus_layer();
-
-    if(sActivation=="SoftMax")
+    else if(sActivation=="SoftMax")
         *_pNet <<  tiny_dnn::softmax_layer();
-
-    if(sActivation=="SoftSign")
+    else if(sActivation=="SoftSign")
         *_pNet <<  tiny_dnn::softsign_layer();
+    else
+        ; // todo error activation does not exist
 }
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTinyDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
@@ -54,7 +52,7 @@ void DNNEngineTinyDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
     mOut.assign(vOut.data(),vOut.data()+vOut.size());
 }
 //////////////////////////////////////////////////////////////////////////////
-DNNTrainResult DNNEngineTinyDnn::train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
+int DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
 {
     assert(mSamples.rows()==mTruth.rows());
 
@@ -63,7 +61,7 @@ DNNTrainResult DNNEngineTinyDnn::train(const MatrixFloat& mSamples,const MatrixF
     std::vector<tiny_dnn::vec_t> vSamples;
     std::vector<tiny_dnn::vec_t> vTruth;
 
-    for(int i=0;i<mSamples.rows();i++)
+    for(unsigned int i=0;i<mSamples.rows();i++)
     {
         tiny_dnn::vec_t tS;
         tS.assign(mSamples.row(i).data(),mSamples.row(i).data()+mSamples.columns());
@@ -76,8 +74,8 @@ DNNTrainResult DNNEngineTinyDnn::train(const MatrixFloat& mSamples,const MatrixF
 
     _pNet->fit<tiny_dnn::mse>(opt, vSamples, vTruth, dto.batchSize, dto.epochs, []() {},[]() {});//  on_enumerate_epoch);
 
-    DNNTrainResult dtr;
-    return dtr;
+    return dto.epochs; //no early aborts?
+
 
  /*
 

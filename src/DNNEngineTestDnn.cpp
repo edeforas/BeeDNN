@@ -30,7 +30,7 @@ void DNNEngineTestDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
    _pNet->forward(mIn,mOut);
 }
 //////////////////////////////////////////////////////////////////////////////
-DNNTrainResult DNNEngineTestDnn::train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
+int DNNEngineTestDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
 {
     TrainOption tOpt;
     tOpt.epochs=dto.epochs;
@@ -42,15 +42,8 @@ DNNTrainResult DNNEngineTestDnn::train(const MatrixFloat& mSamples,const MatrixF
     tOpt.bTrainMore=dto.bTrainMore;
     tOpt.observer=0;//dto.observer;
 
-    TrainResult tr=_pNet->train(mSamples,mTruth,tOpt);
+    int epochs=_pNet->train(mSamples,mTruth,tOpt);
 
-    DNNTrainResult dtr;
-
-    dtr.loss=tr.loss;
-    dtr.maxError=tr.maxError;
-    dtr.computedEpochs=tr.computedEpochs;
-    dtr.epochDuration=tr.epochDuration; //in second
-
-    return dtr;
+    return epochs;
 }
 //////////////////////////////////////////////////////////////////////////////

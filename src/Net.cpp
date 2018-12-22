@@ -3,8 +3,6 @@
 #include "Matrix.h"
 #include "MatrixUtil.h"
 
-#include <iostream>
-#include <chrono>
 #include <cmath>
 using namespace std;
 
@@ -14,7 +12,10 @@ Net::Net()
 /////////////////////////////////////////////////////////////////////////////////////////////////
 Net::~Net()
 {
-    //no ownership of layers: nothing to delete
+    for(unsigned int i=0;i<_layers.size();i++)
+    {
+        delete _layers[i];
+    }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::clear()
@@ -24,7 +25,7 @@ void Net::clear()
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add(Layer* l)
 {
-    _layers.push_back(l);
+    _layers.push_back(l); //take ownership of layers
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
@@ -50,9 +51,10 @@ void Net::classify(const MatrixFloat& mIn,MatrixFloat& mClass) const
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-TrainResult Net::train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const TrainOption& topt)
+int Net::train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const TrainOption& topt)
 {
-    TrainResult tr;
+    //TrainResult tr;
+    int iEpoch;
 
     if(!topt.bTrainMore)
     {
@@ -74,11 +76,8 @@ TrainResult Net::train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,con
         sumDEMomentum.push_back(_layers[i]->dE*0);
     }
 
-    for(int iEpoch=0;iEpoch<topt.epochs;iEpoch++)
+    for(iEpoch=0;iEpoch<topt.epochs;iEpoch++)
     {
-        //compute epoch duration
-        auto beginDuration = std::chrono::steady_clock::now();
-
         double dMaxError=0., dMeanError=0.;
 
         MatrixFloat mShuffle=rand_perm(iNbSamples);
@@ -144,25 +143,21 @@ TrainResult Net::train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,con
             iBatchStart=iBatchEnd;
         }
 
-        auto endDuration = chrono::steady_clock::now();
-
         //early abort test on error
-        tr.computedEpochs=iEpoch+1;
-        tr.epochDuration=chrono::duration_cast<chrono::microseconds> (endDuration-beginDuration).count()/1.e6;
-        tr.maxError=dMaxError;
-        tr.loss=dMeanError/(iNbSamplesSubSampled*mTruth.size()); //same as mean error?
+   //     tr.maxError=dMaxError;
+    double dLoss=dMeanError/(iNbSamplesSubSampled*mTruth.size()); //same as mean error?
 
-        if(topt.observer)
-            topt.observer->stepEpoch(tr);
+   //     if(topt.observer)
+    //        topt.observer->stepEpoch(tr);
 
         if( dMaxError<topt.earlyAbortMaxError)
             break;
 
-        if (tr.loss<topt.earlyAbortMeanError)
+        if (dLoss<topt.earlyAbortMeanError)
             break;
     }
 
-    return tr;
+    return iEpoch;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::backpropagation(const MatrixFloat &mError)
