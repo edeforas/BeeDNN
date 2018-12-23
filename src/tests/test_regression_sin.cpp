@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <cmath>
 using namespace std;
 
@@ -20,22 +21,32 @@ int main()
 
     MatrixFloat mTruth(64);
     MatrixFloat mSamples(64);
-	for( int i=0;i<64;i++)
-	{
+    for( int i=0;i<64;i++)
+    {
         float x=i/10.f;
-		mTruth(i)=sin(x);
+        mTruth(i)=sin(x);
         mSamples(i)=x;
-	}
+    }
 
     TrainOption tOpt;
-    tOpt.epochs=10000;
+    tOpt.epochs=1000;
     tOpt.earlyAbortMaxError=0.05;
     tOpt.learningRate=0.1f;
     tOpt.batchSize=1;
     tOpt.momentum=0.05f;
 
-    TrainResult tr=n.train(mSamples,mTruth,tOpt);
-    cout << "Loss=" << tr.loss << " MaxError=" << tr.maxError << " ComputedEpochs=" << tr.computedEpochs << endl;
+    cout << "Learning..." << endl;
+    int nbEpochs=n.train(mSamples,mTruth,tOpt);
+    cout << "nb epochs=" << nbEpochs << endl;
 
+    //show results
+    MatrixFloat mOnePredict(1), mOneSample(1), mOneTruth(1);
+    for(unsigned int i=0;i<mSamples.size();i+=4) //show 16 samples
+    {
+        mOneSample(0)=mSamples(i);
+        mOneTruth(0)=mTruth(i);
+        n.forward(mOneSample,mOnePredict);
+        cout << std::setprecision(4) << "x=" << mOneSample(0) << "\ttruth=" <<mOneTruth(0) << "\tpredict=" << mOnePredict(0) <<endl;
+    }
     return 0;
 }

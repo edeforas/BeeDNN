@@ -150,10 +150,6 @@ void MainWindow::drawLoss(vector<double> vdLoss,vector<double> vdMaxError)
     qs->addCurve(x,loss,Qt::red);
     qs->addCurve(x,maxError,Qt::black);
 
-    QPen penBlack(Qt::black);
-    penBlack.setCosmetic(true);
-    qs->addLine(0,0,vdLoss.size()-1,0,penBlack);
-
     ui->gvLearningCurve->setScene(qs); //take ownership
 }
 //////////////////////////////////////////////////////////////////////////
@@ -197,9 +193,9 @@ void MainWindow::drawRegression()
 
     QPen penBlack(Qt::black);
     penBlack.setCosmetic(true);
-    qs->addLine(fInputMin,0,fInputMax,0,penBlack);
     qs->addXAxis();
     qs->addYAxis();
+
     ui->gvRegression->setScene(qs); //take ownership
 }
 //////////////////////////////////////////////////////////////////////////

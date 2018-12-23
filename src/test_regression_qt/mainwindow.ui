@@ -472,7 +472,7 @@
        <item>
         <widget class="QLineEdit" name="leEarlyAbortMaxError">
          <property name="text">
-          <string>0.05</string>
+          <string>0.</string>
          </property>
         </widget>
        </item>

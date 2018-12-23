@@ -60,18 +60,51 @@ void SimpleCurve::wheelEvent(QGraphicsSceneWheelEvent* wheelEvent)
 }
 //////////////////////////////////////////////////////////////////////////
 void SimpleCurve::addXAxis()
-{
+{   
+    compute_bounding_box();
 
-    //compute x range
-    for(int i=0;i<_vCurves.size();i++)
-    {
-    //todo
-    }
+    QPen penBlack(Qt::black);
+    penBlack.setCosmetic(true);
+    addLine(xMin,0.,xMax,0.,penBlack);
 }
 //////////////////////////////////////////////////////////////////////////
 void SimpleCurve::addYAxis()
 {
-    //compute y range
+    compute_bounding_box();
+    QPen penBlack(Qt::black);
+    penBlack.setCosmetic(true);
+    addLine(0.,yMin,0.,yMax,penBlack);
+}
+//////////////////////////////////////////////////////////////////////////
+void SimpleCurve::compute_bounding_box()
+{
+    if(_vCurves.size()==0)
+    {
+        xMin=xMax=0.;
+        yMin=yMax=0.;
 
+        return;
+    }
+
+    //compute x range
+    xMin=_vCurves[0].xMin;
+    xMax=_vCurves[0].xMax;
+    yMin=_vCurves[0].yMin;
+    yMax=_vCurves[0].yMax;
+
+    for(int i=1;i<_vCurves.size();i++)
+    {
+        if(_vCurves[i].xMin<xMin)
+            xMin=_vCurves[i].xMin;
+
+        if(_vCurves[i].xMax>xMax)
+            xMax=_vCurves[i].xMax;
+
+        if(_vCurves[i].yMin<yMin)
+            yMin=_vCurves[i].yMin;
+
+        if(_vCurves[i].yMax>yMax)
+            yMax=_vCurves[i].yMax;
+    }
 }
 //////////////////////////////////////////////////////////////////////////

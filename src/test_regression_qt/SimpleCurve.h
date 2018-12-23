@@ -11,7 +11,7 @@ public:
     vector<double> vdX;
     vector<double> vdY;
 
-    int xMin,xMax,yMin,yMax;
+    double xMin,xMax,yMin,yMax;
 
     int _iColor;
 };
@@ -31,7 +31,10 @@ public:
 
     virtual void wheelEvent(QGraphicsSceneWheelEvent* wheelEvent);
 private:
+    void compute_bounding_box();
+
     vector<CurveData> _vCurves;
+    double xMin,xMax,yMin,yMax;
 };
 
 #endif
