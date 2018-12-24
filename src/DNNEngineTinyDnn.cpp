@@ -39,8 +39,8 @@ void DNNEngineTinyDnn::add_layer_and_activation(int inSize,int outSize, eLayerTy
         *_pNet <<  tiny_dnn::relu_layer();
     else if(sActivation=="SoftPlus")
         *_pNet <<  tiny_dnn::softplus_layer();
-    else if(sActivation=="SoftPlus")
-        *_pNet <<  tiny_dnn::softplus_layer();
+    else if(sActivation=="Linear")
+         ; // nothing to do for now
     else if(sActivation=="SoftMax")
         *_pNet <<  tiny_dnn::softmax_layer();
     else if(sActivation=="SoftSign")
