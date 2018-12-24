@@ -19,6 +19,12 @@ void DNNEngineTestDnn::clear()
     _pNet->clear();
 }
 //////////////////////////////////////////////////////////////////////////////
+void DNNEngineTestDnn::init()
+{
+    _pNet->init();
+    DNNEngine::init();
+}
+//////////////////////////////////////////////////////////////////////////////
 void DNNEngineTestDnn::add_layer_and_activation(int inSize,int outSize, eLayerType layer, string sActivation)
 {
     (void)layer;
@@ -39,7 +45,6 @@ int DNNEngineTestDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloat
     tOpt.learningRate=dto.learningRate;
     tOpt.batchSize=dto.batchSize;
     tOpt.momentum=dto.momentum;
-    tOpt.bTrainMore=dto.bTrainMore;
     tOpt.observer=0;//dto.observer;
 
     int epochs=_pNet->train(mSamples,mTruth,tOpt);

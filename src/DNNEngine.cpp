@@ -11,12 +11,14 @@ DNNEngine::DNNEngine()
 DNNEngine::~DNNEngine()
 { }
 //////////////////////////////////////////////////////////////////////////////
+void DNNEngine::init()
+{
+    _iComputedEpochs=0;
+}
+//////////////////////////////////////////////////////////////////////////////
 DNNTrainResult DNNEngine::train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
 {
     DNNTrainResult r;
-
-    if(!dto.bTrainMore)
-        _iComputedEpochs=0;
 
     auto beginDuration = std::chrono::steady_clock::now();
     int iEpochs=train_epochs(mSamples,mTruth,dto);

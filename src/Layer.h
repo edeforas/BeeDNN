@@ -19,7 +19,7 @@ public:
     //learning variables, todo clean up / remove
     MatrixFloat in; //in
     MatrixFloat out; //fcn(in*weight)
-    MatrixFloat outWeight; // in*weight
+    MatrixFloat outWeight; // in*weight todo remove
     MatrixFloat dE;
 
 protected:

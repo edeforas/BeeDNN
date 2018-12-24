@@ -19,6 +19,12 @@ void DNNEngineTinyDnn::clear()
     _pNet=new tiny_dnn::network<tiny_dnn::sequential>;
 }
 //////////////////////////////////////////////////////////////////////////////
+void DNNEngineTinyDnn::init()
+{
+    _pNet->init_weight();
+    DNNEngine::init();
+}
+//////////////////////////////////////////////////////////////////////////////
 void DNNEngineTinyDnn::add_layer_and_activation(int inSize,int outSize, eLayerType layer, string sActivation)
 {
     (void)layer; //for now

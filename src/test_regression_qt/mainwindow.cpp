@@ -55,6 +55,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->cbFunction->addItem("Sqrt");
     ui->cbFunction->addItem("Ln");
     ui->cbFunction->addItem("Gauss");
+    ui->cbFunction->addItem("Inverse");
     ui->cbFunction->addItem("Rectangular");
 
     resizeDocks({ui->dockWidget},{1},Qt::Horizontal);
@@ -91,6 +92,8 @@ void MainWindow::train_and_test(bool bReset)
         _pEngine->add_layer_and_activation(1,iNbHiddenNeurons2,FullyConnected,sActivation1);
         _pEngine->add_layer_and_activation(iNbHiddenNeurons2,iNbHiddenNeurons3,FullyConnected,sActivation2);
         _pEngine->add_layer_and_activation(iNbHiddenNeurons3,1,FullyConnected,sActivation3);
+
+        _pEngine->init();
     }
 
     int iNbPoint=ui->leNbPointsLearn->text().toInt();
@@ -118,7 +121,6 @@ void MainWindow::train_and_test(bool bReset)
     dto.batchSize=ui->leBatchSize->text().toInt();
     dto.momentum=ui->leMomentum->text().toDouble();
     dto.observer=0;//&lossCB;
-    dto.bTrainMore=!bReset;
 
     DNNTrainResult dtr =_pEngine->train(mSamples,mTruth,dto);
 
@@ -246,6 +248,9 @@ double MainWindow::compute_truth(double x)
 
     if(sFunction=="Gauss")
         return exp(-x*x);
+
+    if(sFunction=="Inverse")
+        return 1./x;
 
     if(sFunction=="Rectangular")
         return ((((int)x)+(x<0.))+1) & 1 ;

@@ -12,6 +12,7 @@ public:
     virtual ~DNNEngineTestDnn();
 
     virtual void clear();
+    virtual void init();
     virtual void add_layer_and_activation(int inSize,int outSize, eLayerType layer, string sActivation);
 
     virtual int train_epochs(const MatrixFloat& mSamples, const MatrixFloat& mTruth, const DNNTrainOption& dto);
@@ -19,7 +20,6 @@ public:
     virtual void predict(const MatrixFloat& mIn, MatrixFloat& mOut);
 
 private:
-
     Net* _pNet;
 };
 

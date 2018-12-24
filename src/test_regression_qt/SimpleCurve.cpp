@@ -92,7 +92,7 @@ void SimpleCurve::compute_bounding_box()
     yMin=_vCurves[0].yMin;
     yMax=_vCurves[0].yMax;
 
-    for(int i=1;i<_vCurves.size();i++)
+    for(unsigned int i=1;i<_vCurves.size();i++)
     {
         if(_vCurves[i].xMin<xMin)
             xMin=_vCurves[i].xMin;
