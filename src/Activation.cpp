@@ -18,16 +18,35 @@ public:
 
     float apply(float x) const
     {
-        return atan(x);
+        return atanf(x);
     }
 
     float derivation(float x,float y) const
     {
         (void)y;
-        return 1.f/(1+x*x);
+        return 1.f/(1.f+x*x);
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+class ActivationAsinh: public Activation
+{
+public:
+    string name() const
+    {
+        return "Asinh";
+    }
+
+    float apply(float x) const
+    {
+        return asinhf(x);
+    }
+
+    float derivation(float x,float y) const
+    {
+        (void)y; //TODO optimize
+        return 1.f/sqrtf(1.f+x*x); //http://mathworld.wolfram.com/InverseHyperbolicSine.html
+    }
+};//////////////////////////////////////////////////////////////////////////////
 class ActivationElliot: public Activation
 {
 public:
@@ -84,7 +103,7 @@ public:
     {
         (void)x;
         (void)y;
-        return 1.;
+        return 1.f;
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -141,7 +160,7 @@ public:
         if(x>=0.)
             return x;
         else
-            return expm1(x);
+            return expm1f(x);
     }
 
     float derivation(float x,float y) const
@@ -155,8 +174,8 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
-#define SELU_LAMBDA 1.05070f
-#define SELU_ALPHA 1.67326f
+#define SELU_LAMBDA (1.05070f)
+#define SELU_ALPHA (1.67326f)
 class ActivationSelu: public Activation
 {
 public:
@@ -170,7 +189,7 @@ public:
         if(x>=0.f)
             return SELU_LAMBDA*x;
         else
-            return SELU_LAMBDA*SELU_ALPHA*expm1(x);
+            return SELU_LAMBDA*SELU_ALPHA*expm1f(x);
     }
 
     float derivation(float x,float y) const
@@ -194,13 +213,13 @@ public:
 
     float apply(float x) const
     {
-        return log1p(exp(x));
+        return log1pf(expf(x));
     }
 
     float derivation(float x,float y) const
     {
         (void)y;
-        return 1.f/(1.f+exp(-x));
+        return 1.f/(1.f+expf(-x));
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -214,13 +233,13 @@ public:
 
     float apply(float x) const
     {
-        return x/(1.f+fabs(x));
+        return x/(1.f+fabsf(x));
     }
 
     float derivation(float x,float y) const
     {
         (void)y;
-        return 1.f/((1.f+fabs(x))*(1.f+fabs(x))); //todo optimize
+        return 1.f/((1.f+fabsf(x))*(1.f+fabsf(x))); //todo optimize
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -254,7 +273,7 @@ public:
 
     float apply(float x) const
     {
-        return tanh(x);
+        return tanhf(x);
     }
     float derivation(float x,float y) const
     {
@@ -300,6 +319,9 @@ Activation* get_activation(string sActivation)
     if(sActivation=="Tanh")
         return new ActivationTanh;
 
+    if(sActivation=="Asinh")
+        return new ActivationAsinh;
+
     if(sActivation=="Sigmoid")
         return new ActivationSigmoid;
 
@@ -344,6 +366,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.clear();
 
     vsActivations.push_back("Tanh");
+    vsActivations.push_back("Asinh");
     vsActivations.push_back("Sigmoid");
     vsActivations.push_back("Relu");
     vsActivations.push_back("Linear");

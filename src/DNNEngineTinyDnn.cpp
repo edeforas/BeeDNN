@@ -35,8 +35,16 @@ void DNNEngineTinyDnn::add_layer_and_activation(int inSize,int outSize, eLayerTy
         *_pNet <<  tiny_dnn::tanh_layer();
     else if(sActivation=="Sigmoid")
         *_pNet <<  tiny_dnn::sigmoid_layer();
+    else if(sActivation=="Asinh")
+        *_pNet <<  tiny_dnn::asinh_layer();
     else if(sActivation=="Relu")
         *_pNet <<  tiny_dnn::relu_layer();
+    else if(sActivation=="LeakyRelu")
+        *_pNet <<  tiny_dnn::leaky_relu_layer();
+    else if(sActivation=="Selu")
+        *_pNet <<  tiny_dnn::selu_layer();
+    else if(sActivation=="Elu")
+        *_pNet <<  tiny_dnn::elu_layer();
     else if(sActivation=="SoftPlus")
         *_pNet <<  tiny_dnn::softplus_layer();
     else if(sActivation=="Linear")

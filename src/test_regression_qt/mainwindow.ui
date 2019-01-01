@@ -98,6 +98,11 @@
         <string>Topology</string>
        </attribute>
       </widget>
+      <widget class="QWidget" name="tab_4">
+       <attribute name="title">
+        <string>Details</string>
+       </attribute>
+      </widget>
      </widget>
     </item>
    </layout>
