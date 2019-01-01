@@ -61,6 +61,7 @@ class DNNEngine
 public:
     DNNEngine();
     virtual ~DNNEngine();
+    virtual string to_string()=0;
 
     virtual void clear()=0;
     virtual void init();

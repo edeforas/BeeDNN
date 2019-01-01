@@ -10,6 +10,7 @@ class DNNEngineTestDnn : public DNNEngine
 public:
     DNNEngineTestDnn();
     virtual ~DNNEngineTestDnn();
+    virtual string to_string();
 
     virtual void clear();
     virtual void init();

@@ -2,6 +2,7 @@
 
 #include "Net.h"
 #include "ActivationLayer.h"
+#include "NetUtil.h"
 
 //////////////////////////////////////////////////////////////////////////////
 DNNEngineTestDnn::DNNEngineTestDnn()
@@ -17,6 +18,11 @@ DNNEngineTestDnn::~DNNEngineTestDnn()
 void DNNEngineTestDnn::clear()
 {
     _pNet->clear();
+}
+//////////////////////////////////////////////////////////////////////////////
+string DNNEngineTestDnn::to_string()
+{
+    return NetUtil::to_string(_pNet);
 }
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTestDnn::init()

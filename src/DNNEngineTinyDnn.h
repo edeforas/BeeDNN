@@ -15,6 +15,7 @@ class DNNEngineTinyDnn : public DNNEngine
 public:
     DNNEngineTinyDnn();
     virtual ~DNNEngineTinyDnn();
+    virtual string to_string();
 
     virtual void clear();
     virtual void init();

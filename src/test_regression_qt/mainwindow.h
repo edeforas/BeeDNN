@@ -27,13 +27,8 @@ protected:
 private slots:
     void on_pushButton_clicked();
     void on_actionQuit_triggered();
-
     void on_actionAbout_triggered();
-
-    void on_tabWidget_currentChanged(int index);
-
     void on_cbEngine_currentTextChanged(const QString &arg1);
-
     void on_btnTrainMore_clicked();
 
 private:
@@ -41,6 +36,8 @@ private:
     void drawRegression();
     double compute_truth(double x);
     void train_and_test(bool bReset);
+    void update_details();
+
     Ui::MainWindow *ui;
 
     DNNEngine* _pEngine;

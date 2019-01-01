@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1017</width>
-    <height>657</height>
+    <width>1141</width>
+    <height>737</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -97,11 +97,21 @@
        <attribute name="title">
         <string>Topology</string>
        </attribute>
+       <layout class="QGridLayout" name="gridLayout_9">
+        <item row="0" column="0">
+         <widget class="QGraphicsView" name="gvTopology"/>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="tab_4">
        <attribute name="title">
         <string>Details</string>
        </attribute>
+       <layout class="QGridLayout" name="gridLayout_8">
+        <item row="0" column="0">
+         <widget class="QPlainTextEdit" name="peDetails"/>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>
@@ -112,7 +122,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1017</width>
+     <width>1141</width>
      <height>26</height>
     </rect>
    </property>

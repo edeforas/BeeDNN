@@ -8,6 +8,7 @@ SOURCES += main.cpp\
     ../Activation.cpp \
     ../Layer.cpp \
     ../Net.cpp \
+    ../NetUtil.cpp \
     SimpleCurve.cpp \
     ../MatrixUtil.cpp \
     ../MNISTReader.cpp \
@@ -22,6 +23,7 @@ HEADERS  += mainwindow.h \
     ../Matrix.h \
     ../MatrixUtil.h \
     ../Net.h \
+    ../NetUtil.h \
     SimpleCurve.h \
     ../MNISTReader.h \
     ../ActivationLayer.h \

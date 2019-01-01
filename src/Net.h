@@ -49,7 +49,8 @@ public:
 	void clear();
     void init();
     void add(Layer *l);
-	
+    const vector<Layer*> layers() const;
+
     // return the number of epochs
     int train(const MatrixFloat& mSamples, const MatrixFloat& mTruth, const TrainOption& topt);
 

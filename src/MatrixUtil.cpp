@@ -1,5 +1,7 @@
 #include <cassert>
 #include <cstdlib>
+#include <sstream>
+#include <iomanip>
 
 #include "MatrixUtil.h"
 ///////////////////////////////////////////////////////////////////////////
@@ -68,10 +70,23 @@ MatrixFloat decimate(const MatrixFloat& m, unsigned int iRatio)
 	unsigned int iNewSize=m.rows()/iRatio;
 	
     MatrixFloat mDecimated(iNewSize,m.columns());
-	
+
     for(unsigned int i=0;i<iNewSize;i++)
 		mDecimated.row(i)=m.row(i*iRatio);
 	
 	return mDecimated;
+}
+///////////////////////////////////////////////////////////////////////////
+string to_string(const MatrixFloat& m)
+{
+    stringstream ss; ss << setprecision(4);
+    for(unsigned int iL=0;iL<m.rows();iL++)
+    {
+        for(unsigned int iR=0;iR<m.columns();iR++)
+            ss << setw(10) << m(iL,iR);
+        ss << endl;
+    }
+
+    return ss.str();
 }
 ///////////////////////////////////////////////////////////////////////////

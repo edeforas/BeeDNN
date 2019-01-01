@@ -8,8 +8,8 @@
 #include "DNNEngineTestDnn.h"
 #include "DNNEngineTinyDnn.h"
 
-#include "Net.h"
 #include "ActivationLayer.h"
+
 /*
 //////////////////////////////////////////////////////////////////////////
 // callback class to observe loss evolution
@@ -133,6 +133,7 @@ void MainWindow::train_and_test(bool bReset)
     drawRegression();
     resizeEvent(0);
 
+    update_details();
     QApplication::restoreOverrideCursor();
 }
 //////////////////////////////////////////////////////////////////////////
@@ -277,10 +278,15 @@ void MainWindow::resizeEvent( QResizeEvent *e )
     }
 }
 //////////////////////////////////////////////////////////////////////////////
-void MainWindow::on_tabWidget_currentChanged(int index)
+void MainWindow::update_details()
 {
-    (void)index;
-    resizeEvent(0);
+    if(_pEngine==0)
+    {
+        ui->peDetails->clear();
+        return;
+    }
+
+    ui->peDetails->setPlainText(_pEngine->to_string().c_str());
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_cbEngine_currentTextChanged(const QString &arg1)
