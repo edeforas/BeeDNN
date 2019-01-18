@@ -117,13 +117,13 @@ public:
 
     float apply(float x) const
     {
-        return x>=0.f ? x : 0.f;
+        return x>0.f ? x : 0.f;
     }
 
     float derivation(float x,float y) const
     {
         (void)x;
-        return y>=0.f ? 1.f : 0.f;
+        return y>0.f ? 1.f : 0.f;
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -282,6 +282,28 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+//Swish as in document: Swish: A Self-Gated Activation Function
+class ActivationSwish: public Activation
+{
+public:
+
+    string name() const
+    {
+        return "Swish";
+    }
+
+    float apply(float x) const
+    {
+        return x/(1.f+expf(-x));
+    }
+    float derivation(float x,float y) const
+    {
+        (void)y;
+		float s=1.f/(1.f+expf(-x));
+		return s*(x+1-x*s); //todo optimize
+    }
+};
+//////////////////////////////////////////////////////////////////////////////
 class ActivationParablu: public Activation
 {
 public:
@@ -324,6 +346,9 @@ Activation* get_activation(string sActivation)
 
     if(sActivation=="Sigmoid")
         return new ActivationSigmoid;
+
+    if(sActivation=="Swish")
+        return new ActivationSwish;
 
     if(sActivation=="Relu")
         return new ActivationRelu;
@@ -368,6 +393,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("Tanh");
     vsActivations.push_back("Asinh");
     vsActivations.push_back("Sigmoid");
+    vsActivations.push_back("Swish");
     vsActivations.push_back("Relu");
     vsActivations.push_back("Linear");
     vsActivations.push_back("Atan");
