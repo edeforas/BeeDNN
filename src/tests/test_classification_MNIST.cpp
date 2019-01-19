@@ -59,21 +59,17 @@ int main()
     mTestLabels=index_to_position(mTestLabelsIndex,10);
 
     //normalize data
-    mTestImages=mTestImages/256.f;
-    mRefImages=mRefImages/256.f;
+    mTestImages/=256.f-0.5f;
+    mRefImages/=256.f-0.5f;
 
-    ActivationLayer* l1=new ActivationLayer(784,200,"Tanh");
-    ActivationLayer* l2=new ActivationLayer(200,50,"Tanh");
-    ActivationLayer* l3=new ActivationLayer(50,10,"Tanh");
-
-    n.add(l1);
-    n.add(l2);
-    n.add(l3);
+    //simple net, expect only 33% good classification with it ...
+    n.add(new ActivationLayer(784,30,"Tanh"));
+    n.add(new ActivationLayer(30,10,"Tanh"));
 
     TrainOption tOpt;
     tOpt.epochs=1000;
     tOpt.earlyAbortMaxError=0.05;
-    tOpt.learningRate=0.2f;
+    tOpt.learningRate=0.1f;
     tOpt.batchSize=128;
     tOpt.momentum=0.1f;
     tOpt.observer=&lo;
@@ -112,7 +108,7 @@ int main()
 
         cout << "% of gooddetection=" << cr.goodclassificationPercent << endl;
 
-        cout << "ConfusionMatrixFloat=" << endl;
+        cout << "ConfusionMatrix=" << endl;
         disp(cr.mConfMat);
         cout << endl;
     }
