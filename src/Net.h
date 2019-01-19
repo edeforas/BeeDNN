@@ -47,16 +47,16 @@ public:
     virtual ~Net();
 
 	void clear();
-    void init();
-    void add(Layer *l);
+    void add(Layer *l); //take ownership of layer
     const vector<Layer*> layers() const;
 
-    // return the number of epochs
+    void init();
+    // return the number of epochs,
+    //call init before, to reset weights
     int train(const MatrixFloat& mSamples, const MatrixFloat& mTruth, const TrainOption& topt);
 
     void forward(const MatrixFloat& mIn,MatrixFloat& mOut) const;
-
-    void classify(const MatrixFloat& mIn,MatrixFloat& mClass) const; // todo move in classification problem
+    void classify(const MatrixFloat& mIn,MatrixFloat& mOut) const;
 
 private:
     void backpropagation(const MatrixFloat& mError);

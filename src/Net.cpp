@@ -23,14 +23,9 @@ void Net::clear()
     _layers.clear();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::init()
-{
-    for(unsigned int i=0;i<_layers.size();i++)
-        _layers[i]->init();
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add(Layer* l)
 {
+    l->init_backpropagation();
     _layers.push_back(l); //take ownership of layers
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,6 +52,12 @@ void Net::classify(const MatrixFloat& mIn,MatrixFloat& mClass) const
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
+void Net::init()
+{
+    for(unsigned int i=0;i<_layers.size();i++)
+        _layers[i]->init_backpropagation();
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
 int Net::train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const TrainOption& topt)
 {
     //TrainResult tr;
@@ -70,7 +71,7 @@ int Net::train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const Train
 
     // init error accumulation and momentum
     vector<MatrixFloat> sumDE, sumDEMomentum;
-    for(unsigned int i=0;i<_layers.size();i++)
+    for(size_t i=0;i<_layers.size();i++)
     {
         sumDE.push_back(_layers[i]->dE*0); //todo something cleaner
         sumDEMomentum.push_back(_layers[i]->dE*0);
@@ -144,11 +145,11 @@ int Net::train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const Train
         }
 
         //early abort test on error
-   //     tr.maxError=dMaxError;
-    double dLoss=dMeanError/(iNbSamplesSubSampled*mTruth.size()); //same as mean error?
+        //     tr.maxError=dMaxError;
+        double dLoss=dMeanError/(iNbSamplesSubSampled*mTruth.size()); //same as mean error?
 
-   //     if(topt.observer)
-    //        topt.observer->stepEpoch(tr);
+        //     if(topt.observer)
+        //        topt.observer->stepEpoch(tr);
 
         if( dMaxError<topt.earlyAbortMaxError)
             break;

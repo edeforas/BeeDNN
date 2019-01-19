@@ -20,7 +20,7 @@ ActivationLayer::~ActivationLayer()
     delete _pActiv;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void ActivationLayer::init()
+void ActivationLayer::init_backpropagation()
 {
     float a =sqrtf(6.f/(_iInSize+_iOutSize));
 

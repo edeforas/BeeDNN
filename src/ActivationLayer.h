@@ -14,7 +14,7 @@ class ActivationLayer : public Layer
 public:
     ActivationLayer(int iInSize,int iOutSize, string sActivation);
     ~ActivationLayer();
-    virtual void init();
+    virtual void init_backpropagation();
 
     virtual void forward(const MatrixFloat& mMatin, MatrixFloat &mMatOut) const;
     virtual void forward_save(const MatrixFloat& mMatin, MatrixFloat &mMatOut); //todo remove

@@ -20,7 +20,7 @@ void disp(const MatrixFloat& m)
         cout << endl;
     }
 }
-
+/*
 class LossObserver: public TrainObserver
 {
 public:
@@ -41,10 +41,10 @@ public:
         cout << endl;
     }
 };
-
+*/
 int main()
 {
-    LossObserver lo;
+    //LossObserver lo;
 
     cout << "loading MNIST database..." << endl;
     MNISTReader mr;
@@ -76,7 +76,7 @@ int main()
     tOpt.learningRate=0.2f;
     tOpt.batchSize=128;
     tOpt.momentum=0.1f;
-    tOpt.observer=&lo;
+    //tOpt.observer=&lo;
     //tOpt.subSamplingRatio=50; //use shuffled 1/50 sample for train
 
     cout << "training..." << endl;

@@ -8,7 +8,7 @@ class Layer
 public:
     Layer(int iInSize,int iOutSize);
     virtual ~Layer();
-    virtual void init() =0;
+    virtual void init_backpropagation() =0;
 
     virtual void forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const =0;
     virtual void forward_save(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) =0;

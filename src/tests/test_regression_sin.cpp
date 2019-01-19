@@ -11,13 +11,13 @@ int main()
 {
     Net n;
 
-    ActivationLayer l1(1,20,"Tanh");
-    ActivationLayer l2(20,20,"Tanh");
-    ActivationLayer l3(20,1,"Tanh");
+    Layer* l1=new ActivationLayer(1,20,"Tanh");
+    Layer* l2=new ActivationLayer(20,20,"Tanh");
+    Layer* l3=new ActivationLayer(20,1,"Tanh");
 
-    n.add(&l1);
-    n.add(&l2);
-    n.add(&l3);
+    n.add(l1);
+    n.add(l2);
+    n.add(l3);
 
     MatrixFloat mTruth(64);
     MatrixFloat mSamples(64);

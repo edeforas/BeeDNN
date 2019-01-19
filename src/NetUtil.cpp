@@ -20,7 +20,7 @@ string to_string(const Net* pNet)
     ss << "Nb Layers: " << layers.size() << endl;
     ss << endl;
 
-    for(int i=0;i<layers.size();i++)
+    for(size_t i=0;i<layers.size();i++)
     {
         auto layer=layers[i];
         ss << "----------------------------------------------" << endl;

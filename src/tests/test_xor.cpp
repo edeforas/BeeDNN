@@ -9,11 +9,11 @@ int main()
 {
     Net n;
 
-    ActivationLayer l1(2,3,"Sigmoid");
-    ActivationLayer l2(3,1,"Sigmoid");
+    Layer* l1=new ActivationLayer(2,3,"Sigmoid");
+    Layer* l2=new ActivationLayer(3,1,"Sigmoid");
 
-    n.add(&l1);
-    n.add(&l2);
+    n.add(l1);
+    n.add(l2);
 
     float dSamples[]={ 0 , 0 , 0 , 1 , 1 , 0 , 1 , 1};
     float dTruths[]={ 0 , 1 , 1, 0 };
@@ -27,8 +27,9 @@ int main()
     tOpt.batchSize=1;
     tOpt.momentum=0.9f;
 
-    TrainResult tr=n.train(mSamples,mTruth,tOpt);
-    cout << "Loss=" << tr.loss << " MaxError=" << tr.maxError << " ComputedEpochs=" << tr.computedEpochs << endl;
+    //  TrainResult tr=
+    n.train(mSamples,mTruth,tOpt);
+    //cout << "Loss=" << tr.loss << " MaxError=" << tr.maxError << " ComputedEpochs=" << tr.computedEpochs << endl;
 
     MatrixFloat m00,m01,m10,m11;
 
