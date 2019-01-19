@@ -103,36 +103,10 @@ end
 [AMicroBatch,BMicroBatch]=learn(input,target,learning_rate,nb_epochs,2,AInit,BInit);
 [ASGD,BSGD]=learn(input,target,learning_rate,nb_epochs,1,AInit,BInit);
 
-%compute error landscape
-errorLandscape=[];
-for a=-1:0.1:9
-errb=[];
-for b=-1:0.1:9
-  err=0;
-for s=1:6
-  delta=forward(input(s),a,b)-target(s);
-  err+=delta*delta/2;
-end
-errb=[errb; err/6];
-end
-errorLandscape=[errorLandscape errb];
-end
-
-%draw convergence curve in error landscape
-figure; hold on;
-imagesc([-1 9],[-1 9],errorLandscape);
-plot(ABatch,BBatch,';batch;k');
-plot(AMiniBatch,BMiniBatch,';minibatch;r');
-plot(AMicroBatch,BMicroBatch,';microbatch;g');
-plot(ASGD,BSGD,';SGD;b');
-colormap(jet);
-grid;
-hold off;
-
 %draw A,B vs epoch
 figure; hold on;
-plot(ABatch,';batch;k');
-plot(BBatch,';batch;+k');
+plot(ABatch,';batch;k'); %will not converge due to bias in last level
+plot(BBatch,';batch;+k'); %will not converge due to bias in last level
 plot(AMiniBatch,';minibatch;r');
 plot(BMiniBatch,';minibatch;+r');
 plot(AMicroBatch,';microbatch;g');

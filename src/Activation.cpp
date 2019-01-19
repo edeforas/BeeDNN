@@ -122,8 +122,8 @@ public:
 
     float derivation(float x,float y) const
     {
-        (void)x;
-        return y>0.f ? 1.f : 0.f;
+        (void)y;
+        return x>0.f ? 1.f : 0.f;
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -142,8 +142,8 @@ public:
 
     float derivation(float x,float y) const
     {
-        (void)x;
-        return y>=0.f ? 1.f : 0.01f;
+        (void)y;
+        return x>=0.f ? 1.f : 0.01f;
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -282,11 +282,10 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
-//Swish as in document: Swish: A Self-Gated Activation Function
+//Swish as in the paper: Swish: A Self-Gated Activation Function
 class ActivationSwish: public Activation
 {
 public:
-
     string name() const
     {
         return "Swish";
