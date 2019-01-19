@@ -67,9 +67,6 @@ int Net::train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const Train
 
     unsigned int iBatchSize=topt.batchSize;
     unsigned int iNbSamples=mSamples.rows();
-    unsigned int iNbSamplesSubSampled=iNbSamples/topt.subSamplingRatio;
-    if(iBatchSize>iNbSamplesSubSampled)
-        iBatchSize=iNbSamplesSubSampled;
 
     // init error accumulation and momentum
     vector<MatrixFloat> sumDE, sumDEMomentum;
@@ -86,15 +83,15 @@ int Net::train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const Train
         MatrixFloat mShuffle=rand_perm(iNbSamples);
 
         unsigned int iBatchStart=0;
-        while(iBatchStart<iNbSamplesSubSampled)
+        while(iBatchStart<iBatchSize)
         {
             // init error accumulation
             for(unsigned int i=0;i<_layers.size();i++)
                 sumDE[i].set_zero();
 
             unsigned int iBatchEnd=iBatchStart+iBatchSize;
-            if(iBatchEnd>iNbSamplesSubSampled)
-                iBatchEnd=iNbSamplesSubSampled;
+            if(iBatchEnd>iBatchSize)
+                iBatchEnd=iBatchSize;
 
             for(unsigned int iSample=iBatchStart;iSample<iBatchEnd;iSample++)
             {
@@ -148,7 +145,7 @@ int Net::train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const Train
 
         //early abort test on error
         //     tr.maxError=dMaxError;
-        double dLoss=dMeanError/(iNbSamplesSubSampled*mTruth.size()); //same as mean error?
+        double dLoss=dMeanError/(iBatchSize*mTruth.size()); //same as mean error?
 
         //     if(topt.observer)
         //        topt.observer->stepEpoch(tr);
