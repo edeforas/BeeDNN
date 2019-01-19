@@ -14,7 +14,7 @@ ClassificationResult ConfusionMatrix::compute(const MatrixFloat& mRef,const Matr
     MatrixFloat mDiag=cr.mConfMat.diag();
     MatrixFloat mSum=cr.mConfMat.row_sum();
 
-    MatrixFloat mGoodClassification=mDiag.element_divide(mSum)*100.;
+    MatrixFloat mGoodClassification=mDiag.element_divide(mSum)*100.f;
 
     cr.goodclassificationPercent=mGoodClassification.sum()/iNbClass;
 

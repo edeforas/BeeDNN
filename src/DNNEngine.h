@@ -24,7 +24,6 @@ public:
         batchSize=32;
         learningRate=0.1f;
         momentum=0.1f;
-        subSamplingRatio=1;
         //observer=0;
     }
 
@@ -37,7 +36,6 @@ public:
     float learningRate;
     float momentum;
 
-    int subSamplingRatio; //1 to keep everything in training ; 2 , to keep half (shuffled) and soon on
     DNNTrainObserver* observer;
 };
 

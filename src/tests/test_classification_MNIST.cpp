@@ -77,7 +77,6 @@ int main()
     tOpt.batchSize=128;
     tOpt.momentum=0.1f;
     //tOpt.observer=&lo;
-    //tOpt.subSamplingRatio=50; //use shuffled 1/50 sample for train
 
     cout << "training..." << endl;
 
