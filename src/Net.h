@@ -35,7 +35,7 @@ public:
 class TrainObserver
 {
 public:
- //   virtual void stepEpoch(const TrainResult & tr)=0;
+    virtual void stepEpoch(/*const TrainResult & tr*/)=0;
 };
 
 class Net

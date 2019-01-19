@@ -11,8 +11,11 @@ public:
     virtual void init_backpropagation() =0;
 
     virtual void forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const =0;
+
+    //todo remove
     virtual void forward_save(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) =0;
 
+    //todo  remove
     virtual MatrixFloat get_weight_activation_derivation() const =0;
     virtual MatrixFloat& get_weight() =0;
 

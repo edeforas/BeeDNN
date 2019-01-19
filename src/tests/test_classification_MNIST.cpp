@@ -20,13 +20,13 @@ void disp(const MatrixFloat& m)
         cout << endl;
     }
 }
-/*
+
 class LossObserver: public TrainObserver
 {
 public:
-    virtual void stepEpoch(const TrainResult & tr)
+    virtual void stepEpoch(/*const TrainResult & tr*/)
     {
-        cout << "epoch=" << tr.computedEpochs << " duration=" << tr.epochDuration << "s loss=" << tr.loss << " maxerror=" << tr.maxError << endl;
+    //    cout << "epoch=" << tr.computedEpochs << " duration=" << tr.epochDuration << "s loss=" << tr.loss << " maxerror=" << tr.maxError << endl;
 		
         MatrixFloat mClass;
         n.classify(mTestImages,mClass);
@@ -36,15 +36,15 @@ public:
 
         cout << "% of good detection=" << cr.goodclassificationPercent << endl;
 
-        cout << "ConfusionMatrixFloat=" << endl;
+        cout << "ConfusionMatrix=" << endl;
         disp(cr.mConfMat);
         cout << endl;
     }
 };
-*/
+
 int main()
 {
-    //LossObserver lo;
+    LossObserver lo;
 
     cout << "loading MNIST database..." << endl;
     MNISTReader mr;
@@ -54,29 +54,29 @@ int main()
         return -1;
     }
 
-    // normalize input data
-    mTestImages/=256.f;
-    mRefImages/=256.f;
-
-    //transform truth as a probabilty vector (one column by class)
+    //transform truth as a probability vector (one column by class)
     mRefLabels=index_to_position(mRefLabelsIndex,10);
     mTestLabels=index_to_position(mTestLabelsIndex,10);
 
-    ActivationLayer l1(784,200,"Tanh");
-    ActivationLayer l2(200,50,"Tanh");
-    ActivationLayer l3(50,10,"Tanh");
+    //normalize data
+    mTestImages=mTestImages/256.f;
+    mRefImages=mRefImages/256.f;
 
-    n.add(&l1);
-    n.add(&l2);
-    n.add(&l3);
+    ActivationLayer* l1=new ActivationLayer(784,200,"Tanh");
+    ActivationLayer* l2=new ActivationLayer(200,50,"Tanh");
+    ActivationLayer* l3=new ActivationLayer(50,10,"Tanh");
+
+    n.add(l1);
+    n.add(l2);
+    n.add(l3);
 
     TrainOption tOpt;
-    tOpt.epochs=100;
+    tOpt.epochs=1000;
     tOpt.earlyAbortMaxError=0.05;
     tOpt.learningRate=0.2f;
     tOpt.batchSize=128;
     tOpt.momentum=0.1f;
-    //tOpt.observer=&lo;
+    tOpt.observer=&lo;
 
     cout << "training..." << endl;
 

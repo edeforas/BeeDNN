@@ -147,8 +147,8 @@ int Net::train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const Train
         //     tr.maxError=dMaxError;
         double dLoss=dMeanError/(iBatchSize*mTruth.size()); //same as mean error?
 
-        //     if(topt.observer)
-        //        topt.observer->stepEpoch(tr);
+             if(topt.observer)
+                topt.observer->stepEpoch(/*tr*/);
 
         if( dMaxError<topt.earlyAbortMaxError)
             break;
