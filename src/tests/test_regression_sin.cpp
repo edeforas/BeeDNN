@@ -4,21 +4,20 @@
 using namespace std;
 
 #include "Net.h"
+#include "NetTrainMomentum.h"
+
 #include "Activation.h"
 #include "ActivationLayer.h"
 
 int main()
 {
-    Net n;
+    //build net
+    Net net;
+    net.add(new ActivationLayer(1,20,"Tanh"));
+    net.add(new ActivationLayer(20,20,"Tanh"));
+    net.add(new ActivationLayer(20,1,"Tanh"));
 
-    Layer* l1=new ActivationLayer(1,20,"Tanh");
-    Layer* l2=new ActivationLayer(20,20,"Tanh");
-    Layer* l3=new ActivationLayer(20,1,"Tanh");
-
-    n.add(l1);
-    n.add(l2);
-    n.add(l3);
-
+    //train data
     MatrixFloat mTruth(64);
     MatrixFloat mSamples(64);
     for( int i=0;i<64;i++)
@@ -36,7 +35,8 @@ int main()
     tOpt.momentum=0.05f;
 
     cout << "Learning..." << endl;
-    int nbEpochs=n.train(mSamples,mTruth,tOpt);
+    NetTrainMomentum train;
+    int nbEpochs=train.train(net,mSamples,mTruth,tOpt);
     cout << "nb epochs=" << nbEpochs << endl;
 
     //show results
@@ -45,7 +45,7 @@ int main()
     {
         mOneSample(0)=mSamples(i);
         mOneTruth(0)=mTruth(i);
-        n.forward(mOneSample,mOnePredict);
+        net.forward(mOneSample,mOnePredict);
         cout << std::setprecision(4) << "x=" << mOneSample(0) << "\ttruth=" <<mOneTruth(0) << "\tpredict=" << mOnePredict(0) <<endl;
     }
     return 0;

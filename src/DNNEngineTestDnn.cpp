@@ -1,6 +1,7 @@
 #include "DNNEngineTestDnn.h"
 
 #include "Net.h"
+#include "NetTrainMomentum.h"
 #include "ActivationLayer.h"
 #include "NetUtil.h"
 
@@ -27,7 +28,7 @@ string DNNEngineTestDnn::to_string()
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTestDnn::init()
 {
-    _pNet->init();
+   // _pNet->init(); todo
     DNNEngine::init();
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -53,7 +54,8 @@ int DNNEngineTestDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloat
     tOpt.momentum=dto.momentum;
     tOpt.observer=0;//dto.observer;
 
-    int epochs=_pNet->train(mSamples,mTruth,tOpt);
+    NetTrainMomentum netTrain;
+    int epochs=netTrain.train(*_pNet,mSamples,mTruth,tOpt);
 
     return epochs;
 }

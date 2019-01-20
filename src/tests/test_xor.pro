@@ -5,6 +5,7 @@ CONFIG -= qt
 
 SOURCES += test_xor.cpp \
     ../Net.cpp \
+    ../NetTrainMomentum.cpp \
     ../Layer.cpp \
     ../Activation.cpp \
     ../MatrixUtil.cpp \
@@ -17,5 +18,6 @@ HEADERS += \
     ../Layer.h \
     ../Matrix.h \
     ../Net.h \
+    ../NetTrainMomentum.h \
     ../MatrixUtil.h \
     ../ActivationLayer.h

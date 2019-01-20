@@ -2,13 +2,14 @@
 using namespace std;
 
 #include "Net.h"
+#include "NetTrainMomentum.h"
 #include "Activation.h"
 #include "ActivationLayer.h"
 #include "MNISTReader.h"
 #include "MatrixUtil.h"
 #include "ConfusionMatrix.h"
 
-Net n;
+Net net;
 MatrixFloat mRefImages, mRefLabels, mRefLabelsIndex, mTestImages, mTestLabels, mTestLabelsIndex;
 
 void disp(const MatrixFloat& m)
@@ -29,7 +30,7 @@ public:
     //    cout << "epoch=" << tr.computedEpochs << " duration=" << tr.epochDuration << "s loss=" << tr.loss << " maxerror=" << tr.maxError << endl;
 		
         MatrixFloat mClass;
-        n.classify(mTestImages,mClass);
+        net.classify(mTestImages,mClass);
 
         ConfusionMatrix cm;
         ClassificationResult cr=cm.compute(mTestLabelsIndex,mClass,10);
@@ -63,8 +64,8 @@ int main()
     mRefImages/=256.f-0.5f;
 
     //simple net, expect only 33% good classification with it ...
-    n.add(new ActivationLayer(784,30,"Tanh"));
-    n.add(new ActivationLayer(30,10,"Tanh"));
+    net.add(new ActivationLayer(784,30,"Tanh"));
+    net.add(new ActivationLayer(30,10,"Tanh"));
 
     TrainOption tOpt;
     tOpt.epochs=1000;
@@ -76,7 +77,8 @@ int main()
 
     cout << "training..." << endl;
 
-    n.train(mRefImages,mRefLabels,tOpt);
+    NetTrainMomentum netTrain;
+    netTrain.train(net,mRefImages,mRefLabels,tOpt);
 
     cout << "end of training." << endl;
     cout << "computing perfs ..."<< endl;
@@ -85,7 +87,7 @@ int main()
     {
         cout << " result on full learning DB:" << endl;
         MatrixFloat mClass;
-        n.classify(mRefImages,mClass);
+        net.classify(mRefImages,mClass);
 
         ConfusionMatrix cm;
         ClassificationResult cr=cm.compute(mRefLabelsIndex,mClass,10);
@@ -101,7 +103,7 @@ int main()
     {
         cout << " result on full test DB:" << endl;
         MatrixFloat mClass;
-        n.classify(mTestImages,mClass);
+        net.classify(mTestImages,mClass);
 
         ConfusionMatrix cm;
         ClassificationResult cr=cm.compute(mTestLabelsIndex,mClass,10);

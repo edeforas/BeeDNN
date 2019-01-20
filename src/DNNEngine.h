@@ -24,6 +24,7 @@ public:
         batchSize=32;
         learningRate=0.1f;
         momentum=0.1f;
+        initWeight=true;
         //observer=0;
     }
 
@@ -35,6 +36,7 @@ public:
     //momentum settings
     float learningRate;
     float momentum;
+    bool initWeight;
 
     DNNTrainObserver* observer;
 };

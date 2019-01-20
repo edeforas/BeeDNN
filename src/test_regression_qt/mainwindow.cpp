@@ -121,6 +121,7 @@ void MainWindow::train_and_test(bool bReset)
     dto.batchSize=ui->leBatchSize->text().toInt();
     dto.momentum=ui->leMomentum->text().toDouble();
     dto.observer=0;//&lossCB;
+    dto.initWeight=bReset;
 
     DNNTrainResult dtr =_pEngine->train(mSamples,mTruth,dto);
 

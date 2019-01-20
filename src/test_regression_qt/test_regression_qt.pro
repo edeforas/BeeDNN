@@ -3,13 +3,15 @@ TARGET = test_regression_qt
 TEMPLATE = app
 CONFIG += c++14
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
+SOURCES += \
+	main.cpp\
+	mainwindow.cpp \
+    SimpleCurve.cpp \
     ../Activation.cpp \
     ../Layer.cpp \
     ../Net.cpp \
+    ../NetTrainMomentum.cpp \
     ../NetUtil.cpp \
-    SimpleCurve.cpp \
     ../MatrixUtil.cpp \
     ../MNISTReader.cpp \
     ../ActivationLayer.cpp \
@@ -17,14 +19,16 @@ SOURCES += main.cpp\
     ../DNNEngineTinyDnn.cpp \
     ../DNNEngine.cpp
 
-HEADERS  += mainwindow.h \
+HEADERS  += \
+	mainwindow.h \
+    SimpleCurve.h \
     ../Activation.h \
     ../Layer.h \
     ../Matrix.h \
     ../MatrixUtil.h \
     ../Net.h \
+    ../NetTrainMomentum.h \	
     ../NetUtil.h \
-    SimpleCurve.h \
     ../MNISTReader.h \
     ../ActivationLayer.h \
     ../DNNEngine.h \
