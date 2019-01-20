@@ -60,7 +60,8 @@ public:
 
     float derivation(float x) const
     {
-        return 0.5f/((1.f+fabs(x))*(1.f+fabs(x))); //todo optimize
+        float d=1.f+fabs(x);
+        return 0.5f/(d*d); //todo optimize
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -229,7 +230,8 @@ public:
 
     float derivation(float x) const
     {
-        return 1.f/((1.f+fabsf(x))*(1.f+fabsf(x))); //todo optimize
+        float d=1.f+fabsf(x);
+        return 1.f/(d*d);
     }
 };
 //////////////////////////////////////////////////////////////////////////////
