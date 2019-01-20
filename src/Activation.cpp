@@ -21,9 +21,8 @@ public:
         return atanf(x);
     }
 
-    float derivation(float x,float y) const
+    float derivation(float x) const
     {
-        (void)y;
         return 1.f/(1.f+x*x);
     }
 };
@@ -41,9 +40,8 @@ public:
         return asinhf(x);
     }
 
-    float derivation(float x,float y) const
+    float derivation(float x) const
     {
-        (void)y; //TODO optimize
         return 1.f/sqrtf(1.f+x*x); //http://mathworld.wolfram.com/InverseHyperbolicSine.html
     }
 };//////////////////////////////////////////////////////////////////////////////
@@ -60,9 +58,8 @@ public:
         return 0.5f*(x/(1.f+fabs(x)))+0.5f;
     }
 
-    float derivation(float x,float y) const
+    float derivation(float x) const
     {
-        (void)y;
         return 0.5f/((1.f+fabs(x))*(1.f+fabs(x))); //todo optimize
     }
 };
@@ -80,9 +77,9 @@ public:
         return expf(-x*x);
     }
 
-    float derivation(float x,float y) const
+    float derivation(float x) const
     {
-        return -2.f*x*y; //derivate using f(x)
+        return -2.f*x*expf(-x*x);
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -99,10 +96,9 @@ public:
         return x;
     }
 
-    float derivation(float x,float y) const
+    float derivation(float x) const
     {
         (void)x;
-        (void)y;
         return 1.f;
     }
 };
@@ -120,9 +116,8 @@ public:
         return x>0.f ? x : 0.f;
     }
 
-    float derivation(float x,float y) const
+    float derivation(float x) const
     {
-        (void)y;
         return x>0.f ? 1.f : 0.f;
     }
 };
@@ -140,9 +135,8 @@ public:
         return x>=0.f ? x : 0.01f*x;
     }
 
-    float derivation(float x,float y) const
+    float derivation(float x) const
     {
-        (void)y;
         return x>=0.f ? 1.f : 0.01f;
     }
 };
@@ -163,14 +157,14 @@ public:
             return expm1f(x);
     }
 
-    float derivation(float x,float y) const
+    float derivation(float x) const
     {
         (void)x;
 
-        if(y>=0.f)
+        if(x>=0.f)
             return 1.f;
         else
-            return y+1.f; //optimisation of f'(x) using y=f(x) in case of Elu
+            return expm1f(x)+1.f;
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -192,14 +186,12 @@ public:
             return SELU_LAMBDA*SELU_ALPHA*expm1f(x);
     }
 
-    float derivation(float x,float y) const
+    float derivation(float x) const
     {
-        (void)x;
-
-        if(y>=0.f)
+        if(x>=0.f)
             return SELU_LAMBDA;
         else
-            return y+SELU_LAMBDA*SELU_ALPHA; //optimisation of f'(x) using y=f(x) in case of selu
+            return SELU_LAMBDA*SELU_ALPHA*expm1f(x)+SELU_LAMBDA*SELU_ALPHA;
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -216,9 +208,8 @@ public:
         return log1pf(expf(x));
     }
 
-    float derivation(float x,float y) const
+    float derivation(float x) const
     {
-        (void)y;
         return 1.f/(1.f+expf(-x));
     }
 };
@@ -236,9 +227,8 @@ public:
         return x/(1.f+fabsf(x));
     }
 
-    float derivation(float x,float y) const
+    float derivation(float x) const
     {
-        (void)y;
         return 1.f/((1.f+fabsf(x))*(1.f+fabsf(x))); //todo optimize
     }
 };
@@ -256,10 +246,10 @@ public:
     {
         return 1.f/(1.f+expf(-x));
     }
-    float derivation(float x,float y) const
+    float derivation(float x) const
     {
-        (void)x;
-        return y*(1.f-y); //optimisation of f'(x) using y=f(x) in case of sigmoid
+        float s=1.f/(1.f+expf(-x));
+        return s*(1.f-s); //todo optimise
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -275,10 +265,10 @@ public:
     {
         return tanhf(x);
     }
-    float derivation(float x,float y) const
+    float derivation(float x) const
     {
-        (void)x;
-        return 1.f-y*y; //optimisation of f'(x) using y=f(x) in case of tanh
+        float t=tanhf(x);
+        return 1.f-t*t;
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -295,9 +285,8 @@ public:
     {
         return x/(1.f+expf(-x));
     }
-    float derivation(float x,float y) const
+    float derivation(float x) const
     {
-        (void)y;
 		float s=1.f/(1.f+expf(-x));
 		return s*(x+1-x*s); //todo optimize
     }
@@ -321,9 +310,8 @@ public:
 
         return x*x;
     }
-    float derivation(float x,float y) const
+    float derivation(float x) const
     {
-        (void)y;
         if(x<0.f)
             return 0.f;
 

@@ -74,7 +74,7 @@ MatrixFloat ActivationLayer::get_weight_activation_derivation() const
     MatrixFloat mOut=outWeight;
     for(unsigned int i=0;i<mOut.size();i++)
     {
-        mOut(i)=_pActiv->derivation(outWeight(i),out(i));
+        mOut(i)=_pActiv->derivation(outWeight(i));
     }
 
     return mOut;

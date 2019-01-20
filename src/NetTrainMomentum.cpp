@@ -25,7 +25,6 @@ void NetTrainMomentum::train(Net& net,const MatrixFloat& mSamples,const MatrixFl
     }
 
     //TrainResult tr;
-    int iEpoch;
     unsigned int iBatchSize=topt.batchSize;
     unsigned int iNbSamples=mSamples.rows();
 
@@ -37,7 +36,7 @@ void NetTrainMomentum::train(Net& net,const MatrixFloat& mSamples,const MatrixFl
         sumDEMomentum.push_back(net.layer(i)->dE*0);
     }
 
-    for(iEpoch=0;iEpoch<topt.epochs;iEpoch++)
+    for(int iEpoch=0;iEpoch<topt.epochs;iEpoch++)
     {
         //double dMaxError=0., dMeanError=0.;
 
