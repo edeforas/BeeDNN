@@ -13,7 +13,7 @@ public:
 
 	//todo add void backpropagation();
 	
-    virtual void init_backpropagation() =0; //todo remove
+    virtual void initWeights() =0;
     virtual void forward_save(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) =0;     //todo remove
     virtual MatrixFloat get_weight_activation_derivation() const =0;     //todo  remove
     virtual MatrixFloat& get_weight() =0;     //todo  remove

@@ -20,7 +20,7 @@ ActivationLayer::~ActivationLayer()
     delete _pActiv;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void ActivationLayer::init_backpropagation()
+void ActivationLayer::initWeights()
 {
     float a =sqrtf(6.f/(_iInSize+_iOutSize));
 
@@ -50,8 +50,10 @@ void ActivationLayer::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) co
 }
 ///////////////////////////////////////////////////////////////////////////////
 void ActivationLayer::forward_save(const MatrixFloat& mMatIn,MatrixFloat& mMatOut)
-{ //todo remove this, use forward() instead
+{
+    //todo remove this, use forward() instead
     in=mMatIn;
+
     // compute out=[in 1]*weight; todo use MAC
     mMatOut=mMatIn*_weight.without_last_row();
     mMatOut+=_weight.row(_iInSize);

@@ -19,8 +19,6 @@ public:
     DNNTrainOption()
     {
         epochs=1000;
-        earlyAbortMaxError=0.;
-        earlyAbortMeanError=0.;
         batchSize=32;
         learningRate=0.1f;
         momentum=0.1f;
@@ -68,7 +66,7 @@ public:
     virtual void add_layer_and_activation(int inSize,int outSize, eLayerType layer, string sActivation)=0;
 
     virtual DNNTrainResult train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto);
-    virtual int train_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)=0;
+    virtual void train_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)=0;
 
     virtual void predict(const MatrixFloat& mIn, MatrixFloat& mOut)=0;
 

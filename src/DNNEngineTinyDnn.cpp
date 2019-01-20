@@ -71,7 +71,7 @@ void DNNEngineTinyDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
     mOut.assign(vOut.data(),vOut.data()+vOut.size());
 }
 //////////////////////////////////////////////////////////////////////////////
-int DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
+void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
 {
     assert(mSamples.rows()==mTruth.rows());
 
@@ -92,8 +92,6 @@ int DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloat
     }
 
     _pNet->fit<tiny_dnn::mse>(opt, vSamples, vTruth, dto.batchSize, dto.epochs, []() {},[]() {});//  on_enumerate_epoch);
-
-    return dto.epochs; //no early aborts?
 
 
  /*

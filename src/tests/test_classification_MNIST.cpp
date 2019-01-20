@@ -69,7 +69,6 @@ int main()
 
     TrainOption tOpt;
     tOpt.epochs=1000;
-    tOpt.earlyAbortMaxError=0.05;
     tOpt.learningRate=0.1f;
     tOpt.batchSize=128;
     tOpt.momentum=0.1f;

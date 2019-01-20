@@ -29,15 +29,13 @@ int main()
 
     TrainOption tOpt;
     tOpt.epochs=1000;
-    tOpt.earlyAbortMaxError=0.05;
     tOpt.learningRate=0.1f;
     tOpt.batchSize=1;
     tOpt.momentum=0.05f;
 
     cout << "Learning..." << endl;
     NetTrainMomentum train;
-    int nbEpochs=train.train(net,mSamples,mTruth,tOpt);
-    cout << "nb epochs=" << nbEpochs << endl;
+    train.train(net,mSamples,mTruth,tOpt);
 
     //show results
     MatrixFloat mOnePredict(1), mOneSample(1), mOneTruth(1);

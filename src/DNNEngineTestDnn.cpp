@@ -43,20 +43,16 @@ void DNNEngineTestDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
    _pNet->forward(mIn,mOut);
 }
 //////////////////////////////////////////////////////////////////////////////
-int DNNEngineTestDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
+void DNNEngineTestDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
 {
     TrainOption tOpt;
     tOpt.epochs=dto.epochs;
-    tOpt.earlyAbortMaxError=dto.earlyAbortMaxError;
-    tOpt.earlyAbortMeanError=dto.earlyAbortMeanError;
     tOpt.learningRate=dto.learningRate;
     tOpt.batchSize=dto.batchSize;
     tOpt.momentum=dto.momentum;
     tOpt.observer=0;//dto.observer;
 
     NetTrainMomentum netTrain;
-    int epochs=netTrain.train(*_pNet,mSamples,mTruth,tOpt);
-
-    return epochs;
+    netTrain.train(*_pNet,mSamples,mTruth,tOpt);
 }
 //////////////////////////////////////////////////////////////////////////////

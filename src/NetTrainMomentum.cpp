@@ -14,19 +14,18 @@ NetTrainMomentum::NetTrainMomentum()
 NetTrainMomentum::~NetTrainMomentum()
 { }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-int NetTrainMomentum::train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruth,const TrainOption& topt)
+void NetTrainMomentum::train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruth,const TrainOption& topt)
 {
     size_t nLayers=net.layers().size();
 
     if(topt.initWeight)
     {
         for(unsigned int i=0;i<nLayers;i++)
-            net.layer(i)->init_backpropagation();
+            net.layer(i)->initWeights();
     }
 
     //TrainResult tr;
     int iEpoch;
-
     unsigned int iBatchSize=topt.batchSize;
     unsigned int iNbSamples=mSamples.rows();
 
@@ -40,24 +39,24 @@ int NetTrainMomentum::train(Net& net,const MatrixFloat& mSamples,const MatrixFlo
 
     for(iEpoch=0;iEpoch<topt.epochs;iEpoch++)
     {
-        double dMaxError=0., dMeanError=0.;
+        //double dMaxError=0., dMeanError=0.;
 
         MatrixFloat mShuffle=rand_perm(iNbSamples);
 
         unsigned int iBatchStart=0;
         while(iBatchStart<iBatchSize)
         {
-            // init error accumulation
-            for(unsigned int i=0;i<nLayers;i++)
-                sumDE[i].set_zero();
-
             unsigned int iBatchEnd=iBatchStart+iBatchSize;
             if(iBatchEnd>iBatchSize)
                 iBatchEnd=iBatchSize;
 
+            // init error accumulation
+            for(unsigned int i=0;i<nLayers;i++)
+                sumDE[i].set_zero();
+
             for(unsigned int iSample=iBatchStart;iSample<iBatchEnd;iSample++)
             {
-                //compute one sample error
+                //compute error, sample by sample
 
                 //forward pass with save
                 int iIndexSample=(int)mShuffle(iSample);
@@ -71,15 +70,6 @@ int NetTrainMomentum::train(Net& net,const MatrixFloat& mSamples,const MatrixFlo
 
                 //compute and backpropagate error, sum dE
                 MatrixFloat mError=mOut-mTruth.row(iIndexSample);
-
-                // check early abort max error
-                for(unsigned int i=0;i<mError.size();i++)
-                {
-                    if(fabs(mError(i))>dMaxError)
-                        dMaxError=fabs(mError(i));
-
-                    dMeanError+=fabs(mError(i));
-                }
 
                 backpropagation(net,mError);
 
@@ -101,29 +91,18 @@ int NetTrainMomentum::train(Net& net,const MatrixFloat& mSamples,const MatrixFlo
                 // update momentum
                 sumDEMomentum[i]=sumDE[i];
             }
-
             iBatchStart=iBatchEnd;
         }
 
-        //early abort test on error
-        //     tr.maxError=dMaxError;
-        double dLoss=dMeanError/(iBatchSize*mTruth.size()); //same as mean error?
-
         if(topt.observer)
             topt.observer->stepEpoch(/*tr*/);
-
-        if( dMaxError<topt.earlyAbortMaxError)
-            break;
-
-        if (dLoss<topt.earlyAbortMeanError)
-            break;
     }
-
-    return iEpoch;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrainMomentum::backpropagation(Net& net,const MatrixFloat &mError)
 {
+    MatrixFloat mOne(1,1); mOne.set_constant(1.);
+
     size_t nLayers=net.layers().size();
 
     MatrixFloat mDelta;
@@ -150,7 +129,6 @@ void NetTrainMomentum::backpropagation(Net& net,const MatrixFloat &mError)
         }
 
         //dE=(layer.in')*delta;
-        MatrixFloat mOne(1,1); mOne.set_constant(1.);
         l.dE=(l.in.concat(mOne).transpose())*mDelta;
     }
 }

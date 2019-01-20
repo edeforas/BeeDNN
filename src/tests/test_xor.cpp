@@ -2,10 +2,8 @@
 using namespace std;
 
 #include "Net.h"
-#include "NetTrainMomentum.h"
-
-#include "Activation.h"
 #include "ActivationLayer.h"
+#include "NetTrainMomentum.h"
 
 int main()
 {
@@ -15,7 +13,7 @@ int main()
     net.add(new ActivationLayer(3,1,"Sigmoid"));
 
     //train data
-    float dSamples[]={ 0 , 0 , 0 , 1 , 1 , 0 , 1 , 1};
+    float dSamples[]={ 0,0 , 0,1 , 1,0 , 1,1 };
     float dTruths[]={ 0 , 1 , 1, 0 };
     const MatrixFloat mSamples(dSamples,4,2);
     const MatrixFloat mTruth(dTruths,4,1);
@@ -25,10 +23,10 @@ int main()
     tOpt.learningRate=1.f;
     tOpt.batchSize=1;
     tOpt.momentum=0.9f;
+ //   tOpt.epochs=1000;
 
     //  TrainResult tr=
     NetTrainMomentum netTrain;
-
     netTrain.train(net,mSamples,mTruth,tOpt);
     //cout << "Loss=" << tr.loss << " MaxError=" << tr.maxError << " ComputedEpochs=" << tr.computedEpochs << endl;
 

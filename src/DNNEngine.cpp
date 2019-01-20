@@ -21,11 +21,11 @@ DNNTrainResult DNNEngine::train(const MatrixFloat& mSamples,const MatrixFloat& m
     DNNTrainResult r;
 
     auto beginDuration = std::chrono::steady_clock::now();
-    int iEpochs=train_epochs(mSamples,mTruth,dto);
+    train_epochs(mSamples,mTruth,dto);
     auto endDuration = std::chrono::steady_clock::now();
 
-    _iComputedEpochs+= iEpochs;
-    r.epochDuration=chrono::duration_cast<chrono::microseconds> (endDuration-beginDuration).count()/1.e6/iEpochs;
+    _iComputedEpochs+= dto.epochs;
+    r.epochDuration=chrono::duration_cast<chrono::microseconds> (endDuration-beginDuration).count()/1.e6/dto.epochs;
     r.computedEpochs=_iComputedEpochs;
     return r;
 }

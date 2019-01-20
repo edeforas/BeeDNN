@@ -16,8 +16,6 @@ public:
     TrainOption()
     {
         epochs=1000;
-        earlyAbortMaxError=0.;
-        earlyAbortMeanError=0.;
         batchSize=32;
         learningRate=0.1f;
         momentum=0.1f;
@@ -47,8 +45,7 @@ public:
     NetTrainMomentum();
     virtual ~NetTrainMomentum();
 
-    // return the number of epochs,
-    int train(Net& net, const MatrixFloat& mSamples, const MatrixFloat& mTruth, const TrainOption& topt);
+    void train(Net& net, const MatrixFloat& mSamples, const MatrixFloat& mTruth, const TrainOption& topt);
 
 private:
     void backpropagation(Net& net,const MatrixFloat& mError);
