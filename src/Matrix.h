@@ -4,6 +4,8 @@
 #include <cassert>
 
 //todo add more tests and optimize
+// todo add optional typedef to eigen and update API
+
 
 template <class T>
 class Matrix

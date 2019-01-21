@@ -38,7 +38,7 @@ void NetTrainMomentum::train(Net& net,const MatrixFloat& mSamples,const MatrixFl
 
     for(int iEpoch=0;iEpoch<topt.epochs;iEpoch++)
     {
-        //double dMaxError=0., dMeanError=0.;
+        //double dMaxError=0., dMeanError=0.; // todo read early abort strategy
 
         MatrixFloat mShuffle=rand_perm(iNbSamples);
 
@@ -70,7 +70,7 @@ void NetTrainMomentum::train(Net& net,const MatrixFloat& mSamples,const MatrixFl
                 //compute and backpropagate error, sum dE
                 MatrixFloat mError=mOut-mTruth.row(iIndexSample);
 
-                backpropagation(net,mError);
+                backpropagation(net,mError); //todo move forward?
 
                 //sum error
                 for(unsigned int i=0;i<nLayers;i++)
@@ -98,7 +98,7 @@ void NetTrainMomentum::train(Net& net,const MatrixFloat& mSamples,const MatrixFl
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrainMomentum::backpropagation(Net& net,const MatrixFloat &mError)
+void NetTrainMomentum::backpropagation(Net& net,const MatrixFloat &mError) //todo add input mean for each layer?
 {
     MatrixFloat mOne(1,1); mOne.set_constant(1.);
 

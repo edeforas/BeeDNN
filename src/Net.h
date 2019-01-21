@@ -14,7 +14,7 @@ public:
     virtual ~Net();
 
 	void clear();
-    void add(Layer *l); //take ownership of layer
+    void add(Layer *l); //take ownership of layer todo
     const vector<Layer*> layers() const;
     Layer* layer(size_t iLayer);
 
