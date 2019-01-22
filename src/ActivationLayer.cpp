@@ -33,7 +33,7 @@ void ActivationLayer::initWeights()
     }
 
     dE.resize(_iInSize+1,_iOutSize);
-    dE.set_zero();
+    dE.setZero();
 }
 ///////////////////////////////////////////////////////////////////////////////
 void ActivationLayer::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const

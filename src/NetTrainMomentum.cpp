@@ -51,7 +51,7 @@ void NetTrainMomentum::train(Net& net,const MatrixFloat& mSamples,const MatrixFl
 
             // init error accumulation
             for(unsigned int i=0;i<nLayers;i++)
-                sumDE[i].set_zero();
+                sumDE[i].setZero();
 
             for(unsigned int iSample=iBatchStart;iSample<iBatchEnd;iSample++)
             {
@@ -100,7 +100,7 @@ void NetTrainMomentum::train(Net& net,const MatrixFloat& mSamples,const MatrixFl
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrainMomentum::backpropagation(Net& net,const MatrixFloat &mError) //todo add input mean for each layer?
 {
-    MatrixFloat mOne(1,1); mOne.set_constant(1.);
+    MatrixFloat mOne(1,1); mOne.setConstant(1.);
 
     size_t nLayers=net.layers().size();
 

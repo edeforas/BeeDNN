@@ -25,7 +25,7 @@ string to_string(const Net* pNet)
         auto layer=layers[i];
         ss << "----------------------------------------------" << endl;
         ss << "Layer " << i+1 <<":" << endl;
-        ss << "type: " << "dense with bias and activation inSize= " << layer->get_weight().rows()-1 << "  outSize= " << layer->get_weight().columns() << endl;
+        ss << "type: " << "dense with bias and activation inSize= " << layer->get_weight().rows()-1 << "  outSize= " << layer->get_weight().cols() << endl;
         ss << "weight:" << endl;
         ss << to_string(layer->get_weight()) << endl;
     }

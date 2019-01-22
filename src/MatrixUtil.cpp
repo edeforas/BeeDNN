@@ -29,7 +29,7 @@ MatrixFloat index_to_position(const MatrixFloat& mIndex, unsigned int uiMaxPosit
 {
     unsigned int uiNbRows=mIndex.rows();
     MatrixFloat mPos(uiNbRows,uiMaxPosition);
-    mPos.set_zero();
+    mPos.setZero();
 
     for(unsigned int i=0;i<uiNbRows;i++)
     {
@@ -41,7 +41,7 @@ MatrixFloat index_to_position(const MatrixFloat& mIndex, unsigned int uiMaxPosit
 ///////////////////////////////////////////////////////////////////////////
 MatrixFloat argmax(const MatrixFloat& m)
 {
-    if(m.columns()==0)
+    if(m.cols()==0)
         return m;
 
     MatrixFloat mResult(m.rows(),1);
@@ -51,7 +51,7 @@ MatrixFloat argmax(const MatrixFloat& m)
         double d=m(iR,0);
         unsigned int iIndex=0;
 
-        for(unsigned int iC=1;iC<m.columns();iC++)
+        for(unsigned int iC=1;iC<m.cols();iC++)
         {
             if(m(iR,iC)>d)
             {
@@ -69,7 +69,7 @@ MatrixFloat decimate(const MatrixFloat& m, unsigned int iRatio)
 {
 	unsigned int iNewSize=m.rows()/iRatio;
 	
-    MatrixFloat mDecimated(iNewSize,m.columns());
+    MatrixFloat mDecimated(iNewSize,m.cols());
 
     for(unsigned int i=0;i<iNewSize;i++)
 		mDecimated.row(i)=m.row(i*iRatio);
@@ -82,7 +82,7 @@ string to_string(const MatrixFloat& m)
     stringstream ss; ss << setprecision(4);
     for(unsigned int iL=0;iL<m.rows();iL++)
     {
-        for(unsigned int iR=0;iR<m.columns();iR++)
+        for(unsigned int iR=0;iR<m.cols();iR++)
             ss << setw(10) << m(iL,iR);
         ss << endl;
     }

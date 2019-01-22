@@ -68,7 +68,7 @@ public:
     
     Matrix<T>& operator=( const Matrix<T>& b)
     {
-        resize(b.rows(),b.columns());
+        resize(b.rows(),b.cols());
         
         for(unsigned int i=0;i<size();i++)
             operator()(i)=b(i);
@@ -81,7 +81,7 @@ public:
         return _iRows;
     }
 
-    unsigned int columns() const
+    unsigned int cols() const
     {
         return _iColumns;
     }
@@ -120,15 +120,15 @@ public:
         return _data;
     }
 
-    void set_constant(T b)
+    void setConstant(T b)
     {
         for(unsigned int i=0;i<_iSize;i++)
             _data[i]=b;
     }
 
-    void set_zero()
+    void setZero()
     {
-        set_constant(0.);
+        setConstant(0.);
     }
 
     T& operator()(unsigned int iR,unsigned int iC)
@@ -160,7 +160,7 @@ public:
     Matrix<T>& operator+=(const Matrix<T>& a)
     {
         assert(_iRows==a.rows());
-        assert(_iColumns==a.columns());
+        assert(_iColumns==a.cols());
 
         for(unsigned int i=0;i<_iSize;i++)
             _data[i]+=a(i);
@@ -170,7 +170,7 @@ public:
     Matrix<T> operator+( const Matrix<T>& a ) const
     {
         assert(_iRows==a.rows());
-        assert(_iColumns==a.columns());
+        assert(_iColumns==a.cols());
 
         return Matrix<T>(*this).operator+=(a);
     }
@@ -189,7 +189,7 @@ public:
     Matrix<T>& operator-=(const Matrix<T>& a)
     {
         assert(_iRows==a.rows());
-        assert(_iColumns==a.columns());
+        assert(_iColumns==a.cols());
 
         for(unsigned int i=0;i<_iSize;i++)
             _data[i]-=a(i);
@@ -198,7 +198,7 @@ public:
     Matrix<T> operator-( const Matrix<T>& a ) const
     {
         assert(_iRows==a.rows());
-        assert(_iColumns==a.columns());
+        assert(_iColumns==a.cols());
 
         return Matrix<T>(*this).operator-=(a);
     }
@@ -242,7 +242,7 @@ public:
 
     Matrix<T>& operator*=(const Matrix<T>& b) // slow function!
     {
-        assert(columns()==b.rows());
+        assert(cols()==b.rows());
 
         Matrix<T> a(*this);
         resize(a._iRows,b._iColumns);
@@ -265,7 +265,7 @@ public:
 
     Matrix<T> element_product(const Matrix<T>& m) const
     {
-        assert(columns()==m.columns());
+        assert(cols()==m.cols());
         assert(rows()==m.rows());
 
         Matrix<T> out(*this);
@@ -278,7 +278,7 @@ public:
 
     Matrix<T> element_divide(const Matrix<T>& m) const
     {
-        assert(columns()==m.columns());
+        assert(cols()==m.cols());
         assert(rows()==m.rows());
 
         Matrix<T> out(*this);
@@ -344,7 +344,7 @@ public:
                 mT(r,c)=operator()(r,c);
 
         for(unsigned int r=0;r<b.rows();r++)
-            for(unsigned int c=0;c<b.columns();c++)
+            for(unsigned int c=0;c<b.cols();c++)
                 mT(r,c+_iColumns)=b(r,c);
 
         return mT;

@@ -83,11 +83,11 @@ void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
     for(unsigned int i=0;i<mSamples.rows();i++)
     {
         tiny_dnn::vec_t tS;
-        tS.assign(mSamples.row(i).data(),mSamples.row(i).data()+mSamples.columns());
+        tS.assign(mSamples.row(i).data(),mSamples.row(i).data()+mSamples.cols());
         vSamples.push_back(tS);
 
         tiny_dnn::vec_t tT;
-        tT.assign(mTruth.row(i).data(),mTruth.row(i).data()+mTruth.columns());
+        tT.assign(mTruth.row(i).data(),mTruth.row(i).data()+mTruth.cols());
         vTruth.push_back(tT);
     }
 

@@ -5,10 +5,10 @@ using namespace std;
 
 void disp(const MatrixFloat& m)
 {
-    cout << "rows=" << m.rows() << " columns=" << m.columns() << endl;
+    cout << "rows=" << m.rows() << " columns=" << m.cols() << endl;
     for(unsigned int r=0;r<m.rows();r++)
     {
-        for(unsigned int c=0;c<m.columns();c++)
+        for(unsigned int c=0;c<m.cols();c++)
             cout << m(r,c) << " ";
         cout << endl;
     }
