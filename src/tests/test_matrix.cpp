@@ -20,8 +20,8 @@ int main()
     float a[]={ 4 , 5 , 6, 7 };
     float b[]={ 2, 3};
 
-    const MatrixFloat mA(a,2,2);
-    const MatrixFloat mB(b,2,1);
+    const MatrixFloat mA=from_raw_buffer(a,2,2);
+    const MatrixFloat mB=from_raw_buffer(b,2,1);
 
     const MatrixFloat mAT=mA.transpose();
     disp(mAT);

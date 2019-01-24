@@ -19,7 +19,7 @@ public:
         batchSize=32;
         learningRate=0.1f;
         momentum=0.1f;
-        observer=0;
+        observer=nullptr;
         initWeight=true;
     }
 

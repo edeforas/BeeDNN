@@ -15,17 +15,15 @@ int main()
     //train data
     float dSamples[]={ 0,0 , 0,1 , 1,0 , 1,1 };
     float dTruths[]={ 0 , 1 , 1, 0 };
-    const MatrixFloat mSamples(dSamples,4,2);
-    const MatrixFloat mTruth(dTruths,4,1);
+    const MatrixFloat mSamples=from_raw_buffer(dSamples,4,2);
+    const MatrixFloat mTruth=from_raw_buffer(dTruths,4,1);
 
     TrainOption tOpt;
     tOpt.earlyAbortMaxError=0.05;
     tOpt.learningRate=1.f;
     tOpt.batchSize=1;
     tOpt.momentum=0.9f;
- //   tOpt.epochs=1000;
 
-    //  TrainResult tr=
     NetTrainMomentum netTrain;
     netTrain.train(net,mSamples,mTruth,tOpt);
     //cout << "Loss=" << tr.loss << " MaxError=" << tr.maxError << " ComputedEpochs=" << tr.computedEpochs << endl;

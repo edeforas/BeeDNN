@@ -39,7 +39,7 @@ void ActivationLayer::initWeights()
 void ActivationLayer::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
 {
     // compute out=[in 1]*weight; todo use MAC
-    mMatOut=mMatIn*(_weight.without_last_row());
+    mMatOut=mMatIn*(without_last_row(_weight));
     mMatOut+=_weight.row(_iInSize);
 
     // apply activation
@@ -55,7 +55,7 @@ void ActivationLayer::forward_save(const MatrixFloat& mMatIn,MatrixFloat& mMatOu
     in=mMatIn;
 
     // compute out=[in 1]*weight; todo use MAC
-    mMatOut=mMatIn*_weight.without_last_row();
+    mMatOut=mMatIn*without_last_row(_weight);
     mMatOut+=_weight.row(_iInSize);
 
     outWeight=mMatOut;

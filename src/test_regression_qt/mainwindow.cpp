@@ -36,7 +36,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     list_activations_available( vsActivations);
 
-
     for(unsigned int i=0;i<vsActivations.size();i++)
     {
         ui->cbActivationLayer1->addItem(vsActivations[i].c_str());
@@ -97,19 +96,19 @@ void MainWindow::train_and_test(bool bReset)
     }
 
     int iNbPoint=ui->leNbPointsLearn->text().toInt();
-    double dInputMin=ui->leInputMin->text().toDouble();
-    double dInputMax=ui->leInputMax->text().toDouble();
-    double dStep=(dInputMax-dInputMin)/(double)(iNbPoint-1);
+    float dInputMin=ui->leInputMin->text().toFloat();
+    float dInputMax=ui->leInputMax->text().toFloat();
+    float dStep=(dInputMax-dInputMin)/(iNbPoint-1.f);
 
     //create ref sample
-    MatrixFloat mTruth(iNbPoint);
-    MatrixFloat mSamples(iNbPoint);
-    double dVal=dInputMin;
+    MatrixFloat mTruth(iNbPoint,1);
+    MatrixFloat mSamples(iNbPoint,1);
+    float dVal=dInputMin;
 
     for( int i=0;i<iNbPoint;i++)
     {
-        mTruth(i)=compute_truth(dVal);
-        mSamples(i)=dVal;
+        mTruth(i,0)=compute_truth(dVal);
+        mSamples(i,0)=dVal;
         dVal+=dStep;
     }
 
@@ -117,9 +116,9 @@ void MainWindow::train_and_test(bool bReset)
     dto.epochs=ui->leEpochs->text().toInt();
     dto.earlyAbortMaxError=ui->leEarlyAbortMaxError->text().toDouble();
     dto.earlyAbortMeanError=ui->leEarlyAbortMeanError->text().toDouble(); //same as loss?
-    dto.learningRate=ui->leLearningRate->text().toDouble();
+    dto.learningRate=ui->leLearningRate->text().toFloat();
     dto.batchSize=ui->leBatchSize->text().toInt();
-    dto.momentum=ui->leMomentum->text().toDouble();
+    dto.momentum=ui->leMomentum->text().toFloat();
     dto.observer=0;//&lossCB;
     dto.initWeight=bReset;
 
@@ -163,28 +162,28 @@ void MainWindow::drawRegression()
 
     //create ref sample hi-res and net output
     unsigned int iNbPoint=(unsigned int)(ui->leNbPointsTest->text().toInt());
-    float fInputMin=ui->leInputMin->text().toDouble();
-    float fInputMax=ui->leInputMax->text().toDouble();
+    float fInputMin=ui->leInputMin->text().toFloat();
+    float fInputMax=ui->leInputMax->text().toFloat();
     bool bExtrapole=ui->cbExtrapole->isChecked();
     vector<double> vTruth;
     vector<double> vSamples;
     vector<double> vRegression;
-    MatrixFloat mIn(1),mOut;
+    MatrixFloat mIn(1,1),mOut;
 
     if(bExtrapole)
     {
-        float fBorder=(fInputMax-fInputMin)/2.;
+        float fBorder=(fInputMax-fInputMin)/2.f;
         fInputMin-=fBorder;
         fInputMax+=fBorder;
         iNbPoint*=2;
     }
 
     float fVal=fInputMin;
-    float fStep=(fInputMax-fInputMin)/(double)(iNbPoint-1);
+    float fStep=(fInputMax-fInputMin)/(iNbPoint-1.f);
 
     for(unsigned int i=0;i<iNbPoint;i++)
     {
-        mIn(0)=fVal;
+        mIn(0,0)=fVal;
         vTruth.push_back(-compute_truth(fVal));
         vSamples.push_back(fVal);
         _pEngine->predict(mIn,mOut);
@@ -221,14 +220,14 @@ void MainWindow::on_actionAbout_triggered()
     mb.exec();
 }
 //////////////////////////////////////////////////////////////////////////
-double MainWindow::compute_truth(double x)
+float MainWindow::compute_truth(float x)
 {
     //function not optimized but not mandatory
 
     string sFunction=ui->cbFunction->currentText().toStdString();
 
     if(sFunction=="Sin")
-        return sin(x);
+        return sinf(x);
 
     if(sFunction=="Abs")
         return fabs(x);
@@ -237,27 +236,27 @@ double MainWindow::compute_truth(double x)
         return x*x;
 
     if(sFunction=="Gamma")
-        return tgamma(x);
+        return tgammaf(x);
 
     if(sFunction=="Exp")
-        return exp(x);
+        return expf(x);
 
     if(sFunction=="Sqrt")
-        return sqrt(x);
+        return sqrtf(x);
 
     if(sFunction=="Ln")
-        return log(x);
+        return logf(x);
 
     if(sFunction=="Gauss")
-        return exp(-x*x);
+        return expf(-x*x);
 
     if(sFunction=="Inverse")
-        return 1./x;
+        return 1.f/x;
 
     if(sFunction=="Rectangular")
         return ((((int)x)+(x<0.))+1) & 1 ;
 
-    return 0.;
+    return 0.f;
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::resizeEvent( QResizeEvent *e )

@@ -68,7 +68,11 @@ void DNNEngineTinyDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
     vIn.assign(mIn.data(),mIn.data()+mIn.size());
 
     tiny_dnn::vec_t vOut=_pNet->predict(vIn);
-    mOut.assign(vOut.data(),vOut.data()+vOut.size());
+
+    mOut.resize(vOut.size(),1);
+    std::copy(vOut.data(),vOut.data()+vOut.size(),mOut.data());
+
+    // was mOut.assign(vOut.data(),vOut.data()+vOut.size());
 }
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)

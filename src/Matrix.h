@@ -1,11 +1,49 @@
-#ifndef _Matrix_
-#define _Matrix_
+#ifndef Matrix_
+#define Matrix_
 
 #include <cassert>
 
 //todo add more tests and optimize
 // todo add optional typedef to eigen and update API
 
+#ifdef USE_EIGEN
+
+#include "Eigen/Core"
+using namespace Eigen;
+typedef Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> MatrixFloat;
+
+const MatrixFloat from_raw_buffer(float *pBuffer,size_t iRows,size_t iCols)
+{
+    /*
+    MatrixFloat m(iRows,iCols);
+    for(int i=0;i<m.size();i++)
+        m.data()[i]=pBuffer[i];
+
+    return m;
+*/
+    //todo use
+    return Eigen::Map<MatrixFloat>((float*)pBuffer,static_cast<Eigen::Index>(iRows),static_cast<Eigen::Index>(iCols));
+}
+
+const MatrixFloat without_last_row(MatrixFloat m)
+{
+    return m.block(0,0,m.rows()-1,m.cols()); //todo when rows==0
+}
+
+//template <class T>
+const MatrixFloat without_last_column(MatrixFloat m)
+{
+    return m.block(0,0,m.rows(),m.cols()-1); //todo when rows==0
+}
+
+MatrixFloat concatHorizontally(const MatrixFloat& a, const MatrixFloat& b)
+{
+    MatrixFloat c(a.rows(), a.cols()+b.cols());
+    c << a, b;
+    return c;
+}
+
+#else
 
 template <class T>
 class Matrix
@@ -20,7 +58,7 @@ public:
         _bDelete=false;
     }
 
-    Matrix<T>(unsigned int iRows,unsigned int iColumns=1)
+    Matrix<T>(size_t iRows,size_t iColumns)
     {
         _iRows=iRows;
         _iColumns=iColumns;
@@ -29,7 +67,7 @@ public:
         _bDelete=true;
     }
     
-    Matrix<T>(T* pData,unsigned int iRows,unsigned int iColumns)
+    Matrix<T>(T* pData,size_t iRows,size_t iColumns)
     {
         _iRows=iRows;
         _iColumns=iColumns;
@@ -76,22 +114,22 @@ public:
         return *this;
     }
     
-    unsigned int rows() const
+    size_t rows() const
     {
         return _iRows;
     }
 
-    unsigned int cols() const
+    size_t cols() const
     {
         return _iColumns;
     }
     
-    unsigned int size() const
+    size_t size() const
     {
         return _iSize;
     }
 
-    void resize(unsigned int iRows,unsigned int iColumns) // slow function!
+    void resize(size_t iRows,size_t iColumns) // slow function!
     {
         if((iColumns==_iColumns) && ( iRows==_iRows))
             return;
@@ -131,27 +169,27 @@ public:
         setConstant(0.);
     }
 
-    T& operator()(unsigned int iR,unsigned int iC)
+    T& operator()(size_t iR,size_t iC)
     {
         assert(iR<_iRows);
         assert(iC<_iColumns);
         return *(_data+iR*_iColumns+iC);
     }
     
-    const T& operator()(unsigned int iR,unsigned int iC) const
+    const T& operator()(size_t iR,size_t iC) const
     {
         assert(iR<_iRows);
         assert(iC<_iColumns);
         return *(_data+iR*_iColumns+iC);
     }
     
-    T& operator()(unsigned int iX)
+    T& operator()(size_t iX)
     {
         assert(iX<_iSize);
         return *(_data+iX);
     }
     
-    const T& operator()(unsigned int iX) const
+    const T& operator()(size_t iX) const
     {
         assert(iX<_iSize);
         return *(_data+iX);
@@ -162,7 +200,7 @@ public:
         assert(_iRows==a.rows());
         assert(_iColumns==a.cols());
 
-        for(unsigned int i=0;i<_iSize;i++)
+        for(size_t i=0;i<_iSize;i++)
             _data[i]+=a(i);
         return *this;
     }
@@ -177,7 +215,7 @@ public:
 
     Matrix<T>& operator+=(T d)
     {
-        for(unsigned int i=0;i<_iSize;i++)
+        for(size_t i=0;i<_iSize;i++)
             _data[i]+=d;
         return *this;
     }
@@ -263,7 +301,7 @@ public:
         return *this;
     }
 
-    Matrix<T> element_product(const Matrix<T>& m) const
+    Matrix<T> cwiseProduct(const Matrix<T>& m) const
     {
         assert(cols()==m.cols());
         assert(rows()==m.rows());
@@ -276,7 +314,7 @@ public:
         return out;
     }
 
-    Matrix<T> element_divide(const Matrix<T>& m) const
+    Matrix<T> cwiseDivide(const Matrix<T>& m) const
     {
         assert(cols()==m.cols());
         assert(rows()==m.rows());
@@ -333,30 +371,13 @@ public:
         return out;
     }
 
-    Matrix<T> concat(const Matrix<T> & b) // slow function!
-    {
-        assert(b.rows()==rows());
-
-        Matrix<T> mT(_iRows,_iColumns+b._iColumns);
-
-        for(unsigned int r=0;r<_iRows;r++)
-            for(unsigned int c=0;c<_iColumns;c++)
-                mT(r,c)=operator()(r,c);
-
-        for(unsigned int r=0;r<b.rows();r++)
-            for(unsigned int c=0;c<b.cols();c++)
-                mT(r,c+_iColumns)=b(r,c);
-
-        return mT;
-    }
-
     Matrix<T> operator*(const Matrix<T>& a) const  // slow function!
     {
         return Matrix<T>(*this).operator*=(a);
     }
 
 
-    Matrix<T> row(unsigned int iRow)
+    Matrix<T> row(size_t iRow)
     {
         assert(iRow<_iRows);
 
@@ -364,7 +385,7 @@ public:
     }
 
     
-    const Matrix<T> row(unsigned int iRow) const
+    const Matrix<T> row(size_t iRow) const
     {
         assert(iRow<_iRows);
 
@@ -391,39 +412,68 @@ public:
 
         return r;
     }
-
-    const Matrix<T> without_last_row() const
-    {
-        assert(_iRows>0);
-        return Matrix<T>(_data,_iRows-1,_iColumns);
-    }
-    
-    const Matrix<T> without_last_column() const // slow function!
-    {
-        assert(_iColumns>0);
-
-        Matrix<T> m(_iRows,_iColumns-1);
-
-        for(unsigned int r=0;r<_iRows;r++)
-            for(unsigned int c=0;c<_iColumns-1;c++)
-                m(r,c)=operator()(r,c);
-
-        return m;
-    }
-
     bool is_vector() const
     {
         return (_iRows==1) || (_iColumns==1);
     }
     
 private:
-    unsigned int _iRows,_iColumns,_iSize;
+    size_t _iRows,_iColumns,_iSize;
     T* _data;
     bool _bDelete;
 };
 
-
-typedef Matrix<double> MatrixDouble;
 typedef Matrix<float> MatrixFloat;
+
+template <class T>
+const Matrix<T> from_raw_buffer(T *pBuffer,size_t iRows,size_t iCols)
+{
+    return Matrix<T>(pBuffer,iRows,iCols);
+}
+
+template <class T>
+const Matrix<T> without_last_row(const Matrix<T>& m)
+{
+    return from_raw_buffer((T*)m.data(),m.rows()-1,m.cols());
+}
+
+
+template <class T>
+const Matrix<T> without_last_column(const Matrix<T>& a) // slow function!
+{
+    assert(a.cols()>0);
+
+    Matrix<T> m(a.rows(), a.cols()-1);
+
+    for(unsigned int r=0;r<a.rows();r++)
+        for(unsigned int c=0;c<a.cols()-1;c++)
+            m(r,c)=a(r,c);
+
+    return m;
+}
+
+template <class T>
+Matrix<T> concatHorizontally(const Matrix<T> & a, const Matrix<T> & b) // slow function!
+{
+    //concat horizontally
+    size_t r=a.rows();
+    size_t c=a.cols();
+
+    assert(r==b.rows());
+
+    Matrix<T> out(r,c+b.cols());
+
+    for(unsigned int j=0;j<r;j++)
+        for(unsigned int i=0;i<c;i++)
+            out(j,i)=a(j,i);
+
+    for(unsigned int j=0;j<r;j++)
+        for(unsigned int i=0;i<b.cols();i++)
+            out(j,i+c)=b(j,i);
+
+    return out;
+}
+
+#endif
 
 #endif

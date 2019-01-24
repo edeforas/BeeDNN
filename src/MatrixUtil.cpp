@@ -5,33 +5,33 @@
 
 #include "MatrixUtil.h"
 ///////////////////////////////////////////////////////////////////////////
-MatrixFloat rand_perm(unsigned int iSize) //create a vector of index shuffled
+MatrixFloat rand_perm(size_t iSize) //create a vector of index shuffled
 {
-    MatrixFloat m(iSize);
+    MatrixFloat m(iSize,1);
 
     //create ordered vector
-    for(unsigned int i=0;i<iSize;i++)
-        m(i)=(float)i;
+    for(size_t i=0;i<iSize;i++)
+        m(i,0)=(float)i;
 
     //now bubble shuffle
-    for(unsigned int i=0;i<iSize;i++)
+    for(size_t i=0;i<iSize;i++)
     {
-        unsigned int iNewPos=rand()%iSize;
-        double dVal=m(iNewPos);
-        m(iNewPos)=m(i);
-        m(i)=(float)dVal;
+        unsigned int iNewPos=(size_t)(rand()%iSize);
+        float dVal=m(iNewPos,0); //todo, templatize
+        m(iNewPos,0)=m(i,0);
+        m(i,0)=(float)dVal;
     }
 
     return m;
 }
 ///////////////////////////////////////////////////////////////////////////
-MatrixFloat index_to_position(const MatrixFloat& mIndex, unsigned int uiMaxPosition)
+MatrixFloat index_to_position(const MatrixFloat& mIndex, size_t uiMaxPosition)
 {
-    unsigned int uiNbRows=mIndex.rows();
-    MatrixFloat mPos(uiNbRows,uiMaxPosition);
+    size_t iNbRows=mIndex.rows();
+    MatrixFloat mPos(iNbRows,uiMaxPosition);
     mPos.setZero();
 
-    for(unsigned int i=0;i<uiNbRows;i++)
+    for(size_t i=0;i<iNbRows;i++)
     {
         mPos(i,(unsigned int)mIndex(i))=1;
     }
@@ -48,7 +48,7 @@ MatrixFloat argmax(const MatrixFloat& m)
 
     for(unsigned int iR=0;iR<m.rows();iR++)
     {
-        double d=m(iR,0);
+        float d=m(iR,0);
         unsigned int iIndex=0;
 
         for(unsigned int iC=1;iC<m.cols();iC++)
@@ -59,24 +59,27 @@ MatrixFloat argmax(const MatrixFloat& m)
                 iIndex=iC;
             }
         }
-        mResult(iR)=(float)iIndex;
+        mResult(iR,0)=(float)iIndex;
     }
 
     return mResult;
 }
 ///////////////////////////////////////////////////////////////////////////
-MatrixFloat decimate(const MatrixFloat& m, unsigned int iRatio)
+MatrixFloat decimate(const MatrixFloat& m, size_t iRatio)
 {
-	unsigned int iNewSize=m.rows()/iRatio;
+    size_t iNewSize=m.rows()/iRatio;
 	
     MatrixFloat mDecimated(iNewSize,m.cols());
 
-    for(unsigned int i=0;i<iNewSize;i++)
-		mDecimated.row(i)=m.row(i*iRatio);
+    for(size_t i=0;i<iNewSize;i++)
+        mDecimated.row(i)=m.row(i*iRatio);
 	
 	return mDecimated;
 }
 ///////////////////////////////////////////////////////////////////////////
+namespace MatrixUtil
+{
+
 string to_string(const MatrixFloat& m)
 {
     stringstream ss; ss << setprecision(4);
@@ -89,4 +92,6 @@ string to_string(const MatrixFloat& m)
 
     return ss.str();
 }
+}
+
 ///////////////////////////////////////////////////////////////////////////

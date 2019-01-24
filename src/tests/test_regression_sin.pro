@@ -3,7 +3,10 @@ CONFIG += console c++14
 CONFIG -= app_bundle
 CONFIG -= qt
 
+DEFINES+= "USE_EIGEN_NO"
+
 INCLUDEPATH+=..
+INCLUDEPATH+=$$(EIGEN_PATH)
 
 SOURCES += \
     ../Net.cpp \

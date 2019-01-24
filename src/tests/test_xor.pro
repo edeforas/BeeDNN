@@ -3,6 +3,8 @@ CONFIG += console c++14
 CONFIG -= app_bundle
 CONFIG -= qt
 
+DEFINES+= "USE_EIGEN_NO"
+
 SOURCES += test_xor.cpp \
     ../Net.cpp \
     ../NetTrainMomentum.cpp \
@@ -12,6 +14,7 @@ SOURCES += test_xor.cpp \
     ../ActivationLayer.cpp
 
 INCLUDEPATH+=..
+INCLUDEPATH+=$$(EIGEN_PATH)
 
 HEADERS += \
     ../Activation.h \

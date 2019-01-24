@@ -18,13 +18,13 @@ int main()
     net.add(new ActivationLayer(20,1,"Tanh"));
 
     //train data
-    MatrixFloat mTruth(64);
-    MatrixFloat mSamples(64);
+    MatrixFloat mTruth(64,1);
+    MatrixFloat mSamples(64,1);
     for( int i=0;i<64;i++)
     {
         float x=i/10.f;
-        mTruth(i)=sin(x);
-        mSamples(i)=x;
+        mTruth(i,0)=sin(x);
+        mSamples(i,0)=x;
     }
 
     TrainOption tOpt;
@@ -38,13 +38,13 @@ int main()
     train.train(net,mSamples,mTruth,tOpt);
 
     //show results
-    MatrixFloat mOnePredict(1), mOneSample(1), mOneTruth(1);
+    MatrixFloat mOnePredict(1,1), mOneSample(1,1), mOneTruth(1,1);
     for(unsigned int i=0;i<mSamples.size();i+=4) //show 16 samples
     {
-        mOneSample(0)=mSamples(i);
-        mOneTruth(0)=mTruth(i);
+        mOneSample(0,0)=mSamples(i,0);
+        mOneTruth(0,0)=mTruth(i,0);
         net.forward(mOneSample,mOnePredict);
-        cout << std::setprecision(4) << "x=" << mOneSample(0) << "\ttruth=" <<mOneTruth(0) << "\tpredict=" << mOnePredict(0) <<endl;
+        cout << std::setprecision(4) << "x=" << mOneSample(0,0) << "\ttruth=" << mOneTruth(0,0) << "\tpredict=" << mOnePredict(0,0) <<endl;
     }
     return 0;
 }

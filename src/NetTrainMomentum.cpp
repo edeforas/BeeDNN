@@ -25,8 +25,8 @@ void NetTrainMomentum::train(Net& net,const MatrixFloat& mSamples,const MatrixFl
     }
 
     //TrainResult tr;
-    unsigned int iBatchSize=topt.batchSize;
-    unsigned int iNbSamples=mSamples.rows();
+    size_t iBatchSize=topt.batchSize;
+    size_t iNbSamples=mSamples.rows();
 
     // init error accumulation and momentum
     vector<MatrixFloat> sumDE, sumDEMomentum;
@@ -42,10 +42,10 @@ void NetTrainMomentum::train(Net& net,const MatrixFloat& mSamples,const MatrixFl
 
         MatrixFloat mShuffle=rand_perm(iNbSamples);
 
-        unsigned int iBatchStart=0;
+        size_t iBatchStart=0;
         while(iBatchStart<iBatchSize)
         {
-            unsigned int iBatchEnd=iBatchStart+iBatchSize;
+            size_t iBatchEnd=iBatchStart+iBatchSize;
             if(iBatchEnd>iBatchSize)
                 iBatchEnd=iBatchSize;
 
@@ -53,12 +53,12 @@ void NetTrainMomentum::train(Net& net,const MatrixFloat& mSamples,const MatrixFl
             for(unsigned int i=0;i<nLayers;i++)
                 sumDE[i].setZero();
 
-            for(unsigned int iSample=iBatchStart;iSample<iBatchEnd;iSample++)
+            for(size_t iSample=iBatchStart;iSample<iBatchEnd;iSample++)
             {
                 //compute error, sample by sample
 
                 //forward pass with save
-                int iIndexSample=(int)mShuffle(iSample);
+                size_t iIndexSample=(size_t)mShuffle(iSample);
                 const MatrixFloat& mSample=mSamples.row(iIndexSample);
                 MatrixFloat mOut, mTemp=mSample;
                 for(unsigned int i=0;i<nLayers;i++)
@@ -113,7 +113,7 @@ void NetTrainMomentum::backpropagation(Net& net,const MatrixFloat &mError) //tod
         if(i==(int)(nLayers-1))
         {
             //last layer
-            mDelta=mError.element_product(mAD); //  delta=error.*mAD;
+            mDelta=mError.cwiseProduct(mAD); //  delta=error.*mAD;
         }
         else
         {
@@ -124,11 +124,11 @@ void NetTrainMomentum::backpropagation(Net& net,const MatrixFloat &mError) //tod
             //a=a(:,1:columns(a)-1); % do not use last weight (use only for bias)
             //b=activation_derivation(layer.func,outweight);
             //delta=a.*b;
-            mDelta=(a.without_last_column()).element_product(mAD); //todo optimise
+            mDelta=(without_last_column(a)).cwiseProduct(mAD); //todo optimise
         }
 
         //dE=(layer.in')*delta;
-        l.dE=(l.in.concat(mOne).transpose())*mDelta;
+        l.dE=(concatHorizontally(l.in,mOne).transpose())*mDelta;
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////

@@ -34,7 +34,7 @@ private slots:
 private:
     void drawLoss(vector<double> vdLoss,vector<double> vdMaxError);
     void drawRegression();
-    double compute_truth(double x);
+    float compute_truth(float x);
     void train_and_test(bool bReset);
     void update_details();
 

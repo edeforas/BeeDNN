@@ -3,6 +3,8 @@ TARGET = test_regression_qt
 TEMPLATE = app
 CONFIG += c++14
 
+DEFINES+= "USE_EIGEN_NO"
+
 SOURCES += \
 	main.cpp\
 	mainwindow.cpp \
@@ -37,7 +39,8 @@ HEADERS  += \
 
 FORMS    += mainwindow.ui
 
-INCLUDEPATH += ..\
+INCLUDEPATH += ..
+INCLUDEPATH += $$(EIGEN_PATH)
 
 #tiny-dnn
 INCLUDEPATH += $$(TINY_DNN_PATH)
