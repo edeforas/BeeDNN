@@ -5,10 +5,7 @@ CONFIG -= qt
 
 DEFINES+= "USE_EIGEN_NO"
 
-INCLUDEPATH+=..
-INCLUDEPATH+=$$(EIGEN_PATH)
-
-SOURCES += test_xor.cpp \
+SOURCES += test_mult.cpp \
     ../Net.cpp \
     ../NetTrainLearningRate.cpp \
     ../Layer.cpp \
@@ -18,6 +15,9 @@ SOURCES += test_xor.cpp \
     ../LayerActivation.cpp \
     ../LayerDenseWithoutBias.cpp \
     ../LayerDenseWithBias.cpp
+
+INCLUDEPATH+=..
+INCLUDEPATH+=$$(EIGEN_PATH)
 
 HEADERS += \
     ../Activation.h \

@@ -2,15 +2,19 @@
 using namespace std;
 
 #include "Net.h"
-#include "ActivationLayer.h"
-#include "NetTrainMomentum.h"
+#include "LayerDenseWithBias.h"
+#include "LayerDenseWithoutBias.h"
+#include "LayerActivation.h"
+#include "MatrixUtil.h"
+
+#include "NetTrainLearningRate.h"
 
 int main()
 {
-    //build layer
+    //contruct layer
     Net net;
-    net.add(new ActivationLayer(2,3,"Sigmoid"));
-    net.add(new ActivationLayer(3,1,"Sigmoid"));
+    net.add(new LayerDenseWithBias(2,1));
+ //   net.add(new LayerActivation(1,"Tanh"));
 
     //train data
     float dSamples[]={ 0,0 , 0,1 , 1,0 , 1,1 };
@@ -18,13 +22,14 @@ int main()
     const MatrixFloat mSamples=from_raw_buffer(dSamples,4,2);
     const MatrixFloat mTruth=from_raw_buffer(dTruths,4,1);
 
-    TrainOption tOpt;
-    tOpt.earlyAbortMaxError=0.05;
-    tOpt.learningRate=1.f;
-    tOpt.batchSize=1;
-    tOpt.momentum=0.9f;
+    //cout << MatrixUtil::to_string(mTruth) << endl;
 
-    NetTrainMomentum netTrain;
+    TrainOption tOpt;
+    tOpt.learningRate=0.01f;
+    tOpt.batchSize=1;
+    tOpt.epochs=100;
+
+    NetTrainLearningRate netTrain;
     netTrain.train(net,mSamples,mTruth,tOpt);
     //cout << "Loss=" << tr.loss << " MaxError=" << tr.maxError << " ComputedEpochs=" << tr.computedEpochs << endl;
 
@@ -34,7 +39,8 @@ int main()
     net.forward(mSamples.row(1),m01);
     net.forward(mSamples.row(2),m10);
     net.forward(mSamples.row(3),m11);
-    cout << m00(0)<< " " <<m01(0) << " " << m10(0) << " " << m11(0) << endl;
+
+    cout << m00(0) << " " <<m01(0) << " " << m10(0) << " " << m11(0) << endl;
 
     return 0;
 }

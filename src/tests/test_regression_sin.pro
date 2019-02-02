@@ -8,20 +8,24 @@ DEFINES+= "USE_EIGEN_NO"
 INCLUDEPATH+=..
 INCLUDEPATH+=$$(EIGEN_PATH)
 
-SOURCES += \
+SOURCES += test_regression_sin.cpp \
     ../Net.cpp \
-    ../NetTrainMomentum.cpp \
+    ../NetTrainLearningRate.cpp \
     ../Layer.cpp \
+    ../Matrix.cpp \
     ../Activation.cpp \
     ../MatrixUtil.cpp \
-    ../ActivationLayer.cpp \
-    test_regression_sin.cpp
+    ../LayerActivation.cpp \
+    ../LayerDenseWithoutBias.cpp \
+    ../LayerDenseWithBias.cpp
 
 HEADERS += \
     ../Activation.h \
     ../Layer.h \
     ../Matrix.h \
     ../Net.h \
-    ../NetTrainMomentum.h \
+    ../NetTrainLearningRate.h \
     ../MatrixUtil.h \
-    ../ActivationLayer.h
+    ../LayerActivation.h \
+    ../LayerDenseWithoutBias.h \
+    ../LayerDenseWithBias.h

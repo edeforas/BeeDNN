@@ -61,7 +61,7 @@ public:
     float derivation(float x) const
     {
         float d=1.f+fabs(x);
-        return 0.5f/(d*d); //todo optimize
+        return 0.5f/(d*d);
     }
 };
 //////////////////////////////////////////////////////////////////////////////

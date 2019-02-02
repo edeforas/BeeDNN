@@ -1,8 +1,5 @@
-#ifndef NetTrainMomentum_
-#define NetTrainMomentum_
-
-#include <vector>
-using namespace std;
+#ifndef NetTrainLearningRate_
+#define NetTrainLearningRate_
 
 #include "Matrix.h"
 
@@ -18,17 +15,15 @@ public:
         epochs=1000;
         batchSize=32;
         learningRate=0.1f;
-        momentum=0.1f;
+    //    momentum=0.1f;
         observer=nullptr;
         initWeight=true;
     }
 
     int  epochs;
-    double earlyAbortMaxError;
-    double earlyAbortMeanError;
-    int batchSize;
+    size_t batchSize;
     float learningRate;
-    float momentum;
+ //   float momentum;
     bool initWeight;
     TrainObserver* observer;
 };
@@ -39,16 +34,13 @@ public:
     virtual void stepEpoch(/*const TrainResult & tr*/)=0;
 };
 
-class NetTrainMomentum
+class NetTrainLearningRate
 {
 public:
-    NetTrainMomentum();
-    virtual ~NetTrainMomentum();
+    NetTrainLearningRate();
+    virtual ~NetTrainLearningRate();
 
     void train(Net& net, const MatrixFloat& mSamples, const MatrixFloat& mTruth, const TrainOption& topt);
-
-private:
-    void backpropagation(Net& net,const MatrixFloat& mError);
 };
 
 #endif

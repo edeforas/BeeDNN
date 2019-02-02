@@ -10,19 +10,9 @@ public:
     virtual ~Layer();
 
     virtual void forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const =0;
-
-	//todo add void backpropagation();
 	
-    virtual void initWeights() =0;
-    virtual void forward_save(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) =0;     //todo remove
-    virtual MatrixFloat get_weight_activation_derivation() const =0;     //todo  remove
-    virtual MatrixFloat& get_weight() =0;     //todo  remove
-
-    //learning variables, todo clean up / remove
-    MatrixFloat in; //in todo remove
-    MatrixFloat out; //fcn(in*weight)
-    MatrixFloat outWeight; // in*weight todo remove
-    MatrixFloat dE; //todo remove
+    virtual void init();
+    virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, float fLearningRate, MatrixFloat &mNewDelta)=0;
 
 protected:
     int _iInSize, _iOutSize;

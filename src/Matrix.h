@@ -12,19 +12,7 @@
 using namespace Eigen;
 typedef Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> MatrixFloat;
 
-const MatrixFloat from_raw_buffer(float *pBuffer,size_t iRows,size_t iCols)
-{
-    /*
-    MatrixFloat m(iRows,iCols);
-    for(int i=0;i<m.size();i++)
-        m.data()[i]=pBuffer[i];
-
-    return m;
-*/
-    //todo use
-    return Eigen::Map<MatrixFloat>((float*)pBuffer,static_cast<Eigen::Index>(iRows),static_cast<Eigen::Index>(iCols));
-}
-
+/*
 const MatrixFloat without_last_row(MatrixFloat m)
 {
     return m.block(0,0,m.rows()-1,m.cols()); //todo when rows==0
@@ -35,14 +23,15 @@ const MatrixFloat without_last_column(MatrixFloat m)
 {
     return m.block(0,0,m.rows(),m.cols()-1); //todo when rows==0
 }
-
+*/
+/*
 MatrixFloat concatHorizontally(const MatrixFloat& a, const MatrixFloat& b)
 {
     MatrixFloat c(a.rows(), a.cols()+b.cols());
     c << a, b;
     return c;
 }
-
+*/
 #else
 
 template <class T>
@@ -345,20 +334,19 @@ public:
 
         return dSum;
     }
-	
+
     T max() const
     {
         if(_iSize==0)
-			return 0.; //not clean
-		
+            return 0.; //not clean
+
         T dMax=_data[0];
         for(unsigned int i=1;i<_iSize;i++)
             if(_data[i]>dMax)
-				dMax=_data[i];
+                dMax=_data[i];
 
         return dMax;
     }
-	
 	
     Matrix<T> transpose() const // slow function!
     {
@@ -425,12 +413,10 @@ private:
 
 typedef Matrix<float> MatrixFloat;
 
-template <class T>
-const Matrix<T> from_raw_buffer(T *pBuffer,size_t iRows,size_t iCols)
-{
-    return Matrix<T>(pBuffer,iRows,iCols);
-}
 
+
+
+/*
 template <class T>
 const Matrix<T> without_last_row(const Matrix<T>& m)
 {
@@ -473,7 +459,9 @@ Matrix<T> concatHorizontally(const Matrix<T> & a, const Matrix<T> & b) // slow f
 
     return out;
 }
-
+*/
 #endif
+
+const MatrixFloat from_raw_buffer(float *pBuffer,size_t iRows,size_t iCols);
 
 #endif

@@ -18,6 +18,6 @@ MatrixFloat decimate(const MatrixFloat& m, size_t iRatio);
 
 namespace MatrixUtil
 {
-string to_string(const MatrixFloat& m);
+    string to_string(const MatrixFloat& m);
 }
 #endif

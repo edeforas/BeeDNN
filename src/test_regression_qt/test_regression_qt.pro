@@ -9,33 +9,46 @@ SOURCES += \
 	main.cpp\
 	mainwindow.cpp \
     SimpleCurve.cpp \
-    ../Activation.cpp \
-    ../Layer.cpp \
-    ../Net.cpp \
-    ../NetTrainMomentum.cpp \
-    ../NetUtil.cpp \
-    ../MatrixUtil.cpp \
-    ../MNISTReader.cpp \
-    ../ActivationLayer.cpp \
     ../DNNEngineTestDnn.cpp \
     ../DNNEngineTinyDnn.cpp \
     ../DNNEngine.cpp
 
+SOURCES += \
+    ../Net.cpp \
+    ../NetUtil.cpp \
+    ../NetTrainLearningRate.cpp \
+    ../Layer.cpp \
+    ../Matrix.cpp \
+    ../Activation.cpp \
+    ../MatrixUtil.cpp \
+    ../LayerActivation.cpp \
+    ../LayerDenseWithoutBias.cpp \
+    ../LayerDenseWithBias.cpp
+
+
+
 HEADERS  += \
 	mainwindow.h \
     SimpleCurve.h \
-    ../Activation.h \
-    ../Layer.h \
-    ../Matrix.h \
-    ../MatrixUtil.h \
-    ../Net.h \
-    ../NetTrainMomentum.h \	
-    ../NetUtil.h \
-    ../MNISTReader.h \
-    ../ActivationLayer.h \
     ../DNNEngine.h \
     ../DNNEngineTestDnn.h \
     ../DNNEngineTinyDnn.h
+
+
+HEADERS += \
+    ../Activation.h \
+    ../Layer.h \
+    ../Matrix.h \
+    ../Net.h \
+    ../NetUtil.h \
+    ../NetTrainLearningRate.h \
+    ../MatrixUtil.h \
+    ../LayerActivation.h \
+    ../LayerDenseWithoutBias.h \
+    ../LayerDenseWithBias.h
+
+
+
 
 FORMS    += mainwindow.ui
 

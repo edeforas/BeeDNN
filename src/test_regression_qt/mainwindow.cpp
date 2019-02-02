@@ -8,7 +8,7 @@
 #include "DNNEngineTestDnn.h"
 #include "DNNEngineTinyDnn.h"
 
-#include "ActivationLayer.h"
+#include "LayerActivation.h"
 
 /*
 //////////////////////////////////////////////////////////////////////////

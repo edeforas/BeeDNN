@@ -4,23 +4,29 @@
 using namespace std;
 
 #include "Net.h"
-#include "NetTrainMomentum.h"
+#include "LayerDenseWithBias.h"
+#include "LayerDenseWithoutBias.h"
+#include "LayerActivation.h"
 
-#include "Activation.h"
-#include "ActivationLayer.h"
+#include "NetTrainLearningRate.h"
 
 int main()
 {
     //build net
     Net net;
-    net.add(new ActivationLayer(1,20,"Tanh"));
-    net.add(new ActivationLayer(20,20,"Tanh"));
-    net.add(new ActivationLayer(20,1,"Tanh"));
+    net.add(new LayerDenseWithBias(1,10));
+    net.add(new LayerActivation(10,"Tanh"));
+    
+    net.add(new LayerDenseWithBias(10,1));
+  //  net.add(new LayerActivation(1,"Tanh"));
+	
+  //  net.add(new LayerDenseWithoutBias(7,1));
+  //  net.add(new LayerActivation(1,"Tanh"));
 
     //train data
     MatrixFloat mTruth(64,1);
     MatrixFloat mSamples(64,1);
-    for( int i=0;i<64;i++)
+    for(size_t i=0;i<64;i++)
     {
         float x=i/10.f;
         mTruth(i,0)=sin(x);
@@ -29,12 +35,12 @@ int main()
 
     TrainOption tOpt;
     tOpt.epochs=1000;
-    tOpt.learningRate=0.1f;
-    tOpt.batchSize=1;
-    tOpt.momentum=0.05f;
+    tOpt.learningRate=0.01f;
+    tOpt.batchSize=64;
+  //  tOpt.momentum=0.05f;
 
     cout << "Learning..." << endl;
-    NetTrainMomentum train;
+    NetTrainLearningRate train;
     train.train(net,mSamples,mTruth,tOpt);
 
     //show results
