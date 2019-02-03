@@ -414,15 +414,11 @@ private:
 typedef Matrix<float> MatrixFloat;
 
 
-
-
-/*
 template <class T>
 const Matrix<T> without_last_row(const Matrix<T>& m)
 {
     return from_raw_buffer((T*)m.data(),m.rows()-1,m.cols());
 }
-
 
 template <class T>
 const Matrix<T> without_last_column(const Matrix<T>& a) // slow function!
@@ -437,6 +433,10 @@ const Matrix<T> without_last_column(const Matrix<T>& a) // slow function!
 
     return m;
 }
+
+/*
+
+
 
 template <class T>
 Matrix<T> concatHorizontally(const Matrix<T> & a, const Matrix<T> & b) // slow function!

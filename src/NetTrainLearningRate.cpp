@@ -85,7 +85,7 @@ void NetTrainLearningRate::train(Net& net,const MatrixFloat& mSamples,const Matr
             //backpropagation of delta and update of weights
             MatrixFloat mNewDelta,mDelta=sumDelta/(float)iBatchSize;
 
-            cout << " " << MatrixUtil::to_string(mDelta); // this is not the error!
+            cout << " " << MatrixUtil::to_string(mDelta); // this is not the error! todo remoove
 
             for (int i=(int)(nLayers-1);i>=0;i--)
             {

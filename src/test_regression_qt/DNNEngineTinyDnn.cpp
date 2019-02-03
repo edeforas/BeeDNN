@@ -30,16 +30,24 @@ void DNNEngineTinyDnn::init()
     DNNEngine::init();
 }
 //////////////////////////////////////////////////////////////////////////////
-void DNNEngineTinyDnn::add_layer_and_activation(int inSize,int outSize, eLayerType layer, string sActivation)
+void DNNEngineTinyDnn::add_layer(int inSize, int outSize, string sLayerType)
 {
-    (void)layer; //for now
+    if(sLayerType=="DenseAndBias")
+        *_pNet << tiny_dnn::fully_connected_layer(inSize, outSize);
 
-    *_pNet << tiny_dnn::fully_connected_layer(inSize, outSize);
+    if(sLayerType=="DenseNoBias")
+        *_pNet << tiny_dnn::fully_connected_layer(inSize, outSize,false);
 
-    if(sActivation=="Tanh")
+    if(sLayerType=="Tanh")
         *_pNet <<  tiny_dnn::tanh_layer();
-    else if(sActivation=="Sigmoid")
+
+    else if(sLayerType=="Sigmoid")
         *_pNet <<  tiny_dnn::sigmoid_layer();
+
+    else if(sLayerType=="Relu")
+        *_pNet <<  tiny_dnn::relu_layer();
+
+    /*
     else if(sActivation=="Asinh")
         *_pNet <<  tiny_dnn::asinh_layer();
     else if(sActivation=="Relu")
@@ -57,7 +65,8 @@ void DNNEngineTinyDnn::add_layer_and_activation(int inSize,int outSize, eLayerTy
     else if(sActivation=="SoftMax")
         *_pNet <<  tiny_dnn::softmax_layer();
     else if(sActivation=="SoftSign")
-        *_pNet <<  tiny_dnn::softsign_layer();
+        *_pNet <<  tiny_dnn::softsign_layer();*/
+
     else
         ; // todo error activation does not exist
 }

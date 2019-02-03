@@ -1,14 +1,14 @@
-#ifndef LayerDenseWithoutBias_
-#define LayerDenseWithoutBias_
+#ifndef LayerDenseAndBias_
+#define LayerDenseAndBias_
 
 #include "Layer.h"
 #include "Matrix.h"
 
-class LayerDenseWithoutBias : public Layer
+class LayerDenseAndBias : public Layer
 {
 public:
-    LayerDenseWithoutBias(int iInSize,int iOutSize);
-    virtual ~LayerDenseWithoutBias();
+    LayerDenseAndBias(int iInSize,int iOutSize);
+    virtual ~LayerDenseAndBias();
 	
     virtual void forward(const MatrixFloat& mMatin, MatrixFloat &mMatOut) const;
 	
@@ -17,6 +17,7 @@ public:
 
 private:
     MatrixFloat _weight;
+    MatrixFloat _bias;
 };
 
 #endif

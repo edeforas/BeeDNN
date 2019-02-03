@@ -8,7 +8,15 @@ using namespace std;
 
 enum eLayerType
 {
-    FullyConnected=1
+    DenseAndBias=1,
+	DenseNoBias=2,
+	
+    ActivationLinear=3,
+    ActivationSigmoid=4,
+    ActivationTanh=5,
+    ActivationRelu=6,
+    //...
+	
 };
 
 class DNNTrainObserver;
@@ -63,7 +71,7 @@ public:
 
     virtual void clear()=0;
     virtual void init();
-    virtual void add_layer_and_activation(int inSize,int outSize, eLayerType layer, string sActivation)=0;
+    virtual void add_layer(int inSize,int outSize, string sLayerType)=0;
 
     virtual DNNTrainResult train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto);
     virtual void train_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)=0;

@@ -37,6 +37,7 @@ private:
     float compute_truth(float x);
     void train_and_test(bool bReset);
     void update_details();
+    void parse_net();
 
     Ui::MainWindow *ui;
 

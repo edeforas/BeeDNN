@@ -3,14 +3,14 @@
 #include "Net.h"
 #include "NetTrainLearningRate.h"
 #include "LayerActivation.h"
-#include "LayerDenseWithoutBias.h"
-#include "LayerDenseWithBias.h"
+#include "LayerDenseNoBias.h"
+#include "LayerDenseAndBias.h"
 #include "NetUtil.h"
 
 //////////////////////////////////////////////////////////////////////////////
 DNNEngineTestDnn::DNNEngineTestDnn()
 {
-	_pNet=new Net;
+    _pNet=new Net;
 }
 //////////////////////////////////////////////////////////////////////////////
 DNNEngineTestDnn::~DNNEngineTestDnn()
@@ -30,20 +30,23 @@ string DNNEngineTestDnn::to_string()
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTestDnn::init()
 {
-   // _pNet->init(); todo
+    // _pNet->init(); todo
     DNNEngine::init();
 }
 //////////////////////////////////////////////////////////////////////////////
-void DNNEngineTestDnn::add_layer_and_activation(int inSize,int outSize, eLayerType layer, string sActivation)
+void DNNEngineTestDnn::add_layer(int inSize, int outSize, string sLayerType)
 {
-    (void)layer;
-     _pNet->add(new LayerDenseWithBias(inSize,outSize));
-    _pNet->add(new LayerActivation(outSize,sActivation));
+    if(sLayerType=="DenseAndBias")
+        _pNet->add(new LayerDenseAndBias(inSize,outSize));
+    else if(sLayerType=="DenseNoBias")
+        _pNet->add(new LayerDenseNoBias(inSize,outSize));
+    else
+         _pNet->add(new LayerActivation(sLayerType));
 }
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTestDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
 {
-   _pNet->forward(mIn,mOut);
+    _pNet->forward(mIn,mOut);
 }
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTestDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)

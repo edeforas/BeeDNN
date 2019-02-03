@@ -8,6 +8,7 @@ using namespace std;
 #include "MNISTReader.h"
 #include "MatrixUtil.h"
 #include "ConfusionMatrix.h"
+#include "LayerDenseAndBias.h"
 
 Net net;
 MatrixFloat mRefImages, mRefLabels, mRefLabelsIndex, mTestImages, mTestLabels, mTestLabelsIndex;

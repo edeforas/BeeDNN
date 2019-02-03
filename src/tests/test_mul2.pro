@@ -13,8 +13,8 @@ SOURCES += test_mul2.cpp \
     ../Activation.cpp \
     ../MatrixUtil.cpp \
     ../LayerActivation.cpp \
-    ../LayerDenseWithoutBias.cpp \
-    ../LayerDenseWithBias.cpp
+    ../LayerDenseNoBias.cpp \
+    ../LayerDenseAndBias.cpp
 
 INCLUDEPATH+=..
 INCLUDEPATH+=$$(EIGEN_PATH)
@@ -27,5 +27,5 @@ HEADERS += \
     ../NetTrainLearningRate.h \
     ../MatrixUtil.h \
     ../LayerActivation.h \
-    ../LayerDenseWithoutBias.h \
-    ../LayerDenseWithBias.h
+    ../LayerDenseNoBias.h \
+    ../LayerDenseAndBias.h

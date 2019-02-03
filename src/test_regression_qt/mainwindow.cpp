@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     vector<string> vsActivations;
 
     list_activations_available( vsActivations);
-
+    /*
     for(unsigned int i=0;i<vsActivations.size();i++)
     {
         ui->cbActivationLayer1->addItem(vsActivations[i].c_str());
@@ -56,6 +56,29 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->cbFunction->addItem("Gauss");
     ui->cbFunction->addItem("Inverse");
     ui->cbFunction->addItem("Rectangular");
+*/
+    QStringList qsl;
+    qsl+="LayerType";
+    qsl+="InSize";
+    qsl+="OutSize";
+
+    ui->twNetwork->setHorizontalHeaderLabels(qsl);
+
+    for(int i=0;i<10;i++)
+    {
+        QComboBox*  qcbType=new QComboBox;
+        qcbType->addItem("");
+        qcbType->addItem("DenseAndBias");
+        qcbType->addItem("DenseNoBias");
+
+        qcbType->insertSeparator(3);
+
+        for(int a=0;a<vsActivations.size();a++)
+            qcbType->addItem(vsActivations[a].c_str());
+
+        ui->twNetwork->setCellWidget(i,0,qcbType);
+
+    }
 
     resizeDocks({ui->dockWidget},{1},Qt::Horizontal);
 
@@ -80,20 +103,7 @@ void MainWindow::train_and_test(bool bReset)
     //LossObserver lossCB;
 
     if(bReset)
-    {
-        int iNbHiddenNeurons2=ui->sbNbNeurons2->value();
-        int iNbHiddenNeurons3=ui->sbNbNeurons3->value();
-        string sActivation1=ui->cbActivationLayer1->currentText().toStdString();
-        string sActivation2=ui->cbActivationLayer2->currentText().toStdString();
-        string sActivation3=ui->cbActivationLayer3->currentText().toStdString();
-
-        _pEngine->clear();
-        _pEngine->add_layer_and_activation(1,iNbHiddenNeurons2,FullyConnected,sActivation1);
-        _pEngine->add_layer_and_activation(iNbHiddenNeurons2,iNbHiddenNeurons3,FullyConnected,sActivation2);
-        _pEngine->add_layer_and_activation(iNbHiddenNeurons3,1,FullyConnected,sActivation3);
-
-        _pEngine->init();
-    }
+        parse_net();
 
     int iNbPoint=ui->leNbPointsLearn->text().toInt();
     float dInputMin=ui->leInputMin->text().toFloat();
@@ -298,11 +308,26 @@ void MainWindow::on_cbEngine_currentTextChanged(const QString &arg1)
 
     if(arg1=="tiny-dnn")
         _pEngine=new DNNEngineTinyDnn;
-
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_btnTrainMore_clicked()
 {
     train_and_test(false);
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::parse_net()
+{
+    _pEngine->clear();
+    for(int iRow=0;iRow<10;iRow++) //todo dynamic size
+    {
+        string sType=ui->twNetwork->item(iRow,0)->text().toStdString();
+        int iInSize=ui->twNetwork->item(iRow,1)->text().toInt();
+        int iOutSize=ui->twNetwork->item(iRow,2)->text().toInt();
+
+        if(!sType.empty())
+            _pEngine->add_layer(iInSize,iOutSize,sType);
+
+        _pEngine->init();
+    }
 }
 //////////////////////////////////////////////////////////////////////////////

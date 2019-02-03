@@ -9,9 +9,9 @@ SOURCES += \
 	main.cpp\
 	mainwindow.cpp \
     SimpleCurve.cpp \
-    ../DNNEngineTestDnn.cpp \
-    ../DNNEngineTinyDnn.cpp \
-    ../DNNEngine.cpp
+    DNNEngineTestDnn.cpp \
+    DNNEngineTinyDnn.cpp \
+    DNNEngine.cpp
 
 SOURCES += \
     ../Net.cpp \
@@ -22,17 +22,15 @@ SOURCES += \
     ../Activation.cpp \
     ../MatrixUtil.cpp \
     ../LayerActivation.cpp \
-    ../LayerDenseWithoutBias.cpp \
-    ../LayerDenseWithBias.cpp
-
-
+    ../LayerDenseNoBias.cpp \
+    ../LayerDenseAndBias.cpp
 
 HEADERS  += \
 	mainwindow.h \
     SimpleCurve.h \
-    ../DNNEngine.h \
-    ../DNNEngineTestDnn.h \
-    ../DNNEngineTinyDnn.h
+    DNNEngine.h \
+    DNNEngineTestDnn.h \
+    DNNEngineTinyDnn.h
 
 
 HEADERS += \
@@ -44,11 +42,8 @@ HEADERS += \
     ../NetTrainLearningRate.h \
     ../MatrixUtil.h \
     ../LayerActivation.h \
-    ../LayerDenseWithoutBias.h \
-    ../LayerDenseWithBias.h
-
-
-
+    ../LayerDenseNoBias.h \
+    ../LayerDenseAndBias.h
 
 FORMS    += mainwindow.ui
 

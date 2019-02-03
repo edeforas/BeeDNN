@@ -4,8 +4,8 @@
 using namespace std;
 
 #include "Net.h"
-#include "LayerDenseWithBias.h"
-#include "LayerDenseWithoutBias.h"
+#include "LayerDenseAndBias.h"
+#include "LayerDenseNoBias.h"
 #include "LayerActivation.h"
 
 #include "NetTrainLearningRate.h"
@@ -14,10 +14,10 @@ int main()
 {
     //build net
     Net net;
-    net.add(new LayerDenseWithBias(1,10));
+    net.add(new LayerDenseAndBias(1,10));
     net.add(new LayerActivation(10,"Tanh"));
     
-    net.add(new LayerDenseWithBias(10,1));
+    net.add(new LayerDenseAndBias(10,1));
   //  net.add(new LayerActivation(1,"Tanh"));
 	
   //  net.add(new LayerDenseWithoutBias(7,1));

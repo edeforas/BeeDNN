@@ -11,7 +11,7 @@ SOURCES += \
     ../MNISTReader.cpp \
     ../MatrixUtil.cpp \
     ../ConfusionMatrix.cpp \
-    ../ActivationLayer.cpp \
+    ../LayerDenseAndBias.cpp \
     test_classification_MNIST.cpp
 
 INCLUDEPATH+=..
@@ -25,4 +25,4 @@ HEADERS += \
     ../MNISTReader.h \
     ../MatrixUtil.h \
     ../ConfusionMatrix.h \
-    ../ActivationLayer.h
+    ../LayerDenseAndBias.h

@@ -2,8 +2,8 @@
 using namespace std;
 
 #include "Net.h"
-#include "LayerDenseWithBias.h"
-#include "LayerDenseWithoutBias.h"
+#include "LayerDenseAndBias.h"
+#include "LayerDenseNoBias.h"
 #include "LayerActivation.h"
 #include "MatrixUtil.h"
 
@@ -13,8 +13,9 @@ int main()
 {
     //contruct layer
     Net net;
-    net.add(new LayerDenseWithBias(2,1));
- //   net.add(new LayerActivation(1,"Tanh"));
+    net.add(new LayerDenseAndBias(2,3));
+    net.add(new LayerActivation("Sigmoid"));
+    net.add(new LayerDenseAndBias(3,1));
 
     //train data
     float dSamples[]={ 0,0 , 0,1 , 1,0 , 1,1 };
@@ -25,9 +26,9 @@ int main()
     //cout << MatrixUtil::to_string(mTruth) << endl;
 
     TrainOption tOpt;
-    tOpt.learningRate=0.01f;
+    tOpt.learningRate=0.1f;
     tOpt.batchSize=1;
-    tOpt.epochs=100;
+    tOpt.epochs=20000;
 
     NetTrainLearningRate netTrain;
     netTrain.train(net,mSamples,mTruth,tOpt);

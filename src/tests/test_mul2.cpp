@@ -2,7 +2,7 @@
 using namespace std;
 
 #include "Net.h"
-#include "LayerDenseWithBias.h"
+#include "LayerDenseAndBias.h"
 #include "LayerActivation.h"
 
 #include "NetTrainLearningRate.h"
@@ -11,7 +11,7 @@ int main()
 {
     //contruct layer
     Net net;
-    net.add(new LayerDenseWithBias(1,1));
+    net.add(new LayerDenseAndBias(1,1));
 
     //train data
     float dSamples[]={  -2, 3 ,-1 ,4 ,1 ,2 };

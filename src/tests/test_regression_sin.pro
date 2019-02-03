@@ -16,8 +16,8 @@ SOURCES += test_regression_sin.cpp \
     ../Activation.cpp \
     ../MatrixUtil.cpp \
     ../LayerActivation.cpp \
-    ../LayerDenseWithoutBias.cpp \
-    ../LayerDenseWithBias.cpp
+    ../LayerDenseNoBias.cpp \
+    ../LayerDenseAndBias.cpp
 
 HEADERS += \
     ../Activation.h \
@@ -27,5 +27,5 @@ HEADERS += \
     ../NetTrainLearningRate.h \
     ../MatrixUtil.h \
     ../LayerActivation.h \
-    ../LayerDenseWithoutBias.h \
-    ../LayerDenseWithBias.h
+    ../LayerDenseNoBias.h \
+    ../LayerDenseAndBias.h
