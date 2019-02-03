@@ -73,11 +73,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
         qcbType->insertSeparator(3);
 
-        for(int a=0;a<vsActivations.size();a++)
+        for(unsigned int a=0;a<vsActivations.size();a++)
             qcbType->addItem(vsActivations[a].c_str());
 
         ui->twNetwork->setCellWidget(i,0,qcbType);
-
     }
 
     resizeDocks({ui->dockWidget},{1},Qt::Horizontal);
@@ -320,9 +319,20 @@ void MainWindow::parse_net()
     _pEngine->clear();
     for(int iRow=0;iRow<10;iRow++) //todo dynamic size
     {
-        string sType=ui->twNetwork->item(iRow,0)->text().toStdString();
-        int iInSize=ui->twNetwork->item(iRow,1)->text().toInt();
-        int iOutSize=ui->twNetwork->item(iRow,2)->text().toInt();
+        QTableWidgetItem* pwiType=ui->twNetwork->item(iRow,0);
+        if(!pwiType)
+            continue;
+        string sType=pwiType->text().toStdString();
+
+        QTableWidgetItem* pwiInSize=ui->twNetwork->item(iRow,1); //todo not used in activation
+        if(!pwiInSize)
+            continue;
+        int iInSize=pwiInSize->text().toInt();
+
+        QTableWidgetItem* pwiOutSize=ui->twNetwork->item(iRow,2); //todo not used in activation
+        if(!pwiOutSize)
+            continue;
+        int iOutSize=pwiOutSize->text().toInt();
 
         if(!sType.empty())
             _pEngine->add_layer(iInSize,iOutSize,sType);
