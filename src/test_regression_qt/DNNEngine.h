@@ -74,9 +74,11 @@ public:
     virtual void add_layer(int inSize,int outSize, string sLayerType)=0;
 
     virtual DNNTrainResult train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto);
-    virtual void train_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)=0;
 
     virtual void predict(const MatrixFloat& mIn, MatrixFloat& mOut)=0;
+
+protected:	
+    virtual void train_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)=0;
 
 private:
     int _iComputedEpochs;

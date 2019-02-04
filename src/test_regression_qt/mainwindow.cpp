@@ -45,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->cbActivationLayer1->setCurrentText("Tanh");
     ui->cbActivationLayer2->setCurrentText("Tanh");
     ui->cbActivationLayer3->setCurrentText("Linear");
-
+*/
     ui->cbFunction->addItem("Sin");
     ui->cbFunction->addItem("Abs");
     ui->cbFunction->addItem("Parabolic");
@@ -56,7 +56,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->cbFunction->addItem("Gauss");
     ui->cbFunction->addItem("Inverse");
     ui->cbFunction->addItem("Rectangular");
-*/
+
     QStringList qsl;
     qsl+="LayerType";
     qsl+="InSize";
@@ -179,6 +179,7 @@ void MainWindow::drawRegression()
     vector<double> vRegression;
     MatrixFloat mIn(1,1),mOut;
 
+
     if(bExtrapole)
     {
         float fBorder=(fInputMax-fInputMin)/2.f;
@@ -196,6 +197,10 @@ void MainWindow::drawRegression()
         vTruth.push_back(-compute_truth(fVal));
         vSamples.push_back(fVal);
         _pEngine->predict(mIn,mOut);
+
+        if(mOut.size()==0)
+            return; //todo
+
         vRegression.push_back(-mOut(0));
         fVal+=fStep;
     }
@@ -263,7 +268,7 @@ float MainWindow::compute_truth(float x)
         return 1.f/x;
 
     if(sFunction=="Rectangular")
-        return ((((int)x)+(x<0.))+1) & 1 ;
+        return ((((int)x)+(x<0.f))+1) & 1 ;
 
     return 0.f;
 }
@@ -319,10 +324,10 @@ void MainWindow::parse_net()
     _pEngine->clear();
     for(int iRow=0;iRow<10;iRow++) //todo dynamic size
     {
-        QTableWidgetItem* pwiType=ui->twNetwork->item(iRow,0);
-        if(!pwiType)
+        QComboBox* pCombo=(QComboBox*)(ui->twNetwork->cellWidget(iRow,0));
+        if(!pCombo)
             continue;
-        string sType=pwiType->text().toStdString();
+        string sType=pCombo->currentText().toStdString();
 
         QTableWidgetItem* pwiInSize=ui->twNetwork->item(iRow,1); //todo not used in activation
         if(!pwiInSize)
@@ -336,8 +341,8 @@ void MainWindow::parse_net()
 
         if(!sType.empty())
             _pEngine->add_layer(iInSize,iOutSize,sType);
-
-        _pEngine->init();
     }
+
+    _pEngine->init();
 }
 //////////////////////////////////////////////////////////////////////////////

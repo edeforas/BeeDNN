@@ -5,9 +5,6 @@
 #include "Matrix.h"
 #include "MatrixUtil.h"
 
-#include <iostream>
-using namespace std;
-
 /////////////////////////////////////////////////////////////////////////////////////////////////
 NetTrainLearningRate::NetTrainLearningRate()
 { }
@@ -18,6 +15,13 @@ NetTrainLearningRate::~NetTrainLearningRate()
 void NetTrainLearningRate::train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruth,const TrainOption& topt)
 {
     size_t nLayers=net.layers().size();
+
+    if(nLayers==0)
+    {
+        // todo more info
+        return;
+    }
+
 
     if(topt.initWeight)
     {
@@ -84,8 +88,6 @@ void NetTrainLearningRate::train(Net& net,const MatrixFloat& mSamples,const Matr
 
             //backpropagation of delta and update of weights
             MatrixFloat mNewDelta,mDelta=sumDelta/(float)iBatchSize;
-
-            cout << " " << MatrixUtil::to_string(mDelta); // this is not the error! todo remoove
 
             for (int i=(int)(nLayers-1);i>=0;i--)
             {
