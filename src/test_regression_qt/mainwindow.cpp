@@ -322,6 +322,7 @@ void MainWindow::on_btnTrainMore_clicked()
 void MainWindow::parse_net()
 {
     _pEngine->clear();
+    int iLastOut=1;
     for(int iRow=0;iRow<10;iRow++) //todo dynamic size
     {
         QComboBox* pCombo=(QComboBox*)(ui->twNetwork->cellWidget(iRow,0));
@@ -330,14 +331,22 @@ void MainWindow::parse_net()
         string sType=pCombo->currentText().toStdString();
 
         QTableWidgetItem* pwiInSize=ui->twNetwork->item(iRow,1); //todo not used in activation
+        int iInSize;
         if(!pwiInSize)
-            continue;
-        int iInSize=pwiInSize->text().toInt();
+            iInSize=iLastOut; //use last out
+        else
+            iInSize=pwiInSize->text().toInt();
 
         QTableWidgetItem* pwiOutSize=ui->twNetwork->item(iRow,2); //todo not used in activation
+        int iOutSize;
         if(!pwiOutSize)
-            continue;
-        int iOutSize=pwiOutSize->text().toInt();
+        {
+            iOutSize=iInSize; //same size (i.e. activation case)
+        }
+        else
+            iOutSize=pwiOutSize->text().toInt();
+
+        iLastOut=iOutSize;
 
         if(!sType.empty())
             _pEngine->add_layer(iInSize,iOutSize,sType);
