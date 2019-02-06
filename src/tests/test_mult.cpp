@@ -16,7 +16,7 @@ int main()
     //contruct layer
     Net net;
     net.add(new LayerDenseAndBias(1,1));
-    net.add(new LayerActivation("Tanh"));
+  //  net.add(new LayerActivation("Tanh"));
 
     //train data
     float dSamples[]={  -2.f, 0.1f ,-0.3f ,0.f,-1.f ,1.f ,20.f };
@@ -28,13 +28,13 @@ int main()
     for(int i=0;i<nbSamples;i++)
     {
         mSamples(i,0)=dSamples[i];
-        mTruth(i,0)=tanh(dSamples[i]*0.1f/*+1.f*/);
+        mTruth(i,0)=(dSamples[i]*2.f+3.f/*+1.f*/);
     }
 
     TrainOption tOpt;
-    tOpt.learningRate=0.1f;
-    tOpt.batchSize=1;
-    tOpt.epochs=1000;
+    tOpt.learningRate=0.01f;
+    tOpt.batchSize=7;
+    tOpt.epochs=10000;
 
     NetTrainLearningRate netTrain;
     netTrain.train(net,mSamples,mTruth,tOpt);

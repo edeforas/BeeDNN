@@ -15,7 +15,7 @@ int main()
     //build net
     Net net;
     net.add(new LayerDenseAndBias(1,10));
-    net.add(new LayerActivation(10,"Tanh"));
+    net.add(new LayerActivation("Tanh"));
     
     net.add(new LayerDenseAndBias(10,1));
   //  net.add(new LayerActivation(1,"Tanh"));

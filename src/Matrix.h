@@ -47,7 +47,7 @@ public:
         _bDelete=false;
     }
 
-    Matrix<T>(size_t iRows,size_t iColumns)
+    Matrix<T>(int iRows,int iColumns)
     {
         _iRows=iRows;
         _iColumns=iColumns;
@@ -56,7 +56,7 @@ public:
         _bDelete=true;
     }
     
-    Matrix<T>(T* pData,size_t iRows,size_t iColumns)
+    Matrix<T>(T* pData,int iRows,int iColumns)
     {
         _iRows=iRows;
         _iColumns=iColumns;
@@ -73,7 +73,7 @@ public:
         _data=new T[_iSize];
         _bDelete=true;
 
-        for(unsigned int i=0;i<size();i++)
+        for( int i=0;i<size();i++)
             _data[i]=a(i);
         //todo use or merge with operator=()(a); ??
     }
@@ -97,28 +97,28 @@ public:
     {
         resize(b.rows(),b.cols());
         
-        for(unsigned int i=0;i<size();i++)
+        for(int i=0;i<size();i++)
             operator()(i)=b(i);
         
         return *this;
     }
     
-    size_t rows() const
+    int rows() const
     {
         return _iRows;
     }
 
-    size_t cols() const
+    int cols() const
     {
         return _iColumns;
     }
     
-    size_t size() const
+    int size() const
     {
         return _iSize;
     }
 
-    void resize(size_t iRows,size_t iColumns) // slow function!
+    void resize(int iRows,int iColumns) // slow function!
     {
         if((iColumns==_iColumns) && ( iRows==_iRows))
             return;
@@ -149,7 +149,7 @@ public:
 
     void setConstant(T b)
     {
-        for(unsigned int i=0;i<_iSize;i++)
+        for(int i=0;i<_iSize;i++)
             _data[i]=b;
     }
 
@@ -158,27 +158,27 @@ public:
         setConstant(0.);
     }
 
-    T& operator()(size_t iR,size_t iC)
+    T& operator()(int iR,int iC)
     {
         assert(iR<_iRows);
         assert(iC<_iColumns);
         return *(_data+iR*_iColumns+iC);
     }
     
-    const T& operator()(size_t iR,size_t iC) const
+    const T& operator()(int iR,int iC) const
     {
         assert(iR<_iRows);
         assert(iC<_iColumns);
         return *(_data+iR*_iColumns+iC);
     }
     
-    T& operator()(size_t iX)
+    T& operator()(int iX)
     {
         assert(iX<_iSize);
         return *(_data+iX);
     }
     
-    const T& operator()(size_t iX) const
+    const T& operator()(int iX) const
     {
         assert(iX<_iSize);
         return *(_data+iX);
@@ -189,7 +189,7 @@ public:
         assert(_iRows==a.rows());
         assert(_iColumns==a.cols());
 
-        for(size_t i=0;i<_iSize;i++)
+        for(int i=0;i<_iSize;i++)
             _data[i]+=a(i);
         return *this;
     }
@@ -204,7 +204,7 @@ public:
 
     Matrix<T>& operator+=(T d)
     {
-        for(size_t i=0;i<_iSize;i++)
+        for(int i=0;i<_iSize;i++)
             _data[i]+=d;
         return *this;
     }
@@ -218,7 +218,7 @@ public:
         assert(_iRows==a.rows());
         assert(_iColumns==a.cols());
 
-        for(unsigned int i=0;i<_iSize;i++)
+        for(int i=0;i<_iSize;i++)
             _data[i]-=a(i);
         return *this;
     }
@@ -232,7 +232,7 @@ public:
 
     Matrix<T>& operator-=(T d)
     {
-        for(unsigned int i=0;i<_iSize;i++)
+        for(int i=0;i<_iSize;i++)
             _data[i]-=d;
         return *this;
     }
@@ -243,7 +243,7 @@ public:
     
     Matrix<T>& operator*=(T b)
     {
-        for(unsigned int i=0;i<_iSize;i++)
+        for(int i=0;i<_iSize;i++)
             _data[i]*=b;
 
         return *this;
@@ -251,7 +251,7 @@ public:
 
     Matrix<T>& operator/=(T b)
     {
-        for(unsigned int i=0;i<_iSize;i++)
+        for(int i=0;i<_iSize;i++)
             _data[i]/=b;
 
         return *this;
@@ -274,13 +274,13 @@ public:
         Matrix<T> a(*this);
         resize(a._iRows,b._iColumns);
 
-        for(unsigned int r=0;r<_iRows;r++)
+        for(int r=0;r<_iRows;r++)
         {
-            for(unsigned int c=0;c<_iColumns;c++)
+            for(int c=0;c<_iColumns;c++)
             {
                 T temp=0.;
 
-                for(unsigned int k=0;k<a._iColumns;k++)
+                for(int k=0;k<a._iColumns;k++)
                     temp+=a(r,k)*b(k,c);
 
                 operator()(r,c)=temp;
@@ -297,7 +297,7 @@ public:
 
         Matrix<T> out(*this);
 
-        for(unsigned int i=0;i<_iSize;i++)
+        for(int i=0;i<_iSize;i++)
             out(i)*=m(i);
 
         return out;
@@ -310,7 +310,7 @@ public:
 
         Matrix<T> out(*this);
 
-        for(unsigned int i=0;i<_iSize;i++)
+        for(int i=0;i<_iSize;i++)
             out(i)/=m(i);
 
         return out;
@@ -320,7 +320,7 @@ public:
     {
         Matrix<T> out(*this);
 
-        for(unsigned int i=0;i<_iSize;i++)
+        for(int i=0;i<_iSize;i++)
             out(i)*=d;
 
         return out;
@@ -329,7 +329,7 @@ public:
     T sum() const
     {
         T dSum=0.;
-        for(unsigned int i=0;i<_iSize;i++)
+        for(int i=0;i<_iSize;i++)
             dSum+=_data[i];
 
         return dSum;
@@ -341,7 +341,7 @@ public:
             return 0.; //not clean
 
         T dMax=_data[0];
-        for(unsigned int i=1;i<_iSize;i++)
+        for(int i=1;i<_iSize;i++)
             if(_data[i]>dMax)
                 dMax=_data[i];
 
@@ -352,8 +352,8 @@ public:
     {
         Matrix<T> out(_iColumns,_iRows);
 
-        for(unsigned int r=0;r<_iRows;r++)
-            for(unsigned int c=0;c<_iColumns;c++)
+        for(int r=0;r<_iRows;r++)
+            for(int c=0;c<_iColumns;c++)
                 out(c,r)=operator()(r,c);
 
         return out;
@@ -365,7 +365,7 @@ public:
     }
 
 
-    Matrix<T> row(size_t iRow)
+    Matrix<T> row(int iRow)
     {
         assert(iRow<_iRows);
 
@@ -373,7 +373,7 @@ public:
     }
 
     
-    const Matrix<T> row(size_t iRow) const
+    const Matrix<T> row(int iRow) const
     {
         assert(iRow<_iRows);
 
@@ -385,7 +385,7 @@ public:
     {
         Matrix<T> r(_iRows,1);
 
-        for(unsigned int i=0;i<_iRows;i++)
+        for(int i=0;i<_iRows;i++)
             r(i)=row(i).sum();
 
         return r;
@@ -395,7 +395,7 @@ public:
     {
         Matrix<T> r(_iRows,1);
 
-        for(unsigned int i=0;i<_iRows;i++)
+        for(int i=0;i<_iRows;i++)
             r(i)=operator()(i,i);
 
         return r;
@@ -406,7 +406,7 @@ public:
     }
     
 private:
-    size_t _iRows,_iColumns,_iSize;
+    int _iRows,_iColumns,_iSize;
     T* _data;
     bool _bDelete;
 };
@@ -427,8 +427,8 @@ const Matrix<T> without_last_column(const Matrix<T>& a) // slow function!
 
     Matrix<T> m(a.rows(), a.cols()-1);
 
-    for(unsigned int r=0;r<a.rows();r++)
-        for(unsigned int c=0;c<a.cols()-1;c++)
+    for(int r=0;r<a.rows();r++)
+        for(int c=0;c<a.cols()-1;c++)
             m(r,c)=a(r,c);
 
     return m;

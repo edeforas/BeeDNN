@@ -269,11 +269,6 @@
            <string>testDNN</string>
           </property>
          </item>
-         <item>
-          <property name="text">
-           <string>tiny-dnn</string>
-          </property>
-         </item>
         </widget>
        </item>
        <item>

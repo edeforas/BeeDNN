@@ -33,7 +33,7 @@ void DNNEngineTinyDnn::init()
 void DNNEngineTinyDnn::add_layer(int inSize, int outSize, string sLayerType)
 {
     if(sLayerType=="DenseAndBias")
-        *_pNet << tiny_dnn::fully_connected_layer(inSize, outSize);
+        *_pNet << tiny_dnn::fully_connected_layer(inSize, outSize,true);
 
     if(sLayerType=="DenseNoBias")
         *_pNet << tiny_dnn::fully_connected_layer(inSize, outSize,false);
@@ -78,7 +78,7 @@ void DNNEngineTinyDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
 
     tiny_dnn::vec_t vOut=_pNet->predict(vIn);
 
-    mOut.resize(vOut.size(),1);
+    mOut.resize((int)vOut.size(),1);
     std::copy(vOut.data(),vOut.data()+vOut.size(),mOut.data());
 
     // was mOut.assign(vOut.data(),vOut.data()+vOut.size());
@@ -93,7 +93,7 @@ void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
     std::vector<tiny_dnn::vec_t> vSamples;
     std::vector<tiny_dnn::vec_t> vTruth;
 
-    for(unsigned int i=0;i<mSamples.rows();i++)
+    for(int i=0;i<mSamples.rows();i++)
     {
         tiny_dnn::vec_t tS;
         tS.assign(mSamples.row(i).data(),mSamples.row(i).data()+mSamples.cols());

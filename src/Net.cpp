@@ -47,7 +47,7 @@ void Net::classify(const MatrixFloat& mIn,MatrixFloat& mClass) const
     mClass.resize(mIn.rows(),1); //todo  put int NetClassification problem
 
     MatrixFloat mOut;
-    for(unsigned int i=0;i<mIn.rows();i++)
+    for(int i=0;i<mIn.rows();i++)
     {
         forward(mIn.row(i),mOut);
         mClass(i)=argmax(mOut)(0); //weird

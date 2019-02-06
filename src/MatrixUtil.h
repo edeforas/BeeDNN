@@ -7,14 +7,13 @@ using namespace std;
 #include "Matrix.h"
 
 
+MatrixFloat rand_perm(int iSize); //create a vector of index shuffled
 
-MatrixFloat rand_perm(size_t iSize); //create a vector of index shuffled
-
-MatrixFloat index_to_position(const MatrixFloat& mIndex, size_t uiMaxPosition);
+MatrixFloat index_to_position(const MatrixFloat& mIndex, int uiMaxPosition);
 
 MatrixFloat argmax(const MatrixFloat& m);
 
-MatrixFloat decimate(const MatrixFloat& m, size_t iRatio);
+MatrixFloat decimate(const MatrixFloat& m, int iRatio);
 
 namespace MatrixUtil
 {

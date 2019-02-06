@@ -26,9 +26,9 @@ int main()
     //cout << MatrixUtil::to_string(mTruth) << endl;
 
     TrainOption tOpt;
-    tOpt.learningRate=0.1f;
-    tOpt.batchSize=1;
-    tOpt.epochs=20000;
+    tOpt.learningRate=0.01f;
+    tOpt.batchSize=4;
+    tOpt.epochs=2000;
 
     NetTrainLearningRate netTrain;
     netTrain.train(net,mSamples,mTruth,tOpt);

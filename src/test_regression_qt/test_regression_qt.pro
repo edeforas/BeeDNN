@@ -3,16 +3,21 @@ TARGET = test_regression_qt
 TEMPLATE = app
 CONFIG += c++14
 
+
+#eigen (optional)
 DEFINES+= "USE_EIGEN_NO"
+INCLUDEPATH += $$(EIGEN_PATH)
 
-SOURCES += \
-	main.cpp\
-	mainwindow.cpp \
-    SimpleCurve.cpp \
-    DNNEngineTestDnn.cpp \
-    DNNEngineTinyDnn.cpp \
-    DNNEngine.cpp
 
+#tiny-dnn (optional)
+DEFINES+= "USE_TINYDNN"
+INCLUDEPATH += $$(TINY_DNN_PATH)
+SOURCES += DNNEngineTinyDnn.cpp
+HEADERS +=DNNEngineTinyDnn.h
+
+
+#net library
+INCLUDEPATH += ..
 SOURCES += \
     ../Net.cpp \
     ../NetUtil.cpp \
@@ -24,15 +29,6 @@ SOURCES += \
     ../LayerActivation.cpp \
     ../LayerDenseNoBias.cpp \
     ../LayerDenseAndBias.cpp
-
-HEADERS  += \
-	mainwindow.h \
-    SimpleCurve.h \
-    DNNEngine.h \
-    DNNEngineTestDnn.h \
-    DNNEngineTinyDnn.h
-
-
 HEADERS += \
     ../Activation.h \
     ../Layer.h \
@@ -45,10 +41,18 @@ HEADERS += \
     ../LayerDenseNoBias.h \
     ../LayerDenseAndBias.h
 
+
+#ui
+SOURCES += \
+    main.cpp\
+    mainwindow.cpp \
+    SimpleCurve.cpp \
+    DNNEngineTestDnn.cpp \
+    DNNEngine.cpp
+HEADERS  += \
+    mainwindow.h \
+    SimpleCurve.h \
+    DNNEngine.h \
+    DNNEngineTestDnn.h
 FORMS    += mainwindow.ui
 
-INCLUDEPATH += ..
-INCLUDEPATH += $$(EIGEN_PATH)
-
-#tiny-dnn
-INCLUDEPATH += $$(TINY_DNN_PATH)

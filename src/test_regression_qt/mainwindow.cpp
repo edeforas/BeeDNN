@@ -6,7 +6,10 @@
 
 #include "DNNEngine.h"
 #include "DNNEngineTestDnn.h"
+
+#ifdef USE_TINYDNN
 #include "DNNEngineTinyDnn.h"
+#endif
 
 #include "LayerActivation.h"
 
@@ -35,17 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
     vector<string> vsActivations;
 
     list_activations_available( vsActivations);
-    /*
-    for(unsigned int i=0;i<vsActivations.size();i++)
-    {
-        ui->cbActivationLayer1->addItem(vsActivations[i].c_str());
-        ui->cbActivationLayer2->addItem(vsActivations[i].c_str());
-        ui->cbActivationLayer3->addItem(vsActivations[i].c_str());
-    }
-    ui->cbActivationLayer1->setCurrentText("Tanh");
-    ui->cbActivationLayer2->setCurrentText("Tanh");
-    ui->cbActivationLayer3->setCurrentText("Linear");
-*/
+
     ui->cbFunction->addItem("Sin");
     ui->cbFunction->addItem("Abs");
     ui->cbFunction->addItem("Parabolic");
@@ -78,6 +71,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
         ui->twNetwork->setCellWidget(i,0,qcbType);
     }
+
+#ifdef USE_TINYDNN
+    ui->cbEngine->addItem("tiny-dnn");
+#endif
 
     resizeDocks({ui->dockWidget},{1},Qt::Horizontal);
 
@@ -306,12 +303,15 @@ void MainWindow::update_details()
 void MainWindow::on_cbEngine_currentTextChanged(const QString &arg1)
 {
     delete _pEngine;
+    _pEngine=0;
 
     if(arg1=="testDNN")
         _pEngine=new DNNEngineTestDnn;
 
+#ifdef USE_TINYDNN
     if(arg1=="tiny-dnn")
         _pEngine=new DNNEngineTinyDnn;
+#endif
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_btnTrainMore_clicked()

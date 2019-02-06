@@ -21,7 +21,7 @@ public:
     }
 
     int  epochs;
-    size_t batchSize;
+    int batchSize;
     float learningRate;
  //   float momentum;
     bool initWeight;

@@ -17,18 +17,18 @@ LayerDenseNoBias::~LayerDenseNoBias()
 void LayerDenseNoBias::init()
 {
     float a =4.f*sqrtf(6.f/(_iInSize+_iOutSize));
-    for(unsigned int i=0;i<_weight.size();i++)
+    for(int i=0;i<_weight.size();i++)
         _weight(i)=((float)rand()/(float)RAND_MAX-0.5f)*2.f*a;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDenseNoBias::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
 {
-    mMatOut= mMatIn*_weight ;
+    mMatOut= mMatIn*_weight;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDenseNoBias::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, float fLearningRate, MatrixFloat &mNewDelta)
 {
     mNewDelta=_weight*mDelta;
-    _weight-= (mInput.transpose())*(mDelta.transpose())*fLearningRate; //todo optimize
+    _weight-= (mDelta*mInput).transpose()*fLearningRate; //todo optimize
 }
 ///////////////////////////////////////////////////////////////////////////////

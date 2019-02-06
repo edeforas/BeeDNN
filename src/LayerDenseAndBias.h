@@ -17,7 +17,7 @@ public:
 
 private:
     MatrixFloat _weight;
-    MatrixFloat _bias;
+//    MatrixFloat _bias;
 };
 
 #endif
