@@ -125,7 +125,7 @@ void MainWindow::train_and_test(bool bReset)
     dto.learningRate=ui->leLearningRate->text().toFloat();
     dto.batchSize=ui->leBatchSize->text().toInt();
     dto.momentum=ui->leMomentum->text().toFloat();
-    dto.observer=0;//&lossCB;
+    dto.observer=nullptr;//&lossCB;
     dto.initWeight=bReset;
 
     DNNTrainResult dtr =_pEngine->train(mSamples,mTruth,dto);
@@ -137,7 +137,7 @@ void MainWindow::train_and_test(bool bReset)
 
     //drawLoss(lossCB.vdLoss,lossCB.vdMaxError);
     drawRegression();
-    resizeEvent(0);
+    resizeEvent(nullptr);
 
     update_details();
     QApplication::restoreOverrideCursor();
@@ -191,14 +191,14 @@ void MainWindow::drawRegression()
     for(unsigned int i=0;i<iNbPoint;i++)
     {
         mIn(0,0)=fVal;
-        vTruth.push_back(-compute_truth(fVal));
-        vSamples.push_back(fVal);
+        vTruth.push_back((double)(-compute_truth(fVal)));
+        vSamples.push_back((double)(fVal));
         _pEngine->predict(mIn,mOut);
 
         if(mOut.size()==0)
             return; //todo
 
-        vRegression.push_back(-mOut(0));
+        vRegression.push_back((double)(-mOut(0)));
         fVal+=fStep;
     }
 
@@ -221,7 +221,7 @@ void MainWindow::on_actionQuit_triggered()
 void MainWindow::on_actionAbout_triggered()
 {
     QMessageBox mb;
-    QString qsText="Regression Net Demo";
+    QString qsText="Regression Net Demo (and more)";
     qsText+= "\n";
     qsText+= "\n GitHub: https://github.com/edeforas/test_DNN";
     qsText+= "\n by Etienne de Foras";
@@ -291,7 +291,7 @@ void MainWindow::resizeEvent( QResizeEvent *e )
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::update_details()
 {
-    if(_pEngine==0)
+    if(_pEngine==nullptr)
     {
         ui->peDetails->clear();
         return;
@@ -303,7 +303,7 @@ void MainWindow::update_details()
 void MainWindow::on_cbEngine_currentTextChanged(const QString &arg1)
 {
     delete _pEngine;
-    _pEngine=0;
+    _pEngine=nullptr;
 
     if(arg1=="testDNN")
         _pEngine=new DNNEngineTestDnn;

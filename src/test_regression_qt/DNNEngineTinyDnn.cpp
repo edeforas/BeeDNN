@@ -33,13 +33,16 @@ void DNNEngineTinyDnn::init()
 void DNNEngineTinyDnn::add_layer(int inSize, int outSize, string sLayerType)
 {
     if(sLayerType=="DenseAndBias")
-        *_pNet << tiny_dnn::fully_connected_layer(inSize, outSize,true);
+        *_pNet << tiny_dnn::fully_connected_layer((size_t)inSize, (size_t)outSize,true);
 
     if(sLayerType=="DenseNoBias")
-        *_pNet << tiny_dnn::fully_connected_layer(inSize, outSize,false);
+        *_pNet << tiny_dnn::fully_connected_layer((size_t)inSize, (size_t)outSize,false);
 
     if(sLayerType=="Tanh")
         *_pNet <<  tiny_dnn::tanh_layer();
+
+    if(sLayerType=="TanhP1M2")
+        *_pNet <<  tiny_dnn::tanh_p1m2_layer();
 
     else if(sLayerType=="Sigmoid")
         *_pNet <<  tiny_dnn::sigmoid_layer();
@@ -47,25 +50,26 @@ void DNNEngineTinyDnn::add_layer(int inSize, int outSize, string sLayerType)
     else if(sLayerType=="Relu")
         *_pNet <<  tiny_dnn::relu_layer();
 
-    /*
-    else if(sActivation=="Asinh")
-        *_pNet <<  tiny_dnn::asinh_layer();
-    else if(sActivation=="Relu")
-        *_pNet <<  tiny_dnn::relu_layer();
-    else if(sActivation=="LeakyRelu")
+    else if(sLayerType=="LeakyRelu")
         *_pNet <<  tiny_dnn::leaky_relu_layer();
-    else if(sActivation=="Selu")
-        *_pNet <<  tiny_dnn::selu_layer();
-    else if(sActivation=="Elu")
+
+    else if(sLayerType=="Elu")
         *_pNet <<  tiny_dnn::elu_layer();
-    else if(sActivation=="SoftPlus")
-        *_pNet <<  tiny_dnn::softplus_layer();
-    else if(sActivation=="Linear")
-         ; // nothing to do for now
-    else if(sActivation=="SoftMax")
+
+    else if(sLayerType=="Selu")
+        *_pNet <<  tiny_dnn::selu_layer();
+
+    else if(sLayerType=="Asinh")
+        *_pNet <<  tiny_dnn::asinh_layer();
+
+    else if(sLayerType=="SoftMax")
         *_pNet <<  tiny_dnn::softmax_layer();
-    else if(sActivation=="SoftSign")
-        *_pNet <<  tiny_dnn::softsign_layer();*/
+
+    else if(sLayerType=="SoftPlus")
+        *_pNet <<  tiny_dnn::softplus_layer();
+
+    else if(sLayerType=="SoftSign")
+        *_pNet <<  tiny_dnn::softsign_layer();
 
     else
         ; // todo error activation does not exist

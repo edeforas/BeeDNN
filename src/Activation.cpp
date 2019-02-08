@@ -152,7 +152,7 @@ public:
 
     float apply(float x) const
     {
-        if(x>=0.)
+        if(x>=0.f)
             return x;
         else
             return expm1f(x);
@@ -380,6 +380,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.clear();
 
     vsActivations.push_back("Tanh");
+    vsActivations.push_back("TanhP1M2"); //todo
     vsActivations.push_back("Asinh");
     vsActivations.push_back("Sigmoid");
     vsActivations.push_back("Swish");
@@ -393,6 +394,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("Selu");
     vsActivations.push_back("SoftPlus");
     vsActivations.push_back("SoftSign");
+    vsActivations.push_back("SoftMax"); //todo
     vsActivations.push_back("Parablu");
 }
 //////////////////////////////////////////////////////////////////////////////

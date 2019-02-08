@@ -6,19 +6,6 @@ using namespace std;
 
 #include "Matrix.h"
 
-enum eLayerType
-{
-    DenseAndBias=1,
-	DenseNoBias=2,
-	
-    ActivationLinear=3,
-    ActivationSigmoid=4,
-    ActivationTanh=5,
-    ActivationRelu=6,
-    //...
-	
-};
-
 class DNNTrainObserver;
 
 class DNNTrainOption
@@ -69,8 +56,8 @@ public:
     virtual ~DNNEngine();
     virtual string to_string()=0;
 
-    virtual void clear()=0;
-    virtual void init();
+    virtual void clear()=0; //remove all layers
+    virtual void init(); // init weights
     virtual void add_layer(int inSize,int outSize, string sLayerType)=0;
 
     virtual DNNTrainResult train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto);
