@@ -357,7 +357,7 @@
        <item>
         <widget class="QLineEdit" name="leLearningRate">
          <property name="text">
-          <string>0.1</string>
+          <string>0.01</string>
          </property>
         </widget>
        </item>
@@ -387,6 +387,9 @@
        </item>
        <item>
         <widget class="QLineEdit" name="leMomentum">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>0.01</string>
          </property>
@@ -408,6 +411,9 @@
        </item>
        <item>
         <widget class="QLineEdit" name="leEarlyAbortMeanError">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>0.</string>
          </property>
@@ -422,6 +428,9 @@
        </item>
        <item>
         <widget class="QLineEdit" name="leEarlyAbortMaxError">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>0.</string>
          </property>

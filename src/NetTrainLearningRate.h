@@ -14,7 +14,7 @@ public:
     {
         epochs=1000;
         batchSize=1;
-        learningRate=0.1f;
+        learningRate=0.01f;
         observer=nullptr;
     }
 

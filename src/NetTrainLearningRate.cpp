@@ -31,8 +31,8 @@ void NetTrainLearningRate::train(Net& net,const MatrixFloat& mSamples,const Matr
         while(iBatchStart<iBatchSize)
         {
             int iBatchEnd=iBatchStart+iBatchSize;
-            if(iBatchEnd>iBatchSize) // do not compute with partial minibatch ? todo?
-                break;
+            if(iBatchEnd>iBatchSize)
+                iBatchEnd=iBatchSize; //last batch can be partial
 
             //init suminput accumulation
             vector<MatrixFloat> sumInput;
