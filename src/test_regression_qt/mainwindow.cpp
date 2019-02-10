@@ -121,8 +121,8 @@ void MainWindow::train_and_test(bool bReset)
 
     DNNTrainOption dto;
     dto.epochs=ui->leEpochs->text().toInt();
-    dto.earlyAbortMaxError=ui->leEarlyAbortMaxError->text().toDouble();
-    dto.earlyAbortMeanError=ui->leEarlyAbortMeanError->text().toDouble(); //same as loss?
+   // dto.earlyAbortMaxError=ui->leEarlyAbortMaxError->text().toDouble();
+    //dto.earlyAbortMeanError=ui->leEarlyAbortMeanError->text().toDouble(); //same as loss?
     dto.learningRate=ui->leLearningRate->text().toFloat();
     dto.batchSize=ui->leBatchSize->text().toInt();
   //  dto.momentum=ui->leMomentum->text().toFloat();

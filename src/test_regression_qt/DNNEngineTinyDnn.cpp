@@ -97,6 +97,9 @@ void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
     assert(mSamples.rows()==mTruth.rows());
 
     tiny_dnn::adamax opt;
+   // tiny_dnn::gradient_descent opt; //test
+   // opt.alpha=dto.learningRate;
+    //tiny_dnn::RMSprop opt;
 
     std::vector<tiny_dnn::vec_t> vSamples;
     std::vector<tiny_dnn::vec_t> vTruth;
@@ -113,6 +116,8 @@ void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
     }
 
     _pNet->fit<tiny_dnn::mse>(opt, vSamples, vTruth, dto.batchSize, dto.epochs, []() {},[]() {});//  on_enumerate_epoch);
+
+
 
 
  /*
