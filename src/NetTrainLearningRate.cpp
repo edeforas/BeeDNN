@@ -17,17 +17,7 @@ void NetTrainLearningRate::train(Net& net,const MatrixFloat& mSamples,const Matr
     int nLayers=(int)net.layers().size();
 
     if(nLayers==0)
-    {
-        // todo more info
         return;
-    }
-
-
-    if(topt.initWeight)
-    {
-        for(int i=0;i<nLayers;i++)
-            net.layer(i)->init();
-    }
 
     //TrainResult tr;
     int iBatchSize=topt.batchSize;

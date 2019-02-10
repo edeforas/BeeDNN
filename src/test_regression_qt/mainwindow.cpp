@@ -39,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     list_activations_available( vsActivations);
 
+    ui->cbFunction->addItem("Identity");
     ui->cbFunction->addItem("Sin");
     ui->cbFunction->addItem("Abs");
     ui->cbFunction->addItem("Parabolic");
@@ -124,18 +125,20 @@ void MainWindow::train_and_test(bool bReset)
     dto.earlyAbortMeanError=ui->leEarlyAbortMeanError->text().toDouble(); //same as loss?
     dto.learningRate=ui->leLearningRate->text().toFloat();
     dto.batchSize=ui->leBatchSize->text().toInt();
-    dto.momentum=ui->leMomentum->text().toFloat();
+  //  dto.momentum=ui->leMomentum->text().toFloat();
     dto.observer=nullptr;//&lossCB;
-    dto.initWeight=bReset;
+
+    if(bReset)
+       _pEngine->init();
 
     DNNTrainResult dtr =_pEngine->train(mSamples,mTruth,dto);
 
-    ui->leMSE->setText(QString::number(dtr.loss));
-    ui->leMaxError->setText(QString::number(dtr.maxError));
+    ui->leMSE->setText(QString::number(dtr.finalLoss));
+    //ui->leMaxError->setText(QString::number(dtr.maxError));
     ui->leComputedEpochs->setText(QString::number(dtr.computedEpochs));
     ui->leTimeByEpoch->setText(QString::number(dtr.epochDuration));
 
-    //drawLoss(lossCB.vdLoss,lossCB.vdMaxError);
+    drawLoss(dtr.loss);
     drawRegression();
     resizeEvent(nullptr);
 
@@ -143,21 +146,21 @@ void MainWindow::train_and_test(bool bReset)
     QApplication::restoreOverrideCursor();
 }
 //////////////////////////////////////////////////////////////////////////
-void MainWindow::drawLoss(vector<double> vdLoss,vector<double> vdMaxError)
+void MainWindow::drawLoss(vector<double> vdLoss)
 {
     SimpleCurve* qs=new SimpleCurve;
 
-    vector<double> x,loss,maxError;
+    vector<double> x,loss;
 
     for(unsigned int i=0;i<vdLoss.size();i++)
     {
         x.push_back(i);
-        loss.push_back(-vdLoss[i]*1000.); // //up side down *1000
-        maxError.push_back(-vdMaxError[i]); //up side down
+        loss.push_back(-vdLoss[i]); // //up side down
     }
 
     qs->addCurve(x,loss,Qt::red);
-    qs->addCurve(x,maxError,Qt::black);
+    qs->addXAxis();
+    qs->addYAxis();
 
     ui->gvLearningCurve->setScene(qs); //take ownership
 }
@@ -175,7 +178,6 @@ void MainWindow::drawRegression()
     vector<double> vSamples;
     vector<double> vRegression;
     MatrixFloat mIn(1,1),mOut;
-
 
     if(bExtrapole)
     {
@@ -236,6 +238,9 @@ float MainWindow::compute_truth(float x)
     //function not optimized but not mandatory
 
     string sFunction=ui->cbFunction->currentText().toStdString();
+
+    if(sFunction=="Identity")
+        return x;
 
     if(sFunction=="Sin")
         return sinf(x);

@@ -2,6 +2,7 @@
 #define DNNEngine_
 
 #include <string>
+#include <vector>
 using namespace std;
 
 #include "Matrix.h"
@@ -17,7 +18,7 @@ public:
         batchSize=32;
         learningRate=0.1f;
         momentum=0.1f;
-        initWeight=true;
+    //    initWeight=true;
         //observer=0;
     }
 
@@ -29,7 +30,7 @@ public:
     //momentum settings
     float learningRate;
     float momentum;
-    bool initWeight;
+   // bool initWeight;
 
     DNNTrainObserver* observer;
 };
@@ -37,10 +38,18 @@ public:
 class DNNTrainResult
 {
 public:
-    double loss;
-    double maxError;
+    DNNTrainResult()
+    {
+        finalLoss=0;
+        computedEpochs=0;
+        epochDuration=-1;
+    }
+
+    double finalLoss;
+ //   double maxError;
     int computedEpochs;
     double epochDuration; //in second
+    vector<double> loss;
 };
 
 class DNNTrainObserver

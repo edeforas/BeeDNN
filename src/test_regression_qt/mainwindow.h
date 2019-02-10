@@ -32,7 +32,7 @@ private slots:
     void on_btnTrainMore_clicked();
 
 private:
-    void drawLoss(vector<double> vdLoss,vector<double> vdMaxError);
+    void drawLoss(vector<double> vdLoss);
     void drawRegression();
     float compute_truth(float x);
     void train_and_test(bool bReset);

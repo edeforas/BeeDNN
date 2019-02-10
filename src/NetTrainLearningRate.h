@@ -17,14 +17,12 @@ public:
         learningRate=0.1f;
     //    momentum=0.1f;
         observer=nullptr;
-        initWeight=true;
     }
 
     int  epochs;
     int batchSize;
     float learningRate;
  //   float momentum;
-    bool initWeight;
     TrainObserver* observer;
 };
 

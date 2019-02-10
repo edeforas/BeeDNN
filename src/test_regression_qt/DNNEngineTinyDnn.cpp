@@ -15,7 +15,11 @@ DNNEngineTinyDnn::~DNNEngineTinyDnn()
 //////////////////////////////////////////////////////////////////////////////
 string DNNEngineTinyDnn::to_string()
 {
-    return "tiny-dnn";
+    string s;
+    int iNbLayer=_pNet->depth();
+    s+=std::to_string(iNbLayer);
+
+    return s;
 }
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTinyDnn::clear()
