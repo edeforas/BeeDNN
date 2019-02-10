@@ -13,9 +13,8 @@ public:
     TrainOption()
     {
         epochs=1000;
-        batchSize=32;
+        batchSize=1;
         learningRate=0.1f;
-    //    momentum=0.1f;
         observer=nullptr;
     }
 

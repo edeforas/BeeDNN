@@ -462,6 +462,6 @@ Matrix<T> concatHorizontally(const Matrix<T> & a, const Matrix<T> & b) // slow f
 */
 #endif
 
-const MatrixFloat from_raw_buffer(float *pBuffer,size_t iRows,size_t iCols);
+const MatrixFloat from_raw_buffer(float *pBuffer,int iRows,int iCols);
 
 #endif

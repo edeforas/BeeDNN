@@ -3,10 +3,11 @@ CONFIG += console c++14
 CONFIG -= app_bundle
 CONFIG -= qt
 
+#eigen use (optionnal)
 DEFINES+= "USE_EIGEN_NO"
-
 INCLUDEPATH+=..
 INCLUDEPATH+=$$(EIGEN_PATH)
+
 
 SOURCES += test_xor.cpp \
     ../Net.cpp \
@@ -16,7 +17,6 @@ SOURCES += test_xor.cpp \
     ../Activation.cpp \
     ../MatrixUtil.cpp \
     ../LayerActivation.cpp \
-    ../LayerDenseNoBias.cpp \
     ../LayerDenseAndBias.cpp
 
 HEADERS += \
@@ -27,5 +27,4 @@ HEADERS += \
     ../NetTrainLearningRate.h \
     ../MatrixUtil.h \
     ../LayerActivation.h \
-    ../LayerDenseNoBias.h \
     ../LayerDenseAndBias.h
