@@ -455,7 +455,7 @@
        <item>
         <widget class="QLineEdit" name="leBatchSize">
          <property name="text">
-          <string>10</string>
+          <string>1</string>
          </property>
         </widget>
        </item>
