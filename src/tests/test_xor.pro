@@ -17,7 +17,8 @@ SOURCES += test_xor.cpp \
     ../Activation.cpp \
     ../MatrixUtil.cpp \
     ../LayerActivation.cpp \
-    ../LayerDenseAndBias.cpp
+    ../LayerDenseAndBias.cpp \
+    ../LayerDenseNoBias.cpp
 
 HEADERS += \
     ../Activation.h \
@@ -27,4 +28,5 @@ HEADERS += \
     ../NetTrainLearningRate.h \
     ../MatrixUtil.h \
     ../LayerActivation.h \
-    ../LayerDenseAndBias.h
+    ../LayerDenseAndBias.h \
+    ../LayerDenseNoBias.h

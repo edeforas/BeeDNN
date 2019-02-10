@@ -1,7 +1,12 @@
 #include "Net.h"
 #include "Layer.h"
+
 #include "Matrix.h"
 #include "MatrixUtil.h"
+
+#include "LayerActivation.h"
+#include "LayerDenseNoBias.h"
+#include "LayerDenseAndBias.h"
 
 #include <cmath>
 using namespace std;
@@ -25,9 +30,14 @@ void Net::clear()
     _layers.clear();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add(Layer* l)
+void Net::add_layer(string sType,int inSize,int outSize)
 {
-    _layers.push_back(l); //take ownership of layers todo
+    if(sType=="DenseAndBias")
+        _layers.push_back(new LayerDenseAndBias(inSize,outSize));
+    else if(sType=="DenseNoBias")
+        _layers.push_back(new LayerDenseNoBias(inSize,outSize));
+    else
+         _layers.push_back(new LayerActivation(sType));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const

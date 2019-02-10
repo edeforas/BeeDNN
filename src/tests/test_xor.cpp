@@ -2,19 +2,16 @@
 using namespace std;
 
 #include "Net.h"
-#include "LayerDenseAndBias.h"
-#include "LayerActivation.h"
 #include "MatrixUtil.h"
-
 #include "NetTrainLearningRate.h"
 
 int main()
 {
     //contruct layer
     Net net;
-    net.add(new LayerDenseAndBias(2,10));
-    net.add(new LayerActivation("Relu"));
-    net.add(new LayerDenseAndBias(10,1));
+    net.add_layer("DenseAndBias",2,10);
+    net.add_layer("Relu",10,10);
+    net.add_layer("DenseAndBias",10,1);
 
     //train data
     float dSamples[]={ 0,0 , 0,1 , 1,0 , 1,1 };

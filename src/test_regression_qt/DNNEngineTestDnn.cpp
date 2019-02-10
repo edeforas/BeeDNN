@@ -36,12 +36,7 @@ void DNNEngineTestDnn::init()
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTestDnn::add_layer(int inSize, int outSize, string sLayerType)
 {
-    if(sLayerType=="DenseAndBias")
-        _pNet->add(new LayerDenseAndBias(inSize,outSize));
-    else if(sLayerType=="DenseNoBias")
-        _pNet->add(new LayerDenseNoBias(inSize,outSize));
-    else
-         _pNet->add(new LayerActivation(sLayerType));
+    _pNet->add_layer(sLayerType,inSize,outSize);
 }
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTestDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)

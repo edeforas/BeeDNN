@@ -2,6 +2,7 @@
 #define Net_
 
 #include <vector>
+#include <string>
 using namespace std;
 
 class Layer;
@@ -15,7 +16,8 @@ public:
 
 	void clear();
 	void init();
-    void add(Layer *l); //take ownership of layer todo
+    void add_layer(string sType, int inSize, int outSize);
+
     const vector<Layer*> layers() const;
     Layer* layer(size_t iLayer);
 

@@ -2,13 +2,9 @@
 using namespace std;
 
 #include "Net.h"
-#include "NetTrainMomentum.h"
-#include "Activation.h"
-#include "ActivationLayer.h"
 #include "MNISTReader.h"
 #include "MatrixUtil.h"
 #include "ConfusionMatrix.h"
-#include "LayerDenseAndBias.h"
 
 Net net;
 MatrixFloat mRefImages, mRefLabels, mRefLabelsIndex, mTestImages, mTestLabels, mTestLabelsIndex;
@@ -65,14 +61,15 @@ int main()
     mRefImages/=256.f-0.5f;
 
     //simple net, expect only 33% good classification with it ...
-    net.add(new ActivationLayer(784,30,"Tanh"));
-    net.add(new ActivationLayer(30,10,"Tanh"));
+    net.add_layer("DenseAndBias",784,30);
+    net.add_layer("Tanh",30,30);
+    net.add_layer("DenseAndBias",30,10);
+    net.add_layer("Tanh",10,10);
 
     TrainOption tOpt;
     tOpt.epochs=1000;
     tOpt.learningRate=0.1f;
     tOpt.batchSize=128;
-    tOpt.momentum=0.1f;
     tOpt.observer=&lo;
 
     cout << "training..." << endl;

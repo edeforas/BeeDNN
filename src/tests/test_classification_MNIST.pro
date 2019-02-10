@@ -5,7 +5,6 @@ CONFIG -= qt
 
 SOURCES += \
     ../Net.cpp \
-    ../NetTrainMomentum.cpp \
     ../Layer.cpp \
     ../Activation.cpp \
     ../MNISTReader.cpp \
@@ -21,7 +20,6 @@ HEADERS += \
     ../Layer.h \
     ../Matrix.h \
     ../Net.h \
-    ../NetTrainMomentum.cpp \
     ../MNISTReader.h \
     ../MatrixUtil.h \
     ../ConfusionMatrix.h \
