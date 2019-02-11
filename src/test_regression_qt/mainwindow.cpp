@@ -72,6 +72,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
         ui->twNetwork->setCellWidget(i,0,qcbType);
     }
+    ui->twNetwork->setItem(0,1,new QTableWidgetItem("1")); //first input size is 1
+    ui->twNetwork->adjustSize();
 
 #ifdef USE_TINYDNN
     ui->cbEngine->addItem("tiny-dnn");
@@ -133,10 +135,13 @@ void MainWindow::train_and_test(bool bReset)
 
     DNNTrainResult dtr =_pEngine->train(mSamples,mTruth,dto);
 
-    ui->leMSE->setText(QString::number(dtr.finalLoss));
+    double dLoss=_pEngine->compute_loss(mSamples,mTruth);
+    ui->leMSE->setText(QString::number(dLoss));
     //ui->leMaxError->setText(QString::number(dtr.maxError));
     ui->leComputedEpochs->setText(QString::number(dtr.computedEpochs));
     ui->leTimeByEpoch->setText(QString::number(dtr.epochDuration));
+
+  //  cout << "Loss=" << dLoss << endl;
 
     drawLoss(dtr.loss);
     drawRegression();

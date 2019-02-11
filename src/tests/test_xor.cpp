@@ -9,9 +9,9 @@ int main()
 {
     //contruct layer
     Net net;
-    net.add_layer("DenseAndBias",2,10);
-    net.add_layer("Relu",10,10);
-    net.add_layer("DenseAndBias",10,1);
+    net.add_layer("DenseAndBias",2,3);
+    net.add_layer("Relu",3,3);
+    net.add_layer("DenseAndBias",3,1);
 
     //train data
     float dSamples[]={ 0,0 , 0,1 , 1,0 , 1,1 };
@@ -30,7 +30,11 @@ int main()
     net.forward(mSamples.row(1),m01);
     net.forward(mSamples.row(2),m10);
     net.forward(mSamples.row(3),m11);
-    cout << m00(0) << " " <<m01(0) << " " << m10(0) << " " << m11(0) << endl;
+    cout << "0xor0=" << m00(0) << " 0xor1=" <<m01(0) << " 1xor0=" << m10(0) << " 1xor1=" << m11(0) << endl;
+
+    //compute loss
+    double dLoss=netTrain.compute_loss(net,mSamples,mTruth);
+    cout << "Loss=" << dLoss << endl;
 
     return 0;
 }

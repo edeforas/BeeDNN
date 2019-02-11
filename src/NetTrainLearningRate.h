@@ -2,6 +2,7 @@
 #define NetTrainLearningRate_
 
 #include "Matrix.h"
+#include "NetTrain.h"
 
 class Layer;
 class Net;
@@ -31,7 +32,7 @@ public:
     virtual void stepEpoch(/*const TrainResult & tr*/)=0;
 };
 
-class NetTrainLearningRate
+class NetTrainLearningRate : public NetTrain
 {
 public:
     NetTrainLearningRate();

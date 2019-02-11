@@ -3,6 +3,17 @@
 #include "tiny_dnn/tiny_dnn.h"
 
 //////////////////////////////////////////////////////////////////////////////
+void matrix_to_tinydnnmatrix(const MatrixFloat & m1,std::vector<tiny_dnn::vec_t>& _tinyMatrix)
+{
+    _tinyMatrix.clear();
+    for(int i=0;i<m1.rows();i++)
+    {
+        tiny_dnn::vec_t tS;
+        tS.assign(m1.row(i).data(),m1.row(i).data()+m1.cols());
+        _tinyMatrix.push_back(tS);
+    }
+}
+//////////////////////////////////////////////////////////////////////////////
 DNNEngineTinyDnn::DNNEngineTinyDnn()
 {
     _pNet=new tiny_dnn::network<tiny_dnn::sequential>;
@@ -103,22 +114,10 @@ void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
 
     std::vector<tiny_dnn::vec_t> vSamples;
     std::vector<tiny_dnn::vec_t> vTruth;
-
-    for(int i=0;i<mSamples.rows();i++)
-    {
-        tiny_dnn::vec_t tS;
-        tS.assign(mSamples.row(i).data(),mSamples.row(i).data()+mSamples.cols());
-        vSamples.push_back(tS);
-
-        tiny_dnn::vec_t tT;
-        tT.assign(mTruth.row(i).data(),mTruth.row(i).data()+mTruth.cols());
-        vTruth.push_back(tT);
-    }
+    matrix_to_tinydnnmatrix(mSamples,vSamples);
+    matrix_to_tinydnnmatrix(mTruth,vTruth);
 
     _pNet->fit<tiny_dnn::mse>(opt, vSamples, vTruth, dto.batchSize, dto.epochs, []() {},[]() {});//  on_enumerate_epoch);
-
-
-
 
  /*
 
@@ -134,5 +133,15 @@ void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
   };
 
  */
+}
+//////////////////////////////////////////////////////////////////////////////
+double DNNEngineTinyDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)
+{
+    std::vector<tiny_dnn::vec_t> vSamples;
+    std::vector<tiny_dnn::vec_t> vTruth;
+    matrix_to_tinydnnmatrix(mSamples,vSamples);
+    matrix_to_tinydnnmatrix(mTruth,vTruth);
+
+    return _pNet->get_loss<tiny_dnn::mse>(vSamples,vTruth);
 }
 //////////////////////////////////////////////////////////////////////////////

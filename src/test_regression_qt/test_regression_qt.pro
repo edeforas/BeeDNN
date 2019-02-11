@@ -21,6 +21,7 @@ INCLUDEPATH += ..
 SOURCES += \
     ../Net.cpp \
     ../NetUtil.cpp \
+    ../NetTrain.cpp \
     ../NetTrainLearningRate.cpp \
     ../Layer.cpp \
     ../Matrix.cpp \
@@ -35,6 +36,7 @@ HEADERS += \
     ../Matrix.h \
     ../Net.h \
     ../NetUtil.h \
+    ../NetTrain.h \
     ../NetTrainLearningRate.h \
     ../MatrixUtil.h \
     ../LayerActivation.h \

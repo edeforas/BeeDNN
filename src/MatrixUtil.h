@@ -9,7 +9,7 @@ using namespace std;
 
 MatrixFloat rand_perm(int iSize); //create a vector of index shuffled
 
-MatrixFloat index_to_position(const MatrixFloat& mIndex, int uiMaxPosition);
+//MatrixFloat index_to_position(const MatrixFloat& mIndex, int uiMaxPosition);
 
 MatrixFloat argmax(const MatrixFloat& m);
 

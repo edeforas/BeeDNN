@@ -25,7 +25,7 @@ MatrixFloat rand_perm(int iSize) //create a vector of index shuffled
     return m;
 }
 ///////////////////////////////////////////////////////////////////////////
-MatrixFloat index_to_position(const MatrixFloat& mIndex, int uiMaxPosition)
+/*MatrixFloat index_to_position(const MatrixFloat& mIndex, int uiMaxPosition)
 {
     int iNbRows=mIndex.rows();
     MatrixFloat mPos(iNbRows,uiMaxPosition);
@@ -33,11 +33,12 @@ MatrixFloat index_to_position(const MatrixFloat& mIndex, int uiMaxPosition)
 
     for(int i=0;i<iNbRows;i++)
     {
-        mPos(i,(unsigned int)mIndex(i))=1;
+        mPos(i,mIndex(i))=1;
     }
 
     return mPos;
 }
+*/
 ///////////////////////////////////////////////////////////////////////////
 MatrixFloat argmax(const MatrixFloat& m)
 {

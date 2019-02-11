@@ -20,6 +20,8 @@ public:
 
     virtual void predict(const MatrixFloat& mIn, MatrixFloat& mOut);
 
+    virtual double compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth);
+
 private:
     Net* _pNet;
 };

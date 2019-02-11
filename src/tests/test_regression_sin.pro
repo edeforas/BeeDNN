@@ -10,6 +10,7 @@ INCLUDEPATH+=$$(EIGEN_PATH)
 
 SOURCES += test_regression_sin.cpp \
     ../Net.cpp \
+    ../NetTrain.cpp \
     ../NetTrainLearningRate.cpp \
     ../Layer.cpp \
     ../Matrix.cpp \
@@ -24,6 +25,7 @@ HEADERS += \
     ../Layer.h \
     ../Matrix.h \
     ../Net.h \
+    ../NetTrain.h \
     ../NetTrainLearningRate.h \
     ../MatrixUtil.h \
     ../LayerActivation.h \

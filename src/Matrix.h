@@ -316,6 +316,16 @@ public:
         return out;
     }
 
+    Matrix<T> cwiseAbs2() const
+    {
+        Matrix<T> out(*this);
+
+        for(int i=0;i<_iSize;i++)
+            out(i)=_data[i]*_data[i]; //todo optimize
+
+        return out;
+    }
+
     Matrix<T> scalar_mult(T d) const
     {
         Matrix<T> out(*this);

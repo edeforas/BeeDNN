@@ -51,9 +51,15 @@ void DNNEngineTestDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
     tOpt.learningRate=dto.learningRate;
     tOpt.batchSize=dto.batchSize;
     //tOpt.momentum=dto.momentum;
-    tOpt.observer=0;//dto.observer;
+    tOpt.observer=nullptr;//dto.observer;
 
     NetTrainLearningRate netTrain;
     netTrain.train(*_pNet,mSamples,mTruth,tOpt);
+}
+//////////////////////////////////////////////////////////////////////////////
+double DNNEngineTestDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)
+{
+    NetTrainLearningRate netTrain;
+    return netTrain.compute_loss(*_pNet,mSamples,mTruth);
 }
 //////////////////////////////////////////////////////////////////////////////
