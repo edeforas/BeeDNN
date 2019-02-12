@@ -23,6 +23,7 @@ void NetTrainLearningRate::train(Net& net,const MatrixFloat& mSamples,const Matr
     int iBatchSize=topt.batchSize;
     int iNbSamples=mSamples.rows();
 
+    _vdLoss.clear();
     for(int iEpoch=0;iEpoch<topt.epochs;iEpoch++)
     {
         MatrixFloat mShuffle=rand_perm(iNbSamples);
@@ -91,6 +92,8 @@ void NetTrainLearningRate::train(Net& net,const MatrixFloat& mSamples,const Matr
 
         if(topt.observer)
             topt.observer->stepEpoch(/*tr*/);
+
+        _vdLoss.push_back(compute_loss(net,mSamples,mTruth));
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////

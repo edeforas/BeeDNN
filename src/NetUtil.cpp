@@ -21,12 +21,13 @@ string to_string(const Net* pNet)
 
     for(size_t i=0;i<layers.size();i++)
     {
-        //auto layer=layers[i];
+        const auto& layer=layers[i];
+        string sBuffer;
+        layer->to_string(sBuffer);
         ss << "----------------------------------------------" << endl;
         ss << "Layer " << i+1 <<":" << endl;
-        //ss << "type: " << "dense with bias and activation inSize= " << layer->get_weight().rows()-1 << "  outSize= " << layer->get_weight().cols() << endl;
-        ss << "weight:" << endl;
-  //      ss << MatrixUtil::to_string(layer->get_weight()) << endl;
+
+        ss << sBuffer<< endl;
     }
     ss << "----------------------------------------------" << endl;
 

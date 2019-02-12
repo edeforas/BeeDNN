@@ -3,6 +3,8 @@
 #include <cstdlib> // for rand
 #include <cmath> // for sqrt
 
+#include "MatrixUtil.h"
+
 ///////////////////////////////////////////////////////////////////////////////
 LayerDenseNoBias::LayerDenseNoBias(int iInSize,int iOutSize):
     Layer(iInSize,iOutSize)
@@ -30,5 +32,12 @@ void LayerDenseNoBias::backpropagation(const MatrixFloat &mInput,const MatrixFlo
 {
     mNewDelta=_weight*mDelta;
     _weight-= (mDelta*mInput).transpose()*fLearningRate; //todo optimize
+}
+///////////////////////////////////////////////////////////////////////////////
+void LayerDenseNoBias::to_string(string& sBuffer)
+{
+    sBuffer+="DenseNoBias:  InSize: "+std::to_string(_iInSize) +" OutSize: "+std::to_string(_iOutSize)+"\n";
+    sBuffer+="Weight:\n";
+    sBuffer+=MatrixUtil::to_string(_weight);
 }
 ///////////////////////////////////////////////////////////////////////////////

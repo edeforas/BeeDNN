@@ -3,6 +3,9 @@
 
 #include "Matrix.h"
 
+#include <vector>
+using namespace std; //temp
+
 class Layer;
 class Net;
 
@@ -13,6 +16,12 @@ public:
     virtual ~NetTrain();
 
     double compute_loss(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth);
+
+    vector<double> loss(); //temp
+
+protected:
+    vector<double> _vdLoss; //temp
+
 };
 
 #endif

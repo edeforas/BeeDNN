@@ -81,6 +81,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     resizeDocks({ui->dockWidget},{1},Qt::Horizontal);
 
+    _qsLoss=new SimpleCurve;
+    _qsLoss->addXAxis();
+    _qsLoss->addYAxis();
+    ui->gvLearningCurve->setScene(_qsLoss);
+
     _pEngine=new DNNEngineTestDnn;
 }
 //////////////////////////////////////////////////////////////////////////
@@ -123,25 +128,20 @@ void MainWindow::train_and_test(bool bReset)
 
     DNNTrainOption dto;
     dto.epochs=ui->leEpochs->text().toInt();
-   // dto.earlyAbortMaxError=ui->leEarlyAbortMaxError->text().toDouble();
-    //dto.earlyAbortMeanError=ui->leEarlyAbortMeanError->text().toDouble(); //same as loss?
     dto.learningRate=ui->leLearningRate->text().toFloat();
     dto.batchSize=ui->leBatchSize->text().toInt();
-  //  dto.momentum=ui->leMomentum->text().toFloat();
+    //  dto.momentum=ui->leMomentum->text().toFloat();
     dto.observer=nullptr;//&lossCB;
 
     if(bReset)
-       _pEngine->init();
+        _pEngine->init();
 
     DNNTrainResult dtr =_pEngine->train(mSamples,mTruth,dto);
 
-    double dLoss=_pEngine->compute_loss(mSamples,mTruth);
+    double dLoss=_pEngine->compute_loss(mSamples,mTruth); //todo use last in loss vector?
     ui->leMSE->setText(QString::number(dLoss));
-    //ui->leMaxError->setText(QString::number(dtr.maxError));
     ui->leComputedEpochs->setText(QString::number(dtr.computedEpochs));
     ui->leTimeByEpoch->setText(QString::number(dtr.epochDuration));
-
-  //  cout << "Loss=" << dLoss << endl;
 
     drawLoss(dtr.loss);
     drawRegression();
@@ -153,7 +153,10 @@ void MainWindow::train_and_test(bool bReset)
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::drawLoss(vector<double> vdLoss)
 {
-    SimpleCurve* qs=new SimpleCurve;
+    bool bHoldOn=ui->cbHoldOn->isChecked();
+
+    if(!bHoldOn)
+        _qsLoss->clear();
 
     vector<double> x,loss;
 
@@ -163,11 +166,8 @@ void MainWindow::drawLoss(vector<double> vdLoss)
         loss.push_back(-vdLoss[i]); // //up side down
     }
 
-    qs->addCurve(x,loss,Qt::red);
-    qs->addXAxis();
-    qs->addYAxis();
-
-    ui->gvLearningCurve->setScene(qs); //take ownership
+    _qsLoss->addCurve(x,loss,0xFF0000); //todo color cycle ?
+    ui->gvLearningCurve->fitInView(_qsLoss->sceneRect());
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::drawRegression()
@@ -209,8 +209,8 @@ void MainWindow::drawRegression()
         fVal+=fStep;
     }
 
-    qs->addCurve(vSamples,vTruth,Qt::red);
-    qs->addCurve(vSamples,vRegression,Qt::blue);
+    qs->addCurve(vSamples,vTruth,0xFF0000);
+    qs->addCurve(vSamples,vRegression,0xFF);
 
     QPen penBlack(Qt::black);
     penBlack.setCosmetic(true);
@@ -363,5 +363,12 @@ void MainWindow::parse_net()
     }
 
     _pEngine->init();
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::on_cbYLogAxis_stateChanged(int arg1)
+{
+    (void)arg1;
+    _qsLoss->setYLogAxis(ui->cbYLogAxis->isChecked());
+    ui->gvLearningCurve->fitInView(_qsLoss->sceneRect());
 }
 //////////////////////////////////////////////////////////////////////////////

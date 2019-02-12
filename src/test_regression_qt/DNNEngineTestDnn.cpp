@@ -55,6 +55,9 @@ void DNNEngineTestDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
 
     NetTrainLearningRate netTrain;
     netTrain.train(*_pNet,mSamples,mTruth,tOpt);
+
+    const auto& l=netTrain.loss();
+    _vdLoss.insert(end(_vdLoss),begin(l),end(l)); //temp
 }
 //////////////////////////////////////////////////////////////////////////////
 double DNNEngineTestDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)

@@ -3,6 +3,9 @@
 
 #include "Matrix.h"
 
+#include <string>
+using namespace std;
+
 class Layer
 {
 public:
@@ -13,7 +16,9 @@ public:
 	
     virtual void init(); //init weight if any
     virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, float fLearningRate, MatrixFloat &mNewDelta)=0;
-
+	
+	virtual void to_string(string& sBuffer)=0;
+	
 protected:
     int _iInSize, _iOutSize;
 };

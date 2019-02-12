@@ -77,9 +77,11 @@ public:
 
 protected:	
     virtual void train_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)=0;
+    vector<double> _vdLoss;
 
 private:
     int _iComputedEpochs;
+
 };
 
 #endif

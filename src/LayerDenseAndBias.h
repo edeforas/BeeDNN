@@ -15,6 +15,8 @@ public:
     virtual void init();
     virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, float fLearningRate, MatrixFloat &mNewDelta);
 
+    virtual void to_string(string& sBuffer);
+
 private:
     MatrixFloat _weight;
     MatrixFloat _bias;
