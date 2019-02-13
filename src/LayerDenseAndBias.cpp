@@ -3,11 +3,11 @@
 #include <cstdlib> // for rand
 #include <cmath> // for sqrt
 
-#include "MatrixUtil.h"
+//#include "MatrixUtil.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerDenseAndBias::LayerDenseAndBias(int iInSize,int iOutSize):
-    Layer(iInSize,iOutSize)
+    Layer(iInSize,iOutSize,"DenseAndBias")
 {
     _weight.resize(_iInSize,_iOutSize);
     _bias.resize(1,_iOutSize);
@@ -20,12 +20,13 @@ LayerDenseAndBias::~LayerDenseAndBias()
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDenseAndBias::init()
 {
-    float a =4.f*sqrtf(6.f/(_iInSize+_iOutSize));
+    //Xavier uniform initialisation
+    float a =sqrtf(6.f/(_iInSize+_iOutSize));
     for(int i=0;i<_weight.size();i++)
         _weight(i)=((float)rand()/(float)RAND_MAX-0.5f)*2.f*a;
 
     for(int i=0;i<_bias.size();i++)
-        _bias(i)=((float)rand()/(float)RAND_MAX-0.5f)*2.f*a;
+        _bias(i)=0.f;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDenseAndBias::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
@@ -41,12 +42,13 @@ void LayerDenseAndBias::backpropagation(const MatrixFloat &mInput,const MatrixFl
     _bias-=(mDelta.transpose())*fLearningRate;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerDenseAndBias::to_string(string& sBuffer)
+const MatrixFloat& LayerDenseAndBias::weight() const
 {
-    sBuffer+="DenseAndBias:  InSize: "+std::to_string(_iInSize) +" OutSize: "+std::to_string(_iOutSize)+"\n";
-    sBuffer+="Weight:\n";
-    sBuffer+=MatrixUtil::to_string(_weight);
-    sBuffer+="Bias:\n";
-    sBuffer+=MatrixUtil::to_string(_bias);
+    return _weight;
+}
+///////////////////////////////////////////////////////////////////////////////
+const MatrixFloat& LayerDenseAndBias::bias() const
+{
+    return _bias;
 }
 ///////////////////////////////////////////////////////////////////////////////

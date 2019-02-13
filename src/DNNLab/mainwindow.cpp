@@ -86,6 +86,11 @@ MainWindow::MainWindow(QWidget *parent) :
     _qsLoss->addYAxis();
     ui->gvLearningCurve->setScene(_qsLoss);
 
+    _qsRegression=new SimpleCurve;
+    _qsRegression->addXAxis();
+    _qsRegression->addYAxis();
+    ui->gvRegression->setScene(_qsRegression);
+
     _pEngine=new DNNEngineTestDnn;
 }
 //////////////////////////////////////////////////////////////////////////
@@ -172,7 +177,7 @@ void MainWindow::drawLoss(vector<double> vdLoss)
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::drawRegression()
 {
-    SimpleCurve* qs=new SimpleCurve;
+    _qsRegression->clear();
 
     //create ref sample hi-res and net output
     unsigned int iNbPoint=(unsigned int)(ui->leNbPointsTest->text().toInt());
@@ -209,15 +214,10 @@ void MainWindow::drawRegression()
         fVal+=fStep;
     }
 
-    qs->addCurve(vSamples,vTruth,0xFF0000);
-    qs->addCurve(vSamples,vRegression,0xFF);
-
-    QPen penBlack(Qt::black);
-    penBlack.setCosmetic(true);
-    qs->addXAxis();
-    qs->addYAxis();
-
-    ui->gvRegression->setScene(qs); //take ownership
+    _qsRegression->addCurve(vSamples,vTruth,0xFF0000);
+    _qsRegression->addCurve(vSamples,vRegression,0xFF);
+//    _qsRegression->addXAxis();
+//    _qsRegression->addYAxis();
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionQuit_triggered()
@@ -228,7 +228,7 @@ void MainWindow::on_actionQuit_triggered()
 void MainWindow::on_actionAbout_triggered()
 {
     QMessageBox mb;
-    QString qsText="Regression Net Demo (and more)";
+    QString qsText="DNNLab";
     qsText+= "\n";
     qsText+= "\n GitHub: https://github.com/edeforas/test_DNN";
     qsText+= "\n by Etienne de Foras";

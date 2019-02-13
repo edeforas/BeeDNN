@@ -45,6 +45,7 @@ private:
     Ui::MainWindow *ui;
 
     DNNEngine* _pEngine;
+    SimpleCurve* _qsRegression;
     SimpleCurve* _qsLoss;
 };
 

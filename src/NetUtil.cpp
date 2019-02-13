@@ -3,6 +3,9 @@
 #include "Matrix.h"
 #include "MatrixUtil.h"
 
+#include "LayerDenseAndBias.h"
+#include "LayerDenseNoBias.h"
+
 #include <sstream>
 using namespace std;
 
@@ -19,17 +22,33 @@ string to_string(const Net* pNet)
     ss << "Nb Layers: " << layers.size() << endl;
     ss << endl;
 
+    ss << "----------------------------------------------" << endl;
     for(size_t i=0;i<layers.size();i++)
     {
-        const auto& layer=layers[i];
-        string sBuffer;
-        layer->to_string(sBuffer);
-        ss << "----------------------------------------------" << endl;
-        ss << "Layer " << i+1 <<":" << endl;
+        Layer* layer=layers[i];
 
-        ss << sBuffer<< endl;
+        if(layer->type()=="DenseNoBias")
+        {
+            LayerDenseNoBias* l=(LayerDenseNoBias*)layer;
+            ss << "DenseNoBias:  InSize: " << l->in_size() << " OutSize: " << l->out_size() << endl;
+            ss << "Weight:\n";
+            ss << MatrixUtil::to_string(l->weight());
+        }
+        else if(layer->type()=="DenseAndBias")
+        {
+            LayerDenseAndBias* l=(LayerDenseAndBias*)layer;
+            ss << "DenseAndBias:  InSize: " << l->in_size() << " OutSize: " << l->out_size() << endl;
+            ss << "Weight:\n";
+            ss << MatrixUtil::to_string(l->weight());
+            ss << "Bias:\n";
+            ss << MatrixUtil::to_string(l->bias());
+        }
+        else
+        {
+            ss << "Activation: " << layer->type() << endl;
+        }
+        ss << "----------------------------------------------" << endl;
     }
-    ss << "----------------------------------------------" << endl;
 
     return ss.str();
 }

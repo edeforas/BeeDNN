@@ -3,11 +3,11 @@
 #include <cstdlib> // for rand
 #include <cmath> // for sqrt
 
-#include "MatrixUtil.h"
+//#include "MatrixUtil.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerDenseNoBias::LayerDenseNoBias(int iInSize,int iOutSize):
-    Layer(iInSize,iOutSize)
+    Layer(iInSize,iOutSize,"DenseNoBias")
 {
     _weight.resize((int)_iInSize,(int)_iOutSize);
     init();
@@ -18,7 +18,8 @@ LayerDenseNoBias::~LayerDenseNoBias()
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDenseNoBias::init()
 {
-    float a =4.f*sqrtf(6.f/(_iInSize+_iOutSize));
+    //Xavier uniform initialisation
+    float a =sqrtf(6.f/(_iInSize+_iOutSize));
     for(int i=0;i<_weight.size();i++)
         _weight(i)=((float)rand()/(float)RAND_MAX-0.5f)*2.f*a;
 }
@@ -34,10 +35,8 @@ void LayerDenseNoBias::backpropagation(const MatrixFloat &mInput,const MatrixFlo
     _weight-= (mDelta*mInput).transpose()*fLearningRate; //todo optimize
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerDenseNoBias::to_string(string& sBuffer)
+const MatrixFloat& LayerDenseNoBias::weight() const
 {
-    sBuffer+="DenseNoBias:  InSize: "+std::to_string(_iInSize) +" OutSize: "+std::to_string(_iOutSize)+"\n";
-    sBuffer+="Weight:\n";
-    sBuffer+=MatrixUtil::to_string(_weight);
+    return _weight;
 }
 ///////////////////////////////////////////////////////////////////////////////

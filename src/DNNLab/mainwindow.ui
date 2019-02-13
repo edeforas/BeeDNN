@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Function regression test</string>
+   <string>DNNLab</string>
   </property>
   <property name="documentMode">
    <bool>false</bool>

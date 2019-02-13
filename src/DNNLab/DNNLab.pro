@@ -1,5 +1,5 @@
 QT       += core gui widgets
-TARGET = test_regression_qt
+TARGET = DNNLab
 TEMPLATE = app
 CONFIG += c++14
 

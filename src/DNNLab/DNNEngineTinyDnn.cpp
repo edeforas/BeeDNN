@@ -107,9 +107,9 @@ void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
 {
     assert(mSamples.rows()==mTruth.rows());
 
-    tiny_dnn::adamax opt;
+    //tiny_dnn::adamax opt;
     //tiny_dnn::adagrad opt;
-    //tiny_dnn::adam opt;
+    tiny_dnn::adam opt;
    // tiny_dnn::RMSprop opt;
     //tiny_dnn::momentum opt;
    // tiny_dnn::nesterov_momentum opt;
