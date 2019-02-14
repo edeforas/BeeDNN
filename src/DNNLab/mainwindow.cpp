@@ -135,8 +135,9 @@ void MainWindow::train_and_test(bool bReset)
     dto.epochs=ui->leEpochs->text().toInt();
     dto.learningRate=ui->leLearningRate->text().toFloat();
     dto.batchSize=ui->leBatchSize->text().toInt();
-    //  dto.momentum=ui->leMomentum->text().toFloat();
-    dto.observer=nullptr;//&lossCB;
+    dto.momentum=ui->leMomentum->text().toFloat();
+    dto.optimizer=ui->cbOptimizer->currentText().toStdString();
+    //dto.observer=nullptr;//&lossCB;
 
     if(bReset)
         _pEngine->init();

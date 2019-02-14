@@ -7,7 +7,11 @@ using namespace std;
 
 #include "Matrix.h"
 
-class DNNTrainObserver;
+//class DNNTrainObserver;
+
+
+
+
 
 class DNNTrainOption
 {
@@ -17,9 +21,10 @@ public:
         epochs=1000;
         batchSize=32;
         learningRate=0.1f;
-     //   momentum=0.1f;
+        momentum=0.9f;
     //    initWeight=true;
         //observer=0;
+        optimizer="simpleSGD";
     }
 
     int  epochs;
@@ -29,10 +34,11 @@ public:
 
     //momentum settings
     float learningRate;
-  //  float momentum;
+    float momentum;
+    string optimizer;
    // bool initWeight;
 
-    DNNTrainObserver* observer;
+//    DNNTrainObserver* observer;
 };
 
 class DNNTrainResult

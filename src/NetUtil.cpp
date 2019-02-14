@@ -19,7 +19,7 @@ string to_string(const Net* pNet)
     auto layers=pNet->layers();
     ss << "Engine: testDnn" << endl;
     ss << endl;
-    ss << "Nb Layers: " << layers.size() << endl;
+    ss << "NbLayers: " << layers.size() << endl;
     ss << endl;
 
     ss << "----------------------------------------------" << endl;
