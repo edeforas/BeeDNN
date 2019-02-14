@@ -23,18 +23,11 @@ void tinydnnmatrix_to_matrix(const tiny_dnn::vec_t& tinyMatrix, MatrixFloat& m1)
         return;
     }
 
-    //row major
     int iSize=tinyMatrix.size();
+    m1.resize(1,iSize);
 
-/*
-    int iNbCols=tinyMatrix[0]->size();
-
-    m1.resize(iNbRows,iNbCols);
-
-    for(int r=0;r<iNbRows;r++)
-        for(int c=0;c<iNbCols;c++)
-            m1(r,c)=(*_tinyMatrix[r])[c];
-*/
+    for(int i=0;i<iSize;i++)
+        m1(0,i)=tinyMatrix[i];
 }
 //////////////////////////////////////////////////////////////////////////////
 DNNEngineTinyDnn::DNNEngineTinyDnn()
@@ -65,55 +58,29 @@ string DNNEngineTinyDnn::to_string()
         {
             ss << "fully-connected: InSize: " << l->fan_in_size() << " OutSize: " << l->fan_out_size() << endl;
 
-            MatrixFloat mf;
-     //       tinydnnmatrix_to_matrix(l->weights(),mf);
+            auto w=l->weights();
+            if(w.size()>0)
+            {
+                ss << "Weight:\n";
+                MatrixFloat wmf;
+                tinydnnmatrix_to_matrix(*(w[0]),wmf);
+                ss << MatrixUtil::to_string(wmf);
 
-            ss << "Weight:\n";
-            ss << MatrixUtil::to_string(mf);
-            //           ss << "Bias:\n";
-            //          ss << MatrixUtil::to_string(l->bias());
-
+                if(w.size()>1)
+                {
+                    ss << "Bias:\n";
+                    MatrixFloat wmb;
+                    tinydnnmatrix_to_matrix(*(w[1]),wmb);
+                    ss << MatrixUtil::to_string(wmb);
+                }
+            }
         }
 
-        if(l->layer_type()=="tanh-activation")
+        if(l->layer_type().find("activation")!=string::npos)
         {
             ss << "Activation: " << l->layer_type() << endl;
         }
 
-        if(l->layer_type()=="relu-activation")
-        {
-            ss << "Activation: " << l->layer_type() << endl;
-        }
-
-
-        /*
-
-
-
-
-        Layer* layer=layers[i];
-
-        if(layer->type()=="DenseNoBias")
-        {
-            LayerDenseNoBias* l=(LayerDenseNoBias*)layer;
-            ss << "DenseNoBias:  InSize: " << l->in_size() << " OutSize: " << l->out_size() << endl;
-            ss << "Weight:\n";
-            ss << MatrixUtil::to_string(l->weight());
-        }
-        else if(layer->type()=="DenseAndBias")
-        {
-            LayerDenseAndBias* l=(LayerDenseAndBias*)layer;
-            ss << "DenseAndBias:  InSize: " << l->in_size() << " OutSize: " << l->out_size() << endl;
-            ss << "Weight:\n";
-            ss << MatrixUtil::to_string(l->weight());
-            ss << "Bias:\n";
-            ss << MatrixUtil::to_string(l->bias());
-        }
-        else
-        {
-            ss << "Activation: " << layer->type() << endl;
-        }
-        */
         ss << "----------------------------------------------" << endl;
     }
 
