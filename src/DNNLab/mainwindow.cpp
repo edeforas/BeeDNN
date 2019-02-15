@@ -1,8 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QMessageBox>
-#include <QGraphicsScene>
-#include "SimpleCurve.h"
+#include <QColorDialog>
+#include "SimpleCurveWidget.h"
 
 #include "DNNEngine.h"
 #include "DNNEngineTestDnn.h"
@@ -13,22 +13,7 @@
 
 #include "LayerActivation.h"
 
-/*
 //////////////////////////////////////////////////////////////////////////
-// callback class to observe loss evolution
-class LossObserver: public TrainObserver
-{
-public:
-    virtual void stepEpoch(const TrainResult & tr)
-    {
-        vdLoss.push_back(tr.loss);
-        vdMaxError.push_back(tr.maxError);
-    }
-
-    vector<double> vdLoss,vdMaxError;
-};
-//////////////////////////////////////////////////////////////////////////
-*/
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -81,15 +66,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
     resizeDocks({ui->dockWidget},{1},Qt::Horizontal);
 
-    _qsLoss=new SimpleCurve;
-    _qsLoss->addXAxis();
-    _qsLoss->addYAxis();
-    ui->gvLearningCurve->setScene(_qsLoss);
-
-    _qsRegression=new SimpleCurve;
+    _qsRegression=new SimpleCurveWidget;
     _qsRegression->addXAxis();
     _qsRegression->addYAxis();
-    ui->gvRegression->setScene(_qsRegression);
+    ui->layoutRegression->addWidget(_qsRegression);
+
+    _qsLoss=new SimpleCurveWidget;
+    _qsLoss->addXAxis();
+    _qsLoss->addYAxis();
+    ui->layoutLossCurve->replaceWidget(ui->widgetToReplace,_qsLoss);
+
+    _curveColor=0xff0000; //red
 
     _pEngine=new DNNEngineTestDnn;
 }
@@ -151,7 +138,7 @@ void MainWindow::train_and_test(bool bReset)
 
     drawLoss(dtr.loss);
     drawRegression();
-    resizeEvent(nullptr);
+  //  resizeEvent(nullptr);
 
     update_details();
     QApplication::restoreOverrideCursor();
@@ -165,15 +152,13 @@ void MainWindow::drawLoss(vector<double> vdLoss)
         _qsLoss->clear();
 
     vector<double> x,loss;
-
     for(unsigned int i=0;i<vdLoss.size();i++)
     {
         x.push_back(i);
         loss.push_back(-vdLoss[i]); // //up side down
     }
 
-    _qsLoss->addCurve(x,loss,0xFF0000); //todo color cycle ?
-    ui->gvLearningCurve->fitInView(_qsLoss->sceneRect());
+    _qsLoss->addCurve(x,loss,_curveColor);
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::drawRegression()
@@ -217,8 +202,6 @@ void MainWindow::drawRegression()
 
     _qsRegression->addCurve(vSamples,vTruth,0xFF0000);
     _qsRegression->addCurve(vSamples,vRegression,0xFF);
-//    _qsRegression->addXAxis();
-//    _qsRegression->addYAxis();
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionQuit_triggered()
@@ -283,7 +266,7 @@ float MainWindow::compute_truth(float x)
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::resizeEvent( QResizeEvent *e )
 {
-    (void)e;
+/*    (void)e;
 
     QGraphicsScene* qsr=ui->gvRegression->scene();
     if(qsr)
@@ -298,6 +281,7 @@ void MainWindow::resizeEvent( QResizeEvent *e )
         ui->gvLearningCurve->fitInView(qsl->itemsBoundingRect());
         ui->gvLearningCurve->scale(0.9,0.9);
     }
+*/
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::update_details()
@@ -370,6 +354,18 @@ void MainWindow::on_cbYLogAxis_stateChanged(int arg1)
 {
     (void)arg1;
     _qsLoss->setYLogAxis(ui->cbYLogAxis->isChecked());
-    ui->gvLearningCurve->fitInView(_qsLoss->sceneRect());
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::on_buttonColor_clicked()
+{
+    QColorDialog qcd;
+    qcd.setCurrentColor(_curveColor);
+    qcd.exec();
+    _curveColor=qcd.currentColor().rgb();
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::on_pushButton_2_clicked()
+{
+    _qsLoss->clear();
 }
 //////////////////////////////////////////////////////////////////////////////

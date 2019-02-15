@@ -7,7 +7,7 @@ class DNNEngine;
 
 #include <QMainWindow>
 
-class SimpleCurve;
+class SimpleCurveWidget;
 
 namespace Ui {
 class MainWindow;
@@ -20,7 +20,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 protected:
@@ -34,6 +34,10 @@ private slots:
     void on_btnTrainMore_clicked();   
     void on_cbYLogAxis_stateChanged(int arg1);
 
+    void on_buttonColor_clicked();
+
+    void on_pushButton_2_clicked();
+
 private:
     void drawLoss(vector<double> vdLoss);
     void drawRegression();
@@ -45,8 +49,9 @@ private:
     Ui::MainWindow *ui;
 
     DNNEngine* _pEngine;
-    SimpleCurve* _qsRegression;
-    SimpleCurve* _qsLoss;
+    SimpleCurveWidget* _qsRegression;
+    SimpleCurveWidget* _qsLoss;
+    unsigned int _curveColor;
 };
 
 #endif // MAINWINDOW_H

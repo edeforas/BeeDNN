@@ -4,6 +4,10 @@ TEMPLATE = app
 CONFIG += c++14
 
 
+#qwt (optional)
+DEFINES+= "USE_QWT_NO"
+INCLUDEPATH += $$(QWT_PATH)/include
+
 #eigen (optional)
 DEFINES+= "USE_EIGEN_NO"
 INCLUDEPATH += $$(EIGEN_PATH)
@@ -48,12 +52,12 @@ HEADERS += \
 SOURCES += \
     main.cpp\
     mainwindow.cpp \
-    SimpleCurve.cpp \
+    SimpleCurveWidget.cpp \
     DNNEngineTestDnn.cpp \
     DNNEngine.cpp
 HEADERS  += \
     mainwindow.h \
-    SimpleCurve.h \
+    SimpleCurveWidget.h \
     DNNEngine.h \
     DNNEngineTestDnn.h
 FORMS    += mainwindow.ui
