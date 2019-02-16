@@ -3,13 +3,16 @@ CONFIG += console c++14
 CONFIG -= app_bundle
 CONFIG -= qt
 
-DEFINES+= "USE_EIGEN_NO"
 
-SOURCES += test_matrix.cpp
+#eigen use (optionnal)
+DEFINES+= "USE_EIGEN_NO"
+INCLUDEPATH+=$$(EIGEN_PATH)
+
+
+SOURCES += test_matrix.cpp \
+    ../Matrix.cpp
 
 INCLUDEPATH+=..
-INCLUDEPATH+=$$(EIGEN_PATH)
 
 HEADERS += \
     ../Matrix.h
-

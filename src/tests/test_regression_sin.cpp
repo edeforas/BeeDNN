@@ -29,7 +29,7 @@ int main()
     // learn
     cout << "Learning..." << endl;
     TrainOption tOpt;
-    tOpt.epochs=20000;
+    tOpt.epochs=50000;
     NetTrainLearningRate train;
     train.train(net,mSamples,mTruth,tOpt);
 

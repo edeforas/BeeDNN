@@ -21,6 +21,7 @@ int main()
 
     //optimize
     TrainOption tOpt;
+    tOpt.epochs=5000;
     NetTrainLearningRate netTrain;
     netTrain.train(net,mSamples,mTruth,tOpt);
 

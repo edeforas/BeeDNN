@@ -2,6 +2,7 @@
 using namespace std;
 
 #include "Net.h"
+#include "NetTrainLearningRate.h"
 #include "MNISTReader.h"
 #include "MatrixUtil.h"
 #include "ConfusionMatrix.h"
@@ -18,11 +19,11 @@ void disp(const MatrixFloat& m)
         cout << endl;
     }
 }
-
+/*
 class LossObserver: public TrainObserver
 {
 public:
-    virtual void stepEpoch(/*const TrainResult & tr*/)
+    virtual void stepEpoch()
     {
     //    cout << "epoch=" << tr.computedEpochs << " duration=" << tr.epochDuration << "s loss=" << tr.loss << " maxerror=" << tr.maxError << endl;
 		
@@ -39,10 +40,12 @@ public:
         cout << endl;
     }
 };
-
+*/
 int main()
 {
-    LossObserver lo;
+    //LossObserver lo;
+
+    //TODO update sample
 
     cout << "loading MNIST database..." << endl;
     MNISTReader mr;
@@ -70,11 +73,11 @@ int main()
     tOpt.epochs=1000;
     tOpt.learningRate=0.1f;
     tOpt.batchSize=128;
-    tOpt.observer=&lo;
+    //tOpt.observer=&lo;
 
     cout << "training..." << endl;
 
-    NetTrainMomentum netTrain;
+    NetTrainLearningRate netTrain;
     netTrain.train(net,mRefImages,mRefLabels,tOpt);
 
     cout << "end of training." << endl;
