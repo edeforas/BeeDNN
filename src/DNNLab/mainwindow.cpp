@@ -49,8 +49,9 @@ MainWindow::MainWindow(QWidget *parent) :
         qcbType->addItem("");
         qcbType->addItem("DenseAndBias");
         qcbType->addItem("DenseNoBias");
+        qcbType->addItem("SoftMax");
 
-        qcbType->insertSeparator(3);
+        qcbType->insertSeparator(4);
 
         for(unsigned int a=0;a<vsActivations.size();a++)
             qcbType->addItem(vsActivations[a].c_str());
@@ -124,6 +125,7 @@ void MainWindow::train_and_test(bool bReset)
     dto.batchSize=ui->leBatchSize->text().toInt();
     dto.momentum=ui->leMomentum->text().toFloat();
     dto.optimizer=ui->cbOptimizer->currentText().toStdString();
+    dto.lossFunction=ui->cbLossFunction->currentText().toStdString();
     //dto.observer=nullptr;//&lossCB;
 
     if(bReset)
@@ -266,8 +268,8 @@ float MainWindow::compute_truth(float x)
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::resizeEvent( QResizeEvent *e )
 {
-/*    (void)e;
-
+    (void)e;
+/*
     QGraphicsScene* qsr=ui->gvRegression->scene();
     if(qsr)
     {

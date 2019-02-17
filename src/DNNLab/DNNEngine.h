@@ -9,10 +9,6 @@ using namespace std;
 
 //class DNNTrainObserver;
 
-
-
-
-
 class DNNTrainOption
 {
 public:
@@ -25,6 +21,7 @@ public:
     //    initWeight=true;
         //observer=0;
         optimizer="simpleSGD";
+        lossFunction="mse";
     }
 
     int  epochs;
@@ -36,6 +33,7 @@ public:
     float learningRate;
     float momentum;
     string optimizer;
+    string lossFunction;
    // bool initWeight;
 
 //    DNNTrainObserver* observer;

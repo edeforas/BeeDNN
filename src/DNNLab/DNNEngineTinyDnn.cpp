@@ -109,6 +109,10 @@ void DNNEngineTinyDnn::add_layer(int inSize, int outSize, string sLayerType)
     if(sLayerType=="DenseNoBias")
         *_pNet << tiny_dnn::fully_connected_layer((size_t)inSize, (size_t)outSize,false);
 
+    if(sLayerType=="SoftMax")
+        *_pNet << tiny_dnn::softmax_layer((size_t)inSize, (size_t)outSize,false);
+
+
     if(sLayerType=="Tanh")
         *_pNet <<  tiny_dnn::tanh_layer();
 
@@ -215,14 +219,31 @@ void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
     matrix_to_tinydnnmatrix(mSamples,vSamples);
     matrix_to_tinydnnmatrix(mTruth,vTruth);
 
-    // this lambda function will be called after each epoch
-    auto on_enumerate_epoch = [&]()
+    if(dto.lossFunction=="mse")
     {
-        double dLoss = _pNet->get_loss<tiny_dnn::mse>(vSamples, vTruth);
-        _vdLoss.push_back(dLoss);
-    };
 
-    _pNet->fit<tiny_dnn::mse>(*opt, vSamples, vTruth, dto.batchSize, dto.epochs, []() {},on_enumerate_epoch);//  on_enumerate_epoch);
+        // this lambda function will be called after each epoch
+        auto on_enumerate_epoch = [&]()
+        {
+            double dLoss = _pNet->get_loss<tiny_dnn::mse>(vSamples, vTruth);
+            _vdLoss.push_back(dLoss);
+        };
+
+        _pNet->fit<tiny_dnn::mse>(*opt, vSamples, vTruth, dto.batchSize, dto.epochs, []() {},on_enumerate_epoch);//  on_enumerate_epoch);
+    }
+
+    if(dto.lossFunction=="cross_entropy_multiclass")
+    {
+
+        // this lambda function will be called after each epoch
+        auto on_enumerate_epoch = [&]()
+        {
+            double dLoss = _pNet->get_loss<tiny_dnn::cross_entropy_multiclass>(vSamples, vTruth);
+            _vdLoss.push_back(dLoss);
+        };
+
+        _pNet->fit<tiny_dnn::cross_entropy_multiclass>(*opt, vSamples, vTruth, dto.batchSize, dto.epochs, []() {},on_enumerate_epoch);//  on_enumerate_epoch);
+    }
 
     delete opt;
 }

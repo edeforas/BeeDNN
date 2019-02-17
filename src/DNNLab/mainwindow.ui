@@ -587,6 +587,27 @@
          </item>
         </widget>
        </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>LossFunction</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="cbLossFunction">
+         <item>
+          <property name="text">
+           <string>mse</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>cross_entropy_multiclass</string>
+          </property>
+         </item>
+        </widget>
+       </item>
       </layout>
      </item>
     </layout>
