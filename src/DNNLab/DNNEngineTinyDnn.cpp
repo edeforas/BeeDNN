@@ -232,7 +232,7 @@ void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
         _pNet->fit<tiny_dnn::mse>(*opt, vSamples, vTruth, dto.batchSize, dto.epochs, []() {},on_enumerate_epoch);//  on_enumerate_epoch);
     }
 
-    if(dto.lossFunction=="cross_entropy_multiclass")
+    if(dto.lossFunction=="cross_entropy")
     {
 
         // this lambda function will be called after each epoch
@@ -242,7 +242,7 @@ void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
             _vdLoss.push_back(dLoss);
         };
 
-        _pNet->fit<tiny_dnn::cross_entropy_multiclass>(*opt, vSamples, vTruth, dto.batchSize, dto.epochs, []() {},on_enumerate_epoch);//  on_enumerate_epoch);
+        _pNet->fit<tiny_dnn::cross_entropy>(*opt, vSamples, vTruth, dto.batchSize, dto.epochs, []() {},on_enumerate_epoch);//  on_enumerate_epoch);
     }
 
     delete opt;

@@ -603,7 +603,7 @@
          </item>
          <item>
           <property name="text">
-           <string>cross_entropy_multiclass</string>
+           <string>cross_entropy</string>
           </property>
          </item>
         </widget>
