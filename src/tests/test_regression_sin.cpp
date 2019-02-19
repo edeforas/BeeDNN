@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <cmath>
 using namespace std;
 
 #include "Net.h"
@@ -10,11 +11,11 @@ int main()
 {
     //build net
     Net net;
-    net.add_layer("DenseAndBias",1,20);
-    net.add_layer("Tanh",20,20);
-    net.add_layer("DenseAndBias",20,20);
-    net.add_layer("Tanh",20,20);
-    net.add_layer("DenseAndBias",20,1);
+    net.add_layer("DenseAndBias",1,10);
+    net.add_layer("Tanh",10,10);
+    //net.add_layer("DenseAndBias",20,20);
+   // net.add_layer("Tanh",20,20);
+    net.add_layer("DenseAndBias",10,1);
 
     //train data
     MatrixFloat mTruth(64,1);
@@ -29,7 +30,8 @@ int main()
     // learn
     cout << "Learning..." << endl;
     TrainOption tOpt;
-    tOpt.epochs=50000;
+    tOpt.epochs=10000;
+    tOpt.learningRate=0.1;
     NetTrainLearningRate train;
     train.train(net,mSamples,mTruth,tOpt);
 

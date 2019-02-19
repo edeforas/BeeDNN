@@ -5,12 +5,12 @@ CONFIG += c++14
 
 
 #qwt (optional)
-DEFINES+= "USE_QWT_NO"
-INCLUDEPATH += $$(QWT_PATH)/include
+#DEFINES+= "USE_QWT_NO"
+#INCLUDEPATH += $$(QWT_PATH)/include
 
 #eigen (optional)
-DEFINES+= "USE_EIGEN"
-INCLUDEPATH += $$(EIGEN_PATH)
+#DEFINES+= "USE_EIGEN_NO"
+#INCLUDEPATH += $$(EIGEN_PATH)
 
 
 #tiny-dnn (optional)

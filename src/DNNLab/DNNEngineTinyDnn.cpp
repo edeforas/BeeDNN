@@ -226,7 +226,7 @@ void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
         auto on_enumerate_epoch = [&]()
         {
             double dLoss = _pNet->get_loss<tiny_dnn::mse>(vSamples, vTruth);
-            _vdLoss.push_back(dLoss);
+            _vdLoss.push_back(dLoss/vSamples.size());
         };
 
         _pNet->fit<tiny_dnn::mse>(*opt, vSamples, vTruth, dto.batchSize, dto.epochs, []() {},on_enumerate_epoch);//  on_enumerate_epoch);
@@ -239,7 +239,7 @@ void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
         auto on_enumerate_epoch = [&]()
         {
             double dLoss = _pNet->get_loss<tiny_dnn::cross_entropy_multiclass>(vSamples, vTruth);
-            _vdLoss.push_back(dLoss);
+            _vdLoss.push_back(dLoss/vSamples.size());
         };
 
         _pNet->fit<tiny_dnn::cross_entropy>(*opt, vSamples, vTruth, dto.batchSize, dto.epochs, []() {},on_enumerate_epoch);//  on_enumerate_epoch);
@@ -248,14 +248,13 @@ void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
     delete opt;
 }
 //////////////////////////////////////////////////////////////////////////////
-/*double DNNEngineTinyDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)
+double DNNEngineTinyDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)
 {
     std::vector<tiny_dnn::vec_t> vSamples;
     std::vector<tiny_dnn::vec_t> vTruth;
     matrix_to_tinydnnmatrix(mSamples,vSamples);
     matrix_to_tinydnnmatrix(mTruth,vTruth);
 
-    return _pNet->get_loss<tiny_dnn::mse>(vSamples,vTruth);
+    return _pNet->get_loss<tiny_dnn::mse>(vSamples,vTruth)/vSamples.size();
 }
-*/
 //////////////////////////////////////////////////////////////////////////////

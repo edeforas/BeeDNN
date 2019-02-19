@@ -34,25 +34,3 @@ DNNTrainResult DNNEngine::train(const MatrixFloat& mSamples,const MatrixFloat& m
     return r;
 }
 //////////////////////////////////////////////////////////////////////////////
-double DNNEngine::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)
-{
-  /*  if(net.layers().size()==0)
-         return -1.;
- */
-     int iNbSamples=mSamples.rows();
-     MatrixFloat mOut,mError;
-    double dError=0.;
-
-     for(int i=0;i<iNbSamples;i++)
-     {
-         predict(mSamples.row(i),mOut);
-
-         if(i==0)
-             dError=(mOut-mTruth.row(i)).cwiseAbs2().sum();
-         else
-             dError+=(mOut-mTruth.row(i)).cwiseAbs2().sum();
-     }
-
-     return dError/(double)iNbSamples;
-}
-//////////////////////////////////////////////////////////////////////////////

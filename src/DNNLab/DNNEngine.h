@@ -77,7 +77,7 @@ public:
 
     virtual void predict(const MatrixFloat& mIn, MatrixFloat& mOut)=0;
 
-    virtual double compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth);
+    virtual double compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)=0;
 
 protected:	
     virtual void train_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)=0;

@@ -36,12 +36,15 @@ void NetTrainLearningRate::train(Net& net,const MatrixFloat& mSamples,const Matr
                 iBatchEnd=iBatchSize; //last batch can be partial
 
             //init suminput accumulation
-            vector<MatrixFloat> sumInput;
-            sumInput.resize(nLayers); //todo keep object memory beetween minbatch, avoid malloc
+         //   vector<MatrixFloat> sumInput(nLayers);
+            vector<MatrixFloat> inOut(nLayers+1);
+            vector<MatrixFloat> sumInOut(nLayers+1);
+          //  sumInput.resize(nLayers); //todo keep object memory beetween minbatch, avoid malloc
 
-            MatrixFloat sumDelta; //todo keep object memory beetween minbatch, avoid malloc
+            MatrixFloat sumDelta; //todo keep object memory beetween minibatch, avoid malloc
 
             //forward pass, and compute mean layer input and error
+            bool bInitBatch=true;
             for(int iSample=iBatchStart;iSample<iBatchEnd;iSample++)
             {
                 //compute total error, sample by sample
@@ -49,33 +52,39 @@ void NetTrainLearningRate::train(Net& net,const MatrixFloat& mSamples,const Matr
                 //forward pass with layer input save
                 int iIndexSample=(int)mShuffle(iSample,0);
                 const MatrixFloat& mSample=mSamples.row(iIndexSample);
-                const MatrixFloat& mTarget=mTruth.row(iIndexSample);
-                MatrixFloat mOut, mTemp=mSample;
+                inOut[0]=mSample;
 
-                //forward pass with store
+                if(bInitBatch)
+                    sumInOut[0]=mSample;
+                else
+                    sumInOut[0]+=mSample;
+
+                const MatrixFloat& mTarget=mTruth.row(iIndexSample);
+                MatrixFloat mOut;//, mTemp=mSample;
+
+                //forward pass with store and add
                 for(int i=0;i<nLayers;i++)
                 {
-                    net.layer(i)->forward(mTemp,mOut);
-                    MatrixFloat& mIn=sumInput[i];
-                    if(mIn.size()) //todo correct init
-                        mIn+=mTemp;
-                    else
-                        mIn=mTemp;
+                    net.layer(i)->forward(inOut[i],inOut[i+1]);
 
-                    mTemp=mOut; //todo optim avoid using a temp MatrixFloat
+                    if(bInitBatch)
+                        sumInOut[i+1]=inOut[i+1];
+                    else
+                        sumInOut[i+1]+=inOut[i+1];
                 }
 
-                MatrixFloat mDelta=mOut-mTarget;
-                if(sumDelta.size()) // todo correct init
-                    sumDelta+=mDelta;
-                else
+                MatrixFloat mDelta=inOut[nLayers]-mTarget;
+                if(bInitBatch)
                     sumDelta=mDelta;
+                else
+                    sumDelta+=mDelta;
 
+                bInitBatch=false;
             }
 
             // normalize vs batchsize
             for(int i=0;i<nLayers;i++)
-                sumInput[i]/=(float)iBatchSize;
+                sumInOut[i]/=(float)iBatchSize;
 
             //backpropagation of delta and update of weights
             MatrixFloat mNewDelta,mDelta=sumDelta/(float)iBatchSize;
@@ -83,7 +92,7 @@ void NetTrainLearningRate::train(Net& net,const MatrixFloat& mSamples,const Matr
             for (int i=(int)(nLayers-1);i>=0;i--)
             {
                 Layer* l=net.layer(i);
-                l->backpropagation(sumInput[i],mDelta,topt.learningRate,mNewDelta);
+                l->backpropagation(sumInOut[i],mDelta,topt.learningRate,mNewDelta);
 				mDelta=mNewDelta; //todo optim avoid resize
             }
 
