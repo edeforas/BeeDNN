@@ -9,7 +9,7 @@ DEFINES+= "USE_QWT_NO"
 INCLUDEPATH += $$(QWT_PATH)/include
 
 #eigen (optional)
-DEFINES+= "USE_EIGEN_NO"
+DEFINES+= "USE_EIGEN"
 INCLUDEPATH += $$(EIGEN_PATH)
 
 

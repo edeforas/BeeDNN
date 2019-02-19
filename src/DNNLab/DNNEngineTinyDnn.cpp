@@ -248,7 +248,7 @@ void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
     delete opt;
 }
 //////////////////////////////////////////////////////////////////////////////
-double DNNEngineTinyDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)
+/*double DNNEngineTinyDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)
 {
     std::vector<tiny_dnn::vec_t> vSamples;
     std::vector<tiny_dnn::vec_t> vTruth;
@@ -257,4 +257,5 @@ double DNNEngineTinyDnn::compute_loss(const MatrixFloat & mSamples, const Matrix
 
     return _pNet->get_loss<tiny_dnn::mse>(vSamples,vTruth);
 }
+*/
 //////////////////////////////////////////////////////////////////////////////
