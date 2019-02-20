@@ -3,7 +3,7 @@
 #include "Activation.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerActivation::LayerActivation(string sActivation):
+LayerActivation::LayerActivation(const string& sActivation):
     Layer(0,0,sActivation)
 {
     _pActivation=get_activation(sActivation);

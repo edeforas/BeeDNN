@@ -5,12 +5,13 @@ CONFIG += c++14
 
 
 #qwt (optional)
-#DEFINES+= "USE_QWT_NO"
+#DEFINES+= "USE_QWT"
 #INCLUDEPATH += $$(QWT_PATH)/include
 
+
 #eigen (optional)
-#DEFINES+= "USE_EIGEN_NO"
-#INCLUDEPATH += $$(EIGEN_PATH)
+DEFINES+= "USE_EIGEN"
+INCLUDEPATH += $$(EIGEN_PATH)
 
 
 #tiny-dnn (optional)
@@ -26,7 +27,7 @@ SOURCES += \
     ../Net.cpp \
     ../NetUtil.cpp \
     ../NetTrain.cpp \
-    ../NetTrainLearningRate.cpp \
+    ../NetTrainSGD.cpp \
     ../Layer.cpp \
     ../Matrix.cpp \
     ../Activation.cpp \
@@ -41,7 +42,7 @@ HEADERS += \
     ../Net.h \
     ../NetUtil.h \
     ../NetTrain.h \
-    ../NetTrainLearningRate.h \
+    ../NetTrainSGD.h \
     ../MatrixUtil.h \
     ../LayerActivation.h \
     ../LayerDenseNoBias.h \

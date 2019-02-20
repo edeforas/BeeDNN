@@ -1,5 +1,6 @@
 #include "Matrix.h"
 
+//matrix view on another matrix, without malloc and copy
 const MatrixFloat from_raw_buffer(float *pBuffer,int iRows,int iCols)
 {
 #ifdef USE_EIGEN

@@ -1,7 +1,7 @@
 #include "DNNEngineTestDnn.h"
 
 #include "Net.h"
-#include "NetTrainLearningRate.h"
+#include "NetTrainSGD.h"
 #include "LayerActivation.h"
 #include "LayerDenseNoBias.h"
 #include "LayerDenseAndBias.h"
@@ -15,7 +15,7 @@ DNNEngineTestDnn::DNNEngineTestDnn()
 //////////////////////////////////////////////////////////////////////////////
 DNNEngineTestDnn::~DNNEngineTestDnn()
 {
-    clear();
+    _pNet->clear();
 }
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTestDnn::clear()
@@ -53,8 +53,8 @@ void DNNEngineTestDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
     //tOpt.momentum=dto.momentum;
     tOpt.observer=nullptr;//dto.observer;
 
-    NetTrainLearningRate netTrain;
-    netTrain.train(*_pNet,mSamples,mTruth,tOpt);
+    NetTrainSGD netTrain;
+    netTrain.fit(*_pNet,mSamples,mTruth,tOpt);
 
     const auto& l=netTrain.loss();
     _vdLoss.insert(end(_vdLoss),begin(l),end(l)); //temp
@@ -62,7 +62,7 @@ void DNNEngineTestDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
 //////////////////////////////////////////////////////////////////////////////
 double DNNEngineTestDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)
 {
-    NetTrainLearningRate netTrain;
+    NetTrainSGD netTrain;
     return netTrain.compute_loss(*_pNet,mSamples,mTruth);
 }
 //////////////////////////////////////////////////////////////////////////////

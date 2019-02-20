@@ -3,16 +3,12 @@ CONFIG += console c++14
 CONFIG -= app_bundle
 CONFIG -= qt
 
-#eigen use (optionnal)
-DEFINES+= "USE_EIGEN"
 INCLUDEPATH+=..
-INCLUDEPATH+=$$(EIGEN_PATH)
-
 
 SOURCES += test_xor.cpp \
     ../Net.cpp \
     ../NetTrain.cpp \
-    ../NetTrainLearningRate.cpp \
+    ../NetTrainSGD.cpp \
     ../Layer.cpp \
     ../Matrix.cpp \
     ../Activation.cpp \
@@ -27,7 +23,7 @@ HEADERS += \
     ../Matrix.h \
     ../Net.h \
     ../NetTrain.h \
-    ../NetTrainLearningRate.h \
+    ../NetTrainSGD.h \
     ../MatrixUtil.h \
     ../LayerActivation.h \
     ../LayerDenseAndBias.h \

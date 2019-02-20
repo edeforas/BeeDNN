@@ -17,6 +17,14 @@ SimpleCurveWidget::SimpleCurveWidget(): QGraphicsView()
 //    setInteractive(true);
 //    setTabletTracking(true);
 
+	xMin=0;
+	xMax=0;
+
+	yMin=0;
+	yMax=0;
+
+	_bDrawXaxis=true;	
+	_bDrawYaxis=true;
     _bYLogAxis=false;
 }
 //////////////////////////////////////////////////////////////////////////

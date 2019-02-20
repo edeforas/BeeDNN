@@ -1,7 +1,7 @@
 #include "Layer.h"
 
 ////////////////////////////////////////////////////////////////
-Layer::Layer(int iInSize, int iOutSize,string sType):
+Layer::Layer(int iInSize, int iOutSize,const string& sType):
 _iInSize(iInSize),
 _iOutSize(iOutSize),
 _sType(sType)

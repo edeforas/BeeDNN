@@ -1,6 +1,12 @@
 #include "Activation.h"
 #include <cmath>
 
+// Activations functions
+// the activation API use only the input to compute derivation because:
+// -in minibatch derivation() is called sparsely
+// -activation are not linear, we cannot use mean(data_out)=apply(mean(data_in)) (unless proven)
+// -simplify the API
+
 Activation::Activation()
 { }
 
@@ -11,17 +17,17 @@ Activation::~Activation()
 class ActivationAtan: public Activation
 {
 public:
-    string name() const
+    string name() const override
     {
         return "Atan";
     }
 
-    float apply(float x) const
+    float apply(float x) const override
     {
         return atanf(x);
     }
 
-    float derivation(float x) const
+    float derivation(float x) const override
     {
         return 1.f/(1.f+x*x);
     }
@@ -30,17 +36,17 @@ public:
 class ActivationAsinh: public Activation
 {
 public:
-    string name() const
+    string name() const override
     {
         return "Asinh";
     }
 
-    float apply(float x) const
+    float apply(float x) const override
     {
         return asinhf(x);
     }
 
-    float derivation(float x) const
+    float derivation(float x) const override
     {
         return 1.f/sqrtf(1.f+x*x); //http://mathworld.wolfram.com/InverseHyperbolicSine.html
     }
@@ -48,17 +54,17 @@ public:
 class ActivationElliot: public Activation
 {
 public:
-    string name() const
+    string name() const override
     {
         return "Elliot";
     }
 
-    float apply(float x) const
+    float apply(float x) const override
     {
         return 0.5f*(x/(1.f+fabs(x)))+0.5f;
     }
 
-    float derivation(float x) const
+    float derivation(float x) const override
     {
         float d=1.f+fabs(x);
         return 0.5f/(d*d);
@@ -68,17 +74,17 @@ public:
 class ActivationGauss: public Activation
 {
 public:
-    string name() const
+    string name() const override
     {
         return "Gauss";
     }
 
-    float apply(float x) const
+    float apply(float x) const override
     {
         return expf(-x*x);
     }
 
-    float derivation(float x) const
+    float derivation(float x) const override
     {
         return -2.f*x*expf(-x*x);
     }
@@ -87,17 +93,17 @@ public:
 class ActivationLinear: public Activation
 {
 public:
-    string name() const
+    string name() const override
     {
         return "Linear";
     }
 
-    float apply(float x) const
+    float apply(float x) const override
     {
         return x;
     }
 
-    float derivation(float x) const
+    float derivation(float x) const override
     {
         (void)x;
         return 1.f;
@@ -107,17 +113,17 @@ public:
 class ActivationRelu: public Activation
 {
 public:
-    string name() const
+    string name() const override
     {
         return "Relu";
     }
 
-    float apply(float x) const
+    float apply(float x) const override
     {
         return x>0.f ? x : 0.f;
     }
 
-    float derivation(float x) const
+    float derivation(float x) const override
     {
         return x>0.f ? 1.f : 0.f;
     }
@@ -126,17 +132,17 @@ public:
 class ActivationLeakyRelu: public Activation
 {
 public:
-    string name() const
+    string name() const override
     {
         return "LeakyRelu";
     }
 
-    float apply(float x) const
+    float apply(float x) const override
     {
         return x>=0.f ? x : 0.01f*x;
     }
 
-    float derivation(float x) const
+    float derivation(float x) const override
     {
         return x>=0.f ? 1.f : 0.01f;
     }
@@ -145,12 +151,12 @@ public:
 class ActivationElu: public Activation
 {
 public:
-    string name() const
+    string name() const override
     {
         return "Elu";
     }
 
-    float apply(float x) const
+    float apply(float x) const override
     {
         if(x>=0.f)
             return x;
@@ -158,7 +164,7 @@ public:
             return expm1f(x);
     }
 
-    float derivation(float x) const
+    float derivation(float x) const override
     {
         (void)x;
 
@@ -174,12 +180,12 @@ public:
 class ActivationSelu: public Activation
 {
 public:
-    string name() const
+    string name() const override
     {
         return "Selu";
     }
 
-    float apply(float x) const
+    float apply(float x) const override
     {
         if(x>=0.f)
             return SELU_LAMBDA*x;
@@ -187,7 +193,7 @@ public:
             return SELU_LAMBDA*SELU_ALPHA*expm1f(x);
     }
 
-    float derivation(float x) const
+    float derivation(float x) const override
     {
         if(x>=0.f)
             return SELU_LAMBDA;
@@ -199,39 +205,39 @@ public:
 class ActivationSoftPlus: public Activation
 {
 public:
-    string name() const
+    string name() const override
     {
         return "SoftPlus";
     }
 
-    float apply(float x) const
+    float apply(float x) const override
     {
         return log1pf(expf(x));
     }
 
-    float derivation(float x) const
+    float derivation(float x) const override
     {
-        return 1.f/(1.f+expf(-x));
+        return 1.f/(1.f+expf(-x)); //todo optimize
     }
 };
 //////////////////////////////////////////////////////////////////////////////
 class ActivationSoftSign: public Activation
 {
 public: 
-    string name() const
+    string name() const override
     {
         return "SoftSign";
     }
-
-    float apply(float x) const
+ 
+    float apply(float x) const override
     {
         return x/(1.f+fabsf(x));
     }
 
-    float derivation(float x) const
+    float derivation(float x) const override
     {
         float d=1.f+fabsf(x);
-        return 1.f/(d*d);
+        return 1.f/(d*d); //todo optimize
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -239,16 +245,16 @@ class ActivationSigmoid: public Activation
 {
 public:
 
-    string name() const
+    string name() const override
     {
         return "Sigmoid";
     }
 
-    float apply(float x) const
+    float apply(float x) const override
     {
         return 1.f/(1.f+expf(-x));
     }
-    float derivation(float x) const
+    float derivation(float x) const override
     {
         float s=1.f/(1.f+expf(-x));
         return s*(1.f-s); //todo optimise
@@ -258,16 +264,16 @@ public:
 class ActivationTanh: public Activation
 {
 public:
-    string name() const
+    string name() const override
     {
         return "Tanh";
     }
 
-    float apply(float x) const
+    float apply(float x) const override
     {
         return tanhf(x);
     }
-    float derivation(float x) const
+    float derivation(float x) const override
     {
         float t=tanhf(x);
         return 1.f-t*t;
@@ -278,31 +284,32 @@ public:
 class ActivationSwish: public Activation
 {
 public:
-    string name() const
+    string name() const override
     {
         return "Swish";
     }
 
-    float apply(float x) const
+    float apply(float x) const override
     {
         return x/(1.f+expf(-x));
     }
-    float derivation(float x) const
+    float derivation(float x) const override
     {
 		float s=1.f/(1.f+expf(-x));
 		return s*(x+1-x*s); //todo optimize
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+// Parablu is a softplus approximation without transendental function, author is Etienne de Foras
 class ActivationParablu: public Activation
 {
 public:
-    string name() const
+    string name() const override
     {
         return "Parablu";
     }
 
-    float apply(float x) const
+    float apply(float x) const override
     {
         if(x<0.f)
             return 0.f;
@@ -312,7 +319,7 @@ public:
 
         return x*x;
     }
-    float derivation(float x) const
+    float derivation(float x) const override
     {
         if(x<0.f)
             return 0.f;
@@ -325,7 +332,7 @@ public:
 };
 
 //////////////////////////////////////////////////////////////////////////////
-Activation* get_activation(string sActivation)
+Activation* get_activation(const string& sActivation)
 {
     if(sActivation=="Tanh")
         return new ActivationTanh;
@@ -372,7 +379,7 @@ Activation* get_activation(string sActivation)
     if(sActivation=="Parablu")
         return new ActivationParablu;
 
-    return 0;
+    return nullptr;
 }
 //////////////////////////////////////////////////////////////////////////////
 void list_activations_available(vector<string>& vsActivations)
@@ -380,10 +387,10 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.clear();
 
     vsActivations.push_back("Tanh");
-   // vsActivations.push_back("TanhP1M2"); //todo
+    vsActivations.push_back("TanhP1M2"); //not under testDNN
     vsActivations.push_back("Asinh");
     vsActivations.push_back("Sigmoid");
-    vsActivations.push_back("Swish");
+    vsActivations.push_back("Swish"); //not under tiny-dnn
     vsActivations.push_back("Relu");
     vsActivations.push_back("Linear");
     vsActivations.push_back("Atan");
@@ -394,7 +401,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("Selu");
     vsActivations.push_back("SoftPlus");
     vsActivations.push_back("SoftSign");
-  //  vsActivations.push_back("SoftMax"); //todo
-    vsActivations.push_back("Parablu");
+    vsActivations.push_back("SoftMax"); //not under testDNN
+    vsActivations.push_back("Parablu"); //not under tiny-dnn
 }
 //////////////////////////////////////////////////////////////////////////////

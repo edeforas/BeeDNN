@@ -3,8 +3,6 @@
 #include <cstdlib> // for rand
 #include <cmath> // for sqrt
 
-//#include "MatrixUtil.h"
-
 ///////////////////////////////////////////////////////////////////////////////
 LayerDenseAndBias::LayerDenseAndBias(int iInSize,int iOutSize):
     Layer(iInSize,iOutSize,"DenseAndBias")
@@ -12,7 +10,7 @@ LayerDenseAndBias::LayerDenseAndBias(int iInSize,int iOutSize):
     _weight.resize(_iInSize,_iOutSize);
     _bias.resize(1,_iOutSize);
 
-    init();
+    LayerDenseAndBias::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
 LayerDenseAndBias::~LayerDenseAndBias()
@@ -27,6 +25,8 @@ void LayerDenseAndBias::init()
 
     for(int i=0;i<_bias.size();i++)
         _bias(i)=0.f;
+	
+	Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDenseAndBias::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const

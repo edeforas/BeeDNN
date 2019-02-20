@@ -3,15 +3,12 @@ CONFIG += console c++14
 CONFIG -= app_bundle
 CONFIG -= qt
 
-DEFINES+= "USE_EIGEN_NO"
-
 INCLUDEPATH+=..
-INCLUDEPATH+=$$(EIGEN_PATH)
 
 SOURCES += test_regression_sin.cpp \
     ../Net.cpp \
     ../NetTrain.cpp \
-    ../NetTrainLearningRate.cpp \
+    ../NetTrainSGD.cpp \
     ../Layer.cpp \
     ../Matrix.cpp \
     ../Activation.cpp \
@@ -26,7 +23,7 @@ HEADERS += \
     ../Matrix.h \
     ../Net.h \
     ../NetTrain.h \
-    ../NetTrainLearningRate.h \
+    ../NetTrainSGD.h \
     ../MatrixUtil.h \
     ../LayerActivation.h \
     ../LayerDenseNoBias.h \

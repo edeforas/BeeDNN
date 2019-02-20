@@ -5,7 +5,7 @@ using namespace std;
 
 #include "Net.h"
 
-#include "NetTrainLearningRate.h"
+#include "NetTrainSGD.h"
 
 int main()
 {
@@ -13,11 +13,9 @@ int main()
     Net net;
     net.add_layer("DenseAndBias",1,10);
     net.add_layer("Tanh",10,10);
-    //net.add_layer("DenseAndBias",20,20);
-   // net.add_layer("Tanh",20,20);
     net.add_layer("DenseAndBias",10,1);
 
-    //train data
+    //set train data
     MatrixFloat mTruth(64,1);
     MatrixFloat mSamples(64,1);
     for(int i=0;i<64;i++)
@@ -27,13 +25,12 @@ int main()
         mSamples(i,0)=x;
     }
 
-    // learn
+    //learn
     cout << "Learning..." << endl;
     TrainOption tOpt;
-    tOpt.epochs=10000;
-    tOpt.learningRate=0.1;
-    NetTrainLearningRate train;
-    train.train(net,mSamples,mTruth,tOpt);
+    tOpt.learningRate=0.1f;
+    NetTrainSGD netfit;
+    netfit.fit(net,mSamples,mTruth,tOpt);
 
     //show results
     MatrixFloat mOnePredict(1,1), mOneSample(1,1), mOneTruth(1,1);
@@ -46,7 +43,7 @@ int main()
     }
 
     //compute loss
-    double dLoss=train.compute_loss(net,mSamples,mTruth);
+    double dLoss=netfit.compute_loss(net,mSamples,mTruth);
     cout << "Loss=" << dLoss << endl;
 
     return 0;

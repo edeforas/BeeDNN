@@ -2,7 +2,7 @@
 using namespace std;
 
 #include "Net.h"
-#include "NetTrainLearningRate.h"
+#include "NetTrainSGD.h"
 #include "MNISTReader.h"
 #include "MatrixUtil.h"
 #include "ConfusionMatrix.h"
@@ -77,8 +77,8 @@ int main()
 
     cout << "training..." << endl;
 
-    NetTrainLearningRate netTrain;
-    netTrain.train(net,mRefImages,mRefLabels,tOpt);
+    NetTrainSGD netTrain;
+    netTrain.fit(net,mRefImages,mRefLabels,tOpt); //todo rewrite
 
     cout << "end of training." << endl;
     cout << "computing perfs ..."<< endl;

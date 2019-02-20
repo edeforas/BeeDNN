@@ -11,6 +11,8 @@ SOURCES += \
     ../MatrixUtil.cpp \
     ../ConfusionMatrix.cpp \
     ../LayerDenseAndBias.cpp \
+    ../NetTrain.cpp \
+    ../NetTrainSGD.cpp \
     test_classification_MNIST.cpp
 
 INCLUDEPATH+=..
@@ -21,6 +23,8 @@ HEADERS += \
     ../Matrix.h \
     ../Net.h \
     ../MNISTReader.h \
+    ../NetTrain.h \
+    ../NetTrainSGD.h \
     ../MatrixUtil.h \
     ../ConfusionMatrix.h \
     ../LayerDenseAndBias.h

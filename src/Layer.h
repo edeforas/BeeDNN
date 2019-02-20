@@ -9,7 +9,7 @@ using namespace std;
 class Layer
 {
 public:
-    Layer(int iInSize, int iOutSize, string sType);
+    Layer(int iInSize, int iOutSize,const string& sType);
     virtual ~Layer();
 
     string type() const;
@@ -18,7 +18,7 @@ public:
 
     virtual void forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const =0;
 	
-    virtual void init(); //init weight if any
+    virtual void init(); //init weight if any, or do nothing
     virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, float fLearningRate, MatrixFloat &mNewDelta)=0;
 		
 protected:

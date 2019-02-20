@@ -34,8 +34,10 @@ void Net::add_layer(string sType,int inSize,int outSize)
 {
     if(sType=="DenseAndBias")
         _layers.push_back(new LayerDenseAndBias(inSize,outSize));
+
     else if(sType=="DenseNoBias")
         _layers.push_back(new LayerDenseNoBias(inSize,outSize));
+
     else
          _layers.push_back(new LayerActivation(sType));
 }
@@ -52,14 +54,13 @@ void Net::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::classify(const MatrixFloat& mIn,MatrixFloat& mClass) const
 {
-    // todo merge with forward
-    mClass.resize(mIn.rows(),1); //todo  put int NetClassification problem
+    mClass.resize(mIn.rows(),1);
 
     MatrixFloat mOut;
     for(int i=0;i<mIn.rows();i++)
     {
         forward(mIn.row(i),mOut);
-        mClass(i)=argmax(mOut)(0); //weird
+        mClass(i)=argmax(mOut)(0);
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////

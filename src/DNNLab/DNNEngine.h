@@ -5,6 +5,8 @@
 #include <vector>
 using namespace std;
 
+// DNNEngine is an abstraction class for DNN frameworks
+
 #include "Matrix.h"
 
 //class DNNTrainObserver;
@@ -12,30 +14,26 @@ using namespace std;
 class DNNTrainOption
 {
 public:
-    DNNTrainOption()
+    DNNTrainOption():
+	    optimizer("simpleSGD"),
+        lossFunction("mse")
     {
         epochs=1000;
         batchSize=32;
         learningRate=0.1f;
         momentum=0.9f;
-    //    initWeight=true;
         //observer=0;
-        optimizer="simpleSGD";
-        lossFunction="mse";
+
     }
 
     int  epochs;
- //   double earlyAbortMaxError;
-  //  double earlyAbortMeanError;
     int batchSize;
 
-    //momentum settings
+    //optimizer settings
     float learningRate;
     float momentum;
     string optimizer;
     string lossFunction;
-   // bool initWeight;
-
 //    DNNTrainObserver* observer;
 };
 
@@ -50,7 +48,6 @@ public:
     }
 
     double finalLoss;
- //   double maxError;
     int computedEpochs;
     double epochDuration; //in second
     vector<double> loss;
@@ -81,7 +78,7 @@ public:
 
 protected:	
     virtual void train_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)=0;
-    vector<double> _vdLoss;
+    vector<double> _vdLoss; //temp
 
 private:
     int _iComputedEpochs;

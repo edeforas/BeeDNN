@@ -3,7 +3,7 @@ using namespace std;
 
 #include "Net.h"
 #include "MatrixUtil.h"
-#include "NetTrainLearningRate.h"
+#include "NetTrainSGD.h"
 
 int main()
 {
@@ -21,9 +21,8 @@ int main()
 
     //optimize
     TrainOption tOpt;
-    tOpt.epochs=5000;
-    NetTrainLearningRate netTrain;
-    netTrain.train(net,mSamples,mTruth,tOpt);
+    NetTrainSGD netFit;
+    netFit.fit(net,mSamples,mTruth,tOpt);
 
     //predict results
     MatrixFloat m00,m01,m10,m11;
@@ -34,7 +33,7 @@ int main()
     cout << "0xor0=" << m00(0) << " 0xor1=" <<m01(0) << " 1xor0=" << m10(0) << " 1xor1=" << m11(0) << endl;
 
     //compute loss
-    double dLoss=netTrain.compute_loss(net,mSamples,mTruth);
+    double dLoss=netFit.compute_loss(net,mSamples,mTruth);
     cout << "Loss=" << dLoss << endl;
 
     return 0;

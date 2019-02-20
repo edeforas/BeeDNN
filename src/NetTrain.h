@@ -6,6 +6,34 @@
 #include <vector>
 using namespace std; //temp
 
+
+class TrainObserver
+{
+public:
+    virtual void stepEpoch(/*const TrainResult & tr*/)=0;
+};
+
+
+class TrainOption
+{
+public:
+    TrainOption()
+    {
+        epochs=1000;
+        batchSize=1; //not used for now
+        learningRate=0.01f;
+        momentum=0.1f;  //not used for now
+        observer=nullptr;
+    }
+
+    int  epochs;
+    int batchSize; //not used for now
+    float learningRate;
+    float momentum;  //not used for now
+    TrainObserver* observer;
+};
+
+
 class Layer;
 class Net;
 
@@ -16,6 +44,8 @@ public:
     virtual ~NetTrain();
 
     double compute_loss(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth);
+
+    virtual void fit(Net& net, const MatrixFloat& mSamples, const MatrixFloat& mTruth, const TrainOption& topt)=0;
 
     vector<double> loss(); //temp
 
