@@ -18,6 +18,7 @@ void NetTrainSGD::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mT
     int nLayers=(int)net.layers().size();
     vector<MatrixFloat> inOut(nLayers+1);
     vector<MatrixFloat> delta(nLayers+1);
+    float fLoss=0.f;
 
     _vdLoss.clear();
 
@@ -51,7 +52,9 @@ void NetTrainSGD::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mT
         if(topt.observer)
             topt.observer->stepEpoch(/*tr*/);
 
-        _vdLoss.push_back(compute_loss(net,mSamples,mTruth));
+        if( (iEpoch% topt.testEveryEpochs) == 0)
+            fLoss=compute_loss(net,mSamples,mTruth);
+        _vdLoss.push_back(fLoss);
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////

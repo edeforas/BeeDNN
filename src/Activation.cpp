@@ -387,7 +387,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.clear();
 
     vsActivations.push_back("Tanh");
-    vsActivations.push_back("TanhP1M2"); //not under testDNN
+  //  vsActivations.push_back("TanhP1M2");
     vsActivations.push_back("Asinh");
     vsActivations.push_back("Sigmoid");
     vsActivations.push_back("Swish"); //not under tiny-dnn
@@ -401,7 +401,6 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("Selu");
     vsActivations.push_back("SoftPlus");
     vsActivations.push_back("SoftSign");
-    vsActivations.push_back("SoftMax"); //not under testDNN
     vsActivations.push_back("Parablu"); //not under tiny-dnn
 }
 //////////////////////////////////////////////////////////////////////////////

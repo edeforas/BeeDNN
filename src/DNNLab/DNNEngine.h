@@ -22,6 +22,7 @@ public:
         batchSize=32;
         learningRate=0.1f;
         momentum=0.9f;
+        testEveryEpochs=1;
         //observer=0;
 
     }
@@ -34,6 +35,7 @@ public:
     float momentum;
     string optimizer;
     string lossFunction;
+    int testEveryEpochs; //set to 1 to test at each epoch, 10 to test only 1/10 of the time, etc
 //    DNNTrainObserver* observer;
 };
 

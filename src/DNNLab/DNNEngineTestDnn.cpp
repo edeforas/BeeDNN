@@ -52,6 +52,7 @@ void DNNEngineTestDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
     tOpt.batchSize=dto.batchSize;
     //tOpt.momentum=dto.momentum;
     tOpt.observer=nullptr;//dto.observer;
+    tOpt.testEveryEpochs=dto.testEveryEpochs;
 
     NetTrainSGD netTrain;
     netTrain.fit(*_pNet,mSamples,mTruth,tOpt);

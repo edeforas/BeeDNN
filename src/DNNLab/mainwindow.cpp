@@ -126,6 +126,7 @@ void MainWindow::train_and_test(bool bReset)
     dto.momentum=ui->leMomentum->text().toFloat();
     dto.optimizer=ui->cbOptimizer->currentText().toStdString();
     dto.lossFunction=ui->cbLossFunction->currentText().toStdString();
+    dto.testEveryEpochs=ui->sbTestEveryEpochs->value();
     //dto.observer=nullptr;//&lossCB;
 
     if(bReset)
