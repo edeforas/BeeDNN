@@ -22,7 +22,7 @@ public:
     Layer* layer(size_t iLayer);
 
     void forward(const MatrixFloat& mIn,MatrixFloat& mOut) const;
-    void classify(const MatrixFloat& mIn,MatrixFloat& mOut) const;
+    int classify(const MatrixFloat& mIn) const;
 
 private:
     vector<Layer*> _layers;

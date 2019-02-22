@@ -75,6 +75,7 @@ public:
     virtual DNNTrainResult train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto);
 
     virtual void predict(const MatrixFloat& mIn, MatrixFloat& mOut)=0;
+    virtual int classify(const MatrixFloat& mIn)=0;
 
     virtual double compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)=0;
 

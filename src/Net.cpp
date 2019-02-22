@@ -52,16 +52,11 @@ void Net::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::classify(const MatrixFloat& mIn,MatrixFloat& mClass) const
+int Net::classify(const MatrixFloat& mIn) const
 {
-    mClass.resize(mIn.rows(),1);
-
     MatrixFloat mOut;
-    for(int i=0;i<mIn.rows();i++)
-    {
-        forward(mIn.row(i),mOut);
-        mClass(i)=argmax(mOut)(0);
-    }
+    forward(mIn,mOut);
+    return argmax(mOut);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 const vector<Layer*> Net::layers() const

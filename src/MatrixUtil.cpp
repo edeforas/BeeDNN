@@ -40,30 +40,29 @@ MatrixFloat rand_perm(int iSize) //create a vector of index shuffled
 }
 */
 ///////////////////////////////////////////////////////////////////////////
-MatrixFloat argmax(const MatrixFloat& m)
+int argmax(const MatrixFloat& m)
 {
-    if(m.cols()==0)
-        return m;
+    assert(m.cols()==1); //for now, vector column only
 
-    MatrixFloat mResult(m.rows(),1);
+    if(m.cols()==0)
+        return 0; //todo error not a vector
+
+    if(m.rows()==0)
+        return 0; //todo error empty vector
+
+    float d=m(0,0);
+    unsigned int iIndex=0;
 
     for(int iR=0;iR<m.rows();iR++)
     {
-        float d=m(iR,0);
-        unsigned int iIndex=0;
-
-        for(int iC=1;iC<m.cols();iC++)
+        if(m(iR,0)>d)
         {
-            if(m(iR,iC)>d)
-            {
-                d=m(iR,iC);
-                iIndex=iC;
-            }
+            d=m(iR,0);
+            iIndex=iR;
         }
-        mResult(iR,0)=(float)iIndex;
     }
 
-    return mResult;
+    return iIndex;
 }
 ///////////////////////////////////////////////////////////////////////////
 MatrixFloat decimate(const MatrixFloat& m, int iRatio)
