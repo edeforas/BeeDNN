@@ -11,10 +11,10 @@ ClassificationResult ConfusionMatrix::compute(const MatrixFloat& mRef,const Matr
         cr.mConfMat((unsigned int)mRef(i),(unsigned int)mTest(i))++;
     }
 
-    MatrixFloat mDiag=cr.mConfMat.diag();
-    MatrixFloat mSum=cr.mConfMat.row_sum();
+    MatrixFloat mDiag=cr.mConfMat.diagonal();
+    MatrixFloat mSum=rowWiseSum(cr.mConfMat);
 
-    MatrixFloat mGoodClassification=mDiag.cwiseDivide(mSum)*100.f;
+    MatrixFloat mGoodClassification=mDiag.cwiseQuotient(mSum)*100.f;
 
     cr.goodclassificationPercent=mGoodClassification.sum()/iNbClass;
 

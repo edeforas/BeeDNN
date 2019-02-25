@@ -303,7 +303,7 @@ public:
         return out;
     }
 
-    Matrix<T> cwiseDivide(const Matrix<T>& m) const
+    Matrix<T> cwiseQuotient(const Matrix<T>& m) const
     {
         assert(cols()==m.cols());
         assert(rows()==m.rows());
@@ -325,7 +325,7 @@ public:
 
         return out;
     }
-
+/*
     Matrix<T> scalar_mult(T d) const
     {
         Matrix<T> out(*this);
@@ -335,7 +335,7 @@ public:
 
         return out;
     }
-
+*/
     T sum() const
     {
         T dSum=0.;
@@ -345,7 +345,7 @@ public:
         return dSum;
     }
 
-    T max() const
+    T maxCoeff() const
     {
         if(_iSize==0)
             return 0.; //not clean
@@ -390,7 +390,7 @@ public:
         return Matrix<T>(_data+iRow*_iColumns,1,_iColumns);
     }
 
-
+/*
     Matrix<T> row_sum() const
     {
         Matrix<T> r(_iRows,1);
@@ -400,8 +400,8 @@ public:
 
         return r;
     }
-
-    Matrix<T> diag() const
+*/
+    Matrix<T> diagonal() const
     {
         Matrix<T> r(_iRows,1);
 
@@ -410,11 +410,12 @@ public:
 
         return r;
     }
+    /*
     bool is_vector() const
     {
         return (_iRows==1) || (_iColumns==1);
     }
-    
+    */
 private:
     int _iRows,_iColumns,_iSize;
     T* _data;
@@ -423,7 +424,7 @@ private:
 
 typedef Matrix<float> MatrixFloat;
 
-
+/*
 template <class T>
 const Matrix<T> without_last_row(const Matrix<T>& m)
 {
@@ -443,11 +444,9 @@ const Matrix<T> without_last_column(const Matrix<T>& a) // slow function!
 
     return m;
 }
+*/
 
 /*
-
-
-
 template <class T>
 Matrix<T> concatHorizontally(const Matrix<T> & a, const Matrix<T> & b) // slow function!
 {
@@ -473,5 +472,6 @@ Matrix<T> concatHorizontally(const Matrix<T> & a, const Matrix<T> & b) // slow f
 #endif
 
 const MatrixFloat from_raw_buffer(float *pBuffer,int iRows,int iCols);
+MatrixFloat rowWiseSum(const MatrixFloat& m);
 
 #endif

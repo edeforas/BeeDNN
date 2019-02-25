@@ -32,8 +32,8 @@ void LayerDenseNoBias::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) c
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDenseNoBias::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, float fLearningRate, MatrixFloat &mNewDelta)
 {
-    mNewDelta=_weight*mDelta;
-    _weight-= (mDelta*mInput).transpose()*fLearningRate; //todo optimize
+    mNewDelta=mDelta*(_weight.transpose());
+    _weight-=(mInput.transpose())*(mDelta*fLearningRate);
 }
 ///////////////////////////////////////////////////////////////////////////////
 const MatrixFloat& LayerDenseNoBias::weight() const

@@ -23,6 +23,7 @@ public:
 
     void forward(const MatrixFloat& mIn,MatrixFloat& mOut) const;
     int classify(const MatrixFloat& mIn) const;
+    void classify_all(const MatrixFloat& mIn, MatrixFloat& mClass) const;
 
 private:
     vector<Layer*> _layers;

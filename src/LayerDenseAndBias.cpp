@@ -36,10 +36,10 @@ void LayerDenseAndBias::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) 
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDenseAndBias::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, float fLearningRate, MatrixFloat &mNewDelta)
 {
-    mNewDelta=_weight*mDelta;
+    mNewDelta=mDelta*(_weight.transpose());
 
-    _weight-=((mDelta*mInput).transpose())*fLearningRate;
-    _bias-=(mDelta.transpose())*fLearningRate;
+    _weight-=(mInput.transpose())*(mDelta*fLearningRate);
+    _bias-=mDelta*fLearningRate;
 }
 ///////////////////////////////////////////////////////////////////////////////
 const MatrixFloat& LayerDenseAndBias::weight() const

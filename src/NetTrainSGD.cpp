@@ -12,13 +12,26 @@ NetTrainSGD::NetTrainSGD(): NetTrain()
 NetTrainSGD::~NetTrainSGD()
 { }
 /////////////////////////////////////////////////////////////////////////////////////////////////
+void NetTrainSGD::train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruthLabel,const TrainOption& topt)
+{
+    //create a kronecker matrix, one line by sample
+    int iMax=(int)mTruthLabel.maxCoeff();
+    MatrixFloat mTruth(mTruthLabel.rows(),iMax+1);
+    mTruth.setZero();
+
+    for(int i=0;i<mTruth.rows();i++)
+        mTruth(i,(int)mTruthLabel(i,0))=1;
+
+    fit(net,mSamples,mTruth,topt);
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrainSGD::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruth,const TrainOption& topt)
 {
     int iNbSamples=mSamples.rows();
     int nLayers=(int)net.layers().size();
     vector<MatrixFloat> inOut(nLayers+1);
     vector<MatrixFloat> delta(nLayers+1);
-    float fLoss=0.f;
+    double dLoss=0.;
 
     _vdLoss.clear();
 
@@ -53,8 +66,8 @@ void NetTrainSGD::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mT
             topt.observer->stepEpoch(/*tr*/);
 
         if( (iEpoch% topt.testEveryEpochs) == 0)
-            fLoss=compute_loss(net,mSamples,mTruth);
-        _vdLoss.push_back(fLoss);
+            dLoss=compute_loss(net,mSamples,mTruth);
+        _vdLoss.push_back(dLoss);
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////

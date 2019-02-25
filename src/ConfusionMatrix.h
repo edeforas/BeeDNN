@@ -1,5 +1,5 @@
-#ifndef _ConfusionMatrix_
-#define _ConfusionMatrix_
+#ifndef ConfusionMatrix_
+#define ConfusionMatrix_
 
 #include "Matrix.h"
 

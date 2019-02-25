@@ -25,40 +25,22 @@ MatrixFloat rand_perm(int iSize) //create a vector of index shuffled
     return m;
 }
 ///////////////////////////////////////////////////////////////////////////
-/*MatrixFloat index_to_position(const MatrixFloat& mIndex, int uiMaxPosition)
-{
-    int iNbRows=mIndex.rows();
-    MatrixFloat mPos(iNbRows,uiMaxPosition);
-    mPos.setZero();
-
-    for(int i=0;i<iNbRows;i++)
-    {
-        mPos(i,mIndex(i))=1;
-    }
-
-    return mPos;
-}
-*/
-///////////////////////////////////////////////////////////////////////////
 int argmax(const MatrixFloat& m)
 {
-    assert(m.cols()==1); //for now, vector column only
+    assert(m.rows()==1); //for now, vector raw only
 
     if(m.cols()==0)
         return 0; //todo error not a vector
 
-    if(m.rows()==0)
-        return 0; //todo error empty vector
-
     float d=m(0,0);
     unsigned int iIndex=0;
 
-    for(int iR=0;iR<m.rows();iR++)
+    for(int i=0;i<m.cols();i++)
     {
-        if(m(iR,0)>d)
+        if(m(0,i)>d)
         {
-            d=m(iR,0);
-            iIndex=iR;
+            d=m(0,i);
+            iIndex=i;
         }
     }
 
@@ -92,6 +74,13 @@ string to_string(const MatrixFloat& m)
 
     return ss.str();
 }
-}
-
 ///////////////////////////////////////////////////////////////////////////
+void kronecker(int i,int iSize,MatrixFloat& m)
+{
+    m.resize(iSize,1);
+    m.setZero();
+    m(i,0)=1;
+}
+///////////////////////////////////////////////////////////////////////////
+
+}

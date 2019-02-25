@@ -8,7 +8,7 @@ using namespace std;
 #include "ConfusionMatrix.h"
 
 Net net;
-MatrixFloat mRefImages, mRefLabels, mRefLabelsIndex, mTestImages, mTestLabels, mTestLabelsIndex;
+MatrixFloat mRefImages, mRefLabelsIndex, mTestImages, mTestLabelsIndex;
 
 void disp(const MatrixFloat& m)
 {
@@ -26,7 +26,7 @@ public:
     virtual void stepEpoch()
     {
     //    cout << "epoch=" << tr.computedEpochs << " duration=" << tr.epochDuration << "s loss=" << tr.loss << " maxerror=" << tr.maxError << endl;
-		
+
         MatrixFloat mClass;
         net.classify(mTestImages,mClass);
 
@@ -55,30 +55,24 @@ int main()
         return -1;
     }
 
-    //transform truth as a probability vector (one column by class)
-    mRefLabels=index_to_position(mRefLabelsIndex,10);
-    mTestLabels=index_to_position(mTestLabelsIndex,10);
-
     //normalize data
     mTestImages/=256.f-0.5f;
     mRefImages/=256.f-0.5f;
 
     //simple net, expect only 33% good classification with it ...
-    net.add_layer("DenseAndBias",784,30);
-    net.add_layer("Tanh",30,30);
-    net.add_layer("DenseAndBias",30,10);
-    net.add_layer("Tanh",10,10);
+    net.add_layer("DenseAndBias",784,100);
+    net.add_layer("Relu",100,100);
+    net.add_layer("DenseAndBias",100,10);
+    net.add_layer("Sigmoid",10,10);
 
     TrainOption tOpt;
-    tOpt.epochs=1000;
-    tOpt.learningRate=0.1f;
-    tOpt.batchSize=128;
-    //tOpt.observer=&lo;
+    tOpt.epochs=30;
+    tOpt.testEveryEpochs=1000;
 
     cout << "training..." << endl;
 
     NetTrainSGD netTrain;
-    netTrain.fit(net,mRefImages,mRefLabels,tOpt); //todo rewrite
+    netTrain.train(net,mRefImages,mRefLabelsIndex,tOpt); //todo rewrite
 
     cout << "end of training." << endl;
     cout << "computing perfs ..."<< endl;
@@ -87,7 +81,7 @@ int main()
     {
         cout << " result on full learning DB:" << endl;
         MatrixFloat mClass;
-        net.classify(mRefImages,mClass);
+        net.classify_all(mRefImages,mClass);
 
         ConfusionMatrix cm;
         ClassificationResult cr=cm.compute(mRefLabelsIndex,mClass,10);
@@ -103,7 +97,7 @@ int main()
     {
         cout << " result on full test DB:" << endl;
         MatrixFloat mClass;
-        net.classify(mTestImages,mClass);
+        net.classify_all(mTestImages,mClass);
 
         ConfusionMatrix cm;
         ClassificationResult cr=cm.compute(mTestLabelsIndex,mClass,10);

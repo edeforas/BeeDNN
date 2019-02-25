@@ -14,6 +14,7 @@ public:
     NetTrainSGD();
     virtual ~NetTrainSGD() override;
 
+    virtual void train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruthLabel,const TrainOption& topt) override;
     virtual void fit(Net& net, const MatrixFloat& mSamples, const MatrixFloat& mTruth, const TrainOption& topt) override ;
 };
 

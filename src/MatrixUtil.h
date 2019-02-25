@@ -18,5 +18,6 @@ MatrixFloat decimate(const MatrixFloat& m, int iRatio);
 namespace MatrixUtil
 {
     string to_string(const MatrixFloat& m);
+    void kronecker(int i,int iSize,MatrixFloat& m);
 }
 #endif
