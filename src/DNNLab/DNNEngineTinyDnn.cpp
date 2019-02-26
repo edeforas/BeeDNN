@@ -230,12 +230,13 @@ void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
     matrix_to_tinydnnmatrix(mTruth,vTruth);
 
     if(dto.lossFunction=="mse")
-    {       
+    {
         // this lambda function will be called after each epoch
         auto on_enumerate_epoch = [&]()
         {
-            if( (iEpoch % dto.testEveryEpochs) == 0)
-                fLoss = _pNet->get_loss<tiny_dnn::mse>(vSamples, vTruth)/vSamples.size();
+            if(dto.testEveryEpochs!=-1)
+                if( (iEpoch % dto.testEveryEpochs) == 0)
+                    fLoss = _pNet->get_loss<tiny_dnn::mse>(vSamples, vTruth)/vSamples.size();
 
             _vdLoss.push_back(fLoss);
             iEpoch++;

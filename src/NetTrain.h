@@ -24,14 +24,14 @@ public:
         learningRate=0.01f;
         momentum=0.1f;  //not used for now
         observer=nullptr;
-        testEveryEpochs=1;
+        testEveryEpochs=-1;
     }
 
     int  epochs;
     int batchSize; //not used for now
     float learningRate;
     float momentum;  //not used for now
-    int testEveryEpochs; //set to 1 to test at each epoch, 10 to test only 1/10 of the time, etc
+    int testEveryEpochs; //set to 1 to test at each epoch, 10 to test only 1/10 of the time, etc, set to -1 for no test
     TrainObserver* observer;
 };
 

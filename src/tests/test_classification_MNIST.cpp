@@ -59,7 +59,7 @@ int main()
     mTestImages/=256.f-0.5f;
     mRefImages/=256.f-0.5f;
 
-    //simple net, expect only 33% good classification with it ...
+    //simple net: 83% classif 70% test
     net.add_layer("DenseAndBias",784,100);
     net.add_layer("Relu",100,100);
     net.add_layer("DenseAndBias",100,10);

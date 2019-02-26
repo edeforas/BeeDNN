@@ -65,8 +65,9 @@ void NetTrainSGD::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mT
         if(topt.observer)
             topt.observer->stepEpoch(/*tr*/);
 
-        if( (iEpoch% topt.testEveryEpochs) == 0)
-            dLoss=compute_loss(net,mSamples,mTruth);
+        if(topt.testEveryEpochs!=-1)
+            if( (iEpoch% topt.testEveryEpochs) == 0)
+                dLoss=compute_loss(net,mSamples,mTruth);
         _vdLoss.push_back(dLoss);
     }
 }
