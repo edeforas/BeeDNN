@@ -41,6 +41,7 @@ void NetTrainSGD::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mT
     for(int iEpoch=0;iEpoch<topt.epochs;iEpoch++)
     {
         MatrixFloat mShuffle=rand_perm(iNbSamples);
+		net.set_train_mode(true);
 
         for(int iSample=0;iSample<iNbSamples;iSample++)
         {
@@ -62,8 +63,13 @@ void NetTrainSGD::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mT
             }
         }
 
-        if(topt.observer)
+		net.set_train_mode(false);
+		
+		if(topt.observer)
             topt.observer->stepEpoch(/*tr*/);
+
+		if (topt.epochCallBack)
+			topt.epochCallBack();
 
         if(topt.testEveryEpochs!=-1)
             if( (iEpoch% topt.testEveryEpochs) == 0)

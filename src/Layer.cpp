@@ -5,7 +5,9 @@ Layer::Layer(int iInSize, int iOutSize,const string& sType):
 _iInSize(iInSize),
 _iOutSize(iOutSize),
 _sType(sType)
-{ }
+{ 
+	_bTrainMode = false;
+}
 ////////////////////////////////////////////////////////////////
 Layer::~Layer()
 { }
@@ -26,5 +28,10 @@ int Layer::in_size() const
 int Layer::out_size() const
 {
     return _iOutSize;
+}
+///////////////////////////////////////////////////////////////
+void Layer::set_train_mode(bool bTrainMode)
+{
+	_bTrainMode = bTrainMode;
 }
 ///////////////////////////////////////////////////////////////

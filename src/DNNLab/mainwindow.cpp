@@ -38,8 +38,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QStringList qsl;
     qsl+="LayerType";
-    qsl+="InSize";
-    qsl+="OutSize";
+    qsl+="Arg1";
+    qsl+="Arg2";
 
     ui->twNetwork->setHorizontalHeaderLabels(qsl);
 

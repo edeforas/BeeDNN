@@ -34,8 +34,9 @@ SOURCES += \
     ../MatrixUtil.cpp \
     ../LayerActivation.cpp \
     ../LayerDenseNoBias.cpp \
-    ../LayerDenseAndBias.cpp
-HEADERS += \
+    ../LayerDenseAndBias.cpp \
+    ../LayerDropout.cpp
+	HEADERS += \
     ../Activation.h \
     ../Layer.h \
     ../Matrix.h \
@@ -46,7 +47,8 @@ HEADERS += \
     ../MatrixUtil.h \
     ../LayerActivation.h \
     ../LayerDenseNoBias.h \
-    ../LayerDenseAndBias.h
+    ../LayerDenseAndBias.h \
+	../LayerDropout.h 
 
 
 #ui

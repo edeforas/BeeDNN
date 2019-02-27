@@ -23,7 +23,7 @@ void tinydnnmatrix_to_matrix(const tiny_dnn::vec_t& tinyMatrix, MatrixFloat& m1)
         return;
     }
 
-    int iSize=tinyMatrix.size();
+    int iSize=(int)tinyMatrix.size();
     m1.resize(1,iSize);
 
     for(int i=0;i<iSize;i++)
@@ -42,7 +42,7 @@ DNNEngineTinyDnn::~DNNEngineTinyDnn()
 //////////////////////////////////////////////////////////////////////////////
 string DNNEngineTinyDnn::to_string()
 {
-    int iNbLayer=_pNet->layer_size();
+    int iNbLayer=(int)_pNet->layer_size();
     stringstream ss;
     ss << "Engine: tiny-dnn" << endl;
     ss << endl;

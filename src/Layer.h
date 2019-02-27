@@ -21,8 +21,11 @@ public:
     virtual void init(); //init weight if any, or do nothing
     virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, float fLearningRate, MatrixFloat &mNewDelta)=0;
 		
+	void set_train_mode(bool bTrainMode); //set to true to train, to false to test
+
 protected:
     int _iInSize, _iOutSize;
+	bool _bTrainMode;
 
 private:
     string _sType;

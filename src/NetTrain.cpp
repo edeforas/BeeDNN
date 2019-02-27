@@ -14,7 +14,7 @@ NetTrain::~NetTrain()
 /////////////////////////////////////////////////////////////////////////////////////////////////
 double NetTrain::compute_loss(const Net& net, const MatrixFloat &mSamples, const MatrixFloat &mTruth)
 {
-    if(net.layers().size()==0)
+	if(net.layers().size()==0)
         return -1.;
 
     int iNbSamples=mSamples.rows();

@@ -18,6 +18,7 @@ SOURCES += \
     ../ConfusionMatrix.cpp \
     ../LayerDenseAndBias.cpp \
     ../LayerDenseNoBias.cpp \
+    ../LayerDropout.cpp \
     ../NetTrain.cpp \
     ../NetTrainSGD.cpp \
     test_classification_MNIST.cpp
@@ -36,4 +37,5 @@ HEADERS += \
     ../MatrixUtil.h \
     ../ConfusionMatrix.h \
     ../LayerDenseNoBias.h \
-    ../LayerDenseAndBias.h
+    ../LayerDenseAndBias.h \
+	../LayerDropout.h

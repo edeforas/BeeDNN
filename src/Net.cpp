@@ -7,13 +7,16 @@
 #include "LayerActivation.h"
 #include "LayerDenseNoBias.h"
 #include "LayerDenseAndBias.h"
+#include "LayerDropout.h"
 
 #include <cmath>
 using namespace std;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 Net::Net()
-{ }
+{ 
+	_bTrainMode = false;
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////
 Net::~Net()
 {
@@ -28,6 +31,11 @@ void Net::clear()
     }
 
     _layers.clear();
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void Net::add_dropout_layer(int inSize, float fRatio)
+{
+	 _layers.push_back(new LayerDropout(inSize, fRatio));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_layer(string sType,int inSize,int outSize)
@@ -69,6 +77,16 @@ void Net::classify_all(const MatrixFloat& mIn, MatrixFloat& mClass) const
         forward(mIn.row(i),mOut);
         mClass(i,0)= (float)argmax(mOut);
     }
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void Net::set_train_mode(bool bTrainMode)
+{
+	_bTrainMode = bTrainMode;
+
+	for (unsigned int i = 0; i < _layers.size(); i++)
+	{
+		_layers[i]->set_train_mode(bTrainMode);
+	}
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 const vector<Layer*> Net::layers() const
