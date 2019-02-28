@@ -4,7 +4,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 
-#eigen use (optionnal)
+#eigen use (optional)
 DEFINES+= "USE_EIGEN_NO"
 INCLUDEPATH+=$$(EIGEN_PATH)
 

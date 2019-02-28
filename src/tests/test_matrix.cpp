@@ -23,11 +23,23 @@ int main()
     const MatrixFloat mB=from_raw_buffer(b,2,1);
 
     const MatrixFloat mAT=mA.transpose();
+	cout << "Transposed Matrix:" << endl;
     disp(mAT);
 
     MatrixFloat prod=mA*mB;
-
+	cout << "Product Matrix:" << endl;
     disp(prod);
+
+	MatrixFloat mD=mA.diagonal();
+	cout << "Diagonal Matrix as vector:" << endl;
+	disp(mD);
+
+    MatrixFloat mS=rowWiseSum(mA);
+    cout << "RowWiseSum:" << endl;
+    disp(mS);
+
+
+
 
     return 0;
 }

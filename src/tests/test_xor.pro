@@ -12,11 +12,10 @@ SOURCES += test_xor.cpp \
     ../Layer.cpp \
     ../Matrix.cpp \
     ../Activation.cpp \
-    ../MatrixUtil.cpp \
     ../LayerActivation.cpp \
     ../LayerDenseAndBias.cpp \
     ../LayerDenseNoBias.cpp \
-	../LayerDropout.cpp
+    ../LayerDropout.cpp
 
 HEADERS += \
     ../Activation.h \
@@ -25,8 +24,7 @@ HEADERS += \
     ../Net.h \
     ../NetTrain.h \
     ../NetTrainSGD.h \
-    ../MatrixUtil.h \
     ../LayerActivation.h \
     ../LayerDenseAndBias.h \
     ../LayerDenseNoBias.h \
-	../LayerDropout.h
+    ../LayerDropout.h

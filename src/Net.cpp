@@ -2,7 +2,6 @@
 #include "Layer.h"
 
 #include "Matrix.h"
-#include "MatrixUtil.h"
 
 #include "LayerActivation.h"
 #include "LayerDenseNoBias.h"

@@ -31,12 +31,12 @@ SOURCES += \
     ../Layer.cpp \
     ../Matrix.cpp \
     ../Activation.cpp \
-    ../MatrixUtil.cpp \
     ../LayerActivation.cpp \
     ../LayerDenseNoBias.cpp \
     ../LayerDenseAndBias.cpp \
     ../LayerDropout.cpp
-	HEADERS += \
+
+HEADERS += \
     ../Activation.h \
     ../Layer.h \
     ../Matrix.h \
@@ -44,11 +44,10 @@ SOURCES += \
     ../NetUtil.h \
     ../NetTrain.h \
     ../NetTrainSGD.h \
-    ../MatrixUtil.h \
     ../LayerActivation.h \
     ../LayerDenseNoBias.h \
     ../LayerDenseAndBias.h \
-	../LayerDropout.h 
+    ../LayerDropout.h
 
 
 #ui

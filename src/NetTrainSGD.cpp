@@ -3,7 +3,6 @@
 #include "Net.h"
 #include "Layer.h"
 #include "Matrix.h"
-#include "MatrixUtil.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 NetTrainSGD::NetTrainSGD(): NetTrain()

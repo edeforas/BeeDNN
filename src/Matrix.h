@@ -2,9 +2,10 @@
 #define Matrix_
 
 #include <cassert>
+#include <string>
+using namespace std;
 
 //todo add more tests and optimize
-// todo add optional typedef to eigen and update API
 
 #ifdef USE_EIGEN
 
@@ -325,7 +326,7 @@ public:
 
         return out;
     }
-/*
+    /*
     Matrix<T> scalar_mult(T d) const
     {
         Matrix<T> out(*this);
@@ -357,7 +358,7 @@ public:
 
         return dMax;
     }
-	
+
     Matrix<T> transpose() const // slow function!
     {
         Matrix<T> out(_iColumns,_iRows);
@@ -390,7 +391,7 @@ public:
         return Matrix<T>(_data+iRow*_iColumns,1,_iColumns);
     }
 
-/*
+    /*
     Matrix<T> row_sum() const
     {
         Matrix<T> r(_iRows,1);
@@ -401,7 +402,7 @@ public:
         return r;
     }
 */
-    Matrix<T> diagonal() const
+    Matrix<T> diagonal() const //slow!
     {
         Matrix<T> r(_iRows,1);
 
@@ -473,5 +474,13 @@ Matrix<T> concatHorizontally(const Matrix<T> & a, const Matrix<T> & b) // slow f
 
 const MatrixFloat from_raw_buffer(float *pBuffer,int iRows,int iCols);
 MatrixFloat rowWiseSum(const MatrixFloat& m);
+MatrixFloat rand_perm(int iSize); //create a vector of index shuffled
+MatrixFloat decimate(const MatrixFloat& m, int iRatio);
+string matrix_to_string(const MatrixFloat& m);
+
+//void kronecker(int i,int iSize,MatrixFloat& m);
+//MatrixFloat index_to_position(const MatrixFloat& mIndex, int uiMaxPosition);
+int argmax(const MatrixFloat& m);
 
 #endif
+

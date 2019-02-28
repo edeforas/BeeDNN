@@ -2,7 +2,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerDropout::LayerDropout(int iSize,float fRate):
-    Layer(0,0,"Dropout"),
+    Layer(iSize,iSize,"Dropout"),
 	_fRate(fRate)
 {
 	create_mask(iSize);

@@ -2,7 +2,6 @@
 using namespace std;
 
 #include "Net.h"
-#include "MatrixUtil.h"
 #include "NetTrainSGD.h"
 
 int main()
