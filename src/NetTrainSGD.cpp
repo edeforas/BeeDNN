@@ -63,9 +63,6 @@ void NetTrainSGD::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mT
         }
 
 		net.set_train_mode(false);
-		
-		if(topt.observer)
-            topt.observer->stepEpoch(/*tr*/);
 
 		if (topt.epochCallBack)
 			topt.epochCallBack();

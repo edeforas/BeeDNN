@@ -1,4 +1,5 @@
 #include <iostream>
+#include <chrono>
 using namespace std;
 
 #include "Net.h"
@@ -9,12 +10,18 @@ using namespace std;
 Net net;
 MatrixFloat mRefImages, mRefLabelsIndex, mTestImages, mTestLabelsIndex;
 int iEpoch;
+chrono::steady_clock::time_point start;
 
 //////////////////////////////////////////////////////////////////////////////
 void epoch_callback()
 {
+	//compute epoch time
+	chrono::steady_clock::time_point next = chrono::steady_clock::now();
+	auto delta = chrono::duration_cast<std::chrono::seconds>(next - start).count();
+	start = next;
+
     iEpoch++;
-    cout << " epoch:" << iEpoch << endl;
+    cout << " epoch:" << iEpoch << " duration:" << delta << " s" << endl;
 
     MatrixFloat mClassRef;
     net.classify_all(mRefImages, mClassRef);
@@ -68,6 +75,7 @@ int main()
     cout << "training..." << endl;
 
     NetTrainSGD netTrain;
+	start = chrono::steady_clock::now();
     netTrain.train(net,mRefImages,mRefLabelsIndex,tOpt);
 
     cout << "end of test." << endl;
