@@ -27,10 +27,7 @@ void LayerDense::init()
         _weight(i)=((float)rand()/(float)RAND_MAX-0.5f)*2.f*a;
 
 	if (_bHasBias)
-	{
-		for (int i = 0; i < _bias.size(); i++)
-			_bias(i) = 0.f;
-	}
+		_bias.setZero();
 
 	Layer::init();
 }
