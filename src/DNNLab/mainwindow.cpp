@@ -38,8 +38,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QStringList qsl;
     qsl+="LayerType";
+    qsl+="InSize";
+    qsl+="OutSize";
     qsl+="Arg1";
-    qsl+="Arg2";
 
     ui->twNetwork->setHorizontalHeaderLabels(qsl);
 
@@ -49,9 +50,10 @@ MainWindow::MainWindow(QWidget *parent) :
         qcbType->addItem("");
         qcbType->addItem("DenseAndBias");
         qcbType->addItem("DenseNoBias");
+        qcbType->addItem("Dropout");
         qcbType->addItem("SoftMax");
 
-        qcbType->insertSeparator(4);
+        qcbType->insertSeparator(5);
 
         for(unsigned int a=0;a<vsActivations.size();a++)
             qcbType->addItem(vsActivations[a].c_str());
@@ -141,7 +143,7 @@ void MainWindow::train_and_test(bool bReset)
 
     drawLoss(dtr.loss);
     drawRegression();
-  //  resizeEvent(nullptr);
+    //  resizeEvent(nullptr);
 
     update_details();
     QApplication::restoreOverrideCursor();
@@ -270,7 +272,7 @@ float MainWindow::compute_truth(float x)
 void MainWindow::resizeEvent( QResizeEvent *e )
 {
     (void)e;
-/*
+    /*
     QGraphicsScene* qsr=ui->gvRegression->scene();
     if(qsr)
     {
@@ -346,8 +348,23 @@ void MainWindow::parse_net()
 
         iLastOut=iOutSize;
 
+
         if(!sType.empty())
-            _pEngine->add_layer(iInSize,iOutSize,sType);
+        {
+
+            if(sType=="Dropout")
+            {
+                float fRatio=0.2f; //by default
+
+                QTableWidgetItem* pwArg1=ui->twNetwork->item(iRow,3);
+                if(pwArg1)
+                    fRatio=pwArg1->text().toFloat();
+
+                _pEngine->add_dropout_layer(iInSize,fRatio);
+            }
+            else
+                _pEngine->add_layer(iInSize,iOutSize,sType);
+        }
     }
 
     _pEngine->init();

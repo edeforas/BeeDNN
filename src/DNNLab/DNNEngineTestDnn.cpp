@@ -36,7 +36,15 @@ void DNNEngineTestDnn::init()
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTestDnn::add_layer(int inSize, int outSize, string sLayerType)
 {
-    _pNet->add_layer(sLayerType,inSize,outSize);
+    if( (sLayerType=="DenseAndBias") || (sLayerType=="DenseNoBias"))
+        _pNet->add_dense_layer(sLayerType,inSize,outSize);
+    else
+         _pNet->add_activation_layer(sLayerType);
+}
+//////////////////////////////////////////////////////////////////////////////
+void DNNEngineTestDnn::add_dropout_layer(int inSize,float fRatio)
+{
+    _pNet->add_dropout_layer(inSize,fRatio);
 }
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTestDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)

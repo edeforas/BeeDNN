@@ -8,9 +8,9 @@ int main()
 {
     //contruct layer
     Net net;
-    net.add_layer("DenseAndBias",2,3);
-    net.add_layer("Relu",3,3);
-    net.add_layer("DenseAndBias",3,1);
+    net.add_dense_layer("DenseAndBias",2,3);
+    net.add_activation_layer("Relu");
+    net.add_dense_layer("DenseAndBias",3,1);
 
     //train data
     float dSamples[]={ 0,0 , 0,1 , 1,0 , 1,1 };

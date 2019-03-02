@@ -54,12 +54,12 @@ int main()
     mRefImages/=256.f;
 
     //simple net: 97% classif 76% test after a long time
-    net.add_layer("DenseAndBias",784,128);
-    net.add_dropout_layer(128,0.2f);
-    net.add_layer("Relu",128,128);
-    net.add_layer("DenseAndBias",128,10);
+    net.add_dense_layer("DenseAndBias",784,64);
+    net.add_dropout_layer(64,0.2f);
+    net.add_activation_layer("Relu");
+    net.add_dense_layer("DenseAndBias",64,10);
     net.add_dropout_layer(10,0.2f);
-    net.add_layer("Sigmoid",10,10);
+    net.add_activation_layer("Sigmoid");
 
     TrainOption tOpt;
     tOpt.epochs=100;

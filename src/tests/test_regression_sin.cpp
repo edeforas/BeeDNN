@@ -11,9 +11,9 @@ int main()
 {
     //build net
     Net net;
-    net.add_layer("DenseAndBias",1,10);
-    net.add_layer("Tanh",10,10);
-    net.add_layer("DenseAndBias",10,1);
+    net.add_dense_layer("DenseAndBias",1,10);
+    net.add_activation_layer("Tanh");
+    net.add_dense_layer("DenseAndBias",10,1);
 
     //set train data
     MatrixFloat mTruth(64,1);

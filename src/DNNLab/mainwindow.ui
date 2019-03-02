@@ -352,7 +352,7 @@
         <number>10</number>
        </property>
        <property name="columnCount">
-        <number>3</number>
+        <number>4</number>
        </property>
        <attribute name="horizontalHeaderDefaultSectionSize">
         <number>130</number>
@@ -373,6 +373,7 @@
        <row/>
        <row/>
        <row/>
+       <column/>
        <column/>
        <column/>
        <column/>

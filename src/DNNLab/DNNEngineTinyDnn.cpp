@@ -149,6 +149,11 @@ void DNNEngineTinyDnn::add_layer(int inSize, int outSize, string sLayerType)
         ; // todo error activation does not exist
 }
 //////////////////////////////////////////////////////////////////////////////
+void DNNEngineTinyDnn::add_dropout_layer(int inSize,float fRatio)
+{
+     *_pNet << tiny_dnn::dropout_layer(inSize,fRatio);
+}
+//////////////////////////////////////////////////////////////////////////////
 void DNNEngineTinyDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
 {
     tiny_dnn::vec_t vIn;

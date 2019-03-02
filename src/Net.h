@@ -17,8 +17,9 @@ public:
 	void clear();
 	void init();
 
-    void add_layer(string sType, int inSize, int outSize);
-    void add_dropout_layer(int inSize, float fRatio);
+    void add_dense_layer(string sType, int inSize, int outSize);
+	void add_activation_layer(string sType);
+    void add_dropout_layer(int iSize, float fRatio);
 
     const vector<Layer*> layers() const;
     Layer* layer(size_t iLayer);
