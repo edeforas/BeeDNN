@@ -17,11 +17,11 @@ void epoch_callback()
 {
 	//compute epoch time
 	chrono::steady_clock::time_point next = chrono::steady_clock::now();
-	auto delta = chrono::duration_cast<std::chrono::seconds>(next - start).count();
+	auto delta = chrono::duration_cast<std::chrono::milliseconds>(next - start).count();
 	start = next;
 
     iEpoch++;
-    cout << " epoch:" << iEpoch << " duration:" << delta << " s" << endl;
+    cout << " epoch:" << iEpoch << " duration:" << delta << " ms" << endl;
 
     MatrixFloat mClassRef;
     net.classify_all(mRefImages, mClassRef);

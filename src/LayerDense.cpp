@@ -37,20 +37,20 @@ void LayerDense::init()
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDense::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
 {
+	mMatOut = mMatIn * _weight;
+
 	if (_bHasBias)
-		mMatOut = mMatIn*_weight+_bias;
-	else
-		mMatOut = mMatIn*_weight;
+		mMatOut +=  _bias;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDense::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, float fLearningRate, MatrixFloat &mNewDelta)
 {
     mNewDelta=mDelta*(_weight.transpose());
 
-    _weight-=(mInput.transpose())*(mDelta*fLearningRate);
+    _weight-= (mInput.transpose())*(mDelta*fLearningRate);
 	
 	if (_bHasBias)
-		_bias-=mDelta*fLearningRate;
+		_bias-= mDelta*fLearningRate;
 }
 ///////////////////////////////////////////////////////////////////////////////
 const MatrixFloat& LayerDense::weight() const
