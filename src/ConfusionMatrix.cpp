@@ -6,7 +6,7 @@ ClassificationResult ConfusionMatrix::compute(const MatrixFloat& mRef,const Matr
     cr.mConfMat.resize(iNbClass,iNbClass);
     cr.mConfMat.setZero();
 
-    for(unsigned int i=0;i<mRef.rows();i++)
+    for(unsigned int i=0;i<(unsigned int)mRef.rows();i++)
     {
         cr.mConfMat((unsigned int)mRef(i),(unsigned int)mTest(i))++;
     }

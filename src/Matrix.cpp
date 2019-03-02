@@ -74,7 +74,7 @@ int argmax(const MatrixFloat& m)
 ///////////////////////////////////////////////////////////////////////////
 MatrixFloat decimate(const MatrixFloat& m, int iRatio)
 {
-    int iNewSize=m.rows()/iRatio;
+    int iNewSize=(int)(m.rows()/iRatio);
 
     MatrixFloat mDecimated(iNewSize,m.cols());
 

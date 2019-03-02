@@ -26,7 +26,7 @@ void NetTrainSGD::train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrainSGD::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruth,const TrainOption& topt)
 {
-    int iNbSamples=mSamples.rows();
+    int iNbSamples=(int)mSamples.rows();
     int nLayers=(int)net.layers().size();
     vector<MatrixFloat> inOut(nLayers+1);
     vector<MatrixFloat> delta(nLayers+1);
