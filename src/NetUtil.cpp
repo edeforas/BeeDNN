@@ -43,6 +43,11 @@ string to_string(const Net* pNet)
             ss << "Bias:\n";
             ss << matrix_to_string(l->bias());
         }
+        else if(layer->type()=="Dropout")
+        {
+            LayerDropout* l=(LayerDropout*)layer;
+            ss << "Dropout: rate=" << l->get_rate() << endl;
+        }
         else
         {
             ss << "Activation: " << layer->type() << endl;

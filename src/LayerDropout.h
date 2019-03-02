@@ -14,18 +14,18 @@ class LayerDropout : public Layer
 public:
     LayerDropout(int iSize,float fRate);
     virtual ~LayerDropout() override;
-	
+
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) const override;
-	
+
     virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, float fLearningRate, MatrixFloat &mNewDelta) override;
 
-	virtual void to_string(string& sBuffer);
+    float get_rate() const;
 
 private:
-	void create_mask(int iSize);
+    void create_mask(int iSize);
 
-	float _fRate;
-	MatrixFloat _mask;
+    float _fRate;
+    MatrixFloat _mask;
 };
 
 #endif

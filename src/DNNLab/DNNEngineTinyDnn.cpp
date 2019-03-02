@@ -76,8 +76,11 @@ string DNNEngineTinyDnn::to_string()
                 }
             }
         }
-
-        if(l->layer_type().find("activation")!=string::npos)
+        if(l->layer_type()=="dropout")
+        {
+            ss << "Dropout: rate=" << ((tiny_dnn::dropout_layer*)l)->dropout_rate() << endl;
+        }
+        else if(l->layer_type().find("activation")!=string::npos)
         {
             ss << "Activation: " << l->layer_type() << endl;
         }

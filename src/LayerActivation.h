@@ -19,7 +19,6 @@ public:
 	
     virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, float fLearningRate, MatrixFloat &mNewDelta) override;
 
-	virtual void to_string(string& sBuffer);
 private:
     Activation * _pActivation;
 };

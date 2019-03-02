@@ -31,8 +31,3 @@ void LayerActivation::backpropagation(const MatrixFloat &mInput,const MatrixFloa
         mNewDelta(i)=_pActivation->derivation(mInput(i))*mDelta(i);
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerActivation::to_string(string& sBuffer)
-{
-    sBuffer+="Activation: "+_pActivation->name()+" InSize: "+std::to_string(_iInSize) +" OutSize: "+std::to_string(_iOutSize);
-}
-///////////////////////////////////////////////////////////////////////////////
