@@ -3,8 +3,7 @@
 #include "Net.h"
 #include "NetTrainSGD.h"
 #include "LayerActivation.h"
-#include "LayerDenseNoBias.h"
-#include "LayerDenseAndBias.h"
+#include "LayerDense.h"
 #include "NetUtil.h"
 
 //////////////////////////////////////////////////////////////////////////////
@@ -36,8 +35,10 @@ void DNNEngineTestDnn::init()
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTestDnn::add_layer(int inSize, int outSize, string sLayerType)
 {
-    if( (sLayerType=="DenseAndBias") || (sLayerType=="DenseNoBias"))
-        _pNet->add_dense_layer(sLayerType,inSize,outSize);
+    if(sLayerType=="DenseAndBias")
+        _pNet->add_dense_layer(inSize,outSize,true);
+    else if(sLayerType=="DenseNoBias")
+        _pNet->add_dense_layer(inSize,outSize,false);
     else
          _pNet->add_activation_layer(sLayerType);
 }

@@ -32,8 +32,7 @@ SOURCES += \
     ../Matrix.cpp \
     ../Activation.cpp \
     ../LayerActivation.cpp \
-    ../LayerDenseNoBias.cpp \
-    ../LayerDenseAndBias.cpp \
+    ../LayerDense.cpp \
     ../LayerDropout.cpp
 
 HEADERS += \
@@ -45,8 +44,7 @@ HEADERS += \
     ../NetTrain.h \
     ../NetTrainSGD.h \
     ../LayerActivation.h \
-    ../LayerDenseNoBias.h \
-    ../LayerDenseAndBias.h \
+    ../LayerDense.h \
     ../LayerDropout.h
 
 

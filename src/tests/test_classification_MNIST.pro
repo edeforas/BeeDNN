@@ -15,8 +15,7 @@ SOURCES += \
     ../LayerActivation.cpp \
     ../MNISTReader.cpp \
     ../ConfusionMatrix.cpp \
-    ../LayerDenseAndBias.cpp \
-    ../LayerDenseNoBias.cpp \
+    ../LayerDense.cpp \
     ../LayerDropout.cpp \
     ../NetTrain.cpp \
     ../NetTrainSGD.cpp \
@@ -34,6 +33,5 @@ HEADERS += \
     ../NetTrain.h \
     ../NetTrainSGD.h \
     ../ConfusionMatrix.h \
-    ../LayerDenseNoBias.h \
-    ../LayerDenseAndBias.h \
+    ../LayerDense.h \
     ../LayerDropout.h

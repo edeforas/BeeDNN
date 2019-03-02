@@ -4,8 +4,7 @@
 #include "Matrix.h"
 
 #include "LayerActivation.h"
-#include "LayerDenseNoBias.h"
-#include "LayerDenseAndBias.h"
+#include "LayerDense.h"
 #include "LayerDropout.h"
 
 #include <cmath>
@@ -42,16 +41,9 @@ void Net::add_activation_layer(string sType)
 	_layers.push_back(new LayerActivation(sType));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_dense_layer(string sType,int inSize,int outSize)
+void Net::add_dense_layer(int inSize,int outSize,bool bHasBias)
 {
-    if(sType=="DenseAndBias")
-        _layers.push_back(new LayerDenseAndBias(inSize,outSize));
-
-    else if(sType=="DenseNoBias")
-        _layers.push_back(new LayerDenseNoBias(inSize,outSize));
-
-  //  else
-   //     _layers.push_back(new LayerActivation(sType));
+    _layers.push_back(new LayerDense(inSize,outSize, bHasBias));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const

@@ -1,54 +1,70 @@
-#include "LayerDenseAndBias.h"
+#include "LayerDense.h"
 
 #include <cstdlib> // for rand
 #include <cmath> // for sqrt
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerDenseAndBias::LayerDenseAndBias(int iInSize,int iOutSize):
-    Layer(iInSize,iOutSize,"DenseAndBias")
+LayerDense::LayerDense(int iInSize,int iOutSize,bool bHasBias):
+    Layer(iInSize,iOutSize,"Dense"),
+	_bHasBias(bHasBias)
 {
     _weight.resize(_iInSize,_iOutSize);
-    _bias.resize(1,_iOutSize);
 
-    LayerDenseAndBias::init();
+	if(_bHasBias)
+		_bias.resize(1,_iOutSize);
+
+    LayerDense::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-LayerDenseAndBias::~LayerDenseAndBias()
+LayerDense::~LayerDense()
 { }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerDenseAndBias::init()
+void LayerDense::init()
 {
-    //Xavier uniform initialisation
+    //Xavier uniform initialization
     float a =sqrtf(6.f/(_iInSize+_iOutSize));
     for(int i=0;i<_weight.size();i++)
         _weight(i)=((float)rand()/(float)RAND_MAX-0.5f)*2.f*a;
 
-    for(int i=0;i<_bias.size();i++)
-        _bias(i)=0.f;
-	
+	if (_bHasBias)
+	{
+		for (int i = 0; i < _bias.size(); i++)
+			_bias(i) = 0.f;
+	}
+
 	Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerDenseAndBias::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
+void LayerDense::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
 {
-    mMatOut= mMatIn*_weight+_bias;
+	if (_bHasBias)
+		mMatOut = mMatIn*_weight+_bias;
+	else
+		mMatOut = mMatIn*_weight;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerDenseAndBias::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, float fLearningRate, MatrixFloat &mNewDelta)
+void LayerDense::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, float fLearningRate, MatrixFloat &mNewDelta)
 {
     mNewDelta=mDelta*(_weight.transpose());
 
     _weight-=(mInput.transpose())*(mDelta*fLearningRate);
-    _bias-=mDelta*fLearningRate;
+	
+	if (_bHasBias)
+		_bias-=mDelta*fLearningRate;
 }
 ///////////////////////////////////////////////////////////////////////////////
-const MatrixFloat& LayerDenseAndBias::weight() const
+const MatrixFloat& LayerDense::weight() const
 {
     return _weight;
 }
 ///////////////////////////////////////////////////////////////////////////////
-const MatrixFloat& LayerDenseAndBias::bias() const
+const MatrixFloat& LayerDense::bias() const
 {
     return _bias;
+}
+///////////////////////////////////////////////////////////////////////////////
+bool LayerDense::has_bias() const
+{
+	return _bHasBias;
 }
 ///////////////////////////////////////////////////////////////////////////////

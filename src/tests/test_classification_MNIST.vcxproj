@@ -158,8 +158,7 @@
     <ClCompile Include="..\ConfusionMatrix.cpp" />
     <ClCompile Include="..\Layer.cpp" />
     <ClCompile Include="..\LayerActivation.cpp" />
-    <ClCompile Include="..\LayerDenseAndBias.cpp" />
-    <ClCompile Include="..\LayerDenseNoBias.cpp" />
+    <ClCompile Include="..\LayerDense.cpp" />
     <ClCompile Include="..\LayerDropout.cpp" />
     <ClCompile Include="..\Matrix.cpp" />
     <ClCompile Include="..\MNISTReader.cpp" />
@@ -173,8 +172,7 @@
     <ClInclude Include="..\ConfusionMatrix.h" />
     <ClInclude Include="..\Layer.h" />
     <ClInclude Include="..\LayerActivation.h" />
-    <ClInclude Include="..\LayerDenseAndBias.h" />
-    <ClInclude Include="..\LayerDenseNoBias.h" />
+    <ClInclude Include="..\LayerDense.h" />
     <ClInclude Include="..\LayerDropout.h" />
     <ClInclude Include="..\Matrix.h" />
     <ClInclude Include="..\MNISTReader.h" />

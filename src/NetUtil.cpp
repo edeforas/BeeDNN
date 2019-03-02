@@ -2,8 +2,7 @@
 #include "Layer.h"
 #include "Matrix.h"
 
-#include "LayerDenseAndBias.h"
-#include "LayerDenseNoBias.h"
+#include "LayerDense.h"
 #include "LayerDropout.h"
 
 #include <sstream>
@@ -27,21 +26,17 @@ string to_string(const Net* pNet)
     {
         Layer* layer=layers[i];
 
-        if(layer->type()=="DenseNoBias")
+        if(layer->type()=="Dense")
         {
-            LayerDenseNoBias* l=(LayerDenseNoBias*)layer;
-            ss << "DenseNoBias:  InSize: " << l->in_size() << " OutSize: " << l->out_size() << endl;
+            LayerDense* l=(LayerDense*)layer;
+            ss << "Dense:  InSize: " << l->in_size() << " OutSize: " << l->out_size() << endl;
             ss << "Weight:\n";
             ss << matrix_to_string(l->weight());
-        }
-        else if(layer->type()=="DenseAndBias")
-        {
-            LayerDenseAndBias* l=(LayerDenseAndBias*)layer;
-            ss << "DenseAndBias:  InSize: " << l->in_size() << " OutSize: " << l->out_size() << endl;
-            ss << "Weight:\n";
-            ss << matrix_to_string(l->weight());
-            ss << "Bias:\n";
-            ss << matrix_to_string(l->bias());
+            if(l->has_bias())
+            {
+                ss << "Bias:\n";
+                ss << matrix_to_string(l->bias());
+            }
         }
         else if(layer->type()=="Dropout")
         {
