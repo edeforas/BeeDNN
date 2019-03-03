@@ -19,7 +19,8 @@ public:
 
     virtual void clear() override;
     virtual void init() override;
-    virtual void add_layer(int inSize,int outSize, string sLayerType) override;
+    virtual void add_dense_layer(int inSize,int outSize, bool bWithBias) override;
+    virtual void add_activation_layer(string sActivation) override;
     virtual void add_dropout_layer(int inSize,float fRatio) override;
 
     virtual void train_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto) override;

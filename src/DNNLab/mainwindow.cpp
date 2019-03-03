@@ -51,9 +51,9 @@ MainWindow::MainWindow(QWidget *parent) :
         qcbType->addItem("DenseAndBias");
         qcbType->addItem("DenseNoBias");
         qcbType->addItem("Dropout");
-        qcbType->addItem("SoftMax");
+        // qcbType->addItem("SoftMax");
 
-        qcbType->insertSeparator(5);
+        qcbType->insertSeparator(4);
 
         for(unsigned int a=0;a<vsActivations.size();a++)
             qcbType->addItem(vsActivations[a].c_str());
@@ -348,10 +348,8 @@ void MainWindow::parse_net()
 
         iLastOut=iOutSize;
 
-
         if(!sType.empty())
         {
-
             if(sType=="Dropout")
             {
                 float fRatio=0.2f; //by default
@@ -362,8 +360,12 @@ void MainWindow::parse_net()
 
                 _pEngine->add_dropout_layer(iInSize,fRatio);
             }
+            else if(sType=="DenseAndBias")
+                _pEngine->add_dense_layer(iInSize,iOutSize,true);
+            else if(sType=="DenseNoBias")
+                _pEngine->add_dense_layer(iInSize,iOutSize,false);
             else
-                _pEngine->add_layer(iInSize,iOutSize,sType);
+                _pEngine->add_activation_layer(sType);
         }
     }
 

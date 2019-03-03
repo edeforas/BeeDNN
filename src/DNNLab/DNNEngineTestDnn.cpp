@@ -33,14 +33,14 @@ void DNNEngineTestDnn::init()
     DNNEngine::init();
 }
 //////////////////////////////////////////////////////////////////////////////
-void DNNEngineTestDnn::add_layer(int inSize, int outSize, string sLayerType)
+void DNNEngineTestDnn::add_dense_layer(int inSize, int outSize, bool bWithBias)
 {
-    if(sLayerType=="DenseAndBias")
-        _pNet->add_dense_layer(inSize,outSize,true);
-    else if(sLayerType=="DenseNoBias")
-        _pNet->add_dense_layer(inSize,outSize,false);
-    else
-         _pNet->add_activation_layer(sLayerType);
+    _pNet->add_dense_layer(inSize,outSize,bWithBias);
+}
+//////////////////////////////////////////////////////////////////////////////
+void DNNEngineTestDnn::add_activation_layer(string sActivation)
+{
+    _pNet->add_activation_layer(sActivation);
 }
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTestDnn::add_dropout_layer(int inSize,float fRatio)
@@ -65,7 +65,7 @@ void DNNEngineTestDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
     tOpt.learningRate=dto.learningRate;
     tOpt.batchSize=dto.batchSize;
     //tOpt.momentum=dto.momentum;
-    tOpt.observer=nullptr;//dto.observer;
+    //tOpt.observer=nullptr;//dto.observer;
     tOpt.testEveryEpochs=dto.testEveryEpochs;
 
     NetTrainSGD netTrain;

@@ -228,7 +228,7 @@ public:
     {
         return "SoftSign";
     }
- 
+
     float apply(float x) const override
     {
         return x/(1.f+fabsf(x));
@@ -295,13 +295,13 @@ public:
     }
     float derivation(float x) const override
     {
-		float s=1.f/(1.f+expf(-x));
-		return s*(x+1-x*s); //todo optimize
+        float s=1.f/(1.f+expf(-x));
+        return s*(x+1-x*s); //todo optimize
     }
 };
 //////////////////////////////////////////////////////////////////////////////
-// Parablu is a softplus approximation without transendental function, author is Etienne de Foras
-class ActivationParablu: public Activation
+// SoftPlusLight is a softplus approximation without transendental function, author is Etienne de Foras
+class SoftPlusLight: public Activation
 {
 public:
     string name() const override
@@ -373,11 +373,11 @@ Activation* get_activation(const string& sActivation)
     if(sActivation=="SoftPlus")
         return new ActivationSoftPlus;
 
+    if(sActivation=="SoftPlusLight")
+        return new SoftPlusLight;
+
     if(sActivation=="SoftSign")
         return new ActivationSoftSign;
-
-    if(sActivation=="Parablu")
-        return new ActivationParablu;
 
     return nullptr;
 }
@@ -387,7 +387,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.clear();
 
     vsActivations.push_back("Tanh");
-  //  vsActivations.push_back("TanhP1M2");
+    //  vsActivations.push_back("TanhP1M2");
     vsActivations.push_back("Asinh");
     vsActivations.push_back("Sigmoid");
     vsActivations.push_back("Swish"); //not under tiny-dnn
@@ -400,7 +400,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("Elu");
     vsActivations.push_back("Selu");
     vsActivations.push_back("SoftPlus");
+    vsActivations.push_back("SoftPlusLight"); //not under tiny-dnn
     vsActivations.push_back("SoftSign");
-    vsActivations.push_back("Parablu"); //not under tiny-dnn
 }
 //////////////////////////////////////////////////////////////////////////////

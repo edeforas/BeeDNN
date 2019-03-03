@@ -103,49 +103,44 @@ void DNNEngineTinyDnn::init()
     DNNEngine::init();
 }
 //////////////////////////////////////////////////////////////////////////////
-void DNNEngineTinyDnn::add_layer(int inSize, int outSize, string sLayerType)
+void DNNEngineTinyDnn::add_dense_layer(int inSize, int outSize, bool bWithBias)
 {
-    if(sLayerType=="DenseAndBias")
-        *_pNet << tiny_dnn::fully_connected_layer((size_t)inSize, (size_t)outSize,true);
-
-    if(sLayerType=="DenseNoBias")
-        *_pNet << tiny_dnn::fully_connected_layer((size_t)inSize, (size_t)outSize,false);
-
-    if(sLayerType=="SoftMax")
-        *_pNet << tiny_dnn::softmax_layer((size_t)inSize, (size_t)outSize,false);
-
-
-    if(sLayerType=="Tanh")
+    *_pNet << tiny_dnn::fully_connected_layer((size_t)inSize, (size_t)outSize,bWithBias);
+}
+//////////////////////////////////////////////////////////////////////////////
+void DNNEngineTinyDnn::add_activation_layer(string sActivation)
+{
+    if(sActivation=="Tanh")
         *_pNet <<  tiny_dnn::tanh_layer();
 
-    if(sLayerType=="TanhP1M2")
+    else if(sActivation=="TanhP1M2")
         *_pNet <<  tiny_dnn::tanh_p1m2_layer();
 
-    else if(sLayerType=="Sigmoid")
+    else if(sActivation=="Sigmoid")
         *_pNet <<  tiny_dnn::sigmoid_layer();
 
-    else if(sLayerType=="Relu")
+    else if(sActivation=="Relu")
         *_pNet <<  tiny_dnn::relu_layer();
 
-    else if(sLayerType=="LeakyRelu")
+    else if(sActivation=="LeakyRelu")
         *_pNet <<  tiny_dnn::leaky_relu_layer();
 
-    else if(sLayerType=="Elu")
+    else if(sActivation=="Elu")
         *_pNet <<  tiny_dnn::elu_layer();
 
-    else if(sLayerType=="Selu")
+    else if(sActivation=="Selu")
         *_pNet <<  tiny_dnn::selu_layer();
 
-    else if(sLayerType=="Asinh")
+    else if(sActivation=="Asinh")
         *_pNet <<  tiny_dnn::asinh_layer();
 
-    else if(sLayerType=="SoftMax")
+    else if(sActivation=="SoftMax")
         *_pNet <<  tiny_dnn::softmax_layer();
 
-    else if(sLayerType=="SoftPlus")
+    else if(sActivation=="SoftPlus")
         *_pNet <<  tiny_dnn::softplus_layer();
 
-    else if(sLayerType=="SoftSign")
+    else if(sActivation=="SoftSign")
         *_pNet <<  tiny_dnn::softsign_layer();
 
     else
@@ -154,7 +149,7 @@ void DNNEngineTinyDnn::add_layer(int inSize, int outSize, string sLayerType)
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTinyDnn::add_dropout_layer(int inSize,float fRatio)
 {
-     *_pNet << tiny_dnn::dropout_layer(inSize,fRatio);
+    *_pNet << tiny_dnn::dropout_layer(inSize,fRatio);
 }
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTinyDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)

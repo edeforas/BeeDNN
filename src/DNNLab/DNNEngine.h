@@ -70,7 +70,8 @@ public:
 
     virtual void clear()=0; //remove all layers
     virtual void init(); // init weights
-    virtual void add_layer(int inSize,int outSize, string sLayerType)=0;
+    virtual void add_dense_layer(int inSize,int outSize, bool bWithBias)=0;
+    virtual void add_activation_layer(string sActivation) =0;
     virtual void add_dropout_layer(int inSize,float fRatio) =0;
 
     virtual DNNTrainResult train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto);
