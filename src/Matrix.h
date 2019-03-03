@@ -13,26 +13,6 @@ using namespace std;
 using namespace Eigen;
 typedef Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> MatrixFloat;
 
-/*
-const MatrixFloat without_last_row(MatrixFloat m)
-{
-    return m.block(0,0,m.rows()-1,m.cols()); //todo when rows==0
-}
-
-//template <class T>
-const MatrixFloat without_last_column(MatrixFloat m)
-{
-    return m.block(0,0,m.rows(),m.cols()-1); //todo when rows==0
-}
-*/
-/*
-MatrixFloat concatHorizontally(const MatrixFloat& a, const MatrixFloat& b)
-{
-    MatrixFloat c(a.rows(), a.cols()+b.cols());
-    c << a, b;
-    return c;
-}
-*/
 #else
 
 template <class T>
@@ -326,17 +306,7 @@ public:
 
         return out;
     }
-    /*
-    Matrix<T> scalar_mult(T d) const
-    {
-        Matrix<T> out(*this);
 
-        for(int i=0;i<_iSize;i++)
-            out(i)*=d;
-
-        return out;
-    }
-*/
     T sum() const
     {
         T dSum=0.;
@@ -391,17 +361,6 @@ public:
         return Matrix<T>(_data+iRow*_iColumns,1,_iColumns);
     }
 
-    /*
-    Matrix<T> row_sum() const
-    {
-        Matrix<T> r(_iRows,1);
-
-        for(int i=0;i<_iRows;i++)
-            r(i)=row(i).sum();
-
-        return r;
-    }
-*/
     Matrix<T> diagonal() const //slow!
     {
         Matrix<T> r(_iRows,1);
@@ -411,12 +370,7 @@ public:
 
         return r;
     }
-    /*
-    bool is_vector() const
-    {
-        return (_iRows==1) || (_iColumns==1);
-    }
-    */
+
 private:
     int _iRows,_iColumns,_iSize;
     T* _data;
@@ -425,62 +379,14 @@ private:
 
 typedef Matrix<float> MatrixFloat;
 
-/*
-template <class T>
-const Matrix<T> without_last_row(const Matrix<T>& m)
-{
-    return from_raw_buffer((T*)m.data(),m.rows()-1,m.cols());
-}
-
-template <class T>
-const Matrix<T> without_last_column(const Matrix<T>& a) // slow function!
-{
-    assert(a.cols()>0);
-
-    Matrix<T> m(a.rows(), a.cols()-1);
-
-    for(int r=0;r<a.rows();r++)
-        for(int c=0;c<a.cols()-1;c++)
-            m(r,c)=a(r,c);
-
-    return m;
-}
-*/
-
-/*
-template <class T>
-Matrix<T> concatHorizontally(const Matrix<T> & a, const Matrix<T> & b) // slow function!
-{
-    //concat horizontally
-    size_t r=a.rows();
-    size_t c=a.cols();
-
-    assert(r==b.rows());
-
-    Matrix<T> out(r,c+b.cols());
-
-    for(unsigned int j=0;j<r;j++)
-        for(unsigned int i=0;i<c;i++)
-            out(j,i)=a(j,i);
-
-    for(unsigned int j=0;j<r;j++)
-        for(unsigned int i=0;i<b.cols();i++)
-            out(j,i+c)=b(j,i);
-
-    return out;
-}
-*/
 #endif
 
 const MatrixFloat from_raw_buffer(float *pBuffer,int iRows,int iCols);
 MatrixFloat rowWiseSum(const MatrixFloat& m);
 MatrixFloat rand_perm(int iSize); //create a vector of index shuffled
 MatrixFloat decimate(const MatrixFloat& m, int iRatio);
-string matrix_to_string(const MatrixFloat& m);
-
-//void kronecker(int i,int iSize,MatrixFloat& m);
-//MatrixFloat index_to_position(const MatrixFloat& mIndex, int uiMaxPosition);
 int argmax(const MatrixFloat& m);
+string matrix_to_string(const MatrixFloat& m);
 
 #endif
 

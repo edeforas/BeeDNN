@@ -7,7 +7,7 @@ using namespace std;
 
 // Activations functions
 // the activation API use only the input to compute derivation because:
-// -in minibatch derivation() is called sparsely
+// -in minibatch, derivation() is called sparsely
 // -activation are not linear, we cannot use mean(data_out)=apply(mean(data_in)) (unless proven)
 // -simplify the API
 
