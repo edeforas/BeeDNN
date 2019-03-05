@@ -3,6 +3,7 @@
 #include "Net.h"
 #include "Layer.h"
 #include "Matrix.h"
+#include "Optimizer.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 NetTrainSGD::NetTrainSGD(): NetTrain()
@@ -30,12 +31,21 @@ void NetTrainSGD::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mT
     int nLayers=(int)net.layers().size();
     vector<MatrixFloat> inOut(nLayers+1);
     vector<MatrixFloat> delta(nLayers+1);
-    double dLoss=0.;
+	vector<Optimizer*> optimizers(nLayers);
+	
+	double dLoss=0.;
 
     _vdLoss.clear();
 
     if(nLayers==0)
         return;
+
+	for (int i = 0; i < nLayers; i++)
+	{
+		optimizers[i] = get_optimizer(topt.sOptimizer);
+		optimizers[i]->fLearningRate = topt.learningRate;
+		optimizers[i]->init(*(net.layer(i)));
+	}
 
     for(int iEpoch=0;iEpoch<topt.epochs;iEpoch++)
     {
@@ -58,7 +68,7 @@ void NetTrainSGD::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mT
             for (int i=(int)(nLayers-1);i>=0;i--)
             {
                 Layer* l=net.layer(i);
-                l->backpropagation(inOut[i],delta[i+1],topt.learningRate,delta[i]);
+                l->backpropagation(inOut[i],delta[i+1], optimizers[i],delta[i]);
             }
         }
 
@@ -72,5 +82,8 @@ void NetTrainSGD::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mT
                 dLoss=compute_loss(net,mSamples,mTruth);
         _vdLoss.push_back(dLoss);
     }
+
+	for (int i = 0; i < nLayers; i++)
+		delete optimizers[i];
 }
 /////////////////////////////////////////////////////////////////////////////////////////////

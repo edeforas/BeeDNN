@@ -4,6 +4,7 @@
 #include "Matrix.h"
 
 #include <vector>
+#include <string>
 using namespace std;
 
 class TrainOption
@@ -17,6 +18,7 @@ public:
         momentum=0.1f;  //not used for now
 		nesterov_momentum = 0.f; //not used for now
         testEveryEpochs=-1;
+		sOptimizer = "SGD";
 		epochCallBack = nullptr;
     }
 
@@ -26,7 +28,8 @@ public:
     float momentum;  //not used for now
 	float nesterov_momentum;  //not used for now
 	int testEveryEpochs; //set to 1 to test at each epoch, 10 to test only 1/10 of the time, etc, set to -1 for no test
-	void (*epochCallBack)();
+	string sOptimizer; //ex "SGD"
+	void(*epochCallBack)();
 };
 
 class Layer;

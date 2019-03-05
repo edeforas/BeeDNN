@@ -6,6 +6,8 @@
 #include <string>
 using namespace std;
 
+class Optimizer;
+
 class Layer
 {
 public:
@@ -19,7 +21,7 @@ public:
     virtual void forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const =0;
 	
     virtual void init(); //init all layers
-    virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, float fLearningRate, MatrixFloat &mNewDelta)=0;
+    virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, Optimizer* pOptim, MatrixFloat &mNewDelta)=0;
 		
 	void set_train_mode(bool bTrainMode); //set to true to train, to false to test
 

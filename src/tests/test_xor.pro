@@ -7,6 +7,7 @@ INCLUDEPATH+=..
 
 SOURCES += test_xor.cpp \
     ../Net.cpp \
+    ../Optimizer.cpp \
     ../NetTrain.cpp \
     ../NetTrainSGD.cpp \
     ../Layer.cpp \
@@ -21,6 +22,7 @@ HEADERS += \
     ../Layer.h \
     ../Matrix.h \
     ../Net.h \
+    ../Optimizer.h \
     ../NetTrain.h \
     ../NetTrainSGD.h \
     ../LayerActivation.h \

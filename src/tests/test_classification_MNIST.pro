@@ -18,6 +18,7 @@ SOURCES += \
     ../LayerDense.cpp \
     ../LayerDropout.cpp \
     ../NetTrain.cpp \
+    ../Optimizer.cpp \
     ../NetTrainSGD.cpp \
     test_classification_MNIST.cpp
 
@@ -31,6 +32,7 @@ HEADERS += \
     ../Net.h \
     ../MNISTReader.h \
     ../NetTrain.h \
+    ../Optimizer.h \
     ../NetTrainSGD.h \
     ../ConfusionMatrix.h \
     ../LayerDense.h \

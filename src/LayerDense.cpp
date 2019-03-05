@@ -2,6 +2,7 @@
 
 #include <cstdlib> // for rand
 #include <cmath> // for sqrt
+#include "Optimizer.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerDense::LayerDense(int iInSize,int iOutSize,bool bHasBias):
@@ -40,14 +41,21 @@ void LayerDense::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
 		mMatOut +=  _bias;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerDense::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, float fLearningRate, MatrixFloat &mNewDelta)
+void LayerDense::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, Optimizer* pOptim, MatrixFloat &mNewDelta)
 {
     mNewDelta=mDelta*(_weight.transpose());
 
-    _weight-= (mInput.transpose())*(mDelta*fLearningRate);
+    //pOptim->optimize(_weight, mInput, mDelta);
+    _weight-= (mInput.transpose())*(mDelta*pOptim->fLearningRate);
 	
 	if (_bHasBias)
-		_bias-= mDelta*fLearningRate;
+	{
+		MatrixFloat one = mInput; //temp
+		one.setConstant(1.f); //temp
+
+        _bias-= mDelta* pOptim->fLearningRate;
+        //pOptim->optimize(_bias, mInput, mDelta); //todo concat matrix or use another optimizer
+	}
 }
 ///////////////////////////////////////////////////////////////////////////////
 const MatrixFloat& LayerDense::weight() const

@@ -17,7 +17,7 @@ public:
 
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) const override;
 
-    virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, float fLearningRate, MatrixFloat &mNewDelta) override;
+    virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, Optimizer* pOptim, MatrixFloat &mNewDelta) override;
 
     float get_rate() const;
 

@@ -8,6 +8,7 @@ INCLUDEPATH+=..
 SOURCES += test_regression_sin.cpp \
     ../Net.cpp \
     ../NetTrain.cpp \
+    ../Optimizer.cpp \
     ../NetTrainSGD.cpp \
     ../Layer.cpp \
     ../Matrix.cpp \
@@ -22,6 +23,7 @@ HEADERS += \
     ../Matrix.h \
     ../Net.h \
     ../NetTrain.h \
+    ../Optimizer.h \
     ../NetTrainSGD.h \
     ../LayerActivation.h \
     ../LayerDense.h \

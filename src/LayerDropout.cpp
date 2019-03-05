@@ -19,9 +19,9 @@ void LayerDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
         mOut = mIn; // in test mode
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerDropout::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, float fLearningRate, MatrixFloat &mNewDelta)
+void LayerDropout::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta,Optimizer* pOptim, MatrixFloat &mNewDelta)
 {
-    (void)fLearningRate;
+    (void)pOptim;
     mNewDelta= mDelta.cwiseProduct(_mask);
 
     create_mask((int)mInput.cols());

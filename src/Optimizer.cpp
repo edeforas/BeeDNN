@@ -1,0 +1,57 @@
+#include "Optimizer.h"
+
+// Network optimizer as in:
+// http://cs231n.github.io/neural-networks-3/#update
+
+//////////////////////////////////////////////////////////
+Optimizer::Optimizer()
+{}
+//////////////////////////////////////////////////////////
+Optimizer::~Optimizer()
+{}
+//////////////////////////////////////////////////////////
+class OptimizerSGD : public Optimizer
+{
+public:	
+	OptimizerSGD()
+	{}
+	
+	~OptimizerSGD()
+	{}
+
+	virtual void init(const Layer& l) override
+    { (void)l; }
+
+	virtual void optimize(MatrixFloat& weight,const MatrixFloat& x,const MatrixFloat& dx) override
+	{
+		weight -= (x.transpose())*(dx*fLearningRate);
+	}
+};
+//////////////////////////////////////////////////////////
+class OptimizerMomentum : public Optimizer
+{
+};
+//////////////////////////////////////////////////////////
+class OptimizerNesterov : public Optimizer
+{
+};
+//////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+Optimizer* get_optimizer(const string& sOptimizer)
+{
+	if (sOptimizer == "SGD")
+		return new OptimizerSGD;
+
+
+
+	return nullptr;
+}
+//////////////////////////////////////////////////////////////////////////////
+void list_optimizers_available(vector<string>& vsOptimizers)
+{
+	vsOptimizers.clear();
+
+	vsOptimizers.push_back("SGD");
+}
+//////////////////////////////////////////////////////////////////////////////

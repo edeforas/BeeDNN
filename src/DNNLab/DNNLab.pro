@@ -27,6 +27,7 @@ SOURCES += \
     ../Net.cpp \
     ../NetUtil.cpp \
     ../NetTrain.cpp \
+    ../Optimizer.cpp \
     ../NetTrainSGD.cpp \
     ../Layer.cpp \
     ../Matrix.cpp \
@@ -42,6 +43,7 @@ HEADERS += \
     ../Net.h \
     ../NetUtil.h \
     ../NetTrain.h \
+    ../Optimizer.h \
     ../NetTrainSGD.h \
     ../LayerActivation.h \
     ../LayerDense.h \
