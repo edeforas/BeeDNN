@@ -6,7 +6,7 @@
 #include "Matrix.h"
 
 //matrix view on another matrix, without malloc and copy
-const MatrixFloat from_raw_buffer(float *pBuffer,int iRows,int iCols)
+const MatrixFloat from_raw_buffer(const float *pBuffer,int iRows,int iCols)
 {
 #ifdef USE_EIGEN
     return Eigen::Map<MatrixFloat>((float*)pBuffer,static_cast<Eigen::Index>(iRows),static_cast<Eigen::Index>(iCols));
@@ -95,5 +95,50 @@ string matrix_to_string(const MatrixFloat& m)
     }
 
     return ss.str();
+}
+///////////////////////////////////////////////////////////////////////////
+void contatenateHorizontallyInto(const MatrixFloat& mA, const MatrixFloat& mB, MatrixFloat& mAB)
+{
+	assert(mA.rows() == mB.rows());
+
+	int iRows = (int)mA.rows();
+	int iColsA = (int)mA.cols();
+	int iColsB = (int)mB.cols();
+
+	mAB.resize(iRows,iColsA + iColsB);
+
+#ifdef USE_EIGEN
+	mAB << mA, mB;
+#else
+	//todo check mA and mB are not view on other matrixes wiht reduced columns (horizontal stride pb)
+	TODODODOD TODO
+	std::copy(mA.data(), mA.data() + mA.size(), mAB.data());
+	std::copy(mB.data(), mB.data() + mB.size(), mAB.data() + mA.size());
+#endif
+}
+///////////////////////////////////////////////////////////////////////////
+
+void contatenateVerticallyInto(const MatrixFloat& mA, const MatrixFloat& mB, MatrixFloat& mAB)
+{
+	assert(mA.cols()== mB.cols());
+
+	int iRowA = (int)mA.rows();
+	int iRowB = (int)mB.rows();
+	int iCols = (int)mA.cols();
+
+	mAB.resize(iRowA + iRowB, iCols);
+
+#ifdef USE_EIGEN
+	mAB << mA , mB;
+#else
+	//todo check mA and mB are not view on other matrixes with reduced columns (horizontal stride pb)
+	std::copy(mA.data(), mA.data() + mA.size(), mAB.data());
+	std::copy(mB.data(), mB.data() + mB.size(), mAB.data() + mA.size());
+#endif
+}
+///////////////////////////////////////////////////////////////////////////
+const MatrixFloat withoutLastRow(const MatrixFloat& m)
+{
+	return from_raw_buffer(m.data(), (int)m.rows() - 1, (int)m.cols());
 }
 ///////////////////////////////////////////////////////////////////////////

@@ -44,6 +44,7 @@ void NetTrainSGD::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mT
 	{
 		optimizers[i] = get_optimizer(topt.sOptimizer);
 		optimizers[i]->fLearningRate = topt.learningRate;
+        optimizers[i]->fMomentum=topt.momentum;
 		optimizers[i]->init(*(net.layer(i)));
 	}
 

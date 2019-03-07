@@ -440,10 +440,10 @@
        <item>
         <widget class="QLineEdit" name="leMomentum">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="text">
-          <string>0.1</string>
+          <string>0.9</string>
          </property>
          <property name="readOnly">
           <bool>false</bool>
@@ -580,17 +580,17 @@
         <widget class="QComboBox" name="cbOptimizer">
          <item>
           <property name="text">
-           <string>gradient_descent</string>
+           <string>SGD</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>momentum</string>
+           <string>Momentum</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>nesterov_momentum</string>
+           <string>Nesterov</string>
           </property>
          </item>
          <item>

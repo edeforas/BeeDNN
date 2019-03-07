@@ -18,11 +18,10 @@ public:
 	
 	virtual void init(const Layer& l)=0;
 
-	virtual void optimize(MatrixFloat& weight,const MatrixFloat& x, const MatrixFloat& dx) = 0;
+	virtual void optimize(MatrixFloat& weight, const MatrixFloat& mDx) = 0;
 
-
-	
 	float fLearningRate; //temp
+	float fMomentum; //temp
 };
 
 Optimizer* get_optimizer(const string & sOptimizer);

@@ -381,12 +381,17 @@ typedef Matrix<float> MatrixFloat;
 
 #endif
 
-const MatrixFloat from_raw_buffer(float *pBuffer,int iRows,int iCols);
+const MatrixFloat from_raw_buffer(const float *pBuffer,int iRows,int iCols);
 MatrixFloat rowWiseSum(const MatrixFloat& m);
 MatrixFloat rand_perm(int iSize); //create a vector of index shuffled
 MatrixFloat decimate(const MatrixFloat& m, int iRatio);
 int argmax(const MatrixFloat& m);
 string matrix_to_string(const MatrixFloat& m);
+
+void contatenateHorizontallyInto(const MatrixFloat& mA, const MatrixFloat& mB, MatrixFloat& mAB);
+void contatenateVerticallyInto(const MatrixFloat& mA, const MatrixFloat& mB, MatrixFloat& mAB);
+const MatrixFloat withoutLastRow(const MatrixFloat& m);
+
 
 #endif
 
