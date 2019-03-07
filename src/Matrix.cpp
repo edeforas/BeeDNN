@@ -6,7 +6,7 @@
 #include "Matrix.h"
 
 //matrix view on another matrix, without malloc and copy
-const MatrixFloat from_raw_buffer(float *pBuffer,int iRows,int iCols)
+const MatrixFloat from_raw_buffer(const float *pBuffer,int iRows,int iCols)
 {
 #ifdef USE_EIGEN
     return Eigen::Map<MatrixFloat>((float*)pBuffer,static_cast<Eigen::Index>(iRows),static_cast<Eigen::Index>(iCols));
@@ -95,5 +95,34 @@ string matrix_to_string(const MatrixFloat& m)
     }
 
     return ss.str();
+}
+///////////////////////////////////////////////////////////////////////////
+const MatrixFloat withoutLastRow(const MatrixFloat& m)
+{
+	return from_raw_buffer(m.data(),(int) m.rows() - 1,(int) m.cols());
+}
+///////////////////////////////////////////////////////////////////////////
+MatrixFloat lastRow( MatrixFloat& m)
+{
+	return m.row(m.rows() - 1);
+}
+///////////////////////////////////////////////////////////////////////////
+const MatrixFloat lastRow(const MatrixFloat& m)
+{
+	return m.row(m.rows() - 1);
+}
+///////////////////////////////////////////////////////////////////////////
+const MatrixFloat addColumnOfOne(const MatrixFloat& m)
+{
+	MatrixFloat r(m.rows(), m.cols() + 1);
+
+	for (int iL = 0; iL < m.rows(); iL++)
+	{
+		for (int iR = 0; iR < m.cols(); iR++)
+			r(iL,iR)= m(iL, iR);
+		r(iL, m.cols()) = 1.f;
+	}
+
+	return r;
 }
 ///////////////////////////////////////////////////////////////////////////
