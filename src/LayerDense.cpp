@@ -28,7 +28,12 @@ void LayerDense::init()
         _weight(i)=((float)rand()/(float)RAND_MAX-0.5f)*2.f*a;
 
 	if (_bHasBias)
+	{
 		_bias.setZero();
+
+		_mOne.resize(1, 1);
+		_mOne.setConstant(1.f);
+	}
 
 	Layer::init();
 }
@@ -41,20 +46,27 @@ void LayerDense::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
 		mMatOut +=  _bias;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerDense::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, Optimizer* pOptim, MatrixFloat &mNewDelta)
+void LayerDense::backpropagation(const MatrixFloat &mInput, const MatrixFloat &mDelta, Optimizer* pOptim, MatrixFloat &mNewDelta)
 {
-    mNewDelta=mDelta*(_weight.transpose());
+	mNewDelta = mDelta * (_weight.transpose());
 
-    //pOptim->optimize(_weight, mInput, mDelta);
-    _weight-= (mInput.transpose())*(mDelta*pOptim->fLearningRate);
-	
 	if (_bHasBias)
-	{
-		MatrixFloat one = mInput; //temp
-		one.setConstant(1.f); //temp
+	{ 
+		//concat weight and bias , optimize, and then split, todo replace with better computation
+		contatenateHorizontallyInto(mInput, _mOne, _mInAndOne);
+		contatenateVerticallyInto(_weight, _bias, _fullWeight);
 
-        _bias-= mDelta* pOptim->fLearningRate;
-        //pOptim->optimize(_bias, mInput, mDelta); //todo concat matrix or use another optimizer
+        _mDx = (_mInAndOne.transpose())*mDelta;
+
+		pOptim->optimize(_fullWeight, _mDx);
+
+		_weight = withoutLastRow(_fullWeight);
+        _bias = _fullWeight.row(_fullWeight.rows() - 1);
+	}
+	else
+	{
+		_mDx = mInput.transpose()*mDelta;
+		pOptim->optimize(_weight, _mDx);
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////
