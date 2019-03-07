@@ -5,14 +5,11 @@
 #include "Optimizer.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerDense::LayerDense(int iInSize,int iOutSize,bool bHasBias):
-    Layer(iInSize,iOutSize,"Dense"),
-	_bHasBias(bHasBias)
+LayerDense::LayerDense(int iInSize, int iOutSize, bool bHasBias) :
+    Layer(iInSize , iOutSize, "Dense"),
+    _bHasBias(bHasBias)
 {
-    _weight.resize(_iInSize,_iOutSize);
-
-	if(_bHasBias)
-		_bias.resize(1,_iOutSize);
+    _weight.resize(_iInSize+(bHasBias?1:0),_iOutSize);
 
     LayerDense::init();
 }
@@ -27,35 +24,36 @@ void LayerDense::init()
     for(int i=0;i<_weight.size();i++)
         _weight(i)=((float)rand()/(float)RAND_MAX-0.5f)*2.f*a;
 
-	if (_bHasBias)
-		_bias.setZero();
+    //	if (_bHasBias)
+    //		lastRow(_weight).setZero();
 
-	Layer::init();
+    Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDense::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
 {
-	mMatOut = mMatIn * _weight;
-
-	if (_bHasBias)
-		mMatOut +=  _bias;
+    if (_bHasBias)
+        mMatOut = mMatIn * withoutLastRow(_weight) + lastRow(_weight);
+    else
+        mMatOut = mMatIn * _weight;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDense::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, Optimizer* pOptim, MatrixFloat &mNewDelta)
 {
-    mNewDelta=mDelta*(_weight.transpose());
+    if (_bHasBias)
+    {
+        mNewDelta = mDelta * (withoutLastRow(_weight).transpose());
 
-    //pOptim->optimize(_weight, mInput, mDelta);
-    _weight-= (mInput.transpose())*(mDelta*pOptim->fLearningRate);
-	
-	if (_bHasBias)
-	{
-		MatrixFloat one = mInput; //temp
-		one.setConstant(1.f); //temp
+        MatrixFloat _mDx = ((addColumnOfOne(mInput)).transpose())*mDelta; //temp
+        pOptim->optimize(_weight, _mDx); //temp
+    }
+    else
+    {
+        mNewDelta = mDelta * (_weight.transpose());
 
-        _bias-= mDelta* pOptim->fLearningRate;
-        //pOptim->optimize(_bias, mInput, mDelta); //todo concat matrix or use another optimizer
-	}
+        MatrixFloat _mDx = (mInput.transpose())*mDelta; //temp
+        pOptim->optimize(_weight, _mDx);
+    }
 }
 ///////////////////////////////////////////////////////////////////////////////
 const MatrixFloat& LayerDense::weight() const
@@ -70,6 +68,6 @@ const MatrixFloat& LayerDense::bias() const
 ///////////////////////////////////////////////////////////////////////////////
 bool LayerDense::has_bias() const
 {
-	return _bHasBias;
+    return _bHasBias;
 }
 ///////////////////////////////////////////////////////////////////////////////

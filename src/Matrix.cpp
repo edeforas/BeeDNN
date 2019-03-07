@@ -96,26 +96,7 @@ string matrix_to_string(const MatrixFloat& m)
 
     return ss.str();
 }
-///////////////////////////////////////////////////////////////////////////
-void contatenateHorizontallyInto(const MatrixFloat& mA, const MatrixFloat& mB, MatrixFloat& mAB)
-{
-	assert(mA.rows() == mB.rows());
 
-	int iRows = (int)mA.rows();
-	int iColsA = (int)mA.cols();
-	int iColsB = (int)mB.cols();
-
-	mAB.resize(iRows,iColsA + iColsB);
-
-#ifdef USE_EIGEN
-	mAB << mA, mB;
-#else
-	//todo check mA and mB are not view on other matrixes wiht reduced columns (horizontal stride pb)
-	TODODODOD TODO
-	std::copy(mA.data(), mA.data() + mA.size(), mAB.data());
-	std::copy(mB.data(), mB.data() + mB.size(), mAB.data() + mA.size());
-#endif
-}
 ///////////////////////////////////////////////////////////////////////////
 
 void contatenateVerticallyInto(const MatrixFloat& mA, const MatrixFloat& mB, MatrixFloat& mAB)
@@ -139,6 +120,30 @@ void contatenateVerticallyInto(const MatrixFloat& mA, const MatrixFloat& mB, Mat
 ///////////////////////////////////////////////////////////////////////////
 const MatrixFloat withoutLastRow(const MatrixFloat& m)
 {
-	return from_raw_buffer(m.data(), (int)m.rows() - 1, (int)m.cols());
+	return from_raw_buffer(m.data(),(int) m.rows() - 1,(int) m.cols());
+}
+///////////////////////////////////////////////////////////////////////////
+MatrixFloat lastRow( MatrixFloat& m)
+{
+	return m.row(m.rows() - 1);
+}
+///////////////////////////////////////////////////////////////////////////
+const MatrixFloat lastRow(const MatrixFloat& m)
+{
+	return m.row(m.rows() - 1);
+}
+///////////////////////////////////////////////////////////////////////////
+const MatrixFloat addColumnOfOne(const MatrixFloat& m)
+{
+	MatrixFloat r(m.rows(), m.cols() + 1);
+
+	for (int iL = 0; iL < m.rows(); iL++)
+	{
+		for (int iR = 0; iR < m.cols(); iR++)
+			r(iL,iR)= m(iL, iR);
+		r(iL, m.cols()) = 1.f;
+	}
+
+	return r;
 }
 ///////////////////////////////////////////////////////////////////////////
