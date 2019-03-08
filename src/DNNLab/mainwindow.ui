@@ -578,6 +578,9 @@
        </item>
        <item>
         <widget class="QComboBox" name="cbOptimizer">
+         <property name="currentIndex">
+          <number>2</number>
+         </property>
          <item>
           <property name="text">
            <string>SGD</string>

@@ -46,6 +46,19 @@ public:
         _bDelete=false;
     }
     
+    static const Matrix<T> from_raw_buffer(const T* pData,int iRows,int iColumns)
+    {
+        Matrix<T> m;
+
+        m._iRows=iRows;
+        m._iColumns=iColumns;
+        m._iSize=iRows*iColumns;
+        m._data=(T*)pData;
+        m._bDelete=false;
+
+        return m;
+    }
+
     Matrix<T>(const Matrix<T> &a)
     {
         _iRows=a._iRows;

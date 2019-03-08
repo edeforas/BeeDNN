@@ -17,7 +17,7 @@ public:
 	OptimizerSGD()
 	{}
 	
-	~OptimizerSGD()
+    ~OptimizerSGD() override
 	{}
 
 	virtual void init(const Layer& l) override
@@ -27,8 +27,8 @@ public:
 	{
 		// Vanilla update
 		//	x += -learning_rate * dx
-		weight -=  fLearningRate * mDx;
-	}
+        weight -=  mDx * fLearningRate ;
+    }
 };
 //////////////////////////////////////////////////////////
 class OptimizerMomentum : public Optimizer
@@ -37,7 +37,7 @@ public:
 	OptimizerMomentum()
 	{}
 
-	~OptimizerMomentum()
+    ~OptimizerMomentum() override
 	{}
 
 	virtual void init(const Layer& l) override
@@ -57,7 +57,7 @@ public:
 
 		// v = mu * v - learning_rate * dx // integrate velocity
 		//	x += v // integrate position
-        _v = fMomentum * _v - fLearningRate * mDx;
+        _v = _v*fMomentum - mDx*fLearningRate;
 
 		weight += _v;
 	}
@@ -71,7 +71,7 @@ public:
 	OptimizerNesterov()
 	{}
 
-	~OptimizerNesterov()
+    ~OptimizerNesterov() override
 	{}
 
 	virtual void init(const Layer& l) override
@@ -93,8 +93,8 @@ public:
 		//	v = mu * v - learning_rate * dx # velocity update stays the same
 		//	x += -mu * v_prev + (1 + mu) * v # position update changes form
 		_v_prev = _v;
-        _v = fMomentum * _v - fLearningRate * mDx;
-        weight += -fMomentum * _v_prev + (1.f + fMomentum) * _v;
+        _v = _v*fMomentum - mDx*fLearningRate ;
+        weight += _v_prev*(-fMomentum) + _v*(1.f + fMomentum) ;
 	}
 private:
 	MatrixFloat _v, _v_prev;

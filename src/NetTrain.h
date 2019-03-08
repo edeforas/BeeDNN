@@ -24,8 +24,8 @@ public:
     int  epochs;
     int batchSize; //not used for now
     float learningRate;
-    float momentum;  //not used for now
-	int testEveryEpochs; //set to 1 to test at each epoch, 10 to test only 1/10 of the time, etc, set to -1 for no test
+    float momentum;
+    int testEveryEpochs; //set to 1 to test at each epoch, 10 to test only 1/10 of the time, etc, set to -1 for no test //todo remove
 	string sOptimizer; //ex "SGD"
 	void(*epochCallBack)();
 };
@@ -41,7 +41,7 @@ public:
 
     double compute_loss(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth);
 
-    virtual void train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruthLabel,const TrainOption& topt)=0;
+    virtual void train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruthLabel,const TrainOption& topt);
     virtual void fit(Net& net, const MatrixFloat& mSamples, const MatrixFloat& mTruth, const TrainOption& topt)=0;
 
     vector<double> loss(); //temp

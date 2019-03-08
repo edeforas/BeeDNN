@@ -28,7 +28,6 @@ int main()
     //learn
     cout << "Learning..." << endl;
     TrainOption tOpt;
-    tOpt.learningRate=0.1f;
     NetTrainSGD netfit;
     netfit.fit(net,mSamples,mTruth,tOpt);
 

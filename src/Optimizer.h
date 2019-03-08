@@ -22,6 +22,7 @@ public:
 
 	float fLearningRate; //temp
 	float fMomentum; //temp
+    float fDecay; //temp
 };
 
 Optimizer* get_optimizer(const string & sOptimizer);

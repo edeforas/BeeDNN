@@ -11,7 +11,7 @@ const MatrixFloat from_raw_buffer(const float *pBuffer,int iRows,int iCols)
 #ifdef USE_EIGEN
     return Eigen::Map<MatrixFloat>((float*)pBuffer,static_cast<Eigen::Index>(iRows),static_cast<Eigen::Index>(iCols));
 #else
-    return MatrixFloat(pBuffer,iRows,iCols);
+    return MatrixFloat::from_raw_buffer(pBuffer,iRows,iCols);
 #endif
 }
 
@@ -58,7 +58,7 @@ int argmax(const MatrixFloat& m)
         return 0; //todo error not a vector
 
     float d=m(0,0);
-    unsigned int iIndex=0;
+    int iIndex=0;
 
     for(int i=0;i<m.cols();i++)
     {
