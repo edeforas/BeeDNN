@@ -17,11 +17,9 @@ public:
 
 	bool has_bias() const;
     const MatrixFloat& weight() const;
-    const MatrixFloat& bias() const;
 
 private:
     MatrixFloat _weight;
-    MatrixFloat _bias;
 	bool _bHasBias;
 };
 

@@ -24,8 +24,8 @@ void LayerDense::init()
     for(int i=0;i<_weight.size();i++)
         _weight(i)=((float)rand()/(float)RAND_MAX-0.5f)*2.f*a;
 
-    //	if (_bHasBias)
-    //		lastRow(_weight).setZero();
+    if (_bHasBias)
+    	lastRow(_weight).setZero();
 
     Layer::init();
 }
@@ -59,11 +59,6 @@ void LayerDense::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mD
 const MatrixFloat& LayerDense::weight() const
 {
     return _weight;
-}
-///////////////////////////////////////////////////////////////////////////////
-const MatrixFloat& LayerDense::bias() const
-{
-    return _bias;
 }
 ///////////////////////////////////////////////////////////////////////////////
 bool LayerDense::has_bias() const
