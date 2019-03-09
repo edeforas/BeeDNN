@@ -165,7 +165,6 @@
     <ClCompile Include="..\MNISTReader.cpp" />
     <ClCompile Include="..\Net.cpp" />
     <ClCompile Include="..\NetTrain.cpp" />
-    <ClCompile Include="..\NetTrainSGD.cpp" />
     <ClCompile Include="..\Optimizer.cpp" />
     <ClCompile Include="test_classification_MNIST.cpp" />
   </ItemGroup>
@@ -180,7 +179,6 @@
     <ClInclude Include="..\MNISTReader.h" />
     <ClInclude Include="..\Net.h" />
     <ClInclude Include="..\NetTrain.h" />
-    <ClInclude Include="..\NetTrainSGD.h" />
     <ClInclude Include="..\Optimizer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

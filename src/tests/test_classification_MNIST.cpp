@@ -3,7 +3,7 @@
 using namespace std;
 
 #include "Net.h"
-#include "NetTrainSGD.h"
+#include "NetTrain.h"
 #include "MNISTReader.h"
 #include "ConfusionMatrix.h"
 
@@ -67,7 +67,7 @@ int main()
 
     cout << "training..." << endl;
 
-    NetTrainSGD netTrain;
+    NetTrain netTrain;
 	start = chrono::steady_clock::now();
     netTrain.train(net,mRefImages,mRefLabelsIndex,tOpt);
 

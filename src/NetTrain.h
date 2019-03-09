@@ -43,8 +43,8 @@ public:
 
     double compute_loss(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth);
 
-    virtual void train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruthLabel,const TrainOption& topt);
-    virtual void fit(Net& net, const MatrixFloat& mSamples, const MatrixFloat& mTruth, const TrainOption& topt)=0;
+    void train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruthLabel,const TrainOption& topt);
+    void fit(Net& net, const MatrixFloat& mSamples, const MatrixFloat& mTruth, const TrainOption& topt);
 
     vector<double> loss(); //temp
 

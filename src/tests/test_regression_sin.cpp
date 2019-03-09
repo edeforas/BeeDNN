@@ -5,7 +5,7 @@ using namespace std;
 
 #include "Net.h"
 
-#include "NetTrainSGD.h"
+#include "NetTrain.h"
 
 int main()
 {
@@ -28,7 +28,7 @@ int main()
     //learn
     cout << "Learning..." << endl;
     TrainOption tOpt;
-    NetTrainSGD netfit;
+    NetTrain netfit;
     netfit.fit(net,mSamples,mTruth,tOpt);
 
     //show results

@@ -9,7 +9,6 @@ SOURCES += test_xor.cpp \
     ../Net.cpp \
     ../Optimizer.cpp \
     ../NetTrain.cpp \
-    ../NetTrainSGD.cpp \
     ../Layer.cpp \
     ../Matrix.cpp \
     ../Activation.cpp \
@@ -24,7 +23,6 @@ HEADERS += \
     ../Net.h \
     ../Optimizer.h \
     ../NetTrain.h \
-    ../NetTrainSGD.h \
     ../LayerActivation.h \
     ../LayerDense.h \
     ../LayerDropout.h

@@ -2,7 +2,7 @@
 using namespace std;
 
 #include "Net.h"
-#include "NetTrainSGD.h"
+#include "NetTrain.h"
 
 int main()
 {
@@ -20,7 +20,7 @@ int main()
 
     //optimize
     TrainOption tOpt;
-    NetTrainSGD netFit;
+    NetTrain netFit;
     netFit.fit(net,mSamples,mTruth,tOpt);
 
     //predict results

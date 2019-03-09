@@ -9,7 +9,6 @@ SOURCES += test_regression_sin.cpp \
     ../Net.cpp \
     ../NetTrain.cpp \
     ../Optimizer.cpp \
-    ../NetTrainSGD.cpp \
     ../Layer.cpp \
     ../Matrix.cpp \
     ../Activation.cpp \
@@ -24,7 +23,6 @@ HEADERS += \
     ../Net.h \
     ../NetTrain.h \
     ../Optimizer.h \
-    ../NetTrainSGD.h \
     ../LayerActivation.h \
     ../LayerDense.h \
     ../LayerDropout.h

@@ -1,7 +1,7 @@
 #include "DNNEngineTestDnn.h"
 
 #include "Net.h"
-#include "NetTrainSGD.h"
+#include "NetTrain.h"
 #include "LayerActivation.h"
 #include "LayerDense.h"
 #include "NetUtil.h"
@@ -70,7 +70,7 @@ void DNNEngineTestDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
     //tOpt.observer=nullptr;//dto.observer;
     tOpt.testEveryEpochs=dto.testEveryEpochs;
 
-    NetTrainSGD netTrain;
+    NetTrain netTrain;
     netTrain.fit(*_pNet,mSamples,mTruth,tOpt);
 
     const auto& l=netTrain.loss();
@@ -79,7 +79,7 @@ void DNNEngineTestDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
 //////////////////////////////////////////////////////////////////////////////
 double DNNEngineTestDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)
 {
-    NetTrainSGD netTrain;
+    NetTrain netTrain;
     return netTrain.compute_loss(*_pNet,mSamples,mTruth);
 }
 //////////////////////////////////////////////////////////////////////////////
