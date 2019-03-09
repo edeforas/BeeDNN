@@ -30,14 +30,16 @@ string to_string(const Net* pNet)
         {
             LayerDense* l=(LayerDense*)layer;
             ss << "Dense:  InSize: " << l->in_size() << " OutSize: " << l->out_size() << endl;
+            if(l->has_bias())
+               ss << "with bias" << endl;
             ss << "Weight:\n";
             ss << matrix_to_string(l->weight());
-            if(l->has_bias())
+ /*           if(l->has_bias())
             {
                 ss << "Bias:\n";
                 ss << matrix_to_string(l->bias());
             }
-        }
+  */      }
         else if(layer->type()=="Dropout")
         {
             LayerDropout* l=(LayerDropout*)layer;
