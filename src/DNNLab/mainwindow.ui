@@ -423,10 +423,10 @@
        <item>
         <widget class="QLineEdit" name="leDecay">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="text">
-          <string>0.</string>
+          <string>0.9</string>
          </property>
         </widget>
        </item>
@@ -579,43 +579,8 @@
        <item>
         <widget class="QComboBox" name="cbOptimizer">
          <property name="currentIndex">
-          <number>0</number>
+          <number>-1</number>
          </property>
-         <item>
-          <property name="text">
-           <string>SGD</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Momentum</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Nesterov</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Adagrad</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>adamax</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>adam</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>RMSprop</string>
-          </property>
-         </item>
         </widget>
        </item>
        <item>

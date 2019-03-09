@@ -65,6 +65,7 @@ void DNNEngineTestDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
     tOpt.learningRate=dto.learningRate;
     tOpt.batchSize=dto.batchSize;
     tOpt.optimizer=dto.optimizer;
+    tOpt.decay=dto.decay;
     tOpt.momentum=dto.momentum;
     //tOpt.observer=nullptr;//dto.observer;
     tOpt.testEveryEpochs=dto.testEveryEpochs;

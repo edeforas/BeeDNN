@@ -12,6 +12,7 @@
 #endif
 
 #include "LayerActivation.h"
+#include "Optimizer.h"
 
 //////////////////////////////////////////////////////////////////////////
 MainWindow::MainWindow(QWidget *parent) :
@@ -21,7 +22,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     vector<string> vsActivations;
-
     list_activations_available( vsActivations);
 
     ui->cbFunction->addItem("Identity");
@@ -66,6 +66,12 @@ MainWindow::MainWindow(QWidget *parent) :
 #ifdef USE_TINYDNN
     ui->cbEngine->addItem("tiny-dnn");
 #endif
+
+
+    vector<string> vsOptimizers;
+    list_optimizers_available( vsOptimizers);
+    for(int i=0;i<vsOptimizers.size();i++)
+        ui->cbOptimizer->addItem(vsOptimizers[i].data());
 
     resizeDocks({ui->dockWidget},{1},Qt::Horizontal);
 
@@ -125,6 +131,7 @@ void MainWindow::train_and_test(bool bReset)
     dto.epochs=ui->leEpochs->text().toInt();
     dto.learningRate=ui->leLearningRate->text().toFloat();
     dto.batchSize=ui->leBatchSize->text().toInt();
+    dto.decay=ui->leDecay->text().toFloat();
     dto.momentum=ui->leMomentum->text().toFloat();
     dto.optimizer=ui->cbOptimizer->currentText().toStdString();
     dto.lossFunction=ui->cbLossFunction->currentText().toStdString();

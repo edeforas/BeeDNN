@@ -21,6 +21,7 @@ public:
         epochs=1000;
         batchSize=32;
         learningRate=0.1f;
+        decay=0.9f;
         momentum=0.9f;
         testEveryEpochs=1;
         //observer=0;
@@ -32,6 +33,7 @@ public:
 
     //optimizer settings
     float learningRate;
+    float decay;
     float momentum;
     string optimizer;
     string lossFunction;

@@ -134,6 +134,82 @@ private:
     MatrixFloat _cache;
 };
 //////////////////////////////////////////////////////////
+class OptimizerRMSProp : public Optimizer
+{
+public:
+    OptimizerRMSProp()
+    {}
+
+    ~OptimizerRMSProp() override
+    {}
+
+    virtual void init(const Layer& l) override
+    {
+        (void)l;
+        _cache.resize(0,0);
+    }
+
+    virtual void optimize(MatrixFloat& weight, const MatrixFloat& mDx) override
+    {
+        // init _cache if needed
+        if (_cache.size() == 0)
+        {
+            _cache.resize(mDx.rows(), mDx.cols());
+            _cache.setZero();
+        }
+
+        // cache = decay_rate * cache + (1 - decay_rate) * dx**2
+        // x += - learning_rate * dx / (np.sqrt(cache) + eps)
+        _cache =_cache*fDecay+mDx.cwiseAbs2()*(1.f-fDecay);
+        weight += mDx.cwiseQuotient(_cache.cwiseSqrt().cwiseMax(1.e-8f))*(-fLearningRate);
+    }
+private:
+    MatrixFloat _cache;
+};
+//////////////////////////////////////////////////////////
+class OptimizerAdam : public Optimizer
+{
+public:
+    OptimizerAdam()
+    {}
+
+    ~OptimizerAdam() override
+    {}
+
+    virtual void init(const Layer& l) override
+    {
+        (void)l;
+        _m.resize(0,0);
+        _v.resize(0,0);
+    }
+
+    virtual void optimize(MatrixFloat& weight, const MatrixFloat& mDx) override
+    {
+        // init _m and _v if needed
+        if (_v.size() == 0)
+        {
+            _m.resize(mDx.rows(), mDx.cols());
+            _m.setZero();
+
+            _v.resize(mDx.rows(), mDx.cols());
+            _v.setZero();
+        }
+
+        //simplified Adam, no first step bias correction
+        //m = beta1*m + (1-beta1)*dx
+        //v = beta2*v + (1-beta2)*(dx**2)
+        //x += - learning_rate * m / (np.sqrt(v) + eps)
+        float beta1=0.9f;
+        float beta2=0.999f;
+        _m=_m*beta1+mDx*(1.f-beta1);
+        _v=_v*beta2+mDx.cwiseAbs2()*(1.f-beta2);
+        weight += _m.cwiseQuotient(_v.cwiseSqrt().cwiseMax(1.e-8f))*(-fLearningRate);
+    }
+private:
+    MatrixFloat _m, _v;
+};
+
+//////////////////////////////////////////////////////////
 Optimizer* get_optimizer(const string& sOptimizer)
 {
     if (sOptimizer == "SGD")
@@ -148,6 +224,12 @@ Optimizer* get_optimizer(const string& sOptimizer)
     if (sOptimizer == "Adagrad")
         return new OptimizerAdagrad;
 
+    if (sOptimizer == "Adam")
+        return new OptimizerAdam;
+
+    if (sOptimizer == "RMSProp")
+        return new OptimizerRMSProp;
+
     return nullptr;
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -158,5 +240,8 @@ void list_optimizers_available(vector<string>& vsOptimizers)
     vsOptimizers.push_back("SGD");
     vsOptimizers.push_back("Momentum");
     vsOptimizers.push_back("Nesterov");
+    vsOptimizers.push_back("Adagrad");
+    vsOptimizers.push_back("Adam");
+    vsOptimizers.push_back("RMSProp");
 }
 //////////////////////////////////////////////////////////////////////////////

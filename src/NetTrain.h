@@ -15,6 +15,7 @@ public:
         epochs=1000;
         batchSize=1; //not used for now
         learningRate=0.01f;
+        decay=0.9;
         momentum=0.9f;
         testEveryEpochs=-1;
         optimizer = "Nesterov";
@@ -24,6 +25,7 @@ public:
     int  epochs;
     int batchSize; //not used for now
     float learningRate;
+    float decay;
     float momentum;
     int testEveryEpochs; //set to 1 to test at each epoch, 10 to test only 1/10 of the time, etc, set to -1 for no test //todo remove
     string optimizer; //ex "SGD"
