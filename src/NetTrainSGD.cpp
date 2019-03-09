@@ -29,7 +29,7 @@ void NetTrainSGD::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mT
 
 	for (int i = 0; i < nLayers; i++)
 	{
-		optimizers[i] = get_optimizer(topt.sOptimizer);
+		optimizers[i] = get_optimizer(topt.optimizer);
 		optimizers[i]->fLearningRate = topt.learningRate;
         optimizers[i]->fMomentum=topt.momentum;
 		optimizers[i]->init(*(net.layer(i)));
@@ -37,7 +37,7 @@ void NetTrainSGD::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mT
 
     for(int iEpoch=0;iEpoch<topt.epochs;iEpoch++)
     {
-        MatrixFloat mShuffle=rand_perm(iNbSamples);
+        MatrixFloat mShuffle=randPerm(iNbSamples);
 		net.set_train_mode(true);
 
         for(int iSample=0;iSample<iNbSamples;iSample++)

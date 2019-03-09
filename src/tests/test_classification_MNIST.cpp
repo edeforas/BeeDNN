@@ -46,16 +46,10 @@ int main()
     MNISTReader mr;
     if(!mr.read_from_folder(".",mRefImages,mRefLabelsIndex, mTestImages,mTestLabelsIndex))
     {
-        cout << "MNIST samples not found, please check the *-ubyte files are in executable folder" << endl;
+        cout << "MNIST samples not found, please check the *-ubyte files are in the executable folder" << endl;
         return -1;
     }
-/*
-    //reduce data size (test)
-    mTestImages=decimate(mTestImages,10);
-    mRefImages=decimate(mRefImages,10);
-    mRefLabelsIndex=decimate(mRefLabelsIndex,10);
-    mTestLabelsIndex=decimate(mTestLabelsIndex,10);
-*/
+
     //normalize data
     mTestImages/=256.f;
     mRefImages/=256.f;
@@ -69,7 +63,6 @@ int main()
     net.add_activation_layer("Sigmoid");
 
     TrainOption tOpt;
-    tOpt.epochs=100;
     tOpt.epochCallBack = epoch_callback;
 
     cout << "training..." << endl;

@@ -6,7 +6,7 @@
 #include "Matrix.h"
 
 //matrix view on another matrix, without malloc and copy
-const MatrixFloat from_raw_buffer(const float *pBuffer,int iRows,int iCols)
+const MatrixFloat fromRawBuffer(const float *pBuffer,int iRows,int iCols)
 {
 #ifdef USE_EIGEN
     return Eigen::Map<MatrixFloat>((float*)pBuffer,static_cast<Eigen::Index>(iRows),static_cast<Eigen::Index>(iCols));
@@ -30,7 +30,7 @@ MatrixFloat rowWiseSum(const MatrixFloat& m)
 #endif
 }
 ///////////////////////////////////////////////////////////////////////////
-MatrixFloat rand_perm(int iSize) //create a vector of index shuffled
+MatrixFloat randPerm(int iSize) //create a vector of index shuffled
 {
     MatrixFloat m(iSize,1);
 
@@ -84,7 +84,7 @@ MatrixFloat decimate(const MatrixFloat& m, int iRatio)
     return mDecimated;
 }
 ///////////////////////////////////////////////////////////////////////////
-string matrix_to_string(const MatrixFloat& m)
+string toString(const MatrixFloat& m)
 {
     stringstream ss; ss << setprecision(4);
     for(int iL=0;iL<m.rows();iL++)
@@ -96,9 +96,7 @@ string matrix_to_string(const MatrixFloat& m)
 
     return ss.str();
 }
-
 ///////////////////////////////////////////////////////////////////////////
-
 void contatenateVerticallyInto(const MatrixFloat& mA, const MatrixFloat& mB, MatrixFloat& mAB)
 {
 	assert(mA.cols()== mB.cols());
@@ -120,7 +118,7 @@ void contatenateVerticallyInto(const MatrixFloat& mA, const MatrixFloat& mB, Mat
 ///////////////////////////////////////////////////////////////////////////
 const MatrixFloat withoutLastRow(const MatrixFloat& m)
 {
-	return from_raw_buffer(m.data(),(int) m.rows() - 1,(int) m.cols());
+    return fromRawBuffer(m.data(),(int) m.rows() - 1,(int) m.cols());
 }
 ///////////////////////////////////////////////////////////////////////////
 MatrixFloat lastRow( MatrixFloat& m)

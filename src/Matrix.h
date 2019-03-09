@@ -1,6 +1,7 @@
 #ifndef Matrix_
 #define Matrix_
 
+#include <algorithm>
 #include <cassert>
 #include <string>
 using namespace std;
@@ -320,6 +321,27 @@ public:
         return out;
     }
 
+    Matrix<T> cwiseSqrt() const
+    {
+        Matrix<T> out(*this);
+
+        for(int i=0;i<_iSize;i++)
+            out(i)=sqrtf(_data[i]);
+
+        return out;
+    }
+
+    Matrix<T> cwiseMax(T f) const
+    {
+        Matrix<T> out(*this);
+
+        for(int i=0;i<_iSize;i++)
+            out(i)=std::max<T>(_data[i],f);
+
+        return out;
+    }
+
+
     T sum() const
     {
         T dSum=0.;
@@ -394,12 +416,12 @@ typedef Matrix<float> MatrixFloat;
 
 #endif
 
-const MatrixFloat from_raw_buffer(const float *pBuffer,int iRows,int iCols);
+const MatrixFloat fromRawBuffer(const float *pBuffer,int iRows,int iCols);
 MatrixFloat rowWiseSum(const MatrixFloat& m);
-MatrixFloat rand_perm(int iSize); //create a vector of index shuffled
+MatrixFloat randPerm(int iSize); //create a vector of index shuffled
 MatrixFloat decimate(const MatrixFloat& m, int iRatio);
 int argmax(const MatrixFloat& m);
-string matrix_to_string(const MatrixFloat& m);
+string toString(const MatrixFloat& m);
 void contatenateVerticallyInto(const MatrixFloat& mA, const MatrixFloat& mB, MatrixFloat& mAB);
 const MatrixFloat withoutLastRow(const MatrixFloat& m);
 MatrixFloat lastRow( MatrixFloat& m);

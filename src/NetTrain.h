@@ -17,7 +17,7 @@ public:
         learningRate=0.01f;
         momentum=0.9f;
         testEveryEpochs=-1;
-        sOptimizer = "Nesterov";
+        optimizer = "Nesterov";
 		epochCallBack = nullptr;
     }
 
@@ -26,7 +26,7 @@ public:
     float learningRate;
     float momentum;
     int testEveryEpochs; //set to 1 to test at each epoch, 10 to test only 1/10 of the time, etc, set to -1 for no test //todo remove
-	string sOptimizer; //ex "SGD"
+    string optimizer; //ex "SGD"
 	void(*epochCallBack)();
 };
 

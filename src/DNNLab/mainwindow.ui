@@ -579,7 +579,7 @@
        <item>
         <widget class="QComboBox" name="cbOptimizer">
          <property name="currentIndex">
-          <number>2</number>
+          <number>0</number>
          </property>
          <item>
           <property name="text">
@@ -598,12 +598,12 @@
          </item>
          <item>
           <property name="text">
-           <string>adamax</string>
+           <string>Adagrad</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>adagrad</string>
+           <string>adamax</string>
           </property>
          </item>
          <item>

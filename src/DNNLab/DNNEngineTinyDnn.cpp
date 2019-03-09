@@ -64,7 +64,7 @@ string DNNEngineTinyDnn::to_string()
                 MatrixFloat wmf;
                 tinydnnmatrix_to_matrix(*(w[0]),wmf);
                 wmf.resize(l->fan_in_size(),l->fan_out_size());
-                ss << matrix_to_string(wmf);
+                ss << toString(wmf);
 
                 if(w.size()>1)
                 {
@@ -72,7 +72,7 @@ string DNNEngineTinyDnn::to_string()
                     MatrixFloat wmb;
                     tinydnnmatrix_to_matrix(*(w[1]),wmb);
                     wmb.resize(1,l->fan_out_size());
-                    ss << matrix_to_string(wmb);
+                    ss << toString(wmb);
                 }
             }
         }

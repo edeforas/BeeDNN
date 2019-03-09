@@ -33,7 +33,7 @@ string to_string(const Net* pNet)
             if(l->has_bias())
                ss << "with bias" << endl;
             ss << "Weight:\n";
-            ss << matrix_to_string(l->weight());
+            ss << toString(l->weight());
  /*           if(l->has_bias())
             {
                 ss << "Bias:\n";
