@@ -144,8 +144,7 @@ public:
 
     void setConstant(T b)
     {
-        for(int i=0;i<_iSize;i++)
-            _data[i]=b;
+        std::fill(_data,_data+_iSize,b);
     }
 
     void setZero()

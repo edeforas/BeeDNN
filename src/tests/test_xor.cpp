@@ -15,8 +15,8 @@ int main()
     //train data
     float dSamples[]={ 0,0 , 0,1 , 1,0 , 1,1 };
     float dTruths[]={ 0 , 1 , 1, 0 };
-    const MatrixFloat mSamples=from_raw_buffer(dSamples,4,2);
-    const MatrixFloat mTruth=from_raw_buffer(dTruths,4,1);
+    const MatrixFloat mSamples=fromRawBuffer(dSamples,4,2);
+    const MatrixFloat mTruth=fromRawBuffer(dTruths,4,1);
 
     //optimize
     TrainOption tOpt;
