@@ -181,14 +181,14 @@ void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
 
     tiny_dnn::optimizer* opt=nullptr;
 
-    if(dto.optimizer=="gradient_descent")
+    if(dto.optimizer=="SGD")
     {
         tiny_dnn::gradient_descent* op=new tiny_dnn::gradient_descent;
         op->alpha=dto.learningRate;
         opt=op;
     }
 
-    if(dto.optimizer=="momentum")
+    if(dto.optimizer=="Momentum")
     {
         tiny_dnn::momentum* op=new tiny_dnn::momentum;
         op->alpha=dto.learningRate;
@@ -196,7 +196,7 @@ void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
         opt=op;
     }
 
-    if(dto.optimizer=="nesterov_momentum")
+    if(dto.optimizer=="Nesterov")
     {
         tiny_dnn::nesterov_momentum* op=new tiny_dnn::nesterov_momentum;
         op->alpha=dto.learningRate;
@@ -204,24 +204,33 @@ void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
         opt=op;
     }
 
-    if(dto.optimizer=="adamax")
+    if(dto.optimizer=="Adamax")
     {
-        opt=new tiny_dnn::adamax;
+        tiny_dnn::adamax* op=new tiny_dnn::adamax;
+        op->alpha=dto.learningRate;
+        opt=op;
     }
 
-    if(dto.optimizer=="adagrad")
+    if(dto.optimizer=="Adagrad")
     {
-        opt=new tiny_dnn::adagrad;
+        tiny_dnn::adagrad* op=new tiny_dnn::adagrad;
+        op->alpha=dto.learningRate;
+        opt=op;
     }
 
-    if(dto.optimizer=="adam")
+    if(dto.optimizer=="Adam")
     {
-        opt=new tiny_dnn::adam;
+        tiny_dnn::adam* op=new tiny_dnn::adam;
+        op->alpha=dto.learningRate;
+        opt=op;
     }
 
-    if(dto.optimizer=="RMSprop")
+    if(dto.optimizer=="RMSProp")
     {
-        opt=new tiny_dnn::RMSprop;
+        tiny_dnn::RMSprop *op=new tiny_dnn::RMSprop;
+        op->alpha=dto.learningRate;
+        op->mu=dto.decay; //?
+        opt=op;
     }
 
     assert(opt!=nullptr);
