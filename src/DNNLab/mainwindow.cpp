@@ -24,6 +24,12 @@ MainWindow::MainWindow(QWidget *parent) :
     vector<string> vsActivations;
     list_activations_available( vsActivations);
 
+    ui->cbFunction->addItem("And");
+    ui->cbFunction->addItem("Xor");
+    ui->cbFunction->addItem("Mnist");
+
+    ui->cbFunction->insertSeparator(3);
+
     ui->cbFunction->addItem("Identity");
     ui->cbFunction->addItem("Sin");
     ui->cbFunction->addItem("Abs");
@@ -35,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->cbFunction->addItem("Gauss");
     ui->cbFunction->addItem("Inverse");
     ui->cbFunction->addItem("Rectangular");
+    ui->cbFunction->setCurrentIndex(5);
 
     QStringList qsl;
     qsl+="LayerType";
@@ -60,13 +67,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
         ui->twNetwork->setCellWidget(i,0,qcbType);
     }
+
     ui->twNetwork->setItem(0,1,new QTableWidgetItem("1")); //first input size is 1
     ui->twNetwork->adjustSize();
 
 #ifdef USE_TINYDNN
     ui->cbEngine->addItem("tiny-dnn");
 #endif
-
 
     vector<string> vsOptimizers;
     list_optimizers_available( vsOptimizers);
@@ -87,6 +94,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     _curveColor=0xff0000; //red
 
+    set_input_size(1);
     _pEngine=new DNNEngineTestDnn;
 }
 //////////////////////////////////////////////////////////////////////////
@@ -141,7 +149,7 @@ void MainWindow::train_and_test(bool bReset)
     if(bReset)
         _pEngine->init();
 
-    DNNTrainResult dtr =_pEngine->train(mSamples,mTruth,dto);
+    DNNTrainResult dtr =_pEngine->fit(mSamples,mTruth,dto);
 
     double dLoss=_pEngine->compute_loss(mSamples,mTruth); //todo use last in loss vector?
     ui->leMSE->setText(QString::number(dLoss));
@@ -240,6 +248,24 @@ float MainWindow::compute_truth(float x)
 
     string sFunction=ui->cbFunction->currentText().toStdString();
 
+    if(sFunction=="And")
+    {
+        int iIndex=(int)x;
+        return (iIndex==3);
+    }
+
+    if(sFunction=="Xor")
+    {
+        int iIndex=(int)x;
+        return (iIndex==1) || (iIndex==2);
+    }
+
+    if(sFunction=="Mnist")
+    {
+        //todo
+        return -1;
+    }
+
     if(sFunction=="Identity")
         return x;
 
@@ -279,21 +305,11 @@ float MainWindow::compute_truth(float x)
 void MainWindow::resizeEvent( QResizeEvent *e )
 {
     (void)e;
-    /*
-    QGraphicsScene* qsr=ui->gvRegression->scene();
-    if(qsr)
-    {
-        ui->gvRegression->fitInView(qsr->itemsBoundingRect());
-        ui->gvRegression->scale(0.9,0.9);
-    }
 
-    QGraphicsScene* qsl=ui->gvLearningCurve->scene();
-    if(qsl)
-    {
-        ui->gvLearningCurve->fitInView(qsl->itemsBoundingRect());
-        ui->gvLearningCurve->scale(0.9,0.9);
-    }
-*/
+    QMainWindow::resizeEvent(e);
+
+    //toto resize curves
+
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::update_details()
@@ -396,5 +412,24 @@ void MainWindow::on_buttonColor_clicked()
 void MainWindow::on_pushButton_2_clicked()
 {
     _qsLoss->clear();
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::set_input_size(int iSize)
+{
+    _iInputSize=iSize;
+    //ui->twNetwork->item(0,1)->setText(to_string(_iInputSize).data());
+    ui->twNetwork->setItem(0,1,new QTableWidgetItem(to_string(_iInputSize).data())); //first input size is 1
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::on_cbFunction_currentIndexChanged(int index)
+{
+    if(index<=1)
+        set_input_size(2);
+
+    if(index>2)
+        set_input_size(1);
+
+    if(index==2)
+        set_input_size(768);
 }
 //////////////////////////////////////////////////////////////////////////////

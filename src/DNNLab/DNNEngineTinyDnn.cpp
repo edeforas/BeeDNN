@@ -14,6 +14,15 @@ void matrix_to_tinydnnmatrix(const MatrixFloat & m1,std::vector<tiny_dnn::vec_t>
     }
 }
 //////////////////////////////////////////////////////////////////////////////
+void matrix_to_intvector(const MatrixFloat & m1,std::vector<size_t>& _tinyMatrix)
+{
+    _tinyMatrix.clear();
+    for(int i=0;i<m1.size();i++)
+    {
+        _tinyMatrix.push_back((size_t)m1(i));
+    }
+}
+//////////////////////////////////////////////////////////////////////////////
 void tinydnnmatrix_to_matrix(const tiny_dnn::vec_t& tinyMatrix, MatrixFloat& m1)
 {
     if(tinyMatrix.empty())
@@ -173,7 +182,7 @@ int DNNEngineTinyDnn::classify(const MatrixFloat& mIn)
     return (int)(_pNet->predict_label(vIn));
 }
 //////////////////////////////////////////////////////////////////////////////
-void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
+void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto, bool bFit)
 {
     int iEpoch=0;
     float fLoss=0.f;
@@ -237,8 +246,10 @@ void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
 
     std::vector<tiny_dnn::vec_t> vSamples;
     std::vector<tiny_dnn::vec_t> vTruth;
+    std::vector<size_t> vTruthi;
     matrix_to_tinydnnmatrix(mSamples,vSamples);
     matrix_to_tinydnnmatrix(mTruth,vTruth);
+    matrix_to_intvector(mTruth,vTruthi);
 
     if(dto.lossFunction=="mse")
     {
@@ -253,7 +264,10 @@ void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
             iEpoch++;
         };
 
-        _pNet->fit<tiny_dnn::mse>(*opt, vSamples, vTruth, dto.batchSize, dto.epochs, []() {},on_enumerate_epoch);//  on_enumerate_epoch);
+        if(bFit)
+            _pNet->fit<tiny_dnn::mse>(*opt, vSamples, vTruth, dto.batchSize, dto.epochs, []() {},on_enumerate_epoch);//  on_enumerate_epoch);
+        else
+            _pNet->train<tiny_dnn::mse>(*opt, vSamples, vTruthi, dto.batchSize, dto.epochs, []() {},on_enumerate_epoch);//  on_enumerate_epoch);
     }
 
     delete opt;

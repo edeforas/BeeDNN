@@ -38,6 +38,8 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+    void on_cbFunction_currentIndexChanged(int index);
+
 private:
     void drawLoss(vector<double> vdLoss);
     void drawRegression();
@@ -45,6 +47,7 @@ private:
     void train_and_test(bool bReset);
     void update_details();
     void parse_net();
+    void set_input_size(int iSize);
 
     Ui::MainWindow *ui;
 
@@ -52,6 +55,7 @@ private:
     SimpleCurveWidget* _qsRegression;
     SimpleCurveWidget* _qsLoss;
     unsigned int _curveColor;
+    int _iInputSize;
 };
 
 #endif // MAINWINDOW_H

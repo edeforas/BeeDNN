@@ -58,7 +58,7 @@ int DNNEngineTestDnn::classify(const MatrixFloat& mIn)
     return _pNet->classify(mIn);
 }
 //////////////////////////////////////////////////////////////////////////////
-void DNNEngineTestDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
+void DNNEngineTestDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto,bool bFit)
 {
     TrainOption tOpt;
     tOpt.epochs=dto.epochs;
@@ -71,7 +71,10 @@ void DNNEngineTestDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
     tOpt.testEveryEpochs=dto.testEveryEpochs;
 
     NetTrain netTrain;
-    netTrain.fit(*_pNet,mSamples,mTruth,tOpt);
+    if(bFit)
+        netTrain.fit(*_pNet,mSamples,mTruth,tOpt);
+    else
+        netTrain.train(*_pNet,mSamples,mTruth,tOpt);
 
     const auto& l=netTrain.loss();
     _vdLoss.insert(end(_vdLoss),begin(l),end(l)); //temp

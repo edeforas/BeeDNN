@@ -18,12 +18,28 @@ void DNNEngine::init()
     _iComputedEpochs=0;
 }
 //////////////////////////////////////////////////////////////////////////////
+DNNTrainResult DNNEngine::fit(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
+{
+    DNNTrainResult r;
+
+    auto beginDuration = std::chrono::steady_clock::now();
+    train_epochs(mSamples,mTruth,dto,true);
+    auto endDuration = std::chrono::steady_clock::now();
+
+    _iComputedEpochs+= dto.epochs;
+    r.epochDuration=chrono::duration_cast<chrono::microseconds> (endDuration-beginDuration).count()/1.e6/dto.epochs;
+    r.computedEpochs=_iComputedEpochs;
+
+    r.loss=_vdLoss;
+    return r;
+}
+//////////////////////////////////////////////////////////////////////////////
 DNNTrainResult DNNEngine::train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
 {
     DNNTrainResult r;
 
     auto beginDuration = std::chrono::steady_clock::now();
-    train_epochs(mSamples,mTruth,dto);
+    train_epochs(mSamples,mTruth,dto,false);
     auto endDuration = std::chrono::steady_clock::now();
 
     _iComputedEpochs+= dto.epochs;
