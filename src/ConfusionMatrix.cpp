@@ -4,7 +4,7 @@
 ClassificationResult ConfusionMatrix::compute(const MatrixFloat& mRef,const MatrixFloat& mTest,unsigned int iNbClass)
 {
     if(iNbClass==0)
-        iNbClass=mRef.maxCoeff()+1;
+        iNbClass=(int)mRef.maxCoeff()+1;
 
     ClassificationResult cr;
     cr.mConfMat.resize(iNbClass,iNbClass);

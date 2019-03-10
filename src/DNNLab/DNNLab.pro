@@ -31,6 +31,7 @@ SOURCES += \
     ../Layer.cpp \
     ../Matrix.cpp \
     ../ConfusionMatrix.cpp \
+    ../MNISTReader.cpp \
     ../Activation.cpp \
     ../LayerActivation.cpp \
     ../LayerDense.cpp \
@@ -41,6 +42,7 @@ HEADERS += \
     ../Layer.h \
     ../Matrix.h \
     ../ConfusionMatrix.h \
+    ../MNISTReader.h \
     ../Net.h \
     ../NetUtil.h \
     ../NetTrain.h \

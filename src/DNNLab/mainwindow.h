@@ -59,6 +59,9 @@ private:
 
     MatrixFloat _mInputData;
     MatrixFloat _mTruth;
+
+    MatrixFloat _mTestInputData;
+    MatrixFloat _mTestTruth;
 };
 
 #endif // MAINWINDOW_H

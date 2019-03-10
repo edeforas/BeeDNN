@@ -6,6 +6,7 @@
 
 #include "DNNEngine.h"
 #include "DNNEngineTestDnn.h"
+#include "MNISTReader.h"
 
 #ifdef USE_TINYDNN
 #include "DNNEngineTinyDnn.h"
@@ -256,6 +257,8 @@ void MainWindow::compute_truth()
         _mTruth(2,0)=0;
         _mTruth(3,0)=1;
 
+        _mTestInputData=_mInputData;
+        _mTestTruth=_mTruth;
         set_input_size(2);
         return;
     }
@@ -274,14 +277,19 @@ void MainWindow::compute_truth()
         _mTruth(2,0)=1;
         _mTruth(3,0)=0;
 
+        _mTestInputData=_mInputData;
+        _mTestTruth=_mTruth;
         set_input_size(2);
         return;
     }
 
     if(sFunction=="Mnist")
     {
-        //todo
-        //load Mnist data
+        if( (_mInputData.cols()!=768) || (_mInputData.rows()!=60000))
+        {
+            MNISTReader r;
+            r.read_from_folder(".",_mInputData,_mTruth,_mTestInputData,_mTestTruth);
+        }
 
         set_input_size(768);
         return;
@@ -336,6 +344,8 @@ void MainWindow::compute_truth()
         _mTruth(i,0)=dOut;
         dVal+=dStep;
     }
+    _mTestInputData=_mInputData; //for now
+    _mTestTruth=_mTruth; //for now
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::resizeEvent( QResizeEvent *e )
@@ -468,7 +478,7 @@ void MainWindow::update_classification_tab()
 
     float fAccuracy=0.f;
     MatrixFloat mConfusionMatrix;
-    _pEngine->compute_confusion_matrix(_mInputData,_mTruth,mConfusionMatrix,fAccuracy);
+    _pEngine->compute_confusion_matrix(_mTestInputData,_mTestTruth,mConfusionMatrix,fAccuracy);
 
     ui->twConfusionMatrix->setColumnCount(mConfusionMatrix.cols());
     ui->twConfusionMatrix->setRowCount(mConfusionMatrix.rows());

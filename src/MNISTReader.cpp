@@ -30,7 +30,7 @@ bool MNISTReader::read_from_folder(const string& sFolder,MatrixFloat& mRefImages
 ////////////////////////////////////////////////////////////////////////////////////
 bool MNISTReader::read_Matrix(string sName,MatrixFloat& m)
 {
-    // file format and data at : http://yann.lecun.com/exdb/mnist/
+    // file format and data at: http://yann.lecun.com/exdb/mnist/
 
     ifstream ifs(sName, ios::binary|ios::in );
 
