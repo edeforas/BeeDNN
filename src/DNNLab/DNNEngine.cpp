@@ -7,6 +7,7 @@
 DNNEngine::DNNEngine()
 {
     _iComputedEpochs=0;
+    _bClassification=true;
 }
 //////////////////////////////////////////////////////////////////////////////
 DNNEngine::~DNNEngine()
@@ -18,12 +19,12 @@ void DNNEngine::init()
     _iComputedEpochs=0;
 }
 //////////////////////////////////////////////////////////////////////////////
-DNNTrainResult DNNEngine::fit(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
+DNNTrainResult DNNEngine::learn(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
 {
     DNNTrainResult r;
 
     auto beginDuration = std::chrono::steady_clock::now();
-    train_epochs(mSamples,mTruth,dto,true);
+    learn_epochs(mSamples,mTruth,dto);
     auto endDuration = std::chrono::steady_clock::now();
 
     _iComputedEpochs+= dto.epochs;
@@ -34,19 +35,8 @@ DNNTrainResult DNNEngine::fit(const MatrixFloat& mSamples,const MatrixFloat& mTr
     return r;
 }
 //////////////////////////////////////////////////////////////////////////////
-DNNTrainResult DNNEngine::train(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
+void DNNEngine::set_problem(bool bClassification)
 {
-    DNNTrainResult r;
-
-    auto beginDuration = std::chrono::steady_clock::now();
-    train_epochs(mSamples,mTruth,dto,false);
-    auto endDuration = std::chrono::steady_clock::now();
-
-    _iComputedEpochs+= dto.epochs;
-    r.epochDuration=chrono::duration_cast<chrono::microseconds> (endDuration-beginDuration).count()/1.e6/dto.epochs;
-    r.computedEpochs=_iComputedEpochs;
-
-    r.loss=_vdLoss;
-    return r;
+    _bClassification=bClassification;
 }
 //////////////////////////////////////////////////////////////////////////////

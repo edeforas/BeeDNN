@@ -182,7 +182,7 @@ int DNNEngineTinyDnn::classify(const MatrixFloat& mIn)
     return (int)(_pNet->predict_label(vIn));
 }
 //////////////////////////////////////////////////////////////////////////////
-void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto, bool bFit)
+void DNNEngineTinyDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
 {
     int iEpoch=0;
     float fLoss=0.f;
@@ -264,10 +264,10 @@ void DNNEngineTinyDnn::train_epochs(const MatrixFloat& mSamples,const MatrixFloa
             iEpoch++;
         };
 
-        if(bFit)
-            _pNet->fit<tiny_dnn::mse>(*opt, vSamples, vTruth, dto.batchSize, dto.epochs, []() {},on_enumerate_epoch);//  on_enumerate_epoch);
-        else
+        if(_bClassification)
             _pNet->train<tiny_dnn::mse>(*opt, vSamples, vTruthi, dto.batchSize, dto.epochs, []() {},on_enumerate_epoch);//  on_enumerate_epoch);
+        else
+            _pNet->fit<tiny_dnn::mse>(*opt, vSamples, vTruth, dto.batchSize, dto.epochs, []() {},on_enumerate_epoch);//  on_enumerate_epoch);
     }
 
     delete opt;

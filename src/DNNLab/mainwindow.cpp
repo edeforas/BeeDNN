@@ -11,7 +11,7 @@
 #include "DNNEngineTinyDnn.h"
 #endif
 
-#include "LayerActivation.h"
+#include "Activation.h"
 #include "Optimizer.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -113,27 +113,12 @@ void MainWindow::train_and_test(bool bReset)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
+    compute_truth();
+
     //LossObserver lossCB;
 
     if(bReset)
         parse_net();
-
-    int iNbPoint=ui->leNbPointsLearn->text().toInt();
-    float dInputMin=ui->leInputMin->text().toFloat();
-    float dInputMax=ui->leInputMax->text().toFloat();
-    float dStep=(dInputMax-dInputMin)/(iNbPoint-1.f);
-
-    //create ref sample
-    MatrixFloat mTruth(iNbPoint,1);
-    MatrixFloat mSamples(iNbPoint,1);
-    float dVal=dInputMin;
-
-    for( int i=0;i<iNbPoint;i++)
-    {
-        mTruth(i,0)=compute_truth(dVal);
-        mSamples(i,0)=dVal;
-        dVal+=dStep;
-    }
 
     DNNTrainOption dto;
     dto.epochs=ui->leEpochs->text().toInt();
@@ -149,9 +134,10 @@ void MainWindow::train_and_test(bool bReset)
     if(bReset)
         _pEngine->init();
 
-    DNNTrainResult dtr =_pEngine->fit(mSamples,mTruth,dto);
+    _pEngine->set_problem(ui->cbProblem->currentText()=="Classification");
+    DNNTrainResult dtr =_pEngine->learn(_mInputData,_mTruth,dto);
 
-    double dLoss=_pEngine->compute_loss(mSamples,mTruth); //todo use last in loss vector?
+    double dLoss=_pEngine->compute_loss(_mInputData,_mTruth); //todo use last in loss vector?
     ui->leMSE->setText(QString::number(dLoss));
     ui->leComputedEpochs->setText(QString::number(dtr.computedEpochs));
     ui->leTimeByEpoch->setText(QString::number(dtr.epochDuration));
@@ -195,6 +181,8 @@ void MainWindow::drawRegression()
     vector<double> vRegression;
     MatrixFloat mIn(1,1),mOut;
 
+    compute_truth();
+
     if(bExtrapole)
     {
         float fBorder=(fInputMax-fInputMin)/2.f;
@@ -209,7 +197,7 @@ void MainWindow::drawRegression()
     for(unsigned int i=0;i<iNbPoint;i++)
     {
         mIn(0,0)=fVal;
-        vTruth.push_back((double)(-compute_truth(fVal)));
+        vTruth.push_back((double)(-_mTruth(i,0)));
         vSamples.push_back((double)(fVal));
         _pEngine->predict(mIn,mOut);
 
@@ -242,64 +230,106 @@ void MainWindow::on_actionAbout_triggered()
     mb.exec();
 }
 //////////////////////////////////////////////////////////////////////////
-float MainWindow::compute_truth(float x)
+void MainWindow::compute_truth()
 {
-    //function not optimized but not mandatory
+    //function not optimized but not mandatory for now
 
     string sFunction=ui->cbFunction->currentText().toStdString();
 
     if(sFunction=="And")
     {
-        int iIndex=(int)x;
-        return (iIndex==3);
+        _mInputData.resize(4,2);
+        _mInputData(0,0)=0; _mInputData(0,1)=0;
+        _mInputData(1,0)=1; _mInputData(1,1)=0;
+        _mInputData(2,0)=0; _mInputData(2,1)=1;
+        _mInputData(3,0)=1; _mInputData(3,1)=1;
+
+        _mTruth.resize(4,1);
+        _mTruth(0,0)=0;
+        _mTruth(1,0)=0;
+        _mTruth(2,0)=0;
+        _mTruth(3,0)=1;
+
+        set_input_size(2);
+        return;
     }
 
     if(sFunction=="Xor")
     {
-        int iIndex=(int)x;
-        return (iIndex==1) || (iIndex==2);
+        _mInputData.resize(4,2);
+        _mInputData(0,0)=0; _mInputData(0,1)=0;
+        _mInputData(1,0)=1; _mInputData(1,1)=0;
+        _mInputData(2,0)=0; _mInputData(2,1)=1;
+        _mInputData(3,0)=1; _mInputData(3,1)=1;
+
+        _mTruth.resize(4,1);
+        _mTruth(0,0)=0;
+        _mTruth(1,0)=1;
+        _mTruth(2,0)=1;
+        _mTruth(3,0)=0;
+
+        set_input_size(2);
+        return;
     }
 
     if(sFunction=="Mnist")
     {
         //todo
-        return -1;
+        //load Mnist data
+
+        set_input_size(768);
+        return;
     }
 
-    if(sFunction=="Identity")
-        return x;
+    //simple function to interpolate
+    int iNbPoint=ui->leNbPointsLearn->text().toInt();
+    float dInputMin=ui->leInputMin->text().toFloat();
+    float dInputMax=ui->leInputMax->text().toFloat();
+    float dStep=(dInputMax-dInputMin)/(iNbPoint-1.f);
 
-    if(sFunction=="Sin")
-        return sinf(x);
+    _mTruth.resize(iNbPoint,1);
+    _mInputData.resize(iNbPoint,1);
+    float dVal=dInputMin,dOut;
 
-    if(sFunction=="Abs")
-        return fabs(x);
+    for( int i=0;i<iNbPoint;i++)
+    {
+        if(sFunction=="Identity")
+            dOut=dVal;
 
-    if(sFunction=="Parabolic")
-        return x*x;
+        if(sFunction=="Sin")
+            dOut=sinf(dVal);
 
-    if(sFunction=="Gamma")
-        return tgammaf(x);
+        if(sFunction=="Abs")
+            dOut=fabs(dVal);
 
-    if(sFunction=="Exp")
-        return expf(x);
+        if(sFunction=="Parabolic")
+            dOut=dVal*dVal;
 
-    if(sFunction=="Sqrt")
-        return sqrtf(x);
+        if(sFunction=="Gamma")
+            dOut=tgammaf(dVal);
 
-    if(sFunction=="Ln")
-        return logf(x);
+        if(sFunction=="Exp")
+            dOut=expf(dVal);
 
-    if(sFunction=="Gauss")
-        return expf(-x*x);
+        if(sFunction=="Sqrt")
+            dOut=sqrtf(dVal);
 
-    if(sFunction=="Inverse")
-        return 1.f/x;
+        if(sFunction=="Ln")
+            dOut=logf(dVal);
 
-    if(sFunction=="Rectangular")
-        return ((((int)x)+(x<0.f))+1) & 1 ;
+        if(sFunction=="Gauss")
+            dOut=expf(-dVal*dVal);
 
-    return 0.f;
+        if(sFunction=="Inverse")
+            dOut=1.f/dVal;
+
+        if(sFunction=="Rectangular")
+            dOut= ((((int)dVal)+(dVal<0.f))+1) & 1 ;
+
+        _mInputData(i,0)=dVal;
+        _mTruth(i,0)=dOut;
+        dVal+=dStep;
+    }
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::resizeEvent( QResizeEvent *e )
@@ -419,17 +449,5 @@ void MainWindow::set_input_size(int iSize)
     _iInputSize=iSize;
     //ui->twNetwork->item(0,1)->setText(to_string(_iInputSize).data());
     ui->twNetwork->setItem(0,1,new QTableWidgetItem(to_string(_iInputSize).data())); //first input size is 1
-}
-//////////////////////////////////////////////////////////////////////////////
-void MainWindow::on_cbFunction_currentIndexChanged(int index)
-{
-    if(index<=1)
-        set_input_size(2);
-
-    if(index>2)
-        set_input_size(1);
-
-    if(index==2)
-        set_input_size(768);
 }
 //////////////////////////////////////////////////////////////////////////////

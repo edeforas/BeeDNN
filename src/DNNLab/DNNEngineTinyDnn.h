@@ -23,7 +23,7 @@ public:
     virtual void add_activation_layer(string sActivation) override;
     virtual void add_dropout_layer(int inSize,float fRatio) override;
 
-    virtual void train_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto,bool bFit) override;
+    virtual void learn_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto) override;
 
     virtual void predict(const MatrixFloat& mIn, MatrixFloat& mOut) override;
     virtual int classify(const MatrixFloat& mIn) override;
