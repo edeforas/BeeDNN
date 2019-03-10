@@ -144,9 +144,9 @@ void MainWindow::train_and_test(bool bReset)
 
     drawLoss(dtr.loss);
     drawRegression();
-    //  resizeEvent(nullptr);
-
+    update_classification_tab();
     update_details();
+
     QApplication::restoreOverrideCursor();
 }
 //////////////////////////////////////////////////////////////////////////
@@ -169,6 +169,12 @@ void MainWindow::drawLoss(vector<double> vdLoss)
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::drawRegression()
 {
+    if(_pEngine->problem()==true)
+    {   //not a regression problem
+        _qsRegression->clear();
+        return;
+    }
+
     _qsRegression->clear();
 
     //create ref sample hi-res and net output
@@ -449,5 +455,28 @@ void MainWindow::set_input_size(int iSize)
     _iInputSize=iSize;
     //ui->twNetwork->item(0,1)->setText(to_string(_iInputSize).data());
     ui->twNetwork->setItem(0,1,new QTableWidgetItem(to_string(_iInputSize).data())); //first input size is 1
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::update_classification_tab()
+{
+    if(_pEngine->problem()==false)
+    { // not a classification problem
+        ui->twConfusionMatrix->clear();
+        ui->leAccuracy->setText("n/a");
+        return;
+    }
+
+    float fAccuracy=0.f;
+    MatrixFloat mConfusionMatrix;
+    _pEngine->compute_confusion_matrix(_mInputData,_mTruth,mConfusionMatrix,fAccuracy);
+
+    ui->twConfusionMatrix->setColumnCount(mConfusionMatrix.cols());
+    ui->twConfusionMatrix->setRowCount(mConfusionMatrix.rows());
+
+    for(int c=0;c<mConfusionMatrix.cols();c++)
+        for(int r=0;r<mConfusionMatrix.rows();r++)
+            ui->twConfusionMatrix->setItem(r,c,new QTableWidgetItem(to_string(mConfusionMatrix(r,c)).data()));
+
+    ui->leAccuracy->setText(to_string(fAccuracy).data());
 }
 //////////////////////////////////////////////////////////////////////////////

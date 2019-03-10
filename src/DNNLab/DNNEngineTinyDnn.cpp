@@ -174,13 +174,14 @@ void DNNEngineTinyDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
     // was mOut.assign(vOut.data(),vOut.data()+vOut.size());
 }
 //////////////////////////////////////////////////////////////////////////////
-int DNNEngineTinyDnn::classify(const MatrixFloat& mIn)
+/*int DNNEngineTinyDnn::classify(const MatrixFloat& mIn)
 {
     tiny_dnn::vec_t vIn;
     vIn.assign(mIn.data(),mIn.data()+mIn.size());
 
     return (int)(_pNet->predict_label(vIn));
 }
+*/
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTinyDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
 {

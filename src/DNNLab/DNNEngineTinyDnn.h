@@ -26,7 +26,6 @@ public:
     virtual void learn_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto) override;
 
     virtual void predict(const MatrixFloat& mIn, MatrixFloat& mOut) override;
-    virtual int classify(const MatrixFloat& mIn) override;
 
     virtual double compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth) override;
 

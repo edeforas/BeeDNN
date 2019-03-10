@@ -1,5 +1,7 @@
 #include "DNNEngine.h"
 
+#include "ConfusionMatrix.h"
+
 #include <chrono>
 #include <string>
 
@@ -38,5 +40,32 @@ DNNTrainResult DNNEngine::learn(const MatrixFloat& mSamples,const MatrixFloat& m
 void DNNEngine::set_problem(bool bClassification)
 {
     _bClassification=bClassification;
+}
+//////////////////////////////////////////////////////////////////////////////
+bool DNNEngine::problem()
+{
+    return _bClassification;
+}
+//////////////////////////////////////////////////////////////////////////////
+void DNNEngine::compute_confusion_matrix(const MatrixFloat & mSamples, const MatrixFloat& mTruth,MatrixFloat& mConfusionMatrix, float& fAccuracy)
+{
+    MatrixFloat mTest;
+    predict_all(mSamples,mTest);
+    ConfusionMatrix cm;
+    ClassificationResult result=cm.compute(mTruth,mTest);
+
+    mConfusionMatrix=result.mConfMat;
+    fAccuracy=(float)result.accuracy;
+}
+//////////////////////////////////////////////////////////////////////////////
+void DNNEngine::predict_all(const MatrixFloat & mSamples, MatrixFloat& mResult)
+{
+    MatrixFloat temp;
+    mResult.resize(mSamples.rows(),1);
+    for(int i=0;i<mSamples.rows();i++)
+    {
+        predict(mSamples.row(i),temp);
+        mResult.row(i)=temp;
+    }
 }
 //////////////////////////////////////////////////////////////////////////////

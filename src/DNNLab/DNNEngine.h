@@ -77,12 +77,17 @@ public:
     virtual void add_dropout_layer(int inSize,float fRatio) =0;
 
     void set_problem(bool bClassification);
+    bool problem();
     virtual DNNTrainResult learn(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto);
 
     virtual void predict(const MatrixFloat& mIn, MatrixFloat& mOut)=0;
-    virtual int classify(const MatrixFloat& mIn)=0;
+    virtual void predict_all(const MatrixFloat & mSamples, MatrixFloat& mResult);
+
+    //   virtual int classify(const MatrixFloat& mIn)=0;
 
     virtual double compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)=0;
+
+    virtual void compute_confusion_matrix(const MatrixFloat & mSamples, const MatrixFloat& mTruth, MatrixFloat& mConfusionMatrix, float& fAccuracy);
 
 protected:	
     virtual void learn_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)=0;

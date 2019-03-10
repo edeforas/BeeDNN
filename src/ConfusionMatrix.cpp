@@ -1,7 +1,11 @@
 #include "ConfusionMatrix.h"
+
 ///////////////////////////////////////////////////////////////////////////////
 ClassificationResult ConfusionMatrix::compute(const MatrixFloat& mRef,const MatrixFloat& mTest,unsigned int iNbClass)
 {
+    if(iNbClass==0)
+        iNbClass=mRef.maxCoeff()+1;
+
     ClassificationResult cr;
     cr.mConfMat.resize(iNbClass,iNbClass);
     cr.mConfMat.setZero();
@@ -16,7 +20,7 @@ ClassificationResult ConfusionMatrix::compute(const MatrixFloat& mRef,const Matr
 
     MatrixFloat mGoodClassification=mDiag.cwiseQuotient(mSum)*100.f;
 
-    cr.goodclassificationPercent=mGoodClassification.sum()/iNbClass;
+    cr.accuracy=mGoodClassification.sum()/iNbClass;
 
     return cr;
 }

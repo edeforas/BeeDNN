@@ -30,6 +30,7 @@ SOURCES += \
     ../Optimizer.cpp \
     ../Layer.cpp \
     ../Matrix.cpp \
+    ../ConfusionMatrix.cpp \
     ../Activation.cpp \
     ../LayerActivation.cpp \
     ../LayerDense.cpp \
@@ -39,6 +40,7 @@ HEADERS += \
     ../Activation.h \
     ../Layer.h \
     ../Matrix.h \
+    ../ConfusionMatrix.h \
     ../Net.h \
     ../NetUtil.h \
     ../NetTrain.h \

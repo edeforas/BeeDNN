@@ -42,6 +42,7 @@ private slots:
 private:
     void drawLoss(vector<double> vdLoss);
     void drawRegression();
+    void update_classification_tab();
     void compute_truth();
     void train_and_test(bool bReset);
     void update_details();

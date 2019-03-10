@@ -53,10 +53,11 @@ void DNNEngineTestDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
     _pNet->forward(mIn,mOut);
 }
 //////////////////////////////////////////////////////////////////////////////
-int DNNEngineTestDnn::classify(const MatrixFloat& mIn)
+/*int DNNEngineTestDnn::classify(const MatrixFloat& mIn)
 {
     return _pNet->classify(mIn);
 }
+*/
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTestDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
 {

@@ -329,8 +329,8 @@ public:
 
         return out;
     }
-
-    Matrix<T> cwiseMax(T f) const
+/*
+    Matrix<T> max(T f) const
     {
         Matrix<T> out(*this);
 
@@ -339,7 +339,7 @@ public:
 
         return out;
     }
-
+*/
 
     T sum() const
     {
