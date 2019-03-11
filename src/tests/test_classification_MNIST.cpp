@@ -27,13 +27,13 @@ void epoch_callback()
     net.classify_all(mRefImages, mClassRef);
     ConfusionMatrix cmRef;
     ClassificationResult crRef = cmRef.compute(mRefLabelsIndex, mClassRef, 10);
-    cout << "% accuracy on Ref =" << crRef.goodclassificationPercent << endl;
+    cout << "% accuracy on Ref =" << crRef.accuracy << endl;
 
     MatrixFloat mClassTest;
     net.classify_all(mTestImages, mClassTest);
     ConfusionMatrix cmTest;
     ClassificationResult crTest = cmTest.compute(mTestLabelsIndex, mClassTest, 10);
-    cout << "% accuracy on Test=" << crTest.goodclassificationPercent << endl;
+    cout << "% accuracy on Test=" << crTest.accuracy << endl;
 
     cout << endl;
 }
