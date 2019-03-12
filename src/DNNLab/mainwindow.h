@@ -39,6 +39,10 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+
+
+    void on_cbFunction_currentIndexChanged(int index);
+
 private:
     void drawLoss(vector<double> vdLoss);
     void drawRegression();

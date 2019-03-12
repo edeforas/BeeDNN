@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->cbFunction->addItem("And");
     ui->cbFunction->addItem("Xor");
-    ui->cbFunction->addItem("Mnist");
+    ui->cbFunction->addItem("MNIST");
 
     ui->cbFunction->insertSeparator(3);
 
@@ -42,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->cbFunction->addItem("Gauss");
     ui->cbFunction->addItem("Inverse");
     ui->cbFunction->addItem("Rectangular");
+
     ui->cbFunction->setCurrentIndex(5);
 
     QStringList qsl;
@@ -170,13 +171,12 @@ void MainWindow::drawLoss(vector<double> vdLoss)
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::drawRegression()
 {
+    _qsRegression->clear();
+
     if(_pEngine->problem()==true)
     {   //not a regression problem
-        _qsRegression->clear();
         return;
     }
-
-    _qsRegression->clear();
 
     //create ref sample hi-res and net output
     unsigned int iNbPoint=(unsigned int)(ui->leNbPointsTest->text().toInt());
@@ -283,15 +283,17 @@ void MainWindow::compute_truth()
         return;
     }
 
-    if(sFunction=="Mnist")
+    if(sFunction=="MNIST")
     {
-        if( (_mInputData.cols()!=768) || (_mInputData.rows()!=60000))
+        if( (_mInputData.cols()!=784) || (_mInputData.rows()!=60000))
         {
             MNISTReader r;
-            r.read_from_folder(".",_mInputData,_mTruth,_mTestInputData,_mTestTruth);
+            bool bDbOk=r.read_from_folder(".",_mInputData,_mTruth,_mTestInputData,_mTestTruth);
+            _mInputData/=256.f;
+            _mTestInputData/=256.f;
         }
 
-        set_input_size(768);
+        set_input_size(_mInputData.cols());
         return;
     }
 
@@ -303,7 +305,7 @@ void MainWindow::compute_truth()
 
     _mTruth.resize(iNbPoint,1);
     _mInputData.resize(iNbPoint,1);
-    float dVal=dInputMin,dOut;
+    float dVal=dInputMin,dOut=0.f;
 
     for( int i=0;i<iNbPoint;i++)
     {
@@ -391,7 +393,7 @@ void MainWindow::on_btnTrainMore_clicked()
 void MainWindow::parse_net()
 {
     _pEngine->clear();
-    int iLastOut=1;
+    int iLastOut=_iInputSize;
     for(int iRow=0;iRow<10;iRow++) //todo dynamic size
     {
         QComboBox* pCombo=(QComboBox*)(ui->twNetwork->cellWidget(iRow,0));
@@ -488,5 +490,29 @@ void MainWindow::update_classification_tab()
             ui->twConfusionMatrix->setItem(r,c,new QTableWidgetItem(to_string(mConfusionMatrix(r,c)).data()));
 
     ui->leAccuracy->setText(to_string(fAccuracy).data());
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::on_cbFunction_currentIndexChanged(int index)
+{
+    string sFunction=ui->cbFunction->currentText().toStdString();
+
+    if(sFunction=="And")
+    {
+        set_input_size(2);
+        return;
+    }
+
+    if(sFunction=="Xor")
+    {
+        set_input_size(2);
+        return;
+    }
+
+    if(sFunction=="MNIST")
+    {
+        set_input_size(784);
+        return;
+    }
+    set_input_size(1);
 }
 //////////////////////////////////////////////////////////////////////////////
