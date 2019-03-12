@@ -426,6 +426,6 @@ const MatrixFloat withoutLastRow(const MatrixFloat& m);
 MatrixFloat lastRow( MatrixFloat& m);
 const MatrixFloat lastRow(const MatrixFloat& m);
 const MatrixFloat addColumnOfOne(const MatrixFloat& m);
-
+const MatrixFloat fromFile(const string& sFile);
 #endif
 

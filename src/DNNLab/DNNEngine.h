@@ -83,7 +83,7 @@ public:
     virtual void predict(const MatrixFloat& mIn, MatrixFloat& mOut)=0;
     virtual void predict_all(const MatrixFloat & mSamples, MatrixFloat& mResult);
 
-    //   virtual int classify(const MatrixFloat& mIn)=0;
+    void classify_all(const MatrixFloat & mSamples, MatrixFloat& mResult);
 
     virtual double compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)=0;
 

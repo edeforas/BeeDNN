@@ -28,8 +28,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->cbFunction->addItem("And");
     ui->cbFunction->addItem("Xor");
     ui->cbFunction->addItem("MNIST");
+    ui->cbFunction->addItem("TextFiles");
 
-    ui->cbFunction->insertSeparator(3);
+    ui->cbFunction->insertSeparator(4);
 
     ui->cbFunction->addItem("Identity");
     ui->cbFunction->addItem("Sin");
@@ -288,7 +289,7 @@ void MainWindow::compute_truth()
         if( (_mInputData.cols()!=784) || (_mInputData.rows()!=60000))
         {
             MNISTReader r;
-            bool bDbOk=r.read_from_folder(".",_mInputData,_mTruth,_mTestInputData,_mTestTruth);
+            r.read_from_folder(".",_mInputData,_mTruth,_mTestInputData,_mTestTruth);
             _mInputData/=256.f;
             _mTestInputData/=256.f;
         }
@@ -296,6 +297,22 @@ void MainWindow::compute_truth()
         set_input_size(_mInputData.cols());
         return;
     }
+
+    if(sFunction=="TextFiles")
+    {
+        _mInputData=fromFile("sample.txt");
+        _mTruth=fromFile("truth.txt");
+        _mInputData/=256.f;
+
+        _mTestInputData=_mInputData;
+        _mTestTruth=_mTruth;
+
+
+        set_input_size(_mInputData.cols());
+        return;
+    }
+
+
 
     //simple function to interpolate
     int iNbPoint=ui->leNbPointsLearn->text().toInt();
@@ -489,11 +506,16 @@ void MainWindow::update_classification_tab()
         for(int r=0;r<mConfusionMatrix.rows();r++)
             ui->twConfusionMatrix->setItem(r,c,new QTableWidgetItem(to_string(mConfusionMatrix(r,c)).data()));
 
+    //color in yellow the diagonal
+    for(int c=0;c<mConfusionMatrix.cols();c++)
+        ui->twConfusionMatrix->item(c,c)->setBackgroundColor(Qt::yellow);
+
     ui->leAccuracy->setText(to_string(fAccuracy).data());
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_cbFunction_currentIndexChanged(int index)
 {
+    (void)index;
     string sFunction=ui->cbFunction->currentText().toStdString();
 
     if(sFunction=="And")

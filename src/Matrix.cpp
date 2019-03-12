@@ -1,6 +1,8 @@
 #include <cassert>
 #include <cstdlib>
 #include <sstream>
+#include <fstream>
+#include <vector>
 #include <iomanip>
 
 #include "Matrix.h"
@@ -99,20 +101,20 @@ string toString(const MatrixFloat& m)
 ///////////////////////////////////////////////////////////////////////////
 void contatenateVerticallyInto(const MatrixFloat& mA, const MatrixFloat& mB, MatrixFloat& mAB)
 {
-	assert(mA.cols()== mB.cols());
+    assert(mA.cols()== mB.cols());
 
-	int iRowA = (int)mA.rows();
-	int iRowB = (int)mB.rows();
-	int iCols = (int)mA.cols();
+    int iRowA = (int)mA.rows();
+    int iRowB = (int)mB.rows();
+    int iCols = (int)mA.cols();
 
-	mAB.resize(iRowA + iRowB, iCols);
+    mAB.resize(iRowA + iRowB, iCols);
 
 #ifdef USE_EIGEN
-	mAB << mA , mB;
+    mAB << mA , mB;
 #else
-	//todo check mA and mB are not view on other matrixes with reduced columns (horizontal stride pb)
-	std::copy(mA.data(), mA.data() + mA.size(), mAB.data());
-	std::copy(mB.data(), mB.data() + mB.size(), mAB.data() + mA.size());
+    //todo check mA and mB are not view on other matrixes with reduced columns (horizontal stride pb)
+    std::copy(mA.data(), mA.data() + mA.size(), mAB.data());
+    std::copy(mB.data(), mB.data() + mB.size(), mAB.data() + mA.size());
 #endif
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -123,25 +125,60 @@ const MatrixFloat withoutLastRow(const MatrixFloat& m)
 ///////////////////////////////////////////////////////////////////////////
 MatrixFloat lastRow( MatrixFloat& m)
 {
-	return m.row(m.rows() - 1);
+    return m.row(m.rows() - 1);
 }
 ///////////////////////////////////////////////////////////////////////////
 const MatrixFloat lastRow(const MatrixFloat& m)
 {
-	return m.row(m.rows() - 1);
+    return m.row(m.rows() - 1);
 }
 ///////////////////////////////////////////////////////////////////////////
 const MatrixFloat addColumnOfOne(const MatrixFloat& m)
 {
-	MatrixFloat r(m.rows(), m.cols() + 1);
+    // todo : slow
+    MatrixFloat r(m.rows(), m.cols() + 1);
 
-	for (int iL = 0; iL < m.rows(); iL++)
-	{
-		for (int iR = 0; iR < m.cols(); iR++)
-			r(iL,iR)= m(iL, iR);
-		r(iL, m.cols()) = 1.f;
-	}
+    for (int iL = 0; iL < m.rows(); iL++)
+    {
+        for (int iR = 0; iR < m.cols(); iR++)
+            r(iL,iR)= m(iL, iR);
+        r(iL, m.cols()) = 1.f;
+    }
 
-	return r;
+    return r;
+}
+///////////////////////////////////////////////////////////////////////////
+const MatrixFloat fromFile(const string& sFile)
+{
+    MatrixFloat r;
+    vector<float> vf;
+    fstream f(sFile,ios::in);
+    int iNbCols=0,iNbLine=0;
+    while(!f.eof())
+    {
+        string s;
+        getline(f,s);
+        iNbLine++;
+        if(iNbCols==0)
+        {
+            //count nb of columns
+            int iNbSpace=std::count(s.begin(),s.end(),' ');
+            iNbCols=iNbSpace+1;
+        }
+
+        stringstream ss;
+        ss.str(s);
+        for(int i=0;i<iNbCols;i++)
+        {
+            float f;
+            ss >> f;
+            vf.push_back(f);
+        }
+
+        r.resize(iNbLine,iNbCols);
+        std::copy(vf.begin(),vf.end(),r.data());
+    }
+
+    return r;
 }
 ///////////////////////////////////////////////////////////////////////////

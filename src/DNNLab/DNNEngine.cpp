@@ -50,7 +50,7 @@ bool DNNEngine::problem()
 void DNNEngine::compute_confusion_matrix(const MatrixFloat & mSamples, const MatrixFloat& mTruth,MatrixFloat& mConfusionMatrix, float& fAccuracy)
 {
     MatrixFloat mTest;
-    predict_all(mSamples,mTest);
+    classify_all(mSamples,mTest);
     ConfusionMatrix cm;
     ClassificationResult result=cm.compute(mTruth,mTest);
 
@@ -61,11 +61,23 @@ void DNNEngine::compute_confusion_matrix(const MatrixFloat & mSamples, const Mat
 void DNNEngine::predict_all(const MatrixFloat & mSamples, MatrixFloat& mResult)
 {
     MatrixFloat temp;
+    for(int i=0;i<mSamples.rows();i++)
+    {
+        predict(mSamples.row(i),temp);
+        if(i==0)
+            mResult.resize(mSamples.rows(),temp.cols());
+        mResult.row(i)=temp;
+    }
+}
+//////////////////////////////////////////////////////////////////////////////
+void DNNEngine::classify_all(const MatrixFloat & mSamples, MatrixFloat& mResult)
+{
+    MatrixFloat temp;
     mResult.resize(mSamples.rows(),1);
     for(int i=0;i<mSamples.rows();i++)
     {
         predict(mSamples.row(i),temp);
-        mResult.row(i)=temp;
+        mResult(i,0)=(float)argmax(temp);
     }
 }
 //////////////////////////////////////////////////////////////////////////////
