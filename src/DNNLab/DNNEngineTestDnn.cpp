@@ -81,7 +81,7 @@ void DNNEngineTestDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloa
     _vdLoss.insert(end(_vdLoss),begin(l),end(l)); //temp
 }
 //////////////////////////////////////////////////////////////////////////////
-double DNNEngineTestDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)
+float DNNEngineTestDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)
 {
     NetTrain netTrain;
     return netTrain.compute_loss(*_pNet,mSamples,mTruth);

@@ -42,6 +42,9 @@ private:
 
     vector<CurveData> _vCurves;
     double xMin,xMax,yMin,yMax;
+
+    double yMinL,yMaxL;
+
     bool _bYLogAxis;
     bool _bDrawXaxis,_bDrawYaxis;
     QGraphicsScene _qs;

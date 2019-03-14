@@ -35,7 +35,7 @@ void tinydnnmatrix_to_matrix(const tiny_dnn::vec_t& tinyMatrix, MatrixFloat& m1)
     m1.resize(1,iSize);
 
     for(int i=0;i<iSize;i++)
-        m1(0,i)=tinyMatrix[i];
+        m1(0,i)=(float)tinyMatrix[i];
 }
 //////////////////////////////////////////////////////////////////////////////
 DNNEngineTinyDnn::DNNEngineTinyDnn()
@@ -274,7 +274,7 @@ void DNNEngineTinyDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloa
     delete opt;
 }
 //////////////////////////////////////////////////////////////////////////////
-double DNNEngineTinyDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)
+float DNNEngineTinyDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)
 {
     std::vector<tiny_dnn::vec_t> vSamples;
     std::vector<tiny_dnn::vec_t> vTruth;

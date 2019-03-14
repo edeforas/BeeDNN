@@ -43,10 +43,13 @@ private slots:
 
     void on_cbFunction_currentIndexChanged(int index);
 
+    void on_cbConfMatPercent_stateChanged(int arg1);
+
 private:
     void drawLoss(vector<double> vdLoss);
     void drawRegression();
     void update_classification_tab();
+    void drawConfusionMatrix();
     void compute_truth();
     void train_and_test(bool bReset);
     void update_details();
@@ -66,6 +69,7 @@ private:
 
     MatrixFloat _mTestInputData;
     MatrixFloat _mTestTruth;
+    MatrixFloat _mConfusionMatrix;
 };
 
 #endif // MAINWINDOW_H

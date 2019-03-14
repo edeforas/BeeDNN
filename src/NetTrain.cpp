@@ -12,7 +12,7 @@ NetTrain::NetTrain()
 NetTrain::~NetTrain()
 { }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-double NetTrain::compute_loss(const Net& net, const MatrixFloat &mSamples, const MatrixFloat &mTruth)
+float NetTrain::compute_loss(const Net& net, const MatrixFloat &mSamples, const MatrixFloat &mTruth)
 {
     if(net.layers().size()==0)
         return -1.;
@@ -30,7 +30,7 @@ double NetTrain::compute_loss(const Net& net, const MatrixFloat &mSamples, const
             mError+=(mOut-mTruth.row(i)).cwiseAbs2();
     }
 
-    return mError.sum()/(double)iNbSamples;
+    return mError.sum()/iNbSamples;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 vector<double> NetTrain::loss()
@@ -155,7 +155,7 @@ void NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTrut
 
         if(topt.testEveryEpochs!=-1)
             if( (iEpoch% topt.testEveryEpochs) == 0)
-                dLoss=compute_loss(net,mSamples,mTruth);
+                dLoss=(double)compute_loss(net,mSamples,mTruth);
         _vdLoss.push_back(dLoss);
     }
 

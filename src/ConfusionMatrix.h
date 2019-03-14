@@ -12,7 +12,9 @@ struct ClassificationResult
 class ConfusionMatrix
 {
 public:
-    ClassificationResult compute(const MatrixFloat& mRef, const MatrixFloat& mTest, unsigned int iNbClass=0);
+    ClassificationResult compute(const MatrixFloat& mRef, const MatrixFloat& mTest, int iNbClass=0);
+
+    static void toPercent(const MatrixFloat& mConf, MatrixFloat& mConfPercent);
 };
 
 #endif

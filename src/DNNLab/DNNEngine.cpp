@@ -70,14 +70,17 @@ void DNNEngine::predict_all(const MatrixFloat & mSamples, MatrixFloat& mResult)
     }
 }
 //////////////////////////////////////////////////////////////////////////////
-void DNNEngine::classify_all(const MatrixFloat & mSamples, MatrixFloat& mResult)
+void DNNEngine::classify_all(const MatrixFloat & mSamples, MatrixFloat& mResultLabel)
 {
     MatrixFloat temp;
-    mResult.resize(mSamples.rows(),1);
+    mResultLabel.resize(mSamples.rows(),1);
     for(int i=0;i<mSamples.rows();i++)
     {
         predict(mSamples.row(i),temp);
-        mResult(i,0)=(float)argmax(temp);
+        if(temp.cols()!=1)
+            mResultLabel(i,0)=(float)argmax(temp);
+        else
+            mResultLabel(i,0)=temp(0,0); //case of "output is a label"
     }
 }
 //////////////////////////////////////////////////////////////////////////////

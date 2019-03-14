@@ -41,7 +41,7 @@ public:
     NetTrain();
     virtual ~NetTrain();
 
-    double compute_loss(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth);
+    float compute_loss(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth);
 
     void train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruthLabel,const TrainOption& topt);
     void fit(Net& net, const MatrixFloat& mSamples, const MatrixFloat& mTruth, const TrainOption& topt);

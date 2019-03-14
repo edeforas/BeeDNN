@@ -27,7 +27,7 @@ public:
 
     virtual void predict(const MatrixFloat& mIn, MatrixFloat& mOut) override;
 
-    virtual double compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth) override;
+    virtual float compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth) override;
 
 private:   
     tiny_dnn::network<tiny_dnn::sequential>* _pNet;

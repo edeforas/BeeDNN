@@ -14,6 +14,7 @@
 
 #include "Activation.h"
 #include "Optimizer.h"
+#include "ConfusionMatrix.h"
 
 //////////////////////////////////////////////////////////////////////////
 MainWindow::MainWindow(QWidget *parent) :
@@ -308,11 +309,9 @@ void MainWindow::compute_truth()
         _mTestTruth=_mTruth;
 
 
-        set_input_size(_mInputData.cols());
+        set_input_size((int)_mInputData.cols());
         return;
     }
-
-
 
     //simple function to interpolate
     int iNbPoint=ui->leNbPointsLearn->text().toInt();
@@ -488,6 +487,15 @@ void MainWindow::set_input_size(int iSize)
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::update_classification_tab()
 {
+    float fAccuracy=0.f;
+    _pEngine->compute_confusion_matrix(_mTestInputData,_mTestTruth,_mConfusionMatrix,fAccuracy);
+    ui->leAccuracy->setText(to_string(fAccuracy).data());
+
+    drawConfusionMatrix();
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::drawConfusionMatrix()
+{
     if(_pEngine->problem()==false)
     { // not a classification problem
         ui->twConfusionMatrix->clear();
@@ -495,22 +503,28 @@ void MainWindow::update_classification_tab()
         return;
     }
 
-    float fAccuracy=0.f;
-    MatrixFloat mConfusionMatrix;
-    _pEngine->compute_confusion_matrix(_mTestInputData,_mTestTruth,mConfusionMatrix,fAccuracy);
+    ui->twConfusionMatrix->setColumnCount((int)_mConfusionMatrix.cols());
+    ui->twConfusionMatrix->setRowCount((int)_mConfusionMatrix.rows());
 
-    ui->twConfusionMatrix->setColumnCount(mConfusionMatrix.cols());
-    ui->twConfusionMatrix->setRowCount(mConfusionMatrix.rows());
+    if(ui->cbConfMatPercent->isChecked())
+    {
+        MatrixFloat mConfMatPercent;
+        ConfusionMatrix::toPercent(_mConfusionMatrix,mConfMatPercent);
 
-    for(int c=0;c<mConfusionMatrix.cols();c++)
-        for(int r=0;r<mConfusionMatrix.rows();r++)
-            ui->twConfusionMatrix->setItem(r,c,new QTableWidgetItem(to_string(mConfusionMatrix(r,c)).data()));
+        for(int c=0;c<_mConfusionMatrix.cols();c++)
+            for(int r=0;r<_mConfusionMatrix.rows();r++)
+                ui->twConfusionMatrix->setItem(r,c,new QTableWidgetItem(QString::number((double)mConfMatPercent(r,c),'f',1)));
+    }
+    else
+    {
+        for(int c=0;c<_mConfusionMatrix.cols();c++)
+            for(int r=0;r<_mConfusionMatrix.rows();r++)
+                ui->twConfusionMatrix->setItem(r,c,new QTableWidgetItem(to_string( (int)(_mConfusionMatrix(r,c))).data() ));
+    }
 
-    //color in yellow the diagonal
-    for(int c=0;c<mConfusionMatrix.cols();c++)
+    //colorize in yellow the diagonal
+    for(int c=0;c<_mConfusionMatrix.cols();c++)
         ui->twConfusionMatrix->item(c,c)->setBackgroundColor(Qt::yellow);
-
-    ui->leAccuracy->setText(to_string(fAccuracy).data());
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_cbFunction_currentIndexChanged(int index)
@@ -536,5 +550,11 @@ void MainWindow::on_cbFunction_currentIndexChanged(int index)
         return;
     }
     set_input_size(1);
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::on_cbConfMatPercent_stateChanged(int arg1)
+{
+    (void)arg1;
+    drawConfusionMatrix();
 }
 //////////////////////////////////////////////////////////////////////////////

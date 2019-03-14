@@ -152,19 +152,9 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_8">
             <item>
-             <widget class="QLabel" name="label_17">
+             <widget class="QCheckBox" name="cbConfMatPercent">
               <property name="text">
-               <string>Accuracy</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="leAccuracy"/>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_25">
-              <property name="text">
-               <string>%</string>
+               <string>Disp Percent</string>
               </property>
              </widget>
             </item>
@@ -180,6 +170,23 @@
                </size>
               </property>
              </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_17">
+              <property name="text">
+               <string>Accuracy</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="leAccuracy"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_25">
+              <property name="text">
+               <string>%</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>

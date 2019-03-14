@@ -13,18 +13,18 @@ SimpleCurveWidget::SimpleCurveWidget(): QGraphicsView()
 {
     setScene(&_qs);
     setDragMode(ScrollHandDrag);
-//    setMouseTracking(true);
-//    setInteractive(true);
-//    setTabletTracking(true);
+    //    setMouseTracking(true);
+    //    setInteractive(true);
+    //    setTabletTracking(true);
 
-	xMin=0;
-	xMax=0;
+    xMin=0;
+    xMax=0;
 
-	yMin=0;
-	yMax=0;
+    yMin=0;
+    yMax=0;
 
-	_bDrawXaxis=true;	
-	_bDrawYaxis=true;
+    _bDrawXaxis=true;
+    _bDrawYaxis=true;
     _bYLogAxis=false;
 }
 //////////////////////////////////////////////////////////////////////////
@@ -135,11 +135,8 @@ void SimpleCurveWidget::compute_bounding_box()
             yMax=_vCurves[i].yMax;
     }
 
-    if(_bYLogAxis)
-    {
-        yMin=log10(max<double>(yMin,1.e-8));
-        yMax=log10(max<double>(yMax,1.e-8));
-    }
+    yMinL=log10(max(yMin,1.e-8));
+    yMaxL=log10(max(yMax,1.e-8));
 }
 //////////////////////////////////////////////////////////////////////////
 void SimpleCurveWidget::setYLogAxis(bool bSetLogAxis)
@@ -156,7 +153,7 @@ void SimpleCurveWidget::clear()
 }
 //////////////////////////////////////////////////////////////////////////
 void SimpleCurveWidget::replot_all()
-{
+{  
     _qs.clear();
     compute_bounding_box();
     replot_axis();
@@ -183,9 +180,9 @@ void SimpleCurveWidget::replot_curve(int iCurve)
     }
     else
     {
-        painter.moveTo(QPointF(curve.vdX[0],log10(max<double>(curve.vdY[0],1.e-8))));
+        painter.moveTo(QPointF(curve.vdX[0],log10(max(curve.vdY[0],1.e-1))));
         for(unsigned int i=1;i<curve.vdX.size();i++)
-            painter.lineTo(QPointF(curve.vdX[i],log10(max<double>(curve.vdY[i],1.e-8))));
+            painter.lineTo(QPointF(curve.vdX[i],log10(max(curve.vdY[i],1.e-1))));
     }
 
     QPen penBlack(QRgb(curve._iColorRGB));
@@ -207,7 +204,10 @@ void SimpleCurveWidget::replot_axis()
     {
         QPen penBlack(Qt::black);
         penBlack.setCosmetic(true);
-        _qs.addLine(0.,yMin,0.,yMax,penBlack);
+        if(_bYLogAxis)
+            _qs.addLine(0.,yMinL,0.,yMaxL,penBlack);
+        else
+            _qs.addLine(0.,yMin,0.,yMax,penBlack);
     }
 }
 //////////////////////////////////////////////////////////////////////////

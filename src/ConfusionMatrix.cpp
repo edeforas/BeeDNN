@@ -1,7 +1,7 @@
 #include "ConfusionMatrix.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-ClassificationResult ConfusionMatrix::compute(const MatrixFloat& mRef,const MatrixFloat& mTest,unsigned int iNbClass)
+ClassificationResult ConfusionMatrix::compute(const MatrixFloat& mRef,const MatrixFloat& mTest,int iNbClass)
 {
     if(iNbClass==0)
         iNbClass=(int)mRef.maxCoeff()+1; //guess the nb of class
@@ -25,3 +25,10 @@ ClassificationResult ConfusionMatrix::compute(const MatrixFloat& mRef,const Matr
     return cr;
 }
 ///////////////////////////////////////////////////////////////////////////////
+void ConfusionMatrix::toPercent(const MatrixFloat& mConf, MatrixFloat& mConfPercent)
+{
+    MatrixFloat mSumRow=rowWiseSum(mConf);
+    mConfPercent=rowWiseDivide(mConf,mSumRow)*100.f;
+}
+///////////////////////////////////////////////////////////////////////////////
+

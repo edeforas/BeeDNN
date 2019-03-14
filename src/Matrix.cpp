@@ -164,7 +164,7 @@ const MatrixFloat fromFile(const string& sFile)
     vector<float> vf;
     fstream f(sFile,ios::in);
     int iNbCols=0,iNbLine=0;
-    while(!f.eof())
+    while(!f.eof() && (!f.bad()) && (!f.fail()) )
     {
         string s;
         getline(f,s);
