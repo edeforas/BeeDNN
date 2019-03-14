@@ -1,17 +1,20 @@
-# test_DNN
+# BeeDNN
 
-Test_DNN is a small set of functions to play/learn with DNN algorithms.
+BeeDNN is a library to play/learn with DNN algorithms.
 
 The goal is to have a minimal, clear and concise samples and API so everybody can contribute and play with DNN.
-No dependencies needed, every algorithm rewritten. 
+No dependencies needed, every algorithm rewritten. There is also a simple GUI application for snappy tests.
 
-Implemented:
-- dense layer
-- mini batch learn
-- momentum
-- several activation functions
-- early abort
+Implemented so far:
+- dense layer, with or without bias
+- dropout layer
+- mini batch learn, sgd learn
+- momentum, nesterov, adam , adagrad, rmsprop
+- train or fit
+- lot of activation functions
+- layers can be in any orders
+- tiny-dnn abstraction (optional), so you can compare both library
+- eigen (optional) use or internal matrix library
+- all in C++
 
-in src/ folder, a C++ implementation, with console test and in Qt.
-
-Later, for industrial applications, TensorFlow, Caffe or tiny-dnn are good choices.
+The GUI app use QT, will have binaries soon
