@@ -50,7 +50,52 @@ public:
     {
         return 1.f/sqrtf(1.f+x*x); //http://mathworld.wolfram.com/InverseHyperbolicSine.html
     }
-};//////////////////////////////////////////////////////////////////////////////
+};
+//////////////////////////////////////////////////////////////////////////////
+class ActivationSin: public Activation
+{
+public:
+    string name() const override
+    {
+        return "Sin"; //from: https://en.wikipedia.org/wiki/Activation_function
+    }
+
+    float apply(float x) const override
+    {
+        return sinf(x);
+    }
+
+    float derivation(float x) const override
+    {
+        return cosf(x);
+    }
+};
+//////////////////////////////////////////////////////////////////////////////
+class ActivationSinC: public Activation
+{
+public:
+    string name() const override
+    {
+        return "SinC"; //from: https://en.wikipedia.org/wiki/Activation_function
+    }
+
+    float apply(float x) const override
+    {
+        if(x==0.f)
+            return 1.f;
+
+        return sinf(x)/x;
+    }
+
+    float derivation(float x) const override
+    {
+        if(x==0.f)
+            return 0.f;
+
+        return cosf(x)/x-sinf(x)/(x*x);
+    }
+};
+//////////////////////////////////////////////////////////////////////////////
 class ActivationElliot: public Activation
 {
 public:
@@ -244,7 +289,6 @@ public:
 class ActivationSigmoid: public Activation
 {
 public:
-
     string name() const override
     {
         return "Sigmoid";
@@ -300,8 +344,52 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
-// SoftPlusLight is a softplus approximation without transendental function, author is Etienne de Foras
-class SoftPlusLight: public Activation
+class ActivationSQNL: public Activation  //from: https://en.wikipedia.org/wiki/Activation_function
+{
+public:
+    string name() const override
+    {
+        return "SQNL";
+    }
+
+    float apply(float x) const override
+    {
+        if(x>=0.f)
+        {
+            if(x>=2.0f)
+                return 1.f;
+
+            return x-x*x*0.25f;
+        }
+        else
+        {
+            if(x<=-2.0f)
+                return -1.f;
+
+            return x+x*x*0.25f;
+        }
+    }
+    float derivation(float x) const override
+    {
+        if(x>=0.f)
+        {
+            if(x>=2.0f)
+                return 0.f;
+
+            return 1.f-x*0.5f;
+        }
+        else
+        {
+            if(x<=-2.0f)
+                return 0.f;
+
+            return 1.f+x*0.5f;
+        }
+    }
+};
+//////////////////////////////////////////////////////////////////////////////
+// Parablu is a softplus approximation without transendental function, author is Etienne de Foras
+class ActivationParablu: public Activation
 {
 public:
     string name() const override
@@ -327,10 +415,9 @@ public:
         if(x>0.5f)
             return 1.f;
 
-        return x+x;//2.*x
+        return x+x;//2.f*x
     }
 };
-
 //////////////////////////////////////////////////////////////////////////////
 Activation* get_activation(const string& sActivation)
 {
@@ -339,6 +426,12 @@ Activation* get_activation(const string& sActivation)
 
     if(sActivation=="Asinh")
         return new ActivationAsinh;
+
+    if(sActivation=="Sin")
+        return new ActivationSin;
+
+    if(sActivation=="SinC")
+        return new ActivationSinC;
 
     if(sActivation=="Sigmoid")
         return new ActivationSigmoid;
@@ -370,11 +463,14 @@ Activation* get_activation(const string& sActivation)
     if(sActivation=="Selu")
         return new ActivationSelu;
 
+    if(sActivation=="SQNL")
+        return new ActivationSQNL;
+
     if(sActivation=="SoftPlus")
         return new ActivationSoftPlus;
 
-    if(sActivation=="SoftPlusLight")
-        return new SoftPlusLight;
+    if(sActivation=="Parablu")
+        return new ActivationParablu;
 
     if(sActivation=="SoftSign")
         return new ActivationSoftSign;
@@ -389,6 +485,8 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("Tanh");
     //  vsActivations.push_back("TanhP1M2");
     vsActivations.push_back("Asinh");
+    vsActivations.push_back("Sin");
+    vsActivations.push_back("SinC");  //not under tiny-dnn
     vsActivations.push_back("Sigmoid");
     vsActivations.push_back("Swish"); //not under tiny-dnn
     vsActivations.push_back("Relu");
@@ -399,8 +497,9 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("LeakyRelu");
     vsActivations.push_back("Elu");
     vsActivations.push_back("Selu");
+    vsActivations.push_back("SQNL");  //not under tiny-dnn
     vsActivations.push_back("SoftPlus");
-    vsActivations.push_back("SoftPlusLight"); //not under tiny-dnn
+    vsActivations.push_back("Parablu"); //not under tiny-dnn
     vsActivations.push_back("SoftSign");
 }
 //////////////////////////////////////////////////////////////////////////////

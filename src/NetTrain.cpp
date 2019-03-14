@@ -41,14 +41,19 @@ vector<double> NetTrain::loss()
 void NetTrain::train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruthLabel,const TrainOption& topt)
 {
     //create a kronecker matrix, one line by sample
+    bool bOutputIsLabel=net.layer(net.layers().size()-1)->out_size()==1;
     int iMax=(int)mTruthLabel.maxCoeff();
-    MatrixFloat mTruth(mTruthLabel.rows(),iMax+1);
-    mTruth.setZero();
 
-    for(int i=0;i<mTruth.rows();i++)
-        mTruth(i,(int)mTruthLabel(i,0))=1;
-
-    fit(net,mSamples,mTruth,topt);
+    if(!bOutputIsLabel)
+    {
+        MatrixFloat mTruth(mTruthLabel.rows(),iMax+1);
+        mTruth.setZero();
+        for(int i=0;i<mTruth.rows();i++)
+            mTruth(i,(int)mTruthLabel(i,0))=1;
+        fit(net,mSamples,mTruth,topt);
+    }
+    else
+        fit(net,mSamples,mTruthLabel,topt);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruth,const TrainOption& topt)

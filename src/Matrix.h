@@ -417,6 +417,7 @@ typedef Matrix<float> MatrixFloat;
 
 const MatrixFloat fromRawBuffer(const float *pBuffer,int iRows,int iCols);
 MatrixFloat rowWiseSum(const MatrixFloat& m);
+MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat randPerm(int iSize); //create a vector of index shuffled
 MatrixFloat decimate(const MatrixFloat& m, int iRatio);
 int argmax(const MatrixFloat& m);

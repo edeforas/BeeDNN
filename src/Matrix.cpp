@@ -6,7 +6,7 @@
 #include <iomanip>
 
 #include "Matrix.h"
-
+///////////////////////////////////////////////////////////////////////////
 //matrix view on another matrix, without malloc and copy
 const MatrixFloat fromRawBuffer(const float *pBuffer,int iRows,int iCols)
 {
@@ -16,7 +16,7 @@ const MatrixFloat fromRawBuffer(const float *pBuffer,int iRows,int iCols)
     return MatrixFloat::from_raw_buffer(pBuffer,iRows,iCols);
 #endif
 }
-
+///////////////////////////////////////////////////////////////////////////
 MatrixFloat rowWiseSum(const MatrixFloat& m)
 {
 #ifdef USE_EIGEN
@@ -26,10 +26,20 @@ MatrixFloat rowWiseSum(const MatrixFloat& m)
     MatrixFloat result(r,1);
 
     for(int i=0;i<r;i++)
-        result(i,0)=(m.row(i)).sum();
+        r(i,0)=(m.row(i)).sum();
 
-    return result;
+    return r;
 #endif
+}
+///////////////////////////////////////////////////////////////////////////
+MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d)
+{
+    MatrixFloat r=m;
+
+    for(int l=0;l<r.rows();l++)
+        r.row(l)/=d(l,0);
+
+    return r;
 }
 ///////////////////////////////////////////////////////////////////////////
 MatrixFloat randPerm(int iSize) //create a vector of index shuffled
@@ -162,7 +172,7 @@ const MatrixFloat fromFile(const string& sFile)
         if(iNbCols==0)
         {
             //count nb of columns
-            int iNbSpace=std::count(s.begin(),s.end(),' ');
+            int iNbSpace=(int)std::count(s.begin(),s.end(),' ');
             iNbCols=iNbSpace+1;
         }
 
