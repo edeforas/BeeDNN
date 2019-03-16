@@ -26,9 +26,9 @@ MatrixFloat rowWiseSum(const MatrixFloat& m)
     MatrixFloat result(r,1);
 
     for(int i=0;i<r;i++)
-        r(i,0)=(m.row(i)).sum();
+        result(i,0)=(m.row(i)).sum();
 
-    return r;
+    return result;
 #endif
 }
 ///////////////////////////////////////////////////////////////////////////

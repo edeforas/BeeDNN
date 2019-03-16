@@ -42,6 +42,7 @@ int main()
 {
     iEpoch = 0;
 
+	//load MNIST data
     cout << "loading MNIST database..." << endl;
     MNISTReader mr;
     if(!mr.read_from_folder(".",mRefImages,mRefLabelsIndex, mTestImages,mTestLabelsIndex))
@@ -54,7 +55,7 @@ int main()
     mTestImages/=256.f;
     mRefImages/=256.f;
 
-    //simple net: 97% classif 76% test after a long time
+    //create simple net: 97% classif 76% test after a long time
     net.add_dense_layer(784,64,true);
     net.add_dropout_layer(64,0.2f);
     net.add_activation_layer("Relu");
@@ -62,15 +63,15 @@ int main()
     net.add_dropout_layer(10,0.2f);
     net.add_activation_layer("Sigmoid");
 
-    TrainOption tOpt;
+	//train net
+	cout << "training..." << endl;
+	TrainOption tOpt;
     tOpt.epochCallBack = epoch_callback;
-
-    cout << "training..." << endl;
-
     NetTrain netTrain;
 	start = chrono::steady_clock::now();
     netTrain.train(net,mRefImages,mRefLabelsIndex,tOpt);
 
-    cout << "end of test." << endl;
+	// the end, results are computed in the callback
+	cout << "end of test." << endl;
     return 0;
 }

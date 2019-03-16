@@ -4,7 +4,6 @@
 using namespace std;
 
 #include "Net.h"
-
 #include "NetTrain.h"
 
 int main()
@@ -42,8 +41,8 @@ int main()
     }
 
     //compute loss
-    double dLoss=netfit.compute_loss(net,mSamples,mTruth);
-    cout << "Loss=" << dLoss << endl;
+    float fLoss=netfit.compute_loss(net,mSamples,mTruth);
+    cout << "Loss=" << fLoss << endl;
 
     return 0;
 }

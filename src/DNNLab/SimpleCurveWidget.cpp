@@ -50,7 +50,7 @@ void SimpleCurveWidget::addCurve(const vector<double>& vdX, const vector<double>
     xMax=vdX[0];
     yMin=vdY[0];
     yMax=vdY[0];
-    for(int i=1;i<vdX.size();i++)
+    for(unsigned int i=1;i<vdX.size();i++)
     {
         if(vdX[i]<xMin)
             xMin=vdX[i];
@@ -158,8 +158,8 @@ void SimpleCurveWidget::replot_all()
     compute_bounding_box();
     replot_axis();
 
-    for(int i=0;i<_vCurves.size();i++)
-        replot_curve(i);
+    for(unsigned int i=0;i<_vCurves.size();i++)
+        replot_curve((int)i);
 
     setSceneRect(_qs.itemsBoundingRect());//QRectF(xMin,yMin,xMax-xMin,yMax-yMin)); //for now
     fitInView(_qs.itemsBoundingRect());
@@ -168,21 +168,21 @@ void SimpleCurveWidget::replot_all()
 //////////////////////////////////////////////////////////////////////////
 void SimpleCurveWidget::replot_curve(int iCurve)
 {
-    const CurveData& curve=_vCurves[iCurve];
+    const CurveData& curve=_vCurves[(unsigned int)iCurve];
 
     QPainterPath painter;
 
     if(!_bYLogAxis)
     {
-        painter.moveTo(QPointF(curve.vdX[0],curve.vdY[0]));
+        painter.moveTo(QPointF(curve.vdX[0],-curve.vdY[0]));
         for(unsigned int i=1;i<curve.vdX.size();i++)
-            painter.lineTo(QPointF(curve.vdX[i],curve.vdY[i]));
+            painter.lineTo(QPointF(curve.vdX[i],-curve.vdY[i]));
     }
     else
     {
-        painter.moveTo(QPointF(curve.vdX[0],log10(max(curve.vdY[0],1.e-1))));
+        painter.moveTo(QPointF(curve.vdX[0], -log10(max(curve.vdY[0],1.e-8))));
         for(unsigned int i=1;i<curve.vdX.size();i++)
-            painter.lineTo(QPointF(curve.vdX[i],log10(max(curve.vdY[i],1.e-1))));
+            painter.lineTo(QPointF(curve.vdX[i], -log10(max(curve.vdY[i],1.e-8)) ));
     }
 
     QPen penBlack(QRgb(curve._iColorRGB));
@@ -205,9 +205,9 @@ void SimpleCurveWidget::replot_axis()
         QPen penBlack(Qt::black);
         penBlack.setCosmetic(true);
         if(_bYLogAxis)
-            _qs.addLine(0.,yMinL,0.,yMaxL,penBlack);
+            _qs.addLine(0.,-yMaxL,0.,yMinL ,penBlack);
         else
-            _qs.addLine(0.,yMin,0.,yMax,penBlack);
+            _qs.addLine(0.,-yMax ,0.,yMin,penBlack);
     }
 }
 //////////////////////////////////////////////////////////////////////////

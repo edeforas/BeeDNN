@@ -32,8 +32,8 @@ int main()
     cout << "0xor0=" << m00(0) << " 0xor1=" <<m01(0) << " 1xor0=" << m10(0) << " 1xor1=" << m11(0) << endl;
 
     //compute loss
-    double dLoss=netFit.compute_loss(net,mSamples,mTruth);
-    cout << "Loss=" << dLoss << endl;
+    float fLoss=netFit.compute_loss(net,mSamples,mTruth);
+    cout << "Loss=" << fLoss << endl;
 
     return 0;
 }

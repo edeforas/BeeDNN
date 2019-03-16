@@ -81,7 +81,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     vector<string> vsOptimizers;
     list_optimizers_available( vsOptimizers);
-    for(int i=0;i<vsOptimizers.size();i++)
+    for(unsigned int i=0;i<vsOptimizers.size();i++)
         ui->cbOptimizer->addItem(vsOptimizers[i].data());
 
     resizeDocks({ui->dockWidget},{1},Qt::Horizontal);
@@ -165,7 +165,7 @@ void MainWindow::drawLoss(vector<double> vdLoss)
     for(unsigned int i=0;i<vdLoss.size();i++)
     {
         x.push_back(i);
-        loss.push_back(-vdLoss[i]); // //up side down
+        loss.push_back(vdLoss[i]);
     }
 
     _qsLoss->addCurve(x,loss,_curveColor);
@@ -206,14 +206,14 @@ void MainWindow::drawRegression()
     for(unsigned int i=0;i<iNbPoint;i++)
     {
         mIn(0,0)=fVal;
-        vTruth.push_back((double)(-_mTruth(i,0)));
+        vTruth.push_back((double)(_mTruth(i,0)));
         vSamples.push_back((double)(fVal));
         _pEngine->predict(mIn,mOut);
 
         if(mOut.size()==0)
             return; //todo
 
-        vRegression.push_back((double)(-mOut(0)));
+        vRegression.push_back((double)(mOut(0)));
         fVal+=fStep;
     }
 
@@ -487,6 +487,13 @@ void MainWindow::set_input_size(int iSize)
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::update_classification_tab()
 {
+    if(_pEngine->problem()==false)
+    { // not a classification problem
+        ui->twConfusionMatrix->clear();
+        ui->leAccuracy->setText("n/a");
+        return;
+    }
+
     float fAccuracy=0.f;
     _pEngine->compute_confusion_matrix(_mTestInputData,_mTestTruth,_mConfusionMatrix,fAccuracy);
     ui->leAccuracy->setText(to_string(fAccuracy).data());
