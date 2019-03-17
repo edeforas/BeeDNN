@@ -25,7 +25,7 @@ void LayerDense::init()
         _weight(i)=((float)rand()/(float)RAND_MAX-0.5f)*2.f*a;
 
     if (_bHasBias)
-    	lastRow(_weight).setZero();
+        _weight.row(_iInSize).setZero();
 
     Layer::init();
 }
@@ -33,7 +33,7 @@ void LayerDense::init()
 void LayerDense::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
 {
     if (_bHasBias)
-        mMatOut = mMatIn * withoutLastRow(_weight) + lastRow(_weight);
+        mMatOut = mMatIn *_weight.topRows(_iInSize) + _weight.row(_iInSize); //split _weight in [weightnobias, bias] in computation
     else
         mMatOut = mMatIn * _weight;
 }
@@ -42,18 +42,17 @@ void LayerDense::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mD
 {
     if (_bHasBias)
     {
-        mNewDelta = mDelta * (withoutLastRow(_weight).transpose());
-
-        MatrixFloat _mDx = ((addColumnOfOne(mInput)).transpose())*mDelta; //temp
-        pOptim->optimize(_weight, _mDx); //temp
+        //split _weight in [weightnobias, bias] in computation
+        mNewDelta = mDelta * _weight.topRows(_iInSize).transpose();
+        _mDx = ((addColumnOfOne(mInput)).transpose())*mDelta; //temp
     }
     else
     {
         mNewDelta = mDelta * (_weight.transpose());
-
-        MatrixFloat _mDx = (mInput.transpose())*mDelta; //temp
-        pOptim->optimize(_weight, _mDx);
+        _mDx = (mInput.transpose())*mDelta; //temp
     }
+
+    pOptim->optimize(_weight, _mDx);
 }
 ///////////////////////////////////////////////////////////////////////////////
 const MatrixFloat& LayerDense::weight() const
