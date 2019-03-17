@@ -19,8 +19,8 @@ int main()
     float a[]={ 4 , 5 , 6, 7 };
     float b[]={ 2 , 3 };
 
-    const MatrixFloat mA=from_raw_buffer(a,2,2);
-    const MatrixFloat mB=from_raw_buffer(b,2,1);
+    const MatrixFloat mA=fromRawBuffer(a,2,2);
+    const MatrixFloat mB=fromRawBuffer(b,2,1);
 
     const MatrixFloat mAT=mA.transpose();
 	cout << "Transposed Matrix:" << endl;
@@ -38,8 +38,12 @@ int main()
     cout << "RowWiseSum:" << endl;
     disp(mS);
 
-
-
+    //check fromRawBuffer() is not copying the data
+    float c[5]={ 0, 1 , 2 , 3 , 4 };
+    MatrixFloat mF=fromRawBuffer(c,5,1);
+    disp(mF);
+    c[0]=333;
+    disp(mF);
 
     return 0;
 }
