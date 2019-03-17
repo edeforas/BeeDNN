@@ -136,32 +136,7 @@ void contatenateVerticallyInto(const MatrixFloat& mA, const MatrixFloat& mB, Mat
     std::copy(mB.data(), mB.data() + mB.size(), mAB.data() + mA.size());
 #endif
 }
-/*
 ///////////////////////////////////////////////////////////////////////////
-MatrixFloat withoutLastRow( MatrixFloat& m)
-{
-    return m.topRows(m.rows()-1);
-}
-///////////////////////////////////////////////////////////////////////////
-const MatrixFloat withoutLastRow(const MatrixFloat& m)
-{
-	return m.topRows(m.rows() - 1);
-}
-*/
-///////////////////////////////////////////////////////////////////////////
-/*
-MatrixFloat lastRow( MatrixFloat& m)
-{
-    return m.row(m.rows() - 1);
-}
-///////////////////////////////////////////////////////////////////////////
-const MatrixFloat lastRow(const MatrixFloat& m)
-{
-    return m.row(m.rows() - 1);
-}
-*/
-///////////////////////////////////////////////////////////////////////////
-
 const MatrixFloat addColumnOfOne(const MatrixFloat& m)
 {
     // todo : slow

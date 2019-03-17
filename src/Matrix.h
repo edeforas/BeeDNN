@@ -441,14 +441,6 @@ MatrixFloat decimate(const MatrixFloat& m, int iRatio);
 int argmax(const MatrixFloat& m);
 string toString(const MatrixFloat& m);
 void contatenateVerticallyInto(const MatrixFloat& mA, const MatrixFloat& mB, MatrixFloat& mAB);
-/*
-MatrixFloat withoutLastRow(MatrixFloat &m);
-const MatrixFloat withoutLastRow(const MatrixFloat &m);
-*/
-/*
-MatrixFloat lastRow( MatrixFloat& m);
-const MatrixFloat lastRow(const MatrixFloat& m);
-*/
 const MatrixFloat addColumnOfOne(const MatrixFloat& m);
 const MatrixFloat fromFile(const string& sFile);
 #endif
