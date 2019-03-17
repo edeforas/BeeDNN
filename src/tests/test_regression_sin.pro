@@ -3,6 +3,10 @@ CONFIG += console c++14
 CONFIG -= app_bundle
 CONFIG -= qt
 
+#eigen use (optional)
+DEFINES+= "USE_EIGEN"
+INCLUDEPATH+=$$(EIGEN_PATH)
+
 INCLUDEPATH+=..
 
 SOURCES += test_regression_sin.cpp \

@@ -19,7 +19,7 @@ public:
     const MatrixFloat& weight() const;
 
 private:
-    MatrixFloat _weight;
+    MatrixFloat _weight, _mDx;
 	bool _bHasBias;
 };
 

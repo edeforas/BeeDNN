@@ -13,6 +13,7 @@ using namespace std;
 #include "Eigen/Core"
 using namespace Eigen;
 typedef Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> MatrixFloat;
+typedef Eigen::Map<MatrixFloat> MatrixFloatView;
 
 #else
 
@@ -387,12 +388,27 @@ public:
         return Matrix<T>(_data+iRow*_iColumns,1,_iColumns);
     }
 
-    
     const Matrix<T> row(int iRow) const
     {
         assert(iRow<_iRows);
 
         return Matrix<T>(_data+iRow*_iColumns,1,_iColumns);
+    }
+
+    Matrix<T> topRows(int iNbRow)
+    {
+        assert(iNbRow>=0);
+        assert(iNbRow<_iRows);
+
+        return Matrix<T>(_data,iNbRow,_iColumns);
+    }
+
+    const Matrix<T> topRows(int iNbRow) const
+    {
+        assert(iNbRow>=0);
+        assert(iNbRow<_iRows);
+
+        return Matrix<T>(_data,iNbRow,_iColumns);
     }
 
     Matrix<T> diagonal() const //slow!
@@ -412,10 +428,12 @@ private:
 };
 
 typedef Matrix<float> MatrixFloat;
+typedef Matrix<float> MatrixFloatView;
 
 #endif
 
-const MatrixFloat fromRawBuffer(const float *pBuffer,int iRows,int iCols);
+MatrixFloatView fromRawBuffer(float *pBuffer, int iRows, int iCols);
+const MatrixFloatView fromRawBuffer(const float *pBuffer, int iRows, int iCols);
 MatrixFloat rowWiseSum(const MatrixFloat& m);
 MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat randPerm(int iSize); //create a vector of index shuffled
@@ -423,9 +441,6 @@ MatrixFloat decimate(const MatrixFloat& m, int iRatio);
 int argmax(const MatrixFloat& m);
 string toString(const MatrixFloat& m);
 void contatenateVerticallyInto(const MatrixFloat& mA, const MatrixFloat& mB, MatrixFloat& mAB);
-const MatrixFloat withoutLastRow(const MatrixFloat& m);
-MatrixFloat lastRow( MatrixFloat& m);
-const MatrixFloat lastRow(const MatrixFloat& m);
 const MatrixFloat addColumnOfOne(const MatrixFloat& m);
 const MatrixFloat fromFile(const string& sFile);
 #endif

@@ -29,7 +29,7 @@ public:
     float momentum;
     int testEveryEpochs; //set to 1 to test at each epoch, 10 to test only 1/10 of the time, etc, set to -1 for no test //todo remove
     string optimizer; //ex "SGD" "Momentum" Adam" "Adagrad" "Nesterov" "RMSProp"
-	void(*epochCallBack)();
+    void(*epochCallBack)(); //called after an epoch
 };
 
 class Layer;

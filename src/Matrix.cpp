@@ -8,12 +8,21 @@
 #include "Matrix.h"
 ///////////////////////////////////////////////////////////////////////////
 //matrix view on another matrix, without malloc and copy
-const MatrixFloat fromRawBuffer(const float *pBuffer,int iRows,int iCols)
+const MatrixFloatView fromRawBuffer(const float *pBuffer,int iRows,int iCols)
 {
 #ifdef USE_EIGEN
     return Eigen::Map<MatrixFloat>((float*)pBuffer,static_cast<Eigen::Index>(iRows),static_cast<Eigen::Index>(iCols));
 #else
-    return MatrixFloat::from_raw_buffer(pBuffer,iRows,iCols);
+    return MatrixFloat((float*)pBuffer,iRows,iCols);
+#endif
+}
+///////////////////////////////////////////////////////////////////////////
+MatrixFloatView fromRawBuffer(float *pBuffer,int iRows,int iCols)
+{
+#ifdef USE_EIGEN
+    return Eigen::Map<MatrixFloat>(pBuffer,static_cast<Eigen::Index>(iRows),static_cast<Eigen::Index>(iCols));
+#else
+    return MatrixFloat(pBuffer,iRows,iCols);
 #endif
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -126,21 +135,6 @@ void contatenateVerticallyInto(const MatrixFloat& mA, const MatrixFloat& mB, Mat
     std::copy(mA.data(), mA.data() + mA.size(), mAB.data());
     std::copy(mB.data(), mB.data() + mB.size(), mAB.data() + mA.size());
 #endif
-}
-///////////////////////////////////////////////////////////////////////////
-const MatrixFloat withoutLastRow(const MatrixFloat& m)
-{
-    return fromRawBuffer(m.data(),(int) m.rows() - 1,(int) m.cols());
-}
-///////////////////////////////////////////////////////////////////////////
-MatrixFloat lastRow( MatrixFloat& m)
-{
-    return m.row(m.rows() - 1);
-}
-///////////////////////////////////////////////////////////////////////////
-const MatrixFloat lastRow(const MatrixFloat& m)
-{
-    return m.row(m.rows() - 1);
 }
 ///////////////////////////////////////////////////////////////////////////
 const MatrixFloat addColumnOfOne(const MatrixFloat& m)
