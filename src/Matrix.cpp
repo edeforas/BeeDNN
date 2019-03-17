@@ -149,7 +149,7 @@ const MatrixFloat withoutLastRow(const MatrixFloat& m)
 }
 */
 ///////////////////////////////////////////////////////////////////////////
-
+/*
 MatrixFloat lastRow( MatrixFloat& m)
 {
     return m.row(m.rows() - 1);
@@ -159,6 +159,7 @@ const MatrixFloat lastRow(const MatrixFloat& m)
 {
     return m.row(m.rows() - 1);
 }
+*/
 ///////////////////////////////////////////////////////////////////////////
 
 const MatrixFloat addColumnOfOne(const MatrixFloat& m)

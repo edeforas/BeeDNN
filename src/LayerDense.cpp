@@ -44,12 +44,12 @@ void LayerDense::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mD
     {
         //split _weight in [weightnobias, bias] in computation
         mNewDelta = mDelta * _weight.topRows(_iInSize).transpose();
-        _mDx = ((addColumnOfOne(mInput)).transpose())*mDelta; //temp
+        _mDx = ((addColumnOfOne(mInput)).transpose())*mDelta; //too optimize
     }
     else
     {
         mNewDelta = mDelta * (_weight.transpose());
-        _mDx = (mInput.transpose())*mDelta; //temp
+        _mDx = (mInput.transpose())*mDelta;
     }
 
     pOptim->optimize(_weight, _mDx);
