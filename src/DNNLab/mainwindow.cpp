@@ -5,7 +5,7 @@
 #include "SimpleCurveWidget.h"
 
 #include "DNNEngine.h"
-#include "DNNEngineTestDnn.h"
+#include "DNNEngineBeeDnn.h"
 #include "MNISTReader.h"
 
 #ifdef USE_TINYDNN
@@ -99,7 +99,7 @@ MainWindow::MainWindow(QWidget *parent) :
     _curveColor=0xff0000; //red
 
     set_input_size(1);
-    _pEngine=new DNNEngineTestDnn;
+    _pEngine=new DNNEngineBeeDnn;
 }
 //////////////////////////////////////////////////////////////////////////
 MainWindow::~MainWindow()
@@ -231,7 +231,7 @@ void MainWindow::on_actionAbout_triggered()
     QMessageBox mb;
     QString qsText="DNNLab";
     qsText+= "\n";
-    qsText+= "\n GitHub: https://github.com/edeforas/test_DNN";
+    qsText+= "\n GitHub: https://github.com/edeforas/BeeDNN";
     qsText+= "\n by Etienne de Foras";
     qsText+="\n email: etienne.deforas@gmail.com";
 
@@ -392,8 +392,8 @@ void MainWindow::on_cbEngine_currentTextChanged(const QString &arg1)
     delete _pEngine;
     _pEngine=nullptr;
 
-    if(arg1=="testDNN")
-        _pEngine=new DNNEngineTestDnn;
+    if(arg1=="BeeDNN")
+        _pEngine=new DNNEngineBeeDnn;
 
 #ifdef USE_TINYDNN
     if(arg1=="tiny-dnn")

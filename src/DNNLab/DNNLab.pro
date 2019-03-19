@@ -57,12 +57,12 @@ SOURCES += \
     main.cpp\
     mainwindow.cpp \
     SimpleCurveWidget.cpp \
-    DNNEngineTestDnn.cpp \
+    DNNEngineBeeDnn.cpp \
     DNNEngine.cpp
 HEADERS  += \
     mainwindow.h \
     SimpleCurveWidget.h \
     DNNEngine.h \
-    DNNEngineTestDnn.h
+    DNNEngineBeeDnn.h
 FORMS    += mainwindow.ui
 

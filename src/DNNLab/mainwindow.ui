@@ -414,7 +414,7 @@
         <widget class="QComboBox" name="cbEngine">
          <item>
           <property name="text">
-           <string>testDNN</string>
+           <string>BeeDNN</string>
           </property>
          </item>
         </widget>

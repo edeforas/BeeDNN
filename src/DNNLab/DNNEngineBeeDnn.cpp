@@ -1,4 +1,4 @@
-#include "DNNEngineTestDnn.h"
+#include "DNNEngineBeeDnn.h"
 
 #include "Net.h"
 #include "NetTrain.h"
@@ -7,59 +7,59 @@
 #include "NetUtil.h"
 
 //////////////////////////////////////////////////////////////////////////////
-DNNEngineTestDnn::DNNEngineTestDnn()
+DNNEngineBeeDnn::DNNEngineBeeDnn()
 {
     _pNet=new Net;
 }
 //////////////////////////////////////////////////////////////////////////////
-DNNEngineTestDnn::~DNNEngineTestDnn()
+DNNEngineBeeDnn::~DNNEngineBeeDnn()
 {
     _pNet->clear();
 }
 //////////////////////////////////////////////////////////////////////////////
-void DNNEngineTestDnn::clear()
+void DNNEngineBeeDnn::clear()
 {
     _pNet->clear();
 }
 //////////////////////////////////////////////////////////////////////////////
-string DNNEngineTestDnn::to_string()
+string DNNEngineBeeDnn::to_string()
 {
     return NetUtil::to_string(_pNet);
 }
 //////////////////////////////////////////////////////////////////////////////
-void DNNEngineTestDnn::init()
+void DNNEngineBeeDnn::init()
 {
     _pNet->init();
     DNNEngine::init();
 }
 //////////////////////////////////////////////////////////////////////////////
-void DNNEngineTestDnn::add_dense_layer(int inSize, int outSize, bool bWithBias)
+void DNNEngineBeeDnn::add_dense_layer(int inSize, int outSize, bool bWithBias)
 {
     _pNet->add_dense_layer(inSize,outSize,bWithBias);
 }
 //////////////////////////////////////////////////////////////////////////////
-void DNNEngineTestDnn::add_activation_layer(string sActivation)
+void DNNEngineBeeDnn::add_activation_layer(string sActivation)
 {
     _pNet->add_activation_layer(sActivation);
 }
 //////////////////////////////////////////////////////////////////////////////
-void DNNEngineTestDnn::add_dropout_layer(int inSize,float fRatio)
+void DNNEngineBeeDnn::add_dropout_layer(int inSize,float fRatio)
 {
     _pNet->add_dropout_layer(inSize,fRatio);
 }
 //////////////////////////////////////////////////////////////////////////////
-void DNNEngineTestDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
+void DNNEngineBeeDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
 {
     _pNet->forward(mIn,mOut);
 }
 //////////////////////////////////////////////////////////////////////////////
-/*int DNNEngineTestDnn::classify(const MatrixFloat& mIn)
+/*int DNNEngineBeeDnn::classify(const MatrixFloat& mIn)
 {
     return _pNet->classify(mIn);
 }
 */
 //////////////////////////////////////////////////////////////////////////////
-void DNNEngineTestDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
+void DNNEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
 {
     TrainOption tOpt;
     tOpt.epochs=dto.epochs;
@@ -81,7 +81,7 @@ void DNNEngineTestDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloa
     _vdLoss.insert(end(_vdLoss),begin(l),end(l)); //temp
 }
 //////////////////////////////////////////////////////////////////////////////
-float DNNEngineTestDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)
+float DNNEngineBeeDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)
 {
     NetTrain netTrain;
     return netTrain.compute_loss(*_pNet,mSamples,mTruth);
