@@ -3,7 +3,6 @@
 
 class DNNEngine;
 
-
 #include "Matrix.h"
 
 #include <QMainWindow>
@@ -34,15 +33,9 @@ private slots:
     void on_cbEngine_currentTextChanged(const QString &arg1);
     void on_btnTrainMore_clicked();   
     void on_cbYLogAxis_stateChanged(int arg1);
-
     void on_buttonColor_clicked();
-
     void on_pushButton_2_clicked();
-
-
-
     void on_cbFunction_currentIndexChanged(int index);
-
     void on_cbConfMatPercent_stateChanged(int arg1);
 
 private:
@@ -64,11 +57,12 @@ private:
     unsigned int _curveColor;
     int _iInputSize;
 
-    MatrixFloat _mInputData;
-    MatrixFloat _mTruth;
-
-    MatrixFloat _mTestInputData;
+    MatrixFloat _mTrainData;
+    MatrixFloat _mTrainTruth;
+    MatrixFloat _mTestData;
     MatrixFloat _mTestTruth;
+    bool _bHasTestData;
+
     MatrixFloat _mConfusionMatrix;
 };
 

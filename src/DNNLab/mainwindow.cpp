@@ -98,6 +98,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     _curveColor=0xff0000; //red
 
+    _bHasTestData=false;
     set_input_size(1);
     _pEngine=new DNNEngineBeeDnn;
 }
@@ -139,9 +140,9 @@ void MainWindow::train_and_test(bool bReset)
         _pEngine->init();
 
     _pEngine->set_problem(ui->cbProblem->currentText()=="Classification");
-    DNNTrainResult dtr =_pEngine->learn(_mInputData,_mTruth,dto);
+    DNNTrainResult dtr =_pEngine->learn(_mTrainData,_mTrainTruth,dto);
 
-    double dLoss=_pEngine->compute_loss(_mInputData,_mTruth); //todo use last in loss vector?
+    double dLoss=_pEngine->compute_loss(_mTrainData,_mTrainTruth); //todo use last in loss vector?
     ui->leMSE->setText(QString::number(dLoss));
     ui->leComputedEpochs->setText(QString::number(dtr.computedEpochs));
     ui->leTimeByEpoch->setText(QString::number(dtr.epochDuration));
@@ -206,7 +207,7 @@ void MainWindow::drawRegression()
     for(unsigned int i=0;i<iNbPoint;i++)
     {
         mIn(0,0)=fVal;
-        vTruth.push_back((double)(_mTruth(i,0)));
+        vTruth.push_back((double)(_mTrainTruth(i,0)));
         vSamples.push_back((double)(fVal));
         _pEngine->predict(mIn,mOut);
 
@@ -247,69 +248,76 @@ void MainWindow::compute_truth()
 
     if(sFunction=="And")
     {
-        _mInputData.resize(4,2);
-        _mInputData(0,0)=0; _mInputData(0,1)=0;
-        _mInputData(1,0)=1; _mInputData(1,1)=0;
-        _mInputData(2,0)=0; _mInputData(2,1)=1;
-        _mInputData(3,0)=1; _mInputData(3,1)=1;
+        _mTrainData.resize(4,2);
+        _mTrainData(0,0)=0; _mTrainData(0,1)=0;
+        _mTrainData(1,0)=1; _mTrainData(1,1)=0;
+        _mTrainData(2,0)=0; _mTrainData(2,1)=1;
+        _mTrainData(3,0)=1; _mTrainData(3,1)=1;
 
-        _mTruth.resize(4,1);
-        _mTruth(0,0)=0;
-        _mTruth(1,0)=0;
-        _mTruth(2,0)=0;
-        _mTruth(3,0)=1;
+        _mTrainTruth.resize(4,1);
+        _mTrainTruth(0,0)=0;
+        _mTrainTruth(1,0)=0;
+        _mTrainTruth(2,0)=0;
+        _mTrainTruth(3,0)=1;
 
-        _mTestInputData=_mInputData;
-        _mTestTruth=_mTruth;
+        _mTestData=_mTrainData;
+        _mTestTruth=_mTrainTruth;
         set_input_size(2);
         return;
     }
 
     if(sFunction=="Xor")
     {
-        _mInputData.resize(4,2);
-        _mInputData(0,0)=0; _mInputData(0,1)=0;
-        _mInputData(1,0)=1; _mInputData(1,1)=0;
-        _mInputData(2,0)=0; _mInputData(2,1)=1;
-        _mInputData(3,0)=1; _mInputData(3,1)=1;
+        _mTrainData.resize(4,2);
+        _mTrainData(0,0)=0; _mTrainData(0,1)=0;
+        _mTrainData(1,0)=1; _mTrainData(1,1)=0;
+        _mTrainData(2,0)=0; _mTrainData(2,1)=1;
+        _mTrainData(3,0)=1; _mTrainData(3,1)=1;
 
-        _mTruth.resize(4,1);
-        _mTruth(0,0)=0;
-        _mTruth(1,0)=1;
-        _mTruth(2,0)=1;
-        _mTruth(3,0)=0;
+        _mTrainTruth.resize(4,1);
+        _mTrainTruth(0,0)=0;
+        _mTrainTruth(1,0)=1;
+        _mTrainTruth(2,0)=1;
+        _mTrainTruth(3,0)=0;
 
-        _mTestInputData=_mInputData;
-        _mTestTruth=_mTruth;
+        _mTestData=_mTrainData;
+        _mTestTruth=_mTrainTruth;
         set_input_size(2);
         return;
     }
 
     if(sFunction=="MNIST")
     {
-        if( (_mInputData.cols()!=784) || (_mInputData.rows()!=60000))
+        if( (_mTrainData.cols()!=784) || (_mTrainData.rows()!=60000))
         {
             MNISTReader r;
-            r.read_from_folder(".",_mInputData,_mTruth,_mTestInputData,_mTestTruth);
-            _mInputData/=256.f;
-            _mTestInputData/=256.f;
+            r.read_from_folder(".",_mTrainData,_mTrainTruth,_mTestData,_mTestTruth);
+            _mTrainData/=256.f;
+            _mTestData/=256.f;
         }
 
-        set_input_size(_mInputData.cols());
+        set_input_size(_mTrainData.cols());
         return;
     }
 
     if(sFunction=="TextFiles")
     {
-        _mInputData=fromFile("sample.txt");
-        _mTruth=fromFile("truth.txt");
-        _mInputData/=256.f;
+        _mTrainData=fromFile("train_data.txt");
+        _mTrainTruth=fromFile("train_truth.txt");
+        _mTrainData/=256.f;
 
-        _mTestInputData=_mInputData;
-        _mTestTruth=_mTruth;
+        _mTestData=fromFile("test_data.txt");
+        _mTestTruth=fromFile("test_truth.txt");
+        _mTestData/=256.f;
 
+        _bHasTestData=_mTestData.size()!=0;
+        if(!_bHasTestData) //if invalid/noexistent test_data, use train_data
+        {
+            _mTestData=_mTrainData;
+            _mTestTruth=_mTrainTruth;
+        }
 
-        set_input_size((int)_mInputData.cols());
+        set_input_size((int)_mTrainData.cols());
         return;
     }
 
@@ -319,8 +327,8 @@ void MainWindow::compute_truth()
     float dInputMax=ui->leInputMax->text().toFloat();
     float dStep=(dInputMax-dInputMin)/(iNbPoint-1.f);
 
-    _mTruth.resize(iNbPoint,1);
-    _mInputData.resize(iNbPoint,1);
+    _mTrainTruth.resize(iNbPoint,1);
+    _mTrainData.resize(iNbPoint,1);
     float dVal=dInputMin,dOut=0.f;
 
     for( int i=0;i<iNbPoint;i++)
@@ -358,12 +366,12 @@ void MainWindow::compute_truth()
         if(sFunction=="Rectangular")
             dOut= ((((int)dVal)+(dVal<0.f))+1) & 1 ;
 
-        _mInputData(i,0)=dVal;
-        _mTruth(i,0)=dOut;
+        _mTrainData(i,0)=dVal;
+        _mTrainTruth(i,0)=dOut;
         dVal+=dStep;
     }
-    _mTestInputData=_mInputData; //for now
-    _mTestTruth=_mTruth; //for now
+    _mTestData=_mTrainData; //for now
+    _mTestTruth=_mTrainTruth; //for now
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::resizeEvent( QResizeEvent *e )
@@ -489,13 +497,13 @@ void MainWindow::update_classification_tab()
 {
     if(_pEngine->problem()==false)
     { // not a classification problem
-        ui->twConfusionMatrix->clear();
+        ui->twConfusionMatrixTrain->clear();
         ui->leAccuracy->setText("n/a");
         return;
     }
 
     float fAccuracy=0.f;
-    _pEngine->compute_confusion_matrix(_mTestInputData,_mTestTruth,_mConfusionMatrix,fAccuracy);
+    _pEngine->compute_confusion_matrix(_mTestData,_mTestTruth,_mConfusionMatrix,fAccuracy);
     ui->leAccuracy->setText(to_string(fAccuracy).data());
 
     drawConfusionMatrix();
@@ -505,13 +513,13 @@ void MainWindow::drawConfusionMatrix()
 {
     if(_pEngine->problem()==false)
     { // not a classification problem
-        ui->twConfusionMatrix->clear();
+        ui->twConfusionMatrixTrain->clear();
         ui->leAccuracy->setText("n/a");
         return;
     }
 
-    ui->twConfusionMatrix->setColumnCount((int)_mConfusionMatrix.cols());
-    ui->twConfusionMatrix->setRowCount((int)_mConfusionMatrix.rows());
+    ui->twConfusionMatrixTrain->setColumnCount((int)_mConfusionMatrix.cols());
+    ui->twConfusionMatrixTrain->setRowCount((int)_mConfusionMatrix.rows());
 
     if(ui->cbConfMatPercent->isChecked())
     {
@@ -520,18 +528,18 @@ void MainWindow::drawConfusionMatrix()
 
         for(int c=0;c<_mConfusionMatrix.cols();c++)
             for(int r=0;r<_mConfusionMatrix.rows();r++)
-                ui->twConfusionMatrix->setItem(r,c,new QTableWidgetItem(QString::number((double)mConfMatPercent(r,c),'f',1)));
+                ui->twConfusionMatrixTrain->setItem(r,c,new QTableWidgetItem(QString::number((double)mConfMatPercent(r,c),'f',1)));
     }
     else
     {
         for(int c=0;c<_mConfusionMatrix.cols();c++)
             for(int r=0;r<_mConfusionMatrix.rows();r++)
-                ui->twConfusionMatrix->setItem(r,c,new QTableWidgetItem(to_string( (int)(_mConfusionMatrix(r,c))).data() ));
+                ui->twConfusionMatrixTrain->setItem(r,c,new QTableWidgetItem(to_string( (int)(_mConfusionMatrix(r,c))).data() ));
     }
 
     //colorize in yellow the diagonal
     for(int c=0;c<_mConfusionMatrix.cols();c++)
-        ui->twConfusionMatrix->item(c,c)->setBackgroundColor(Qt::yellow);
+        ui->twConfusionMatrixTrain->item(c,c)->setBackgroundColor(Qt::yellow);
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_cbFunction_currentIndexChanged(int index)
@@ -556,7 +564,6 @@ void MainWindow::on_cbFunction_currentIndexChanged(int index)
         set_input_size(784);
         return;
     }
-    set_input_size(1);
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_cbConfMatPercent_stateChanged(int arg1)

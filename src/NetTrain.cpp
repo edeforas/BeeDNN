@@ -40,7 +40,6 @@ vector<double> NetTrain::loss()
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruthLabel,const TrainOption& topt)
 {
-    //create a kronecker matrix, one line by sample
     bool bOutputIsLabel=net.layer(net.layers().size()-1)->out_size()==1;
     int iMax=(int)mTruthLabel.maxCoeff();
 
@@ -69,7 +68,7 @@ void NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTrut
 
     vector<MatrixFloat> inOut(nLayers+1);
     vector<MatrixFloat> inOutSum(nLayers+1);
-    vector<MatrixFloat> delta(nLayers+1);
+//    vector<MatrixFloat> delta(nLayers+1);
     vector<MatrixFloat> deltaSum(nLayers+1);
 
     vector<Optimizer*> optimizers(nLayers);
@@ -103,7 +102,7 @@ void NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTrut
             if(iBatchEnd>iNbSamples)
                 iBatchEnd=iNbSamples;
 
-            //init all layers inputs and error
+            //init all layers inputs sum and error sum
             for(int i=0;i<nLayers;i++)
                 inOutSum[i].setZero();
             for(int i=0;i<nLayers+1;i++)
@@ -115,13 +114,13 @@ void NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTrut
                 const MatrixFloat& mSample=mSamples.row(iIndexSample);
                 const MatrixFloat& mTarget=mTruth.row(iIndexSample);
 
-                //forward pass with store and add
+                //forward pass with store
                 inOut[0]=mSample;
                 for(int i=0;i<nLayers;i++)
                     net.layer(i)->forward(inOut[i],inOut[i+1]);
 
                 //add all layers inputs
-                for(int i=0;i<nLayers;i++)
+                for(int i=0;i<nLayers+1;i++)
                 {
                     if(inOutSum[i].size())
                         inOutSum[i]+=inOut[i];
@@ -130,11 +129,10 @@ void NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTrut
                 }
 
                 // add all errors
-                delta[nLayers]=inOut[nLayers]-mTarget;
                 if(deltaSum[nLayers].size())
-                    deltaSum[nLayers]+=delta[nLayers];
+                    deltaSum[nLayers]+=inOut[nLayers]-mTarget;
                 else
-                    deltaSum[nLayers]=delta[nLayers];
+                    deltaSum[nLayers]=inOut[nLayers]-mTarget;
             }
 
             //backward pass
