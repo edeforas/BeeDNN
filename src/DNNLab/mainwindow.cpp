@@ -94,8 +94,9 @@ MainWindow::MainWindow(QWidget *parent) :
     _qsLoss=new SimpleCurveWidget;
     _qsLoss->addXAxis();
     _qsLoss->addYAxis();
-    ui->layoutLossCurve->replaceWidget(ui->widgetToReplace,_qsLoss);
+  //  ui->gbFrameLoss->replaceWidget(ui->widgetToReplace,_qsLoss);
 
+    ui->layoutLossCurve->addWidget(_qsLoss);
     _curveColor=0xff0000; //red
 
     _bHasTestData=false;
@@ -142,8 +143,8 @@ void MainWindow::train_and_test(bool bReset)
     _pEngine->set_problem(ui->cbProblem->currentText()=="Classification");
     DNNTrainResult dtr =_pEngine->learn(_mTrainData,_mTrainTruth,dto);
 
-    double dLoss=_pEngine->compute_loss(_mTrainData,_mTrainTruth); //todo use last in loss vector?
-    ui->leMSE->setText(QString::number(dLoss));
+    float fLoss=_pEngine->compute_loss(_mTrainData,_mTrainTruth); //final loss
+    ui->leMSE->setText(QString::number(fLoss));
     ui->leComputedEpochs->setText(QString::number(dtr.computedEpochs));
     ui->leTimeByEpoch->setText(QString::number(dtr.epochDuration));
 
@@ -176,7 +177,7 @@ void MainWindow::drawRegression()
 {
     _qsRegression->clear();
 
-    if(_pEngine->problem()==true)
+    if(_pEngine->is_classification_problem()==true)
     {   //not a regression problem
         return;
     }
@@ -495,26 +496,36 @@ void MainWindow::set_input_size(int iSize)
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::update_classification_tab()
 {
-    if(_pEngine->problem()==false)
+    if(!_pEngine->is_classification_problem())
     { // not a classification problem
-        ui->twConfusionMatrixTrain->clear();
-        ui->leAccuracy->setText("n/a");
+        ui->twConfusionMatrixTrain->clearContents();
+        ui->leTrainAccuracy->setText("n/a");
+        ui->leTestAccuracy->setText("n/a");
         return;
     }
 
     float fAccuracy=0.f;
-    _pEngine->compute_confusion_matrix(_mTestData,_mTestTruth,_mConfusionMatrix,fAccuracy);
-    ui->leAccuracy->setText(to_string(fAccuracy).data());
+    if(_bHasTestData)
+    {
+        _pEngine->compute_confusion_matrix(_mTestData,_mTestTruth,_mConfusionMatrix,fAccuracy);
+        ui->leTestAccuracy->setText(QString::number(fAccuracy,'f',2));
+    }
+    else
+        ui->leTestAccuracy->setText("n/a");
 
-    drawConfusionMatrix();
+    _pEngine->compute_confusion_matrix(_mTrainData,_mTrainTruth,_mConfusionMatrix,fAccuracy);
+    ui->leTrainAccuracy->setText(QString::number(fAccuracy,'f',2));
+
+    drawConfusionMatrix(); //for now on train data
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::drawConfusionMatrix()
 {
-    if(_pEngine->problem()==false)
+    if(_pEngine->is_classification_problem()==false)
     { // not a classification problem
-        ui->twConfusionMatrixTrain->clear();
-        ui->leAccuracy->setText("n/a");
+        ui->twConfusionMatrixTrain->clearContents();
+        ui->leTrainAccuracy->setText("n/a");
+        ui->leTestAccuracy->setText("n/a");
         return;
     }
 

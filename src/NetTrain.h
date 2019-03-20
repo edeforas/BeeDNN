@@ -32,6 +32,22 @@ public:
     void(*epochCallBack)(); //called after an epoch
 };
 
+class TrainResult
+{
+public:
+    TrainResult()
+    { }
+
+    void reset()
+    {
+        loss.clear();
+        accuracy.clear();
+    }
+
+    vector<double> loss;
+    vector<double> accuracy; //todo
+};
+
 class Layer;
 class Net;
 
@@ -43,13 +59,8 @@ public:
 
     float compute_loss(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth);
 
-    void train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruthLabel,const TrainOption& topt);
-    void fit(Net& net, const MatrixFloat& mSamples, const MatrixFloat& mTruth, const TrainOption& topt);
-
-    vector<double> loss(); //temp
-
-protected:
-    vector<double> _vdLoss; //temp
+    TrainResult train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruthLabel,const TrainOption& topt);
+    TrainResult fit(Net& net, const MatrixFloat& mSamples, const MatrixFloat& mTruth, const TrainOption& topt);
 };
 
 #endif

@@ -55,6 +55,7 @@ public:
     int computedEpochs;
     double epochDuration; //in second
     vector<double> loss;
+    vector<double> accuracy;
 };
 
 class DNNTrainObserver
@@ -77,7 +78,7 @@ public:
     virtual void add_dropout_layer(int inSize,float fRatio) =0;
 
     void set_problem(bool bClassification);
-    bool problem();
+    bool is_classification_problem();
     virtual DNNTrainResult learn(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto);
 
     virtual void predict(const MatrixFloat& mIn, MatrixFloat& mOut)=0;
@@ -92,6 +93,7 @@ public:
 protected:	
     virtual void learn_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)=0;
     vector<double> _vdLoss; //temp
+    vector<double>_vdAccuracy; //temp
 
     int _bClassification;
     int _iComputedEpochs;

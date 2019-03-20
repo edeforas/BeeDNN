@@ -8,9 +8,9 @@ int main()
 {
     //contruct layer
     Net net;
-    net.add_dense_layer(2,3,false);
-    net.add_activation_layer("Relu");
-    net.add_dense_layer(3,1,false);
+    net.add_dense_layer(2,2,false);
+    net.add_activation_layer("Tanh");
+    net.add_dense_layer(2,1,false);
 
     //train data
     float dSamples[]={ 0,0 , 0,1 , 1,0 , 1,1 };
@@ -20,6 +20,8 @@ int main()
 
     //optimize
     TrainOption tOpt;
+    tOpt.epochs=500;
+    tOpt.learningRate=0.05f;
     NetTrain netFit;
     netFit.fit(net,mSamples,mTruth,tOpt);
 

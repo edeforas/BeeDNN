@@ -32,13 +32,8 @@ float NetTrain::compute_loss(const Net& net, const MatrixFloat &mSamples, const 
 
     return mError.sum()/iNbSamples;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////
-vector<double> NetTrain::loss()
-{
-    return _vdLoss;
-}
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruthLabel,const TrainOption& topt)
+TrainResult NetTrain::train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruthLabel,const TrainOption& topt)
 {
     bool bOutputIsLabel=net.layer(net.layers().size()-1)->out_size()==1;
     int iMax=(int)mTruthLabel.maxCoeff();
@@ -49,14 +44,15 @@ void NetTrain::train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTr
         mTruth.setZero();
         for(int i=0;i<mTruth.rows();i++)
             mTruth(i,(int)mTruthLabel(i,0))=1;
-        fit(net,mSamples,mTruth,topt);
+        return fit(net,mSamples,mTruth,topt);
     }
     else
-        fit(net,mSamples,mTruthLabel,topt);
+        return fit(net,mSamples,mTruthLabel,topt);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruth,const TrainOption& topt)
+TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruth,const TrainOption& topt)
 {
+    TrainResult tr;
     int iNbSamples=(int)mSamples.rows();
     int nLayers=(int)net.layers().size();
 
@@ -68,17 +64,17 @@ void NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTrut
 
     vector<MatrixFloat> inOut(nLayers+1);
     vector<MatrixFloat> inOutSum(nLayers+1);
-//    vector<MatrixFloat> delta(nLayers+1);
     vector<MatrixFloat> deltaSum(nLayers+1);
 
     vector<Optimizer*> optimizers(nLayers);
 
+    MatrixFloat mLoss;
     double dLoss=0.;
 
-    _vdLoss.clear();
+    tr.reset();
 
     if(nLayers==0)
-        return;
+        return tr;
 
     for (int i = 0; i < nLayers; i++)
     {
@@ -91,6 +87,8 @@ void NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTrut
 
     for(int iEpoch=0;iEpoch<topt.epochs;iEpoch++)
     {
+        dLoss=0.;
+
         MatrixFloat mShuffle=randPerm(iNbSamples);
         net.set_train_mode(true);
 
@@ -129,10 +127,12 @@ void NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTrut
                 }
 
                 // add all errors
+                mLoss=inOut[nLayers]-mTarget;
+                dLoss += mLoss.cwiseAbs2().sum(); //update loss
                 if(deltaSum[nLayers].size())
-                    deltaSum[nLayers]+=inOut[nLayers]-mTarget;
+                    deltaSum[nLayers]+=mLoss;
                 else
-                    deltaSum[nLayers]=inOut[nLayers]-mTarget;
+                    deltaSum[nLayers]=mLoss;
             }
 
             //backward pass
@@ -151,13 +151,16 @@ void NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTrut
         if (topt.epochCallBack)
             topt.epochCallBack();
 
-        if(topt.testEveryEpochs!=-1)
-            if( (iEpoch% topt.testEveryEpochs) == 0)
-                dLoss=(double)compute_loss(net,mSamples,mTruth);
-        _vdLoss.push_back(dLoss);
+//        if(topt.testEveryEpochs!=-1)
+ //           if( (iEpoch% topt.testEveryEpochs) == 0)
+  //              dLoss=(double)compute_loss(net,mSamples,mTruth);
+
+        tr.loss.push_back(dLoss/iNbSamples);
     }
 
     for (int i = 0; i < nLayers; i++)
         delete optimizers[i];
+
+    return tr;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////

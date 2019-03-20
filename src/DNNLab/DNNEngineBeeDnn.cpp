@@ -72,13 +72,13 @@ void DNNEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat
     tOpt.testEveryEpochs=dto.testEveryEpochs;
 
     NetTrain netTrain;
+    TrainResult tr;
     if(_bClassification)
-        netTrain.train(*_pNet,mSamples,mTruth,tOpt);
+        tr=netTrain.train(*_pNet,mSamples,mTruth,tOpt);
     else
-        netTrain.fit(*_pNet,mSamples,mTruth,tOpt);
+        tr=netTrain.fit(*_pNet,mSamples,mTruth,tOpt);
 
-    const auto& l=netTrain.loss();
-    _vdLoss.insert(end(_vdLoss),begin(l),end(l)); //temp
+    _vdLoss.insert(end(_vdLoss),begin(tr.loss),end(tr.loss));
 }
 //////////////////////////////////////////////////////////////////////////////
 float DNNEngineBeeDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)

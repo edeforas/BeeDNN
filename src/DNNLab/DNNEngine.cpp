@@ -34,6 +34,10 @@ DNNTrainResult DNNEngine::learn(const MatrixFloat& mSamples,const MatrixFloat& m
     r.computedEpochs=_iComputedEpochs;
 
     r.loss=_vdLoss;
+
+    if(_bClassification)
+        r.accuracy=_vdAccuracy;
+
     return r;
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -42,7 +46,7 @@ void DNNEngine::set_problem(bool bClassification)
     _bClassification=bClassification;
 }
 //////////////////////////////////////////////////////////////////////////////
-bool DNNEngine::problem()
+bool DNNEngine::is_classification_problem()
 {
     return _bClassification;
 }
