@@ -19,7 +19,7 @@ public:
         momentum=0.9f;
         testEveryEpochs=-1;
         optimizer = "Nesterov";
-		epochCallBack = nullptr;
+        epochCallBack = nullptr;
     }
 
     int  epochs;
@@ -29,7 +29,9 @@ public:
     float momentum;
     int testEveryEpochs; //set to 1 to test at each epoch, 10 to test only 1/10 of the time, etc, set to -1 for no test //todo remove
     string optimizer; //ex "SGD" "Momentum" Adam" "Adagrad" "Nesterov" "RMSProp"
-    void(*epochCallBack)(); //called after an epoch
+    std::function<void()> epochCallBack;
+
+    // void(*epochCallBack)(); //called after an epoch
 };
 
 class TrainResult
@@ -45,7 +47,8 @@ public:
     }
 
     vector<double> loss;
-    vector<double> accuracy; //todo
+    vector<double> accuracy;
+    vector<double> euclidian_distance;
 };
 
 class Layer;

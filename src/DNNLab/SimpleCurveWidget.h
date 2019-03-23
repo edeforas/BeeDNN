@@ -28,6 +28,8 @@ public:
     void clear();
 
     void addXAxis();
+    void addHorizontalLine(double dY);
+
     void addYAxis();
     void setYLogAxis(bool bSetLogAxis);
 
@@ -46,7 +48,11 @@ private:
     double yMinL,yMaxL;
 
     bool _bYLogAxis;
-    bool _bDrawXaxis,_bDrawYaxis;
+    //bool _bDrawXaxis;
+    bool _bDrawYaxis;
+
+    vector<double> _horizontalLines;
+
     QGraphicsScene _qs;
 };
 

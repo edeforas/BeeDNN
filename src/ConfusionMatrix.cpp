@@ -12,7 +12,11 @@ ClassificationResult ConfusionMatrix::compute(const MatrixFloat& mRef,const Matr
 
     for(unsigned int i=0;i<(unsigned int)mRef.rows();i++)
     {
-        cr.mConfMat((unsigned int)mRef(i),(unsigned int)(mTest(i)+0.5f))++;
+        //threshold label
+        int iLabel=(unsigned int)(mTest(i)+0.5f);
+        iLabel=std::min(iLabel,iNbClass-1);
+        iLabel=std::max(iLabel,0);
+        cr.mConfMat((unsigned int)mRef(i),iLabel)++;
     }
 
     MatrixFloat mDiag=cr.mConfMat.diagonal();

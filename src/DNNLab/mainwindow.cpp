@@ -94,9 +94,13 @@ MainWindow::MainWindow(QWidget *parent) :
     _qsLoss=new SimpleCurveWidget;
     _qsLoss->addXAxis();
     _qsLoss->addYAxis();
-  //  ui->gbFrameLoss->replaceWidget(ui->widgetToReplace,_qsLoss);
-
     ui->layoutLossCurve->addWidget(_qsLoss);
+
+    _qsAccuracy=new SimpleCurveWidget;
+    _qsAccuracy->addXAxis();
+    _qsAccuracy->addYAxis();
+    ui->layoutAccuracyCurve->addWidget(_qsAccuracy);
+
     _curveColor=0xff0000; //red
 
     _bHasTestData=false;
@@ -149,6 +153,8 @@ void MainWindow::train_and_test(bool bReset)
     ui->leTimeByEpoch->setText(QString::number(dtr.epochDuration));
 
     drawLoss(dtr.loss);
+    drawAccuracy(dtr.accuracy);
+
     drawRegression();
     update_classification_tab();
     update_details();
@@ -158,19 +164,44 @@ void MainWindow::train_and_test(bool bReset)
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::drawLoss(vector<double> vdLoss)
 {
-    bool bHoldOn=ui->cbHoldOn->isChecked();
-
-    if(!bHoldOn)
+    if(!ui->cbHoldOn->isChecked())
         _qsLoss->clear();
 
-    vector<double> x,loss;
+    vector<double> x;
     for(unsigned int i=0;i<vdLoss.size();i++)
-    {
         x.push_back(i);
-        loss.push_back(vdLoss[i]);
-    }
 
-    _qsLoss->addCurve(x,loss,_curveColor);
+    _qsLoss->addCurve(x,vdLoss,_curveColor);
+}
+//////////////////////////////////////////////////////////////////////////
+void MainWindow::drawAccuracy(vector<double> vdAccuracy)
+{
+    if(!ui->cbHoldOn->isChecked())
+        _qsAccuracy->clear();
+
+    if(_pEngine->is_classification_problem())
+    {
+        ui->gbTrainAccuracy->setTitle("Train accuracy");
+
+        // add 0%, 25% , 50%, 100%
+        _qsAccuracy->addHorizontalLine(0.);
+        _qsAccuracy->addHorizontalLine(25.);
+        _qsAccuracy->addHorizontalLine(50.);
+        _qsAccuracy->addHorizontalLine(75.);
+        _qsAccuracy->addHorizontalLine(100.);
+
+        //draw accuracy
+        vector<double> x;
+        for(unsigned int i=0;i<vdAccuracy.size();i++)
+            x.push_back(i);
+
+        _qsAccuracy->addCurve(x,vdAccuracy,_curveColor);
+    }
+    else
+    {
+        //draw euclidian distance
+        ui->gbTrainAccuracy->setTitle("Train Euclidian distance");
+    }
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::drawRegression()
@@ -485,6 +516,7 @@ void MainWindow::on_buttonColor_clicked()
 void MainWindow::on_pushButton_2_clicked()
 {
     _qsLoss->clear();
+    _qsAccuracy->clear();
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::set_input_size(int iSize)

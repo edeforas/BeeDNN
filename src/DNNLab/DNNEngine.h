@@ -93,7 +93,7 @@ public:
 protected:	
     virtual void learn_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)=0;
     vector<double> _vdLoss; //temp
-    vector<double>_vdAccuracy; //temp
+    vector<double> _vdAccuracy; //temp
 
     int _bClassification;
     int _iComputedEpochs;

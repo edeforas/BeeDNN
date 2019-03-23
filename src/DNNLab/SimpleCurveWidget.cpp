@@ -23,7 +23,7 @@ SimpleCurveWidget::SimpleCurveWidget(): QGraphicsView()
     yMin=0;
     yMax=0;
 
-    _bDrawXaxis=true;
+    //_bDrawXaxis=true;
     _bDrawYaxis=true;
     _bYLogAxis=false;
 }
@@ -89,7 +89,7 @@ void SimpleCurveWidget::wheelEvent(QWheelEvent* event)
 //////////////////////////////////////////////////////////////////////////
 void SimpleCurveWidget::addXAxis()
 {   
-    _bDrawXaxis=true;
+    _horizontalLines.push_back(0.);
     replot_axis();
 }
 //////////////////////////////////////////////////////////////////////////
@@ -135,6 +135,16 @@ void SimpleCurveWidget::compute_bounding_box()
             yMax=_vCurves[i].yMax;
     }
 
+    //compute range with horizonal lines
+    for(int i=0;i<_horizontalLines.size();i++)
+    {
+        if(_horizontalLines[i]<yMin)
+            yMin=_horizontalLines[i];
+
+        if(_horizontalLines[i]>yMax)
+            yMax=_horizontalLines[i];
+    }
+
     yMinL=log10(max(yMin,1.e-8));
     yMaxL=log10(max(yMax,1.e-8));
 }
@@ -149,6 +159,7 @@ void SimpleCurveWidget::clear()
 {
     _qs.clear();
     _vCurves.clear();
+    _horizontalLines.clear();
     compute_bounding_box();
 }
 //////////////////////////////////////////////////////////////////////////
@@ -192,12 +203,13 @@ void SimpleCurveWidget::replot_curve(int iCurve)
 }
 //////////////////////////////////////////////////////////////////////////
 void SimpleCurveWidget::replot_axis()
-{
-    if(_bDrawXaxis)
+{  
+    for(int i=0;i<_horizontalLines.size();i++)
     {
         QPen penBlack(Qt::black);
         penBlack.setCosmetic(true);
-        _qs.addLine(xMin,0.,xMax,0.,penBlack);
+        double dY=_horizontalLines[i];
+        _qs.addLine(xMin,-dY,xMax,-dY,penBlack);
     }
 
     if(_bDrawYaxis)
@@ -205,9 +217,16 @@ void SimpleCurveWidget::replot_axis()
         QPen penBlack(Qt::black);
         penBlack.setCosmetic(true);
         if(_bYLogAxis)
-            _qs.addLine(0.,-yMaxL,0.,yMinL ,penBlack);
+            _qs.addLine(0.,-yMaxL,0.,-yMinL ,penBlack);
         else
-            _qs.addLine(0.,-yMax ,0.,yMin,penBlack);
+            _qs.addLine(0.,-yMax ,0.,-yMin,penBlack);
     }
 }
 //////////////////////////////////////////////////////////////////////////
+void SimpleCurveWidget::addHorizontalLine(double dY)
+{
+    _horizontalLines.push_back(dY);
+    compute_bounding_box();
+}
+//////////////////////////////////////////////////////////////////////////
+

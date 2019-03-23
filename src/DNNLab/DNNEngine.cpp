@@ -18,6 +18,7 @@ DNNEngine::~DNNEngine()
 void DNNEngine::init()
 {
     _vdLoss.clear();
+    _vdAccuracy.clear();
     _iComputedEpochs=0;
 }
 //////////////////////////////////////////////////////////////////////////////

@@ -62,26 +62,46 @@ void DNNEngineBeeDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
 void DNNEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
 {
     TrainOption tOpt;
+    TrainResult tr;
+    NetTrain netTrain;
+    float fAccuracy=0.f;
+    vector<double> vdAccuracy;
+
+    int iEpoch=0;
     tOpt.epochs=dto.epochs;
     tOpt.learningRate=dto.learningRate;
     tOpt.batchSize=dto.batchSize;
     tOpt.optimizer=dto.optimizer;
     tOpt.decay=dto.decay;
     tOpt.momentum=dto.momentum;
-    //tOpt.observer=nullptr;//dto.observer;
     tOpt.testEveryEpochs=dto.testEveryEpochs;
+    tOpt.epochCallBack= [&]()
+    {
+        iEpoch++;
+        if(_bClassification)
+        {
+            if( (iEpoch % tOpt.testEveryEpochs )==0)
+            {
+                MatrixFloat mConf;
+                compute_confusion_matrix(mSamples, mTruth, mConf, fAccuracy);
+            }
+            vdAccuracy.push_back(fAccuracy);
+        }
+    };
 
-    NetTrain netTrain;
-    TrainResult tr;
     if(_bClassification)
+    {
         tr=netTrain.train(*_pNet,mSamples,mTruth,tOpt);
+        tr.accuracy=vdAccuracy;
+    }
     else
         tr=netTrain.fit(*_pNet,mSamples,mTruth,tOpt);
 
     _vdLoss.insert(end(_vdLoss),begin(tr.loss),end(tr.loss));
+    _vdAccuracy.insert(end(_vdAccuracy),begin(tr.accuracy),end(tr.accuracy));
 }
 //////////////////////////////////////////////////////////////////////////////
-float DNNEngineBeeDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)
+float DNNEngineBeeDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth) //compute final loss
 {
     NetTrain netTrain;
     return netTrain.compute_loss(*_pNet,mSamples,mTruth);

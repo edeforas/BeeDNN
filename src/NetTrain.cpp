@@ -35,6 +35,9 @@ float NetTrain::compute_loss(const Net& net, const MatrixFloat &mSamples, const 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 TrainResult NetTrain::train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruthLabel,const TrainOption& topt)
 {
+    if(net.layers().size()==0)
+        return TrainResult(); //nothing to do
+
     bool bOutputIsLabel=net.layer(net.layers().size()-1)->out_size()==1;
     int iMax=(int)mTruthLabel.maxCoeff();
 
@@ -148,14 +151,10 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
 
         net.set_train_mode(false);
 
+        tr.loss.push_back(dLoss/iNbSamples);
+
         if (topt.epochCallBack)
             topt.epochCallBack();
-
-//        if(topt.testEveryEpochs!=-1)
- //           if( (iEpoch% topt.testEveryEpochs) == 0)
-  //              dLoss=(double)compute_loss(net,mSamples,mTruth);
-
-        tr.loss.push_back(dLoss/iNbSamples);
     }
 
     for (int i = 0; i < nLayers; i++)

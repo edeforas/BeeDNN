@@ -40,6 +40,8 @@ private slots:
 
 private:
     void drawLoss(vector<double> vdLoss);
+    void drawAccuracy(vector<double> vdAccuracy);
+
     void drawRegression();
     void update_classification_tab();
     void drawConfusionMatrix();
@@ -54,6 +56,7 @@ private:
     DNNEngine* _pEngine;
     SimpleCurveWidget* _qsRegression;
     SimpleCurveWidget* _qsLoss;
+    SimpleCurveWidget* _qsAccuracy;
     unsigned int _curveColor;
     int _iInputSize;
 
