@@ -277,6 +277,7 @@ void MainWindow::compute_truth()
     //function not optimized but not mandatory for now
 
     string sFunction=ui->cbFunction->currentText().toStdString();
+    _bHasTestData=false;
 
     if(sFunction=="And")
     {
@@ -328,6 +329,7 @@ void MainWindow::compute_truth()
             _mTestData/=256.f;
         }
 
+        _bHasTestData=true;
         set_input_size(_mTrainData.cols());
         return;
     }

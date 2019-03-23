@@ -1,7 +1,9 @@
+#include <algorithm>
 #include <cassert>
 #include <cstdlib>
 #include <sstream>
 #include <fstream>
+#include <random>
 #include <vector>
 #include <iomanip>
 
@@ -59,14 +61,7 @@ MatrixFloat randPerm(int iSize) //create a vector of index shuffled
     for(int i=0;i<iSize;i++)
         m(i,0)=(float)i;
 
-    //now bubble shuffle
-    for(int i=0;i<iSize;i++)
-    {
-        int iNewPos=(int)(rand()%iSize);
-        float dVal=m(iNewPos,0); //todo, templatize
-        m(iNewPos,0)=m(i,0);
-        m(i,0)=(float)dVal;
-    }
+    std::shuffle(m.data(),m.data()+m.size(), std::default_random_engine());
 
     return m;
 }
