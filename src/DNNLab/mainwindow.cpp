@@ -154,7 +154,6 @@ void MainWindow::train_and_test(bool bReset)
 
     drawLoss(dtr.loss);
     drawAccuracy(dtr.accuracy);
-
     drawRegression();
     update_classification_tab();
     update_details();
@@ -171,6 +170,7 @@ void MainWindow::drawLoss(vector<double> vdLoss)
     for(unsigned int i=0;i<vdLoss.size();i++)
         x.push_back(i);
 
+    _qsLoss->addHorizontalLine(0.);
     _qsLoss->addCurve(x,vdLoss,_curveColor);
 }
 //////////////////////////////////////////////////////////////////////////

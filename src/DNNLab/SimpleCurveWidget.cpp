@@ -5,6 +5,7 @@
 #include <QWheelEvent>
 #include <QGraphicsSceneWheelEvent>
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 
@@ -225,6 +226,9 @@ void SimpleCurveWidget::replot_axis()
 //////////////////////////////////////////////////////////////////////////
 void SimpleCurveWidget::addHorizontalLine(double dY)
 {
+    if(std::find(_horizontalLines.begin(),_horizontalLines.end(),dY)!=_horizontalLines.end())
+        return;
+
     _horizontalLines.push_back(dY);
     compute_bounding_box();
 }
