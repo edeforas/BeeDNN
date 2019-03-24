@@ -101,9 +101,11 @@ void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat&
     _vdAccuracy.insert(end(_vdAccuracy),begin(tr.accuracy),end(tr.accuracy));
 }
 //////////////////////////////////////////////////////////////////////////////
+/*
 float MLEngineBeeDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth) //compute final loss
 {
     NetTrain netTrain;
     return netTrain.compute_loss(*_pNet,mSamples,mTruth);
 }
+*/
 //////////////////////////////////////////////////////////////////////////////

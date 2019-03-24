@@ -89,3 +89,13 @@ void MLEngine::classify_all(const MatrixFloat & mSamples, MatrixFloat& mResultLa
     }
 }
 //////////////////////////////////////////////////////////////////////////////
+float MLEngine::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)
+{
+    MatrixFloat mPredicted;
+    int iNbSamples=(int)mSamples.rows();
+
+    predict_all(mSamples,mPredicted);
+    return (mPredicted-mTruth).cwiseAbs2().sum()/iNbSamples;
+}
+//////////////////////////////////////////////////////////////////////////////
+

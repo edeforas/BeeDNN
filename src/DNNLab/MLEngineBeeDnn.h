@@ -22,7 +22,7 @@ public:
 
     virtual void predict(const MatrixFloat& mIn, MatrixFloat& mOut) override;
 
-    virtual float compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth) override;
+ //   virtual float compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth) override;
 
 private:
     Net* _pNet;
