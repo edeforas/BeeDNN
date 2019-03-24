@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-class DNNEngine;
+class MLEngine;
 
 #include "Matrix.h"
 
@@ -53,7 +53,7 @@ private:
 
     Ui::MainWindow *ui;
 
-    DNNEngine* _pEngine;
+    MLEngine* _pEngine;
     SimpleCurveWidget* _qsRegression;
     SimpleCurveWidget* _qsLoss;
     SimpleCurveWidget* _qsAccuracy;

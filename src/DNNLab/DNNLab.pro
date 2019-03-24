@@ -17,8 +17,8 @@ INCLUDEPATH += $$(EIGEN_PATH)
 #tiny-dnn (optional)
 DEFINES+= "USE_TINYDNN"
 INCLUDEPATH += $$(TINY_DNN_PATH)
-SOURCES += DNNEngineTinyDnn.cpp
-HEADERS +=DNNEngineTinyDnn.h
+SOURCES += MLEngineTinyDnn.cpp
+HEADERS +=MLEngineTinyDnn.h
 
 
 #net library
@@ -57,12 +57,12 @@ SOURCES += \
     main.cpp\
     mainwindow.cpp \
     SimpleCurveWidget.cpp \
-    DNNEngineBeeDnn.cpp \
-    DNNEngine.cpp
+    MLEngineBeeDnn.cpp \
+    MLEngine.cpp
 HEADERS  += \
     mainwindow.h \
     SimpleCurveWidget.h \
-    DNNEngine.h \
-    DNNEngineBeeDnn.h
+    MLEngine.h \
+    MLEngineBeeDnn.h
 FORMS    += mainwindow.ui
 

@@ -1,4 +1,4 @@
-#include "DNNEngine.h"
+#include "MLEngine.h"
 
 #include "ConfusionMatrix.h"
 
@@ -6,23 +6,23 @@
 #include <string>
 
 //////////////////////////////////////////////////////////////////////////////
-DNNEngine::DNNEngine()
+MLEngine::MLEngine()
 {
     _iComputedEpochs=0;
     _bClassification=true;
 }
 //////////////////////////////////////////////////////////////////////////////
-DNNEngine::~DNNEngine()
+MLEngine::~MLEngine()
 { }
 //////////////////////////////////////////////////////////////////////////////
-void DNNEngine::init()
+void MLEngine::init()
 {
     _vdLoss.clear();
     _vdAccuracy.clear();
     _iComputedEpochs=0;
 }
 //////////////////////////////////////////////////////////////////////////////
-DNNTrainResult DNNEngine::learn(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
+DNNTrainResult MLEngine::learn(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
 {
     DNNTrainResult r;
 
@@ -42,17 +42,17 @@ DNNTrainResult DNNEngine::learn(const MatrixFloat& mSamples,const MatrixFloat& m
     return r;
 }
 //////////////////////////////////////////////////////////////////////////////
-void DNNEngine::set_problem(bool bClassification)
+void MLEngine::set_problem(bool bClassification)
 {
     _bClassification=bClassification;
 }
 //////////////////////////////////////////////////////////////////////////////
-bool DNNEngine::is_classification_problem()
+bool MLEngine::is_classification_problem()
 {
     return _bClassification;
 }
 //////////////////////////////////////////////////////////////////////////////
-void DNNEngine::compute_confusion_matrix(const MatrixFloat & mSamples, const MatrixFloat& mTruth,MatrixFloat& mConfusionMatrix, float& fAccuracy)
+void MLEngine::compute_confusion_matrix(const MatrixFloat & mSamples, const MatrixFloat& mTruth,MatrixFloat& mConfusionMatrix, float& fAccuracy)
 {
     MatrixFloat mTest;
     classify_all(mSamples,mTest);
@@ -63,7 +63,7 @@ void DNNEngine::compute_confusion_matrix(const MatrixFloat & mSamples, const Mat
     fAccuracy=(float)result.accuracy;
 }
 //////////////////////////////////////////////////////////////////////////////
-void DNNEngine::predict_all(const MatrixFloat & mSamples, MatrixFloat& mResult)
+void MLEngine::predict_all(const MatrixFloat & mSamples, MatrixFloat& mResult)
 {
     MatrixFloat temp;
     for(int i=0;i<mSamples.rows();i++)
@@ -75,7 +75,7 @@ void DNNEngine::predict_all(const MatrixFloat & mSamples, MatrixFloat& mResult)
     }
 }
 //////////////////////////////////////////////////////////////////////////////
-void DNNEngine::classify_all(const MatrixFloat & mSamples, MatrixFloat& mResultLabel)
+void MLEngine::classify_all(const MatrixFloat & mSamples, MatrixFloat& mResultLabel)
 {
     MatrixFloat temp;
     mResultLabel.resize(mSamples.rows(),1);

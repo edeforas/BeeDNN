@@ -1,4 +1,4 @@
-#include "DNNEngineTinyDnn.h"
+#include "MLEngineTinyDnn.h"
 
 #include "tiny_dnn/tiny_dnn.h"
 
@@ -109,7 +109,7 @@ void DNNEngineTinyDnn::clear()
 void DNNEngineTinyDnn::init()
 {
     _pNet->init_weight();
-    DNNEngine::init();
+    MLEngine::init();
 }
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTinyDnn::add_dense_layer(int inSize, int outSize, bool bWithBias)

@@ -4,12 +4,12 @@
 #include <QColorDialog>
 #include "SimpleCurveWidget.h"
 
-#include "DNNEngine.h"
-#include "DNNEngineBeeDnn.h"
+#include "MLEngine.h"
+#include "MLEngineBeeDnn.h"
 #include "MNISTReader.h"
 
 #ifdef USE_TINYDNN
-#include "DNNEngineTinyDnn.h"
+#include "MLEngineTinyDnn.h"
 #endif
 
 #include "Activation.h"
@@ -105,7 +105,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     _bHasTestData=false;
     set_input_size(1);
-    _pEngine=new DNNEngineBeeDnn;
+    _pEngine=new MLEngineBeeDnn;
 }
 //////////////////////////////////////////////////////////////////////////
 MainWindow::~MainWindow()
@@ -435,7 +435,7 @@ void MainWindow::on_cbEngine_currentTextChanged(const QString &arg1)
     _pEngine=nullptr;
 
     if(arg1=="BeeDNN")
-        _pEngine=new DNNEngineBeeDnn;
+        _pEngine=new MLEngineBeeDnn;
 
 #ifdef USE_TINYDNN
     if(arg1=="tiny-dnn")

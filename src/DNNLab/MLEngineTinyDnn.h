@@ -1,7 +1,7 @@
 #ifndef DNNEngineTinyDnn_
 #define DNNEngineTinyDnn_
 
-#include "DNNEngine.h"
+#include "MLEngine.h"
 
 // forward declaration of tiny_dnn
 namespace tiny_dnn {
@@ -10,7 +10,7 @@ class network;
 class sequential;
 }
 
-class DNNEngineTinyDnn : public DNNEngine
+class DNNEngineTinyDnn : public MLEngine
 {
 public:
     DNNEngineTinyDnn();

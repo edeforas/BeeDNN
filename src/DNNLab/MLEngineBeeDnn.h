@@ -1,15 +1,15 @@
 #ifndef DNNEngineBeeDnn_
 #define DNNEngineBeeDnn_
 
-#include "DNNEngine.h"
+#include "MLEngine.h"
 
 class Net;
 
-class DNNEngineBeeDnn : public DNNEngine
+class MLEngineBeeDnn : public MLEngine
 {
 public:
-    DNNEngineBeeDnn();
-    virtual ~DNNEngineBeeDnn();
+    MLEngineBeeDnn();
+    virtual ~MLEngineBeeDnn();
     virtual string to_string() override;
 
     virtual void clear() override;
