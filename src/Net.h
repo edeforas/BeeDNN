@@ -17,7 +17,7 @@ public:
 	void clear();
 	void init();
 
-    void add_dense_layer(int inSize, int outSize, bool bHasBias);
+    void add_dense_layer(int inSize, int outSize, bool bHasBias=true);
 	void add_activation_layer(string sType);
     void add_dropout_layer(int iSize, float fRatio);
 

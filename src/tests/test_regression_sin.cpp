@@ -10,16 +10,16 @@ int main()
 {
     //build net
     Net net;
-    net.add_dense_layer(1,10,true);
-    net.add_activation_layer("Tanh");
-    net.add_dense_layer(10,1,true);
+    net.add_dense_layer(1,100,true);
+    net.add_activation_layer("Relu");
+    net.add_dense_layer(100,1,true);
 
     //set train data
-    MatrixFloat mTruth(64,1);
-    MatrixFloat mSamples(64,1);
-    for(int i=0;i<64;i++)
+    MatrixFloat mTruth(128,1);
+    MatrixFloat mSamples(128,1);
+    for(int i=0;i<128;i++)
     {
-        float x=i/10.f;
+        float x=i/100.f;
         mTruth(i,0)=sin(x);
         mSamples(i,0)=x;
     }
@@ -27,12 +27,12 @@ int main()
     //learn
     cout << "Learning..." << endl;
     TrainOption tOpt;
-    NetTrain netfit;
+	NetTrain netfit;
     netfit.fit(net,mSamples,mTruth,tOpt);
 
-    //show results
+    //show some results
     MatrixFloat mOnePredict(1,1), mOneSample(1,1), mOneTruth(1,1);
-    for(int i=0;i<mSamples.size();i+=4) //show 16 samples
+    for(int i=0;i<mSamples.size();i+=8)
     {
         mOneSample(0,0)=mSamples(i,0);
         mOneTruth(0,0)=mTruth(i,0);
