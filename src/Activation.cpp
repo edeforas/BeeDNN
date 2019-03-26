@@ -116,6 +116,25 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+class ActivationBent: public Activation
+{
+public:
+    string name() const override
+    {
+        return "Bent";
+    }
+
+    float apply(float x) const override
+    {
+        return (sqrtf(x*x+1.f)-1.f)*0.5f+x;
+    }
+
+    float derivation(float x) const override
+    {
+        return x/(2.f*sqrtf(x*x+1.f))+1.f;
+    }
+};
+//////////////////////////////////////////////////////////////////////////////
 class ActivationGauss: public Activation
 {
 public:
@@ -452,47 +471,38 @@ public:
 //////////////////////////////////////////////////////////////////////////////
 Activation* get_activation(const string& sActivation)
 {
-    if(sActivation=="Tanh")
-        return new ActivationTanh;
-
     if(sActivation=="Asinh")
         return new ActivationAsinh;
-
-    if(sActivation=="Sin")
-        return new ActivationSin;
-
-    if(sActivation=="SinC")
-        return new ActivationSinC;
-
-    if(sActivation=="Sigmoid")
-        return new ActivationSigmoid;
-
-    if(sActivation=="HardSigmoid")
-        return new ActivationHardSigmoid;
-
-    if(sActivation=="Swish")
-        return new ActivationSwish;
-
-    if(sActivation=="Relu")
-        return new ActivationRelu;
-
-    if(sActivation=="Linear")
-        return new ActivationLinear;
 
     if(sActivation=="Atan")
         return new ActivationAtan;
 
+    if(sActivation=="Bent")
+        return new ActivationBent;
+
     if(sActivation=="Elliot")
         return new ActivationElliot;
+
+    if(sActivation=="Elu")
+        return new ActivationElu;
+
+    if(sActivation=="HardSigmoid")
+        return new ActivationHardSigmoid;
 
     if(sActivation=="Gauss")
         return new ActivationGauss;
 
+    if(sActivation=="Linear")
+        return new ActivationLinear;
+
     if(sActivation=="LeakyRelu")
         return new ActivationLeakyRelu;
 
-    if(sActivation=="Elu")
-        return new ActivationElu;
+    if(sActivation=="Parablu")
+        return new ActivationParablu;
+
+    if(sActivation=="Relu")
+        return new ActivationRelu;
 
     if(sActivation=="Selu")
         return new ActivationSelu;
@@ -503,11 +513,23 @@ Activation* get_activation(const string& sActivation)
     if(sActivation=="SoftPlus")
         return new ActivationSoftPlus;
 
-    if(sActivation=="Parablu")
-        return new ActivationParablu;
+    if(sActivation=="Sin")
+        return new ActivationSin;
+
+    if(sActivation=="SinC")
+        return new ActivationSinC;
+
+    if(sActivation=="Sigmoid")
+        return new ActivationSigmoid;
+
+    if(sActivation=="Swish")
+        return new ActivationSwish;
 
     if(sActivation=="SoftSign")
         return new ActivationSoftSign;
+
+    if(sActivation=="Tanh")
+        return new ActivationTanh;
 
     return nullptr;
 }
@@ -518,6 +540,7 @@ void list_activations_available(vector<string>& vsActivations)
 
     vsActivations.push_back("Asinh");
     vsActivations.push_back("Atan");
+    vsActivations.push_back("Bent"); //not under tiny-dnn
     vsActivations.push_back("Elliot");
     vsActivations.push_back("Elu");
     vsActivations.push_back("Gauss");
