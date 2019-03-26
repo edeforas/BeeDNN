@@ -305,6 +305,37 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+// hard sigmoid as in: https://github.com/Theano/Theano/blob/master/theano/tensor/nnet/sigm.py#L277
+class ActivationHardSigmoid: public Activation
+{
+public:
+    string name() const override
+    {
+        return "HardSigmoid";
+    }
+
+    float apply(float x) const override
+    {
+        if(x>2.5f)
+            return 1.f;
+
+        if(x<-2.5f)
+            return -1.f;
+
+        return 0.2f*x+0.5f;
+    }
+    float derivation(float x) const override
+    {
+        if(x>2.5f)
+            return 0.f;
+
+        if(x<-2.5f)
+            return 0.f;
+
+        return 0.2f;
+    }
+};
+//////////////////////////////////////////////////////////////////////////////
 class ActivationTanh: public Activation
 {
 public:
@@ -436,6 +467,9 @@ Activation* get_activation(const string& sActivation)
     if(sActivation=="Sigmoid")
         return new ActivationSigmoid;
 
+    if(sActivation=="HardSigmoid")
+        return new ActivationHardSigmoid;
+
     if(sActivation=="Swish")
         return new ActivationSwish;
 
@@ -482,24 +516,24 @@ void list_activations_available(vector<string>& vsActivations)
 {
     vsActivations.clear();
 
-    vsActivations.push_back("Tanh");
-    //  vsActivations.push_back("TanhP1M2");
     vsActivations.push_back("Asinh");
-    vsActivations.push_back("Sin");
-    vsActivations.push_back("SinC");  //not under tiny-dnn
-    vsActivations.push_back("Sigmoid");
-    vsActivations.push_back("Swish"); //not under tiny-dnn
-    vsActivations.push_back("Relu");
-    vsActivations.push_back("Linear");
     vsActivations.push_back("Atan");
     vsActivations.push_back("Elliot");
-    vsActivations.push_back("Gauss");
-    vsActivations.push_back("LeakyRelu");
     vsActivations.push_back("Elu");
-    vsActivations.push_back("Selu");
-    vsActivations.push_back("SQNL");  //not under tiny-dnn
-    vsActivations.push_back("SoftPlus");
+    vsActivations.push_back("Gauss");
+    vsActivations.push_back("HardSigmoid");
+    vsActivations.push_back("Linear");
+    vsActivations.push_back("LeakyRelu");
     vsActivations.push_back("Parablu"); //not under tiny-dnn
+    vsActivations.push_back("Relu");
+    vsActivations.push_back("Selu");
+    vsActivations.push_back("SoftPlus");
     vsActivations.push_back("SoftSign");
+    vsActivations.push_back("SQNL");  //not under tiny-dnn
+    vsActivations.push_back("Sigmoid");
+    vsActivations.push_back("SinC");  //not under tiny-dnn
+    vsActivations.push_back("Sin");
+    vsActivations.push_back("Swish"); //not under tiny-dnn
+    vsActivations.push_back("Tanh");
 }
 //////////////////////////////////////////////////////////////////////////////
