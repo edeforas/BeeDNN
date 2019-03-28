@@ -14,6 +14,11 @@ LayerActivation::~LayerActivation()
 	delete _pActivation;
 }
 ///////////////////////////////////////////////////////////////////////////////
+Layer* LayerActivation::clone()
+{
+    return new LayerActivation(_pActivation->name());
+}
+///////////////////////////////////////////////////////////////////////////////
 void LayerActivation::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 {
     mOut.resize(mIn.rows(),mIn.cols());

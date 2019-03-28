@@ -28,7 +28,7 @@ int main()
     cout << "Learning..." << endl;
     TrainOption tOpt;
 	NetTrain netfit;
-    netfit.fit(net,mSamples,mTruth,tOpt);
+	netfit.fit(net,mSamples,mTruth,tOpt);
 
     //show some results
     MatrixFloat mOnePredict(1,1), mOneSample(1,1), mOneTruth(1,1);

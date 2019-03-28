@@ -31,6 +31,17 @@ void Net::clear()
     _layers.clear();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
+Net& Net::operator=(const Net& other)
+{
+    _bTrainMode=other._bTrainMode;
+    clear();
+
+    for(int i=0;i<other._layers.size();i++)
+        _layers.push_back(other._layers[i]->clone());
+
+    return *this;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_dropout_layer(int iSize,float fRatio)
 {
      _layers.push_back(new LayerDropout(iSize, fRatio));

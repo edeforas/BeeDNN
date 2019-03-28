@@ -17,6 +17,13 @@ LayerDense::LayerDense(int iInSize, int iOutSize, bool bHasBias) :
 LayerDense::~LayerDense()
 { }
 ///////////////////////////////////////////////////////////////////////////////
+Layer* LayerDense::clone()
+{
+    LayerDense* pLayer=new LayerDense(_iInSize,_iOutSize,_bHasBias);
+    pLayer->_weight=_weight;
+    return pLayer;
+}
+///////////////////////////////////////////////////////////////////////////////
 void LayerDense::init()
 {
     //Xavier uniform initialization

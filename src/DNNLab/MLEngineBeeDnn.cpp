@@ -71,6 +71,7 @@ void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat&
     tOpt.epochs=dto.epochs;
     tOpt.learningRate=dto.learningRate;
     tOpt.batchSize=dto.batchSize;
+    tOpt.keepBest=dto.keepBest;
     tOpt.optimizer=dto.optimizer;
     tOpt.decay=dto.decay;
     tOpt.momentum=dto.momentum;

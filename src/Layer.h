@@ -14,6 +14,8 @@ public:
     Layer(int iInSize, int iOutSize,const string& sType);
     virtual ~Layer();
 
+    virtual Layer* clone()=0;
+
     string type() const;
     int in_size() const;
     int out_size() const;

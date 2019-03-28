@@ -14,7 +14,9 @@ class LayerActivation : public Layer
 public:
     LayerActivation(const string& sActivation);
     virtual ~LayerActivation() override;
-	
+
+    virtual Layer* clone() override;
+
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) const override;
 	
     virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, Optimizer* pOptim, MatrixFloat &mNewDelta) override;

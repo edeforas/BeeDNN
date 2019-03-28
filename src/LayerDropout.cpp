@@ -11,6 +11,11 @@ LayerDropout::LayerDropout(int iSize,float fRate):
 LayerDropout::~LayerDropout()
 { }
 ///////////////////////////////////////////////////////////////////////////////
+Layer* LayerDropout::clone()
+{
+    return new LayerDropout(_iInSize,_fRate);
+}
+///////////////////////////////////////////////////////////////////////////////
 void LayerDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 {
     if(_bTrainMode)

@@ -10,6 +10,8 @@ public:
     LayerDense(int iInSize,int iOutSize,bool bHasBias);
     virtual ~LayerDense();
 	
+    virtual Layer* clone() override;
+
     virtual void forward(const MatrixFloat& mMatin, MatrixFloat &mMatOut) const override;
 	
     virtual void init() override;

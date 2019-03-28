@@ -15,6 +15,8 @@ public:
     LayerDropout(int iSize,float fRate);
     virtual ~LayerDropout() override;
 
+    virtual Layer* clone() override;
+
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) const override;
 
     virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, Optimizer* pOptim, MatrixFloat &mNewDelta) override;

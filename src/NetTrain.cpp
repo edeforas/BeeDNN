@@ -59,6 +59,8 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
     int iNbSamples=(int)mSamples.rows();
     int nLayers=(int)net.layers().size();
 
+    Net bestNet;
+
     int iBatchSize=topt.batchSize;
     if(iBatchSize>iNbSamples)
         iBatchSize=iNbSamples;
@@ -72,7 +74,7 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
     vector<Optimizer*> optimizers(nLayers);
 
     MatrixFloat mLoss;
-    double dLoss=0.;
+    double dLoss=0.,dMinLoss=1.e99;
 
     tr.reset();
 
@@ -150,15 +152,34 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
         }
 
         net.set_train_mode(false);
+        dLoss/=iNbSamples;
 
-        tr.loss.push_back(dLoss/iNbSamples);
+        tr.loss.push_back(dLoss);
 
         if (topt.epochCallBack)
             topt.epochCallBack();
+
+        //keep the best model if asked
+        if(topt.keepBest)
+        {
+            if(dMinLoss>dLoss)
+            {
+                dMinLoss=dLoss;
+                bestNet=net;
+            }
+        }
     }
 
     for (int i = 0; i < nLayers; i++)
         delete optimizers[i];
+
+    if(topt.keepBest)
+    {
+        net=bestNet;
+        tr.finalLoss=dMinLoss;
+    }
+    else
+        tr.finalLoss=dLoss;
 
     return tr;
 }

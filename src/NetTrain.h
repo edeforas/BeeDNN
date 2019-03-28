@@ -17,6 +17,7 @@ public:
         learningRate=0.01f;
         decay=0.9f;
         momentum=0.9f;
+		keepBest = false;
         testEveryEpochs=-1;
         optimizer = "Nesterov";
         epochCallBack = nullptr;
@@ -27,6 +28,7 @@ public:
     float learningRate;
     float decay;
     float momentum;
+	bool keepBest;
     int testEveryEpochs; //set to 1 to test at each epoch, 10 to test only 1/10 of the time, etc, set to -1 for no test //todo remove
     string optimizer; //ex "SGD" "Momentum" Adam" "Adagrad" "Nesterov" "RMSProp"
     std::function<void()> epochCallBack;
@@ -49,6 +51,7 @@ public:
     vector<double> loss;
     vector<double> accuracy;
     vector<double> euclidian_distance;
+    double finalLoss;
 };
 
 class Layer;

@@ -18,6 +18,8 @@ public:
     {
         epochs=100;
         batchSize=1;
+        keepBest=false;
+
         learningRate=0.01f;
         decay=0.9f;
         momentum=0.9f;
@@ -26,6 +28,7 @@ public:
 
     int  epochs;
     int batchSize;
+    bool keepBest;
 
     //optimizer settings
     float learningRate;

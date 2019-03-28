@@ -13,6 +13,7 @@ class Net
 public:
     Net();
     virtual ~Net();
+    Net& operator=(const Net& other);
 
 	void clear();
 	void init();

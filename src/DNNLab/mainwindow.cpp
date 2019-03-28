@@ -134,6 +134,7 @@ void MainWindow::train_and_test(bool bReset)
     dto.epochs=ui->leEpochs->text().toInt();
     dto.learningRate=ui->leLearningRate->text().toFloat();
     dto.batchSize=ui->leBatchSize->text().toInt();
+    dto.keepBest=ui->cbKeepBest->isChecked();
     dto.decay=ui->leDecay->text().toFloat();
     dto.momentum=ui->leMomentum->text().toFloat();
     dto.optimizer=ui->cbOptimizer->currentText().toStdString();
