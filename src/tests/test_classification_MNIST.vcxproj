@@ -161,6 +161,7 @@
     <ClCompile Include="..\LayerActivation.cpp" />
     <ClCompile Include="..\LayerDense.cpp" />
     <ClCompile Include="..\LayerDropout.cpp" />
+    <ClCompile Include="..\LayerGlobalGain.cpp" />
     <ClCompile Include="..\Matrix.cpp" />
     <ClCompile Include="..\MNISTReader.cpp" />
     <ClCompile Include="..\Net.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="..\LayerActivation.h" />
     <ClInclude Include="..\LayerDense.h" />
     <ClInclude Include="..\LayerDropout.h" />
+    <ClInclude Include="..\LayerGlobalGain.h" />
     <ClInclude Include="..\Matrix.h" />
     <ClInclude Include="..\MNISTReader.h" />
     <ClInclude Include="..\Net.h" />

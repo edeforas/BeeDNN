@@ -48,6 +48,11 @@ void MLEngineBeeDnn::add_dropout_layer(int inSize,float fRatio)
     _pNet->add_dropout_layer(inSize,fRatio);
 }
 //////////////////////////////////////////////////////////////////////////////
+void MLEngineBeeDnn::add_globalgain_layer(int inSize,float fGain)
+{
+      _pNet->add_globalgain_layer(inSize,fGain);
+}
+//////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
 {
     _pNet->forward(mIn,mOut);

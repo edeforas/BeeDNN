@@ -21,6 +21,7 @@ public:
     void add_dense_layer(int inSize, int outSize, bool bHasBias=true);
 	void add_activation_layer(string sType);
     void add_dropout_layer(int iSize, float fRatio);
+	void add_globalgain_layer(int inSize,float fGlobalGain=0.f); //if fGlobalGain==0.f, then it is learned, else is it fixed
 
     const vector<Layer*> layers() const;
     Layer& layer(size_t iLayer);

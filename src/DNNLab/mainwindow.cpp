@@ -62,9 +62,10 @@ MainWindow::MainWindow(QWidget *parent) :
         qcbType->addItem("DenseAndBias");
         qcbType->addItem("DenseNoBias");
         qcbType->addItem("Dropout");
+        qcbType->addItem("GlobalGain");
         // qcbType->addItem("SoftMax");
 
-        qcbType->insertSeparator(4);
+        qcbType->insertSeparator(5);
 
         for(unsigned int a=0;a<vsActivations.size();a++)
             qcbType->addItem(vsActivations[a].c_str());
@@ -253,6 +254,7 @@ void MainWindow::drawRegression()
         fVal+=fStep;
     }
 
+    _qsRegression->addHorizontalLine(0.);
     _qsRegression->addCurve(vSamples,vTruth,0xFF0000);
     _qsRegression->addCurve(vSamples,vRegression,0xFF);
 }
@@ -491,6 +493,16 @@ void MainWindow::parse_net()
                     fRatio=pwArg1->text().toFloat();
 
                 _pEngine->add_dropout_layer(iInSize,fRatio);
+            }
+            else if(sType=="GlobalGain")
+            {
+                float fGain=0.f; //by default
+
+                QTableWidgetItem* pwArg1=ui->twNetwork->item(iRow,3);
+                if(pwArg1)
+                    fGain=pwArg1->text().toFloat();
+
+                _pEngine->add_globalgain_layer(iInSize,fGain);
             }
             else if(sType=="DenseAndBias")
                 _pEngine->add_dense_layer(iInSize,iOutSize,true);

@@ -161,6 +161,15 @@ void DNNEngineTinyDnn::add_dropout_layer(int inSize,float fRatio)
     *_pNet << tiny_dnn::dropout_layer(inSize,fRatio);
 }
 //////////////////////////////////////////////////////////////////////////////
+void DNNEngineTinyDnn::add_globalgain_layer(int inSize,float fGain)
+{
+    (void)fGain;
+    (void)inSize;
+
+    assert(false);
+    // not implemented
+}
+//////////////////////////////////////////////////////////////////////////////
 void DNNEngineTinyDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
 {
     tiny_dnn::vec_t vIn;
