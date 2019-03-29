@@ -38,6 +38,16 @@ private slots:
     void on_cbFunction_currentIndexChanged(int index);
     void on_cbConfMatPercent_stateChanged(int arg1);
 
+    void on_actionSave_as_triggered();
+
+    void on_actionNew_triggered();
+
+    void on_actionOpen_triggered();
+
+    void on_actionSave_triggered();
+
+    void on_actionClose_triggered();
+
 private:
     void drawLoss(vector<double> vdLoss);
     void drawAccuracy(vector<double> vdAccuracy);
@@ -65,6 +75,7 @@ private:
     MatrixFloat _mTestData;
     MatrixFloat _mTestTruth;
     bool _bHasTestData;
+    bool _bMustSave;
 
     MatrixFloat _mConfusionMatrix;
 };

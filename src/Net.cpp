@@ -24,16 +24,14 @@ Net::~Net()
 void Net::clear()
 {
     for(unsigned int i=0;i<_layers.size();i++)
-    {
         delete _layers[i];
-    }
 
     _layers.clear();
+    _bTrainMode=false;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 Net& Net::operator=(const Net& other)
 {
-    _bTrainMode=other._bTrainMode;
     clear();
 
     for(int i=0;i<other._layers.size();i++)
@@ -101,9 +99,9 @@ const vector<Layer*> Net::layers() const
     return _layers;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-Layer* Net::layer(size_t iLayer)
+Layer& Net::layer(size_t iLayer)
 {
-    return _layers[iLayer];
+    return *(_layers[iLayer]);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 void Net::init()

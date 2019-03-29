@@ -14,7 +14,7 @@ LayerActivation::~LayerActivation()
 	delete _pActivation;
 }
 ///////////////////////////////////////////////////////////////////////////////
-Layer* LayerActivation::clone()
+Layer* LayerActivation::clone() const
 {
     return new LayerActivation(_pActivation->name());
 }

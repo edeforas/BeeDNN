@@ -38,7 +38,7 @@ TrainResult NetTrain::train(Net& net,const MatrixFloat& mSamples,const MatrixFlo
     if(net.layers().size()==0)
         return TrainResult(); //nothing to do
 
-    bool bOutputIsLabel=net.layer(net.layers().size()-1)->out_size()==1;
+    bool bOutputIsLabel=net.layer(net.layers().size()-1).out_size()==1;
     int iMax=(int)mTruthLabel.maxCoeff();
 
     if(!bOutputIsLabel)
@@ -87,7 +87,7 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
         optimizers[i]->fLearningRate = topt.learningRate;
         optimizers[i]->fMomentum=topt.momentum;
         optimizers[i]->fDecay=topt.decay;
-        optimizers[i]->init(*(net.layer(i)));
+        optimizers[i]->init(net.layer(i));
     }
 
     for(int iEpoch=0;iEpoch<topt.epochs;iEpoch++)
@@ -106,7 +106,7 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
                 iBatchEnd=iNbSamples;
 
             //init all layers inputs sum and error sum
-            for(int i=0;i<nLayers;i++)
+            for(int i=0;i<nLayers+1;i++)
                 inOutSum[i].setZero();
             for(int i=0;i<nLayers+1;i++)
                 deltaSum[i].setZero();
@@ -120,7 +120,7 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
                 //forward pass with store
                 inOut[0]=mSample;
                 for(int i=0;i<nLayers;i++)
-                    net.layer(i)->forward(inOut[i],inOut[i+1]);
+                    net.layer(i).forward(inOut[i],inOut[i+1]);
 
                 //add all layers inputs
                 for(int i=0;i<nLayers+1;i++)
@@ -140,12 +140,18 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
                     deltaSum[nLayers]=mLoss;
             }
 
+            //average minibatch
+            for(int i=0;i<nLayers+1;i++)
+            {
+                inOutSum[i]*=fInvBatchSize;
+                deltaSum[i]*=fInvBatchSize;
+            }
+
             //backward pass
-            deltaSum[nLayers]*=fInvBatchSize;
             for (int i=(int)(nLayers-1);i>=0;i--)
             {
-                Layer* l=net.layer(i);
-                l->backpropagation(inOutSum[i]*fInvBatchSize,deltaSum[i+1], optimizers[i],deltaSum[i]);
+                Layer& l=net.layer(i);
+                l.backpropagation(inOutSum[i], deltaSum[i+1], optimizers[i], deltaSum[i]);
             }
 
             iBatchStart=iBatchEnd;

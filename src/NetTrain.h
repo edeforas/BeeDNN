@@ -4,6 +4,7 @@
 #include "Matrix.h"
 
 #include <vector>
+#include <functional>
 #include <string>
 using namespace std;
 

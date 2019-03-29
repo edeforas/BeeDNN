@@ -6,8 +6,6 @@
 #include <string>
 using namespace std;
 
-//todo add more tests and optimize
-
 #ifdef USE_EIGEN
 
 #include "Eigen/Core"
@@ -152,6 +150,12 @@ public:
     {
         setConstant(0.);
     }
+
+    void setRandom()
+	{
+	    for(int i=0;i<_iSize;i++)
+            _data[i]=((T)rand()/(T)RAND_MAX-0.5f)*2.f;
+	}
 
     T& operator()(int iR,int iC)
     {
@@ -380,7 +384,6 @@ public:
         return Matrix<T>(*this).operator*=(a);
     }
 
-
     Matrix<T> row(int iRow)
     {
         assert(iRow<_iRows);
@@ -439,9 +442,11 @@ MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat randPerm(int iSize); //create a vector of index shuffled
 MatrixFloat decimate(const MatrixFloat& m, int iRatio);
 int argmax(const MatrixFloat& m);
-string toString(const MatrixFloat& m);
 void contatenateVerticallyInto(const MatrixFloat& mA, const MatrixFloat& mB, MatrixFloat& mAB);
 const MatrixFloat addColumnOfOne(const MatrixFloat& m);
+
+string toString(const MatrixFloat& m);
 const MatrixFloat fromFile(const string& sFile);
+
 #endif
 

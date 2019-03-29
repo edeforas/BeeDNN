@@ -23,7 +23,7 @@ public:
     void add_dropout_layer(int iSize, float fRatio);
 
     const vector<Layer*> layers() const;
-    Layer* layer(size_t iLayer);
+    Layer& layer(size_t iLayer);
 
     void forward(const MatrixFloat& mIn,MatrixFloat& mOut) const;
     int classify(const MatrixFloat& mIn) const;

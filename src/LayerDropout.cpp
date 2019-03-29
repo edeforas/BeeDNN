@@ -11,7 +11,7 @@ LayerDropout::LayerDropout(int iSize,float fRate):
 LayerDropout::~LayerDropout()
 { }
 ///////////////////////////////////////////////////////////////////////////////
-Layer* LayerDropout::clone()
+Layer* LayerDropout::clone() const
 {
     return new LayerDropout(_iInSize,_fRate);
 }
@@ -39,7 +39,7 @@ void LayerDropout::create_mask(int iSize)
 
     for (int i = 0; i < iSize; i++)
     {
-        if ( (rand()/(double)RAND_MAX) < _fRate)
+        if ( (rand()/(float)RAND_MAX) < _fRate)
             _mask(0, i) = 0.f;
     }
 }

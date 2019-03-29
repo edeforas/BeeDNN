@@ -1,6 +1,5 @@
 #include "LayerDense.h"
 
-#include <cstdlib> // for rand
 #include <cmath> // for sqrt
 #include "Optimizer.h"
 
@@ -17,7 +16,7 @@ LayerDense::LayerDense(int iInSize, int iOutSize, bool bHasBias) :
 LayerDense::~LayerDense()
 { }
 ///////////////////////////////////////////////////////////////////////////////
-Layer* LayerDense::clone()
+Layer* LayerDense::clone() const
 {
     LayerDense* pLayer=new LayerDense(_iInSize,_iOutSize,_bHasBias);
     pLayer->_weight=_weight;
@@ -26,10 +25,10 @@ Layer* LayerDense::clone()
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDense::init()
 {
-    //Xavier uniform initialization
+    //Xavier uniform initialization    
     float a =sqrtf(6.f/(_iInSize+_iOutSize));
-    for(int i=0;i<_weight.size();i++)
-        _weight(i)=((float)rand()/(float)RAND_MAX-0.5f)*2.f*a;
+    _weight.setRandom();
+    _weight*=a;
 
  //   if (_bHasBias)
  //       _weight.row(_iInSize).setZero(); //removed for now: accuracy is worse with bias initialized with zero

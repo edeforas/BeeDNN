@@ -15,7 +15,7 @@ public:
     LayerDropout(int iSize,float fRate);
     virtual ~LayerDropout() override;
 
-    virtual Layer* clone() override;
+    virtual Layer* clone() const override;
 
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) const override;
 

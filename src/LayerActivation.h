@@ -15,7 +15,7 @@ public:
     LayerActivation(const string& sActivation);
     virtual ~LayerActivation() override;
 
-    virtual Layer* clone() override;
+    virtual Layer* clone() const override;
 
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) const override;
 	
