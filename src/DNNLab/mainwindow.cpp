@@ -456,6 +456,7 @@ void MainWindow::on_btnTrainMore_clicked()
 void MainWindow::parse_net()
 {
     bool bOk;
+    float fArg1;
     _pEngine->clear();
     int iLastOut=_iInputSize;
     for(int iRow=0;iRow<10;iRow++) //todo dynamic size
@@ -493,26 +494,26 @@ void MainWindow::parse_net()
 
         iLastOut=iOutSize;
 
+        QTableWidgetItem* pwArg1=ui->twNetwork->item(iRow,3);
+        if(pwArg1)
+            fArg1=pwArg1->text().toFloat(&bOk);
+        else
+            bOk=false;
+
         if(!sType.empty())
         {
             if(sType=="Dropout")
             {
                 float fRatio=0.2f; //by default
-
-                QTableWidgetItem* pwArg1=ui->twNetwork->item(iRow,3);
-                if(pwArg1)
-                    fRatio=pwArg1->text().toFloat();
-
+                if(bOk)
+                    fRatio=fArg1;
                 _pEngine->add_dropout_layer(iInSize,fRatio);
             }
             else if(sType=="GlobalGain")
             {
                 float fGain=0.f; //by default
-
-                QTableWidgetItem* pwArg1=ui->twNetwork->item(iRow,3);
-                if(pwArg1)
-                    fGain=pwArg1->text().toFloat();
-
+                if(bOk)
+                    fGain=fArg1;
                 _pEngine->add_globalgain_layer(iInSize,fGain);
             }
             else if(sType=="DenseAndBias")

@@ -5,12 +5,13 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerGlobalGain::LayerGlobalGain(int iInSize, float fGlobalGain) :
-    Layer(iInSize , iInSize, "GlobalGain"),
-    _fGlobalGain(fGlobalGain)
+    Layer(iInSize , iInSize, "GlobalGain")//,
+  //  _fGlobalGain(fGlobalGain)
 {
-    _bLearnable=(_fGlobalGain==0.f); //temp code
+    _bLearnable=(fGlobalGain==0.f); //temp code
 
     _globalGain.resize(1,1);
+    _globalGain(0)=fGlobalGain;
 
     init();
 }
@@ -20,31 +21,40 @@ LayerGlobalGain::~LayerGlobalGain()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerGlobalGain::clone() const
 {
-    LayerGlobalGain* pLayer=new LayerGlobalGain(_iInSize,_fGlobalGain);
+    LayerGlobalGain* pLayer=new LayerGlobalGain(_iInSize,_globalGain(0));
     return pLayer;
+}
+///////////////////////////////////////////////////////////////////////////////
+void LayerGlobalGain::init()
+{
+    if(_bLearnable)
+    {
+        //Xavier uniform initialization
+        float a =sqrtf(6.f/(_iInSize+_iOutSize));
+        _globalGain.setRandom();
+        _globalGain*=a;
+    }
+
+    Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGlobalGain::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
 {
-    mMatOut = mMatIn * _fGlobalGain;
+    mMatOut = mMatIn * _globalGain(0);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGlobalGain::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, Optimizer* pOptim, MatrixFloat &mNewDelta)
 {
-    mNewDelta = mDelta * _fGlobalGain;
+    mNewDelta = mDelta * _globalGain(0);
     _mDx = mInput*(mDelta.transpose());
 
     if(_bLearnable)
-    {
-        _globalGain(0,0)=_fGlobalGain;
         pOptim->optimize(_globalGain, _mDx);
-        _fGlobalGain=_globalGain(0,0);
-    }
 }
 ///////////////////////////////////////////////////////////////////////////////
 float LayerGlobalGain::gain() const
 {
-    return _fGlobalGain;
+    return _globalGain(0);
 }
 ///////////////////////////////////////////////////////////////////////////////
 bool LayerGlobalGain::is_learned() const

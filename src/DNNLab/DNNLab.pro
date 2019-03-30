@@ -51,7 +51,7 @@ HEADERS += \
     ../LayerActivation.h \
     ../LayerDense.h \
     ../LayerDropout.h \
-    ../LayerGlobalGain.cpp
+    ../LayerGlobalGain.h
 
 #ui
 SOURCES += \
