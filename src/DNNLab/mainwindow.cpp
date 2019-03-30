@@ -455,6 +455,7 @@ void MainWindow::on_btnTrainMore_clicked()
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::parse_net()
 {
+    bool bOk;
     _pEngine->clear();
     int iLastOut=_iInputSize;
     for(int iRow=0;iRow<10;iRow++) //todo dynamic size
@@ -469,16 +470,26 @@ void MainWindow::parse_net()
         if(!pwiInSize)
             iInSize=iLastOut; //use last out
         else
-            iInSize=pwiInSize->text().toInt();
+        {
+            int iIn=pwiInSize->text().toInt(&bOk);
+            if(bOk)
+                iInSize=iIn;
+            else
+                iInSize=iLastOut;
+        }
 
         QTableWidgetItem* pwiOutSize=ui->twNetwork->item(iRow,2); //todo not used in activation
         int iOutSize;
         if(!pwiOutSize)
-        {
             iOutSize=iInSize; //same size (i.e. activation case)
-        }
         else
-            iOutSize=pwiOutSize->text().toInt();
+        {
+            int iOut=pwiOutSize->text().toInt(&bOk);
+            if(bOk)
+                iOutSize=iOut;
+            else
+                iOutSize=iInSize;
+        }
 
         iLastOut=iOutSize;
 
