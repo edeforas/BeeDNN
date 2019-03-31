@@ -219,15 +219,64 @@ public:
 
         _m=_m*beta1+dw*(1.f-beta1);
         _v=_v*beta2+dw.cwiseAbs2()*(1.f-beta2);
-
         weight += _m.cwiseQuotient((_v/(1.f-beta2_prod)).cwiseSqrt().cwiseMax(1.e-8f))*(-fLearningRate/(1.f-beta1_prod));
-
         beta1_prod*=beta1;
         beta2_prod*=beta2;
     }
 private:
     MatrixFloat _m, _v;
     float beta1, beta2, beta1_prod, beta2_prod;
+};
+//////////////////////////////////////////////////////////
+// Adamax from http://ruder.io/optimizing-gradient-descent/index.html#adamax
+class OptimizerAdamax : public Optimizer
+{
+public:
+    OptimizerAdamax()
+    {
+        alpha=0.002f;
+        beta1=0.9f;
+        beta2=0.999f;
+    }
+
+    ~OptimizerAdamax() override
+    {}
+
+    virtual void init(const Layer& l) override
+    {
+        (void)l;
+
+        _m.resize(0,0);
+        _u.resize(0,0);
+
+        beta1_prod=beta1;
+    }
+
+    virtual void optimize(MatrixFloat& weight, const MatrixFloat& dw) override
+    {
+        // init _m and _v if needed
+        if (_u.size() == 0)
+        {
+            _m.resize(dw.rows(), dw.cols());
+            _m.setZero();
+
+            _u.resize(dw.rows(), dw.cols());
+            _u.setZero();
+        }
+
+        //m = beta1*m + (1-beta1)*dw
+        //u=max(b2*u,abs(dw))
+        //W+=((-alpha)/(1-beta1_prod))*(m/(max(u,eps)))
+        //beta1_prod*=beta1;
+
+        _m=_m*beta1+dw*(1.f-beta1);
+        _u=(_u*beta2).cwiseMax(dw.cwiseAbs());
+        weight += _m.cwiseQuotient(_u.cwiseMax(1.e-8f))*(-fLearningRate/(1.f-beta1_prod));
+        beta1_prod*=beta1;
+    }
+private:
+    MatrixFloat _m, _u;
+    float alpha, beta1, beta2, beta1_prod;
 };
 //////////////////////////////////////////////////////////
 Optimizer* get_optimizer(const string& sOptimizer)
@@ -247,6 +296,9 @@ Optimizer* get_optimizer(const string& sOptimizer)
     if (sOptimizer == "Adam")
         return new OptimizerAdam;
 
+    if (sOptimizer == "Adamax")
+        return new OptimizerAdamax;
+
     if (sOptimizer == "RMSProp")
         return new OptimizerRMSProp;
 
@@ -262,6 +314,7 @@ void list_optimizers_available(vector<string>& vsOptimizers)
     vsOptimizers.push_back("Nesterov");
     vsOptimizers.push_back("Adagrad");
     vsOptimizers.push_back("Adam");
+    vsOptimizers.push_back("Adamax");
     vsOptimizers.push_back("RMSProp");
 }
 //////////////////////////////////////////////////////////////////////////////
