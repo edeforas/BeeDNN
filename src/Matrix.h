@@ -159,6 +159,12 @@ public:
         setConstant(0.);
     }
 
+    void setZero(int iRows,int iColumns)
+    {
+        resize(iRows,iColumns);
+        setZero();
+    }
+
     void setRandom()
 	{
 	    for(int i=0;i<_iSize;i++)

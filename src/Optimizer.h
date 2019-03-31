@@ -25,7 +25,7 @@ public:
 	
 	virtual void init(const Layer& l)=0;
 
-    virtual void optimize(MatrixFloat& weight, const MatrixFloat& dw) = 0;
+    virtual void optimize(MatrixFloat& w, const MatrixFloat& dw) = 0;
 
 	float fLearningRate; //temp
 	float fMomentum; //temp

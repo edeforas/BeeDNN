@@ -31,11 +31,11 @@ public:
     virtual void init(const Layer& l) override
     { (void)l; }
 
-    virtual void optimize(MatrixFloat& weight,const MatrixFloat& dw) override
+    virtual void optimize(MatrixFloat& w,const MatrixFloat& dw) override
     {
         // Vanilla update
         //	x += -learning_rate * dx
-        weight -=  dw * fLearningRate ;
+        w -=  dw * fLearningRate ;
     }
 };
 //////////////////////////////////////////////////////////
@@ -54,20 +54,17 @@ public:
         _v.resize(0,0);
     }
 
-    virtual void optimize(MatrixFloat& weight, const MatrixFloat& dw) override
+    virtual void optimize(MatrixFloat& w, const MatrixFloat& dw) override
     {
         // init _V if needed
         if (_v.size() == 0)
-        {
-            _v.resize(weight.rows(), weight.cols());
-            _v.setZero();
-        }
+            _v.setZero(w.rows(), w.cols());
 
         // v = mu * v - learning_rate * dx // integrate velocity
         // x += v // integrate position
         _v = _v*fMomentum - dw*fLearningRate;
 
-        weight += _v;
+        w += _v;
     }
 private:
     MatrixFloat _v;
@@ -88,21 +85,18 @@ public:
         _v.resize(0, 0);
     }
 
-    virtual void optimize(MatrixFloat& weight, const MatrixFloat& dw) override
+    virtual void optimize(MatrixFloat& w, const MatrixFloat& dw) override
     {
         // init _V if needed
         if (_v.size() == 0)
-        {
-            _v.resize(weight.rows(), weight.cols());
-            _v.setZero();
-        }
+            _v.setZero(w.rows(), w.cols());
 
         // v_prev = v # back this up
         // v = mu * v - learning_rate * dx # velocity update stays the same
         // x += -mu * v_prev + (1 + mu) * v # position update changes form
         _v_prev = _v;
         _v = _v*fMomentum - dw*fLearningRate ;
-        weight += _v_prev*(-fMomentum) + _v*(1.f + fMomentum) ;
+        w += _v_prev*(-fMomentum) + _v*(1.f + fMomentum) ;
     }
 private:
     MatrixFloat _v, _v_prev;
@@ -123,20 +117,17 @@ public:
         _cache.resize(0,0);
     }
 
-    virtual void optimize(MatrixFloat& weight, const MatrixFloat& dw) override
+    virtual void optimize(MatrixFloat& w, const MatrixFloat& dw) override
     {
         // init _cache if needed
         if (_cache.size() == 0)
-        {
-            _cache.resize(dw.rows(), dw.cols());
-            _cache.setZero();
-        }
+            _cache.setZero(dw.rows(), dw.cols());
 
         // cache += dx**2
         // x += - learning_rate * dx / (np.sqrt(cache) + eps)
 
         _cache +=dw.cwiseAbs2();
-        weight += dw.cwiseQuotient(_cache.cwiseSqrt().cwiseMax(1.e-8f))*(-fLearningRate);
+        w += dw.cwiseQuotient(_cache.cwiseSqrt().cwiseMax(1.e-8f))*(-fLearningRate);
     }
 private:
     MatrixFloat _cache;
@@ -157,19 +148,16 @@ public:
         _cache.resize(0,0);
     }
 
-    virtual void optimize(MatrixFloat& weight, const MatrixFloat& dw) override
+    virtual void optimize(MatrixFloat& w, const MatrixFloat& dw) override
     {
         // init _cache if needed
         if (_cache.size() == 0)
-        {
-            _cache.resize(dw.rows(), dw.cols());
-            _cache.setZero();
-        }
+            _cache.setZero(dw.rows(), dw.cols());
 
         // cache = decay_rate * cache + (1 - decay_rate) * dx**2
         // x += - learning_rate * dx / (np.sqrt(cache) + eps)
         _cache =_cache*fDecay+dw.cwiseAbs2()*(1.f-fDecay);
-        weight += dw.cwiseQuotient(_cache.cwiseSqrt().cwiseMax(1.e-8f))*(-fLearningRate);
+        w += dw.cwiseQuotient(_cache.cwiseSqrt().cwiseMax(1.e-8f))*(-fLearningRate);
     }
 private:
     MatrixFloat _cache;
@@ -198,16 +186,13 @@ public:
         beta2_prod=beta2;
     }
 
-    virtual void optimize(MatrixFloat& weight, const MatrixFloat& dw) override
+    virtual void optimize(MatrixFloat& w, const MatrixFloat& dw) override
     {
         // init _m and _v if needed
         if (_v.size() == 0)
         {
-            _m.resize(dw.rows(), dw.cols());
-            _m.setZero();
-
-            _v.resize(dw.rows(), dw.cols());
-            _v.setZero();
+            _m.setZero(dw.rows(), dw.cols());
+            _v.setZero(dw.rows(), dw.cols());
         }
 
         // Adam, with first step bias correction
@@ -219,7 +204,57 @@ public:
 
         _m=_m*beta1+dw*(1.f-beta1);
         _v=_v*beta2+dw.cwiseAbs2()*(1.f-beta2);
-        weight += _m.cwiseQuotient((_v/(1.f-beta2_prod)).cwiseSqrt().cwiseMax(1.e-8f))*(-fLearningRate/(1.f-beta1_prod));
+        w += _m.cwiseQuotient((_v/(1.f-beta2_prod)).cwiseSqrt().cwiseMax(1.e-8f))*(-fLearningRate/(1.f-beta1_prod));
+        beta1_prod*=beta1;
+        beta2_prod*=beta2;
+    }
+private:
+    MatrixFloat _m, _v;
+    float beta1, beta2, beta1_prod, beta2_prod;
+};
+//////////////////////////////////////////////////////////
+class OptimizerNadam : public Optimizer
+{
+public:
+    OptimizerNadam()
+    {
+        beta1=0.9f;
+        beta2=0.999f;
+    }
+
+    ~OptimizerNadam() override
+    {}
+
+    virtual void init(const Layer& l) override
+    {
+        (void)l;
+
+        _m.resize(0,0);
+        _v.resize(0,0);
+
+        beta1_prod=beta1;
+        beta2_prod=beta2;
+    }
+
+    virtual void optimize(MatrixFloat& w, const MatrixFloat& dw) override
+    {
+        // init _m and _v if needed
+        if (_v.size() == 0)
+        {
+            _m.setZero(dw.rows(), dw.cols());
+            _v.setZero(dw.rows(), dw.cols());
+        }
+
+        // Nadam
+        //m = beta1*m + (1-beta1)*dx
+        //v = beta2*v + (1-beta2)*(dx**2)
+        // w += (_m*beta1+dw*(1-beta1)/(1-beta1_prod) )*(-fLearningRate)/(sqrt(_v+epsilon));
+        //beta1_prod*=beta1;
+        //beta2_prod*=beta2;
+
+        _m=_m*beta1+dw*(1.f-beta1);
+        _v=_v*beta2+dw.cwiseAbs2()*(1.f-beta2);
+        w += (_m*beta1+dw*(1.f-beta1)/(1.f-beta1_prod)  ).cwiseQuotient(_v.cwiseSqrt().cwiseMax(1.e-8f))*(-fLearningRate);
         beta1_prod*=beta1;
         beta2_prod*=beta2;
     }
@@ -252,16 +287,13 @@ public:
         beta1_prod=beta1;
     }
 
-    virtual void optimize(MatrixFloat& weight, const MatrixFloat& dw) override
+    virtual void optimize(MatrixFloat& w, const MatrixFloat& dw) override
     {
         // init _m and _v if needed
         if (_u.size() == 0)
         {
-            _m.resize(dw.rows(), dw.cols());
-            _m.setZero();
-
-            _u.resize(dw.rows(), dw.cols());
-            _u.setZero();
+            _m.setZero(dw.rows(), dw.cols());
+            _u.setZero(dw.rows(), dw.cols());
         }
 
         //m = beta1*m + (1-beta1)*dw
@@ -271,7 +303,7 @@ public:
 
         _m=_m*beta1+dw*(1.f-beta1);
         _u=(_u*beta2).cwiseMax(dw.cwiseAbs());
-        weight += _m.cwiseQuotient(_u.cwiseMax(1.e-8f))*(-fLearningRate/(1.f-beta1_prod));
+        w += _m.cwiseQuotient(_u.cwiseMax(1.e-8f))*(-fLearningRate/(1.f-beta1_prod));
         beta1_prod*=beta1;
     }
 private:
@@ -296,6 +328,9 @@ Optimizer* get_optimizer(const string& sOptimizer)
     if (sOptimizer == "Adam")
         return new OptimizerAdam;
 
+    if (sOptimizer == "Nadam")
+        return new OptimizerNadam;
+
     if (sOptimizer == "Adamax")
         return new OptimizerAdamax;
 
@@ -314,6 +349,7 @@ void list_optimizers_available(vector<string>& vsOptimizers)
     vsOptimizers.push_back("Nesterov");
     vsOptimizers.push_back("Adagrad");
     vsOptimizers.push_back("Adam");
+    vsOptimizers.push_back("Nadam");
     vsOptimizers.push_back("Adamax");
     vsOptimizers.push_back("RMSProp");
 }

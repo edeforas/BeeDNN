@@ -446,7 +446,7 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
-// Parablu is a softplus approximation without transendental function, author is Etienne de Foras
+// Parablu is a softplus approximation without slow elementary function, author is Etienne de Foras
 class ActivationParablu: public Activation
 {
 public:
@@ -473,7 +473,7 @@ public:
         if(x>0.5f)
             return 1.f;
 
-        return x+x;//2.f*x
+        return x+x; //2.f*x
     }
 };
 //////////////////////////////////////////////////////////////////////////////
