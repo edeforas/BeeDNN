@@ -218,6 +218,7 @@ class OptimizerNadam : public Optimizer
 public:
     OptimizerNadam()
     {
+        alpha=0.002f;
         beta1=0.9f;
         beta2=0.999f;
     }
@@ -254,13 +255,13 @@ public:
 
         _m=_m*beta1+dw*(1.f-beta1);
         _v=_v*beta2+dw.cwiseAbs2()*(1.f-beta2);
-        w += (_m*beta1+dw*(1.f-beta1)/(1.f-beta1_prod)  ).cwiseQuotient(_v.cwiseSqrt().cwiseMax(1.e-8f))*(-fLearningRate);
+        w += (_m*beta1+dw*(1.f-beta1)/(1.f-beta1_prod)  ).cwiseQuotient(_v.cwiseSqrt().cwiseMax(1.e-8f))*(-alpha);
         beta1_prod*=beta1;
         beta2_prod*=beta2;
     }
 private:
     MatrixFloat _m, _v;
-    float beta1, beta2, beta1_prod, beta2_prod;
+    float alpha, beta1, beta2, beta1_prod, beta2_prod;
 };
 //////////////////////////////////////////////////////////
 // Adamax from http://ruder.io/optimizing-gradient-descent/index.html#adamax
