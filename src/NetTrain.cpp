@@ -155,6 +155,8 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
            //    deltaSum[i]*=fInvBatchSize;
           //  }
 
+             deltaSum[nLayers]*=fInvBatchSize;
+
             //backward pass
             for (int i=(int)(nLayers-1);i>=0;i--)
             {
