@@ -1,3 +1,11 @@
+/*
+    Copyright (c) 2019, Etienne de Foras and the respective contributors
+    All rights reserved.
+
+    Use of this source code is governed by a MIT-style license that can be found
+    in the LICENSE.txt file.
+*/
+
 #ifndef LayerGlobalGain_
 #define LayerGlobalGain_
 
@@ -22,7 +30,6 @@ public:
 
 private:
     MatrixFloat _globalGain,_mDx;
-//    float _fGlobalGain;
     bool _bLearnable;
 };
 

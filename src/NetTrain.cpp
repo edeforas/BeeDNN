@@ -1,3 +1,11 @@
+/*
+    Copyright (c) 2019, Etienne de Foras and the respective contributors
+    All rights reserved.
+
+    Use of this source code is governed by a MIT-style license that can be found
+    in the LICENSE.txt file.
+*/
+
 #include "NetTrain.h"
 
 #include "Net.h"
@@ -141,11 +149,11 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
             }
 
             //average minibatch
-            for(int i=0;i<nLayers+1;i++)
-            {
-                inOutSum[i]*=fInvBatchSize;
-                deltaSum[i]*=fInvBatchSize;
-            }
+          //  for(int i=0;i<nLayers+1;i++)
+          //  {
+           //    inOutSum[i]*=fInvBatchSize;
+           //    deltaSum[i]*=fInvBatchSize;
+          //  }
 
             //backward pass
             for (int i=(int)(nLayers-1);i>=0;i--)

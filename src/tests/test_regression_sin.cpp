@@ -10,9 +10,9 @@ int main()
 {
     //build net
     Net net;
-    net.add_dense_layer(1,100,true);
+    net.add_dense_layer(1,100);
     net.add_activation_layer("Relu");
-    net.add_dense_layer(100,1,true);
+    net.add_dense_layer(100,1);
 
     //set train data
     MatrixFloat mTruth(128,1);
@@ -24,9 +24,11 @@ int main()
         mSamples(i,0)=x;
     }
 
-    //learn
-    cout << "Learning..." << endl;
+    //train
+    cout << "Training..." << endl;
     TrainOption tOpt;
+	tOpt.batchSize = 16;
+	tOpt.learningRate *= 16;
 	NetTrain netfit;
 	netfit.fit(net,mSamples,mTruth,tOpt);
 
