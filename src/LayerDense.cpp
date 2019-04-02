@@ -52,7 +52,7 @@ void LayerDense::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
         mMatOut = mMatIn * _weight;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerDense::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, /*Optimizer* pOptim,*/ MatrixFloat &mInputDelta)
+void LayerDense::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mInputDelta)
 {
     //split _weight in [weightnobias, bias] in computation in cases of bias
 
@@ -67,10 +67,6 @@ void LayerDense::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mD
         mInputDelta = mDelta * (_weight.transpose());
         _deltaWeight = (mInput.transpose())*mDelta;
     }
-
-    //optimize weight
-    // end of minibatch only
-    //pOptim->optimize(_weight, _deltaWeight);
 }
 ///////////////////////////////////////////////////////////////////////////////
 MatrixFloat& LayerDense::weights()

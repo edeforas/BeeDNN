@@ -27,8 +27,6 @@ int main()
     //train
     cout << "Training..." << endl;
     TrainOption tOpt;
-	tOpt.batchSize = 16;
-	tOpt.learningRate *= 16;
 	NetTrain netfit;
 	netfit.fit(net,mSamples,mTruth,tOpt);
 

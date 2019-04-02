@@ -18,7 +18,8 @@ SOURCES += test_xor.cpp \
     ../Activation.cpp \
     ../LayerActivation.cpp \
     ../LayerDense.cpp \
-    ../LayerDropout.cpp
+    ../LayerDropout.cpp \
+    ../LayerGlobalGain.cpp
 
 HEADERS += \
     ../Activation.h \
@@ -29,4 +30,5 @@ HEADERS += \
     ../NetTrain.h \
     ../LayerActivation.h \
     ../LayerDense.h \
+    ../LayerGlobalGain.h \
     ../LayerDropout.h

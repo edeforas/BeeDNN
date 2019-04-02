@@ -4,7 +4,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 #eigen (optional)
-DEFINES+= "USE_EIGENgfder"
+DEFINES+= "USE_EIGEN"
 INCLUDEPATH += $$(EIGEN_PATH)
 
 SOURCES += \
@@ -17,6 +17,7 @@ SOURCES += \
     ../ConfusionMatrix.cpp \
     ../LayerDense.cpp \
     ../LayerDropout.cpp \
+    ../LayerGlobalGain.cpp \
     ../NetTrain.cpp \
     ../Optimizer.cpp \
     test_classification_MNIST.cpp
@@ -34,4 +35,5 @@ HEADERS += \
     ../Optimizer.h \
     ../ConfusionMatrix.h \
     ../LayerDense.h \
-    ../LayerDropout.h
+    ../LayerDropout.h \
+    ../LayerGlobalGain.h
