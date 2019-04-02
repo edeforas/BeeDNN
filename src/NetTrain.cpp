@@ -76,8 +76,8 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
     float fInvBatchSize=1.f/(float)iBatchSize;
 
     vector<MatrixFloat> inOut(nLayers+1);
-    vector<MatrixFloat> inOutSum(nLayers+1);
     vector<MatrixFloat> deltaSum(nLayers+1);
+    vector<MatrixFloat> delta(nLayers+1);
 
     vector<Optimizer*> optimizers(nLayers);
 
@@ -89,6 +89,7 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
     if(nLayers==0)
         return tr;
 
+    //init all optimizers
     for (int i = 0; i < nLayers; i++)
     {
         optimizers[i] = get_optimizer(topt.optimizer);
@@ -113,9 +114,6 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
             if(iBatchEnd>iNbSamples)
                 iBatchEnd=iNbSamples;
 
-            //init all layers inputs sum and error sum
-            for(int i=0;i<nLayers+1;i++)
-                inOutSum[i].setZero();
             for(int i=0;i<nLayers+1;i++)
                 deltaSum[i].setZero();
 
@@ -130,38 +128,34 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
                 for(int i=0;i<nLayers;i++)
                     net.layer(i).forward(inOut[i],inOut[i+1]);
 
-                //add all layers inputs
-                for(int i=0;i<nLayers+1;i++)
-                {
-                    if(inOutSum[i].size())
-                        inOutSum[i]+=inOut[i];
-                    else
-                        inOutSum[i]=inOut[i];
-                }
+                //compute loss
+                delta[nLayers]=inOut[nLayers]-mTarget;
+                dLoss += delta[nLayers].cwiseAbs2().sum();
 
-                // add all errors
-                mLoss=inOut[nLayers]-mTarget;
-                dLoss += mLoss.cwiseAbs2().sum(); //update loss
-                if(deltaSum[nLayers].size())
-                    deltaSum[nLayers]+=mLoss;
-                else
-                    deltaSum[nLayers]=mLoss;
+                //backward pass with store
+                for (int i=(int)(nLayers-1);i>=0;i--)
+                    net.layer(i).backpropagation(inOut[i], delta[i+1], delta[i]);
+
+                //sum deltaweight
+                for(int i=0;i<nLayers;i++)
+                {
+                    Layer& l=net.layer(i);
+                    if(l.has_weight())
+                    {
+                        if(deltaSum[i].size())
+                            deltaSum[i]+=l.gradient_weights();
+                        else
+                            deltaSum[i]=l.gradient_weights();
+                    }
+                }
             }
 
-            //average minibatch
-          //  for(int i=0;i<nLayers+1;i++)
-          //  {
-           //    inOutSum[i]*=fInvBatchSize;
-           //    deltaSum[i]*=fInvBatchSize;
-          //  }
-
-             deltaSum[nLayers]*=fInvBatchSize;
-
-            //backward pass
-            for (int i=(int)(nLayers-1);i>=0;i--)
+            //optimize all layers
+            for(int i=0;i<nLayers;i++)
             {
                 Layer& l=net.layer(i);
-                l.backpropagation(inOutSum[i], deltaSum[i+1], optimizers[i], deltaSum[i]);
+                if(l.has_weight())
+                    optimizers[i]->optimize(l.weights(), deltaSum[i]*fInvBatchSize);
             }
 
             iBatchStart=iBatchEnd;

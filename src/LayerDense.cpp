@@ -33,13 +33,13 @@ Layer* LayerDense::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDense::init()
 {
-    //Xavier uniform initialization    
+    //Xavier uniform initialization
     float a =sqrtf(6.f/(_iInSize+_iOutSize));
     _weight.setRandom();
     _weight*=a;
 
- //   if (_bHasBias)
- //       _weight.row(_iInSize).setZero(); //removed for now: accuracy is worse with bias initialized with zero
+    //   if (_bHasBias)
+    //       _weight.row(_iInSize).setZero(); //removed for now: accuracy is worse with bias initialized with zero
 
     Layer::init();
 }
@@ -52,30 +52,39 @@ void LayerDense::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
         mMatOut = mMatIn * _weight;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerDense::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, Optimizer* pOptim, MatrixFloat &mNewDelta)
+void LayerDense::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, /*Optimizer* pOptim,*/ MatrixFloat &mInputDelta)
 {
+    //split _weight in [weightnobias, bias] in computation in cases of bias
+
+    //backpropagation and computation of gradient
     if (_bHasBias)
     {
-        //split _weight in [weightnobias, bias] in computation
-        mNewDelta = mDelta * _weight.topRows(_iInSize).transpose();
-        _mDx = ((addColumnOfOne(mInput)).transpose())*mDelta; //todo optimize
+        mInputDelta = mDelta * _weight.topRows(_iInSize).transpose();
+        _deltaWeight = ((addColumnOfOne(mInput)).transpose())*mDelta; //todo optimize
     }
     else
     {
-        mNewDelta = mDelta * (_weight.transpose());
-        _mDx = (mInput.transpose())*mDelta;
+        mInputDelta = mDelta * (_weight.transpose());
+        _deltaWeight = (mInput.transpose())*mDelta;
     }
 
-    pOptim->optimize(_weight, _mDx);
+    //optimize weight
+    // end of minibatch only
+    //pOptim->optimize(_weight, _deltaWeight);
 }
 ///////////////////////////////////////////////////////////////////////////////
-const MatrixFloat& LayerDense::weight() const
+MatrixFloat& LayerDense::weights()
 {
     return _weight;
 }
 ///////////////////////////////////////////////////////////////////////////////
-bool LayerDense::has_bias() const
+MatrixFloat& LayerDense::gradient_weights()
 {
-    return _bHasBias;
+    return _deltaWeight;
 }
 ///////////////////////////////////////////////////////////////////////////////
+bool LayerDense::has_weight()
+{
+    return true;
+}
+///////////////////////////////////////////////////////////////

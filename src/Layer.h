@@ -31,15 +31,22 @@ public:
     virtual void forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const =0;
 	
     virtual void init(); //init all layers
-    virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, Optimizer* pOptim, MatrixFloat &mNewDelta)=0;
+    virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, /*Optimizer* pOptim,*/ MatrixFloat &mNewDelta)=0;
 		
 	void set_train_mode(bool bTrainMode); //set to true to train, to false to test
+
+    virtual bool has_weight();
+
+
+    virtual MatrixFloat& weights();
+    virtual MatrixFloat& gradient_weights();
 
 protected:
     int _iInSize, _iOutSize;
 	bool _bTrainMode;
 
 private:
+    MatrixFloat _weight,_deltaWeight; //for now
     string _sType;
 };
 

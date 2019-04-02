@@ -23,7 +23,7 @@ public:
     virtual void init() override;
     virtual void forward(const MatrixFloat& mMatin, MatrixFloat &mMatOut) const override;
 
-    virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, Optimizer* pOptim, MatrixFloat &mNewDelta) override;
+    virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta) override;
 
     float gain() const;
     bool is_learned() const;

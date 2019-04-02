@@ -51,13 +51,14 @@ void LayerGlobalGain::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) co
     mMatOut = mMatIn * _globalGain(0);
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerGlobalGain::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, Optimizer* pOptim, MatrixFloat &mNewDelta)
+void LayerGlobalGain::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta)
 {
     mNewDelta = mDelta * _globalGain(0);
     _mDx = mInput*(mDelta.transpose());
-
+/*
     if(_bLearnable)
         pOptim->optimize(_globalGain, _mDx);
+*/
 }
 ///////////////////////////////////////////////////////////////////////////////
 float LayerGlobalGain::gain() const

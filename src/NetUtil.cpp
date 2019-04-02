@@ -39,10 +39,10 @@ string to_string(const Net* pNet)
         {
             LayerDense* l=(LayerDense*)layer;
             ss << "Dense:  InSize: " << l->in_size() << " OutSize: " << l->out_size() << endl;
-            if(l->has_bias())
+       //     if(l->has_bias()) todo
                 ss << "with bias" << endl;
             ss << "Weight:\n";
-            ss << toString(l->weight());
+       //     ss << toString(l->weight()); //todo
         }
 
         else if(layer->type()=="GlobalGain")

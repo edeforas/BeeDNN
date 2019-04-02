@@ -16,21 +16,26 @@ class LayerDense : public Layer
 {
 public:
     LayerDense(int iInSize,int iOutSize,bool bHasBias);
-    virtual ~LayerDense();
-	
+    virtual ~LayerDense() override;
+
     virtual Layer* clone() const override;
 
     virtual void forward(const MatrixFloat& mMatin, MatrixFloat &mMatOut) const override;
-	
-    virtual void init() override;
-    virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, Optimizer* pOptim, MatrixFloat &mNewDelta) override;
 
-	bool has_bias() const;
-    const MatrixFloat& weight() const;
+    virtual void init() override;
+    virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, /*Optimizer* pOptim,*/ MatrixFloat &mNewDelta) override;
+
+  //  bool has_bias() const;
+
+    virtual bool has_weight() override;
+
+
+    virtual MatrixFloat& weights() override;
+    virtual MatrixFloat& gradient_weights() override;
 
 private:
-    MatrixFloat _weight, _mDx;
-	bool _bHasBias;
+    MatrixFloat _weight, _deltaWeight;
+    bool _bHasBias;
 };
 
 #endif
