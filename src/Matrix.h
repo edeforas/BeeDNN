@@ -329,6 +329,16 @@ public:
         return out;
     }
 
+    Matrix<T> cwiseAbs() const
+    {
+        Matrix<T> out(*this);
+
+        for(int i=0;i<_iSize;i++)
+            out(i)=fabs(_data[i]);
+
+        return out;
+    }
+
     Matrix<T> cwiseAbs2() const
     {
         Matrix<T> out(*this);
@@ -359,6 +369,18 @@ public:
         return out;
     }
 
+    Matrix<T> cwiseMax(const Matrix<T>& m) const
+    {
+        assert(m.rows()==rows());
+        assert(m.cols()==cols());
+
+        Matrix<T> out(*this);
+
+        for(int i=0;i<_iSize;i++)
+            out(i)=std::max<T>(_data[i],m._data[i]);
+
+        return out;
+    }
 
     T sum() const
     {

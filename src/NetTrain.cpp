@@ -76,7 +76,7 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
     float fInvBatchSize=1.f/(float)iBatchSize;
 
     vector<MatrixFloat> inOut(nLayers+1);
-    vector<MatrixFloat> deltaSum(nLayers+1);
+    vector<MatrixFloat> deltaWeight(nLayers+1);
     vector<MatrixFloat> delta(nLayers+1);
 
     vector<Optimizer*> optimizers(nLayers);
@@ -115,7 +115,7 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
                 iBatchEnd=iNbSamples;
 
             for(int i=0;i<nLayers+1;i++)
-                deltaSum[i].setZero();
+                deltaWeight[i].setZero();
 
             for(int iBatch=iBatchStart;iBatch<iBatchEnd;iBatch++)
             {
@@ -142,10 +142,10 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
                     Layer& l=net.layer(i);
                     if(l.has_weight())
                     {
-                        if(deltaSum[i].size())
-                            deltaSum[i]+=l.gradient_weights();
+                        if(deltaWeight[i].size())
+                            deltaWeight[i]+=l.gradient_weights();
                         else
-                            deltaSum[i]=l.gradient_weights();
+                            deltaWeight[i]=l.gradient_weights();
                     }
                 }
             }
@@ -155,7 +155,7 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
             {
                 Layer& l=net.layer(i);
                 if(l.has_weight())
-                    optimizers[i]->optimize(l.weights(), deltaSum[i]*fInvBatchSize);
+                    optimizers[i]->optimize(l.weights(), deltaWeight[i]*fInvBatchSize);
             }
 
             iBatchStart=iBatchEnd;
