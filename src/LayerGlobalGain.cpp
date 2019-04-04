@@ -21,7 +21,7 @@ LayerGlobalGain::LayerGlobalGain(int iInSize, float fGlobalGain) :
     _globalGain.resize(1,1);
     _globalGain(0)=fGlobalGain;
 
-    init();
+    LayerGlobalGain::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
 LayerGlobalGain::~LayerGlobalGain()

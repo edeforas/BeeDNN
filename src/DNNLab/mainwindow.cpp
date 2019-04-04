@@ -80,10 +80,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->cbEngine->addItem("tiny-dnn");
 #endif
 
+    //setup optimizer
     vector<string> vsOptimizers;
     list_optimizers_available( vsOptimizers);
     for(unsigned int i=0;i<vsOptimizers.size();i++)
         ui->cbOptimizer->addItem(vsOptimizers[i].data());
+    ui->cbOptimizer->setCurrentText("Adam");
 
     resizeDocks({ui->dockWidget},{1},Qt::Horizontal);
 

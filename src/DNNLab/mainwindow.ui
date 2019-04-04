@@ -539,7 +539,7 @@
        <item>
         <widget class="QLineEdit" name="leLearningRate">
          <property name="text">
-          <string>0.01</string>
+          <string>0.001</string>
          </property>
         </widget>
        </item>
@@ -623,7 +623,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>1</string>
+          <string>16</string>
          </property>
         </widget>
        </item>
@@ -700,6 +700,9 @@
         <widget class="QCheckBox" name="cbKeepBest">
          <property name="text">
           <string>KeepBest</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>

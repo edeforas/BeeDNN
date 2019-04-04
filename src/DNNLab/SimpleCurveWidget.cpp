@@ -24,6 +24,9 @@ SimpleCurveWidget::SimpleCurveWidget(): QGraphicsView()
     yMin=0;
     yMax=0;
 
+    yMinL=-8.;
+    yMaxL=-8.;
+
     //_bDrawXaxis=true;
     _bDrawYaxis=true;
     _bYLogAxis=false;

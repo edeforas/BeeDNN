@@ -10,7 +10,6 @@
 #include "Layer.h"
 #include "Matrix.h"
 
-#include "LayerDense.h"
 #include "LayerDropout.h"
 #include "LayerGlobalGain.h"
 
@@ -37,12 +36,15 @@ string to_string(const Net* pNet)
 
         if(layer->type()=="Dense")
         {
-            LayerDense* l=(LayerDense*)layer;
-            ss << "Dense:  InSize: " << l->in_size() << " OutSize: " << l->out_size() << endl;
-       //     if(l->has_bias()) todo
-                ss << "with bias" << endl;
-            ss << "Weight:\n";
-       //     ss << toString(l->weight()); //todo
+            ss << "Dense:  InSize: " << layer->in_size() << " OutSize: " << layer->out_size() ;
+
+            if(layer->in_size()!=layer->weights().rows())
+              ss << " (with bias)" << endl;
+            else
+                ss << " (without bias)" << endl;
+
+            ss << "Weight:" << endl;
+            ss << toString(layer->weights()) << endl;
         }
 
         else if(layer->type()=="GlobalGain")

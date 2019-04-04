@@ -21,14 +21,14 @@ class TrainOption
 public:
     TrainOption()
     {
-        epochs=1000;
-        batchSize=1; //not used for now
-        learningRate=0.01f;
+        epochs=100;
+        batchSize=16;
+        learningRate=0.001f;
         decay=0.9f;
         momentum=0.9f;
-		keepBest = false;
+        keepBest = true;
         testEveryEpochs=-1;
-        optimizer = "Nesterov";
+        optimizer = "Adam";
         epochCallBack = nullptr;
     }
 
@@ -39,17 +39,17 @@ public:
     float momentum;
 	bool keepBest;
     int testEveryEpochs; //set to 1 to test at each epoch, 10 to test only 1/10 of the time, etc, set to -1 for no test //todo remove
-    string optimizer; //ex "SGD" "Momentum" Adam" "Adagrad" "Nesterov" "RMSProp"
+    string optimizer; //ex "SGD" "Momentum" Adam" "Adagrad" "Nesterov" "Nadam" "Adamax" "RMSProp"
     std::function<void()> epochCallBack;
-
-    // void(*epochCallBack)(); //called after an epoch
 };
 
 class TrainResult
 {
 public:
     TrainResult()
-    { }
+    { 
+		finalLoss=-1.;
+	}
 
     void reset()
     {

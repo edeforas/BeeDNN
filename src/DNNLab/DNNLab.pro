@@ -1,7 +1,7 @@
 QT       += core gui widgets
 TARGET = DNNLab
 TEMPLATE = app
-CONFIG += c++14
+CONFIG += c++17
 
 
 #qwt (optional)
