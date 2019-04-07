@@ -14,6 +14,7 @@
 #include "LayerGlobalGain.h"
 
 #include <sstream>
+#include <fstream>
 using namespace std;
 
 namespace NetUtil {
@@ -68,5 +69,15 @@ string to_string(const Net* pNet)
     return ss.str();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
+bool NetUtil::save(string sFileName,const Net* pNet)
+{
+    string s=to_string(pNet);
+    ofstream f(sFileName);
+    f << s;
+    f.close();
+
+    return true;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 }

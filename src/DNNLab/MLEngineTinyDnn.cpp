@@ -100,6 +100,16 @@ string DNNEngineTinyDnn::to_string()
     return ss.str();
 }
 //////////////////////////////////////////////////////////////////////////////
+bool DNNEngineTinyDnn::save(string sFileName)
+{
+    string s=to_string();
+    ofstream f(sFileName);
+    f << s;
+    f.close();
+
+    return true;
+}
+//////////////////////////////////////////////////////////////////////////////
 void DNNEngineTinyDnn::clear()
 {
     delete _pNet;

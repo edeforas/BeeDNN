@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include <QMessageBox>
 #include <QColorDialog>
+#include <QFileDialog>
+
 #include "SimpleCurveWidget.h"
 
 #include "MLEngine.h"
@@ -655,6 +657,14 @@ void MainWindow::on_cbConfMatPercent_stateChanged(int arg1)
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionSave_as_triggered()
 {
+    string sFileName = QFileDialog::getSaveFileName(this,tr("Save DNNLab File as"), ".", tr("DNNLab Files (*.dnnlab)")).toStdString();
+    if(sFileName.empty())
+        return;
+
+    _sFileName=sFileName;
+
+    _pEngine->save(_sFileName);
+    _bMustSave=false;
 
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -671,7 +681,17 @@ void MainWindow::on_actionOpen_triggered()
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionSave_triggered()
 {
+    if(_sFileName.empty())
+    {
+        string sFileName = QFileDialog::getSaveFileName(this,tr("Save DNNLab File"), ".", tr("DNNLab Files (*.dnnlab)")).toStdString();
+        if(sFileName.empty())
+            return;
 
+        _sFileName=sFileName;
+    }
+
+    _pEngine->save(_sFileName);
+    _bMustSave=false;
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionClose_triggered()
@@ -681,6 +701,19 @@ void MainWindow::on_actionClose_triggered()
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionSave_with_Score_triggered()
 {
+    /*    if(_sFileName.empty())
+    {
+        string sFileName = QFileDialog::getSaveFileName(this,tr("Save DNNLab File"), ".", tr("DNNLab Files (*.dnnlab)")).toStdString();
+        if(sFileName.empty())
+            return;
 
-}
+        _sFileName=sFileName;
+    }
+
+    //score=to_string()
+    //todo
+
+    _pEngine->save(_sFileName+sScore);
+    _bMustSave=false;
+*/}
 //////////////////////////////////////////////////////////////////////////////

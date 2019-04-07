@@ -19,6 +19,9 @@ class Layer;
 
 namespace NetUtil {
 string to_string(const Net* pNet);
+
+bool save(string sFileName,const Net* pNet);
+
 };
 
 #endif

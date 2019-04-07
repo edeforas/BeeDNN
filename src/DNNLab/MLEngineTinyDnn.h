@@ -16,6 +16,7 @@ public:
     DNNEngineTinyDnn();
     virtual ~DNNEngineTinyDnn();
     virtual string to_string() override;
+    virtual bool save(string sFileName) override;
 
     virtual void clear() override;
     virtual void init() override;

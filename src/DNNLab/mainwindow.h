@@ -79,6 +79,7 @@ private:
     MatrixFloat _mTestTruth;
     bool _bHasTestData;
     bool _bMustSave;
+    string _sFileName;
 
     MatrixFloat _mConfusionMatrix;
 };

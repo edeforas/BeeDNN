@@ -27,6 +27,11 @@ string MLEngineBeeDnn::to_string()
     return NetUtil::to_string(_pNet);
 }
 //////////////////////////////////////////////////////////////////////////////
+bool MLEngineBeeDnn::save(string sFileName)
+{
+   return NetUtil::save(sFileName,_pNet);
+}
+//////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::init()
 {
     _pNet->init();

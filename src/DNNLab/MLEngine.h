@@ -68,6 +68,7 @@ public:
     MLEngine();
     virtual ~MLEngine();
     virtual string to_string()=0;
+    virtual bool save(string sFileName)=0;
 
     virtual void clear()=0; //remove all layers
     virtual void init(); // init weights
