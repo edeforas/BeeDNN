@@ -48,6 +48,8 @@ private slots:
 
     void on_actionClose_triggered();
 
+    void on_actionSave_with_Score_triggered();
+
 private:
     void drawLoss(vector<double> vdLoss);
     void drawAccuracy(vector<double> vdAccuracy);
@@ -58,7 +60,8 @@ private:
     void compute_truth();
     void train_and_test(bool bReset);
     void update_details();
-    void parse_net();
+    void ui_to_net();
+    void net_to_ui();
     void set_input_size(int iSize);
 
     Ui::MainWindow *ui;

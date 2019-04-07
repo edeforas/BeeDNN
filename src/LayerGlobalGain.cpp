@@ -9,17 +9,15 @@
 #include "LayerGlobalGain.h"
 
 #include <cmath> // for sqrt
-#include "Optimizer.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerGlobalGain::LayerGlobalGain(int iInSize, float fGlobalGain) :
-    Layer(iInSize , iInSize, "GlobalGain")//,
-  //  _fGlobalGain(fGlobalGain)
+    Layer(iInSize , iInSize, "GlobalGain")
 {
-    _bLearnable=(fGlobalGain==0.f); //temp code
+    _bLearnable=(fGlobalGain==0.f); //for now
 
-    _globalGain.resize(1,1);
-    _globalGain(0)=fGlobalGain;
+    _weight.resize(1,1);
+    _weight(0)=fGlobalGain;
 
     LayerGlobalGain::init();
 }
@@ -29,7 +27,7 @@ LayerGlobalGain::~LayerGlobalGain()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerGlobalGain::clone() const
 {
-    LayerGlobalGain* pLayer=new LayerGlobalGain(_iInSize,_globalGain(0));
+    LayerGlobalGain* pLayer=new LayerGlobalGain(_iInSize,_weight(0));
     return pLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -39,8 +37,8 @@ void LayerGlobalGain::init()
     {
         //Xavier uniform initialization
         float a =sqrtf(6.f/(_iInSize+_iOutSize));
-        _globalGain.setRandom();
-        _globalGain*=a;
+        _weight.setRandom();
+        _weight*=a;
     }
 
     Layer::init();
@@ -48,22 +46,18 @@ void LayerGlobalGain::init()
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGlobalGain::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
 {
-    mMatOut = mMatIn * _globalGain(0);
+    mMatOut = mMatIn * _weight(0);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGlobalGain::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta)
 {
-    mNewDelta = mDelta * _globalGain(0);
-    _mDx = mInput*(mDelta.transpose());
-/*
-    if(_bLearnable)
-        pOptim->optimize(_globalGain, _mDx);
-*/
+    mNewDelta = mDelta * _weight(0);
+    _mDeltaWeight = mInput*(mDelta.transpose());
 }
 ///////////////////////////////////////////////////////////////////////////////
 float LayerGlobalGain::gain() const
 {
-    return _globalGain(0);
+    return _weight(0);
 }
 ///////////////////////////////////////////////////////////////////////////////
 bool LayerGlobalGain::is_learned() const
@@ -71,3 +65,18 @@ bool LayerGlobalGain::is_learned() const
     return _bLearnable;
 }
 ///////////////////////////////////////////////////////////////////////////////
+MatrixFloat& LayerGlobalGain::weights()
+{
+    return _weight;
+}
+///////////////////////////////////////////////////////////////////////////////
+MatrixFloat& LayerGlobalGain::gradient_weights()
+{
+    return _mDeltaWeight;
+}
+///////////////////////////////////////////////////////////////////////////////
+bool LayerGlobalGain::has_weight()
+{
+    return true;
+}
+///////////////////////////////////////////////////////////////

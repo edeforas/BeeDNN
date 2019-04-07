@@ -64,9 +64,9 @@ void Net::add_dense_layer(int inSize,int outSize,bool bHasBias)
     _layers.push_back(new LayerDense(inSize,outSize, bHasBias));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_globalgain_layer(int inSize,float fGlobalGain)
+void Net::add_globalgain_layer(int inSize, float fGlobalGain)
 {
-    _layers.push_back(new LayerGlobalGain(inSize,fGlobalGain));	
+    _layers.push_back(new LayerGlobalGain(inSize,fGlobalGain));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const

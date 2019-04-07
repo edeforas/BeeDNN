@@ -44,7 +44,7 @@ protected:
 	bool _bTrainMode;
 
 private:
-    MatrixFloat _weight,_deltaWeight; //for now
+    MatrixFloat _weightVoid,_deltaWeightVoid; //for now
     string _sType;
 };
 

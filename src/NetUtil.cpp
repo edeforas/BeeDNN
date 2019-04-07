@@ -50,7 +50,7 @@ string to_string(const Net* pNet)
         else if(layer->type()=="GlobalGain")
         {
             LayerGlobalGain* l=(LayerGlobalGain*)layer;
-            ss << "GlobalGain: gain=" << l->gain() << (l->is_learned()?" (Learned)":" (fixed)") << endl;
+            ss << "GlobalGain: gain=" << l->gain() << endl; //(l->is_learned()?" (Learned)":" (fixed)") << endl;
         }
 
         else if(layer->type()=="Dropout")

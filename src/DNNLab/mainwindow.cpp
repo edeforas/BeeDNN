@@ -133,7 +133,7 @@ void MainWindow::train_and_test(bool bReset)
     //LossObserver lossCB;
 
     if(bReset)
-        parse_net();
+        ui_to_net();
 
     DNNTrainOption dto;
     dto.epochs=ui->leEpochs->text().toInt();
@@ -455,7 +455,14 @@ void MainWindow::on_btnTrainMore_clicked()
     train_and_test(false);
 }
 //////////////////////////////////////////////////////////////////////////////
-void MainWindow::parse_net()
+void MainWindow::net_to_ui()
+{
+    ui->twNetwork->clearContents();
+
+    //todo
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::ui_to_net()
 {
     bool bOk;
     float fArg1;
@@ -653,7 +660,8 @@ void MainWindow::on_actionSave_as_triggered()
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionNew_triggered()
 {
-
+    _pEngine->clear();
+    net_to_ui();
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionOpen_triggered()
@@ -667,6 +675,11 @@ void MainWindow::on_actionSave_triggered()
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionClose_triggered()
+{
+
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::on_actionSave_with_Score_triggered()
 {
 
 }

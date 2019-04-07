@@ -28,8 +28,12 @@ public:
     float gain() const;
     bool is_learned() const;
 
+    virtual bool has_weight() override;
+    virtual MatrixFloat& weights() override;
+    virtual MatrixFloat& gradient_weights() override;
+
 private:
-    MatrixFloat _globalGain,_mDx;
+    MatrixFloat _weight,_mDeltaWeight;
     bool _bLearnable;
 };
 
