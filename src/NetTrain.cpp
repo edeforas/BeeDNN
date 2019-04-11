@@ -177,6 +177,8 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
                 dMinLoss=dLoss;
                 bestNet=net;
             }
+            else
+                net=bestNet; //restart from best solution
         }
     }
 

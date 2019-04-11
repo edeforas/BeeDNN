@@ -8,6 +8,8 @@
 
 #include "ConfusionMatrix.h"
 
+#include <cmath>
+
 ///////////////////////////////////////////////////////////////////////////////
 ClassificationResult ConfusionMatrix::compute(const MatrixFloat& mRef,const MatrixFloat& mTest,int iNbClass)
 {
@@ -21,18 +23,16 @@ ClassificationResult ConfusionMatrix::compute(const MatrixFloat& mRef,const Matr
     for(unsigned int i=0;i<(unsigned int)mRef.rows();i++)
     {
         //threshold label
-        int iLabel=(unsigned int)(mTest(i)+0.5f);
+        int iLabel=(int)(std::roundf(mTest(i)));
         iLabel=std::min(iLabel,iNbClass-1);
         iLabel=std::max(iLabel,0);
         cr.mConfMat((unsigned int)mRef(i),iLabel)++;
     }
 
-    MatrixFloat mDiag=cr.mConfMat.diagonal();
-    MatrixFloat mSum=rowWiseSum(cr.mConfMat);
-
-    MatrixFloat mGoodClassification=mDiag.cwiseQuotient(mSum)*100.f;
-
-    cr.accuracy=mGoodClassification.sum()/iNbClass;
+    //compute accuracy in percent
+    double dTrace=cr.mConfMat.trace();
+    double dSum=cr.mConfMat.sum();
+    cr.accuracy=dTrace/dSum*100.;
 
     return cr;
 }

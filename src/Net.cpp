@@ -94,7 +94,10 @@ void Net::classify_all(const MatrixFloat& mIn, MatrixFloat& mClass) const
     for(int i=0;i<mIn.rows();i++)
     {
         forward(mIn.row(i),mOut);
-        mClass(i,0)= (float)argmax(mOut);
+        if(mOut.cols()!=1)
+            mClass(i,0)= (float)argmax(mOut);
+        else
+            mClass(i,0)=std::roundf(mOut(0,0)); //case of "output is a label"
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////

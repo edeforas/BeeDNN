@@ -26,7 +26,7 @@ public:
         learningRate=0.001f;
         decay=0.9f;
         momentum=0.9f;
-        keepBest = true;
+        keepBest = false;
         testEveryEpochs=-1;
         optimizer = "Adam";
         epochCallBack = nullptr;

@@ -69,7 +69,7 @@ string to_string(const Net* pNet)
     return ss.str();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-bool NetUtil::save(string sFileName,const Net* pNet)
+bool save(string sFileName,const Net* pNet)
 {
     string s=to_string(pNet);
     ofstream f(sFileName);

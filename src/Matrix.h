@@ -460,6 +460,16 @@ public:
         return r;
     }
 
+    T trace() const
+    {
+        T trace=0;
+
+        for(int i=0;i<_iRows;i++) //todo test square
+            trace+=operator()(i,i);
+
+        return trace;
+    }
+
 private:
     int _iRows,_iColumns,_iSize;
     T* _data;
