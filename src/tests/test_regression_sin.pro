@@ -19,6 +19,7 @@ SOURCES += test_regression_sin.cpp \
     ../LayerActivation.cpp \
     ../LayerDense.cpp \
     ../LayerDropout.cpp \
+    ../LayerPoolAverage1D.cpp \
     ../LayerGlobalGain.cpp
 
 HEADERS += \
@@ -31,4 +32,5 @@ HEADERS += \
     ../LayerActivation.h \
     ../LayerDense.h \
     ../LayerDropout.h \
+    ../LayerPoolAverage1D.h \
     ../LayerGlobalGain.h

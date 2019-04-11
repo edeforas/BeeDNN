@@ -58,6 +58,11 @@ void MLEngineBeeDnn::add_globalgain_layer(int inSize,float fGain)
       _pNet->add_globalgain_layer(inSize,fGain);
 }
 //////////////////////////////////////////////////////////////////////////////
+void MLEngineBeeDnn::add_poolaveraging1d_layer(int inSize,int iWindowSize)
+{
+    _pNet->add_poolaveraging1D_layer(inSize,iWindowSize);
+}
+//////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
 {
     _pNet->forward(mIn,mOut);
@@ -96,7 +101,7 @@ void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat&
                 MatrixFloat mConf;
                 compute_confusion_matrix(mSamples, mTruth, mConf, fAccuracy);
             }
-            vdAccuracy.push_back(fAccuracy);
+            vdAccuracy.push_back((double)fAccuracy);
         }
     };
 

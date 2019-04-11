@@ -9,7 +9,6 @@
 #include "LayerDense.h"
 
 #include <cmath> // for sqrt
-#include "Optimizer.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerDense::LayerDense(int iInSize, int iOutSize, bool bHasBias) :

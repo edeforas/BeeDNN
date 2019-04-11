@@ -179,6 +179,16 @@ void DNNEngineTinyDnn::add_globalgain_layer(int inSize,float fGain)
     assert(false);
     // not implemented
 }
+
+//////////////////////////////////////////////////////////////////////////////
+void DNNEngineTinyDnn::add_poolaveraging1d_layer(int inSize,int iWindowSize)
+{
+    (void)inSize;
+    (void)iWindowSize;
+
+assert(false);
+// not implemented
+}
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTinyDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
 {

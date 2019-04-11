@@ -36,7 +36,8 @@ SOURCES += \
     ../LayerActivation.cpp \
     ../LayerDense.cpp \
     ../LayerDropout.cpp \
-    ../LayerGlobalGain.cpp
+    ../LayerGlobalGain.cpp \
+    ../LayerPoolAveraging1D.cpp
 
 HEADERS += \
     ../Activation.h \
@@ -51,7 +52,8 @@ HEADERS += \
     ../LayerActivation.h \
     ../LayerDense.h \
     ../LayerDropout.h \
-    ../LayerGlobalGain.h
+    ../LayerGlobalGain.h \
+    ../LayerPoolAveraging1D.h
 
 #ui
 SOURCES += \

@@ -457,7 +457,7 @@
        </property>
        <property name="minimumSize">
         <size>
-         <width>520</width>
+         <width>600</width>
          <height>0</height>
         </size>
        </property>
@@ -486,7 +486,7 @@
         <number>4</number>
        </property>
        <attribute name="horizontalHeaderDefaultSectionSize">
-        <number>130</number>
+        <number>150</number>
        </attribute>
        <attribute name="horizontalHeaderMinimumSectionSize">
         <number>130</number>

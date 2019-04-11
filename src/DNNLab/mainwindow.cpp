@@ -65,9 +65,10 @@ MainWindow::MainWindow(QWidget *parent) :
         qcbType->addItem("DenseNoBias");
         qcbType->addItem("Dropout");
         qcbType->addItem("GlobalGain");
+        qcbType->addItem("PoolAveraging1D");
         // qcbType->addItem("SoftMax");
 
-        qcbType->insertSeparator(5);
+        qcbType->insertSeparator(6);
 
         for(unsigned int a=0;a<vsActivations.size();a++)
             qcbType->addItem(vsActivations[a].c_str());
@@ -467,7 +468,7 @@ void MainWindow::net_to_ui()
 void MainWindow::ui_to_net()
 {
     bool bOk;
-    float fArg1;
+    float fArg1=0.f;
     _pEngine->clear();
     int iLastOut=_iInputSize;
     for(int iRow=0;iRow<10;iRow++) //todo dynamic size
@@ -527,6 +528,8 @@ void MainWindow::ui_to_net()
                     fGain=fArg1;
                 _pEngine->add_globalgain_layer(iInSize,fGain);
             }
+            else if(sType=="PoolAveraging1D")
+                _pEngine->add_poolaveraging1d_layer(iInSize,iOutSize);
             else if(sType=="DenseAndBias")
                 _pEngine->add_dense_layer(iInSize,iOutSize,true);
             else if(sType=="DenseNoBias")

@@ -18,6 +18,7 @@ SOURCES += \
     ../LayerDense.cpp \
     ../LayerDropout.cpp \
     ../LayerGlobalGain.cpp \
+    ../LayerPoolAveraging1D.cpp \
     ../NetTrain.cpp \
     ../Optimizer.cpp \
     test_classification_MNIST.cpp
@@ -36,4 +37,5 @@ HEADERS += \
     ../ConfusionMatrix.h \
     ../LayerDense.h \
     ../LayerDropout.h \
+    ../LayerPoolAveraging1D.h \
     ../LayerGlobalGain.h

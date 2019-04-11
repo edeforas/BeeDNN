@@ -77,6 +77,7 @@ public:
     virtual void add_activation_layer(string sActivation) =0;
     virtual void add_dropout_layer(int inSize,float fRatio) =0;
     virtual void add_globalgain_layer(int inSize,float fGain) =0;
+    virtual void add_poolaveraging1d_layer(int inSize,int iWindowSize) =0;
 
     void set_problem(bool bClassification); //classification or regression
     bool is_classification_problem();

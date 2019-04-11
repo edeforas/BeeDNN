@@ -15,6 +15,7 @@
 #include "LayerDense.h"
 #include "LayerDropout.h"
 #include "LayerGlobalGain.h"
+#include "LayerPoolAveraging1D.h"
 
 #include <cmath>
 using namespace std;
@@ -22,7 +23,7 @@ using namespace std;
 /////////////////////////////////////////////////////////////////////////////////////////////////
 Net::Net()
 { 
-	_bTrainMode = false;
+    _bTrainMode = false;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 Net::~Net()
@@ -51,12 +52,12 @@ Net& Net::operator=(const Net& other)
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_dropout_layer(int iSize,float fRatio)
 {
-     _layers.push_back(new LayerDropout(iSize, fRatio));
+    _layers.push_back(new LayerDropout(iSize, fRatio));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_activation_layer(string sType)
 {
-	_layers.push_back(new LayerActivation(sType));
+    _layers.push_back(new LayerActivation(sType));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_dense_layer(int inSize,int outSize,bool bHasBias)
@@ -67,6 +68,11 @@ void Net::add_dense_layer(int inSize,int outSize,bool bHasBias)
 void Net::add_globalgain_layer(int inSize, float fGlobalGain)
 {
     _layers.push_back(new LayerGlobalGain(inSize,fGlobalGain));
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void Net::add_poolaveraging1D_layer(int inSize, int iWindowSize)
+{
+    _layers.push_back(new LayerPoolAveraging1D(inSize, iWindowSize));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
@@ -103,12 +109,12 @@ void Net::classify_all(const MatrixFloat& mIn, MatrixFloat& mClass) const
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::set_train_mode(bool bTrainMode)
 {
-	_bTrainMode = bTrainMode;
+    _bTrainMode = bTrainMode;
 
-	for (unsigned int i = 0; i < _layers.size(); i++)
-	{
-		_layers[i]->set_train_mode(bTrainMode);
-	}
+    for (unsigned int i = 0; i < _layers.size(); i++)
+    {
+        _layers[i]->set_train_mode(bTrainMode);
+    }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 const vector<Layer*> Net::layers() const
