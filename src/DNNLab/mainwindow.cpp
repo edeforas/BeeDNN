@@ -529,7 +529,7 @@ void MainWindow::ui_to_net()
                 _pEngine->add_globalgain_layer(iInSize,fGain);
             }
             else if(sType=="PoolAveraging1D")
-                _pEngine->add_poolaveraging1d_layer(iInSize,iOutSize);
+                _pEngine->add_poolaveraging1D_layer(iInSize,iOutSize);
             else if(sType=="DenseAndBias")
                 _pEngine->add_dense_layer(iInSize,iOutSize,true);
             else if(sType=="DenseNoBias")

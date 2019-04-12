@@ -181,7 +181,7 @@ void DNNEngineTinyDnn::add_globalgain_layer(int inSize,float fGain)
 }
 
 //////////////////////////////////////////////////////////////////////////////
-void DNNEngineTinyDnn::add_poolaveraging1d_layer(int inSize,int iWindowSize)
+void DNNEngineTinyDnn::add_poolaveraging1D_layer(int inSize,int iWindowSize)
 {
     (void)inSize;
     (void)iWindowSize;
