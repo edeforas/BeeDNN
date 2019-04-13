@@ -55,7 +55,7 @@ int main()
     mTestImages/=256.f;
     mRefImages/=256.f;
 
-    //create simple net: 97% classif 76% test after a long time
+    //create simple net: 97% train, 76% test after a long time
     net.add_dense_layer(784,64,true);
     net.add_dropout_layer(64,0.2f);
     net.add_activation_layer("Relu");

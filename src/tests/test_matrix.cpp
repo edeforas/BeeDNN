@@ -8,9 +8,9 @@ using namespace std;
 void disp(const MatrixFloat& m)
 {
     cout << "rows=" << m.rows() << " columns=" << m.cols() << endl;
-    for(unsigned int r=0;r<m.rows();r++)
+    for( int r=0;r<m.rows();r++)
     {
-        for(unsigned int c=0;c<m.cols();c++)
+        for( int c=0;c<m.cols();c++)
             cout << m(r,c) << " ";
         cout << endl;
     }
@@ -39,16 +39,16 @@ int main()
     const MatrixFloat mB=fromRawBuffer(b,2,1);
 
     const MatrixFloat mAT=mA.transpose();
-	cout << "Transposed Matrix:" << endl;
+    cout << "Transposed Matrix:" << endl;
     disp(mAT);
 
     MatrixFloat prod=mA*mB;
-	cout << "Product Matrix:" << endl;
+    cout << "Product Matrix:" << endl;
     disp(prod);
 
-	MatrixFloat mD=mA.diagonal();
-	cout << "Diagonal Matrix as vector:" << endl;
-	disp(mD);
+    MatrixFloat mD=mA.diagonal();
+    cout << "Diagonal Matrix as vector:" << endl;
+    disp(mD);
 
     MatrixFloat mS=rowWiseSum(mA);
     cout << "RowWiseSum:" << endl;
