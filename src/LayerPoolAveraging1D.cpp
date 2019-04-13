@@ -9,12 +9,17 @@
 #include "LayerPoolAveraging1D.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerPoolAveraging1D::LayerPoolAveraging1D(int iInSize, int iWindowSize) :
-    Layer(iInSize , iInSize/iWindowSize, "PoolAveraging1D")
+LayerPoolAveraging1D::LayerPoolAveraging1D(int iInSize, int iOutSize) :
+    Layer(iInSize , iOutSize, "PoolAveraging1D")
 {
-    _iWindowSize=iWindowSize;
-    _weight.resize(_iInSize,_iOutSize);
-    _weight.setConstant(1.f/iWindowSize);
+    int iWindowSize=iInSize/iOutSize;
+    float fInvWeight=1.f/iWindowSize;
+
+    _weight.setZero(_iInSize,_iOutSize);
+
+    for(int i=0;i<iOutSize;i++)
+        for(int j=0;j<iWindowSize;j++)
+            _weight(i*iWindowSize+j,i)=fInvWeight;
 }
 ///////////////////////////////////////////////////////////////////////////////
 LayerPoolAveraging1D::~LayerPoolAveraging1D()
@@ -22,7 +27,7 @@ LayerPoolAveraging1D::~LayerPoolAveraging1D()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerPoolAveraging1D::clone() const
 {
-    return new LayerPoolAveraging1D(_iInSize,_iWindowSize);
+    return new LayerPoolAveraging1D(_iInSize,_iOutSize);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerPoolAveraging1D::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
@@ -34,10 +39,5 @@ void LayerPoolAveraging1D::backpropagation(const MatrixFloat &mInput,const Matri
 {
     (void)mInput;
     mInputDelta = mDelta * (_weight.transpose());
-}
-///////////////////////////////////////////////////////////////////////////////
-int LayerPoolAveraging1D::window_size() const
-{
-    return _iWindowSize;
 }
 ///////////////////////////////////////////////////////////////////////////////

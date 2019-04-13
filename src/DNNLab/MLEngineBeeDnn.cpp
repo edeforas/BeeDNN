@@ -58,9 +58,9 @@ void MLEngineBeeDnn::add_globalgain_layer(int inSize,float fGain)
       _pNet->add_globalgain_layer(inSize,fGain);
 }
 //////////////////////////////////////////////////////////////////////////////
-void MLEngineBeeDnn::add_poolaveraging1D_layer(int inSize,int iWindowSize)
+void MLEngineBeeDnn::add_poolaveraging1D_layer(int inSize,int iOutSize)
 {
-    _pNet->add_poolaveraging1D_layer(inSize,iWindowSize);
+    _pNet->add_poolaveraging1D_layer(inSize,iOutSize);
 }
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)

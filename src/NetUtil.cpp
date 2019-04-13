@@ -12,7 +12,6 @@
 
 #include "LayerDropout.h"
 #include "LayerGlobalGain.h"
-#include "LayerPoolAveraging1D.h"
 
 #include <sstream>
 #include <fstream>
@@ -52,14 +51,11 @@ string to_string(const Net* pNet)
         else if(layer->type()=="GlobalGain")
         {
             LayerGlobalGain* l=(LayerGlobalGain*)layer;
-            ss << "GlobalGain: gain=" << l->gain() << endl; //(l->is_learned()?" (Learned)":" (fixed)") << endl;
+            ss << "GlobalGain: gain=" << l->gain() << endl;
         }
 
         else if(layer->type()=="PoolAveraging1D")
-        {
-            LayerPoolAveraging1D* l=(LayerPoolAveraging1D*)layer;
-            ss << "PoolAveraging1D: windowSize=" << l->window_size() << endl; //(l->is_learned()?" (Learned)":" (fixed)") << endl;
-        }
+            ss << "PoolAveraging1D:  InSize: " << layer->in_size() << " OutSize: " << layer->out_size() << endl;
 
         else if(layer->type()=="Dropout")
         {

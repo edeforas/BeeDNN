@@ -44,7 +44,7 @@ Net& Net::operator=(const Net& other)
 {
     clear();
 
-    for(int i=0;i<other._layers.size();i++)
+    for(unsigned int i=0;i<other._layers.size();i++)
         _layers.push_back(other._layers[i]->clone());
 
     return *this;
@@ -70,9 +70,9 @@ void Net::add_globalgain_layer(int inSize, float fGlobalGain)
     _layers.push_back(new LayerGlobalGain(inSize,fGlobalGain));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_poolaveraging1D_layer(int inSize, int iWindowSize)
+void Net::add_poolaveraging1D_layer(int inSize, int iOutSize)
 {
-    _layers.push_back(new LayerPoolAveraging1D(inSize, iWindowSize));
+    _layers.push_back(new LayerPoolAveraging1D(inSize, iOutSize));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const

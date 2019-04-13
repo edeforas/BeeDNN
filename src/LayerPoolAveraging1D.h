@@ -23,10 +23,7 @@ public:
     virtual void forward(const MatrixFloat& mMatin, MatrixFloat &mMatOut) const override;
     virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta) override;
 
-    int window_size() const;
-
 private:
-	int _iWindowSize;
     MatrixFloat _weight;
 };
 
