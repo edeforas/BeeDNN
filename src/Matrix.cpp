@@ -49,6 +49,20 @@ MatrixFloat rowWiseSum(const MatrixFloat& m)
 #endif
 }
 ///////////////////////////////////////////////////////////////////////////
+MatrixFloat cwiseLog(const MatrixFloat& m)
+{
+#ifdef USE_EIGEN
+	return m.array().log();
+#else
+	MatrixFloat result(m.rows(),m.cols());
+
+	for (int i = 0; i < m.size(); i++)
+		result(i) = log(m(i));
+
+	return result;
+#endif
+}
+///////////////////////////////////////////////////////////////////////////
 MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d)
 {
     MatrixFloat r=m;

@@ -485,6 +485,7 @@ MatrixFloatView fromRawBuffer(float *pBuffer, int iRows, int iCols);
 const MatrixFloatView fromRawBuffer(const float *pBuffer, int iRows, int iCols);
 MatrixFloat rowWiseSum(const MatrixFloat& m);
 MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d);
+MatrixFloat cwiseLog(const MatrixFloat& m);
 MatrixFloat randPerm(int iSize); //create a vector of index shuffled
 MatrixFloat decimate(const MatrixFloat& m, int iRatio);
 int argmax(const MatrixFloat& m);

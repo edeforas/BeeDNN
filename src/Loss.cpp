@@ -47,13 +47,12 @@ public:
 	
 	float compute(const MatrixFloat& mPredicted,const MatrixFloat& mTarget) const
 	{
-		return 0.f; //todo
-
+		return -(mTarget.cwiseProduct(cwiseLog(mPredicted.cwiseMax(1.e-8f))).sum()); //to avoid computing log(0)
 	}
 	
 	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const
 	{
-		//todo
+		mGradientLoss = -(mTarget.cwiseQuotient(mPredicted.cwiseMax(1.e-8f))); //to avoid computing 1/0
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -73,6 +72,6 @@ void list_loss_available(vector<string>& vsLoss)
     vsLoss.clear();
 
     vsLoss.push_back("MeanSquareError");
-//	vsLoss.push_back("CrossEntropy");
+	vsLoss.push_back("CrossEntropy");
 }
 //////////////////////////////////////////////////////////////////////////////
