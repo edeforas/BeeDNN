@@ -23,6 +23,8 @@ public:
 	Optimizer();
 	virtual ~Optimizer();
 	
+	virtual string name() const = 0;
+
 	virtual void init(const Layer& l)=0;
 
     virtual void optimize(MatrixFloat& w, const MatrixFloat& dw) = 0;
@@ -32,7 +34,7 @@ public:
     float fDecay; //temp
 };
 
-Optimizer* get_optimizer(const string & sOptimizer);
+Optimizer* create_optimizer(const string & sOptimizer);
 void list_optimizers_available(vector<string>& vsOptimizers);
 
 #endif

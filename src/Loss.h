@@ -24,10 +24,10 @@ public:
     virtual string name() const =0 ;
 
 	virtual float compute(const MatrixFloat& mPredicted,const MatrixFloat& mTarget) const =0 ;
-	virtual float compute_derivate(const MatrixFloat& mPredicted,const MatrixFloat& mTarget) const =0 ;
+	virtual void compute_gradient(const MatrixFloat& mPredicted,const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const =0 ;
 };
 
-Loss* get_loss(const string & sLoss);
+Loss* create_loss(const string & sLoss);
 void list_loss_available(vector<string>& vsLoss);
 
 #endif

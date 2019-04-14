@@ -16,6 +16,7 @@
 #include <string>
 using namespace std;
 
+class Optimizer;
 class Loss;
 
 class TrainOption
@@ -30,7 +31,6 @@ public:
         momentum=0.9f;
         keepBest = false;
         testEveryEpochs=-1;
-        optimizer = "Adam";
         epochCallBack = nullptr;
     }
 
@@ -41,9 +41,7 @@ public:
     float momentum;
 	bool keepBest;
     int testEveryEpochs; //set to 1 to test at each epoch, 10 to test only 1/10 of the time, etc, set to -1 for no test //todo remove
-    string optimizer; //ex "SGD" "Momentum" Adam" "Adagrad" "Nesterov" "Nadam" "Adamax" "RMSProp"
-
-	
+ 
 	std::function<void()> epochCallBack;
 };
 
@@ -81,12 +79,15 @@ public:
     TrainResult train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruthLabel,const TrainOption& topt);
     TrainResult fit(Net& net, const MatrixFloat& mSamples, const MatrixFloat& mTruth, const TrainOption& topt);
 
-	void set_loss_function(string sLoss); //ex "MeanSquareError" "CategorialCrossEntropy"
-	string get_loss_function() const;
+	void set_optimizer(string sOptimizer); //ex "SGD" "Adam" "Nesterov" ...
+	string get_optimizer() const;
+
+	void set_loss(string sLoss); //ex "MeanSquareError" "CategorialCrossEntropy"
+	string get_loss() const;
 
 private:
+	string _sOptimizer;
 	Loss* _pLoss;
-
 };
 
 #endif

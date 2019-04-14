@@ -13,6 +13,7 @@ SOURCES += test_xor.cpp \
     ../Net.cpp \
     ../Optimizer.cpp \
     ../NetTrain.cpp \
+	../Loss.cpp \
     ../Layer.cpp \
     ../Matrix.cpp \
     ../Activation.cpp \
@@ -29,6 +30,7 @@ HEADERS += \
     ../Net.h \
     ../Optimizer.h \
     ../NetTrain.h \
+	../Loss.h \
     ../LayerActivation.h \
     ../LayerDense.h \
     ../LayerPoolAveraging1D.h \

@@ -31,12 +31,9 @@ public:
 		return (mPredicted -mTarget ).cwiseAbs2().sum() / mTarget.rows();
 	}
 	
-	float compute_derivate(const MatrixFloat& mPredicted,const MatrixFloat& mTarget) const
+	void compute_gradient(const MatrixFloat& mPredicted,const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const
 	{
-		if (mTarget.rows() == 0)
-			return 0.f;
-
-		return (mPredicted - mTarget).sum() / mTarget.rows();
+		mGradientLoss = mPredicted - mTarget;
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -54,14 +51,13 @@ public:
 
 	}
 	
-	float compute_derivate(const MatrixFloat& mPredicted,const MatrixFloat& mTarget) const
+	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const
 	{
-		return 0.f; //todo
-
+		//todo
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
-Loss* get_loss(const string& sActivation)
+Loss* create_loss(const string& sActivation)
 {
     if(sActivation=="MeanSquareError")
         return new LossMeanSquareError;
@@ -77,6 +73,6 @@ void list_loss_available(vector<string>& vsLoss)
     vsLoss.clear();
 
     vsLoss.push_back("MeanSquareError");
-	vsLoss.push_back("CrossEntropy");
+//	vsLoss.push_back("CrossEntropy");
 }
 //////////////////////////////////////////////////////////////////////////////

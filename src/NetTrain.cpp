@@ -11,29 +11,39 @@
 #include "Net.h"
 #include "Layer.h"
 #include "Matrix.h"
-#include "Optimizer.h"
 
+#include "Optimizer.h"
 #include "Loss.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 NetTrain::NetTrain()
 {
-	_pLoss = get_loss("MeanSquareError");
+	_sOptimizer = "Adam";
+	_pLoss = create_loss("MeanSquareError");
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 NetTrain::~NetTrain()
 {
 	delete _pLoss;
 }
-
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_loss_function(string sLoss)
+void NetTrain::set_optimizer(string sOptimizer)
 {
-	delete _pLoss;
-	_pLoss = get_loss(sLoss);
+	_sOptimizer = sOptimizer;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-string NetTrain::get_loss_function() const
+string NetTrain::get_optimizer() const
+{
+	return _sOptimizer;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void NetTrain::set_loss(string sLoss)
+{
+	delete _pLoss;
+	_pLoss = create_loss(sLoss);
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+string NetTrain::get_loss() const
 {
 	return _pLoss->name();
 }
@@ -108,7 +118,7 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
     //init all optimizers
     for (int i = 0; i < nLayers; i++)
     {
-        optimizers[i] = get_optimizer(topt.optimizer);
+        optimizers[i] = create_optimizer(_sOptimizer);
         optimizers[i]->fLearningRate = topt.learningRate;
         optimizers[i]->fMomentum=topt.momentum;
         optimizers[i]->fDecay=topt.decay;
@@ -145,9 +155,7 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
                     net.layer(i).forward(inOut[i],inOut[i+1]);
 
                 //compute loss
-                delta[nLayers]=inOut[nLayers]-mTarget;			
-			//	delta[nLayers] = inOut[nLayers] - mTarget;
-
+				_pLoss->compute_gradient(inOut[nLayers], mTarget, delta[nLayers]);
 				dLoss += _pLoss->compute(inOut[nLayers], mTarget);
 				
 				//backward pass with store

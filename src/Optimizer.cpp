@@ -27,6 +27,11 @@ public:
 
     ~OptimizerSGD() override
     {}
+	
+	string name() const override
+	{
+		return "SGD";
+	}
 
     virtual void init(const Layer& l) override
     { (void)l; }
@@ -47,6 +52,11 @@ public:
 
     ~OptimizerMomentum() override
     {}
+
+	string name() const override
+	{
+		return "Momentum";
+	}
 
     virtual void init(const Layer& l) override
     {
@@ -78,6 +88,11 @@ public:
 
     ~OptimizerNesterov() override
     {}
+
+	string name() const override
+	{
+		return "Nesterov";
+	}
 
     virtual void init(const Layer& l) override
     {
@@ -111,6 +126,11 @@ public:
     ~OptimizerAdagrad() override
     {}
 
+	string name() const override
+	{
+		return "Adagrad";
+	}
+
     virtual void init(const Layer& l) override
     {
         (void)l;
@@ -141,6 +161,11 @@ public:
 
     ~OptimizerRMSProp() override
     {}
+
+	string name() const override
+	{
+		return "RMSProp";
+	}
 
     virtual void init(const Layer& l) override
     {
@@ -174,6 +199,11 @@ public:
 
     ~OptimizerAdam() override
     {}
+
+	string name() const override
+	{
+		return "Adam";
+	}
 
     virtual void init(const Layer& l) override
     {
@@ -225,6 +255,11 @@ public:
 
     ~OptimizerNadam() override
     {}
+
+	string name() const override
+	{
+		return "Nadam";
+	}
 
     virtual void init(const Layer& l) override
     {
@@ -278,6 +313,11 @@ public:
     ~OptimizerAdamax() override
     {}
 
+	string name() const override
+	{
+		return "Adamax";
+	}
+
     virtual void init(const Layer& l) override
     {
         (void)l;
@@ -312,7 +352,7 @@ private:
     float alpha, beta1, beta2, beta1_prod;
 };
 //////////////////////////////////////////////////////////
-Optimizer* get_optimizer(const string& sOptimizer)
+Optimizer* create_optimizer(const string& sOptimizer)
 {
     if (sOptimizer == "SGD")
         return new OptimizerSGD;

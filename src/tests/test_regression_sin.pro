@@ -12,6 +12,7 @@ INCLUDEPATH+=..
 SOURCES += test_regression_sin.cpp \
     ../Net.cpp \
     ../NetTrain.cpp \
+    ../Loss.cpp \
     ../Optimizer.cpp \
     ../Layer.cpp \
     ../Matrix.cpp \
@@ -19,7 +20,7 @@ SOURCES += test_regression_sin.cpp \
     ../LayerActivation.cpp \
     ../LayerDense.cpp \
     ../LayerDropout.cpp \
-    ../LayerPoolAverage1D.cpp \
+    ../LayerPoolAveraging1D.cpp \
     ../LayerGlobalGain.cpp
 
 HEADERS += \
@@ -28,9 +29,10 @@ HEADERS += \
     ../Matrix.h \
     ../Net.h \
     ../NetTrain.h \
+    ../Loss.h \
     ../Optimizer.h \
     ../LayerActivation.h \
     ../LayerDense.h \
     ../LayerDropout.h \
-    ../LayerPoolAverage1D.h \
+    ../LayerPoolAveraging1D.h \
     ../LayerGlobalGain.h

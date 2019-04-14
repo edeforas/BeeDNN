@@ -163,6 +163,7 @@
     <ClCompile Include="..\LayerDropout.cpp" />
     <ClCompile Include="..\LayerGlobalGain.cpp" />
     <ClCompile Include="..\LayerPoolAveraging1D.cpp" />
+    <ClCompile Include="..\Loss.cpp" />
     <ClCompile Include="..\Matrix.cpp" />
     <ClCompile Include="..\Net.cpp" />
     <ClCompile Include="..\NetTrain.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="..\LayerDropout.h" />
     <ClInclude Include="..\LayerGlobalGain.h" />
     <ClInclude Include="..\LayerPoolAveraging1D.h" />
+    <ClInclude Include="..\Loss.h" />
     <ClInclude Include="..\Matrix.h" />
     <ClInclude Include="..\Net.h" />
     <ClInclude Include="..\NetTrain.h" />

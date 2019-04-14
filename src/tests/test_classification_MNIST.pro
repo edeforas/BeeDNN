@@ -20,6 +20,7 @@ SOURCES += \
     ../LayerGlobalGain.cpp \
     ../LayerPoolAveraging1D.cpp \
     ../NetTrain.cpp \
+	../Loss.cpp \
     ../Optimizer.cpp \
     test_classification_MNIST.cpp
 
@@ -33,6 +34,7 @@ HEADERS += \
     ../Net.h \
     ../MNISTReader.h \
     ../NetTrain.h \
+	../Loss.h \
     ../Optimizer.h \
     ../ConfusionMatrix.h \
     ../LayerDense.h \
