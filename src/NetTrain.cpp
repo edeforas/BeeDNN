@@ -13,32 +13,48 @@
 #include "Matrix.h"
 #include "Optimizer.h"
 
+#include "Loss.h"
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 NetTrain::NetTrain()
-{ }
+{
+	_pLoss = get_loss("MeanSquareError");
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////
 NetTrain::~NetTrain()
-{ }
+{
+	delete _pLoss;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void NetTrain::set_loss_function(string sLoss)
+{
+	delete _pLoss;
+	_pLoss = get_loss(sLoss);
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+string NetTrain::get_loss_function() const
+{
+	return _pLoss->name();
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////
 float NetTrain::compute_loss(const Net& net, const MatrixFloat &mSamples, const MatrixFloat &mTruth)
 {
-    if(net.layers().size()==0)
-        return -1.;
+	int iNbSamples = (int)mSamples.rows();
+	
+	if( (net.layers().size()==0) || (iNbSamples==0) )
+        return 0.f;
 
-    int iNbSamples=(int)mSamples.rows();
-    MatrixFloat mOut,mError;
+    MatrixFloat mOut;
+	float fLoss = 0.f;
 
     for(int i=0;i<iNbSamples;i++)
     {
         net.forward(mSamples.row(i),mOut);
-
-        if(i==0)
-            mError=(mOut-mTruth.row(i)).cwiseAbs2();
-        else
-            mError+=(mOut-mTruth.row(i)).cwiseAbs2();
+		fLoss += _pLoss->compute(mOut, mTruth.row(i));
     }
 
-    return mError.sum()/iNbSamples;
+    return fLoss /iNbSamples;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 TrainResult NetTrain::train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruthLabel,const TrainOption& topt)
@@ -129,10 +145,12 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
                     net.layer(i).forward(inOut[i],inOut[i+1]);
 
                 //compute loss
-                delta[nLayers]=inOut[nLayers]-mTarget;
-                dLoss += delta[nLayers].cwiseAbs2().sum();
+                delta[nLayers]=inOut[nLayers]-mTarget;			
+			//	delta[nLayers] = inOut[nLayers] - mTarget;
 
-                //backward pass with store
+				dLoss += _pLoss->compute(inOut[nLayers], mTarget);
+				
+				//backward pass with store
                 for (int i=(int)(nLayers-1);i>=0;i--)
                     net.layer(i).backpropagation(inOut[i], delta[i+1], delta[i]);
 
@@ -177,8 +195,6 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
                 dMinLoss=dLoss;
                 bestNet=net;
             }
-            else
-                net=bestNet; //restart from best solution
         }
     }
 

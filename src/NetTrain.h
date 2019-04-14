@@ -16,6 +16,8 @@
 #include <string>
 using namespace std;
 
+class Loss;
+
 class TrainOption
 {
 public:
@@ -33,14 +35,16 @@ public:
     }
 
     int  epochs;
-    int batchSize; //not used for now
+    int batchSize;
     float learningRate;
     float decay;
     float momentum;
 	bool keepBest;
     int testEveryEpochs; //set to 1 to test at each epoch, 10 to test only 1/10 of the time, etc, set to -1 for no test //todo remove
     string optimizer; //ex "SGD" "Momentum" Adam" "Adagrad" "Nesterov" "Nadam" "Adamax" "RMSProp"
-    std::function<void()> epochCallBack;
+
+	
+	std::function<void()> epochCallBack;
 };
 
 class TrainResult
@@ -76,6 +80,13 @@ public:
 
     TrainResult train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruthLabel,const TrainOption& topt);
     TrainResult fit(Net& net, const MatrixFloat& mSamples, const MatrixFloat& mTruth, const TrainOption& topt);
+
+	void set_loss_function(string sLoss); //ex "MeanSquareError" "CategorialCrossEntropy"
+	string get_loss_function() const;
+
+private:
+	Loss* _pLoss;
+
 };
 
 #endif
