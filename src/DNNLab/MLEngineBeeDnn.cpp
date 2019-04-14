@@ -91,6 +91,8 @@ void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat&
     tOpt.decay=dto.decay;
     tOpt.momentum=dto.momentum;
     tOpt.testEveryEpochs=dto.testEveryEpochs;
+    netTrain.set_loss(dto.lossFunction);
+
     tOpt.epochCallBack= [&]()
     {
         iEpoch++;

@@ -18,6 +18,7 @@ SOURCES += test_xor.cpp \
     ../Matrix.cpp \
     ../Activation.cpp \
     ../LayerActivation.cpp \
+    ../LayerSoftmax.cpp \
     ../LayerDense.cpp \
     ../LayerDropout.cpp \
     ../LayerPoolAveraging1D.cpp \
@@ -32,6 +33,7 @@ HEADERS += \
     ../NetTrain.h \
 	../Loss.h \
     ../LayerActivation.h \
+    ../LayerSoftmax.cpp \
     ../LayerDense.h \
     ../LayerPoolAveraging1D.h \
     ../LayerGlobalGain.h \

@@ -12,6 +12,7 @@
 #include "Matrix.h"
 
 #include "LayerActivation.h"
+#include "LayerSoftmax.h"
 #include "LayerDense.h"
 #include "LayerDropout.h"
 #include "LayerGlobalGain.h"
@@ -58,6 +59,11 @@ void Net::add_dropout_layer(int iSize,float fRatio)
 void Net::add_activation_layer(string sType)
 {
     _layers.push_back(new LayerActivation(sType));
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void Net::add_softmax_layer()
+{
+    _layers.push_back(new LayerSoftmax());
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_dense_layer(int inSize,int outSize,bool bHasBias)

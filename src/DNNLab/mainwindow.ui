@@ -778,18 +778,8 @@
        <item>
         <widget class="QComboBox" name="cbLossFunction">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
-         <item>
-          <property name="text">
-           <string>mse</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>cross_entropy</string>
-          </property>
-         </item>
         </widget>
        </item>
       </layout>

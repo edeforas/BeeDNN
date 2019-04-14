@@ -18,6 +18,7 @@ SOURCES += test_regression_sin.cpp \
     ../Matrix.cpp \
     ../Activation.cpp \
     ../LayerActivation.cpp \
+    ../LayerSoftmax.cpp \
     ../LayerDense.cpp \
     ../LayerDropout.cpp \
     ../LayerPoolAveraging1D.cpp \
@@ -32,6 +33,7 @@ HEADERS += \
     ../Loss.h \
     ../Optimizer.h \
     ../LayerActivation.h \
+    ../LayerSoftmax.h \
     ../LayerDense.h \
     ../LayerDropout.h \
     ../LayerPoolAveraging1D.h \

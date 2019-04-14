@@ -13,6 +13,7 @@ SOURCES += \
     ../Matrix.cpp \
     ../Activation.cpp \
     ../LayerActivation.cpp \
+    ../LayerSoftmax.cpp \
     ../MNISTReader.cpp \
     ../ConfusionMatrix.cpp \
     ../LayerDense.cpp \
@@ -28,7 +29,8 @@ INCLUDEPATH+=..
 
 HEADERS += \
     ../Activation.h \
-    ../layerActivation.h \
+    ../LayerActivation.h \
+    ../LayerSoftmax.h \
     ../Layer.h \
     ../Matrix.h \
     ../Net.h \

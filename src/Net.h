@@ -28,6 +28,7 @@ public:
 
     void add_dense_layer(int inSize, int outSize, bool bHasBias=true);
 	void add_activation_layer(string sType);
+	void add_softmax_layer();
     void add_dropout_layer(int iSize, float fRatio);
     void add_globalgain_layer(int inSize, float fGlobalGain);
     void add_poolaveraging1D_layer(int inSize, int iWindowSize);
