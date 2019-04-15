@@ -25,19 +25,12 @@ Layer* LayerSoftmax::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerSoftmax::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 {
-    mOut.resize(mIn.rows(),mIn.cols());
-
-//    for(int i=0;i<mOut.size();i++)
-//        mOut(i)=_pActivation->apply(mIn(i));
-
-//todo
+	mOut=cwiseExp(mIn-cwiseMax(mIn));
+	mOut/=mOut.sum();
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerSoftmax::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta)
 {
-//    mNewDelta.resize(mDelta.rows(),mDelta.cols());
-//    for(int i=0;i<mNewDelta.size();i++)
-//        mNewDelta(i)=_pActivation->derivation(mInput(i))*mDelta(i);
 
 //todo
 }
