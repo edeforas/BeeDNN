@@ -235,6 +235,7 @@ public:
             _data[i]-=a(i);
         return *this;
     }
+
     Matrix<T> operator-( const Matrix<T>& a ) const
     {
         assert(_iRows==a.rows());
@@ -249,6 +250,7 @@ public:
             _data[i]-=d;
         return *this;
     }
+
     Matrix<T> operator-(T d ) const
     {
         return Matrix<T>(*this).operator-=(d);
@@ -486,6 +488,8 @@ const MatrixFloatView fromRawBuffer(const float *pBuffer, int iRows, int iCols);
 MatrixFloat rowWiseSum(const MatrixFloat& m);
 MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat cwiseLog(const MatrixFloat& m);
+MatrixFloat cwiseExp(const MatrixFloat& m);
+void arraySub(MatrixFloat& m,float f);
 MatrixFloat randPerm(int iSize); //create a vector of index shuffled
 MatrixFloat decimate(const MatrixFloat& m, int iRatio);
 int argmax(const MatrixFloat& m);
