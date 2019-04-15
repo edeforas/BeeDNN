@@ -39,7 +39,18 @@ void LayerSoftmax::backpropagation(const MatrixFloat &mInput,const MatrixFloat &
 
     (void)(mDelta); // todo
 
-    MatrixFloat sd=S.asDiagonal();
+	MatrixFloat sd(S.cols(), S.cols());
+	sd.setZero();
+
+	//sd.diagonal() = S;
+	for (int i = 0; i < S.cols(); i++)
+		sd(i, i) = S(0, i);
+
+	
+//	= S.asDiagonal();
+
+
+
     mNewDelta=sd-(S.transpose()*S);
 
 
