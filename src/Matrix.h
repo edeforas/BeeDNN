@@ -105,7 +105,15 @@ public:
         return *this;
     }
     
-    int rows() const
+	Matrix<T>& operator-()
+	{
+		for (int i = 0; i < size(); i++)
+			_data[i] = -_data[i];
+
+		return *this;
+	}
+	
+	int rows() const
     {
         return _iRows;
     }

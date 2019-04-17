@@ -8,9 +8,8 @@ int main()
 {
     //contruct layer
     Net net;
-    net.add_dense_layer(2,3);
-    net.add_activation_layer("Tanh");
-    net.add_dense_layer(3,1);
+    net.add_dense_layer(2,1);
+	net.add_activation_layer("Sigmoid");
 
     //train data
     float dSamples[]={ 0,0 , 0,1 , 1,0 , 1,1 };
@@ -21,8 +20,11 @@ int main()
     //optimize
     TrainOption tOpt;
     tOpt.learningRate=0.05f;
-    NetTrain netFit;
-    netFit.fit(net,mSamples,mTruth,tOpt);
+	tOpt.epochs = 500;
+
+	NetTrain netFit;
+	netFit.set_loss("BinaryCrossEntropy");
+	netFit.fit(net,mSamples,mTruth,tOpt);
 
     //predict results
     MatrixFloat m00,m01,m10,m11;
