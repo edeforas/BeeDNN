@@ -25,6 +25,7 @@ using namespace std;
 Net::Net()
 { 
     _bTrainMode = false;
+	_iOutputSize = 0;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 Net::~Net()
@@ -39,6 +40,7 @@ void Net::clear()
 
     _layers.clear();
     _bTrainMode=false;
+	_iOutputSize = 0;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 Net& Net::operator=(const Net& other)
@@ -48,7 +50,9 @@ Net& Net::operator=(const Net& other)
     for(unsigned int i=0;i<other._layers.size();i++)
         _layers.push_back(other._layers[i]->clone());
 
-    return *this;
+	_iOutputSize = other._iOutputSize;
+
+	return *this;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_dropout_layer(int iSize,float fRatio)
@@ -69,6 +73,7 @@ void Net::add_softmax_layer()
 void Net::add_dense_layer(int inSize,int outSize,bool bHasBias)
 {
     _layers.push_back(new LayerDense(inSize,outSize, bHasBias));
+	_iOutputSize = outSize;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_globalgain_layer(int inSize, float fGlobalGain)
@@ -79,6 +84,7 @@ void Net::add_globalgain_layer(int inSize, float fGlobalGain)
 void Net::add_poolaveraging1D_layer(int inSize, int iOutSize)
 {
     _layers.push_back(new LayerPoolAveraging1D(inSize, iOutSize));
+	_iOutputSize = iOutSize;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
@@ -139,5 +145,10 @@ void Net::init()
     {
         _layers[i]->init();
     }
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
+int Net::output_size() const
+{
+	return _iOutputSize;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////

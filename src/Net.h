@@ -33,6 +33,8 @@ public:
     void add_globalgain_layer(int inSize, float fGlobalGain);
     void add_poolaveraging1D_layer(int inSize, int iWindowSize);
 
+	int output_size() const;
+
     const vector<Layer*> layers() const;
     Layer& layer(size_t iLayer);
 
@@ -43,7 +45,8 @@ public:
 	void set_train_mode(bool bTrainMode); // set to true if training, set to false if testing
 private:
 	bool _bTrainMode;
-    vector<Layer*> _layers;
+	vector<Layer*> _layers;
+	int _iOutputSize;
 };
 
 #endif

@@ -72,15 +72,17 @@ TrainResult NetTrain::train(Net& net,const MatrixFloat& mSamples,const MatrixFlo
     if(net.layers().size()==0)
         return TrainResult(); //nothing to do
 
-    bool bOutputIsLabel=net.layer(net.layers().size()-1).out_size()==1;
+    bool bOutputIsLabel=net.output_size() ==1;
     int iMax=(int)mTruthLabel.maxCoeff();
 
     if(!bOutputIsLabel)
     {
-        MatrixFloat mTruth(mTruthLabel.rows(),iMax+1);
-        mTruth.setZero();
-        for(int i=0;i<mTruth.rows();i++)
+		//create binary label
+        MatrixFloat mTruth(mTruthLabel.rows(),iMax+1); 
+		mTruth.setZero();        
+		for(int i=0;i<mTruth.rows();i++)
             mTruth(i,(int)mTruthLabel(i,0))=1;
+
         return fit(net,mSamples,mTruth,topt);
     }
     else

@@ -8,6 +8,8 @@
 
 #include "Loss.h"
 
+#include <cassert>
+
 ////////////////////////////////////////////////////////////////
 Loss::Loss()
 { }
@@ -25,6 +27,8 @@ public:
 	
 	float compute(const MatrixFloat& mPredicted,const MatrixFloat& mTarget) const
 	{
+		assert((mPredicted.rows() == mTarget.rows()) && (mPredicted.cols() == mTarget.cols()) );
+
 		if (mTarget.rows() == 0)
 			return 0.f;
 
@@ -33,6 +37,8 @@ public:
 	
 	void compute_gradient(const MatrixFloat& mPredicted,const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const
 	{
+		assert( (mPredicted.rows() == mTarget.rows()) && (mPredicted.cols() == mTarget.cols()) );
+
 		mGradientLoss = mPredicted - mTarget;
 	}
 };
@@ -47,11 +53,15 @@ public:
 	
 	float compute(const MatrixFloat& mPredicted,const MatrixFloat& mTarget) const
 	{
+		assert((mPredicted.rows() == mTarget.rows()) && (mPredicted.cols() == mTarget.cols()) );
+
 		return -(mTarget.cwiseProduct(cwiseLog(mPredicted.cwiseMax(1.e-8f))).sum()); //to avoid computing log(0)
 	}
 	
 	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const
 	{
+		assert((mPredicted.rows() == mTarget.rows()) && (mPredicted.cols() == mTarget.cols()) );
+
 		mGradientLoss = -(mTarget.cwiseQuotient(mPredicted.cwiseMax(1.e-8f))); //to avoid computing 1/0
 	}
 };
