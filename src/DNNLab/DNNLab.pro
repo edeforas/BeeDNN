@@ -35,6 +35,7 @@ SOURCES += \
     ../MNISTReader.cpp \
     ../Activation.cpp \
     ../LayerActivation.cpp \
+    ../LayerSoftmax.cpp \
     ../LayerDense.cpp \
     ../LayerDropout.cpp \
     ../LayerGlobalGain.cpp \
@@ -52,6 +53,7 @@ HEADERS += \
 	../Loss.h \
     ../Optimizer.h \
     ../LayerActivation.h \
+    ../LayerSoftmax.h \
     ../LayerDense.h \
     ../LayerDropout.h \
     ../LayerGlobalGain.h \

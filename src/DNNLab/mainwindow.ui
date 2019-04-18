@@ -769,6 +769,19 @@
         </widget>
        </item>
        <item>
+        <spacer name="horizontalSpacer_10">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
           <string>LossFunction</string>
@@ -778,18 +791,8 @@
        <item>
         <widget class="QComboBox" name="cbLossFunction">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
-         <item>
-          <property name="text">
-           <string>mse</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>cross_entropy</string>
-          </property>
-         </item>
         </widget>
        </item>
       </layout>

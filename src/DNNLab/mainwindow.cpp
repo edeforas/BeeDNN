@@ -16,6 +16,7 @@
 
 #include "Activation.h"
 #include "Optimizer.h"
+#include "Loss.h"
 #include "ConfusionMatrix.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -66,9 +67,9 @@ MainWindow::MainWindow(QWidget *parent) :
         qcbType->addItem("Dropout");
         qcbType->addItem("GlobalGain");
         qcbType->addItem("PoolAveraging1D");
-        // qcbType->addItem("SoftMax");
+        qcbType->addItem("SoftMax");
 
-        qcbType->insertSeparator(6);
+        qcbType->insertSeparator(7);
 
         for(unsigned int a=0;a<vsActivations.size();a++)
             qcbType->addItem(vsActivations[a].c_str());
@@ -82,6 +83,13 @@ MainWindow::MainWindow(QWidget *parent) :
 #ifdef USE_TINYDNN
     ui->cbEngine->addItem("tiny-dnn");
 #endif
+
+    //setup loss
+    vector<string> vsloss;
+    list_loss_available(vsloss);
+    for(unsigned int i=0;i<vsloss.size();i++)
+        ui->cbLossFunction->addItem(vsloss[i].data());
+    ui->cbLossFunction->setCurrentText("MeanSquareError");
 
     //setup optimizer
     vector<string> vsOptimizers;
@@ -132,8 +140,6 @@ void MainWindow::train_and_test(bool bReset)
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     compute_truth();
-
-    //LossObserver lossCB;
 
     if(bReset)
         ui_to_net();

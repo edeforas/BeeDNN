@@ -8,14 +8,15 @@ No dependencies needed, every algorithm rewritten. There is also a simple GUI ap
 Implemented so far:
 - dense layer, with or without bias
 - dropout layer
-- global gain
-- pool averaging 1D
+- global gain layer
+- pool averaging 1D layer
+- softmax layer
+- layers can be in any orders
 - mini batch learn, sgd learn
 - SGD, Momentum, Nesterov, Adam , Nadam, Adagrad, Adamax, rmsprop
 - train or fit
 - lot of activation functions
-- layers can be in any orders
-- MeanSquareError or CrossEntropy
+- MeanSquareError, CrossEntropy or BinaryCrossEntropy loss
 - tiny-dnn abstraction (optional), so you can compare both library
 - eigen (optional) use or internal matrix library
 - all in C++
