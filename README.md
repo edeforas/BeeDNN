@@ -12,13 +12,13 @@ Implemented so far:
 - pool averaging 1D layer
 - softmax layer
 - layers can be in any orders
-- mini batch learn, sgd learn, batch learn
+- mini batch learn, SGD learn, batch learn
 - SGD, Momentum, Nesterov, Adam , Nadam, Adagrad, Adamax, RMSprop
 - classification or regression
 - lot of activation functions: Asinh, Atan, Bent, Elliot, Elu, HardSigmoid, Gauss, Linear, LeakyRelu, Parablu, Relu, Selu, SQNL, SoftPlus, Sin, SinC, Sigmoid, Swish, SoftSign, Tanh
 - MeanSquareError, CrossEntropy or BinaryCrossEntropy loss
-- optional tiny-dnn (https://github.com/tiny-dnn) bindining, so you can compare both library
-- eigen (http://eigen.tuxfamily.org) (optional) use or internal matrix library
+- optional tiny-dnn binding (https://github.com/tiny-dnn), so you can compare both library
+- optional eigen use (http://eigen.tuxfamily.org), or use internal matrix library
 - all in C++
 
 The GUI app use Qt, binaries coming soon
