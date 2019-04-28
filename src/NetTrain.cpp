@@ -132,6 +132,11 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
         dLoss=0.;
 
         MatrixFloat mShuffle=randPerm(iNbSamples);
+		MatrixFloat mSampleShuffled;
+		MatrixFloat mTruthShuffled;
+		applyRowPermutation(mShuffle, mSamples, mSampleShuffled);
+		applyRowPermutation(mShuffle, mTruth, mTruthShuffled);
+
         net.set_train_mode(true);
 
         int iBatchStart=0;
@@ -144,39 +149,28 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
 
             for(int i=0;i<nLayers+1;i++)
                 deltaWeight[i].setZero();
+			
+			const MatrixFloat mSample = rowRange(mSampleShuffled, iBatchStart, iBatchEnd);
+			const MatrixFloat mTarget = rowRange(mTruthShuffled, iBatchStart, iBatchEnd);
 
-            for(int iBatch=iBatchStart;iBatch<iBatchEnd;iBatch++)
-            {
-                int iIndexSample=(int)mShuffle(iBatch,0);
-                const MatrixFloat& mSample=mSamples.row(iIndexSample);
-                const MatrixFloat& mTarget=mTruth.row(iIndexSample);
+            //forward pass with store
+            inOut[0]=mSample;
+            for(int i=0;i<nLayers;i++)
+                 net.layer(i).forward(inOut[i],inOut[i+1]);
 
-                //forward pass with store
-                inOut[0]=mSample;
-                for(int i=0;i<nLayers;i++)
-                    net.layer(i).forward(inOut[i],inOut[i+1]);
-
-                //compute loss
-				_pLoss->compute_gradient(inOut[nLayers], mTarget, delta[nLayers]);
-				dLoss += _pLoss->compute(inOut[nLayers], mTarget);
+            //compute loss
+			_pLoss->compute_gradient(inOut[nLayers], mTarget, delta[nLayers]);
+			dLoss += _pLoss->compute(inOut[nLayers], mTarget);
 				
-				//backward pass with store
-                for (int i=(int)(nLayers-1);i>=0;i--)
-                    net.layer(i).backpropagation(inOut[i], delta[i+1], delta[i]);
+			//backward pass with store , compute deltaWeight
+			for (int i = (int)(nLayers - 1); i >= 0; i--)
+			{
+				Layer& l = net.layer(i);
+				l.backpropagation(inOut[i], delta[i + 1], delta[i]);
 
-                //sum deltaweight
-                for(int i=0;i<nLayers;i++)
-                {
-                    Layer& l=net.layer(i);
-                    if(l.has_weight())
-                    {
-                        if(deltaWeight[i].size())
-                            deltaWeight[i]+=l.gradient_weights();
-                        else
-                            deltaWeight[i]=l.gradient_weights();
-                    }
-                }
-            }
+				if (l.has_weight())
+					deltaWeight[i] = l.gradient_weights().colwise().sum();
+			}
 
             //optimize all layers
             for(int i=0;i<nLayers;i++)

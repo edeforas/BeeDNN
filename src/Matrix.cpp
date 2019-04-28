@@ -108,6 +108,17 @@ MatrixFloat randPerm(int iSize) //create a vector of index shuffled
     return m;
 }
 ///////////////////////////////////////////////////////////////////////////
+void applyRowPermutation(const MatrixFloat & mPermutationIndex, const MatrixFloat & mIn, MatrixFloat & mPermuted)
+{
+	assert(mPermutationIndex.rows() == mIn.rows());
+	assert(mPermutationIndex.cols() == 1);
+
+	mPermuted.resize(mIn.rows(), mIn.cols());
+
+	for (int i = 0; i < mPermutationIndex.rows(); i++)
+		mPermuted.row(i) = mIn.row((int)mPermutationIndex(i));
+}
+///////////////////////////////////////////////////////////////////////////
 int argmax(const MatrixFloat& m)
 {
     assert(m.rows()==1); //for now, vector raw only
@@ -221,5 +232,14 @@ const MatrixFloat fromFile(const string& sFile)
     }
 
     return r;
+}
+///////////////////////////////////////////////////////////////////////////
+ //create a row view starting at iStartRow ending at iEndRow (not included)
+const MatrixFloat rowRange(const MatrixFloat& m, int iStartRow, int iEndRow)
+{
+	assert(iStartRow < iEndRow); //iEndRow not included
+	assert(m.rows() >= iEndRow);
+
+	return fromRawBuffer(m.data() + iStartRow * m.cols(), iEndRow- iStartRow, m.cols());
 }
 ///////////////////////////////////////////////////////////////////////////

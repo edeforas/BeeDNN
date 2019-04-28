@@ -25,11 +25,12 @@ Layer* LayerDropout::clone() const
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
-{
+{/*
     if(_bTrainMode)
-        mOut = mIn.cwiseProduct(_mask); //in train mode
+        mOut = mIn.rowwise()*(_mask); //in train mode
     else
         mOut = mIn; // in test mode
+*/
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDropout::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta)

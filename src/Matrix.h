@@ -505,6 +505,8 @@ MatrixFloat cwiseLog(const MatrixFloat& m);
 MatrixFloat cwiseExp(const MatrixFloat& m);
 void arraySub(MatrixFloat& m,float f);
 MatrixFloat randPerm(int iSize); //create a vector of index shuffled
+void applyRowPermutation(const MatrixFloat & mPermutationIndex, const MatrixFloat & mIn, MatrixFloat & mPermuted); 
+const MatrixFloat rowRange(const MatrixFloat& m, int iStartRow, int iEndRow); //create a row view starting at iStartRow to (not included) iEndRow
 MatrixFloat decimate(const MatrixFloat& m, int iRatio);
 int argmax(const MatrixFloat& m);
 void contatenateVerticallyInto(const MatrixFloat& mA, const MatrixFloat& mB, MatrixFloat& mAB);
