@@ -179,6 +179,12 @@ public:
             _data[i]=((T)rand()/(T)RAND_MAX-0.5f)*2.f;
 	}
 
+	void setRandom(int iRows, int iColumns)
+	{
+		resize(iRows, iColumns);
+		setRandom();
+	}
+
     T& operator()(int iR,int iC)
     {
         assert(iR<_iRows);
