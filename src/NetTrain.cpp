@@ -169,7 +169,7 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
 				l.backpropagation(inOut[i], delta[i + 1], delta[i]);
 
 				if (l.has_weight())
-					deltaWeight[i] = l.gradient_weights().colwise().sum();
+					deltaWeight[i] = l.gradient_weights();
 			}
 
             //optimize all layers

@@ -78,6 +78,8 @@ public:
 	{
 		assert(mTarget.cols() == 1);
 		assert(mTarget.size() == 1);
+
+		assert(mPredicted.cols() == 1);
 		assert(mPredicted.size() == 1);
 
 		float p = mPredicted(0);
@@ -89,6 +91,8 @@ public:
 	{
 		assert(mTarget.cols() == 1);
 		assert(mTarget.size() == 1);
+
+		assert(mPredicted.cols() == 1);
 		assert(mPredicted.size() == 1);
 
 		float p = mPredicted(0);
