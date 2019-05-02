@@ -56,13 +56,11 @@ float NetTrain::compute_loss(const Net& net, const MatrixFloat &mSamples, const 
         return 0.f;
 
     MatrixFloat mOut;
-	float fLoss = 0.f;
+	net.forward(mSamples, mOut);
 
-    for(int i=0;i<iNbSamples;i++)
-    {
-        net.forward(mSamples.row(i),mOut);
-		fLoss += _pLoss->compute(mOut, mTruth.row(i));
-    }
+	float fLoss = 0.f;
+    for(int i=0;i<iNbSamples;i++) //todo optimize
+		fLoss += _pLoss->compute(mOut.row(i), mTruth.row(i));
 
     return fLoss /iNbSamples;
 }

@@ -240,6 +240,6 @@ const MatrixFloat rowRange(const MatrixFloat& m, int iStartRow, int iEndRow)
 	assert(iStartRow < iEndRow); //iEndRow not included
 	assert(m.rows() >= iEndRow);
 
-	return fromRawBuffer(m.data() + iStartRow * m.cols(), iEndRow- iStartRow, m.cols());
+	return fromRawBuffer(m.data() + iStartRow * m.cols(), iEndRow- iStartRow, (int)m.cols());
 }
 ///////////////////////////////////////////////////////////////////////////

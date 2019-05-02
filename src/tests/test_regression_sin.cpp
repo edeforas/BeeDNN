@@ -30,15 +30,11 @@ int main()
 	NetTrain netfit;
 	netfit.fit(net,mSamples,mTruth,tOpt);
 
-    //show some results
-    MatrixFloat mOnePredict(1,1), mOneSample(1,1), mOneTruth(1,1);
+    //display some sin prediction
+	MatrixFloat mPredict;
+	net.forward(mSamples, mPredict);
     for(int i=0;i<mSamples.size();i+=8)
-    {
-        mOneSample(0,0)=mSamples(i,0);
-        mOneTruth(0,0)=mTruth(i,0);
-        net.forward(mOneSample,mOnePredict);
-        cout << std::setprecision(4) << "x=" << mOneSample(0,0) << "\ttruth=" << mOneTruth(0,0) << "\tpredict=" << mOnePredict(0,0) <<endl;
-    }
+        cout << std::setprecision(4) << "x=" << mSamples(i,0) << "\ttruth=" << mTruth(i,0) << "\tpredict=" << mPredict(i,0) <<endl;
 
     //compute loss
     float fLoss=netfit.compute_loss(net,mSamples,mTruth);

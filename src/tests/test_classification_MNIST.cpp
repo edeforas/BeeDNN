@@ -55,11 +55,10 @@ int main()
     mTestImages/=256.f;
     mRefImages/=256.f;
 
-    //create simple net: 97% train, 76% test after a long time
-    net.add_dense_layer(784,128,true);
- //   net.add_dropout_layer(128,0.2f);
+    //create simple demo net: 88% train, 74% test after 10 epochs
+    net.add_dense_layer(784,256,true);
     net.add_activation_layer("Relu");
-    net.add_dense_layer(128,10,true);
+    net.add_dense_layer(256,10,true);
     net.add_activation_layer("Sigmoid");
 
 	//train net
