@@ -90,15 +90,14 @@ public:
 	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const
 	{
 		assert(mTarget.cols() == 1);
-		assert(mTarget.size() == 1);
-
 		assert(mPredicted.cols() == 1);
-		assert(mPredicted.size() == 1);
+		assert(mTarget.rows() == mPredicted.rows());
+
+		//from https://math.stackexchange.com/questions/2503428/derivative-of-binary-cross-entropy-why-are-my-signs-not-right
 
 		float p = mPredicted(0);
 		float y = mTarget(0);
 
-		//https://math.stackexchange.com/questions/2503428/derivative-of-binary-cross-entropy-why-are-my-signs-not-right
 		mGradientLoss.resize(1, 1);
         mGradientLoss(0)= -(y / max(p,1.e-8f) - (1.f - y) / max((1.f - p),1.e-8f));
 	}

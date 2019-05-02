@@ -46,7 +46,7 @@ void LayerDense::init()
 void LayerDense::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
 {
     if (_bHasBias)
-        mMatOut = (mMatIn *_weight.topRows(_iInSize)).rowwise() + _weight.row(_iInSize); //split _weight in [weightnobias, bias] in computation
+        mMatOut = rowWiseAdd(mMatIn *_weight.topRows(_iInSize) , _weight.row(_iInSize)); //split _weight in [weightnobias, bias] in computation
     else
         mMatOut = mMatIn * _weight;
 }

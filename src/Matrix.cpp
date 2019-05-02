@@ -87,12 +87,30 @@ void arraySub(MatrixFloat& m,float f)
 ///////////////////////////////////////////////////////////////////////////
 MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d)
 {
-    MatrixFloat r=m;
+	assert(d.rows() == 1);
+	assert(d.cols() == m.cols());
+
+	MatrixFloat r=m;
 
     for(int l=0;l<r.rows();l++)
         r.row(l)/=d(l,0);
 
     return r;
+}
+///////////////////////////////////////////////////////////////////////////
+MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d)
+{
+	assert(d.rows() == 1);
+	assert(d.cols() == m.cols());
+
+#ifdef USE_EIGEN
+    return m.rowwise() + d;
+#else
+	MatrixFloat r = m;
+	for (int l = 0; l < r.rows(); l++)
+		r.row(l) += d;
+	return r;
+#endif
 }
 ///////////////////////////////////////////////////////////////////////////
 MatrixFloat randPerm(int iSize) //create a vector of index shuffled

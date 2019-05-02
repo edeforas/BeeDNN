@@ -185,6 +185,17 @@ public:
 		setRandom();
 	}
 
+	Matrix<T> asDiagonal() const
+	{
+		Matrix<T> out;
+		out.setZero(_iSize, _iSize);
+		
+		for (int i = 0; i < _iSize; i++)
+			out(i, i) = _data[i];
+
+		return out;
+	}
+
     T& operator()(int iR,int iC)
     {
         assert(iR<_iRows);
@@ -500,6 +511,7 @@ typedef Matrix<float> MatrixFloatView;
 MatrixFloatView fromRawBuffer(float *pBuffer, int iRows, int iCols);
 const MatrixFloatView fromRawBuffer(const float *pBuffer, int iRows, int iCols);
 MatrixFloat rowWiseSum(const MatrixFloat& m);
+MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat cwiseLog(const MatrixFloat& m);
 MatrixFloat cwiseExp(const MatrixFloat& m);
