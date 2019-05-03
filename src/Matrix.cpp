@@ -104,7 +104,7 @@ MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d)
 	assert(d.cols() == m.cols());
 
 #ifdef USE_EIGEN
-    return m.rowwise() + d;
+    return m + d.replicate(m.rows(), 1);
 #else
 	MatrixFloat r = m;
 	for (int l = 0; l < r.rows(); l++)
