@@ -55,16 +55,18 @@ int main()
     mTestImages/=256.f;
     mRefImages/=256.f;
 
-    //create simple demo net: 88% train, 74% test after 10 epochs
-    net.add_dense_layer(784,256,true);
+    //create simple net: 97% train, 76% test after a long time
+    net.add_dense_layer(784,128,true);
+ //   net.add_dropout_layer(64,0.2f);
     net.add_activation_layer("Relu");
-    net.add_dense_layer(256,10,true);
+    net.add_dense_layer(128,10,true);
+ //   net.add_dropout_layer(10,0.2f);
     net.add_activation_layer("Sigmoid");
 
 	//train net
 	cout << "training..." << endl;
 	TrainOption tOpt;
-	tOpt.epochCallBack = epoch_callback;
+    tOpt.epochCallBack = epoch_callback;
     NetTrain netTrain;
 	start = chrono::steady_clock::now();
     netTrain.train(net,mRefImages,mRefLabelsIndex,tOpt);

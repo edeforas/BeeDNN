@@ -108,15 +108,15 @@ void Net::classify_all(const MatrixFloat& mIn, MatrixFloat& mClass) const
 {
     MatrixFloat mOut;
 	forward(mIn, mOut);
-
-    mClass.resize(mIn.rows(),1);
-
+	
 	if (mOut.cols() != 1)
-		for (int i = 0; i < mIn.rows(); i++)
-			mClass(i, 0) = (float)argmax(mOut);
+		rowsArgmax(mOut, mClass);
 	else
+	{
+		mClass.resize(mIn.rows(), 1);
 		for (int i = 0; i < mIn.rows(); i++)
 			mClass(i, 0) = std::roundf(mOut(0, 0)); //case of "output is a label"
+	}
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::set_train_mode(bool bTrainMode)
