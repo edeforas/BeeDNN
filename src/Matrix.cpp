@@ -161,11 +161,11 @@ int argmax(const MatrixFloat& m)
 ///////////////////////////////////////////////////////////////////////////
 void rowsArgmax(const MatrixFloat& m, MatrixFloat& argM)
 {
-	int iRows = m.rows();
+    int iRows = (int)m.rows();
 	argM.resize(iRows, 1);
 
 	for (int i = 0; i < iRows; i++)
-		argM(i) = argmax(m.row(i));
+        argM(i) = (float)argmax(m.row(i));
 }
 ///////////////////////////////////////////////////////////////////////////
 MatrixFloat decimate(const MatrixFloat& m, int iRatio)

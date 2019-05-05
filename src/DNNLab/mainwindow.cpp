@@ -96,7 +96,7 @@ MainWindow::MainWindow(QWidget *parent) :
     list_optimizers_available( vsOptimizers);
     for(unsigned int i=0;i<vsOptimizers.size();i++)
         ui->cbOptimizer->addItem(vsOptimizers[i].data());
-    ui->cbOptimizer->setCurrentText("Adam");
+    ui->cbOptimizer->setCurrentText("Nadam");
 
     resizeDocks({ui->dockWidget},{1},Qt::Horizontal);
 
