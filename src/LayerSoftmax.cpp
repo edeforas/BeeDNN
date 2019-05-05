@@ -25,35 +25,30 @@ Layer* LayerSoftmax::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerSoftmax::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 {
-    mOut=mIn;
-    arraySub(mOut,mIn.maxCoeff()); // todo simplify and optimize
-    mOut=cwiseExp(mOut);
-    mOut/=mOut.sum();
+    mOut=cwiseExp(mIn);
+
+    for(int i=0;i<mOut.rows();i++)
+        mOut.row(i)/=mOut.row(i).sum();
+
+ //   arraySub(mOut,mIn.maxCoeff()); // todo simplify and optimize
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerSoftmax::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta)
 {
-    //WIP WIP
     MatrixFloat S;
-    forward(mInput,S); //WIP
+    forward(mInput,S);
+    mNewDelta.resize(mDelta.rows(),mDelta.cols());
 
-    //(void)(mDelta); // todo
+    for(int i=0;i<S.rows();i++)
+    {
+        MatrixFloat sR=S.row(i);
+		MatrixFloat mDiag(sR.cols(), sR.cols());
+		for (int i = 0; i < sR.cols(); i++)
+			mDiag(i, i) = sR(0, i);
 
-	MatrixFloat sd(S.cols(), S.cols());
-	sd.setZero();
-
-	//sd.diagonal() = S;
-	for (int i = 0; i < S.cols(); i++)
-		sd(i, i) = S(0, i);
-
-	
-//	= S.asDiagonal();
-
-
-
-    mNewDelta= mDelta*(sd-(S.transpose()*S));
-
-
-//todo
+		MatrixFloat m3 = (mDiag - (sR.transpose()*sR));
+		MatrixFloat m4= mDelta * m3;
+		mNewDelta.row(i) = m4;
+    }
 }
 ///////////////////////////////////////////////////////////////////////////////

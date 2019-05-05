@@ -56,12 +56,13 @@ int main()
     mRefImages/=256.f;
 
     //create simple net: 97% train, 76% test after a long time
-    net.add_dense_layer(784,128,true);
+    net.add_dense_layer(784,10,true);
  //   net.add_dropout_layer(64,0.2f);
-    net.add_activation_layer("Relu");
-    net.add_dense_layer(128,10,true);
+ //   net.add_activation_layer("Relu");
+ //   net.add_dense_layer(128,10,true);
  //   net.add_dropout_layer(10,0.2f);
-    net.add_activation_layer("Sigmoid");
+    //net.add_activation_layer("Sigmoid");
+	net.add_softmax_layer();
 
 	//train net
 	cout << "training..." << endl;

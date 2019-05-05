@@ -51,8 +51,7 @@ void LayerDropout::create_mask(int iSize)
     }
 
 	//inverse dropout as in: https://pgaleone.eu/deep-learning/regularization/2017/01/10/anaysis-of-dropout/)
-	//with precise compensation
-	_mask*=((float)iSize / _mask.sum());
+	_mask*=1.f/(1.f-_fRate);
 }
 ///////////////////////////////////////////////////////////////////////////////
 float LayerDropout::get_rate() const
