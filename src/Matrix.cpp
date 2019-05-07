@@ -87,12 +87,30 @@ void arraySub(MatrixFloat& m,float f)
 ///////////////////////////////////////////////////////////////////////////
 MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d)
 {
-    MatrixFloat r=m;
+	assert(d.rows() == 1);
+	assert(d.cols() == m.cols());
+
+	MatrixFloat r=m;
 
     for(int l=0;l<r.rows();l++)
         r.row(l)/=d(l,0);
 
     return r;
+}
+///////////////////////////////////////////////////////////////////////////
+MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d)
+{
+	assert(d.rows() == 1);
+	assert(d.cols() == m.cols());
+
+#ifdef USE_EIGEN
+    return m + d.replicate(m.rows(), 1);
+#else
+	MatrixFloat r = m;
+	for (int l = 0; l < r.rows(); l++)
+		r.row(l) += d;
+	return r;
+#endif
 }
 ///////////////////////////////////////////////////////////////////////////
 MatrixFloat randPerm(int iSize) //create a vector of index shuffled
@@ -106,6 +124,17 @@ MatrixFloat randPerm(int iSize) //create a vector of index shuffled
     std::shuffle(m.data(),m.data()+m.size(), std::default_random_engine());
 
     return m;
+}
+///////////////////////////////////////////////////////////////////////////
+void applyRowPermutation(const MatrixFloat & mPermutationIndex, const MatrixFloat & mIn, MatrixFloat & mPermuted)
+{
+	assert(mPermutationIndex.rows() == mIn.rows());
+	assert(mPermutationIndex.cols() == 1);
+
+	mPermuted.resize(mIn.rows(), mIn.cols());
+
+	for (int i = 0; i < mPermutationIndex.rows(); i++)
+		mPermuted.row(i) = mIn.row((int)mPermutationIndex(i));
 }
 ///////////////////////////////////////////////////////////////////////////
 int argmax(const MatrixFloat& m)
@@ -128,6 +157,15 @@ int argmax(const MatrixFloat& m)
     }
 
     return iIndex;
+}
+///////////////////////////////////////////////////////////////////////////
+void rowsArgmax(const MatrixFloat& m, MatrixFloat& argM)
+{
+    int iRows = (int)m.rows();
+	argM.resize(iRows, 1);
+
+	for (int i = 0; i < iRows; i++)
+        argM(i) = (float)argmax(m.row(i));
 }
 ///////////////////////////////////////////////////////////////////////////
 MatrixFloat decimate(const MatrixFloat& m, int iRatio)
@@ -221,5 +259,14 @@ const MatrixFloat fromFile(const string& sFile)
     }
 
     return r;
+}
+///////////////////////////////////////////////////////////////////////////
+ //create a row view starting at iStartRow ending at iEndRow (not included)
+const MatrixFloat rowRange(const MatrixFloat& m, int iStartRow, int iEndRow)
+{
+	assert(iStartRow < iEndRow); //iEndRow not included
+	assert(m.rows() >= iEndRow);
+
+	return fromRawBuffer(m.data() + iStartRow * m.cols(), iEndRow- iStartRow, (int)m.cols());
 }
 ///////////////////////////////////////////////////////////////////////////

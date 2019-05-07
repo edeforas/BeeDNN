@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.28307.489
+VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_regression_sin", "test_regression_sin.vcxproj", "{769D3182-0048-417D-8E83-6BFECF8D3F1E}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3A30B351-7759-44C3-9439-16504B890AA0}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_regression_sin", "sample_regression_sin.vcxproj", "{769D3182-0048-417D-8E83-6BFECF8D3F1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,6 +26,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {074185C8-E390-4EBE-9744-DA07D3E54822}
+		SolutionGuid = {0440F7DA-62DC-437D-907B-C93A5D58A6A9}
 	EndGlobalSection
 EndGlobal

@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{3C67BC6A-ED98-4C03-B5F4-F413C66E835A}</ProjectGuid>
+    <ProjectGuid>{769D3182-0048-417D-8E83-6BFECF8D3F1E}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>testparallel</RootNamespace>
+    <RootNamespace>sample_regression_sin</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -72,19 +72,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(EIGEN_DIR);.;..;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(EIGEN_DIR);.;..;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(EIGEN_DIR);.;..;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>.;..;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -95,11 +91,6 @@
       <PreprocessorDefinitions>USE_EIGEN</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -115,11 +106,7 @@
       <PreprocessorDefinitions>USE_EIGEN</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>$(EIGEN_PATH);..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,12 +124,6 @@
       <PreprocessorDefinitions>USE_EIGEN</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <EnableModules>true</EnableModules>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -162,11 +143,9 @@
       <PreprocessorDefinitions>USE_EIGEN</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EIGEN_PATH);..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -176,11 +155,37 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Activation.cpp" />
+    <ClCompile Include="..\ConfusionMatrix.cpp" />
+    <ClCompile Include="..\Layer.cpp" />
+    <ClCompile Include="..\LayerActivation.cpp" />
+    <ClCompile Include="..\LayerDense.cpp" />
+    <ClCompile Include="..\LayerDropout.cpp" />
+    <ClCompile Include="..\LayerGlobalGain.cpp" />
+    <ClCompile Include="..\LayerPoolAveraging1D.cpp" />
+    <ClCompile Include="..\LayerSoftmax.cpp" />
+    <ClCompile Include="..\Loss.cpp" />
     <ClCompile Include="..\Matrix.cpp" />
-    <ClCompile Include="test_Matrix_product.cpp" />
+    <ClCompile Include="..\Net.cpp" />
+    <ClCompile Include="..\NetTrain.cpp" />
+    <ClCompile Include="..\Optimizer.cpp" />
+    <ClCompile Include="sample_regression_sin.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Activation.h" />
+    <ClInclude Include="..\ConfusionMatrix.h" />
+    <ClInclude Include="..\Layer.h" />
+    <ClInclude Include="..\LayerActivation.h" />
+    <ClInclude Include="..\LayerDense.h" />
+    <ClInclude Include="..\LayerDropout.h" />
+    <ClInclude Include="..\LayerGlobalGain.h" />
+    <ClInclude Include="..\LayerPoolAveraging1D.h" />
+    <ClInclude Include="..\LayerSoftmax.h" />
+    <ClInclude Include="..\Loss.h" />
     <ClInclude Include="..\Matrix.h" />
+    <ClInclude Include="..\Net.h" />
+    <ClInclude Include="..\NetTrain.h" />
+    <ClInclude Include="..\Optimizer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

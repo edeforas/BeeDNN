@@ -8,6 +8,7 @@
 
 #include "Optimizer.h"
 #include "Layer.h"
+#include <cassert>
 
 // Network optimizer as in:
 // http://cs231n.github.io/neural-networks-3/#update
@@ -38,6 +39,9 @@ public:
 
     virtual void optimize(MatrixFloat& w,const MatrixFloat& dw) override
     {
+		assert(w.rows() == dw.rows());
+		assert(w.cols() == dw.cols());
+
         // Vanilla update
         //	x += -learning_rate * dx
         w -=  dw * fLearningRate ;
@@ -66,6 +70,9 @@ public:
 
     virtual void optimize(MatrixFloat& w, const MatrixFloat& dw) override
     {
+		assert(w.rows() == dw.rows());
+		assert(w.cols() == dw.cols());
+
         // init _V if needed
         if (_v.size() == 0)
             _v.setZero(w.rows(), w.cols());
@@ -102,6 +109,9 @@ public:
 
     virtual void optimize(MatrixFloat& w, const MatrixFloat& dw) override
     {
+		assert(w.rows() == dw.rows());
+		assert(w.cols() == dw.cols());
+
         // init _V if needed
         if (_v.size() == 0)
             _v.setZero(w.rows(), w.cols());
@@ -139,6 +149,9 @@ public:
 
     virtual void optimize(MatrixFloat& w, const MatrixFloat& dw) override
     {
+		assert(w.rows() == dw.rows());
+		assert(w.cols() == dw.cols());
+
         // init _cache if needed
         if (_cache.size() == 0)
             _cache.setZero(dw.rows(), dw.cols());
@@ -175,6 +188,9 @@ public:
 
     virtual void optimize(MatrixFloat& w, const MatrixFloat& dw) override
     {
+		assert(w.rows() == dw.rows());
+		assert(w.cols() == dw.cols());
+
         // init _cache if needed
         if (_cache.size() == 0)
             _cache.setZero(dw.rows(), dw.cols());
@@ -218,6 +234,9 @@ public:
 
     virtual void optimize(MatrixFloat& w, const MatrixFloat& dw) override
     {
+		assert(w.rows() == dw.rows());
+		assert(w.cols() == dw.cols());
+
         // init _m and _v if needed
         if (_v.size() == 0)
         {

@@ -27,7 +27,7 @@ SOURCES += \
     ../Net.cpp \
     ../NetUtil.cpp \
     ../NetTrain.cpp \
-	../Loss.cpp \
+    ../Loss.cpp \
     ../Optimizer.cpp \
     ../Layer.cpp \
     ../Matrix.cpp \
@@ -50,7 +50,7 @@ HEADERS += \
     ../Net.h \
     ../NetUtil.h \
     ../NetTrain.h \
-	../Loss.h \
+    ../Loss.h \
     ../Optimizer.h \
     ../LayerActivation.h \
     ../LayerSoftmax.h \

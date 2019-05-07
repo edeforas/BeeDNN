@@ -27,14 +27,14 @@ Layer* LayerDropout::clone() const
 void LayerDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 {
     if(_bTrainMode)
-        mOut = mIn.cwiseProduct(_mask); //in train mode
+        mOut = mIn*_mask.asDiagonal(); //in learn mode
     else
         mOut = mIn; // in test mode
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDropout::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta)
 {
-    mNewDelta= mDelta.cwiseProduct(_mask);
+    mNewDelta= mDelta*_mask.asDiagonal();
 
     create_mask((int)mInput.cols());
 }
@@ -42,13 +42,16 @@ void LayerDropout::backpropagation(const MatrixFloat &mInput,const MatrixFloat &
 void LayerDropout::create_mask(int iSize)
 {
     _mask.resize(1, iSize);
-    _mask.setConstant(1.f/(1.f - _fRate)); //inverse dropout as in: https://pgaleone.eu/deep-learning/regularization/2017/01/10/anaysis-of-dropout/);
+	_mask.setConstant(1.f);
 
-    for (int i = 0; i < iSize; i++)
+    for (int i = 0; i < iSize; i++) //todo distribute a proportion of 1, so we get exactly fRate
     {
         if ( (rand()/(float)RAND_MAX) < _fRate)
             _mask(0, i) = 0.f;
     }
+
+	//inverse dropout as in: https://pgaleone.eu/deep-learning/regularization/2017/01/10/anaysis-of-dropout/)
+	_mask*=1.f/(1.f-_fRate);
 }
 ///////////////////////////////////////////////////////////////////////////////
 float LayerDropout::get_rate() const

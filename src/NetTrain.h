@@ -79,7 +79,7 @@ public:
     TrainResult train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruthLabel,const TrainOption& topt);
     TrainResult fit(Net& net, const MatrixFloat& mSamples, const MatrixFloat& mTruth, const TrainOption& topt);
 
-	void set_optimizer(string sOptimizer); //ex "SGD" "Adam" "Nesterov" ...
+	void set_optimizer(string sOptimizer); //ex "SGD" "Adam" "Nadam" "Nesterov" ...
 	string get_optimizer() const;
 
 	void set_loss(string sLoss); //ex "MeanSquareError" "CategorialCrossEntropy"

@@ -185,6 +185,17 @@ public:
 		setRandom();
 	}
 
+	Matrix<T> asDiagonal() const
+	{
+		Matrix<T> out;
+		out.setZero(_iSize, _iSize);
+		
+		for (int i = 0; i < _iSize; i++)
+			out(i, i) = _data[i];
+
+		return out;
+	}
+
     T& operator()(int iR,int iC)
     {
         assert(iR<_iRows);
@@ -500,13 +511,17 @@ typedef Matrix<float> MatrixFloatView;
 MatrixFloatView fromRawBuffer(float *pBuffer, int iRows, int iCols);
 const MatrixFloatView fromRawBuffer(const float *pBuffer, int iRows, int iCols);
 MatrixFloat rowWiseSum(const MatrixFloat& m);
+MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat cwiseLog(const MatrixFloat& m);
 MatrixFloat cwiseExp(const MatrixFloat& m);
 void arraySub(MatrixFloat& m,float f);
 MatrixFloat randPerm(int iSize); //create a vector of index shuffled
+void applyRowPermutation(const MatrixFloat & mPermutationIndex, const MatrixFloat & mIn, MatrixFloat & mPermuted); 
+const MatrixFloat rowRange(const MatrixFloat& m, int iStartRow, int iEndRow); //create a row view starting at iStartRow to (not included) iEndRow
 MatrixFloat decimate(const MatrixFloat& m, int iRatio);
 int argmax(const MatrixFloat& m);
+void rowsArgmax(const MatrixFloat& m, MatrixFloat& argM); //compute the argmax row by row
 void contatenateVerticallyInto(const MatrixFloat& mA, const MatrixFloat& mB, MatrixFloat& mAB);
 const MatrixFloat addColumnOfOne(const MatrixFloat& m);
 
