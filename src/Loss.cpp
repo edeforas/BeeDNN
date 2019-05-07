@@ -27,23 +27,26 @@ public:
 	
 	float compute(const MatrixFloat& mPredicted,const MatrixFloat& mTarget) const
 	{
-		assert((mPredicted.rows() == mTarget.rows()) && (mPredicted.cols() == mTarget.cols()) );
+		assert(mTarget.cols() == mPredicted.cols());
+		assert(mTarget.rows() == mPredicted.rows());
 
-		if (mTarget.rows() == 0)
+		if (mTarget.size() == 0)
 			return 0.f;
 
-		return (mPredicted -mTarget ).cwiseAbs2().sum() / mTarget.rows();
+		return (mPredicted -mTarget ).cwiseAbs2().sum() / mTarget.size();
 	}
 	
 	void compute_gradient(const MatrixFloat& mPredicted,const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const
 	{
-		assert( (mPredicted.rows() == mTarget.rows()) && (mPredicted.cols() == mTarget.cols()) );
+		assert(mTarget.cols() == mPredicted.cols());
+		assert(mTarget.rows() == mPredicted.rows());
 
 		mGradientLoss = mPredicted - mTarget;
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
-class LossCrossEntropy : public Loss   // as in: https://gombru.github.io/2018/05/23/cross_entropy_loss/
+// from https://gombru.github.io/2018/05/23/cross_entropy_loss
+class LossCrossEntropy : public Loss   
 {
 public:
 	string name() const override
@@ -53,20 +56,24 @@ public:
 	
 	float compute(const MatrixFloat& mPredicted,const MatrixFloat& mTarget) const
 	{
-		assert((mPredicted.rows() == mTarget.rows()) && (mPredicted.cols() == mTarget.cols()) );
+		assert(mTarget.cols() == mPredicted.cols());
+		assert(mTarget.rows() == mPredicted.rows());
 
-		return -(mTarget.cwiseProduct(cwiseLog(mPredicted.cwiseMax(1.e-8f))).sum()); //to avoid computing log(0)
+		return -(mTarget.cwiseProduct(cwiseLog(mPredicted.cwiseMax(1.e-8f))).sum()) / mTarget.size(); //to avoid computing log(0)
 	}
 	
 	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const
 	{
-		assert((mPredicted.rows() == mTarget.rows()) && (mPredicted.cols() == mTarget.cols()) );
+		assert(mTarget.cols() == mPredicted.cols());
+		assert(mTarget.rows() == mPredicted.rows());
 
 		mGradientLoss = -(mTarget.cwiseQuotient(mPredicted.cwiseMax(1.e-8f))); //to avoid computing 1/0
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
-class LossBinaryCrossEntropy : public Loss   // as in: https://ml-cheatsheet.readthedocs.io/en/latest/loss_functions.html
+// from https://math.stackexchange.com/questions/2503428/derivative-of-binary-cross-entropy-why-are-my-signs-not-right
+// and https://ml-cheatsheet.readthedocs.io/en/latest/loss_functions.html
+class LossBinaryCrossEntropy : public Loss
 {
 public:
 	string name() const override
@@ -76,30 +83,31 @@ public:
 
 	float compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget) const
 	{
-		assert(mTarget.cols() == 1);
-		assert(mTarget.size() == 1);
-
-		assert(mPredicted.cols() == 1);
-		assert(mPredicted.size() == 1);
-
-		float p = mPredicted(0);
-		float y = mTarget(0);
-		return -(y*log(max(p,1.e-8f)) + (1.f-y)*log(max(1.e-8f,1.f-p)));
+		assert(mTarget.cols() == mPredicted.cols());
+		assert(mTarget.rows() == mPredicted.rows());
+		
+		float fLoss = 0.f;
+		for (int i = 0; i < mTarget.size(); i++)
+		{
+			float p = mPredicted(i);
+			float y = mTarget(i);
+			fLoss += -(y*log(max(p, 1.e-8f)) + (1.f - y)*log(max(1.e-8f, 1.f - p)));
+		}
+		return fLoss / mTarget.size();
 	}
 
 	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const
 	{
-		assert(mTarget.cols() == 1);
-		assert(mPredicted.cols() == 1);
+		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
 
-		//from https://math.stackexchange.com/questions/2503428/derivative-of-binary-cross-entropy-why-are-my-signs-not-right
-
-		float p = mPredicted(0);
-		float y = mTarget(0);
-
-		mGradientLoss.resize(1, 1);
-        mGradientLoss(0)= -(y / max(p,1.e-8f) - (1.f - y) / max((1.f - p),1.e-8f));
+		mGradientLoss.resize(mTarget.rows(), mTarget.cols());
+		for (int i = 0; i < mTarget.size(); i++)
+		{
+			float p = mPredicted(i);
+			float y = mTarget(i);
+			mGradientLoss(i)= -(y / max(p,1.e-8f) - (1.f - y) / max((1.f - p),1.e-8f));
+		}
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
