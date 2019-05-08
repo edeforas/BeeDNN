@@ -9,7 +9,7 @@ CONFIG -= qt
 
 INCLUDEPATH+=..
 
-SOURCES += test_xor.cpp \
+SOURCES += sample_classification_xor.cpp \
     ../Net.cpp \
     ../Optimizer.cpp \
     ../NetTrain.cpp \
