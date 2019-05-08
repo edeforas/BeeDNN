@@ -214,6 +214,24 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+class ActivationNLRelu: public Activation
+{
+public:
+    string name() const override
+    {
+        return "NLRelu";
+    }
+
+    float apply(float x) const override
+    {
+        return x>0.f ? log1pf(x) : 0.f;
+    }
+
+    float derivation(float x) const override
+    {
+        return x>0.f ? 1.f/(1.f+x) : 0.f;
+    }
+};//////////////////////////////////////////////////////////////////////////////
 class ActivationElu: public Activation
 {
 public:
@@ -500,6 +518,9 @@ Activation* get_activation(const string& sActivation)
     if(sActivation=="LeakyRelu")
         return new ActivationLeakyRelu;
 
+    if(sActivation=="NLRelu")
+        return new ActivationNLRelu;
+
     if(sActivation=="Parablu")
         return new ActivationParablu;
 
@@ -549,7 +570,8 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("HardSigmoid");
     vsActivations.push_back("Linear");
     vsActivations.push_back("LeakyRelu");
-    vsActivations.push_back("Parablu"); //not under tiny-dnn
+    vsActivations.push_back("NLRelu");   
+	vsActivations.push_back("Parablu"); //not under tiny-dnn
     vsActivations.push_back("Relu");
     vsActivations.push_back("Selu");
     vsActivations.push_back("SoftPlus");

@@ -11,11 +11,11 @@ Implemented so far:
 - global gain layer
 - pool averaging 1D layer
 - softmax layer
-- layers can be in any orders
+- layers and activations are decoupled, can be in any orders
 - mini batch learn, SGD learn, batch learn
 - SGD, Momentum, Nesterov, Adam , Nadam, Adagrad, Adamax, RMSprop
 - classification or regression
-- lot of activation functions: Asinh, Atan, Bent, Elliot, Elu, HardSigmoid, Gauss, Linear, LeakyRelu, Parablu, Relu, Selu, SQNL, SoftPlus, Sin, SinC, Sigmoid, Swish, SoftSign, Tanh
+- lot of activation functions: Asinh, Atan, Bent, Elliot, Elu, HardSigmoid, Gauss, Linear, LeakyRelu, NLRelu, Parablu, Relu, Selu, SQNL, SoftPlus, Sin, SinC, Sigmoid, Swish, SoftSign, Tanh
 - MeanSquareError, CrossEntropy or BinaryCrossEntropy loss
 - optional tiny-dnn binding (https://github.com/tiny-dnn), so you can compare both library
 - optional eigen use (http://eigen.tuxfamily.org), or use internal matrix library
