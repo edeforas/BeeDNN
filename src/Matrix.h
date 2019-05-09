@@ -366,7 +366,7 @@ public:
         return out;
     }
 
-    Matrix<T> cwiseAbs2() const
+	Matrix<T> cwiseAbs2() const
     {
         Matrix<T> out(*this);
 
@@ -376,7 +376,17 @@ public:
         return out;
     }
 
-    Matrix<T> cwiseSqrt() const
+	Matrix<T> cwiseSign() const
+	{
+		Matrix<T> out(*this);
+
+		for (int i = 0; i < _iSize; i++)
+			out(i) = (_data[i] >= 0.f)*2.f -1.f;
+
+		return out;
+	}
+
+	Matrix<T> cwiseSqrt() const
     {
         Matrix<T> out(*this);
 

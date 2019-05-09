@@ -45,6 +45,34 @@ public:
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
+class LossMeanAbsoluteError : public Loss
+{
+public:
+	string name() const override
+	{
+		return "MeanAbsoluteError";
+	}
+	
+	float compute(const MatrixFloat& mPredicted,const MatrixFloat& mTarget) const
+	{
+		assert(mTarget.cols() == mPredicted.cols());
+		assert(mTarget.rows() == mPredicted.rows());
+
+		if (mTarget.size() == 0)
+			return 0.f;
+
+		return (mPredicted -mTarget ).cwiseAbs().sum() / mTarget.size();
+	}
+	
+	void compute_gradient(const MatrixFloat& mPredicted,const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const
+	{
+		assert(mTarget.cols() == mPredicted.cols());
+		assert(mTarget.rows() == mPredicted.rows());
+
+        mGradientLoss=(mPredicted - mTarget).cwiseSign();
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
 // from https://gombru.github.io/2018/05/23/cross_entropy_loss
 class LossCrossEntropy : public Loss   
 {
@@ -116,6 +144,9 @@ Loss* create_loss(const string& sLoss)
     if(sLoss =="MeanSquareError")
         return new LossMeanSquareError;
 
+    if(sLoss =="MeanAbsoluteError")
+        return new LossMeanAbsoluteError;
+
     if(sLoss =="CrossEntropy")
         return new LossCrossEntropy;
 
@@ -130,6 +161,7 @@ void list_loss_available(vector<string>& vsLoss)
     vsLoss.clear();
 
     vsLoss.push_back("MeanSquareError");
+	vsLoss.push_back("MeanAbsoluteError");
 	vsLoss.push_back("CrossEntropy");
 	vsLoss.push_back("BinaryCrossEntropy");
 }

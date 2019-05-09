@@ -570,7 +570,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("HardSigmoid");
     vsActivations.push_back("Linear");
     vsActivations.push_back("LeakyRelu");
-    vsActivations.push_back("NLRelu");   
+    vsActivations.push_back("NLRelu");  //not under tiny-dnn
 	vsActivations.push_back("Parablu"); //not under tiny-dnn
     vsActivations.push_back("Relu");
     vsActivations.push_back("Selu");
