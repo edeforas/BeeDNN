@@ -16,7 +16,7 @@ Implemented so far:
 - SGD, Momentum, Nesterov, Adam , Nadam, Adagrad, Adamax, RMSprop
 - classification or regression
 - lot of activation functions: Asinh, Atan, Bent, Elliot, Elu, HardSigmoid, Gauss, Linear, LeakyRelu, NLRelu, Parablu, Relu, Selu, SQNL, SoftPlus, Sin, SinC, Sigmoid, Swish, SoftSign, Tanh
-- MeanSquareError, MeanAbsoluteError, CrossEntropy or BinaryCrossEntropy loss
+- Loss functions can be: MeanSquareError, MeanAbsoluteError, L2, L1, CrossEntropy or BinaryCrossEntropy
 - optional tiny-dnn binding (https://github.com/tiny-dnn), so you can compare both library
 - optional eigen use (http://eigen.tuxfamily.org), or use internal matrix library
 - all in C++

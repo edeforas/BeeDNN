@@ -8,11 +8,12 @@
 
 #include "MLEngine.h"
 #include "MLEngineBeeDnn.h"
-#include "MNISTReader.h"
 
 #ifdef USE_TINYDNN
 #include "MLEngineTinyDnn.h"
 #endif
+
+#include "DataSource.h"
 
 #include "Activation.h"
 #include "Optimizer.h"
@@ -117,17 +118,19 @@ MainWindow::MainWindow(QWidget *parent) :
 
     _curveColor=0xff0000; //red
 
-    _bHasTestData=false;
     _bMustSave=false;
 
     set_input_size(1);
     _pEngine=new MLEngineBeeDnn;
+
+    _pData=new DataSource;
 }
 //////////////////////////////////////////////////////////////////////////
 MainWindow::~MainWindow()
 {
     delete ui;
     delete _pEngine;
+    delete _pData;
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::on_pushButton_clicked()
@@ -160,10 +163,10 @@ void MainWindow::train_and_test(bool bReset)
         _pEngine->init();
 
     _pEngine->set_problem(ui->cbProblem->currentText()=="Classification");
-    DNNTrainResult dtr =_pEngine->learn(_mTrainData,_mTrainTruth,dto);
+    DNNTrainResult dtr =_pEngine->learn(_pData->train_data(),_pData->train_annotation(),dto);
 
-    float fLoss=_pEngine->compute_loss(_mTrainData,_mTrainTruth); //final loss
-    ui->leMSE->setText(QString::number(fLoss));
+    float fLoss=_pEngine->compute_loss(_pData->train_data(),_pData->train_annotation()); //final loss
+    ui->leMSE->setText(QString::number((double)fLoss));
     ui->leComputedEpochs->setText(QString::number(dtr.computedEpochs));
     ui->leTimeByEpoch->setText(QString::number(dtr.epochDuration));
 
@@ -229,10 +232,9 @@ void MainWindow::drawRegression()
     }
 
     //create ref sample hi-res and net output
-    unsigned int iNbPoint=(unsigned int)(ui->leNbPointsTest->text().toInt());
+    unsigned int iNbPoint=(unsigned int)(ui->leNbPointsLearn->text().toInt());
     float fInputMin=ui->leInputMin->text().toFloat();
     float fInputMax=ui->leInputMax->text().toFloat();
-    bool bExtrapole=ui->cbExtrapole->isChecked();
     vector<double> vTruth;
     vector<double> vSamples;
     vector<double> vRegression;
@@ -240,21 +242,13 @@ void MainWindow::drawRegression()
 
     compute_truth();
 
-    if(bExtrapole)
-    {
-        float fBorder=(fInputMax-fInputMin)/2.f;
-        fInputMin-=fBorder;
-        fInputMax+=fBorder;
-        iNbPoint*=2;
-    }
-
     float fVal=fInputMin;
     float fStep=(fInputMax-fInputMin)/(iNbPoint-1.f);
 
     for(unsigned int i=0;i<iNbPoint;i++)
     {
         mIn(0,0)=fVal;
-        vTruth.push_back((double)(_mTrainTruth(i,0)));
+        vTruth.push_back((double)(_pData->train_annotation()(i,0)));
         vSamples.push_back((double)(fVal));
         _pEngine->predict(mIn,mOut);
 
@@ -289,139 +283,42 @@ void MainWindow::on_actionAbout_triggered()
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::compute_truth()
-{
-    //function not optimized but not mandatory for now
-
+{  
     string sFunction=ui->cbFunction->currentText().toStdString();
-    _bHasTestData=false;
 
     if(sFunction=="And")
     {
-        _mTrainData.resize(4,2);
-        _mTrainData(0,0)=0; _mTrainData(0,1)=0;
-        _mTrainData(1,0)=1; _mTrainData(1,1)=0;
-        _mTrainData(2,0)=0; _mTrainData(2,1)=1;
-        _mTrainData(3,0)=1; _mTrainData(3,1)=1;
-
-        _mTrainTruth.resize(4,1);
-        _mTrainTruth(0,0)=0;
-        _mTrainTruth(1,0)=0;
-        _mTrainTruth(2,0)=0;
-        _mTrainTruth(3,0)=1;
-
-        _mTestData=_mTrainData;
-        _mTestTruth=_mTrainTruth;
-        set_input_size(2);
+        _pData->load_and();
+        set_input_size(_pData->data_cols());
         return;
     }
 
     if(sFunction=="Xor")
     {
-        _mTrainData.resize(4,2);
-        _mTrainData(0,0)=0; _mTrainData(0,1)=0;
-        _mTrainData(1,0)=1; _mTrainData(1,1)=0;
-        _mTrainData(2,0)=0; _mTrainData(2,1)=1;
-        _mTrainData(3,0)=1; _mTrainData(3,1)=1;
-
-        _mTrainTruth.resize(4,1);
-        _mTrainTruth(0,0)=0;
-        _mTrainTruth(1,0)=1;
-        _mTrainTruth(2,0)=1;
-        _mTrainTruth(3,0)=0;
-
-        _mTestData=_mTrainData;
-        _mTestTruth=_mTrainTruth;
-        set_input_size(2);
+        _pData->load_xor();
+        set_input_size(_pData->data_cols());
         return;
     }
 
     if(sFunction=="MNIST")
     {
-        if( (_mTrainData.cols()!=784) || (_mTrainData.rows()!=60000))
-        {
-            MNISTReader r;
-            r.read_from_folder(".",_mTrainData,_mTrainTruth,_mTestData,_mTestTruth);
-            _mTrainData/=256.f;
-            _mTestData/=256.f;
-        }
-
-        _bHasTestData=true;
-        set_input_size(_mTrainData.cols());
+        _pData->load_mnist(); //todo check errors
+        set_input_size(_pData->data_cols());
         return;
     }
 
     if(sFunction=="TextFiles")
     {
-        _mTrainData=fromFile("train_data.txt");
-        _mTrainTruth=fromFile("train_truth.txt");
-        _mTrainData/=256.f;
-
-        _mTestData=fromFile("test_data.txt");
-        _mTestTruth=fromFile("test_truth.txt");
-        _mTestData/=256.f;
-
-        _bHasTestData=_mTestData.size()!=0;
-        if(!_bHasTestData) //if invalid/noexistent test_data, use train_data
-        {
-            _mTestData=_mTrainData;
-            _mTestTruth=_mTrainTruth;
-        }
-
-        set_input_size((int)_mTrainData.cols());
+        _pData->load_textfile();; //todo check errors
+        set_input_size(_pData->data_cols());
         return;
     }
 
-    //simple function to interpolate
+    //function default case
     int iNbPoint=ui->leNbPointsLearn->text().toInt();
-    float dInputMin=ui->leInputMin->text().toFloat();
-    float dInputMax=ui->leInputMax->text().toFloat();
-    float dStep=(dInputMax-dInputMin)/(iNbPoint-1.f);
-
-    _mTrainTruth.resize(iNbPoint,1);
-    _mTrainData.resize(iNbPoint,1);
-    float dVal=dInputMin,dOut=0.f;
-
-    for( int i=0;i<iNbPoint;i++)
-    {
-        if(sFunction=="Identity")
-            dOut=dVal;
-
-        if(sFunction=="Sin")
-            dOut=sinf(dVal);
-
-        if(sFunction=="Abs")
-            dOut=fabs(dVal);
-
-        if(sFunction=="Parabolic")
-            dOut=dVal*dVal;
-
-        if(sFunction=="Gamma")
-            dOut=tgammaf(dVal);
-
-        if(sFunction=="Exp")
-            dOut=expf(dVal);
-
-        if(sFunction=="Sqrt")
-            dOut=sqrtf(dVal);
-
-        if(sFunction=="Ln")
-            dOut=logf(dVal);
-
-        if(sFunction=="Gauss")
-            dOut=expf(-dVal*dVal);
-
-        if(sFunction=="Inverse")
-            dOut=1.f/dVal;
-
-        if(sFunction=="Rectangular")
-            dOut= ((((int)dVal)+(dVal<0.f))+1) & 1 ;
-
-        _mTrainData(i,0)=dVal;
-        _mTrainTruth(i,0)=dOut;
-        dVal+=dStep;
-    }
-    _mTestData=_mTrainData; //for now
-    _mTestTruth=_mTrainTruth; //for now
+    float fMin=ui->leInputMin->text().toFloat();
+    float fMax=ui->leInputMax->text().toFloat();
+    _pData->load_function(sFunction,fMin,fMax,iNbPoint);
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::resizeEvent( QResizeEvent *e )
@@ -586,16 +483,16 @@ void MainWindow::update_classification_tab()
     }
 
     float fAccuracy=0.f;
-    if(_bHasTestData)
+    if(_pData->has_test_data())
     {
-        _pEngine->compute_confusion_matrix(_mTestData,_mTestTruth,_mConfusionMatrix,fAccuracy);
-        ui->leTestAccuracy->setText(QString::number(fAccuracy,'f',2));
+        _pEngine->compute_confusion_matrix(_pData->test_data(),_pData->test_annotation(),_mConfusionMatrix,fAccuracy);
+        ui->leTestAccuracy->setText(QString::number((double)fAccuracy,'f',2));
     }
     else
         ui->leTestAccuracy->setText("n/a");
 
-    _pEngine->compute_confusion_matrix(_mTrainData,_mTrainTruth,_mConfusionMatrix,fAccuracy);
-    ui->leTrainAccuracy->setText(QString::number(fAccuracy,'f',2));
+    _pEngine->compute_confusion_matrix(_pData->train_data(),_pData->train_annotation(),_mConfusionMatrix,fAccuracy);
+    ui->leTrainAccuracy->setText(QString::number((double)fAccuracy,'f',2));
 
     drawConfusionMatrix(); //for now on train data
 }

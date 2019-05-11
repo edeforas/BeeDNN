@@ -14,6 +14,7 @@ class MainWindow;
 }
 
 class Net;
+class DataSource;
 
 class MainWindow : public QMainWindow
 {
@@ -73,15 +74,11 @@ private:
     unsigned int _curveColor;
     int _iInputSize;
 
-    MatrixFloat _mTrainData;
-    MatrixFloat _mTrainTruth;
-    MatrixFloat _mTestData;
-    MatrixFloat _mTestTruth;
-    bool _bHasTestData;
     bool _bMustSave;
     string _sFileName;
 
     MatrixFloat _mConfusionMatrix;
+    DataSource* _pData;
 };
 
 #endif // MAINWINDOW_H

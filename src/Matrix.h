@@ -428,7 +428,12 @@ public:
         return dSum;
     }
 
-    T maxCoeff() const
+	T mean() const
+	{
+		return sum()/(float)_iSize;
+	}
+	
+	T maxCoeff() const
     {
         if(_iSize==0)
             return 0.; //not clean

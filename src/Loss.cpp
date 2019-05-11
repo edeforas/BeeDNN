@@ -33,7 +33,7 @@ public:
 		if (mTarget.size() == 0)
 			return 0.f;
 
-		return (mPredicted -mTarget ).cwiseAbs2().sum() / mTarget.size();
+        return (mPredicted -mTarget ).cwiseAbs2().mean();
 	}
 	
 	void compute_gradient(const MatrixFloat& mPredicted,const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const
@@ -61,7 +61,7 @@ public:
 		if (mTarget.size() == 0)
 			return 0.f;
 
-		return (mPredicted -mTarget ).cwiseAbs().sum() / mTarget.size();
+        return (mPredicted -mTarget ).cwiseAbs().mean();
 	}
 	
 	void compute_gradient(const MatrixFloat& mPredicted,const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const
@@ -70,6 +70,66 @@ public:
 		assert(mTarget.rows() == mPredicted.rows());
 
         mGradientLoss=(mPredicted - mTarget).cwiseSign();
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
+// same as MeanSquareError but do not divide by nbSamples
+// see https://isaacchanghau.github.io/post/loss_functions/
+class LossL2 : public Loss
+{
+public:
+	string name() const override
+	{
+		return "L2";
+	}
+
+	float compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget) const
+	{
+		assert(mTarget.cols() == mPredicted.cols());
+		assert(mTarget.rows() == mPredicted.rows());
+
+		if (mTarget.size() == 0)
+			return 0.f;
+
+		return (mPredicted - mTarget).cwiseAbs2().sum();
+	}
+
+	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const
+	{
+		assert(mTarget.cols() == mPredicted.cols());
+		assert(mTarget.rows() == mPredicted.rows());
+
+		mGradientLoss = mPredicted - mTarget;
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
+// same as MeanAbsoluteError but do not divide by nbSamples
+// see https://isaacchanghau.github.io/post/loss_functions/
+class LossL1 : public Loss
+{
+public:
+	string name() const override
+	{
+		return "L1";
+	}
+
+	float compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget) const
+	{
+		assert(mTarget.cols() == mPredicted.cols());
+		assert(mTarget.rows() == mPredicted.rows());
+
+		if (mTarget.size() == 0)
+			return 0.f;
+
+		return (mPredicted - mTarget).cwiseAbs().sum();
+	}
+
+	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const
+	{
+		assert(mTarget.cols() == mPredicted.cols());
+		assert(mTarget.rows() == mPredicted.rows());
+
+		mGradientLoss = (mPredicted - mTarget).cwiseSign();
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -87,7 +147,7 @@ public:
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
 
-		return -(mTarget.cwiseProduct(cwiseLog(mPredicted.cwiseMax(1.e-8f))).sum()) / mTarget.size(); //to avoid computing log(0)
+        return -(mTarget.cwiseProduct(cwiseLog(mPredicted.cwiseMax(1.e-8f)))).mean(); //to avoid computing log(0)
 	}
 	
 	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const
@@ -147,7 +207,13 @@ Loss* create_loss(const string& sLoss)
     if(sLoss =="MeanAbsoluteError")
         return new LossMeanAbsoluteError;
 
-    if(sLoss =="CrossEntropy")
+	if (sLoss == "L2")
+		return new LossL2;
+
+	if (sLoss == "L1")
+		return new LossL1;
+	
+	if(sLoss =="CrossEntropy")
         return new LossCrossEntropy;
 
 	if (sLoss == "BinaryCrossEntropy")
@@ -162,6 +228,8 @@ void list_loss_available(vector<string>& vsLoss)
 
     vsLoss.push_back("MeanSquareError");
 	vsLoss.push_back("MeanAbsoluteError");
+	vsLoss.push_back("L2");
+	vsLoss.push_back("L1");
 	vsLoss.push_back("CrossEntropy");
 	vsLoss.push_back("BinaryCrossEntropy");
 }

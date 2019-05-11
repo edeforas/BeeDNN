@@ -295,26 +295,9 @@
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_11">
-       <item>
         <widget class="QLabel" name="label_20">
          <property name="text">
-          <string>NbPointsLearn</string>
+          <string>NbPoints</string>
          </property>
         </widget>
        </item>
@@ -326,25 +309,17 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_21">
-         <property name="text">
-          <string>NbPointsTest</string>
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="leNbPointsTest">
-         <property name="text">
-          <string>100</string>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="cbExtrapole">
-         <property name="text">
-          <string>Extrapole2x</string>
-         </property>
-        </widget>
+        </spacer>
        </item>
       </layout>
      </item>
