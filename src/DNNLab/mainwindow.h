@@ -51,6 +51,8 @@ private slots:
 
     void on_actionSave_with_Score_triggered();
 
+    void on_pushButton_3_clicked();
+
 private:
     void drawLoss(vector<double> vdLoss);
     void drawAccuracy(vector<double> vdAccuracy);

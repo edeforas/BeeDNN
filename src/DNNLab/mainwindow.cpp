@@ -3,6 +3,7 @@
 #include <QMessageBox>
 #include <QColorDialog>
 #include <QFileDialog>
+#include <QClipboard>
 
 #include "SimpleCurveWidget.h"
 
@@ -622,4 +623,10 @@ void MainWindow::on_actionSave_with_Score_triggered()
     _pEngine->save(_sFileName+sScore);
     _bMustSave=false;
 */}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::on_pushButton_3_clicked()
+{
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setText(ui->peDetails->toPlainText());
+}
 //////////////////////////////////////////////////////////////////////////////

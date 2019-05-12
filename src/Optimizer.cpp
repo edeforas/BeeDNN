@@ -15,7 +15,11 @@
 
 //////////////////////////////////////////////////////////
 Optimizer::Optimizer()
-{}
+{
+	fLearningRate=0.f;
+	fMomentum=0.f;
+	fDecay=0.f;
+}
 //////////////////////////////////////////////////////////
 Optimizer::~Optimizer()
 {}
@@ -211,6 +215,8 @@ public:
     {
         beta1=0.9f;
         beta2=0.999f;
+		beta1_prod = 0.f;
+		beta2_prod = 0.f;
     }
 
     ~OptimizerAdam() override
@@ -270,6 +276,8 @@ public:
         alpha=0.002f;
         beta1=0.9f;
         beta2=0.999f;
+		beta1_prod = 0.f;
+		beta2_prod = 0.f;
     }
 
     ~OptimizerNadam() override
@@ -327,6 +335,7 @@ public:
         alpha=0.002f;
         beta1=0.9f;
         beta2=0.999f;
+		beta1_prod = 0.f;
     }
 
     ~OptimizerAdamax() override
