@@ -59,17 +59,24 @@ HEADERS += \
     ../LayerGlobalGain.h \
     ../LayerPoolAveraging1D.h
 
-#ui
+	
+#GUI
 SOURCES += \
     main.cpp\
     mainwindow.cpp \
     SimpleCurveWidget.cpp \
+    Properties.cpp \
+    DataSource.cpp \
     MLEngineBeeDnn.cpp \
     MLEngine.cpp
+	
 HEADERS  += \
     mainwindow.h \
     SimpleCurveWidget.h \
+    Properties.h \
     MLEngine.h \
+	DataSource.h \
     MLEngineBeeDnn.h
-FORMS    += mainwindow.ui
+
+	FORMS    += mainwindow.ui
 
