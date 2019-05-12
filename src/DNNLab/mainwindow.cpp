@@ -91,7 +91,7 @@ MainWindow::MainWindow(QWidget *parent) :
     list_loss_available(vsloss);
     for(unsigned int i=0;i<vsloss.size();i++)
         ui->cbLossFunction->addItem(vsloss[i].data());
-    ui->cbLossFunction->setCurrentText("MeanSquareError");
+    ui->cbLossFunction->setCurrentIndex(0);
 
     //setup optimizer
     vector<string> vsOptimizers;
@@ -303,14 +303,14 @@ void MainWindow::compute_truth()
 
     if(sFunction=="MNIST")
     {
-        _pData->load_mnist(); //todo check errors
+        _pData->load_mnist(); //todo check file I/O errors
         set_input_size(_pData->data_cols());
         return;
     }
 
     if(sFunction=="TextFiles")
     {
-        _pData->load_textfile();; //todo check errors
+        _pData->load_textfile();; //todo check file I/O errors
         set_input_size(_pData->data_cols());
         return;
     }
@@ -427,7 +427,7 @@ void MainWindow::ui_to_net()
             }
             else if(sType=="GlobalGain")
             {
-                float fGain=0.f; //by default
+                float fGain=0.f; //by default, 0.f mean learned
                 if(bOk)
                     fGain=fArg1;
                 _pEngine->add_globalgain_layer(iInSize,fGain);
@@ -583,7 +583,7 @@ void MainWindow::on_actionNew_triggered()
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionOpen_triggered()
 {
-
+//todo
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionSave_triggered()
@@ -603,7 +603,7 @@ void MainWindow::on_actionSave_triggered()
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionClose_triggered()
 {
-
+//todo
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionSave_with_Score_triggered()

@@ -17,12 +17,12 @@ Loss::Loss()
 Loss::~Loss()
 { }
 //////////////////////////////////////////////////////////////////////////////
-class LossMeanSquareError : public Loss
+class LossMeanSquaredError : public Loss
 {
 public:
 	string name() const override
 	{
-		return "MeanSquareError";
+		return "MeanSquaredError";
 	}
 	
 	float compute(const MatrixFloat& mPredicted,const MatrixFloat& mTarget) const
@@ -134,12 +134,12 @@ public:
 };
 //////////////////////////////////////////////////////////////////////////////
 // from https://gombru.github.io/2018/05/23/cross_entropy_loss
-class LossCrossEntropy : public Loss   
+class LossCategoricalCrossEntropy : public Loss
 {
 public:
 	string name() const override
 	{
-		return "CrossEntropy";
+		return "CategoricalCrossEntropy";
 	}
 	
 	float compute(const MatrixFloat& mPredicted,const MatrixFloat& mTarget) const
@@ -201,8 +201,8 @@ public:
 //////////////////////////////////////////////////////////////////////////////
 Loss* create_loss(const string& sLoss)
 {
-    if(sLoss =="MeanSquareError")
-        return new LossMeanSquareError;
+    if(sLoss =="MeanSquaredError")
+        return new LossMeanSquaredError;
 
     if(sLoss =="MeanAbsoluteError")
         return new LossMeanAbsoluteError;
@@ -213,8 +213,8 @@ Loss* create_loss(const string& sLoss)
 	if (sLoss == "L1")
 		return new LossL1;
 	
-	if(sLoss =="CrossEntropy")
-        return new LossCrossEntropy;
+	if(sLoss =="CategoricalCrossEntropy")
+        return new LossCategoricalCrossEntropy;
 
 	if (sLoss == "BinaryCrossEntropy")
 		return new LossBinaryCrossEntropy;
@@ -226,11 +226,11 @@ void list_loss_available(vector<string>& vsLoss)
 {
     vsLoss.clear();
 
-    vsLoss.push_back("MeanSquareError");
+    vsLoss.push_back("MeanSquaredError");
 	vsLoss.push_back("MeanAbsoluteError");
 	vsLoss.push_back("L2");
 	vsLoss.push_back("L1");
-	vsLoss.push_back("CrossEntropy");
+	vsLoss.push_back("CategoricalCrossEntropy");
 	vsLoss.push_back("BinaryCrossEntropy");
 }
 //////////////////////////////////////////////////////////////////////////////
