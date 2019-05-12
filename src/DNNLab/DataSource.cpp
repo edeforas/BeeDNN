@@ -71,11 +71,9 @@ void DataSource::load_textfile()
 
         _mTrainData=fromFile("train_data.txt");
         _mTrainAnnotation=fromFile("train_truth.txt");
-        _mTrainData/=255.f;
 
         _mTestData=fromFile("test_data.txt");
         _mTestAnnotation=fromFile("test_truth.txt");
-        _mTestData/=255.f;
 
         _bHasTrainData=true;
         _bHasTestData=true;
