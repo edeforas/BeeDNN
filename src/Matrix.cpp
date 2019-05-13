@@ -249,9 +249,9 @@ const MatrixFloat fromFile(const string& sFile)
         ss.str(s);
         for(int i=0;i<iNbCols;i++)
         {
-            float f;
-            ss >> f;
-            vf.push_back(f);
+            float sF;
+            ss >> sF;
+            vf.push_back(sF);
         }
 
         r.resize(iNbLine,iNbCols);

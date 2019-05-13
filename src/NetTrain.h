@@ -22,7 +22,8 @@ class Loss;
 class TrainOption
 {
 public:
-    TrainOption()
+    TrainOption():
+		epochCallBack(nullptr)
     {
         epochs=100;
         batchSize=16;
@@ -31,7 +32,6 @@ public:
         momentum=0.9f;
         keepBest = false;
         testEveryEpochs=-1;
-        epochCallBack = nullptr;
     }
 
     int  epochs;

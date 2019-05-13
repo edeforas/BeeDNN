@@ -43,8 +43,8 @@ void LayerSoftmax::backpropagation(const MatrixFloat &mInput,const MatrixFloat &
     {
         MatrixFloat sR=S.row(i);
 		MatrixFloat mDiag(sR.cols(), sR.cols());
-		for (int i = 0; i < sR.cols(); i++)
-			mDiag(i, i) = sR(0, i);
+		for (int iC = 0; iC < sR.cols(); iC++)
+			mDiag(iC, iC) = sR(0, iC);
 
 		MatrixFloat m3 = (mDiag - (sR.transpose()*sR));
         MatrixFloat m4= mDelta.row(i) * m3;

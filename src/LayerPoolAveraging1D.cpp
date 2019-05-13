@@ -12,6 +12,8 @@
 LayerPoolAveraging1D::LayerPoolAveraging1D(int iInSize, int iOutSize) :
     Layer(iInSize , iOutSize, "PoolAveraging1D")
 {
+	assert(iOutSize>0);
+
     int iWindowSize=iInSize/iOutSize;
     float fInvWeight=1.f/iWindowSize;
 

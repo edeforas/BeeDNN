@@ -25,7 +25,7 @@ public:
 		return "MeanSquaredError";
 	}
 	
-	float compute(const MatrixFloat& mPredicted,const MatrixFloat& mTarget) const
+	float compute(const MatrixFloat& mPredicted,const MatrixFloat& mTarget) const override
 	{
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
@@ -36,7 +36,7 @@ public:
         return (mPredicted -mTarget ).cwiseAbs2().mean();
 	}
 	
-	void compute_gradient(const MatrixFloat& mPredicted,const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const
+	void compute_gradient(const MatrixFloat& mPredicted,const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
 	{
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
@@ -53,7 +53,7 @@ public:
 		return "MeanAbsoluteError";
 	}
 	
-	float compute(const MatrixFloat& mPredicted,const MatrixFloat& mTarget) const
+	float compute(const MatrixFloat& mPredicted,const MatrixFloat& mTarget) const override
 	{
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
@@ -64,7 +64,7 @@ public:
         return (mPredicted -mTarget ).cwiseAbs().mean();
 	}
 	
-	void compute_gradient(const MatrixFloat& mPredicted,const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const
+	void compute_gradient(const MatrixFloat& mPredicted,const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
 	{
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
@@ -83,7 +83,7 @@ public:
 		return "L2";
 	}
 
-	float compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget) const
+	float compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget) const override
 	{
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
@@ -94,7 +94,7 @@ public:
 		return (mPredicted - mTarget).cwiseAbs2().sum();
 	}
 
-	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const
+	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
 	{
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
@@ -113,7 +113,7 @@ public:
 		return "L1";
 	}
 
-	float compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget) const
+	float compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget) const override
 	{
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
@@ -124,7 +124,7 @@ public:
 		return (mPredicted - mTarget).cwiseAbs().sum();
 	}
 
-	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const
+	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
 	{
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
@@ -142,7 +142,7 @@ public:
 		return "CategoricalCrossEntropy";
 	}
 	
-	float compute(const MatrixFloat& mPredicted,const MatrixFloat& mTarget) const
+	float compute(const MatrixFloat& mPredicted,const MatrixFloat& mTarget) const override
 	{
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
@@ -150,7 +150,7 @@ public:
         return -(mTarget.cwiseProduct(cwiseLog(mPredicted.cwiseMax(1.e-8f)))).mean(); //to avoid computing log(0)
 	}
 	
-	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const
+	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
 	{
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
@@ -169,7 +169,7 @@ public:
 		return "BinaryCrossEntropy";
 	}
 
-	float compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget) const
+	float compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget) const override
 	{
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
@@ -184,7 +184,7 @@ public:
 		return fLoss / mTarget.size();
 	}
 
-	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const
+	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
 	{
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());

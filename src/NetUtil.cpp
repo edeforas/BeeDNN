@@ -50,7 +50,7 @@ string to_string(const Net* pNet)
 
         else if(layer->type()=="GlobalGain")
         {
-            LayerGlobalGain* l=(LayerGlobalGain*)layer;
+            LayerGlobalGain* l=static_cast<LayerGlobalGain*>(layer);
             ss << "GlobalGain: gain=" << l->gain() << endl;
         }
 
@@ -59,7 +59,7 @@ string to_string(const Net* pNet)
 
         else if(layer->type()=="Dropout")
         {
-            LayerDropout* l=(LayerDropout*)layer;
+            LayerDropout* l=static_cast<LayerDropout*>(layer);
             ss << "Dropout: rate=" << l->get_rate() << endl;
         }
         else
@@ -76,6 +76,7 @@ Net* from_string(const string& s)
 {
     Net* pNet=new Net;
 
+    (void)s;
     //todo
 
     return pNet;
@@ -93,6 +94,8 @@ bool save(string sFileName,const Net* pNet)
 ////////////////////////////////////////////////////////////////////////////////////////////////
 bool load(string sFileName,Net* pNet)
 {
+    (void)pNet;
+
     ifstream f(sFileName);
 /*
     string s=to_string(pNet);
