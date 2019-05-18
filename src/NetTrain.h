@@ -76,7 +76,7 @@ public:
 
     float compute_loss(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth);
 
-    TrainResult train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruthLabel,const TrainOption& topt);
+    TrainResult train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruth,const TrainOption& topt);
     TrainResult fit(Net& net, const MatrixFloat& mSamples, const MatrixFloat& mTruth, const TrainOption& topt);
 
 	void set_optimizer(string sOptimizer); //ex "SGD" "Adam" "Nadam" "Nesterov" ...

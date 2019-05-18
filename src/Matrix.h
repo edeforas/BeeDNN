@@ -536,12 +536,14 @@ void applyRowPermutation(const MatrixFloat & mPermutationIndex, const MatrixFloa
 const MatrixFloat rowRange(const MatrixFloat& m, int iStartRow, int iEndRow); //create a row view starting at iStartRow to (not included) iEndRow
 MatrixFloat decimate(const MatrixFloat& m, int iRatio);
 int argmax(const MatrixFloat& m);
+void labelToOneHot(const MatrixFloat& mLabel, MatrixFloat& mOneMat, int iNbClass=0);
 void rowsArgmax(const MatrixFloat& m, MatrixFloat& argM); //compute the argmax row by row
 void contatenateVerticallyInto(const MatrixFloat& mA, const MatrixFloat& mB, MatrixFloat& mAB);
 const MatrixFloat addColumnOfOne(const MatrixFloat& m);
 
 string toString(const MatrixFloat& m);
 const MatrixFloat fromFile(const string& sFile);
+bool toFile(const string& sFile, const MatrixFloat & m);
 
 #endif
 

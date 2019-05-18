@@ -144,19 +144,32 @@ int argmax(const MatrixFloat& m)
     if(m.cols()==0)
         return 0; //todo error not a vector
 
-    float d=m(0,0);
+    float d=m(0);
     int iIndex=0;
 
-    for(int i=0;i<m.cols();i++)
+    for(int i=1;i<m.cols();i++)
     {
-        if(m(0,i)>d)
+        if(m(i)>d)
         {
-            d=m(0,i);
+            d=m(i);
             iIndex=i;
         }
     }
 
     return iIndex;
+}
+///////////////////////////////////////////////////////////////////////////
+void labelToOneHot(const MatrixFloat& mLabel, MatrixFloat& mOneMat, int iNbClass)
+{
+	assert(mLabel.cols() == 1);
+
+	if (iNbClass == 0)
+		iNbClass = (int)mLabel.maxCoeff() + 1; //guess the nb of class
+
+	mOneMat.setZero(mLabel.rows(), iNbClass);
+
+	for (int i = 0; i < mLabel.rows(); i++)
+		mOneMat(i, (int)mLabel(i)) = 1;
 }
 ///////////////////////////////////////////////////////////////////////////
 void rowsArgmax(const MatrixFloat& m, MatrixFloat& argM)
@@ -261,7 +274,20 @@ const MatrixFloat fromFile(const string& sFile)
     return r;
 }
 ///////////////////////////////////////////////////////////////////////////
- //create a row view starting at iStartRow ending at iEndRow (not included)
+bool toFile(const string& sFile, const MatrixFloat & m)
+{
+	fstream f(sFile, ios::out);
+	for (int iL = 0; iL < m.rows(); iL++)
+	{
+		for (int iR = 0; iR < m.cols(); iR++)
+			f << m(iL, iR);
+		f << endl;
+	}
+
+	return true;
+}
+///////////////////////////////////////////////////////////////////////////
+//create a row view starting at iStartRow ending at iEndRow (not included)
 const MatrixFloat rowRange(const MatrixFloat& m, int iStartRow, int iEndRow)
 {
 	assert(iStartRow < iEndRow); //iEndRow not included

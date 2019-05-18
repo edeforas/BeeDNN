@@ -1,6 +1,8 @@
 // sample  classification MNIST as in:
 // https://colab.research.google.com/github/tensorflow/docs/blob/master/site/en/tutorials/_index.ipynb
 
+//expect 95% on ref and test in less than 1mn training time
+
 #include <iostream>
 #include <chrono>
 using namespace std;
@@ -11,7 +13,7 @@ using namespace std;
 #include "ConfusionMatrix.h"
 
 Net net;
-MatrixFloat mRefImages, mRefLabelsIndex, mTestImages, mTestLabelsIndex;
+MatrixFloat mRefImages, mRefLabels, mTestImages, mTestLabels;
 int iEpoch;
 chrono::steady_clock::time_point start;
 
@@ -29,13 +31,13 @@ void epoch_callback()
     MatrixFloat mClassRef;
     net.classify_all(mRefImages, mClassRef);
     ConfusionMatrix cmRef;
-    ClassificationResult crRef = cmRef.compute(mRefLabelsIndex, mClassRef, 10);
+    ClassificationResult crRef = cmRef.compute(mRefLabels, mClassRef);
     cout << "% accuracy on Ref =" << crRef.accuracy << endl;
-
+	
     MatrixFloat mClassTest;
     net.classify_all(mTestImages, mClassTest);
     ConfusionMatrix cmTest;
-    ClassificationResult crTest = cmTest.compute(mTestLabelsIndex, mClassTest, 10);
+    ClassificationResult crTest = cmTest.compute(mTestLabels, mClassTest);
     cout << "% accuracy on Test=" << crTest.accuracy << endl;
 
     cout << endl;
@@ -48,38 +50,31 @@ int main()
 	//load MNIST data
     cout << "loading MNIST database..." << endl;
     MNISTReader mr;
-    if(!mr.read_from_folder(".",mRefImages,mRefLabelsIndex, mTestImages,mTestLabelsIndex))
+    if(!mr.read_from_folder(".",mRefImages,mRefLabels, mTestImages,mTestLabels))
     {
         cout << "MNIST samples not found, please check the *-ubyte files are in the executable folder" << endl;
         return -1;
     }
 
-    //normalize data
-    mTestImages/=255.f;
-    mRefImages/=255.f;
-
-	//check perf was 15s/iteration in sample
-    
+	//normalize data
+	mTestImages/= 255.f;
+	mRefImages/= 255.f;
+  
 	//create simple net:
-    net.add_dense_layer(784,16); //was 512
+    net.add_dense_layer(784,32);
 	net.add_activation_layer("Relu");
-	net.add_dropout_layer(16,0.2f);
-	net.add_dense_layer(16, 10);
-	net.add_activation_layer("Relu"); 
-	net.add_softmax_layer();
+	net.add_dense_layer(32, 10);
+	net.add_activation_layer("Sigmoid"); 
 
 	//train net
 	cout << "training..." << endl;
 	TrainOption tOpt;
     tOpt.epochCallBack = epoch_callback;
-	tOpt.epochs = 5;
+	tOpt.epochs = 10;
 
 	NetTrain netTrain;
-	netTrain.set_loss("CategoricalCrossEntropy");
-	netTrain.set_optimizer("Adam");
-
 	start = chrono::steady_clock::now();
-    netTrain.train(net,mRefImages,mRefLabelsIndex,tOpt);
+    netTrain.train(net, mRefImages, mRefLabels,tOpt);
 
 	// the end, results are computed and displayed in the callback
 	cout << "end of test." << endl;

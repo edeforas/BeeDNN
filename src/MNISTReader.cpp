@@ -65,7 +65,7 @@ bool MNISTReader::read_Matrix(string sName,MatrixFloat& m)
 
         m.resize(uiSize,1);
 
-        char* pVector=new char[uiSize];
+        unsigned char* pVector=new unsigned char[uiSize];
         ifs.read((char*)(pVector),uiSize);
         float* pData=m.data();
         for(unsigned int i=0;i<uiSize;i++)
@@ -89,11 +89,11 @@ bool MNISTReader::read_Matrix(string sName,MatrixFloat& m)
 
         m.resize(uiNbImages,uiSize);
 
-        char* pImage=new char[uiSize];
+        unsigned char* pImage=new unsigned char[uiSize];
 
         for(unsigned int iImage=0;iImage<uiNbImages;iImage++)
         {
-            ifs.read(pImage,uiSize);
+            ifs.read((char*)pImage,uiSize);
             float * pData=m.row(iImage).data();
             for(unsigned int i=0;i<uiSize;i++)
             {

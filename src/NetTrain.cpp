@@ -65,26 +65,22 @@ float NetTrain::compute_loss(const Net& net, const MatrixFloat &mSamples, const 
     return fLoss /iNbSamples;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-TrainResult NetTrain::train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruthLabel,const TrainOption& topt)
+TrainResult NetTrain::train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruth,const TrainOption& topt)
 {
     if(net.layers().size()==0)
         return TrainResult(); //nothing to do
 
-    bool bOutputIsLabel=net.output_size() ==1;
-    int iMax=(int)mTruthLabel.maxCoeff();
-
-    if(!bOutputIsLabel)
+    bool bTruthIsLabel= (mTruth.cols()==1);
+    if(bTruthIsLabel)
     {
 		//create binary label
-        MatrixFloat mTruth(mTruthLabel.rows(),iMax+1); 
-		mTruth.setZero();        
-		for(int i=0;i<mTruth.rows();i++)
-            mTruth(i,(int)mTruthLabel(i,0))=1;
+        MatrixFloat mTruthOneHot;
+		labelToOneHot(mTruth, mTruthOneHot);
 
-        return fit(net,mSamples,mTruth,topt);
+        return fit(net,mSamples, mTruthOneHot,topt);
     }
     else
-        return fit(net,mSamples,mTruthLabel,topt);
+        return fit(net,mSamples,mTruth,topt);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruth,const TrainOption& topt)
@@ -160,23 +156,17 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
 			_pLoss->compute_gradient(inOut[nLayers], mTarget, delta[nLayers]);
 			dLoss += _pLoss->compute(inOut[nLayers], mTarget);
 				
-			//backward pass with store , compute deltaWeight
-			for (int i = (int)(nLayers - 1); i >= 0; i--)
+			//backward pass with store , compute deltaWeight, optimize
+			for (int i = nLayers - 1; i >= 0; i--)
 			{
 				Layer& l = net.layer(i);
 				l.backpropagation(inOut[i], delta[i + 1], delta[i]);
 
 				if (l.has_weight())
-					deltaWeight[i] = l.gradient_weights();
+				{
+					optimizers[i]->optimize(l.weights(), l.gradient_weights()* fInvBatchSize);
+				}
 			}
-
-            //optimize all layers
-            for(int i=0;i<nLayers;i++)
-            {
-                Layer& l=net.layer(i);
-                if(l.has_weight())
-                    optimizers[i]->optimize(l.weights(), deltaWeight[i]*fInvBatchSize);
-            }
 
             iBatchStart=iBatchEnd;
         }
