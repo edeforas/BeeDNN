@@ -24,8 +24,9 @@ int main()
 
     //optimize
     TrainOption tOpt;
-	tOpt.epochs = 1000;
+	tOpt.epochs = 2000;
 	NetTrain netFit;
+	netFit.set_optimizer("Nadam");
 	netFit.set_loss("BinaryCrossEntropy");
 	netFit.fit(net,mSamples,mTruth,tOpt);
 

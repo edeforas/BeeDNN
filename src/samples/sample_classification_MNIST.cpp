@@ -1,7 +1,7 @@
-// sample  classification MNIST as in:
+// sample  classification MNIST similar as :
 // https://colab.research.google.com/github/tensorflow/docs/blob/master/site/en/tutorials/_index.ipynb
 
-//expect 95% on ref and test in less than 1mn training time
+//expect 97% on ref and test in less than 100s training time
 
 #include <iostream>
 #include <chrono>
@@ -61,10 +61,10 @@ int main()
 	mRefImages/= 255.f;
   
 	//create simple net:
-    net.add_dense_layer(784,32);
+    net.add_dense_layer(784,64);
 	net.add_activation_layer("Relu");
-	net.add_dense_layer(32, 10);
-	net.add_activation_layer("Sigmoid"); 
+	net.add_dense_layer(64, 10);
+	net.add_activation_layer("Sigmoid");
 
 	//train net
 	cout << "training..." << endl;
@@ -74,7 +74,7 @@ int main()
 
 	NetTrain netTrain;
 	start = chrono::steady_clock::now();
-    netTrain.train(net, mRefImages, mRefLabels,tOpt);
+	netTrain.train(net, mRefImages, mRefLabels,tOpt);
 
 	// the end, results are computed and displayed in the callback
 	cout << "end of test." << endl;

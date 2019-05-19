@@ -37,8 +37,8 @@ void LayerDense::init()
     _weight.setRandom();
     _weight*=a;
 
-    //   if (_bHasBias)
-    //       _weight.row(_iInSize).setZero(); //removed for now: accuracy is worse with bias initialized with zero
+ //      if (_bHasBias)
+ //          _weight.row(_iInSize).setZero(); //removed for now: accuracy is worse with bias initialized with zero
 
     Layer::init();
 }
