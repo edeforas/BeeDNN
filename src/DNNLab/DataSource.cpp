@@ -14,7 +14,11 @@ DataSource::~DataSource()
 ////////////////////////////////////////////////////////////////////////
 void DataSource::load_mnist()
 {
-    //TODO do not reload if already loaded
+    if(_sLastLoaded=="MNIST")
+        return;
+
+    _sLastLoaded="MNIST";
+
     MNISTReader r;
     r.read_from_folder(".",_mTrainData,_mTrainAnnotation,_mTestData,_mTestAnnotation);
     _mTrainData/=255.f;
@@ -26,6 +30,8 @@ void DataSource::load_mnist()
 ////////////////////////////////////////////////////////////////////////
 void DataSource::load_and()
 {
+     _sLastLoaded="and";
+
     _mTrainData.resize(4,2);
     _mTrainData(0,0)=0; _mTrainData(0,1)=0;
     _mTrainData(1,0)=1; _mTrainData(1,1)=0;
@@ -47,6 +53,8 @@ void DataSource::load_and()
 ////////////////////////////////////////////////////////////////////////
 void DataSource::load_xor()
 {
+    _sLastLoaded="xor";
+
     _mTrainData.resize(4,2);
     _mTrainData(0,0)=0; _mTrainData(0,1)=0;
     _mTrainData(1,0)=1; _mTrainData(1,1)=0;
@@ -68,19 +76,28 @@ void DataSource::load_xor()
 ////////////////////////////////////////////////////////////////////////
 void DataSource::load_textfile()
 {
+    if(_sLastLoaded=="TextFile")
+        return;
 
-        _mTrainData=fromFile("train_data.txt");
-        _mTrainAnnotation=fromFile("train_truth.txt");
+    _sLastLoaded="TextFile";
 
-        _mTestData=fromFile("test_data.txt");
-        _mTestAnnotation=fromFile("test_truth.txt");
+    _mTrainData=fromFile("train_data.txt");
+    _mTrainAnnotation=fromFile("train_truth.txt");
 
-        _bHasTrainData=true;
-        _bHasTestData=true;
+    _mTestData=fromFile("test_data.txt");
+    _mTestAnnotation=fromFile("test_truth.txt");
+
+    _mTrainData/=255.f; //for now
+    _mTestData/=255.f; //for now;
+
+    _bHasTrainData=true;
+    _bHasTestData=true;
 }
 ////////////////////////////////////////////////////////////////////////
 void DataSource::load_function(string sFunction,float fMin, float fMax, int iNbPoints)
 {
+    _sLastLoaded=sFunction;
+
     _mTrainData.resize(iNbPoints,1);
     _mTrainAnnotation.resize(iNbPoints,1);
 

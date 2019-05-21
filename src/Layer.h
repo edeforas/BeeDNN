@@ -14,8 +14,6 @@
 #include <string>
 using namespace std;
 
-class Optimizer;
-
 class Layer
 {
 public:

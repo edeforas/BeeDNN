@@ -39,6 +39,8 @@ private:
 
     bool _bHasTestData;
     bool _bHasTrainData;
+
+    string _sLastLoaded;
 };
 
 #endif

@@ -23,12 +23,11 @@ int main()
     const MatrixFloat mTruth=fromRawBuffer(dTruths,4,1);
 
     //optimize
-    TrainOption tOpt;
 	NetTrain netFit;
 	netFit.set_epochs(2000);
 	netFit.set_optimizer("Nadam");
 	netFit.set_loss("BinaryCrossEntropy");
-	netFit.fit(net,mSamples,mTruth,tOpt);
+	netFit.fit(net,mSamples,mTruth);
 
     //predict and show results
     MatrixFloat mOut;

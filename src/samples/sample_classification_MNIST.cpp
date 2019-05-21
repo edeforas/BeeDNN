@@ -68,13 +68,11 @@ int main()
 
 	//train net
 	cout << "training..." << endl;
-	TrainOption tOpt;
-    tOpt.epochCallBack = epoch_callback;
-
 	NetTrain netTrain;
 	netTrain.set_epochs(10);
+	netTrain.set_epoch_callback(epoch_callback);
 	start = chrono::steady_clock::now();
-	netTrain.train(net, mRefImages, mRefLabels,tOpt);
+	netTrain.train(net, mRefImages, mRefLabels);
 
 	// the end, results are computed and displayed in the callback
 	cout << "end of test." << endl;

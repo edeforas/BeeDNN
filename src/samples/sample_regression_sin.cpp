@@ -29,9 +29,8 @@ int main()
 
     //train
     cout << "Training..." << endl;
-    TrainOption tOpt;
 	NetTrain netfit;
-	netfit.fit(net,mSamples,mTruth,tOpt);
+	netfit.fit(net,mSamples,mTruth);
 
     //display sin prediction
 	MatrixFloat mPredict;

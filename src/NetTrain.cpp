@@ -23,6 +23,10 @@ NetTrain::NetTrain():
 	_iBatchSize = 16;
 	_bKeepBest = true;
 	_iEpochs = 100;
+
+	_fLearningRate = 0.001f;
+	_fDecay = 0.9f;
+	_fMomentum = 0.9f;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 NetTrain::~NetTrain()
@@ -30,15 +34,19 @@ NetTrain::~NetTrain()
 	delete _pLoss;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_optimizer(string sOptimizer)
+void NetTrain::set_optimizer(string sOptimizer, float fLearningRate, float fDecay, float fMomentum) //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov" ... -1.s is for default settings
 {
 	_sOptimizer = sOptimizer;
+    _fLearningRate=fLearningRate;
+    _fDecay=fDecay;
+    _fMomentum=fMomentum;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-string NetTrain::get_optimizer() const
+/*void NetTrain::get_optimizer(string& sOptimizer, float& fLearningRate, float& fDecay, float& fMomentum) const
 {
-	return _sOptimizer;
+	sOptimizer = _sOptimizer; //TODO set fLearningRate fDecay fMomentum
 }
+*/
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::set_epochs(int iEpochs) //100 by default
 {
@@ -48,6 +56,11 @@ void NetTrain::set_epochs(int iEpochs) //100 by default
 int NetTrain::get_epochs() const
 {
 	return _iEpochs;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void NetTrain::set_epoch_callback(std::function<void()> epochCallBack)
+{
+	_epochCallBack = epochCallBack;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::set_loss(string sLoss)
@@ -98,11 +111,11 @@ float NetTrain::compute_loss(const Net& net, const MatrixFloat &mSamples, const 
     return fLoss /iNbSamples;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-TrainResult NetTrain::train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruth,const TrainOption& topt)
+TrainResult NetTrain::train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruth)
 {
     if(net.layers().size()==0)
         return TrainResult(); //nothing to do
-
+	/*
     bool bTruthIsLabel= (mTruth.cols()==1);
     if(bTruthIsLabel)
     {
@@ -110,13 +123,14 @@ TrainResult NetTrain::train(Net& net,const MatrixFloat& mSamples,const MatrixFlo
         MatrixFloat mTruthOneHot;
 		labelToOneHot(mTruth, mTruthOneHot);
 
-        return fit(net,mSamples, mTruthOneHot,topt);
+        return fit(net,mSamples, mTruthOneHot);
     }
     else
-        return fit(net,mSamples,mTruth,topt);
+	*/
+        return fit(net,mSamples,mTruth);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruth,const TrainOption& topt)
+TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruth)
 {
     TrainResult tr;
     int iNbSamples=(int)mSamples.rows();
@@ -148,10 +162,7 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
     for (int i = 0; i < nLayers; i++)
     {
         optimizers[i] = create_optimizer(_sOptimizer);
-        optimizers[i]->fLearningRate = topt.learningRate;
-        optimizers[i]->fMomentum=topt.momentum;
-        optimizers[i]->fDecay=topt.decay;
-        optimizers[i]->init(net.layer(i));
+		optimizers[i]->set_params(_fLearningRate,_fDecay, _fMomentum);
     }
 
     for(int iEpoch=0;iEpoch<_iEpochs;iEpoch++)
@@ -209,8 +220,8 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
 
         tr.loss.push_back(dLoss);
 
-        if (topt.epochCallBack)
-            topt.epochCallBack();
+        if (_epochCallBack)
+            _epochCallBack();
 
         //keep the best model if asked
         if(_bKeepBest)

@@ -23,7 +23,6 @@ public:
         learningRate=0.01f;
         decay=0.9f;
         momentum=0.9f;
-        testEveryEpochs=1;
     }
 
     int  epochs;
