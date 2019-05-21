@@ -70,9 +70,9 @@ int main()
 	cout << "training..." << endl;
 	TrainOption tOpt;
     tOpt.epochCallBack = epoch_callback;
-	tOpt.epochs = 10;
 
 	NetTrain netTrain;
+	netTrain.set_epochs(10);
 	start = chrono::steady_clock::now();
 	netTrain.train(net, mRefImages, mRefLabels,tOpt);
 

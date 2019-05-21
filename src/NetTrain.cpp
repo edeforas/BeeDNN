@@ -21,6 +21,8 @@ NetTrain::NetTrain():
 {
 	_pLoss = create_loss("MeanSquaredError");
 	_iBatchSize = 16;
+	_bKeepBest = true;
+	_iEpochs = 100;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 NetTrain::~NetTrain()
@@ -36,6 +38,16 @@ void NetTrain::set_optimizer(string sOptimizer)
 string NetTrain::get_optimizer() const
 {
 	return _sOptimizer;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void NetTrain::set_epochs(int iEpochs) //100 by default
+{
+	_iEpochs = iEpochs;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+int NetTrain::get_epochs() const
+{
+	return _iEpochs;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::set_loss(string sLoss)
@@ -57,6 +69,16 @@ void NetTrain::set_batchsize(int iBatchSize) //16 by default
 int NetTrain::get_batchsize() const
 {
 	return _iBatchSize;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void NetTrain::set_keepbest(bool bKeepBest) //true by default
+{
+	_bKeepBest = bKeepBest;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+bool NetTrain::get_keepbest() const
+{
+	return _bKeepBest;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 float NetTrain::compute_loss(const Net& net, const MatrixFloat &mSamples, const MatrixFloat &mTruth)
@@ -132,7 +154,7 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
         optimizers[i]->init(net.layer(i));
     }
 
-    for(int iEpoch=0;iEpoch<topt.epochs;iEpoch++)
+    for(int iEpoch=0;iEpoch<_iEpochs;iEpoch++)
     {
         dLoss=0.;
 
@@ -191,7 +213,7 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
             topt.epochCallBack();
 
         //keep the best model if asked
-        if(topt.keepBest)
+        if(_bKeepBest)
         {
             if(dMinLoss>dLoss)
             {
@@ -204,7 +226,7 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
     for (int i = 0; i < nLayers; i++)
         delete optimizers[i];
 
-    if(topt.keepBest)
+    if(_bKeepBest)
     {
         net=bestNet;
         tr.finalLoss=dMinLoss;
