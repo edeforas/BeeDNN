@@ -26,7 +26,6 @@ public:
 		epochCallBack(nullptr)
     {
         epochs=100;
-        batchSize=16;
         learningRate=0.001f;
         decay=0.9f;
         momentum=0.9f;
@@ -35,10 +34,11 @@ public:
     }
 
     int  epochs;
-    int batchSize;
-    float learningRate;
+    
+	float learningRate;
     float decay;
     float momentum;
+
 	bool keepBest;
     int testEveryEpochs; //set to 1 to test at each epoch, 10 to test only 1/10 of the time, etc, set to -1 for no test //todo remove
  
@@ -79,13 +79,17 @@ public:
     TrainResult train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruth,const TrainOption& topt);
     TrainResult fit(Net& net, const MatrixFloat& mSamples, const MatrixFloat& mTruth, const TrainOption& topt);
 
-	void set_optimizer(string sOptimizer); //ex "SGD" "Adam" "Nadam" "Nesterov" ...
+	void set_optimizer(string sOptimizer); //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov" ...
 	string get_optimizer() const;
 
-	void set_loss(string sLoss); //ex "MeanSquareError" "CategorialCrossEntropy"
+	void set_batchsize(int iBatchSize); //16 by default
+	int get_batchsize() const;
+
+	void set_loss(string sLoss); // "MeanSquareError" by default, ex "MeanSquareError" "CategorialCrossEntropy"
 	string get_loss() const;
 
 private:
+	int _iBatchSize;
 	string _sOptimizer;
 	Loss* _pLoss;
 };

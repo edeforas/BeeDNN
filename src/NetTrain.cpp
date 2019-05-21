@@ -20,6 +20,7 @@ NetTrain::NetTrain():
 	_sOptimizer("Adam")
 {
 	_pLoss = create_loss("MeanSquaredError");
+	_iBatchSize = 16;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 NetTrain::~NetTrain()
@@ -46,6 +47,16 @@ void NetTrain::set_loss(string sLoss)
 string NetTrain::get_loss() const
 {
 	return _pLoss->name();
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void NetTrain::set_batchsize(int iBatchSize) //16 by default
+{
+	_iBatchSize = iBatchSize;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+int NetTrain::get_batchsize() const
+{
+	return _iBatchSize;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 float NetTrain::compute_loss(const Net& net, const MatrixFloat &mSamples, const MatrixFloat &mTruth)
@@ -91,7 +102,7 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
 
     Net bestNet;
 
-    int iBatchSize=topt.batchSize;
+    int iBatchSize=_iBatchSize;
     if(iBatchSize>iNbSamples)
         iBatchSize=iNbSamples;
 
