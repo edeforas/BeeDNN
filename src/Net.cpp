@@ -113,9 +113,9 @@ void Net::classify_all(const MatrixFloat& mIn, MatrixFloat& mClass) const
 		rowsArgmax(mOut, mClass);
 	else
 	{
-		mClass.resize(mIn.rows(), 1);
-		for (int i = 0; i < mIn.rows(); i++)
-			mClass(i, 0) = std::roundf(mOut(0, 0)); //case of "output is a label"
+		mClass.resize(mOut.rows(), 1);
+		for (int i = 0; i < mOut.rows(); i++)
+			mClass(i, 0) = std::roundf(mOut(i, 0)); //case of "output is a label"
 	}
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////

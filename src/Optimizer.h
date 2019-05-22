@@ -23,15 +23,17 @@ public:
 	Optimizer();
 	virtual ~Optimizer();
 	
-	virtual string name() const = 0;
+	void set_params(float fLearningRate = -1.f, float fDecay = -1.f, float fMomentum = -1.f);  //-1.f is for default params
 
-	virtual void init(const Layer& l)=0;
+	virtual string name() const = 0;
+	virtual void init()=0;
 
     virtual void optimize(MatrixFloat& w, const MatrixFloat& dw) = 0;
 
-	float fLearningRate; //temp
-	float fMomentum; //temp
-    float fDecay; //temp
+protected:
+	float _fLearningRate;
+	float _fMomentum;
+    float _fDecay;
 };
 
 Optimizer* create_optimizer(const string & sOptimizer);

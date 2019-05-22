@@ -29,7 +29,7 @@ string MLEngineBeeDnn::to_string()
 //////////////////////////////////////////////////////////////////////////////
 bool MLEngineBeeDnn::save(string sFileName)
 {
-   return NetUtil::save(sFileName,_pNet);
+    return NetUtil::save(sFileName,_pNet);
 }
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::init()
@@ -55,7 +55,7 @@ void MLEngineBeeDnn::add_dropout_layer(int inSize,float fRatio)
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::add_globalgain_layer(int inSize,float fGain)
 {
-      _pNet->add_globalgain_layer(inSize,fGain);
+    _pNet->add_globalgain_layer(inSize,fGain);
 }
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::add_poolaveraging1D_layer(int inSize,int iOutSize)
@@ -76,44 +76,38 @@ void MLEngineBeeDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
 {
-    TrainOption tOpt;
     TrainResult tr;
     NetTrain netTrain;
     float fAccuracy=0.f;
     vector<double> vdAccuracy;
 
     int iEpoch=0;
-    tOpt.epochs=dto.epochs;
-    tOpt.learningRate=dto.learningRate;
-    tOpt.batchSize=dto.batchSize;
-    tOpt.keepBest=dto.keepBest;
+    netTrain.set_epochs(dto.epochs);
+    netTrain.set_optimizer(dto.optimizer,dto.learningRate,dto.decay,dto.momentum);
+    netTrain.set_batchsize(dto.batchSize);
+    netTrain.set_keepbest(dto.keepBest);
     netTrain.set_optimizer(dto.optimizer);
-    tOpt.decay=dto.decay;
-    tOpt.momentum=dto.momentum;
-    tOpt.testEveryEpochs=dto.testEveryEpochs;
     netTrain.set_loss(dto.lossFunction);
 
-    tOpt.epochCallBack= [&]()
+    netTrain.set_epoch_callback( [&]()
     {
         iEpoch++;
         if(_bClassification)
         {
-            if( (iEpoch % tOpt.testEveryEpochs )==0)
-            {
-                MatrixFloat mConf;
-                compute_confusion_matrix(mSamples, mTruth, mConf, fAccuracy);
-            }
+            MatrixFloat mConf;
+            compute_confusion_matrix(mSamples, mTruth, mConf, fAccuracy);
             vdAccuracy.push_back((double)fAccuracy);
         }
-    };
+    }
+    );
 
     if(_bClassification)
     {
-        tr=netTrain.train(*_pNet,mSamples,mTruth,tOpt);
+        tr=netTrain.train(*_pNet,mSamples,mTruth);
         tr.accuracy=vdAccuracy;
     }
     else
-        tr=netTrain.fit(*_pNet,mSamples,mTruth,tOpt);
+        tr=netTrain.fit(*_pNet,mSamples,mTruth);
 
     _vdLoss.insert(end(_vdLoss),begin(tr.loss),end(tr.loss));
     _vdAccuracy.insert(end(_vdAccuracy),begin(tr.accuracy),end(tr.accuracy));

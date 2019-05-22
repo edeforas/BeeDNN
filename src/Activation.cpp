@@ -214,6 +214,26 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+// LeakyRelu compatible with integer computation (using a shift >> 8 ) . author: Etienne de Foras
+class ActivationLeakyRelu256 : public Activation
+{
+public:
+	string name() const override
+	{
+		return "LeakyRelu256";
+	}
+
+	float apply(float x) const override
+	{
+		return x >= 0.f ? x : x* 0.00390625f;  // 1/256 ; will be (x+127)>>8 in fixed point
+	}
+
+	float derivation(float x) const override
+	{
+		return x >= 0.f ? 1.f : 0.00390625f; // 1/256 ; will be (x+127)>>8 in fixed point
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
 class ActivationNLRelu: public Activation
 {
 public:
@@ -518,7 +538,10 @@ Activation* get_activation(const string& sActivation)
     if(sActivation=="LeakyRelu")
         return new ActivationLeakyRelu;
 
-    if(sActivation=="NLRelu")
+	if (sActivation=="LeakyRelu256")
+		return new ActivationLeakyRelu256;
+	
+	if(sActivation=="NLRelu")
         return new ActivationNLRelu;
 
     if(sActivation=="Parablu")
@@ -567,10 +590,11 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("Elliot");
     vsActivations.push_back("Elu");
     vsActivations.push_back("Gauss");
-    vsActivations.push_back("HardSigmoid");
+    vsActivations.push_back("HardSigmoid"); //not under tiny-dnn
     vsActivations.push_back("Linear");
     vsActivations.push_back("LeakyRelu");
-    vsActivations.push_back("NLRelu");  //not under tiny-dnn
+	vsActivations.push_back("LeakyRelu256"); //not under tiny-dnn
+	vsActivations.push_back("NLRelu");  //not under tiny-dnn
 	vsActivations.push_back("Parablu"); //not under tiny-dnn
     vsActivations.push_back("Relu");
     vsActivations.push_back("Selu");
