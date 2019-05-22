@@ -74,7 +74,7 @@ int main()
 	start = chrono::steady_clock::now();
 	netTrain.train(net, mRefImages, mRefLabels);
 
-	// the end, results are computed and displayed in the callback
+	// the end, results are computed and displayed in epoch_callback
 	cout << "end of test." << endl;
     return 0;
 }

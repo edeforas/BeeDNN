@@ -115,9 +115,9 @@ TrainResult NetTrain::train(Net& net,const MatrixFloat& mSamples,const MatrixFlo
 {
     if(net.layers().size()==0)
         return TrainResult(); //nothing to do
-	/*
+	
     bool bTruthIsLabel= (mTruth.cols()==1);
-    if(bTruthIsLabel)
+    if(bTruthIsLabel && (net.output_size()!=1) )
     {
 		//create binary label
         MatrixFloat mTruthOneHot;
@@ -126,7 +126,6 @@ TrainResult NetTrain::train(Net& net,const MatrixFloat& mSamples,const MatrixFlo
         return fit(net,mSamples, mTruthOneHot);
     }
     else
-	*/
         return fit(net,mSamples,mTruth);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -200,7 +199,7 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
 			_pLoss->compute_gradient(inOut[nLayers], mTarget, delta[nLayers]);
 			dLoss += _pLoss->compute(inOut[nLayers], mTarget);
 				
-			//backward pass with store , compute deltaWeight, optimize
+			//backward pass with store, compute deltaWeight, optimize
 			for (int i = nLayers - 1; i >= 0; i--)
 			{
 				Layer& l = net.layer(i);
