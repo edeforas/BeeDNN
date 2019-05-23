@@ -75,6 +75,7 @@ public:
     virtual void add_dense_layer(int inSize,int outSize, bool bWithBias)=0;
     virtual void add_activation_layer(string sActivation) =0;
     virtual void add_dropout_layer(int inSize,float fRatio) =0;
+    virtual void add_gaussian_noise_layer(int inSize,float fStd) =0;
     virtual void add_globalgain_layer(int inSize,float fGain) =0;
     virtual void add_poolaveraging1D_layer(int inSize,int iWindowSize) =0;
 

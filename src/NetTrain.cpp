@@ -23,6 +23,7 @@ NetTrain::NetTrain():
 	_iBatchSize = 16;
 	_bKeepBest = true;
 	_iEpochs = 100;
+	_iReboostEveryEpochs = -1; // -1 mean no reboost
 
 	_fLearningRate = 0.001f;
 	_fDecay = 0.9f;
@@ -56,6 +57,16 @@ void NetTrain::set_epochs(int iEpochs) //100 by default
 int NetTrain::get_epochs() const
 {
 	return _iEpochs;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void NetTrain::set_reboost_every_epochs(int iReboostEveryEpochs) //-1 by default -> disabled
+{
+	_iReboostEveryEpochs = iReboostEveryEpochs;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+int NetTrain::get_reboost_every_epochs() const
+{
+	return _iReboostEveryEpochs;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::set_epoch_callback(std::function<void()> epochCallBack)
@@ -134,6 +145,7 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
     TrainResult tr;
     int iNbSamples=(int)mSamples.rows();
     int nLayers=(int)net.layers().size();
+	int iReboost = 0;
 
     Net bestNet;
 
@@ -231,6 +243,19 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
                 bestNet=net;
             }
         }
+
+		//reboost every epochs if asked
+		if (_iReboostEveryEpochs != -1)
+		{
+			if (iReboost < _iReboostEveryEpochs)
+				iReboost++;
+			else
+			{
+				iReboost = 0;
+				for (int i = 0; i < nLayers; i++)
+					optimizers[i]->init();
+			}
+		}
     }
 
     for (int i = 0; i < nLayers; i++)

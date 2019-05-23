@@ -7,7 +7,7 @@ No dependencies needed, every algorithm rewritten in C++ from scratch. There is 
 
 Implemented so far:
 - dense layer, with or without bias
-- dropout layer
+- dropout layer, gaussian noise layer
 - global gain layer
 - pool averaging 1D layer
 - softmax layer (WIP)

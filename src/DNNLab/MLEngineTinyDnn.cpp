@@ -171,6 +171,15 @@ void DNNEngineTinyDnn::add_dropout_layer(int inSize,float fRatio)
     *_pNet << tiny_dnn::dropout_layer(inSize,fRatio);
 }
 //////////////////////////////////////////////////////////////////////////////
+void DNNEngineTinyDnn::add_gaussian_noise_layer(int inSize,float fStd)
+{
+    (void)fStd;
+    (void)inSize;
+
+    assert(false);
+    // not implemented
+}
+//////////////////////////////////////////////////////////////////////////////
 void DNNEngineTinyDnn::add_globalgain_layer(int inSize,float fGain)
 {
     (void)fGain;

@@ -15,6 +15,7 @@
 #include "LayerSoftmax.h"
 #include "LayerDense.h"
 #include "LayerDropout.h"
+#include "LayerGaussianNoise.h"
 #include "LayerGlobalGain.h"
 #include "LayerPoolAveraging1D.h"
 
@@ -58,6 +59,11 @@ Net& Net::operator=(const Net& other)
 void Net::add_dropout_layer(int iSize,float fRatio)
 {
     _layers.push_back(new LayerDropout(iSize, fRatio));
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void Net::add_gaussian_noise_layer(int iSize, float fStd)
+{
+	_layers.push_back(new LayerGaussianNoise(iSize, fStd));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_activation_layer(string sType)

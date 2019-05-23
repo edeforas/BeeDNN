@@ -172,6 +172,7 @@
     <ClCompile Include="..\LayerActivation.cpp" />
     <ClCompile Include="..\LayerDense.cpp" />
     <ClCompile Include="..\LayerDropout.cpp" />
+    <ClCompile Include="..\LayerGaussianNoise.cpp" />
     <ClCompile Include="..\LayerGlobalGain.cpp" />
     <ClCompile Include="..\LayerPoolAveraging1D.cpp" />
     <ClCompile Include="..\LayerSoftmax.cpp" />
@@ -189,6 +190,7 @@
     <ClInclude Include="..\LayerActivation.h" />
     <ClInclude Include="..\LayerDense.h" />
     <ClInclude Include="..\LayerDropout.h" />
+    <ClInclude Include="..\LayerGaussianNoise.h" />
     <ClInclude Include="..\LayerGlobalGain.h" />
     <ClInclude Include="..\LayerPoolAveraging1D.h" />
     <ClInclude Include="..\LayerSoftmax.h" />

@@ -67,11 +67,12 @@ MainWindow::MainWindow(QWidget *parent) :
         qcbType->addItem("DenseAndBias");
         qcbType->addItem("DenseNoBias");
         qcbType->addItem("Dropout");
+        qcbType->addItem("GaussianNoise");
         qcbType->addItem("GlobalGain");
         qcbType->addItem("PoolAveraging1D");
         qcbType->addItem("SoftMax");
 
-        qcbType->insertSeparator(7);
+        qcbType->insertSeparator(8);
 
         for(unsigned int a=0;a<vsActivations.size();a++)
             qcbType->addItem(vsActivations[a].c_str());
@@ -424,6 +425,13 @@ void MainWindow::ui_to_net()
                 if(bOk)
                     fRatio=fArg1;
                 _pEngine->add_dropout_layer(iInSize,fRatio);
+            }
+            else if(sType=="GaussianNoise")
+            {
+                float fStd=1.f; //by default
+                if(bOk)
+                    fStd=fArg1;
+                _pEngine->add_gaussian_noise_layer(iInSize,fStd);
             }
             else if(sType=="GlobalGain")
             {

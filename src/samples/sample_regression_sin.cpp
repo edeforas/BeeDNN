@@ -1,5 +1,5 @@
-//this sample is a basic regression task.
-//the problem here is to mimic a sinus function and evaluate the model approximation error
+//this sample is a basic toy regression task.
+//the problem here is to approximate a sinus function and to evaluate the model error
 
 #include <iostream>
 #include <iomanip>

@@ -1,5 +1,5 @@
-// this sample shows how to do a simple classification, the usecase is to learn a XOR gate
-// the output of this network is a Sigmoid, so the we can use the loss BinaryCrossEntropy and 0 -> class_0 ; 1 -> class_1
+// this sample shows how to do a simple classification, the toy usecase is to learn a XOR gate
+// the output of this network is a Sigmoid, so the loss BinaryCrossEntropy can be used and 0 -> class_0 ; 1 -> class_1
 
 #include <iostream>
 using namespace std;

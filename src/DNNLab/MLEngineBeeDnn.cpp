@@ -53,6 +53,11 @@ void MLEngineBeeDnn::add_dropout_layer(int inSize,float fRatio)
     _pNet->add_dropout_layer(inSize,fRatio);
 }
 //////////////////////////////////////////////////////////////////////////////
+void MLEngineBeeDnn::add_gaussian_noise_layer(int inSize,float fStd)
+{
+    _pNet->add_gaussian_noise_layer(inSize,fStd);
+}
+//////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::add_globalgain_layer(int inSize,float fGain)
 {
     _pNet->add_globalgain_layer(inSize,fGain);
