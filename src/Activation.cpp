@@ -118,6 +118,25 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+class ActivationExponential: public Activation
+{
+public:
+    string name() const override
+    {
+        return "Exponential";
+    }
+
+    float apply(float x) const override
+    {
+        return expf(x);
+    }
+
+    float derivation(float x) const override
+    {
+        return exp(x);
+    }
+};
+//////////////////////////////////////////////////////////////////////////////
 class ActivationBent: public Activation
 {
 public:
@@ -526,6 +545,9 @@ Activation* get_activation(const string& sActivation)
     if(sActivation=="Elu")
         return new ActivationElu;
 
+    if(sActivation=="Exponential")
+        return new ActivationExponential;
+
     if(sActivation=="HardSigmoid")
         return new ActivationHardSigmoid;
 
@@ -589,6 +611,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("Bent"); //not under tiny-dnn
     vsActivations.push_back("Elliot");
     vsActivations.push_back("Elu");
+    vsActivations.push_back("Exponential"); //not under tiny-dnn
     vsActivations.push_back("Gauss");
     vsActivations.push_back("HardSigmoid"); //not under tiny-dnn
     vsActivations.push_back("Linear");
