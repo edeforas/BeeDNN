@@ -94,6 +94,23 @@ void DataSource::load_textfile()
     _bHasTestData=true;
 }
 ////////////////////////////////////////////////////////////////////////
+void DataSource::load_fisher()
+{
+    if(_sLastLoaded=="Fisher")
+        return;
+
+    _sLastLoaded="Fisher";
+
+    _mTrainData=fromFile("Fisher_data.txt");
+    _mTrainAnnotation=fromFile("Fisher_truth.txt");
+
+    _mTestData=_mTrainData;
+    _mTestAnnotation=_mTrainAnnotation;
+
+    _bHasTrainData=true;
+    _bHasTestData=false;
+}
+////////////////////////////////////////////////////////////////////////
 void DataSource::load_function(string sFunction,float fMin, float fMax, int iNbPoints)
 {
     _sLastLoaded=sFunction;

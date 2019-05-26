@@ -34,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->cbFunction->addItem("And");
     ui->cbFunction->addItem("Xor");
     ui->cbFunction->addItem("MNIST");
+    ui->cbFunction->addItem("Fisher");
     ui->cbFunction->addItem("TextFiles");
 
     ui->cbFunction->insertSeparator(4);
@@ -309,6 +310,13 @@ void MainWindow::compute_truth()
         return;
     }
 
+    if(sFunction=="Fisher")
+    {
+        _pData->load_fisher(); //todo check file I/O errors
+        set_input_size(_pData->data_cols());
+        return;
+    }
+
     if(sFunction=="TextFiles")
     {
         _pData->load_textfile();; //todo check file I/O errors
@@ -562,6 +570,13 @@ void MainWindow::on_cbFunction_currentIndexChanged(int index)
         set_input_size(784);
         return;
     }
+
+    if(sFunction=="Fisher")
+    {
+        set_input_size(4);
+        return;
+    }
+
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_cbConfMatPercent_stateChanged(int arg1)

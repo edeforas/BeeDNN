@@ -17,6 +17,7 @@ public:
     void load_textfile();
     void load_and();
     void load_xor();
+    void load_fisher();
 
     const MatrixFloat& train_data() const;
     const MatrixFloat& train_annotation() const;
