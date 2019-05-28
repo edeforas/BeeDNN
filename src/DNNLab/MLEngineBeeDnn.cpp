@@ -10,26 +10,31 @@
 MLEngineBeeDnn::MLEngineBeeDnn()
 {
     _pNet=new Net;
+    _pTrain= new NetTrain;
 }
 //////////////////////////////////////////////////////////////////////////////
 MLEngineBeeDnn::~MLEngineBeeDnn()
 {
-    _pNet->clear();
+    delete _pNet;
+    delete _pTrain;
 }
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::clear()
 {
     _pNet->clear();
+    _pTrain->clear();
 }
 //////////////////////////////////////////////////////////////////////////////
-string MLEngineBeeDnn::to_string()
+void MLEngineBeeDnn::write(string& s)
 {
-    return NetUtil::to_string(_pNet);
+    NetUtil::write(*_pTrain,s);
+    s+="\n";
+    NetUtil::write(*_pNet,s);
 }
 //////////////////////////////////////////////////////////////////////////////
-bool MLEngineBeeDnn::save(string sFileName)
+void MLEngineBeeDnn::read(const string& s)
 {
-    return NetUtil::save(sFileName,_pNet);
+    //todo
 }
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::init()
@@ -82,19 +87,20 @@ void MLEngineBeeDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
 void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
 {
     TrainResult tr;
-    NetTrain netTrain;
     float fAccuracy=0.f;
     vector<double> vdAccuracy;
 
     int iEpoch=0;
-    netTrain.set_epochs(dto.epochs);
-    netTrain.set_optimizer(dto.optimizer,dto.learningRate,dto.decay,dto.momentum);
-    netTrain.set_batchsize(dto.batchSize);
-    netTrain.set_keepbest(dto.keepBest);
-    netTrain.set_optimizer(dto.optimizer);
-    netTrain.set_loss(dto.lossFunction);
+    _pTrain->clear();
+    _pTrain->set_epochs(dto.epochs);
+    _pTrain->set_optimizer(dto.optimizer,dto.learningRate,dto.decay,dto.momentum);
+    _pTrain->set_batchsize(dto.batchSize);
+    _pTrain->set_keepbest(dto.keepBest);
+    _pTrain->set_optimizer(dto.optimizer);
+    _pTrain->set_loss(dto.lossFunction);
+    _pTrain->set_reboost_every_epochs(dto.reboostEveryEpoch);
 
-    netTrain.set_epoch_callback( [&]()
+    _pTrain->set_epoch_callback( [&]()
     {
         iEpoch++;
         if(_bClassification)
@@ -108,11 +114,11 @@ void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat&
 
     if(_bClassification)
     {
-        tr=netTrain.train(*_pNet,mSamples,mTruth);
+        tr=_pTrain->train(*_pNet,mSamples,mTruth);
         tr.accuracy=vdAccuracy;
     }
     else
-        tr=netTrain.fit(*_pNet,mSamples,mTruth);
+        tr=_pTrain->fit(*_pNet,mSamples,mTruth);
 
     _vdLoss.insert(end(_vdLoss),begin(tr.loss),end(tr.loss));
     _vdAccuracy.insert(end(_vdAccuracy),begin(tr.accuracy),end(tr.accuracy));

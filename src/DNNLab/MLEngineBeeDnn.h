@@ -4,14 +4,16 @@
 #include "MLEngine.h"
 
 class Net;
+class NetTrain;
 
 class MLEngineBeeDnn : public MLEngine
 {
 public:
     MLEngineBeeDnn();
-    virtual ~MLEngineBeeDnn();
-    virtual string to_string() override;
-    virtual bool save(string sFileName) override;
+    virtual ~MLEngineBeeDnn() override;
+
+    virtual void write(string& s) override;
+    virtual void read(const string&) override;
 
     virtual void clear() override;
     virtual void init() override;
@@ -28,6 +30,7 @@ public:
 
 private:
     Net* _pNet;
+    NetTrain* _pTrain;
 };
 
 #endif

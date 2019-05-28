@@ -77,8 +77,8 @@ HEADERS  += \
     SimpleCurveWidget.h \
     Properties.h \
     MLEngine.h \
-	DataSource.h \
+    DataSource.h \
     MLEngineBeeDnn.h
 
-	FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui
 

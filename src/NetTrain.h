@@ -48,6 +48,7 @@ public:
     NetTrain();
     virtual ~NetTrain();
 
+    void clear();
     float compute_loss(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth);
 
     TrainResult train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruth);
@@ -63,7 +64,7 @@ public:
 	void set_epoch_callback(std::function<void()> epochCallBack);
 
 	void set_optimizer(string sOptimizer,float fLearningRate=-1.f, float fDecay = -1.f, float fMomentum = -1.f); //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov" ... -1.s is for default settings
-//	void get_optimizer(string& sOptimizer, float& fLearningRate, float& fDecay, float& fMomentum) const;
+    void get_optimizer(string& sOptimizer, float& fLearningRate, float& fDecay, float& fMomentum) const;
 
 	void set_batchsize(int iBatchSize); //16 by default
 	int get_batchsize() const;
@@ -80,13 +81,13 @@ private:
 	int _iEpochs;
 	int _iReboostEveryEpochs;
 
-	float _fLearningRate;
+    string _sOptimizer;
+    float _fLearningRate;
 	float _fDecay;
 	float _fMomentum;
 
 	std::function<void()> _epochCallBack;
 
-	string _sOptimizer;
 	Loss* _pLoss;
 };
 

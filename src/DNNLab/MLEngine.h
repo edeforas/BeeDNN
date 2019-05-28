@@ -23,6 +23,7 @@ public:
         learningRate=0.01f;
         decay=0.9f;
         momentum=0.9f;
+        reboostEveryEpoch=-1;
     }
 
     int  epochs;
@@ -35,6 +36,7 @@ public:
     float momentum;
     string optimizer;
     string lossFunction;
+    int reboostEveryEpoch;
     int testEveryEpochs; //set to 1 to test at each epoch, 10 to test only 1/10 of the time, etc
 };
 
@@ -66,8 +68,8 @@ class MLEngine
 public:
     MLEngine();
     virtual ~MLEngine();
-    virtual string to_string()=0;
-    virtual bool save(string sFileName)=0;
+    virtual void write(string& sFileName)=0;
+    virtual void read(const string& sFileName)=0;
 
     virtual void clear()=0; //remove all layers
     virtual void init(); // init weights

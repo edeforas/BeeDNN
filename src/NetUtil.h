@@ -9,7 +9,8 @@
 #ifndef NetUtil_
 #define NetUtil_
 
-#include "Net.h"
+class Net;
+class NetTrain;
 
 #include <string>
 using namespace std;
@@ -18,10 +19,14 @@ class Layer;
 #include "Matrix.h"
 
 namespace NetUtil {
-string to_string(const Net* pNet);
-Net* from_string(const string& s);
 
-bool save(string sFileName,const Net* pNet);
+void write(const Net& net,string& s);
+void read(const string& s,Net& net);
+
+void write(const NetTrain& train,string& s);
+void read(const string& s,NetTrain& train);
+
+bool save(string sFileName,const Net& net);
 bool load(string sFileName,Net* pNet);
 
 };

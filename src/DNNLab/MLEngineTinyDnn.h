@@ -14,9 +14,10 @@ class DNNEngineTinyDnn : public MLEngine
 {
 public:
     DNNEngineTinyDnn();
-    virtual ~DNNEngineTinyDnn();
-    virtual string to_string() override;
-    virtual bool save(string sFileName) override;
+    virtual ~DNNEngineTinyDnn() override;
+
+    virtual void write(string& s) override;
+    virtual void read(const string& s) override;
 
     virtual void clear() override;
     virtual void init() override;

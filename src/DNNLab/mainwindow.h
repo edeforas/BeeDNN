@@ -32,7 +32,7 @@ private slots:
     void on_actionQuit_triggered();
     void on_actionAbout_triggered();
     void on_cbEngine_currentTextChanged(const QString &arg1);
-    void on_btnTrainMore_clicked();   
+    void on_btnTrainMore_clicked();
     void on_cbYLogAxis_stateChanged(int arg1);
     void on_buttonColor_clicked();
     void on_pushButton_2_clicked();
@@ -67,6 +67,8 @@ private:
     void net_to_ui();
     void set_input_size(int iSize);
 
+    bool save();
+
     Ui::MainWindow *ui;
 
     MLEngine* _pEngine;
@@ -80,7 +82,7 @@ private:
     string _sFileName;
 
     MatrixFloat _mConfusionMatrix;
-    DataSource* _pData;
+    DataSource* _pDataSource;
 };
 
 #endif // MAINWINDOW_H

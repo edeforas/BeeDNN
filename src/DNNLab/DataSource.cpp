@@ -12,12 +12,22 @@ DataSource::DataSource()
 DataSource::~DataSource()
 {}
 ////////////////////////////////////////////////////////////////////////
+void DataSource::write(string& sFileName)
+{
+    sFileName+=string("Datasource=")+_sSourceName+string("\n");
+}
+////////////////////////////////////////////////////////////////////////
+void DataSource::read(const string& sFileName)
+{
+    //todo
+}
+////////////////////////////////////////////////////////////////////////
 void DataSource::load_mnist()
 {
-    if(_sLastLoaded=="MNIST")
+    if(_sSourceName=="MNIST")
         return;
 
-    _sLastLoaded="MNIST";
+    _sSourceName="MNIST";
 
     MNISTReader r;
     r.read_from_folder(".",_mTrainData,_mTrainAnnotation,_mTestData,_mTestAnnotation);
@@ -30,7 +40,7 @@ void DataSource::load_mnist()
 ////////////////////////////////////////////////////////////////////////
 void DataSource::load_and()
 {
-     _sLastLoaded="and";
+     _sSourceName="and";
 
     _mTrainData.resize(4,2);
     _mTrainData(0,0)=0; _mTrainData(0,1)=0;
@@ -53,7 +63,7 @@ void DataSource::load_and()
 ////////////////////////////////////////////////////////////////////////
 void DataSource::load_xor()
 {
-    _sLastLoaded="xor";
+    _sSourceName="xor";
 
     _mTrainData.resize(4,2);
     _mTrainData(0,0)=0; _mTrainData(0,1)=0;
@@ -76,10 +86,10 @@ void DataSource::load_xor()
 ////////////////////////////////////////////////////////////////////////
 void DataSource::load_textfile()
 {
-    if(_sLastLoaded=="TextFile")
+    if(_sSourceName=="TextFile")
         return;
 
-    _sLastLoaded="TextFile";
+    _sSourceName="TextFile";
 
     _mTrainData=fromFile("train_data.txt");
     _mTrainAnnotation=fromFile("train_truth.txt");
@@ -96,10 +106,10 @@ void DataSource::load_textfile()
 ////////////////////////////////////////////////////////////////////////
 void DataSource::load_fisher()
 {
-    if(_sLastLoaded=="Fisher")
+    if(_sSourceName=="Fisher")
         return;
 
-    _sLastLoaded="Fisher";
+    _sSourceName="Fisher";
 
     _mTrainData=fromFile("Fisher_data.txt");
     _mTrainAnnotation=fromFile("Fisher_truth.txt");
@@ -113,7 +123,7 @@ void DataSource::load_fisher()
 ////////////////////////////////////////////////////////////////////////
 void DataSource::load_function(string sFunction,float fMin, float fMax, int iNbPoints)
 {
-    _sLastLoaded=sFunction;
+    _sSourceName=sFunction;
 
     _mTrainData.resize(iNbPoints,1);
     _mTrainAnnotation.resize(iNbPoints,1);

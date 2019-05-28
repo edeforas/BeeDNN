@@ -12,6 +12,9 @@ public:
     DataSource();
     ~DataSource();
 
+    void write(string& sFileName);
+    void read(const string& sFileName);
+
     void load_mnist();
     void load_function(string sFunction,float fMin, float fMax, int iNbPoints);
     void load_textfile();
@@ -41,7 +44,7 @@ private:
     bool _bHasTestData;
     bool _bHasTrainData;
 
-    string _sLastLoaded;
+    string _sSourceName;
 };
 
 #endif

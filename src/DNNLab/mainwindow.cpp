@@ -5,6 +5,9 @@
 #include <QFileDialog>
 #include <QClipboard>
 
+#include <fstream>
+using namespace std;
+
 #include "SimpleCurveWidget.h"
 
 #include "MLEngine.h"
@@ -51,7 +54,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->cbFunction->addItem("Inverse");
     ui->cbFunction->addItem("Rectangular");
 
-    ui->cbFunction->setCurrentIndex(5);
+    ui->cbFunction->setCurrentIndex(6);
 
     QStringList qsl;
     qsl+="LayerType";
@@ -126,14 +129,14 @@ MainWindow::MainWindow(QWidget *parent) :
     set_input_size(1);
     _pEngine=new MLEngineBeeDnn;
 
-    _pData=new DataSource;
+    _pDataSource=new DataSource;
 }
 //////////////////////////////////////////////////////////////////////////
 MainWindow::~MainWindow()
 {
     delete ui;
     delete _pEngine;
-    delete _pData;
+    delete _pDataSource;
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::on_pushButton_clicked()
@@ -160,15 +163,16 @@ void MainWindow::train_and_test(bool bReset)
     dto.optimizer=ui->cbOptimizer->currentText().toStdString();
     dto.lossFunction=ui->cbLossFunction->currentText().toStdString();
     dto.testEveryEpochs=ui->sbTestEveryEpochs->value();
+    dto.reboostEveryEpoch=ui->leReboost->text().toInt();
     //dto.observer=nullptr;//&lossCB;
 
     if(bReset)
         _pEngine->init();
 
     _pEngine->set_problem(ui->cbProblem->currentText()=="Classification");
-    DNNTrainResult dtr =_pEngine->learn(_pData->train_data(),_pData->train_annotation(),dto);
+    DNNTrainResult dtr =_pEngine->learn(_pDataSource->train_data(),_pDataSource->train_annotation(),dto);
 
-    float fLoss=_pEngine->compute_loss(_pData->train_data(),_pData->train_annotation()); //final loss
+    float fLoss=_pEngine->compute_loss(_pDataSource->train_data(),_pDataSource->train_annotation()); //final loss
     ui->leMSE->setText(QString::number((double)fLoss));
     ui->leComputedEpochs->setText(QString::number(dtr.computedEpochs));
     ui->leTimeByEpoch->setText(QString::number(dtr.epochDuration));
@@ -251,7 +255,7 @@ void MainWindow::drawRegression()
     for(unsigned int i=0;i<iNbPoint;i++)
     {
         mIn(0,0)=fVal;
-        vTruth.push_back((double)(_pData->train_annotation()(i,0)));
+        vTruth.push_back((double)(_pDataSource->train_annotation()(i,0)));
         vSamples.push_back((double)(fVal));
         _pEngine->predict(mIn,mOut);
 
@@ -291,36 +295,36 @@ void MainWindow::compute_truth()
 
     if(sFunction=="And")
     {
-        _pData->load_and();
-        set_input_size(_pData->data_cols());
+        _pDataSource->load_and();
+        set_input_size(_pDataSource->data_cols());
         return;
     }
 
     if(sFunction=="Xor")
     {
-        _pData->load_xor();
-        set_input_size(_pData->data_cols());
+        _pDataSource->load_xor();
+        set_input_size(_pDataSource->data_cols());
         return;
     }
 
     if(sFunction=="MNIST")
     {
-        _pData->load_mnist(); //todo check file I/O errors
-        set_input_size(_pData->data_cols());
+        _pDataSource->load_mnist(); //todo check file I/O errors
+        set_input_size(_pDataSource->data_cols());
         return;
     }
 
     if(sFunction=="Fisher")
     {
-        _pData->load_fisher(); //todo check file I/O errors
-        set_input_size(_pData->data_cols());
+        _pDataSource->load_fisher(); //todo check file I/O errors
+        set_input_size(_pDataSource->data_cols());
         return;
     }
 
     if(sFunction=="TextFiles")
     {
-        _pData->load_textfile();; //todo check file I/O errors
-        set_input_size(_pData->data_cols());
+        _pDataSource->load_textfile();; //todo check file I/O errors
+        set_input_size(_pDataSource->data_cols());
         return;
     }
 
@@ -328,7 +332,7 @@ void MainWindow::compute_truth()
     int iNbPoint=ui->leNbPointsLearn->text().toInt();
     float fMin=ui->leInputMin->text().toFloat();
     float fMax=ui->leInputMax->text().toFloat();
-    _pData->load_function(sFunction,fMin,fMax,iNbPoint);
+    _pDataSource->load_function(sFunction,fMin,fMax,iNbPoint);
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::resizeEvent( QResizeEvent *e )
@@ -349,7 +353,12 @@ void MainWindow::update_details()
         return;
     }
 
-    ui->peDetails->setPlainText(_pEngine->to_string().c_str());
+    string s;
+    _pDataSource->write(s);
+    s+="\n";
+    _pEngine->write(s);
+
+    ui->peDetails->setPlainText(s.c_str());
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_cbEngine_currentTextChanged(const QString &arg1)
@@ -500,15 +509,15 @@ void MainWindow::update_classification_tab()
     }
 
     float fAccuracy=0.f;
-    if(_pData->has_test_data())
+    if(_pDataSource->has_test_data())
     {
-        _pEngine->compute_confusion_matrix(_pData->test_data(),_pData->test_annotation(),_mConfusionMatrix,fAccuracy);
+        _pEngine->compute_confusion_matrix(_pDataSource->test_data(),_pDataSource->test_annotation(),_mConfusionMatrix,fAccuracy);
         ui->leTestAccuracy->setText(QString::number((double)fAccuracy,'f',2));
     }
     else
         ui->leTestAccuracy->setText("n/a");
 
-    _pEngine->compute_confusion_matrix(_pData->train_data(),_pData->train_annotation(),_mConfusionMatrix,fAccuracy);
+    _pEngine->compute_confusion_matrix(_pDataSource->train_data(),_pDataSource->train_annotation(),_mConfusionMatrix,fAccuracy);
     ui->leTrainAccuracy->setText(QString::number((double)fAccuracy,'f',2));
 
     drawConfusionMatrix(); //for now on train data
@@ -593,20 +602,31 @@ void MainWindow::on_actionSave_as_triggered()
 
     _sFileName=sFileName;
 
-    _pEngine->save(_sFileName);
+    save();
+
     _bMustSave=false;
 
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionNew_triggered()
 {
+    if(_bMustSave)
+    {
+         //todo use _bMustSave
+    }
+
     _pEngine->clear();
     net_to_ui();
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionOpen_triggered()
 {
-//todo
+    if(_bMustSave)
+    {
+         //todo use _bMustSave
+    }
+
+
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionSave_triggered()
@@ -620,18 +640,21 @@ void MainWindow::on_actionSave_triggered()
         _sFileName=sFileName;
     }
 
-    _pEngine->save(_sFileName);
+    save();
     _bMustSave=false;
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionClose_triggered()
 {
-//todo
+    if(_bMustSave)
+    {
+         //todo use _bMustSave
+    }
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionSave_with_Score_triggered()
 {
-    /*    if(_sFileName.empty())
+    if(_sFileName.empty())
     {
         string sFileName = QFileDialog::getSaveFileName(this,tr("Save DNNLab File"), ".", tr("DNNLab Files (*.dnnlab)")).toStdString();
         if(sFileName.empty())
@@ -640,16 +663,27 @@ void MainWindow::on_actionSave_with_Score_triggered()
         _sFileName=sFileName;
     }
 
-    //score=to_string()
-    //todo
+    //score=to_string() todo
 
-    _pEngine->save(_sFileName+sScore);
-    _bMustSave=false;
-*/}
+    save();
+}
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_pushButton_3_clicked()
 {
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(ui->peDetails->toPlainText());
+}
+//////////////////////////////////////////////////////////////////////////////
+bool MainWindow::save()
+{
+    string s;
+    _pDataSource->write(s);
+    _pEngine->write(s);
+
+    ofstream out(_sFileName,ios::binary);
+    out << s;
+
+    _bMustSave=false;
+    return true; //for now
 }
 //////////////////////////////////////////////////////////////////////////////

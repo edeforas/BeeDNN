@@ -48,7 +48,7 @@ DNNEngineTinyDnn::~DNNEngineTinyDnn()
     delete _pNet;
 }
 //////////////////////////////////////////////////////////////////////////////
-string DNNEngineTinyDnn::to_string()
+void DNNEngineTinyDnn::write(string& s)
 {
     int iNbLayer=(int)_pNet->layer_size();
     stringstream ss;
@@ -97,17 +97,12 @@ string DNNEngineTinyDnn::to_string()
         ss << "----------------------------------------------" << endl;
     }
 
-    return ss.str();
+    s+=ss.str();
 }
 //////////////////////////////////////////////////////////////////////////////
-bool DNNEngineTinyDnn::save(string sFileName)
+void DNNEngineTinyDnn::read(const string& s)
 {
-    string s=to_string();
-    ofstream f(sFileName);
-    f << s;
-    f.close();
-
-    return true;
+    //todo
 }
 //////////////////////////////////////////////////////////////////////////////
 void DNNEngineTinyDnn::clear()

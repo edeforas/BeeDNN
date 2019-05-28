@@ -35,6 +35,9 @@ NetTrain::~NetTrain()
 	delete _pLoss;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
+void NetTrain::clear()
+{ }
+/////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::set_optimizer(string sOptimizer, float fLearningRate, float fDecay, float fMomentum) //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov" ... -1.s is for default settings
 {
 	_sOptimizer = sOptimizer;
@@ -43,11 +46,13 @@ void NetTrain::set_optimizer(string sOptimizer, float fLearningRate, float fDeca
     _fMomentum=fMomentum;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-/*void NetTrain::get_optimizer(string& sOptimizer, float& fLearningRate, float& fDecay, float& fMomentum) const
+void NetTrain::get_optimizer(string& sOptimizer, float& fLearningRate, float& fDecay, float& fMomentum) const
 {
-	sOptimizer = _sOptimizer; //TODO set fLearningRate fDecay fMomentum
+    sOptimizer = _sOptimizer;
+    fLearningRate=_fLearningRate;
+    fDecay=_fDecay;
+    fMomentum=_fMomentum;
 }
-*/
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::set_epochs(int iEpochs) //100 by default
 {
