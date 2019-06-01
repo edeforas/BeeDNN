@@ -47,7 +47,8 @@ void write(const Net& net,string & s)
         {
             LayerDense* l=static_cast<LayerDense*>(layer);
             ss << "Layer" << i+1 << ".hasBias=" << (l->has_bias()?1:0) << endl;
-            ss << toString(layer->weights()) << endl; //todo
+            ss << "Layer" << i+1 << ".weight=" << endl;
+            ss << toString(layer->weights()) << endl;
         }
 
         else if(layer->type()=="GlobalGain")
@@ -56,18 +57,16 @@ void write(const Net& net,string & s)
             ss << "Layer" << i+1 << ".globalGain=" << l->gain() << endl;
         }
 
-        else if(layer->type()=="PoolAveraging1D")
-            ss << "PoolAveraging1D:  InSize: " << layer->in_size() << " OutSize: " << layer->out_size() << endl;
-
         else if(layer->type()=="Dropout")
         {
             LayerDropout* l=static_cast<LayerDropout*>(layer);
-            ss << "Dropout: rate=" << l->get_rate() << endl;
+            ss << "Layer" << i+1 << ".rate=" << l->get_rate() << endl;
         }
+
         else if (layer->type() == "GaussianNoise")
         {
             LayerGaussianNoise* l = static_cast<LayerGaussianNoise*>(layer);
-            ss << "GaussianNoise: std=" << l->get_std() << endl;
+            ss << "Layer" << i+1 << ".stdNoise=" << l->get_std() << endl;
         }
     }
 
@@ -100,12 +99,9 @@ void write(const NetTrain& train,string & s)
     train.get_optimizer(sOptimizer,fLearningrate,fDecay,fMomentum);
     ss << "Optimizer=" << sOptimizer << endl;
     ss << "LearningRate=" << fLearningrate << endl;
-
-    ss << "LearningRate=" << fLearningrate << endl;
     ss << "Decay=" << fDecay << endl;
     ss << "Momentum=" << fMomentum << endl;
 
-    //todo
     s += ss.str();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////

@@ -199,8 +199,9 @@ string toString(const MatrixFloat& m)
     for(int iL=0;iL<m.rows();iL++)
     {
         for(int iR=0;iR<m.cols();iR++)
-            ss << setw(10) << m(iL,iR);
-        ss << endl;
+            ss  << m(iL,iR) << " ";
+        if(iL+1<m.rows())
+            ss << endl;
     }
 
     return ss.str();
