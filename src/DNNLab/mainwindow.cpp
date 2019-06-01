@@ -26,8 +26,8 @@ using namespace std;
 
 //////////////////////////////////////////////////////////////////////////
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    QMainWindow(parent)
+  , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
@@ -53,8 +53,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->cbFunction->addItem("Gauss");
     ui->cbFunction->addItem("Inverse");
     ui->cbFunction->addItem("Rectangular");
-
-    ui->cbFunction->setCurrentIndex(6);
 
     QStringList qsl;
     qsl+="LayerType";
@@ -82,6 +80,7 @@ MainWindow::MainWindow(QWidget *parent) :
             qcbType->addItem(vsActivations[a].c_str());
 
         ui->twNetwork->setCellWidget(i,0,qcbType);
+
     }
 
     ui->twNetwork->setItem(0,1,new QTableWidgetItem("1")); //first input size is 1
@@ -91,22 +90,22 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->cbEngine->addItem("tiny-dnn");
 #endif
 
+    _pEngine=0;
+    _pDataSource=0;
+
     //setup loss
     vector<string> vsloss;
     list_loss_available(vsloss);
     for(unsigned int i=0;i<vsloss.size();i++)
         ui->cbLossFunction->addItem(vsloss[i].data());
-    ui->cbLossFunction->setCurrentIndex(0);
 
     //setup optimizer
     vector<string> vsOptimizers;
     list_optimizers_available( vsOptimizers);
     for(unsigned int i=0;i<vsOptimizers.size();i++)
         ui->cbOptimizer->addItem(vsOptimizers[i].data());
-    ui->cbOptimizer->setCurrentText("Adam");
 
     resizeDocks({ui->dockWidget},{1},Qt::Horizontal);
-
     _qsRegression=new SimpleCurveWidget;
     _qsRegression->addXAxis();
     _qsRegression->addYAxis();
@@ -122,13 +121,41 @@ MainWindow::MainWindow(QWidget *parent) :
     _qsAccuracy->addYAxis();
     ui->layoutAccuracyCurve->addWidget(_qsAccuracy);
 
-    _curveColor=0xff0000; //red
+    init_all();
+}
+//////////////////////////////////////////////////////////////////////////
+void MainWindow::init_all()
+{
+    ui->cbFunction->setCurrentIndex(6);
+    ui->cbLossFunction->setCurrentIndex(0);
+    ui->cbOptimizer->setCurrentText("Adam");
+
+    ui->cbEngine->setCurrentIndex(0);
+    ui->cbProblem->setCurrentIndex(0);
+
+    for(int i=0;i<10;i++)
+    {
+        ((QComboBox*)(ui->twNetwork->cellWidget(i,0)))->setCurrentIndex(0);
+        ui->twNetwork->setItem(i,1,new QTableWidgetItem(""));
+        ui->twNetwork->setItem(i,2,new QTableWidgetItem(""));
+    }
+
+    _qsAccuracy->clear();
+    _qsLoss->clear();
+    _qsRegression->clear();
+    ui->twConfusionMatrixTrain->resize(0,0);
+    ui->peDetails->clear();
 
     _bMustSave=false;
+    _sFileName="";
 
+    _curveColor=0xff0000; //red
     set_input_size(1);
+
+    delete _pEngine;
     _pEngine=new MLEngineBeeDnn;
 
+    delete _pDataSource;
     _pDataSource=new DataSource;
 }
 //////////////////////////////////////////////////////////////////////////
@@ -610,20 +637,15 @@ void MainWindow::on_actionSave_as_triggered()
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionNew_triggered()
 {
-    if(_bMustSave)
-    {
-         //todo use _bMustSave
-    }
-
-    _pEngine->clear();
-    net_to_ui();
+    if(ask_save())
+        init_all();
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionOpen_triggered()
 {
-    if(_bMustSave)
+    if(ask_save())
     {
-         //todo use _bMustSave
+        //todo use _bMustSave
     }
 
 
@@ -641,15 +663,12 @@ void MainWindow::on_actionSave_triggered()
     }
 
     save();
-    _bMustSave=false;
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionClose_triggered()
 {
-    if(_bMustSave)
-    {
-         //todo use _bMustSave
-    }
+    if(ask_save())
+        init_all();
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionSave_with_Score_triggered()
@@ -680,10 +699,47 @@ bool MainWindow::save()
     _pDataSource->write(s);
     _pEngine->write(s);
 
-    ofstream out(_sFileName,ios::binary);
+    ofstream out(_sFileName,ios::binary); //todo test
+
     out << s;
 
     _bMustSave=false;
     return true; //for now
+}
+//////////////////////////////////////////////////////////////////////////////
+bool MainWindow::ask_save()
+{
+    if(!_bMustSave)
+        return true;
+    //todo
+
+    {
+
+
+
+    }
+    /*
+    string sFileName = QFileDialog::getSaveFileName(this,tr("Save DNNLab File"), ".", tr("DNNLab Files (*.dnnlab)")).toStdString();
+    if(sFileName.empty())
+        return;
+*/
+    //_sFileName=sFileName;
+
+
+    _bMustSave=false;
+    return true;
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::updateTitle()
+{
+    string sTitle="DNNLab ";
+
+    if(_sFileName.empty())
+        sTitle+=_sFileName;
+
+    if(_bMustSave)
+        sTitle+=" *";
+
+    setWindowTitle(sTitle.c_str());
 }
 //////////////////////////////////////////////////////////////////////////////

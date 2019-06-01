@@ -54,8 +54,12 @@ private slots:
     void on_pushButton_3_clicked();
 
 private:
+    void init_all();
+    bool ask_save(); //return true if saved/ready to overwrite
+
     void drawLoss(vector<double> vdLoss);
     void drawAccuracy(vector<double> vdAccuracy);
+    void updateTitle();
 
     void drawRegression();
     void update_classification_tab();
@@ -66,6 +70,7 @@ private:
     void ui_to_net();
     void net_to_ui();
     void set_input_size(int iSize);
+
 
     bool save();
 
