@@ -12,12 +12,12 @@ DataSource::DataSource()
 DataSource::~DataSource()
 {}
 ////////////////////////////////////////////////////////////////////////
-void DataSource::write(string& sFileName)
+void DataSource::write(string& s)
 {
-    sFileName+=string("Datasource=")+_sSourceName+string("\n");
+    s+=string("DataSource=")+_sSourceName+string("\n");
 }
 ////////////////////////////////////////////////////////////////////////
-void DataSource::read(const string& sFileName)
+void DataSource::read(const string& s)
 {
     //todo
 }

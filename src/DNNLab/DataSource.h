@@ -12,8 +12,8 @@ public:
     DataSource();
     ~DataSource();
 
-    void write(string& sFileName);
-    void read(const string& sFileName);
+    void write(string& s);
+    void read(const string& s);
 
     void load_mnist();
     void load_function(string sFunction,float fMin, float fMax, int iNbPoints);

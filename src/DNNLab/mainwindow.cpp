@@ -157,6 +157,8 @@ void MainWindow::init_all()
 
     delete _pDataSource;
     _pDataSource=new DataSource;
+
+    updateTitle();
 }
 //////////////////////////////////////////////////////////////////////////
 MainWindow::~MainWindow()
@@ -300,7 +302,8 @@ void MainWindow::drawRegression()
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionQuit_triggered()
 {
-    close();
+    if(ask_save())
+        close();
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionAbout_triggered()
@@ -368,7 +371,7 @@ void MainWindow::resizeEvent( QResizeEvent *e )
 
     QMainWindow::resizeEvent(e);
 
-    //toto resize curves
+    //todo resize curves
 
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -400,6 +403,7 @@ void MainWindow::on_cbEngine_currentTextChanged(const QString &arg1)
     if(arg1=="tiny-dnn")
         _pEngine=new DNNEngineTinyDnn;
 #endif
+    _bMustSave=true;
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_btnTrainMore_clicked()
@@ -409,7 +413,7 @@ void MainWindow::on_btnTrainMore_clicked()
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::net_to_ui()
 {
-    ui->twNetwork->clearContents();
+    init_all();
 
     //todo
 }
@@ -613,6 +617,8 @@ void MainWindow::on_cbFunction_currentIndexChanged(int index)
         return;
     }
 
+    _bMustSave=true;
+    updateTitle();
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_cbConfMatPercent_stateChanged(int arg1)
@@ -633,6 +639,7 @@ void MainWindow::on_actionSave_as_triggered()
 
     _bMustSave=false;
 
+    updateTitle();
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionNew_triggered()
@@ -645,10 +652,8 @@ void MainWindow::on_actionOpen_triggered()
 {
     if(ask_save())
     {
-        //todo use _bMustSave
+
     }
-
-
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionSave_triggered()
@@ -734,7 +739,7 @@ void MainWindow::updateTitle()
 {
     string sTitle="DNNLab ";
 
-    if(_sFileName.empty())
+    if(!_sFileName.empty())
         sTitle+=_sFileName;
 
     if(_bMustSave)

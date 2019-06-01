@@ -67,7 +67,6 @@ SOURCES += \
     main.cpp\
     mainwindow.cpp \
     SimpleCurveWidget.cpp \
-    Properties.cpp \
     DataSource.cpp \
     MLEngineBeeDnn.cpp \
     MLEngine.cpp
@@ -75,7 +74,6 @@ SOURCES += \
 HEADERS  += \
     mainwindow.h \
     SimpleCurveWidget.h \
-    Properties.h \
     MLEngine.h \
     DataSource.h \
     MLEngineBeeDnn.h
