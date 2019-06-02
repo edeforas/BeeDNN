@@ -84,10 +84,25 @@ void read(const string& s,Net& net)
     {
         string sLayer="Layer"+to_string(i+1);
 
-        string sType; find_key(sLayer+".type",sType);
+        string sType=find_key(s,sLayer+".type");
+
+        string sInSize=find_key(s,sLayer+".inSize");
+        string sOutSize=find_key(s,sLayer+".outSize");
+
+        int iInSize=0;
+        int iOutSize=0;
+
+        if(!sInSize.empty())
+            iInSize=stoi(sInSize);
+
+        if(!sOutSize.empty())
+            iOutSize=stoi(sOutSize);
 
         if(sType=="Dense")
-        {
+        {          
+            string sHasBias=find_key(s,sLayer+".hasBias");
+            net.add_dense_layer(iInSize,iOutSize,sHasBias!="0");
+
   /*          LayerDense* l=static_cast<LayerDense*>(layer);
             ss << "Layer" << i+1 << ".hasBias=" << (l->has_bias()?1:0) << endl;
             ss << "Layer" << i+1 << ".weight=" << endl;
@@ -113,7 +128,7 @@ void read(const string& s,Net& net)
        */ }
         else
         {
-            //activation
+            //activation layer
             net.add_activation_layer(sType);
         }
     }
@@ -190,7 +205,14 @@ string find_key(string s,string sKey)
     if(i2==string::npos)
         i2=s.size()-1;
 
-    return s.substr(i,i2-i);
+    string s2=s.substr(i,i2-i);
+
+    //trim right
+    auto i3=s2.find_last_not_of(" \t\r\n");
+    if(i3!=string::npos)
+        return s2.substr(0,i3+1);
+    else
+        return s2;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////
 }

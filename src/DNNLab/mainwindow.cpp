@@ -14,6 +14,8 @@ using namespace std;
 
 #include "DataSource.h"
 
+#include "LayerDense.h"
+
 #include "Activation.h"
 #include "Optimizer.h"
 #include "Loss.h"
@@ -360,12 +362,19 @@ void MainWindow::net_to_ui()
 {
     ui->cbFunction->setCurrentText(_pDataSource->name().c_str());
 
-    auto l=  _pEngine->net().layers();
+    auto l= _pEngine->net().layers();
     for(int i=0;i<l.size();i++)
     {
-        ((QComboBox*)ui->twNetwork->cellWidget(i,0))->setCurrentText(l[i]->type().c_str());
+        string sType=l[i]->type();
+        if(sType=="Dense")
+        {
+            if(((LayerDense*)l[i])->has_bias())
+                sType="DenseAndBias";
+            else
+                sType="DenseNoBias";
+        }
 
-
+        ((QComboBox*)ui->twNetwork->cellWidget(i,0))->setCurrentText(sType.c_str());
     }
 
 
