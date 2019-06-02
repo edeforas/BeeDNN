@@ -77,9 +77,46 @@ void read(const string& s,Net& net)
 {
     net.clear();
 
-    (void)s;
-    //todo
+    string sNbLayer=NetUtil::find_key(s,"NbLayers");
+    int iNbLayers=stoi(sNbLayer);
 
+    for(int i=0;i<iNbLayers;i++)
+    {
+        string sLayer="Layer"+to_string(i+1);
+
+        string sType; find_key(sLayer+".type",sType);
+
+        if(sType=="Dense")
+        {
+  /*          LayerDense* l=static_cast<LayerDense*>(layer);
+            ss << "Layer" << i+1 << ".hasBias=" << (l->has_bias()?1:0) << endl;
+            ss << "Layer" << i+1 << ".weight=" << endl;
+            ss << toString(layer->weights()) << endl;
+    */    }
+
+        else if(sType=="GlobalGain")
+        {
+      /*      LayerGlobalGain* l=static_cast<LayerGlobalGain*>(layer);
+            ss << "Layer" << i+1 << ".globalGain=" << l->gain() << endl;
+      */  }
+
+        else if(sType=="Dropout")
+        {
+      /*      LayerDropout* l=static_cast<LayerDropout*>(layer);
+            ss << "Layer" << i+1 << ".rate=" << l->get_rate() << endl;
+      */  }
+
+        else if (sType == "GaussianNoise")
+        {
+        /*    LayerGaussianNoise* l = static_cast<LayerGaussianNoise*>(layer);
+            ss << "Layer" << i+1 << ".stdNoise=" << l->get_std() << endl;
+       */ }
+        else
+        {
+            //activation
+            net.add_activation_layer(sType);
+        }
+    }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void write(const NetTrain& train,string & s)

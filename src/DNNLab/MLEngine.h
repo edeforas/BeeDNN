@@ -93,7 +93,7 @@ public:
     virtual float compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth);
     virtual void compute_confusion_matrix(const MatrixFloat & mSamples, const MatrixFloat& mTruth, MatrixFloat& mConfusionMatrix, float& fAccuracy);
 
-protected:	
+protected:
     virtual void learn_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)=0;
     vector<double> _vdLoss; //temp
     vector<double> _vdAccuracy; //temp

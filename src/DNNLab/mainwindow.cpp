@@ -375,9 +375,11 @@ void MainWindow::on_btnTrainMore_clicked()
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::net_to_ui()
 {
-
-
     ui->cbFunction->setCurrentText(_pDataSource->name().c_str());
+
+ //   for(int i=0;i<_pEngine->learn)
+
+
 
     //todo
 }
@@ -717,6 +719,7 @@ bool MainWindow::ask_save()
 {
     if(!_bMustSave)
         return true;
+
     //todo
 
     {
