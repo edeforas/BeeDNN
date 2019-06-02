@@ -147,7 +147,7 @@ void MainWindow::init_all()
     ui->peDetails->clear();
 
     _bMustSave=false;
-    _sFileName="";
+    //   _sFileName="";
 
     _curveColor=0xff0000; //red
     set_input_size(1);
@@ -268,9 +268,9 @@ void MainWindow::drawRegression()
     }
 
     //create ref sample hi-res and net output
-    unsigned int iNbPoint=(unsigned int)(ui->leNbPointsLearn->text().toInt());
-    float fInputMin=ui->leInputMin->text().toFloat();
-    float fInputMax=ui->leInputMax->text().toFloat();
+    unsigned int iNbPoint=100;
+    float fInputMin=-4.f;
+    float fInputMax=4.f;
     vector<double> vTruth;
     vector<double> vSamples;
     vector<double> vRegression;
@@ -323,46 +323,8 @@ void MainWindow::compute_truth()
 {  
     string sFunction=ui->cbFunction->currentText().toStdString();
 
-    if(sFunction=="And")
-    {
-        _pDataSource->load_and();
-        set_input_size(_pDataSource->data_cols());
-        return;
-    }
-
-    if(sFunction=="Xor")
-    {
-        _pDataSource->load_xor();
-        set_input_size(_pDataSource->data_cols());
-        return;
-    }
-
-    if(sFunction=="MNIST")
-    {
-        _pDataSource->load_mnist(); //todo check file I/O errors
-        set_input_size(_pDataSource->data_cols());
-        return;
-    }
-
-    if(sFunction=="Fisher")
-    {
-        _pDataSource->load_fisher(); //todo check file I/O errors
-        set_input_size(_pDataSource->data_cols());
-        return;
-    }
-
-    if(sFunction=="TextFiles")
-    {
-        _pDataSource->load_textfile();; //todo check file I/O errors
-        set_input_size(_pDataSource->data_cols());
-        return;
-    }
-
-    //function default case
-    int iNbPoint=ui->leNbPointsLearn->text().toInt();
-    float fMin=ui->leInputMin->text().toFloat();
-    float fMax=ui->leInputMax->text().toFloat();
-    _pDataSource->load_function(sFunction,fMin,fMax,iNbPoint);
+    _pDataSource->load(sFunction);
+    set_input_size(_pDataSource->data_cols());
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::resizeEvent( QResizeEvent *e )
@@ -413,7 +375,9 @@ void MainWindow::on_btnTrainMore_clicked()
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::net_to_ui()
 {
-    init_all();
+
+
+    ui->cbFunction->setCurrentText(_pDataSource->name().c_str());
 
     //todo
 }
@@ -645,14 +609,23 @@ void MainWindow::on_actionSave_as_triggered()
 void MainWindow::on_actionNew_triggered()
 {
     if(ask_save())
+    {
+        _sFileName="";
         init_all();
+    }
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionOpen_triggered()
 {
     if(ask_save())
     {
+        string sFileName = QFileDialog::getOpenFileName(this,tr("Open DNNLab File"), ".", tr("DNNLab Files (*.dnnlab)")).toStdString();
+        if(sFileName.empty())
+            return;
 
+        _sFileName=sFileName;
+
+        load();
     }
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -673,7 +646,10 @@ void MainWindow::on_actionSave_triggered()
 void MainWindow::on_actionClose_triggered()
 {
     if(ask_save())
+    {
+        _sFileName="";
         init_all();
+    }
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionSave_with_Score_triggered()
@@ -709,6 +685,31 @@ bool MainWindow::save()
     out << s;
 
     _bMustSave=false;
+    return true; //for now
+}
+//////////////////////////////////////////////////////////////////////////////
+bool MainWindow::load()
+{
+    //todo use a file I/O class, properties?
+    init_all();
+
+    string s;
+    ifstream fIn(_sFileName);
+    string line;
+    while(std::getline(fIn, line))
+    {
+        //concat lines without "="
+        if(line.find("=")!=string::npos)
+            s+="\n"+line;
+        else
+            s+=" "+line;
+    }
+
+    _pEngine->read(s);
+    _pDataSource->read(s);
+
+    net_to_ui();
+
     return true; //for now
 }
 //////////////////////////////////////////////////////////////////////////////

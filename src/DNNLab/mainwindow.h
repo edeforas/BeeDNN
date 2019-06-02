@@ -73,6 +73,7 @@ private:
 
 
     bool save();
+    bool load();
 
     Ui::MainWindow *ui;
 

@@ -289,65 +289,6 @@
    <widget class="QWidget" name="dockWidgetContents_7">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_10">
-       <item>
-        <widget class="QLabel" name="label_19">
-         <property name="text">
-          <string>Min</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="leInputMin">
-         <property name="text">
-          <string>-4</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_18">
-         <property name="text">
-          <string>Max</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="leInputMax">
-         <property name="text">
-          <string>4</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_20">
-         <property name="text">
-          <string>NbPoints</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="leNbPointsLearn">
-         <property name="text">
-          <string>100</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </item>
-     <item>
       <layout class="QHBoxLayout" name="horizontalLayout_9">
        <item>
         <widget class="QLabel" name="label_16">

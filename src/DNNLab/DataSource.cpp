@@ -1,5 +1,6 @@
 #include "DataSource.h"
 
+#include "NetUtil.h"
 #include "MNISTReader.h"
 
 ////////////////////////////////////////////////////////////////////////
@@ -14,20 +15,49 @@ DataSource::~DataSource()
 ////////////////////////////////////////////////////////////////////////
 void DataSource::write(string& s)
 {
-    s+=string("DataSource=")+_sSourceName+string("\n");
+    s+=string("DataSource=")+_sName+string("\n");
 }
 ////////////////////////////////////////////////////////////////////////
 void DataSource::read(const string& s)
 {
-    //todo
+    string sVal=NetUtil::find_key(s,"DataSource");
+
+    load(sVal);
+}
+////////////////////////////////////////////////////////////////////////
+void DataSource::load(const string& sName)
+{
+    clear();
+
+    if(sName.empty())
+        return;
+
+    _sName=sName;
+
+    if(sName=="MNIST")
+        load_mnist();
+
+    else if(sName=="and")
+        load_and();
+
+    else if(sName=="xor")
+        load_xor();
+
+    else if(sName=="TextFile")
+        load_textfile();
+
+    else if(sName=="Fisher")
+        load_fisher();
+
+    else load_function();
 }
 ////////////////////////////////////////////////////////////////////////
 void DataSource::load_mnist()
 {
-    if(_sSourceName=="MNIST")
+    if(_sName=="MNIST")
         return;
 
-    _sSourceName="MNIST";
+    _sName="MNIST";
 
     MNISTReader r;
     r.read_from_folder(".",_mTrainData,_mTrainAnnotation,_mTestData,_mTestAnnotation);
@@ -40,7 +70,7 @@ void DataSource::load_mnist()
 ////////////////////////////////////////////////////////////////////////
 void DataSource::load_and()
 {
-     _sSourceName="and";
+     _sName="and";
 
     _mTrainData.resize(4,2);
     _mTrainData(0,0)=0; _mTrainData(0,1)=0;
@@ -63,7 +93,7 @@ void DataSource::load_and()
 ////////////////////////////////////////////////////////////////////////
 void DataSource::load_xor()
 {
-    _sSourceName="xor";
+    _sName="xor";
 
     _mTrainData.resize(4,2);
     _mTrainData(0,0)=0; _mTrainData(0,1)=0;
@@ -86,10 +116,10 @@ void DataSource::load_xor()
 ////////////////////////////////////////////////////////////////////////
 void DataSource::load_textfile()
 {
-    if(_sSourceName=="TextFile")
+    if(_sName=="TextFile")
         return;
 
-    _sSourceName="TextFile";
+    _sName="TextFile";
 
     _mTrainData=fromFile("train_data.txt");
     _mTrainAnnotation=fromFile("train_truth.txt");
@@ -106,10 +136,10 @@ void DataSource::load_textfile()
 ////////////////////////////////////////////////////////////////////////
 void DataSource::load_fisher()
 {
-    if(_sSourceName=="Fisher")
+    if(_sName=="Fisher")
         return;
 
-    _sSourceName="Fisher";
+    _sName="Fisher";
 
     _mTrainData=fromFile("Fisher_data.txt");
     _mTrainAnnotation=fromFile("Fisher_truth.txt");
@@ -121,9 +151,11 @@ void DataSource::load_fisher()
     _bHasTestData=false;
 }
 ////////////////////////////////////////////////////////////////////////
-void DataSource::load_function(string sFunction,float fMin, float fMax, int iNbPoints)
+void DataSource::load_function()
 {
-    _sSourceName=sFunction;
+    float fMin=-4.f;
+    float fMax=4.f;
+    int iNbPoints=100;
 
     _mTrainData.resize(iNbPoints,1);
     _mTrainAnnotation.resize(iNbPoints,1);
@@ -134,37 +166,37 @@ void DataSource::load_function(string sFunction,float fMin, float fMax, int iNbP
 
     for( int i=0;i<iNbPoints;i++)
     {
-        if(sFunction=="Identity")
+        if(_sName=="Identity")
             fOut=fVal;
 
-        if(sFunction=="Sin")
+        if(_sName=="Sin")
             fOut=sinf(fVal);
 
-        if(sFunction=="Abs")
+        if(_sName=="Abs")
             fOut=fabs(fVal);
 
-        if(sFunction=="Parabolic")
+        if(_sName=="Parabolic")
             fOut=fVal*fVal;
 
-        if(sFunction=="Gamma")
+        if(_sName=="Gamma")
             fOut=tgammaf(fVal);
 
-        if(sFunction=="Exp")
+        if(_sName=="Exp")
             fOut=expf(fVal);
 
-        if(sFunction=="Sqrt")
+        if(_sName=="Sqrt")
             fOut=sqrtf(fVal);
 
-        if(sFunction=="Ln")
+        if(_sName=="Ln")
             fOut=logf(fVal);
 
-        if(sFunction=="Gauss")
+        if(_sName=="Gauss")
             fOut=expf(-fVal*fVal);
 
-        if(sFunction=="Inverse")
+        if(_sName=="Inverse")
             fOut=1.f/fVal;
 
-        if(sFunction=="Rectangular")
+        if(_sName=="Rectangular")
             fOut= (float)(((((int)fVal)+(fVal<0.f))+1) & 1 );
 
         _mTrainData(i)=fVal;
@@ -222,5 +254,23 @@ int DataSource::data_cols() const
 int DataSource::annotation_cols() const
 {
     return (int)_mTrainAnnotation.cols();
+}
+////////////////////////////////////////////////////////////////////////
+void DataSource::clear()
+{
+    _mTrainData.resize(0,0);
+    _mTrainAnnotation.resize(0,0);
+    _mTestData.resize(0,0);
+    _mTestAnnotation.resize(0,0);
+
+    _bHasTestData=false;
+    _bHasTrainData=false;
+
+    _sName="";
+}
+////////////////////////////////////////////////////////////////////////
+const string DataSource::name() const
+{
+    return _sName;
 }
 ////////////////////////////////////////////////////////////////////////

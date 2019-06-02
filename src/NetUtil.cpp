@@ -139,5 +139,21 @@ bool load(string sFileName,Net* pNet)
     return true;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////
+string find_key(string s,string sKey)
+{
+    auto i = s.find(sKey+"=");
 
+    if(i==string::npos)
+        return "";
+
+    i+=sKey.size()+1;
+
+    auto i2=s.find("\n",i);
+
+    if(i2==string::npos)
+        i2=s.size()-1;
+
+    return s.substr(i,i2-i);
+}
+////////////////////////////////////////////////////////////////////////////////////////////////
 }

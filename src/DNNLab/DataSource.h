@@ -12,15 +12,14 @@ public:
     DataSource();
     ~DataSource();
 
+    void clear();
+
     void write(string& s);
     void read(const string& s);
 
-    void load_mnist();
-    void load_function(string sFunction,float fMin, float fMax, int iNbPoints);
-    void load_textfile();
-    void load_and();
-    void load_xor();
-    void load_fisher();
+    const string name() const;
+
+    void load(const string & sName);
 
     const MatrixFloat& train_data() const;
     const MatrixFloat& train_annotation() const;
@@ -36,6 +35,14 @@ public:
     int annotation_cols() const;
 
 private:
+
+    void load_mnist();
+    void load_function();
+    void load_textfile();
+    void load_and();
+    void load_xor();
+    void load_fisher();
+
     MatrixFloat _mTrainData;
     MatrixFloat _mTrainAnnotation;
     MatrixFloat _mTestData;
@@ -44,7 +51,7 @@ private:
     bool _bHasTestData;
     bool _bHasTrainData;
 
-    string _sSourceName;
+    string _sName;
 };
 
 #endif
