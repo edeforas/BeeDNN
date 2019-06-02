@@ -360,7 +360,14 @@ void MainWindow::net_to_ui()
 {
     ui->cbFunction->setCurrentText(_pDataSource->name().c_str());
 
-    //   for(int i=0;i<_pEngine->learn)
+    auto l=  _pEngine->net().layers();
+    for(int i=0;i<l.size();i++)
+    {
+        ((QComboBox*)ui->twNetwork->cellWidget(i,0))->setCurrentText(l[i]->type().c_str());
+
+
+    }
+
 
 
 

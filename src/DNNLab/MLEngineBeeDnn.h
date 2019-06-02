@@ -3,7 +3,7 @@
 
 #include "Net.h"
 #include "NetTrain.h"
-
+#include "Layer.h"
 
 class DNNTrainResult
 {

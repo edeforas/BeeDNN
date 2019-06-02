@@ -42,6 +42,10 @@ void MLEngineBeeDnn::write(string& s)
 void MLEngineBeeDnn::read(const string& s)
 {
     (void)s;
+
+    NetUtil::read(s,*_pNet);
+    NetUtil::read(s,*_pTrain);
+
     //todo
 }
 //////////////////////////////////////////////////////////////////////////////
