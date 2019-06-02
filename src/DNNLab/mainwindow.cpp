@@ -13,10 +13,6 @@ using namespace std;
 #include "MLEngine.h"
 #include "MLEngineBeeDnn.h"
 
-#ifdef USE_TINYDNN
-#include "MLEngineTinyDnn.h"
-#endif
-
 #include "DataSource.h"
 
 #include "Activation.h"
@@ -85,10 +81,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->twNetwork->setItem(0,1,new QTableWidgetItem("1")); //first input size is 1
     ui->twNetwork->adjustSize();
-
-#ifdef USE_TINYDNN
-    ui->cbEngine->addItem("tiny-dnn");
-#endif
 
     _pEngine=0;
     _pDataSource=0;
@@ -361,10 +353,6 @@ void MainWindow::on_cbEngine_currentTextChanged(const QString &arg1)
     if(arg1=="BeeDNN")
         _pEngine=new MLEngineBeeDnn;
 
-#ifdef USE_TINYDNN
-    if(arg1=="tiny-dnn")
-        _pEngine=new DNNEngineTinyDnn;
-#endif
     _bMustSave=true;
 }
 //////////////////////////////////////////////////////////////////////////////
