@@ -15,6 +15,9 @@ using namespace std;
 #include "DataSource.h"
 
 #include "LayerDense.h"
+#include "LayerDropout.h"
+#include "LayerGlobalGain.h"
+#include "LayerGaussianNoise.h"
 
 #include "Activation.h"
 #include "Optimizer.h"
@@ -181,8 +184,6 @@ void MainWindow::train_and_test(bool bReset)
     _pEngine->netTrain().set_keepbest(ui->cbKeepBest->isChecked());
     _pEngine->netTrain().set_loss(ui->cbLossFunction->currentText().toStdString());
     _pEngine->netTrain().set_reboost_every_epochs(ui->leReboost->text().toInt());
-
-
 
     if(bReset)
         _pEngine->init();
@@ -362,22 +363,45 @@ void MainWindow::net_to_ui()
 {
     ui->cbFunction->setCurrentText(_pDataSource->name().c_str());
 
-    auto l= _pEngine->net().layers();
-    for(int i=0;i<l.size();i++)
+    auto layers= _pEngine->net().layers();
+    for(unsigned int i=0;i<layers.size();i++)
     {
-        string sType=l[i]->type();
+        auto l=layers[i];
+        string sType=l->type();
         if(sType=="Dense")
         {
-            if(((LayerDense*)l[i])->has_bias())
+            if(((LayerDense*)l)->has_bias())
                 sType="DenseAndBias";
             else
                 sType="DenseNoBias";
         }
 
         ((QComboBox*)ui->twNetwork->cellWidget(i,0))->setCurrentText(sType.c_str());
+
+        if(sType=="GaussianNoise")
+        {
+            float fStd=((LayerGaussianNoise*)l)->get_std();
+            ui->twNetwork->setItem(i,3,new QTableWidgetItem(to_string(fStd).c_str()));
+        }
+
+        if(sType=="Dropout")
+        {
+            float fRate=((LayerDropout*)l)->get_rate();
+            ui->twNetwork->setItem(i,3,new QTableWidgetItem(to_string(fRate).c_str()));
+        }
+
+        if(sType=="GlobalGain")
+        {
+            float fGain=((LayerGlobalGain*)l)->gain();
+            ui->twNetwork->setItem(i,3,new QTableWidgetItem(to_string(fGain).c_str()));
+        }
+
+        if(l->in_size())
+            ui->twNetwork->setItem(i,1,new QTableWidgetItem(to_string(l->in_size()).c_str()));
+
+        if(l->out_size())
+            ui->twNetwork->setItem(i,2,new QTableWidgetItem(to_string(l->out_size()).c_str()));
     }
-
-
 
 
     //todo
