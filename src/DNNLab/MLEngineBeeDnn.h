@@ -2,46 +2,8 @@
 #define DNNEngineBeeDnn_
 
 #include "Net.h"
+#include "NetTrain.h"
 
-class Net;
-class NetTrain;
-
-
-
-
-
-
-
-class DNNTrainOption
-{
-public:
-    DNNTrainOption():
-        optimizer("SGD"),
-        lossFunction("mse")
-    {
-        epochs=100;
-        batchSize=1;
-        keepBest=false;
-
-        learningRate=0.01f;
-        decay=0.9f;
-        momentum=0.9f;
-        reboostEveryEpoch=-1;
-    }
-
-    int  epochs;
-    int batchSize;
-    bool keepBest;
-
-    //optimizer settings
-    float learningRate;
-    float decay;
-    float momentum;
-    string optimizer;
-    string lossFunction;
-    int reboostEveryEpoch;
-    int testEveryEpochs; //set to 1 to test at each epoch, 10 to test only 1/10 of the time, etc
-};
 
 class DNNTrainResult
 {
@@ -60,16 +22,6 @@ public:
     vector<double> accuracy;
 };
 
-class DNNTrainObserver
-{
-public:
-    virtual void stepEpoch(const DNNTrainResult & tr)=0;
-};
-
-
-
-
-
 
 class MLEngineBeeDnn
 {
@@ -83,28 +35,25 @@ public:
     virtual void clear() ;
     virtual void init() ;
 
-    virtual void learn_epochs(const MatrixFloat& mSamples, const MatrixFloat& mTruth, const DNNTrainOption& dto) ;
+    virtual void learn_epochs(const MatrixFloat& mSamples, const MatrixFloat& mTruth) ;
 
     virtual void predict(const MatrixFloat& mIn, MatrixFloat& mOut) ;
 
     Net& net();
     const Net& net() const;
 
+    NetTrain& netTrain();
+    const NetTrain& netTrain() const;
 
     void set_problem(bool bClassification); //classification or regression
     bool is_classification_problem();
 
-    virtual DNNTrainResult learn(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto);
+    virtual DNNTrainResult learn(const MatrixFloat& mSamples,const MatrixFloat& mTruth);
 
     virtual void predict_all(const MatrixFloat & mSamples, MatrixFloat& mResult);
     void classify_all(const MatrixFloat & mSamples, MatrixFloat& mResultLabel);
     virtual float compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth);
     virtual void compute_confusion_matrix(const MatrixFloat & mSamples, const MatrixFloat& mTruth, MatrixFloat& mConfusionMatrix, float& fAccuracy);
-
-
-
-
-
 
 
 private:

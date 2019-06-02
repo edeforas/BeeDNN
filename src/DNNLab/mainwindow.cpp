@@ -173,24 +173,20 @@ void MainWindow::train_and_test(bool bReset)
     if(bReset)
         ui_to_net();
 
-    DNNTrainOption dto;
-    dto.epochs=ui->leEpochs->text().toInt();
-    dto.learningRate=ui->leLearningRate->text().toFloat();
-    dto.batchSize=ui->leBatchSize->text().toInt();
-    dto.keepBest=ui->cbKeepBest->isChecked();
-    dto.decay=ui->leDecay->text().toFloat();
-    dto.momentum=ui->leMomentum->text().toFloat();
-    dto.optimizer=ui->cbOptimizer->currentText().toStdString();
-    dto.lossFunction=ui->cbLossFunction->currentText().toStdString();
-    dto.testEveryEpochs=ui->sbTestEveryEpochs->value();
-    dto.reboostEveryEpoch=ui->leReboost->text().toInt();
-    //dto.observer=nullptr;//&lossCB;
+    _pEngine->netTrain().set_epochs(ui->leEpochs->text().toInt());
+    _pEngine->netTrain().set_optimizer(ui->cbOptimizer->currentText().toStdString(),ui->leLearningRate->text().toFloat(),ui->leDecay->text().toFloat(),ui->leMomentum->text().toFloat());
+    _pEngine->netTrain().set_batchsize(ui->leBatchSize->text().toInt());
+    _pEngine->netTrain().set_keepbest(ui->cbKeepBest->isChecked());
+    _pEngine->netTrain().set_loss(ui->cbLossFunction->currentText().toStdString());
+    _pEngine->netTrain().set_reboost_every_epochs(ui->leReboost->text().toInt());
+
+
 
     if(bReset)
         _pEngine->init();
 
     _pEngine->set_problem(ui->cbProblem->currentText()=="Classification");
-    DNNTrainResult dtr =_pEngine->learn(_pDataSource->train_data(),_pDataSource->train_annotation(),dto);
+    DNNTrainResult dtr =_pEngine->learn(_pDataSource->train_data(),_pDataSource->train_annotation());
 
     float fLoss=_pEngine->compute_loss(_pDataSource->train_data(),_pDataSource->train_annotation()); //final loss
     ui->leMSE->setText(QString::number((double)fLoss));
@@ -364,7 +360,7 @@ void MainWindow::net_to_ui()
 {
     ui->cbFunction->setCurrentText(_pDataSource->name().c_str());
 
- //   for(int i=0;i<_pEngine->learn)
+    //   for(int i=0;i<_pEngine->learn)
 
 
 

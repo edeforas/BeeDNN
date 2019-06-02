@@ -59,7 +59,7 @@ void MLEngineBeeDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
     _pNet->forward(mIn,mOut);
 }
 //////////////////////////////////////////////////////////////////////////////
-void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
+void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth)
 {
     TrainResult tr;
     float fAccuracy=0.f;
@@ -67,13 +67,6 @@ void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat&
 
     int iEpoch=0;
     _pTrain->clear();
-    _pTrain->set_epochs(dto.epochs);
-    _pTrain->set_optimizer(dto.optimizer,dto.learningRate,dto.decay,dto.momentum);
-    _pTrain->set_batchsize(dto.batchSize);
-    _pTrain->set_keepbest(dto.keepBest);
-    _pTrain->set_optimizer(dto.optimizer);
-    _pTrain->set_loss(dto.lossFunction);
-    _pTrain->set_reboost_every_epochs(dto.reboostEveryEpoch);
 
     _pTrain->set_epoch_callback( [&]()
     {
@@ -108,17 +101,28 @@ const Net& MLEngineBeeDnn::net() const
 {
     return *_pNet;
 }
+
 //////////////////////////////////////////////////////////////////////////////
-DNNTrainResult MLEngineBeeDnn::learn(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
+NetTrain& MLEngineBeeDnn::netTrain()
+{
+    return *_pTrain;
+}
+//////////////////////////////////////////////////////////////////////////////
+const NetTrain& MLEngineBeeDnn::netTrain() const
+{
+    return *_pTrain;
+}
+//////////////////////////////////////////////////////////////////////////////
+DNNTrainResult MLEngineBeeDnn::learn(const MatrixFloat& mSamples,const MatrixFloat& mTruth)
 {
     DNNTrainResult r;
 
     auto beginDuration = std::chrono::steady_clock::now();
-    learn_epochs(mSamples,mTruth,dto);
+    learn_epochs(mSamples,mTruth);
     auto endDuration = std::chrono::steady_clock::now();
 
-    _iComputedEpochs+= dto.epochs;
-    r.epochDuration=chrono::duration_cast<chrono::microseconds> (endDuration-beginDuration).count()/1.e6/dto.epochs;
+    _iComputedEpochs+= _pTrain->get_epochs();
+    r.epochDuration=chrono::duration_cast<chrono::microseconds> (endDuration-beginDuration).count()/1.e6/_pTrain->get_epochs();
     r.computedEpochs=_iComputedEpochs;
 
     r.loss=_vdLoss;
