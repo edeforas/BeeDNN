@@ -15,6 +15,7 @@ class MainWindow;
 
 class Net;
 class DataSource;
+class MLEngineBeeDnn;
 
 class MainWindow : public QMainWindow
 {
@@ -77,7 +78,7 @@ private:
 
     Ui::MainWindow *ui;
 
-    MLEngine* _pEngine;
+    MLEngineBeeDnn* _pEngine;
     SimpleCurveWidget* _qsRegression;
     SimpleCurveWidget* _qsLoss;
     SimpleCurveWidget* _qsAccuracy;

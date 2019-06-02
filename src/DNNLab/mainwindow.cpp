@@ -10,7 +10,6 @@ using namespace std;
 
 #include "SimpleCurveWidget.h"
 
-#include "MLEngine.h"
 #include "MLEngineBeeDnn.h"
 
 #include "DataSource.h"
@@ -426,30 +425,30 @@ void MainWindow::ui_to_net()
                 float fRatio=0.2f; //by default
                 if(bOk)
                     fRatio=fArg1;
-                _pEngine->add_dropout_layer(iInSize,fRatio);
+                _pEngine->net().add_dropout_layer(iInSize,fRatio);
             }
             else if(sType=="GaussianNoise")
             {
                 float fStd=1.f; //by default
                 if(bOk)
                     fStd=fArg1;
-                _pEngine->add_gaussian_noise_layer(iInSize,fStd);
+                _pEngine->net().add_gaussian_noise_layer(iInSize,fStd);
             }
             else if(sType=="GlobalGain")
             {
                 float fGain=0.f; //by default, 0.f mean learned
                 if(bOk)
                     fGain=fArg1;
-                _pEngine->add_globalgain_layer(iInSize,fGain);
+                _pEngine->net().add_globalgain_layer(iInSize,fGain);
             }
             else if(sType=="PoolAveraging1D")
-                _pEngine->add_poolaveraging1D_layer(iInSize,iOutSize);
+                _pEngine->net().add_poolaveraging1D_layer(iInSize,iOutSize);
             else if(sType=="DenseAndBias")
-                _pEngine->add_dense_layer(iInSize,iOutSize,true);
+                _pEngine->net().add_dense_layer(iInSize,iOutSize,true);
             else if(sType=="DenseNoBias")
-                _pEngine->add_dense_layer(iInSize,iOutSize,false);
+                _pEngine->net().add_dense_layer(iInSize,iOutSize,false);
             else
-                _pEngine->add_activation_layer(sType);
+                _pEngine->net().add_activation_layer(sType);
         }
     }
 
