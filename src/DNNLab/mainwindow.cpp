@@ -10,14 +10,14 @@ using namespace std;
 
 #include "SimpleCurveWidget.h"
 
-#include "MLEngine.h"
 #include "MLEngineBeeDnn.h"
 
-#ifdef USE_TINYDNN
-#include "MLEngineTinyDnn.h"
-#endif
-
 #include "DataSource.h"
+
+#include "LayerDense.h"
+#include "LayerDropout.h"
+#include "LayerGlobalGain.h"
+#include "LayerGaussianNoise.h"
 
 #include "Activation.h"
 #include "Optimizer.h"
@@ -86,12 +86,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->twNetwork->setItem(0,1,new QTableWidgetItem("1")); //first input size is 1
     ui->twNetwork->adjustSize();
 
-#ifdef USE_TINYDNN
-    ui->cbEngine->addItem("tiny-dnn");
-#endif
-
-    _pEngine=0;
-    _pDataSource=0;
+    _pEngine=nullptr;
+    _pDataSource=nullptr;
 
     //setup loss
     vector<string> vsloss;
@@ -182,24 +178,18 @@ void MainWindow::train_and_test(bool bReset)
     if(bReset)
         ui_to_net();
 
-    DNNTrainOption dto;
-    dto.epochs=ui->leEpochs->text().toInt();
-    dto.learningRate=ui->leLearningRate->text().toFloat();
-    dto.batchSize=ui->leBatchSize->text().toInt();
-    dto.keepBest=ui->cbKeepBest->isChecked();
-    dto.decay=ui->leDecay->text().toFloat();
-    dto.momentum=ui->leMomentum->text().toFloat();
-    dto.optimizer=ui->cbOptimizer->currentText().toStdString();
-    dto.lossFunction=ui->cbLossFunction->currentText().toStdString();
-    dto.testEveryEpochs=ui->sbTestEveryEpochs->value();
-    dto.reboostEveryEpoch=ui->leReboost->text().toInt();
-    //dto.observer=nullptr;//&lossCB;
+    _pEngine->netTrain().set_epochs(ui->leEpochs->text().toInt());
+    _pEngine->netTrain().set_optimizer(ui->cbOptimizer->currentText().toStdString(),ui->leLearningRate->text().toFloat(),ui->leDecay->text().toFloat(),ui->leMomentum->text().toFloat());
+    _pEngine->netTrain().set_batchsize(ui->leBatchSize->text().toInt());
+    _pEngine->netTrain().set_keepbest(ui->cbKeepBest->isChecked());
+    _pEngine->netTrain().set_loss(ui->cbLossFunction->currentText().toStdString());
+    _pEngine->netTrain().set_reboost_every_epochs(ui->leReboost->text().toInt());
 
     if(bReset)
         _pEngine->init();
 
     _pEngine->set_problem(ui->cbProblem->currentText()=="Classification");
-    DNNTrainResult dtr =_pEngine->learn(_pDataSource->train_data(),_pDataSource->train_annotation(),dto);
+    DNNTrainResult dtr =_pEngine->learn(_pDataSource->train_data(),_pDataSource->train_annotation());
 
     float fLoss=_pEngine->compute_loss(_pDataSource->train_data(),_pDataSource->train_annotation()); //final loss
     ui->leMSE->setText(QString::number((double)fLoss));
@@ -361,10 +351,6 @@ void MainWindow::on_cbEngine_currentTextChanged(const QString &arg1)
     if(arg1=="BeeDNN")
         _pEngine=new MLEngineBeeDnn;
 
-#ifdef USE_TINYDNN
-    if(arg1=="tiny-dnn")
-        _pEngine=new DNNEngineTinyDnn;
-#endif
     _bMustSave=true;
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -377,11 +363,52 @@ void MainWindow::net_to_ui()
 {
     ui->cbFunction->setCurrentText(_pDataSource->name().c_str());
 
- //   for(int i=0;i<_pEngine->learn)
+    auto layers= _pEngine->net().layers();
+    for(unsigned int i=0;i<layers.size();i++)
+    {
+        auto l=layers[i];
+        string sType=l->type();
+        if(sType=="Dense")
+        {
+            if(((LayerDense*)l)->has_bias())
+                sType="DenseAndBias";
+            else
+                sType="DenseNoBias";
+        }
 
+        ((QComboBox*)ui->twNetwork->cellWidget(i,0))->setCurrentText(sType.c_str());
 
+        if(sType=="GaussianNoise")
+        {
+            float fStd=((LayerGaussianNoise*)l)->get_std();
+            ui->twNetwork->setItem(i,3,new QTableWidgetItem(to_string(fStd).c_str()));
+        }
 
-    //todo
+        if(sType=="Dropout")
+        {
+            float fRate=((LayerDropout*)l)->get_rate();
+            ui->twNetwork->setItem(i,3,new QTableWidgetItem(to_string(fRate).c_str()));
+        }
+
+        if(sType=="GlobalGain")
+        {
+            float fGain=((LayerGlobalGain*)l)->gain();
+            ui->twNetwork->setItem(i,3,new QTableWidgetItem(to_string(fGain).c_str()));
+        }
+
+        if(l->in_size())
+            ui->twNetwork->setItem(i,1,new QTableWidgetItem(to_string(l->in_size()).c_str()));
+
+        if(l->out_size())
+            ui->twNetwork->setItem(i,2,new QTableWidgetItem(to_string(l->out_size()).c_str()));
+    }
+
+    updateTitle();
+    drawRegression();
+    update_details();
+    update_classification_tab();
+
+    ui->cbProblem->setCurrentIndex(_pEngine->is_classification_problem()?1:0);
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::ui_to_net()
@@ -438,30 +465,30 @@ void MainWindow::ui_to_net()
                 float fRatio=0.2f; //by default
                 if(bOk)
                     fRatio=fArg1;
-                _pEngine->add_dropout_layer(iInSize,fRatio);
+                _pEngine->net().add_dropout_layer(iInSize,fRatio);
             }
             else if(sType=="GaussianNoise")
             {
                 float fStd=1.f; //by default
                 if(bOk)
                     fStd=fArg1;
-                _pEngine->add_gaussian_noise_layer(iInSize,fStd);
+                _pEngine->net().add_gaussian_noise_layer(iInSize,fStd);
             }
             else if(sType=="GlobalGain")
             {
                 float fGain=0.f; //by default, 0.f mean learned
                 if(bOk)
                     fGain=fArg1;
-                _pEngine->add_globalgain_layer(iInSize,fGain);
+                _pEngine->net().add_globalgain_layer(iInSize,fGain);
             }
             else if(sType=="PoolAveraging1D")
-                _pEngine->add_poolaveraging1D_layer(iInSize,iOutSize);
+                _pEngine->net().add_poolaveraging1D_layer(iInSize,iOutSize);
             else if(sType=="DenseAndBias")
-                _pEngine->add_dense_layer(iInSize,iOutSize,true);
+                _pEngine->net().add_dense_layer(iInSize,iOutSize,true);
             else if(sType=="DenseNoBias")
-                _pEngine->add_dense_layer(iInSize,iOutSize,false);
+                _pEngine->net().add_dense_layer(iInSize,iOutSize,false);
             else
-                _pEngine->add_activation_layer(sType);
+                _pEngine->net().add_activation_layer(sType);
         }
     }
 
@@ -750,5 +777,10 @@ void MainWindow::updateTitle()
         sTitle+=" *";
 
     setWindowTitle(sTitle.c_str());
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::on_btnTestOnly_clicked()
+{
+    //todo
 }
 //////////////////////////////////////////////////////////////////////////////

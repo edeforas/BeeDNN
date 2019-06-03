@@ -13,14 +13,6 @@ CONFIG += c++17
 DEFINES+= "USE_EIGEN"
 INCLUDEPATH += $$(EIGEN_PATH)
 
-
-#tiny-dnn (optional)
-DEFINES+= "USE_TINYDNN"
-INCLUDEPATH += $$(TINY_DNN_PATH)
-SOURCES += MLEngineTinyDnn.cpp
-HEADERS +=MLEngineTinyDnn.h
-
-
 #net library
 INCLUDEPATH += ..
 SOURCES += \
@@ -68,13 +60,11 @@ SOURCES += \
     mainwindow.cpp \
     SimpleCurveWidget.cpp \
     DataSource.cpp \
-    MLEngineBeeDnn.cpp \
-    MLEngine.cpp
+    MLEngineBeeDnn.cpp
 	
 HEADERS  += \
     mainwindow.h \
     SimpleCurveWidget.h \
-    MLEngine.h \
     DataSource.h \
     MLEngineBeeDnn.h
 

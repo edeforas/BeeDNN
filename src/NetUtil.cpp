@@ -84,36 +84,52 @@ void read(const string& s,Net& net)
     {
         string sLayer="Layer"+to_string(i+1);
 
-        string sType; find_key(sLayer+".type",sType);
+        string sType=find_key(s,sLayer+".type");
+
+        string sInSize=find_key(s,sLayer+".inSize");
+        string sOutSize=find_key(s,sLayer+".outSize");
+
+        int iInSize=0;
+        int iOutSize=0;
+
+        if(!sInSize.empty())
+            iInSize=stoi(sInSize);
+
+        if(!sOutSize.empty())
+            iOutSize=stoi(sOutSize);
 
         if(sType=="Dense")
         {
-  /*          LayerDense* l=static_cast<LayerDense*>(layer);
-            ss << "Layer" << i+1 << ".hasBias=" << (l->has_bias()?1:0) << endl;
-            ss << "Layer" << i+1 << ".weight=" << endl;
-            ss << toString(layer->weights()) << endl;
-    */    }
+            string sHasBias=find_key(s,sLayer+".hasBias");
+            bool bHasBias=sHasBias!="0";
+            net.add_dense_layer(iInSize,iOutSize,bHasBias);
+
+            string sWeight=find_key(s,sLayer+".weight");
+            MatrixFloat mf=fromString(sWeight);
+            mf.resize(iInSize+(bHasBias?1:0),iOutSize);
+            net.layer(net.size()-1).weights()=mf;
+        }
 
         else if(sType=="GlobalGain")
         {
-      /*      LayerGlobalGain* l=static_cast<LayerGlobalGain*>(layer);
-            ss << "Layer" << i+1 << ".globalGain=" << l->gain() << endl;
-      */  }
+            string sGain=find_key(s,sLayer+".globalGain");
+            net.add_globalgain_layer(iInSize,stof(sGain));
+        }
 
         else if(sType=="Dropout")
         {
-      /*      LayerDropout* l=static_cast<LayerDropout*>(layer);
-            ss << "Layer" << i+1 << ".rate=" << l->get_rate() << endl;
-      */  }
+            string sRate=find_key(s,sLayer+".rate");
+            net.add_dropout_layer(iInSize,stof(sRate));
+        }
 
         else if (sType == "GaussianNoise")
         {
-        /*    LayerGaussianNoise* l = static_cast<LayerGaussianNoise*>(layer);
-            ss << "Layer" << i+1 << ".stdNoise=" << l->get_std() << endl;
-       */ }
+            string sNoise=find_key(s,sLayer+".stdNoise");
+            net.add_gaussian_noise_layer(iInSize,stof(sNoise));
+        }
         else
         {
-            //activation
+            //activation layer
             net.add_activation_layer(sType);
         }
     }
@@ -188,9 +204,16 @@ string find_key(string s,string sKey)
     auto i2=s.find("\n",i);
 
     if(i2==string::npos)
-        i2=s.size()-1;
+        i2=s.size();
 
-    return s.substr(i,i2-i);
+    string s2=s.substr(i,i2-i);
+
+    //trim right
+    auto i3=s2.find_last_not_of(" \t\r\n");
+    if(i3!=string::npos)
+        return s2.substr(0,i3+1);
+    else
+        return s2;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////
 }

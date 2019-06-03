@@ -32,8 +32,6 @@ void DataSource::load(const string& sName)
     if(sName.empty())
         return;
 
-    _sName=sName;
-
     if(sName=="MNIST")
         load_mnist();
 
@@ -49,7 +47,12 @@ void DataSource::load(const string& sName)
     else if(sName=="Fisher")
         load_fisher();
 
-    else load_function();
+    else
+    {
+        _sName=sName;
+        load_function();
+    }
+    _sName=sName;
 }
 ////////////////////////////////////////////////////////////////////////
 void DataSource::load_mnist()
@@ -70,7 +73,7 @@ void DataSource::load_mnist()
 ////////////////////////////////////////////////////////////////////////
 void DataSource::load_and()
 {
-     _sName="and";
+    _sName="and";
 
     _mTrainData.resize(4,2);
     _mTrainData(0,0)=0; _mTrainData(0,1)=0;

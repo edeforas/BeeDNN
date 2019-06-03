@@ -1,5 +1,9 @@
 #include "MLEngineBeeDnn.h"
 
+#include <chrono>
+#include <string>
+
+#include "ConfusionMatrix.h"
 #include "Net.h"
 #include "NetTrain.h"
 #include "LayerActivation.h"
@@ -9,6 +13,9 @@
 //////////////////////////////////////////////////////////////////////////////
 MLEngineBeeDnn::MLEngineBeeDnn()
 {
+    _iComputedEpochs=0;
+    _bClassification=true;
+
     _pNet=new Net;
     _pTrain= new NetTrain;
 }
@@ -27,6 +34,8 @@ void MLEngineBeeDnn::clear()
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::write(string& s)
 {
+    s+="Problem="+string(_bClassification?"Classification":"Regression")+"\n";
+
     NetUtil::write(*_pTrain,s);
     s+="\n";
     NetUtil::write(*_pNet,s);
@@ -34,43 +43,25 @@ void MLEngineBeeDnn::write(string& s)
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::read(const string& s)
 {
+    (void)s;
+
+    string sProblem=NetUtil::find_key(s,"Problem");
+
+    _bClassification=(sProblem=="Classification");
+
+    NetUtil::read(s,*_pNet);
+    NetUtil::read(s,*_pTrain);
+
     //todo
 }
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::init()
 {
     _pNet->init();
-    MLEngine::init();
-}
-//////////////////////////////////////////////////////////////////////////////
-void MLEngineBeeDnn::add_dense_layer(int inSize, int outSize, bool bWithBias)
-{
-    _pNet->add_dense_layer(inSize,outSize,bWithBias);
-}
-//////////////////////////////////////////////////////////////////////////////
-void MLEngineBeeDnn::add_activation_layer(string sActivation)
-{
-    _pNet->add_activation_layer(sActivation);
-}
-//////////////////////////////////////////////////////////////////////////////
-void MLEngineBeeDnn::add_dropout_layer(int inSize,float fRatio)
-{
-    _pNet->add_dropout_layer(inSize,fRatio);
-}
-//////////////////////////////////////////////////////////////////////////////
-void MLEngineBeeDnn::add_gaussian_noise_layer(int inSize,float fStd)
-{
-    _pNet->add_gaussian_noise_layer(inSize,fStd);
-}
-//////////////////////////////////////////////////////////////////////////////
-void MLEngineBeeDnn::add_globalgain_layer(int inSize,float fGain)
-{
-    _pNet->add_globalgain_layer(inSize,fGain);
-}
-//////////////////////////////////////////////////////////////////////////////
-void MLEngineBeeDnn::add_poolaveraging1D_layer(int inSize,int iOutSize)
-{
-    _pNet->add_poolaveraging1D_layer(inSize,iOutSize);
+
+    _vdLoss.clear();
+    _vdAccuracy.clear();
+    _iComputedEpochs=0;
 }
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
@@ -78,13 +69,7 @@ void MLEngineBeeDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
     _pNet->forward(mIn,mOut);
 }
 //////////////////////////////////////////////////////////////////////////////
-/*int DNNEngineBeeDnn::classify(const MatrixFloat& mIn)
-{
-    return _pNet->classify(mIn);
-}
-*/
-//////////////////////////////////////////////////////////////////////////////
-void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth,const DNNTrainOption& dto)
+void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth)
 {
     TrainResult tr;
     float fAccuracy=0.f;
@@ -92,13 +77,6 @@ void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat&
 
     int iEpoch=0;
     _pTrain->clear();
-    _pTrain->set_epochs(dto.epochs);
-    _pTrain->set_optimizer(dto.optimizer,dto.learningRate,dto.decay,dto.momentum);
-    _pTrain->set_batchsize(dto.batchSize);
-    _pTrain->set_keepbest(dto.keepBest);
-    _pTrain->set_optimizer(dto.optimizer);
-    _pTrain->set_loss(dto.lossFunction);
-    _pTrain->set_reboost_every_epochs(dto.reboostEveryEpoch);
 
     _pTrain->set_epoch_callback( [&]()
     {
@@ -124,3 +102,101 @@ void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat&
     _vdAccuracy.insert(end(_vdAccuracy),begin(tr.accuracy),end(tr.accuracy));
 }
 //////////////////////////////////////////////////////////////////////////////
+Net& MLEngineBeeDnn::net()
+{
+    return *_pNet;
+}
+//////////////////////////////////////////////////////////////////////////////
+const Net& MLEngineBeeDnn::net() const
+{
+    return *_pNet;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+NetTrain& MLEngineBeeDnn::netTrain()
+{
+    return *_pTrain;
+}
+//////////////////////////////////////////////////////////////////////////////
+const NetTrain& MLEngineBeeDnn::netTrain() const
+{
+    return *_pTrain;
+}
+//////////////////////////////////////////////////////////////////////////////
+DNNTrainResult MLEngineBeeDnn::learn(const MatrixFloat& mSamples,const MatrixFloat& mTruth)
+{
+    DNNTrainResult r;
+
+    auto beginDuration = std::chrono::steady_clock::now();
+    learn_epochs(mSamples,mTruth);
+    auto endDuration = std::chrono::steady_clock::now();
+
+    _iComputedEpochs+= _pTrain->get_epochs();
+    r.epochDuration=chrono::duration_cast<chrono::microseconds> (endDuration-beginDuration).count()/1.e6/_pTrain->get_epochs();
+    r.computedEpochs=_iComputedEpochs;
+
+    r.loss=_vdLoss;
+
+    if(_bClassification)
+        r.accuracy=_vdAccuracy;
+
+    return r;
+}
+//////////////////////////////////////////////////////////////////////////////
+void MLEngineBeeDnn::set_problem(bool bClassification)
+{
+    _bClassification=bClassification;
+}
+//////////////////////////////////////////////////////////////////////////////
+bool MLEngineBeeDnn::is_classification_problem()
+{
+    return _bClassification;
+}
+//////////////////////////////////////////////////////////////////////////////
+void MLEngineBeeDnn::compute_confusion_matrix(const MatrixFloat & mSamples, const MatrixFloat& mTruth,MatrixFloat& mConfusionMatrix, float& fAccuracy)
+{
+    MatrixFloat mTest;
+    classify_all(mSamples,mTest);
+    ConfusionMatrix cm;
+    ClassificationResult result=cm.compute(mTruth,mTest);
+
+    mConfusionMatrix=result.mConfMat;
+    fAccuracy=(float)result.accuracy;
+}
+//////////////////////////////////////////////////////////////////////////////
+void MLEngineBeeDnn::predict_all(const MatrixFloat & mSamples, MatrixFloat& mResult)
+{
+    MatrixFloat temp;
+    for(int i=0;i<mSamples.rows();i++)
+    {
+        predict(mSamples.row(i),temp);
+        if(i==0)
+            mResult.resize(mSamples.rows(),temp.cols());
+        mResult.row(i)=temp;
+    }
+}
+//////////////////////////////////////////////////////////////////////////////
+void MLEngineBeeDnn::classify_all(const MatrixFloat & mSamples, MatrixFloat& mResultLabel)
+{
+    MatrixFloat temp;
+    mResultLabel.resize(mSamples.rows(),1);
+    for(int i=0;i<mSamples.rows();i++)
+    {
+        predict(mSamples.row(i),temp);
+        if(temp.cols()!=1)
+            mResultLabel(i,0)=(float)argmax(temp);
+        else
+            mResultLabel(i,0)=temp(0,0); //case of "output is a label"
+    }
+}
+//////////////////////////////////////////////////////////////////////////////
+float MLEngineBeeDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)
+{
+    MatrixFloat mPredicted;
+    int iNbSamples=(int)mSamples.rows();
+
+    predict_all(mSamples,mPredicted);
+    return (mPredicted-mTruth).cwiseAbs2().sum()/iNbSamples;
+}
+//////////////////////////////////////////////////////////////////////////////
+

@@ -543,6 +543,7 @@ const MatrixFloat addColumnOfOne(const MatrixFloat& m);
 
 string toString(const MatrixFloat& m);
 const MatrixFloat fromFile(const string& sFile);
+const MatrixFloat fromString(const string& s);
 bool toFile(const string& sFile, const MatrixFloat & m);
 
 #endif

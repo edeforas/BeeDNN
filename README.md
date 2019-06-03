@@ -17,7 +17,6 @@ Implemented so far:
 - classification or regression
 - lot of activation functions: Asinh, Atan, Bent, Elliot, Elu, Exponential, HardSigmoid, Gauss, Linear, LeakyRelu, LeakyRelu256, NLRelu, Parablu, Relu, Selu, SQNL, SoftPlus, Sin, SinC, Sigmoid, Swish, SoftSign, Tanh
 - Loss functions can be: MeanSquareError, MeanAbsoluteError, L2, L1, CrossEntropy or BinaryCrossEntropy
-- optional tiny-dnn binding (https://github.com/tiny-dnn), so you can compare both library
 - optional eigen use (http://eigen.tuxfamily.org), or use internal matrix library
 - all in C++
 

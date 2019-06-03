@@ -15,6 +15,7 @@ class MainWindow;
 
 class Net;
 class DataSource;
+class MLEngineBeeDnn;
 
 class MainWindow : public QMainWindow
 {
@@ -53,6 +54,8 @@ private slots:
 
     void on_pushButton_3_clicked();
 
+    void on_btnTestOnly_clicked();
+
 private:
     void init_all();
     bool ask_save(); //return true if saved/ready to overwrite
@@ -77,7 +80,7 @@ private:
 
     Ui::MainWindow *ui;
 
-    MLEngine* _pEngine;
+    MLEngineBeeDnn* _pEngine;
     SimpleCurveWidget* _qsRegression;
     SimpleCurveWidget* _qsLoss;
     SimpleCurveWidget* _qsAccuracy;
