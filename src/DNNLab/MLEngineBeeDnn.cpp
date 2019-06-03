@@ -34,6 +34,8 @@ void MLEngineBeeDnn::clear()
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::write(string& s)
 {
+    s+="Problem="+string(_bClassification?"Classification":"Regression")+"\n";
+
     NetUtil::write(*_pTrain,s);
     s+="\n";
     NetUtil::write(*_pNet,s);
@@ -42,6 +44,10 @@ void MLEngineBeeDnn::write(string& s)
 void MLEngineBeeDnn::read(const string& s)
 {
     (void)s;
+
+    string sProblem=NetUtil::find_key(s,"Problem");
+
+    _bClassification=(sProblem=="Classification");
 
     NetUtil::read(s,*_pNet);
     NetUtil::read(s,*_pTrain);

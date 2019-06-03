@@ -254,7 +254,7 @@
      <x>0</x>
      <y>0</y>
      <width>1141</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -632,6 +632,13 @@
      </item>
      <item row="4" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout_12">
+       <item>
+        <widget class="QPushButton" name="btnTestOnly">
+         <property name="text">
+          <string>Test Only</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QPushButton" name="pushButton">
          <property name="text">

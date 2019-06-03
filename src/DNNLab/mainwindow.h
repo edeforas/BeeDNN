@@ -54,6 +54,8 @@ private slots:
 
     void on_pushButton_3_clicked();
 
+    void on_btnTestOnly_clicked();
+
 private:
     void init_all();
     bool ask_save(); //return true if saved/ready to overwrite

@@ -101,10 +101,12 @@ void read(const string& s,Net& net)
         if(sType=="Dense")
         {
             string sHasBias=find_key(s,sLayer+".hasBias");
-            net.add_dense_layer(iInSize,iOutSize,sHasBias!="0");
+            bool bHasBias=sHasBias!="0";
+            net.add_dense_layer(iInSize,iOutSize,bHasBias);
 
             string sWeight=find_key(s,sLayer+".weight");
             MatrixFloat mf=fromString(sWeight);
+            mf.resize(iInSize+(bHasBias?1:0),iOutSize);
             net.layer(net.size()-1).weights()=mf;
         }
 
@@ -202,7 +204,7 @@ string find_key(string s,string sKey)
     auto i2=s.find("\n",i);
 
     if(i2==string::npos)
-        i2=s.size()-1;
+        i2=s.size();
 
     string s2=s.substr(i,i2-i);
 

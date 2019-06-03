@@ -86,8 +86,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->twNetwork->setItem(0,1,new QTableWidgetItem("1")); //first input size is 1
     ui->twNetwork->adjustSize();
 
-    _pEngine=0;
-    _pDataSource=0;
+    _pEngine=nullptr;
+    _pDataSource=nullptr;
 
     //setup loss
     vector<string> vsloss;
@@ -403,8 +403,12 @@ void MainWindow::net_to_ui()
             ui->twNetwork->setItem(i,2,new QTableWidgetItem(to_string(l->out_size()).c_str()));
     }
 
+    updateTitle();
+    drawRegression();
+    update_details();
+    update_classification_tab();
 
-    //todo
+    ui->cbProblem->setCurrentIndex(_pEngine->is_classification_problem()?1:0);
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::ui_to_net()
@@ -773,5 +777,10 @@ void MainWindow::updateTitle()
         sTitle+=" *";
 
     setWindowTitle(sTitle.c_str());
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::on_btnTestOnly_clicked()
+{
+    //todo
 }
 //////////////////////////////////////////////////////////////////////////////

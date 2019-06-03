@@ -6,6 +6,7 @@
     in the LICENSE.txt file.
 */
 
+#include <algorithm>
 #include <cstdlib>
 #include <sstream>
 #include <fstream>
@@ -242,36 +243,28 @@ const MatrixFloat addColumnOfOne(const MatrixFloat& m)
 }
 ///////////////////////////////////////////////////////////////////////////
 const MatrixFloat fromFile(const string& sFile)
-{
-    MatrixFloat r;
+{    
     vector<float> vf;
     fstream f(sFile,ios::in);
-    int iNbCols=0,iNbLine=0;
+    int iNbLine=0;
     while(!f.eof() && (!f.bad()) && (!f.fail()) )
     {
         string s;
         getline(f,s);
         iNbLine++;
-        if(iNbCols==0)
-        {
-            //count nb of columns
-            int iNbSpace=(int)std::count(s.begin(),s.end(),' ');
-            iNbCols=iNbSpace+1;
-        }
 
         stringstream ss;
         ss.str(s);
-        for(int i=0;i<iNbCols;i++)
+        while(!ss.eof())
         {
             float sF;
             ss >> sF;
             vf.push_back(sF);
         }
-
-        r.resize(iNbLine,iNbCols);
-        std::copy(vf.begin(),vf.end(),r.data());
     }
 
+    MatrixFloat r(iNbLine,(int)vf.size()/iNbLine); // todo check size
+    std::copy(vf.begin(),vf.end(),r.data());
     return r;
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -281,31 +274,19 @@ const MatrixFloat fromString(const string& s)
     vector<float> vf;
     stringstream ss(s);
     int iNbCols=0,iNbLine=0;
+
     while( !ss.eof() )
     {
-        string s;
-        getline(ss,s);
-        iNbLine++;
-        if(iNbCols==0)
-        {
-            //count nb of columns
-            int iNbSpace=(int)std::count(s.begin(),s.end(),' ');
-            iNbCols=iNbSpace+1;
-        }
-
-        stringstream ssl;
-        ssl.str(s);
-        for(int i=0;i<iNbCols;i++)
-        {
-            float sF;
-            ssl >> sF;
-            vf.push_back(sF);
-        }
-
-        r.resize(iNbLine,iNbCols);
-        std::copy(vf.begin(),vf.end(),r.data());
+        float sF;
+        ss >> sF;
+        vf.push_back(sF);
     }
 
+    iNbCols=(int)std::count(s.begin(),s.end(),'\n')+1;
+    iNbLine=(int)vf.size()/iNbCols;
+
+    r.resize(iNbLine,iNbCols);
+    std::copy(vf.begin(),vf.end(),r.data());
     return r;
 }
 ///////////////////////////////////////////////////////////////////////////
