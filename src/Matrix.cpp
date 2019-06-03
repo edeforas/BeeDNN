@@ -275,6 +275,40 @@ const MatrixFloat fromFile(const string& sFile)
     return r;
 }
 ///////////////////////////////////////////////////////////////////////////
+const MatrixFloat fromString(const string& s)
+{
+    MatrixFloat r;
+    vector<float> vf;
+    stringstream ss(s);
+    int iNbCols=0,iNbLine=0;
+    while( !ss.eof() )
+    {
+        string s;
+        getline(ss,s);
+        iNbLine++;
+        if(iNbCols==0)
+        {
+            //count nb of columns
+            int iNbSpace=(int)std::count(s.begin(),s.end(),' ');
+            iNbCols=iNbSpace+1;
+        }
+
+        stringstream ssl;
+        ssl.str(s);
+        for(int i=0;i<iNbCols;i++)
+        {
+            float sF;
+            ssl >> sF;
+            vf.push_back(sF);
+        }
+
+        r.resize(iNbLine,iNbCols);
+        std::copy(vf.begin(),vf.end(),r.data());
+    }
+
+    return r;
+}
+///////////////////////////////////////////////////////////////////////////
 bool toFile(const string& sFile, const MatrixFloat & m)
 {
 	fstream f(sFile, ios::out);

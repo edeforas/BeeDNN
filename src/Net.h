@@ -38,6 +38,7 @@ public:
 
     const vector<Layer*> layers() const;
     Layer& layer(size_t iLayer);
+    size_t size() const;
 
     void forward(const MatrixFloat& mIn,MatrixFloat& mOut) const;
     int classify(const MatrixFloat& mIn) const;
