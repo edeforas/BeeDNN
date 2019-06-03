@@ -5,7 +5,7 @@ BatchSize=16
 Loss=MeanSquaredError
 KeepBest=1
 ReboostEveryEpochs=-1
-Optimizer=Nadam
+Optimizer=Adam
 LearningRate=-1
 Decay=-1
 Momentum=-1
@@ -18,21 +18,21 @@ Layer1.inSize=4
 Layer1.outSize=4
 Layer1.hasBias=1
 Layer1.weight=
-0.2526 0.3171 0.5034 -0.0507 
-0.231 0.5154 0.1313 0.5927 
--0.5611 -0.4373 -0.1917 0.5964 
--0.01867 -0.4898 0.1495 0.2217 
-0.3099 0.4531 -0.3663 -0.1844 
+-0.6433 0.4418 0.04095 0.684 
+1.386 0.7143 -0.2882 -1.214 
+-0.08202 -0.7974 -0.3406 -0.265 
+-0.2329 -1.472 -1.452 0.162 
+0.0326 1.494 0.2366 -0.8659 
 
-Layer2.type=Relu
+Layer2.type=Atan
 
 Layer3.type=Dense
 Layer3.inSize=4
 Layer3.outSize=1
 Layer3.hasBias=1
 Layer3.weight=
-0.6238 
--0.7796 
--0.08291 
-0.406 
-0.5975 
+-0.5173 
+-0.5707 
+-0.1846 
+-0.6588 
+0.3595 
