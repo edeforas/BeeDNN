@@ -398,7 +398,7 @@ public:
             return 1.f;
 
         if(x<-2.5f)
-            return -1.f;
+            return 0.f;
 
         return 0.2f*x+0.5f;
     }
