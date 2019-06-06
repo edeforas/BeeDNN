@@ -29,6 +29,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
   , ui(new Ui::MainWindow)
 {
+    _pDataSource=new DataSource;
+
     ui->setupUi(this);
 
     vector<string> vsActivations;
@@ -87,7 +89,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->twNetwork->adjustSize();
 
     _pEngine=nullptr;
-    _pDataSource=nullptr;
 
     //setup loss
     vector<string> vsloss;
@@ -122,7 +123,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::init_all()
 {
-    ui->cbFunction->setCurrentIndex(6);
+    ui->cbFunction->setCurrentIndex(7);
     ui->cbLossFunction->setCurrentIndex(0);
     ui->cbOptimizer->setCurrentText("Adam");
 
@@ -166,10 +167,10 @@ MainWindow::~MainWindow()
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::on_pushButton_clicked()
 {
-    train_and_test(true);
+    train_and_test(true,true);
 }
 //////////////////////////////////////////////////////////////////////////
-void MainWindow::train_and_test(bool bReset)
+void MainWindow::train_and_test(bool bReset,bool bLearn)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
@@ -189,15 +190,27 @@ void MainWindow::train_and_test(bool bReset)
         _pEngine->init();
 
     _pEngine->set_problem(ui->cbProblem->currentText()=="Classification");
-    DNNTrainResult dtr =_pEngine->learn(_pDataSource->train_data(),_pDataSource->train_annotation());
+
+    if(bLearn)
+    {
+        DNNTrainResult dtr =_pEngine->learn(_pDataSource->train_data(),_pDataSource->train_annotation());
+
+        ui->leComputedEpochs->setText(QString::number(dtr.computedEpochs));
+        ui->leTimeByEpoch->setText(QString::number(dtr.epochDuration));
+
+        drawLoss(dtr.loss);
+        drawAccuracy(dtr.accuracy);
+    }
+    else
+    {
+        _qsRegression->clear();
+        _qsLoss->clear();
+        _qsAccuracy->clear();
+    }
 
     float fLoss=_pEngine->compute_loss(_pDataSource->train_data(),_pDataSource->train_annotation()); //final loss
     ui->leMSE->setText(QString::number((double)fLoss));
-    ui->leComputedEpochs->setText(QString::number(dtr.computedEpochs));
-    ui->leTimeByEpoch->setText(QString::number(dtr.epochDuration));
 
-    drawLoss(dtr.loss);
-    drawAccuracy(dtr.accuracy);
     drawRegression();
     update_classification_tab();
     update_details();
@@ -205,20 +218,20 @@ void MainWindow::train_and_test(bool bReset)
     QApplication::restoreOverrideCursor();
 }
 //////////////////////////////////////////////////////////////////////////
-void MainWindow::drawLoss(vector<double> vdLoss)
+void MainWindow::drawLoss(vector<float> vfLoss)
 {
     if(!ui->cbHoldOn->isChecked())
         _qsLoss->clear();
 
-    vector<double> x;
-    for(unsigned int i=0;i<vdLoss.size();i++)
+    vector<float> x;
+    for(unsigned int i=0;i<vfLoss.size();i++)
         x.push_back(i);
 
     _qsLoss->addHorizontalLine(0.);
-    _qsLoss->addCurve(x,vdLoss,_curveColor);
+    _qsLoss->addCurve(x,vfLoss,_curveColor);
 }
 //////////////////////////////////////////////////////////////////////////
-void MainWindow::drawAccuracy(vector<double> vdAccuracy)
+void MainWindow::drawAccuracy(vector<float> vfAccuracy)
 {
     if(!ui->cbHoldOn->isChecked())
         _qsAccuracy->clear();
@@ -235,11 +248,11 @@ void MainWindow::drawAccuracy(vector<double> vdAccuracy)
         _qsAccuracy->addHorizontalLine(100.);
 
         //draw accuracy
-        vector<double> x;
-        for(unsigned int i=0;i<vdAccuracy.size();i++)
+        vector<float> x;
+        for(unsigned int i=0;i<vfAccuracy.size();i++)
             x.push_back(i);
 
-        _qsAccuracy->addCurve(x,vdAccuracy,_curveColor);
+        _qsAccuracy->addCurve(x,vfAccuracy,_curveColor);
     }
     else
     {
@@ -312,7 +325,6 @@ void MainWindow::on_actionAbout_triggered()
 void MainWindow::compute_truth()
 {  
     string sFunction=ui->cbFunction->currentText().toStdString();
-
     _pDataSource->load(sFunction);
     set_input_size(_pDataSource->data_cols());
 }
@@ -356,7 +368,7 @@ void MainWindow::on_cbEngine_currentTextChanged(const QString &arg1)
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_btnTrainMore_clicked()
 {
-    train_and_test(false);
+    train_and_test(false,true);
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::net_to_ui()
@@ -425,7 +437,7 @@ void MainWindow::ui_to_net()
         string sType=pCombo->currentText().toStdString();
 
         QTableWidgetItem* pwiInSize=ui->twNetwork->item(iRow,1); //todo not used in activation
-        int iInSize;
+        int iInSize=0;
         if(!pwiInSize)
             iInSize=iLastOut; //use last out
         else
@@ -584,31 +596,7 @@ void MainWindow::drawConfusionMatrix()
 void MainWindow::on_cbFunction_currentIndexChanged(int index)
 {
     (void)index;
-    string sFunction=ui->cbFunction->currentText().toStdString();
-
-    if(sFunction=="And")
-    {
-        set_input_size(2);
-        return;
-    }
-
-    if(sFunction=="Xor")
-    {
-        set_input_size(2);
-        return;
-    }
-
-    if(sFunction=="MNIST")
-    {
-        set_input_size(784);
-        return;
-    }
-
-    if(sFunction=="Fisher")
-    {
-        set_input_size(4);
-        return;
-    }
+    compute_truth();
 
     _bMustSave=true;
     updateTitle();
@@ -781,6 +769,6 @@ void MainWindow::updateTitle()
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_btnTestOnly_clicked()
 {
-    //todo
+    train_and_test(false,false);
 }
 //////////////////////////////////////////////////////////////////////////////

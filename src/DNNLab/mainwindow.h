@@ -60,15 +60,15 @@ private:
     void init_all();
     bool ask_save(); //return true if saved/ready to overwrite
 
-    void drawLoss(vector<double> vdLoss);
-    void drawAccuracy(vector<double> vdAccuracy);
+    void drawLoss(vector<float> vfLoss);
+    void drawAccuracy(vector<float> vfAccuracy);
     void updateTitle();
 
     void drawRegression();
     void update_classification_tab();
     void drawConfusionMatrix();
     void compute_truth();
-    void train_and_test(bool bReset);
+    void train_and_test(bool bReset, bool bLearn);
     void update_details();
     void ui_to_net();
     void net_to_ui();

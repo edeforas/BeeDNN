@@ -24,6 +24,7 @@ public:
     SimpleCurveWidget();
     virtual ~SimpleCurveWidget();
 
+    void addCurve(const vector<float>& vfX, const vector<float>& vfY,unsigned int iColorRGB=0xFFFFFF);
     void addCurve(const vector<double>& vdX, const vector<double>& vdY,unsigned int iColorRGB=0xFFFFFF);
     void clear();
 

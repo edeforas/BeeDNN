@@ -162,9 +162,18 @@ void read(const string& s,NetTrain& train)
 {
     train.clear();
 
-    (void)s;
-    //todo
+    train.set_epochs(stoi(find_key(s,"Epochs")));
+    train.set_batchsize(stoi(find_key(s,"BatchSize")));
+    train.set_loss(find_key(s,"Loss"));
+    train.set_keepbest(stoi(find_key(s,"KeepBest"))!=0);
+    train.set_reboost_every_epochs(stoi(find_key(s,"ReboostEveryEpochs"))!=0);
 
+    string sOptimizer=find_key(s,"Optimizer");
+    float fLearningRate=stof(find_key(s,"LearningRate"));
+    float fDecay=stof(find_key(s,"Decay"));
+    float fMomentum=stof(find_key(s,"Momentum"));
+
+    train.set_optimizer(sOptimizer,fLearningRate,fDecay,fMomentum);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 bool save(string sFileName,const Net& net)

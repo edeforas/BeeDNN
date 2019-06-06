@@ -35,6 +35,18 @@ SimpleCurveWidget::SimpleCurveWidget(): QGraphicsView()
 SimpleCurveWidget::~SimpleCurveWidget()
 { }
 //////////////////////////////////////////////////////////////////////////
+void SimpleCurveWidget::addCurve(const vector<float>& vfX, const vector<float>& vfY,unsigned int iColorRGB)
+{
+    vector<double> vdX,vdY;
+    for(int i=0;i<vfX.size();i++)
+    {
+        vdX.push_back((double)vfX[i]);
+        vdY.push_back((double)vfY[i]);
+    }
+
+    addCurve(vdX,vdY,iColorRGB);
+}
+//////////////////////////////////////////////////////////////////////////
 void SimpleCurveWidget::addCurve(const vector<double>& vdX, const vector<double>& vdY,unsigned int iColorRGB)
 { 
     assert(vdX.size()==vdY.size());

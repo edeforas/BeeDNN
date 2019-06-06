@@ -59,8 +59,8 @@ void MLEngineBeeDnn::init()
 {
     _pNet->init();
 
-    _vdLoss.clear();
-    _vdAccuracy.clear();
+    _vfLoss.clear();
+    _vfAccuracy.clear();
     _iComputedEpochs=0;
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -72,12 +72,13 @@ void MLEngineBeeDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
 void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth)
 {
     TrainResult tr;
-    float fAccuracy=0.f;
-    vector<double> vdAccuracy;
+//    float fAccuracy=0.f;
+//    vector<float> vfAccuracy;
 
-    int iEpoch=0;
-    _pTrain->clear();
+    //int iEpoch=0;
+    _pTrain->clear(); //todo remove
 
+/*
     _pTrain->set_epoch_callback( [&]()
     {
         iEpoch++;
@@ -85,21 +86,21 @@ void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat&
         {
             MatrixFloat mConf;
             compute_confusion_matrix(mSamples, mTruth, mConf, fAccuracy);
-            vdAccuracy.push_back((double)fAccuracy);
+            vfAccuracy.push_back(fAccuracy);
         }
     }
     );
-
+*/
     if(_bClassification)
-    {
+    //{
         tr=_pTrain->train(*_pNet,mSamples,mTruth);
-        tr.accuracy=vdAccuracy;
-    }
+        //tr.accuracy=vfAccuracy;
+    //}
     else
         tr=_pTrain->fit(*_pNet,mSamples,mTruth);
 
-    _vdLoss.insert(end(_vdLoss),begin(tr.loss),end(tr.loss));
-    _vdAccuracy.insert(end(_vdAccuracy),begin(tr.accuracy),end(tr.accuracy));
+    _vfLoss.insert(end(_vfLoss),begin(tr.loss),end(tr.loss));
+    _vfAccuracy.insert(end(_vfAccuracy),begin(tr.accuracy),end(tr.accuracy));
 }
 //////////////////////////////////////////////////////////////////////////////
 Net& MLEngineBeeDnn::net()
@@ -132,13 +133,11 @@ DNNTrainResult MLEngineBeeDnn::learn(const MatrixFloat& mSamples,const MatrixFlo
     auto endDuration = std::chrono::steady_clock::now();
 
     _iComputedEpochs+= _pTrain->get_epochs();
+
     r.epochDuration=chrono::duration_cast<chrono::microseconds> (endDuration-beginDuration).count()/1.e6/_pTrain->get_epochs();
     r.computedEpochs=_iComputedEpochs;
-
-    r.loss=_vdLoss;
-
-    if(_bClassification)
-        r.accuracy=_vdAccuracy;
+    r.loss=_vfLoss;
+    r.accuracy=_vfAccuracy;
 
     return r;
 }

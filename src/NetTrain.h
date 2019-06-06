@@ -24,7 +24,7 @@ class TrainResult
 public:
     TrainResult()
     { 
-		finalLoss=-1.;
+    //	finalLoss=-1.;
 	}
 
     void reset()
@@ -33,10 +33,9 @@ public:
         accuracy.clear();
     }
 
-    vector<double> loss;
-    vector<double> accuracy;
-    vector<double> euclidian_distance;
-    double finalLoss;
+    vector<float> loss;
+    vector<float> accuracy;
+    //double finalLoss;
 };
 
 class Layer;
@@ -50,6 +49,7 @@ public:
 
     void clear();
     float compute_loss(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth);
+    float compute_accuracy(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth);
 
     TrainResult train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruth);
     TrainResult fit(Net& net, const MatrixFloat& mSamples, const MatrixFloat& mTruth);
@@ -75,6 +75,7 @@ public:
 	void set_loss(string sLoss); // "MeanSquareError" by default, ex "MeanSquareError" "CategorialCrossEntropy"
 	string get_loss() const;
 
+
 private:
 	bool _bKeepBest;
 	int _iBatchSize;
@@ -85,6 +86,7 @@ private:
     float _fLearningRate;
 	float _fDecay;
 	float _fMomentum;
+    bool _bIsclassificationProblem;
 
 	std::function<void()> _epochCallBack;
 
