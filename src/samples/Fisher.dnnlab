@@ -1,10 +1,10 @@
 DataSource=Fisher
 Problem=Classification
-Epochs=1000
+Epochs=100
 BatchSize=16
 Loss=MeanSquaredError
 KeepBest=1
-ReboostEveryEpochs=-1
+ReboostEveryEpochs=10
 Optimizer=Adam
 LearningRate=-1
 Decay=-1
@@ -15,22 +15,21 @@ NbLayers=3
 
 Layer1.type=Dense
 Layer1.inSize=4
-Layer1.outSize=2
+Layer1.outSize=1
 Layer1.hasBias=1
 Layer1.weight=
-0.4564 -0.1342 
--1.525 -0.956 
-0.001862 0.6582 
-0.5388 1.157 
-0.3943 0.8777 
+-0.1695 
+-0.327 
+0.5664 
+0.6304 
+0.02033 
 
 Layer2.type=LeakyRelu
 
 Layer3.type=Dense
-Layer3.inSize=2
+Layer3.inSize=1
 Layer3.outSize=1
 Layer3.hasBias=1
 Layer3.weight=
--0.5654 
-0.6306 
--0.0003078 
+0.7967 
+0.01685 
