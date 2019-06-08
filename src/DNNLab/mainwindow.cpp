@@ -659,6 +659,12 @@ void MainWindow::on_actionOpen_triggered()
 
         load();
     }
+
+    //show intersting results from net
+    if(_pEngine->is_classification_problem())
+        ui->tabWidget->setCurrentIndex(2);
+    else
+        ui->tabWidget->setCurrentIndex(1);
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionSave_triggered()

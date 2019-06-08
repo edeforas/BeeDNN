@@ -72,30 +72,11 @@ void MLEngineBeeDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
 void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth)
 {
     TrainResult tr;
-//    float fAccuracy=0.f;
-//    vector<float> vfAccuracy;
 
-    //int iEpoch=0;
     _pTrain->clear(); //todo remove
 
-/*
-    _pTrain->set_epoch_callback( [&]()
-    {
-        iEpoch++;
-        if(_bClassification)
-        {
-            MatrixFloat mConf;
-            compute_confusion_matrix(mSamples, mTruth, mConf, fAccuracy);
-            vfAccuracy.push_back(fAccuracy);
-        }
-    }
-    );
-*/
     if(_bClassification)
-    //{
         tr=_pTrain->train(*_pNet,mSamples,mTruth);
-        //tr.accuracy=vfAccuracy;
-    //}
     else
         tr=_pTrain->fit(*_pNet,mSamples,mTruth);
 
