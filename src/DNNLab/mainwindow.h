@@ -56,6 +56,8 @@ private slots:
 
     void on_btnTestOnly_clicked();
 
+    void on_actionReload_triggered();
+
 private:
     void init_all();
     bool ask_save(); //return true if saved/ready to overwrite

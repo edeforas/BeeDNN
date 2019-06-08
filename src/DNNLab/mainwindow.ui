@@ -266,6 +266,7 @@
     <addaction name="actionSave"/>
     <addaction name="actionSave_with_Score"/>
     <addaction name="actionSave_as"/>
+    <addaction name="actionReload"/>
     <addaction name="actionClose"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
@@ -911,6 +912,11 @@
    </property>
    <property name="text">
     <string>Save with Score</string>
+   </property>
+  </action>
+  <action name="actionReload">
+   <property name="text">
+    <string>Reload</string>
    </property>
   </action>
  </widget>

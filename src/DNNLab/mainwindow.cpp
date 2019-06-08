@@ -140,7 +140,7 @@ void MainWindow::init_all()
     _qsAccuracy->clear();
     _qsLoss->clear();
     _qsRegression->clear();
-    ui->twConfusionMatrixTrain->resize(0,0);
+    ui->twConfusionMatrixTrain->clear();
     ui->peDetails->clear();
 
     _bMustSave=false;
@@ -167,6 +167,12 @@ MainWindow::~MainWindow()
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::on_pushButton_clicked()
 {
+    if(QGuiApplication::keyboardModifiers() & Qt::ControlModifier)
+    {
+        for(int i=0;i<10;i++)
+            train_and_test(true,true);
+    }
+
     train_and_test(true,true);
 }
 //////////////////////////////////////////////////////////////////////////
@@ -368,6 +374,12 @@ void MainWindow::on_cbEngine_currentTextChanged(const QString &arg1)
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_btnTrainMore_clicked()
 {
+    if(QGuiApplication::keyboardModifiers() & Qt::ControlModifier)
+    {
+        for(int i=0;i<10;i++)
+            train_and_test(false,true);
+    }
+
     train_and_test(false,true);
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -734,25 +746,15 @@ bool MainWindow::ask_save()
 {
     if(!_bMustSave)
         return true;
-
-    //todo
-
-    {
-
-
-
-    }
-    /*
+/*
     string sFileName = QFileDialog::getSaveFileName(this,tr("Save DNNLab File"), ".", tr("DNNLab Files (*.dnnlab)")).toStdString();
     if(sFileName.empty())
-        return;
-*/
-    //_sFileName=sFileName;
+        return false;
 
-
+    _sFileName=sFileName;
     _bMustSave=false;
     return true;
-}
+*/}
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::updateTitle()
 {
@@ -770,5 +772,11 @@ void MainWindow::updateTitle()
 void MainWindow::on_btnTestOnly_clicked()
 {
     train_and_test(false,false);
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::on_actionReload_triggered()
+{
+    if(ask_save())
+        load();
 }
 //////////////////////////////////////////////////////////////////////////////
