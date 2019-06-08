@@ -165,7 +165,7 @@ MainWindow::~MainWindow()
     delete _pDataSource;
 }
 //////////////////////////////////////////////////////////////////////////
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_pushButton_clicked() //train & test
 {
     if(QGuiApplication::keyboardModifiers() & Qt::ControlModifier)
     {
@@ -184,6 +184,9 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
 
     if(bReset)
         ui_to_net();
+
+    if(bLearn)
+        _bMustSave=true;
 
     _pEngine->netTrain().set_epochs(ui->leEpochs->text().toInt());
     _pEngine->netTrain().set_optimizer(ui->cbOptimizer->currentText().toStdString(),ui->leLearningRate->text().toFloat(),ui->leDecay->text().toFloat(),ui->leMomentum->text().toFloat());
@@ -217,6 +220,7 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
     float fLoss=_pEngine->compute_loss(_pDataSource->train_data(),_pDataSource->train_annotation()); //final loss
     ui->leMSE->setText(QString::number((double)fLoss));
 
+    updateTitle();
     drawRegression();
     update_classification_tab();
     update_details();
@@ -276,7 +280,7 @@ void MainWindow::drawRegression()
         return;
     }
 
-    //create ref sample hi-res and net output
+    //create ref sample and net output
     unsigned int iNbPoint=100;
     float fInputMin=-4.f;
     float fInputMax=4.f;
@@ -533,7 +537,7 @@ void MainWindow::on_buttonColor_clicked()
     _curveColor=qcd.currentColor().rgb();
 }
 //////////////////////////////////////////////////////////////////////////////
-void MainWindow::on_pushButton_2_clicked()
+void MainWindow::on_pushButton_2_clicked() //clear
 {
     _qsLoss->clear();
     _qsAccuracy->clear();
@@ -542,8 +546,7 @@ void MainWindow::on_pushButton_2_clicked()
 void MainWindow::set_input_size(int iSize)
 {
     _iInputSize=iSize;
-    //ui->twNetwork->item(0,1)->setText(to_string(_iInputSize).data());
-    ui->twNetwork->setItem(0,1,new QTableWidgetItem(to_string(_iInputSize).data())); //first input size is 1
+    ui->twNetwork->setItem(0,1,new QTableWidgetItem(to_string(_iInputSize).data()));
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::update_classification_tab()
@@ -610,7 +613,7 @@ void MainWindow::on_cbFunction_currentIndexChanged(int index)
     (void)index;
     compute_truth();
 
-    _bMustSave=true;
+   // _bMustSave=true;
     updateTitle();
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -697,7 +700,7 @@ void MainWindow::on_actionSave_with_Score_triggered()
     save();
 }
 //////////////////////////////////////////////////////////////////////////////
-void MainWindow::on_pushButton_3_clicked()
+void MainWindow::on_pushButton_3_clicked() //copy to clipboard
 {
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(ui->peDetails->toPlainText());
@@ -746,15 +749,27 @@ bool MainWindow::ask_save()
 {
     if(!_bMustSave)
         return true;
-/*
-    string sFileName = QFileDialog::getSaveFileName(this,tr("Save DNNLab File"), ".", tr("DNNLab Files (*.dnnlab)")).toStdString();
-    if(sFileName.empty())
-        return false;
 
-    _sFileName=sFileName;
-    _bMustSave=false;
-    return true;
-*/}
+    QMessageBox msgBox;
+    msgBox.setText("The newtork has been modified.");
+    msgBox.setInformativeText("Do you want to save your changes?");
+    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Save);
+
+    switch (msgBox.exec())
+    {
+    case QMessageBox::Save:
+        save();
+        return true;
+    case QMessageBox::Discard:
+        _bMustSave=false;
+        return true;
+    case QMessageBox::Cancel:
+        return false;
+    default:
+        return false;
+    }
+}
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::updateTitle()
 {
@@ -780,3 +795,13 @@ void MainWindow::on_actionReload_triggered()
         load();
 }
 //////////////////////////////////////////////////////////////////////////////
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    if(ask_save())
+        event->accept();
+    else
+        event->ignore();
+}
+//////////////////////////////////////////////////////////////////////////////
+
+

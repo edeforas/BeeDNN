@@ -26,7 +26,8 @@ public:
     ~MainWindow();
 
 protected:
-    virtual void resizeEvent( QResizeEvent *e );
+    virtual void resizeEvent( QResizeEvent *e ) override;
+    virtual void closeEvent(QCloseEvent *event) override;
 
 private slots:
     void on_pushButton_clicked();

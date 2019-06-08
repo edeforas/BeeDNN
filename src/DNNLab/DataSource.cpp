@@ -32,6 +32,15 @@ void DataSource::load(const string& sName)
     if(sName.empty())
         return;
 
+    if(sName.find('.')!=string::npos)
+    {
+        //filename provided
+
+        //todo
+
+        return;
+    }
+
     if(sName=="MNIST")
         load_mnist();
 
