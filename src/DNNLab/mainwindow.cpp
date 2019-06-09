@@ -154,6 +154,7 @@ void MainWindow::init_all()
     delete _pDataSource;
     _pDataSource=new DataSource;
 
+    _pDataSource->load(ui->cbFunction->currentText().toStdString());
     updateTitle();
 }
 //////////////////////////////////////////////////////////////////////////
@@ -168,7 +169,7 @@ void MainWindow::on_pushButton_clicked() //train & test
 {
     if(QGuiApplication::keyboardModifiers() & Qt::ControlModifier)
     {
-        for(int i=0;i<10;i++)
+        for(int i=0;i<9;i++)
             train_and_test(true,true);
     }
 
@@ -372,7 +373,7 @@ void MainWindow::on_btnTrainMore_clicked()
 {
     if(QGuiApplication::keyboardModifiers() & Qt::ControlModifier)
     {
-        for(int i=0;i<10;i++)
+        for(int i=0;i<9;i++)
             train_and_test(false,true);
     }
 
@@ -428,6 +429,7 @@ void MainWindow::net_to_ui()
     update_details();
     update_classification_tab();
 
+    ui->leEpochs->setText(to_string(_pEngine->netTrain().get_epochs()).c_str());
     ui->cbProblem->setCurrentIndex(_pEngine->is_classification_problem()?1:0);
 }
 //////////////////////////////////////////////////////////////////////////////

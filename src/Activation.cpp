@@ -214,6 +214,37 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+class ActivationRelu6: public Activation
+{
+public:
+    string name() const override
+    {
+        return "Relu6";
+    }
+
+    float apply(float x) const override
+    {
+		if(x>=6)
+			return 6;
+		
+		if(x<=0)
+			return 0;
+
+		return x;
+    }
+
+    float derivation(float x) const override
+    {
+		if(x>=6)
+			return 0;
+		
+		if(x<=0)
+			return 0;
+
+		return 1;
+    }
+};
+//////////////////////////////////////////////////////////////////////////////
 class ActivationLeakyRelu: public Activation
 {
 public:
@@ -572,6 +603,9 @@ Activation* get_activation(const string& sActivation)
     if(sActivation=="Relu")
         return new ActivationRelu;
 
+    if(sActivation=="Relu6")
+        return new ActivationRelu6;
+
     if(sActivation=="Selu")
         return new ActivationSelu;
 
@@ -620,6 +654,7 @@ void list_activations_available(vector<string>& vsActivations)
 	vsActivations.push_back("NLRelu");  //not under tiny-dnn
 	vsActivations.push_back("Parablu"); //not under tiny-dnn
     vsActivations.push_back("Relu");
+    vsActivations.push_back("Relu6");
     vsActivations.push_back("Selu");
     vsActivations.push_back("SoftPlus");
     vsActivations.push_back("SoftSign");

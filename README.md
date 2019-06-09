@@ -15,7 +15,7 @@ Implemented so far:
 - mini batch learn, SGD learn, batch learn
 - SGD, Momentum, Nesterov, Adam , Nadam, Adagrad, Adamax, RMSprop
 - classification or regression
-- lot of activation functions: Asinh, Atan, Bent, Elliot, Elu, Exponential, HardSigmoid, Gauss, Linear, LeakyRelu, LeakyRelu256, NLRelu, Parablu, Relu, Selu, SQNL, SoftPlus, Sin, SinC, Sigmoid, Swish, SoftSign, Tanh
+- lot of activation functions: Asinh, Atan, Bent, Elliot, Elu, Exponential, HardSigmoid, Gauss, Linear, LeakyRelu, LeakyRelu256, NLRelu, Parablu, Relu, Relu6, Selu, SQNL, SoftPlus, Sin, SinC, Sigmoid, Swish, SoftSign, Tanh
 - Loss functions can be: MeanSquareError, MeanAbsoluteError, L2, L1, CrossEntropy or BinaryCrossEntropy
 - optional eigen use (http://eigen.tuxfamily.org), or use internal matrix library
 - all in C++
