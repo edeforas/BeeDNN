@@ -70,7 +70,6 @@ private:
     void drawRegression();
     void update_classification_tab();
     void drawConfusionMatrix();
-    void compute_truth();
     void train_and_test(bool bReset, bool bLearn);
     void update_details();
     void ui_to_net();

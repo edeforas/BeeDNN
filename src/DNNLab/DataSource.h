@@ -22,10 +22,10 @@ public:
     void load(const string & sName);
 
     const MatrixFloat& train_data() const;
-    const MatrixFloat& train_annotation() const;
+    const MatrixFloat& train_truth() const;
 
     const MatrixFloat& test_data() const;
-    const MatrixFloat& test_annotation() const;
+    const MatrixFloat& test_truth() const;
 
     bool has_data() const;
     bool has_train_data() const;
@@ -35,7 +35,6 @@ public:
     int annotation_cols() const;
 
 private:
-
     void load_mnist();
     void load_function();
     void load_textfile();
@@ -44,9 +43,9 @@ private:
     void load_fisher();
 
     MatrixFloat _mTrainData;
-    MatrixFloat _mTrainAnnotation;
+    MatrixFloat _mTrainTruth;
     MatrixFloat _mTestData;
-    MatrixFloat _mTestAnnotation;
+    MatrixFloat _mTestTruth;
 
     bool _bHasTestData;
     bool _bHasTrainData;

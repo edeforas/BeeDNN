@@ -36,15 +36,14 @@ MainWindow::MainWindow(QWidget *parent) :
     vector<string> vsActivations;
     list_activations_available( vsActivations);
 
+    ui->cbFunction->addItem("Identity");
+    ui->cbFunction->addItem("File...");
     ui->cbFunction->addItem("And");
     ui->cbFunction->addItem("Xor");
     ui->cbFunction->addItem("MNIST");
-    ui->cbFunction->addItem("Fisher");
-    ui->cbFunction->addItem("TextFiles");
 
     ui->cbFunction->insertSeparator(4);
 
-    ui->cbFunction->addItem("Identity");
     ui->cbFunction->addItem("Sin");
     ui->cbFunction->addItem("Abs");
     ui->cbFunction->addItem("Parabolic");
@@ -123,7 +122,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::init_all()
 {
-    ui->cbFunction->setCurrentIndex(7);
+    ui->cbFunction->setCurrentIndex(6);
     ui->cbLossFunction->setCurrentIndex(0);
     ui->cbOptimizer->setCurrentText("Adam");
 
@@ -180,7 +179,7 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    compute_truth();
+    //compute_truth();
 
     if(bReset)
         ui_to_net();
@@ -202,7 +201,7 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
 
     if(bLearn)
     {
-        DNNTrainResult dtr =_pEngine->learn(_pDataSource->train_data(),_pDataSource->train_annotation());
+        DNNTrainResult dtr =_pEngine->learn(_pDataSource->train_data(),_pDataSource->train_truth());
 
         ui->leComputedEpochs->setText(QString::number(dtr.computedEpochs));
         ui->leTimeByEpoch->setText(QString::number(dtr.epochDuration));
@@ -217,7 +216,7 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
         _qsAccuracy->clear();
     }
 
-    float fLoss=_pEngine->compute_loss(_pDataSource->train_data(),_pDataSource->train_annotation()); //final loss
+    float fLoss=_pEngine->compute_loss(_pDataSource->train_data(),_pDataSource->train_truth()); //final loss
     ui->leMSE->setText(QString::number((double)fLoss));
 
     updateTitle();
@@ -289,7 +288,7 @@ void MainWindow::drawRegression()
     vector<double> vRegression;
     MatrixFloat mIn(1,1),mOut;
 
-    compute_truth();
+  //  compute_truth();
 
     float fVal=fInputMin;
     float fStep=(fInputMax-fInputMin)/(iNbPoint-1.f);
@@ -297,7 +296,7 @@ void MainWindow::drawRegression()
     for(unsigned int i=0;i<iNbPoint;i++)
     {
         mIn(0,0)=fVal;
-        vTruth.push_back((double)(_pDataSource->train_annotation()(i,0)));
+        vTruth.push_back((double)(_pDataSource->train_truth()(i,0)));
         vSamples.push_back((double)(fVal));
         _pEngine->predict(mIn,mOut);
 
@@ -330,13 +329,6 @@ void MainWindow::on_actionAbout_triggered()
 
     mb.setText(qsText);
     mb.exec();
-}
-//////////////////////////////////////////////////////////////////////////
-void MainWindow::compute_truth()
-{  
-    string sFunction=ui->cbFunction->currentText().toStdString();
-    _pDataSource->load(sFunction);
-    set_input_size(_pDataSource->data_cols());
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::resizeEvent( QResizeEvent *e )
@@ -562,13 +554,13 @@ void MainWindow::update_classification_tab()
     float fAccuracy=0.f;
     if(_pDataSource->has_test_data())
     {
-        _pEngine->compute_confusion_matrix(_pDataSource->test_data(),_pDataSource->test_annotation(),_mConfusionMatrix,fAccuracy);
+        _pEngine->compute_confusion_matrix(_pDataSource->test_data(),_pDataSource->test_truth(),_mConfusionMatrix,fAccuracy);
         ui->leTestAccuracy->setText(QString::number((double)fAccuracy,'f',2));
     }
     else
         ui->leTestAccuracy->setText("n/a");
 
-    _pEngine->compute_confusion_matrix(_pDataSource->train_data(),_pDataSource->train_annotation(),_mConfusionMatrix,fAccuracy);
+    _pEngine->compute_confusion_matrix(_pDataSource->train_data(),_pDataSource->train_truth(),_mConfusionMatrix,fAccuracy);
     ui->leTrainAccuracy->setText(QString::number((double)fAccuracy,'f',2));
 
     drawConfusionMatrix(); //for now on train data
@@ -610,10 +602,25 @@ void MainWindow::drawConfusionMatrix()
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_cbFunction_currentIndexChanged(int index)
 {
-    (void)index;
-    compute_truth();
+    if(index==1)
+    {
+        //custom file
+        string sFileName = QFileDialog::getOpenFileName(this,tr("Open data, truth, test or train file"), ".", tr("All files (*.*)")).toStdString();
+        if(sFileName.empty())
+            return;
 
-   // _bMustSave=true;
+        //ui->cbFunction->setCurrentIndex(1);
+        ui->cbFunction->setItemText(1,(sFileName + "...").c_str());
+        _pDataSource->load(sFileName);
+    }
+    else
+    {
+        _pDataSource->load( ui->cbFunction->currentText().toStdString());
+    }
+
+    ui->cbFunction->setToolTip( ui->cbFunction->currentText());
+
+    set_input_size(_pDataSource->data_cols());
     updateTitle();
 }
 //////////////////////////////////////////////////////////////////////////////

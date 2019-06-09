@@ -263,6 +263,9 @@ const MatrixFloat fromFile(const string& sFile)
         }
     }
 
+    if(iNbLine==0)
+        return MatrixFloat();
+
     MatrixFloat r(iNbLine,(int)vf.size()/iNbLine); // todo check size
     std::copy(vf.begin(),vf.end(),r.data());
     return r;

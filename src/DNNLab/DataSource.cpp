@@ -4,6 +4,13 @@
 #include "MNISTReader.h"
 
 ////////////////////////////////////////////////////////////////////////
+void replace_last(string& s, string sOld,string sNew)
+{
+    auto found = s.rfind(sOld);
+    if(found != std::string::npos)
+        s.replace(found, sOld.length(), sNew);
+}
+////////////////////////////////////////////////////////////////////////
 DataSource::DataSource()
 {
     _bHasTrainData=false;
@@ -32,11 +39,47 @@ void DataSource::load(const string& sName)
     if(sName.empty())
         return;
 
+    // if has an extention -> custom file
     if(sName.find('.')!=string::npos)
     {
-        //filename provided
+        //create 4 file names (can no exist)
+        string sTrainData=sName;
+        string sTrainTruth=sName;
+        string sTestData=sName;
+        string sTestTruth=sName;
 
-        //todo
+        //create sTrainData
+        replace_last(sTrainData,"test","train");
+        replace_last(sTrainData,"truth","data");
+
+        //create sTrainTruth
+        replace_last(sTrainTruth,"test","train");
+        replace_last(sTrainTruth,"data","truth");
+
+        //create sTestData
+        replace_last(sTestData,"train","test");
+        replace_last(sTestData,"truth","data");
+
+        //create sTestTruth
+        replace_last(sTestTruth,"train","test");
+        replace_last(sTestTruth,"data","truth");
+
+        //try to load every file
+        _mTrainData=fromFile(sTrainData);
+        _mTrainTruth=fromFile(sTrainTruth);
+        _mTestData=fromFile(sTestData);
+        _mTestTruth=fromFile(sTestTruth);
+
+        _bHasTrainData=(_mTrainData.size()!=0) && (_mTrainTruth.size()!=0) ;
+        _bHasTestData=(_mTestData.size()!=0) && (_mTestTruth.size()!=0) && (sTrainData!=sTestData) && (sTrainTruth!=sTestTruth);
+
+        if(!_bHasTestData)
+        {
+            _mTestData.resize(0,0);
+            _mTestTruth.resize(0,0);
+        }
+
+        _sName=sName;
 
         return;
     }
@@ -72,7 +115,7 @@ void DataSource::load_mnist()
     _sName="MNIST";
 
     MNISTReader r;
-    r.read_from_folder(".",_mTrainData,_mTrainAnnotation,_mTestData,_mTestAnnotation);
+    r.read_from_folder(".",_mTrainData,_mTrainTruth,_mTestData,_mTestTruth);
     _mTrainData/=255.f;
     _mTestData/=255.f;
 
@@ -90,14 +133,14 @@ void DataSource::load_and()
     _mTrainData(2,0)=0; _mTrainData(2,1)=1;
     _mTrainData(3,0)=1; _mTrainData(3,1)=1;
 
-    _mTrainAnnotation.resize(4,1);
-    _mTrainAnnotation(0,0)=0;
-    _mTrainAnnotation(1,0)=0;
-    _mTrainAnnotation(2,0)=0;
-    _mTrainAnnotation(3,0)=1;
+    _mTrainTruth.resize(4,1);
+    _mTrainTruth(0,0)=0;
+    _mTrainTruth(1,0)=0;
+    _mTrainTruth(2,0)=0;
+    _mTrainTruth(3,0)=1;
 
     _mTestData=_mTrainData;
-    _mTestAnnotation=_mTrainAnnotation;
+    _mTestTruth=_mTrainTruth;
 
     _bHasTrainData=true;
     _bHasTestData=false;
@@ -113,14 +156,14 @@ void DataSource::load_xor()
     _mTrainData(2,0)=0; _mTrainData(2,1)=1;
     _mTrainData(3,0)=1; _mTrainData(3,1)=1;
 
-    _mTrainAnnotation.resize(4,1);
-    _mTrainAnnotation(0,0)=0;
-    _mTrainAnnotation(1,0)=1;
-    _mTrainAnnotation(2,0)=1;
-    _mTrainAnnotation(3,0)=0;
+    _mTrainTruth.resize(4,1);
+    _mTrainTruth(0,0)=0;
+    _mTrainTruth(1,0)=1;
+    _mTrainTruth(2,0)=1;
+    _mTrainTruth(3,0)=0;
 
     _mTestData=_mTrainData;
-    _mTestAnnotation=_mTrainAnnotation;
+    _mTestTruth=_mTrainTruth;
 
     _bHasTrainData=true;
     _bHasTestData=false;
@@ -134,10 +177,10 @@ void DataSource::load_textfile()
     _sName="TextFile";
 
     _mTrainData=fromFile("train_data.txt");
-    _mTrainAnnotation=fromFile("train_truth.txt");
+    _mTrainTruth=fromFile("train_truth.txt");
 
     _mTestData=fromFile("test_data.txt");
-    _mTestAnnotation=fromFile("test_truth.txt");
+    _mTestTruth=fromFile("test_truth.txt");
 
     _mTrainData/=255.f; //for now
     _mTestData/=255.f; //for now;
@@ -154,10 +197,10 @@ void DataSource::load_fisher()
     _sName="Fisher";
 
     _mTrainData=fromFile("Fisher_data.txt");
-    _mTrainAnnotation=fromFile("Fisher_truth.txt");
+    _mTrainTruth=fromFile("Fisher_truth.txt");
 
     _mTestData=_mTrainData;
-    _mTestAnnotation=_mTrainAnnotation;
+    _mTestTruth=_mTrainTruth;
 
     _bHasTrainData=true;
     _bHasTestData=false;
@@ -170,7 +213,7 @@ void DataSource::load_function()
     int iNbPoints=100;
 
     _mTrainData.resize(iNbPoints,1);
-    _mTrainAnnotation.resize(iNbPoints,1);
+    _mTrainTruth.resize(iNbPoints,1);
 
     float dStep=(fMax-fMin)/(iNbPoints-1.f);
 
@@ -212,12 +255,12 @@ void DataSource::load_function()
             fOut= (float)(((((int)fVal)+(fVal<0.f))+1) & 1 );
 
         _mTrainData(i)=fVal;
-        _mTrainAnnotation(i)=fOut;
+        _mTrainTruth(i)=fOut;
         fVal+=dStep;
     }
 
     _mTestData=_mTrainData;
-    _mTestAnnotation=_mTrainAnnotation;
+    _mTestTruth=_mTrainTruth;
 
     _bHasTrainData=true;
     _bHasTestData=false;
@@ -228,9 +271,9 @@ const MatrixFloat& DataSource::train_data() const
     return _mTrainData;
 }
 ////////////////////////////////////////////////////////////////////////
-const MatrixFloat& DataSource::train_annotation() const
+const MatrixFloat& DataSource::train_truth() const
 {
-    return _mTrainAnnotation;
+    return _mTrainTruth;
 }
 ////////////////////////////////////////////////////////////////////////
 const MatrixFloat& DataSource::test_data() const
@@ -238,9 +281,9 @@ const MatrixFloat& DataSource::test_data() const
     return _mTestData;
 }
 ////////////////////////////////////////////////////////////////////////
-const MatrixFloat& DataSource::test_annotation() const
+const MatrixFloat& DataSource::test_truth() const
 {
-    return _mTestAnnotation;
+    return _mTestTruth;
 }
 ////////////////////////////////////////////////////////////////////////
 bool DataSource::has_data() const
@@ -265,15 +308,15 @@ int DataSource::data_cols() const
 ////////////////////////////////////////////////////////////////////////
 int DataSource::annotation_cols() const
 {
-    return (int)_mTrainAnnotation.cols();
+    return (int)_mTrainTruth.cols();
 }
 ////////////////////////////////////////////////////////////////////////
 void DataSource::clear()
 {
     _mTrainData.resize(0,0);
-    _mTrainAnnotation.resize(0,0);
+    _mTrainTruth.resize(0,0);
     _mTestData.resize(0,0);
-    _mTestAnnotation.resize(0,0);
+    _mTestTruth.resize(0,0);
 
     _bHasTestData=false;
     _bHasTrainData=false;
