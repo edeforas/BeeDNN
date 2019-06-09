@@ -1,4 +1,4 @@
-DataSource=Fisher
+DataSource=Fisher_data.txt
 Problem=Classification
 Epochs=100
 BatchSize=16
