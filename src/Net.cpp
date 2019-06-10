@@ -58,11 +58,13 @@ Net& Net::operator=(const Net& other)
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_dropout_layer(int iSize,float fRatio)
 {
+    update_input_size(iSize);
     _layers.push_back(new LayerDropout(iSize, fRatio));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_gaussian_noise_layer(int iSize, float fStd)
 {
+    update_input_size(iSize);
 	_layers.push_back(new LayerGaussianNoise(iSize, fStd));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,17 +80,26 @@ void Net::add_softmax_layer()
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_dense_layer(int inSize,int outSize,bool bHasBias)
 {
+    update_input_size(inSize);
+    if(outSize==0)
+        outSize=1;
+
     _layers.push_back(new LayerDense(inSize,outSize, bHasBias));
 	_iOutputSize = outSize;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_globalgain_layer(int inSize, float fGlobalGain)
 {
+    if(_iOutputSize!=0)
+        if(inSize!=_iOutputSize)
+            inSize=_iOutputSize;
+
     _layers.push_back(new LayerGlobalGain(inSize,fGlobalGain));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_poolaveraging1D_layer(int inSize, int iOutSize)
 {
+    update_input_size(inSize);
     _layers.push_back(new LayerPoolAveraging1D(inSize, iOutSize));
 	_iOutputSize = iOutSize;
 }
@@ -159,5 +170,13 @@ void Net::init()
 int Net::output_size() const
 {
 	return _iOutputSize;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
+void Net::update_input_size(int& iInSize)
+{
+    //check if input size is coherent, else update it
+    if(_iOutputSize!=0)
+        if(iInSize!=_iOutputSize)
+            iInSize=_iOutputSize;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////

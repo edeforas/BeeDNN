@@ -44,8 +44,10 @@ public:
     int classify(const MatrixFloat& mIn) const;
     void classify_all(const MatrixFloat& mIn, MatrixFloat& mClass) const;
 
-	void set_train_mode(bool bTrainMode); // set to true if training, set to false if testing
+    void set_train_mode(bool bTrainMode); // set to true if training, set to false if testing
+
 private:
+    void update_input_size(int& iInSize);
 	bool _bTrainMode;
 	vector<Layer*> _layers;
 	int _iOutputSize;

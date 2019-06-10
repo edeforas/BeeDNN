@@ -514,6 +514,11 @@ void MainWindow::ui_to_net()
         }
     }
 
+    _pEngine->netTrain().set_epochs(ui->leEpochs->text().toInt());
+
+
+    net_to_ui(); //updated changed input size
+
     _pEngine->init();
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -622,6 +627,7 @@ void MainWindow::on_cbFunction_currentIndexChanged(int index)
 
     ui->cbFunction->setToolTip( ui->cbFunction->currentText());
 
+    _bMustSave=true;
     set_input_size(_pDataSource->data_cols());
     updateTitle();
 }
