@@ -25,6 +25,8 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void model_changed(void * pSender);
+
 protected:
     virtual void resizeEvent( QResizeEvent *e ) override;
     virtual void closeEvent(QCloseEvent *event) override;
@@ -77,12 +79,13 @@ private:
     void set_input_size(int iSize);
 
 
+
+
     bool save();
     bool load();
 
     Ui::MainWindow *ui;
 
-    MLEngineBeeDnn* _pEngine;
     SimpleCurveWidget* _qsRegression;
     SimpleCurveWidget* _qsLoss;
     SimpleCurveWidget* _qsAccuracy;
@@ -92,8 +95,11 @@ private:
     bool _bMustSave;
     string _sFileName;
 
+    //state data, need to be saved
+    MLEngineBeeDnn* _pEngine;
     MatrixFloat _mConfusionMatrix;
     DataSource* _pDataSource;
+    string _sNotes;
 };
 
 #endif // MAINWINDOW_H

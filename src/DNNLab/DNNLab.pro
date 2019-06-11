@@ -32,7 +32,8 @@ SOURCES += \
     ../LayerDropout.cpp \
     ../LayerGaussianNoise.cpp \
     ../LayerGlobalGain.cpp \
-    ../LayerPoolAveraging1D.cpp
+    ../LayerPoolAveraging1D.cpp \
+    FrameNotes.cpp
 
 HEADERS += \
     ../Activation.h \
@@ -51,7 +52,8 @@ HEADERS += \
     ../LayerDropout.h \
     ../LayerGaussianNoise.h \
     ../LayerGlobalGain.h \
-    ../LayerPoolAveraging1D.h
+    ../LayerPoolAveraging1D.h \
+    FrameNotes.h
 
 	
 #GUI
@@ -68,5 +70,6 @@ HEADERS  += \
     DataSource.h \
     MLEngineBeeDnn.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    FrameNotes.ui
 

@@ -23,6 +23,7 @@ using namespace std;
 #include "Optimizer.h"
 #include "Loss.h"
 #include "ConfusionMatrix.h"
+#include "NetUtil.h"
 
 //////////////////////////////////////////////////////////////////////////
 MainWindow::MainWindow(QWidget *parent) :
@@ -32,6 +33,8 @@ MainWindow::MainWindow(QWidget *parent) :
     _pDataSource=new DataSource;
 
     ui->setupUi(this);
+
+    ui->frameNotes->set_main_window(this);
 
     vector<string> vsActivations;
     list_activations_available( vsActivations);
@@ -289,7 +292,7 @@ void MainWindow::drawRegression()
     vector<double> vRegression;
     MatrixFloat mIn(1,1),mOut;
 
-  //  compute_truth();
+    //  compute_truth();
 
     float fVal=fInputMin;
     float fStep=(fInputMax-fInputMin)/(iNbPoint-1.f);
@@ -647,10 +650,6 @@ void MainWindow::on_actionSave_as_triggered()
     _sFileName=sFileName;
 
     save();
-
-    _bMustSave=false;
-
-    updateTitle();
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionNew_triggered()
@@ -732,12 +731,14 @@ bool MainWindow::save()
     string s;
     _pDataSource->write(s);
     _pEngine->write(s);
+    s+="\nNotes=\n"+_sNotes+"\n";
 
     ofstream out(_sFileName,ios::binary); //todo test
 
     out << s;
 
     _bMustSave=false;
+    updateTitle();
     return true; //for now
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -760,6 +761,9 @@ bool MainWindow::load()
 
     _pEngine->read(s);
     _pDataSource->read(s);
+    _sNotes=NetUtil::find_key(s,"Notes");
+
+    model_changed(nullptr); //update everything
 
     net_to_ui();
 
@@ -772,7 +776,7 @@ bool MainWindow::ask_save()
         return true;
 
     QMessageBox msgBox;
-    msgBox.setText("The newtork has been modified.");
+    msgBox.setText("The network has been modified.");
     msgBox.setInformativeText("Do you want to save your changes?");
     msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
     msgBox.setDefaultButton(QMessageBox::Save);
@@ -824,5 +828,16 @@ void MainWindow::closeEvent(QCloseEvent *event)
         event->ignore();
 }
 //////////////////////////////////////////////////////////////////////////////
+void MainWindow::model_changed(void * pSender)
+{
+    if(pSender != (void*)(ui->frameNotes ) )
+    {
+        ui->frameNotes->setText(_sNotes);
+    }
+    else
+        _sNotes=ui->frameNotes->text();
 
-
+   _bMustSave=true;
+   updateTitle();
+}
+//////////////////////////////////////////////////////////////////////////////
