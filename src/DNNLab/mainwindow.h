@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MainWindow_
+#define MainWindow_
 
 class MLEngine;
 
@@ -23,7 +23,7 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    ~MainWindow() override;
 
     void model_changed(void * pSender);
 
@@ -40,25 +40,15 @@ private slots:
     void on_cbYLogAxis_stateChanged(int arg1);
     void on_buttonColor_clicked();
     void on_pushButton_2_clicked();
-    void on_cbFunction_currentIndexChanged(int index);
     void on_cbConfMatPercent_stateChanged(int arg1);
-
     void on_actionSave_as_triggered();
-
     void on_actionNew_triggered();
-
     void on_actionOpen_triggered();
-
     void on_actionSave_triggered();
-
     void on_actionClose_triggered();
-
     void on_actionSave_with_Score_triggered();
-
     void on_pushButton_3_clicked();
-
     void on_btnTestOnly_clicked();
-
     void on_actionReload_triggered();
 
 private:
@@ -77,9 +67,6 @@ private:
     void ui_to_net();
     void net_to_ui();
     void set_input_size(int iSize);
-
-
-
 
     bool save();
     bool load();
@@ -102,4 +89,4 @@ private:
     string _sNotes;
 };
 
-#endif // MAINWINDOW_H
+#endif

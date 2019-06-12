@@ -35,28 +35,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     ui->frameNotes->set_main_window(this);
+    ui->frameGlobal->set_main_window(this);
 
     vector<string> vsActivations;
     list_activations_available( vsActivations);
-
-    ui->cbFunction->addItem("Identity");
-    ui->cbFunction->addItem("File...");
-    ui->cbFunction->addItem("And");
-    ui->cbFunction->addItem("Xor");
-    ui->cbFunction->addItem("MNIST");
-
-    ui->cbFunction->insertSeparator(4);
-
-    ui->cbFunction->addItem("Sin");
-    ui->cbFunction->addItem("Abs");
-    ui->cbFunction->addItem("Parabolic");
-    ui->cbFunction->addItem("Gamma");
-    ui->cbFunction->addItem("Exp");
-    ui->cbFunction->addItem("Sqrt");
-    ui->cbFunction->addItem("Ln");
-    ui->cbFunction->addItem("Gauss");
-    ui->cbFunction->addItem("Inverse");
-    ui->cbFunction->addItem("Rectangular");
 
     QStringList qsl;
     qsl+="LayerType";
@@ -125,12 +107,10 @@ MainWindow::MainWindow(QWidget *parent) :
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::init_all()
 {
-    ui->cbFunction->setCurrentIndex(6);
+    ui->frameGlobal->init();
+
     ui->cbLossFunction->setCurrentIndex(0);
     ui->cbOptimizer->setCurrentText("Adam");
-
-    ui->cbEngine->setCurrentIndex(0);
-    ui->cbProblem->setCurrentIndex(0);
 
     for(int i=0;i<10;i++)
     {
@@ -157,7 +137,7 @@ void MainWindow::init_all()
     delete _pDataSource;
     _pDataSource=new DataSource;
 
-    _pDataSource->load(ui->cbFunction->currentText().toStdString());
+    _pDataSource->load(ui->frameGlobal->data_name());
     updateTitle();
 }
 //////////////////////////////////////////////////////////////////////////
@@ -201,7 +181,7 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
     if(bReset)
         _pEngine->init();
 
-    _pEngine->set_problem(ui->cbProblem->currentText()=="Classification");
+    _pEngine->set_problem(ui->frameGlobal->problem_name()=="Classification");
 
     if(bLearn)
     {
@@ -385,7 +365,7 @@ void MainWindow::on_btnTrainMore_clicked()
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::net_to_ui()
 {
-    ui->cbFunction->setCurrentText(_pDataSource->name().c_str());
+    ui->frameGlobal->set_data_name(_pDataSource->name().c_str());
 
     auto layers= _pEngine->net().layers();
     for(unsigned int i=0;i<layers.size();i++)
@@ -433,7 +413,7 @@ void MainWindow::net_to_ui()
     update_classification_tab();
 
     ui->leEpochs->setText(to_string(_pEngine->netTrain().get_epochs()).c_str());
-    ui->cbProblem->setCurrentIndex(_pEngine->is_classification_problem()?1:0);
+    ui->frameGlobal->set_problem_name(_pEngine->is_classification_problem()?"Classification":"Regression");
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::ui_to_net()
@@ -610,31 +590,6 @@ void MainWindow::drawConfusionMatrix()
         ui->twConfusionMatrixTrain->item(c,c)->setBackgroundColor(Qt::yellow);
 }
 //////////////////////////////////////////////////////////////////////////////
-void MainWindow::on_cbFunction_currentIndexChanged(int index)
-{
-    if(index==1)
-    {
-        //custom file
-        string sFileName = QFileDialog::getOpenFileName(this,tr("Open data, truth, test or train file"), ".", tr("All files (*.*)")).toStdString();
-        if(sFileName.empty())
-            return;
-
-        //ui->cbFunction->setCurrentIndex(1);
-        ui->cbFunction->setItemText(1,(sFileName + "...").c_str());
-        _pDataSource->load(sFileName);
-    }
-    else
-    {
-        _pDataSource->load( ui->cbFunction->currentText().toStdString());
-    }
-
-    ui->cbFunction->setToolTip( ui->cbFunction->currentText());
-
-    _bMustSave=true;
-    set_input_size(_pDataSource->data_cols());
-    updateTitle();
-}
-//////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_cbConfMatPercent_stateChanged(int arg1)
 {
     (void)arg1;
@@ -756,7 +711,7 @@ bool MainWindow::load()
         if(line.find("=")!=string::npos)
             s+="\n"+line;
         else
-            s+=" "+line;
+            s+=" "+line; //todo keep \n int multilines string
     }
 
     _pEngine->read(s);
@@ -837,7 +792,24 @@ void MainWindow::model_changed(void * pSender)
     else
         _sNotes=ui->frameNotes->text();
 
-   _bMustSave=true;
-   updateTitle();
+    if(pSender != (void*)(ui->frameGlobal ) )
+    {
+        ui->frameGlobal->set_data_name(_pDataSource->name());
+        ui->frameGlobal->set_problem_name(_pEngine->is_classification_problem()?"Classification":"Regression");
+        //        ui->frameGlobal->set_engine_name("BeeDNN");
+    }
+    else
+    {
+        _pDataSource->load(ui->frameGlobal->data_name());
+        _pEngine->set_problem(ui->frameGlobal->problem_name()=="Classification");
+
+
+           set_input_size(_pDataSource->data_cols());
+
+        //        ui->frameGlobal->set_engine_name("BeeDNN");
+    }
+
+    _bMustSave=true;
+    updateTitle();
 }
 //////////////////////////////////////////////////////////////////////////////
