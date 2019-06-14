@@ -53,14 +53,14 @@ MatrixFloat rowWiseSum(const MatrixFloat& m)
 MatrixFloat cwiseLog(const MatrixFloat& m)
 {
 #ifdef USE_EIGEN
-	return m.array().log();
+    return m.array().log();
 #else
-	MatrixFloat result(m.rows(),m.cols());
+    MatrixFloat result(m.rows(),m.cols());
 
-	for (int i = 0; i < m.size(); i++)
-		result(i) = log(m(i));
+    for (int i = 0; i < m.size(); i++)
+        result(i) = log(m(i));
 
-	return result;
+    return result;
 #endif
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -88,10 +88,10 @@ void arraySub(MatrixFloat& m,float f)
 ///////////////////////////////////////////////////////////////////////////
 MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d)
 {
-	assert(d.rows() == 1);
-	assert(d.cols() == m.cols());
+    assert(d.rows() == 1);
+    assert(d.cols() == m.cols());
 
-	MatrixFloat r=m;
+    MatrixFloat r=m;
 
     for(int l=0;l<r.rows();l++)
         r.row(l)/=d(l,0);
@@ -101,16 +101,16 @@ MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d)
 ///////////////////////////////////////////////////////////////////////////
 MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d)
 {
-	assert(d.rows() == 1);
-	assert(d.cols() == m.cols());
+    assert(d.rows() == 1);
+    assert(d.cols() == m.cols());
 
 #ifdef USE_EIGEN
     return m + d.replicate(m.rows(), 1);
 #else
-	MatrixFloat r = m;
-	for (int l = 0; l < r.rows(); l++)
-		r.row(l) += d;
-	return r;
+    MatrixFloat r = m;
+    for (int l = 0; l < r.rows(); l++)
+        r.row(l) += d;
+    return r;
 #endif
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -129,13 +129,13 @@ MatrixFloat randPerm(int iSize) //create a vector of index shuffled
 ///////////////////////////////////////////////////////////////////////////
 void applyRowPermutation(const MatrixFloat & mPermutationIndex, const MatrixFloat & mIn, MatrixFloat & mPermuted)
 {
-	assert(mPermutationIndex.rows() == mIn.rows());
-	assert(mPermutationIndex.cols() == 1);
+    assert(mPermutationIndex.rows() == mIn.rows());
+    assert(mPermutationIndex.cols() == 1);
 
-	mPermuted.resize(mIn.rows(), mIn.cols());
+    mPermuted.resize(mIn.rows(), mIn.cols());
 
-	for (int i = 0; i < mPermutationIndex.rows(); i++)
-		mPermuted.row(i) = mIn.row((int)mPermutationIndex(i));
+    for (int i = 0; i < mPermutationIndex.rows(); i++)
+        mPermuted.row(i) = mIn.row((int)mPermutationIndex(i));
 }
 ///////////////////////////////////////////////////////////////////////////
 int argmax(const MatrixFloat& m)
@@ -162,23 +162,23 @@ int argmax(const MatrixFloat& m)
 ///////////////////////////////////////////////////////////////////////////
 void labelToOneHot(const MatrixFloat& mLabel, MatrixFloat& mOneMat, int iNbClass)
 {
-	assert(mLabel.cols() == 1);
+    assert(mLabel.cols() == 1);
 
-	if (iNbClass == 0)
-		iNbClass = (int)mLabel.maxCoeff() + 1; //guess the nb of class
+    if (iNbClass == 0)
+        iNbClass = (int)mLabel.maxCoeff() + 1; //guess the nb of class
 
-	mOneMat.setZero(mLabel.rows(), iNbClass);
+    mOneMat.setZero(mLabel.rows(), iNbClass);
 
-	for (int i = 0; i < mLabel.rows(); i++)
-		mOneMat(i, (int)mLabel(i)) = 1;
+    for (int i = 0; i < mLabel.rows(); i++)
+        mOneMat(i, (int)mLabel(i)) = 1;
 }
 ///////////////////////////////////////////////////////////////////////////
 void rowsArgmax(const MatrixFloat& m, MatrixFloat& argM)
 {
     int iRows = (int)m.rows();
-	argM.resize(iRows, 1);
+    argM.resize(iRows, 1);
 
-	for (int i = 0; i < iRows; i++)
+    for (int i = 0; i < iRows; i++)
         argM(i) = (float)argmax(m.row(i));
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -251,6 +251,12 @@ const MatrixFloat fromFile(const string& sFile)
     {
         string s;
         getline(f,s);
+
+        if(s.empty())
+            continue;
+
+        std::replace( s.begin(), s.end(), ',', ' '); //replace ',' by spaces if present
+
         iNbLine++;
 
         stringstream ss;
@@ -295,23 +301,23 @@ const MatrixFloat fromString(const string& s)
 ///////////////////////////////////////////////////////////////////////////
 bool toFile(const string& sFile, const MatrixFloat & m)
 {
-	fstream f(sFile, ios::out);
-	for (int iL = 0; iL < m.rows(); iL++)
-	{
-		for (int iR = 0; iR < m.cols(); iR++)
-			f << m(iL, iR);
-		f << endl;
-	}
+    fstream f(sFile, ios::out);
+    for (int iL = 0; iL < m.rows(); iL++)
+    {
+        for (int iR = 0; iR < m.cols(); iR++)
+            f << m(iL, iR);
+        f << endl;
+    }
 
-	return true;
+    return true;
 }
 ///////////////////////////////////////////////////////////////////////////
 //create a row view starting at iStartRow ending at iEndRow (not included)
 const MatrixFloat rowRange(const MatrixFloat& m, int iStartRow, int iEndRow)
 {
-	assert(iStartRow < iEndRow); //iEndRow not included
-	assert(m.rows() >= iEndRow);
+    assert(iStartRow < iEndRow); //iEndRow not included
+    assert(m.rows() >= iEndRow);
 
-	return fromRawBuffer(m.data() + iStartRow * m.cols(), iEndRow- iStartRow, (int)m.cols());
+    return fromRawBuffer(m.data() + iStartRow * m.cols(), iEndRow- iStartRow, (int)m.cols());
 }
 ///////////////////////////////////////////////////////////////////////////
