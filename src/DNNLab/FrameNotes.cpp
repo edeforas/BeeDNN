@@ -7,8 +7,10 @@ FrameNotes::FrameNotes(QWidget *parent) :
     QFrame(parent),
     ui(new Ui::FrameNotes)
 {
-    ui->setupUi(this);
+    _bLock=true;
     _pMainWindow=nullptr;
+    ui->setupUi(this);
+    _bLock=false;
 }
 
 FrameNotes::~FrameNotes()
@@ -16,15 +18,16 @@ FrameNotes::~FrameNotes()
     delete ui;
 }
 
-
-string FrameNotes::text()
+string FrameNotes::text() const
 {
     return ui->leNotes->toPlainText().toStdString();
 }
 
-void FrameNotes::setText(string sText)
+void FrameNotes::setText(const string &sText)
 {
-      ui->leNotes->setPlainText(sText.c_str());
+    _bLock=true;
+    ui->leNotes->setPlainText(sText.c_str());
+    _bLock=false;
 }
 
 void FrameNotes::set_main_window(MainWindow* pMainWindow)
@@ -34,7 +37,8 @@ void FrameNotes::set_main_window(MainWindow* pMainWindow)
 
 void FrameNotes::on_leNotes_textChanged()
 {
-    _pMainWindow->model_changed(this);
+    if(_bLock)
+        return;
 
-    //todo
+    _pMainWindow->model_changed(this);
 }

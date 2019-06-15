@@ -224,24 +224,24 @@ public:
 
     float apply(float x) const override
     {
-		if(x>=6)
-			return 6;
-		
-		if(x<=0)
-			return 0;
+        if(x>=6)
+            return 6;
 
-		return x;
+        if(x<=0)
+            return 0;
+
+        return x;
     }
 
     float derivation(float x) const override
     {
-		if(x>=6)
-			return 0;
-		
-		if(x<=0)
-			return 0;
+        if(x>=6)
+            return 0;
 
-		return 1;
+        if(x<=0)
+            return 0;
+
+        return 1;
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -268,20 +268,54 @@ public:
 class ActivationLeakyRelu256 : public Activation
 {
 public:
-	string name() const override
-	{
-		return "LeakyRelu256";
-	}
+    string name() const override
+    {
+        return "LeakyRelu256";
+    }
 
-	float apply(float x) const override
-	{
-		return x >= 0.f ? x : x* 0.00390625f;  // 1/256 ; will be (x+127)>>8 in fixed point
-	}
+    float apply(float x) const override
+    {
+        return x >= 0.f ? x : x* 0.00390625f;  // 1/256 ; will be (x+127)>>8 in fixed point
+    }
 
-	float derivation(float x) const override
-	{
-		return x >= 0.f ? 1.f : 0.00390625f; // 1/256 ; will be (x+127)>>8 in fixed point
-	}
+    float derivation(float x) const override
+    {
+        return x >= 0.f ? 1.f : 0.00390625f; // 1/256 ; will be (x+127)>>8 in fixed point
+    }
+};
+//////////////////////////////////////////////////////////////////////////////
+// from https://ai.stanford.edu/~amaas/papers/relu_hybrid_icml2013_final.pdf
+// and https://tensorlayer.readthedocs.io/en/latest/modules/activation.html#tensorlayer.activation.leaky_twice_relu6
+// for now, alpha=alpha_high=0.2f ; for IoT, use a power of two, i.e 0.125 or 0.25
+class ActivationLeakyTwiceRelu6: public Activation
+{
+public:
+    string name() const override
+    {
+        return "LeakyTwiceRelu6";
+    }
+
+    float apply(float x) const override
+    {
+        if(x<0.f)
+            return 0.2f*x;
+
+        if(x<6.f)
+            return x;
+
+        return 6.f+0.2f*(x-6.f); //can be optimized
+    }
+
+    float derivation(float x) const override
+    {
+        if(x<0.f)
+            return 0.2f;
+
+        if(x>6.f)
+            return 0.2f;
+
+        return 1.f; //can be optimized
+    }
 };
 //////////////////////////////////////////////////////////////////////////////
 class ActivationNLRelu: public Activation
@@ -591,10 +625,13 @@ Activation* get_activation(const string& sActivation)
     if(sActivation=="LeakyRelu")
         return new ActivationLeakyRelu;
 
-	if (sActivation=="LeakyRelu256")
-		return new ActivationLeakyRelu256;
-	
-	if(sActivation=="NLRelu")
+    if (sActivation=="LeakyRelu256")
+        return new ActivationLeakyRelu256;
+
+    if(sActivation=="LeakyTwiceRelu6")
+        return new ActivationLeakyTwiceRelu6;
+
+    if(sActivation=="NLRelu")
         return new ActivationNLRelu;
 
     if(sActivation=="Parablu")
@@ -642,27 +679,28 @@ void list_activations_available(vector<string>& vsActivations)
 
     vsActivations.push_back("Asinh");
     vsActivations.push_back("Atan");
-    vsActivations.push_back("Bent"); //not under tiny-dnn
+    vsActivations.push_back("Bent");
     vsActivations.push_back("Elliot");
     vsActivations.push_back("Elu");
-    vsActivations.push_back("Exponential"); //not under tiny-dnn
+    vsActivations.push_back("Exponential");
     vsActivations.push_back("Gauss");
-    vsActivations.push_back("HardSigmoid"); //not under tiny-dnn
+    vsActivations.push_back("HardSigmoid");
     vsActivations.push_back("Linear");
     vsActivations.push_back("LeakyRelu");
-	vsActivations.push_back("LeakyRelu256"); //not under tiny-dnn
-	vsActivations.push_back("NLRelu");  //not under tiny-dnn
-	vsActivations.push_back("Parablu"); //not under tiny-dnn
+    vsActivations.push_back("LeakyRelu256");
+    vsActivations.push_back("LeakyTwiceRelu6");
+    vsActivations.push_back("NLRelu");
+    vsActivations.push_back("Parablu");
     vsActivations.push_back("Relu");
     vsActivations.push_back("Relu6");
     vsActivations.push_back("Selu");
     vsActivations.push_back("SoftPlus");
     vsActivations.push_back("SoftSign");
-    vsActivations.push_back("SQNL");  //not under tiny-dnn
+    vsActivations.push_back("SQNL");
     vsActivations.push_back("Sigmoid");
-    vsActivations.push_back("SinC");  //not under tiny-dnn
+    vsActivations.push_back("SinC");
     vsActivations.push_back("Sin");
-    vsActivations.push_back("Swish"); //not under tiny-dnn
+    vsActivations.push_back("Swish");
     vsActivations.push_back("Tanh");
 }
 //////////////////////////////////////////////////////////////////////////////

@@ -220,7 +220,7 @@
      <x>0</x>
      <y>0</y>
      <width>1141</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -256,88 +256,14 @@
    <widget class="QWidget" name="dockWidgetContents_7">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_9">
-       <item>
-        <widget class="QLabel" name="label_22">
-         <property name="text">
-          <string>Engine</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="cbEngine">
-         <item>
-          <property name="text">
-           <string>BeeDNN</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_16">
-         <property name="text">
-          <string>Problem</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="cbProblem">
-         <item>
-          <property name="text">
-           <string>Regression</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Classification</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string>Data</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="cbFunction">
-         <property name="sizeAdjustPolicy">
-          <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
-         </property>
-         <property name="frame">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      <widget class="FrameGlobal" name="frameGlobal">
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -954,7 +880,13 @@
   <customwidget>
    <class>FrameNotes</class>
    <extends>QFrame</extends>
-   <header location="global">FrameNotes.h</header>
+   <header>FrameNotes.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>FrameGlobal</class>
+   <extends>QFrame</extends>
+   <header location="global">FrameGlobal.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

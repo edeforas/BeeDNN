@@ -1,5 +1,5 @@
-#ifndef FRAMENOTES_H
-#define FRAMENOTES_H
+#ifndef FrameNotes_
+#define FrameNotes_
 
 #include <QFrame>
 
@@ -21,16 +21,16 @@ public:
     ~FrameNotes();
 
     void set_main_window(MainWindow* _pMainWindow);
-
-    string text();
-    void setText(string sText);
+    string text() const;
+    void setText(const string& sText);
 
 private slots:
     void on_leNotes_textChanged();
 
 private:
+    bool _bLock;
     MainWindow* _pMainWindow;
     Ui::FrameNotes *ui;
 };
 
-#endif // FRAMENOTES_H
+#endif

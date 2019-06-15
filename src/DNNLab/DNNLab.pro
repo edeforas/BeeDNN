@@ -32,8 +32,8 @@ SOURCES += \
     ../LayerDropout.cpp \
     ../LayerGaussianNoise.cpp \
     ../LayerGlobalGain.cpp \
-    ../LayerPoolAveraging1D.cpp \
-    FrameNotes.cpp
+    ../LayerPoolAveraging1D.cpp
+
 
 HEADERS += \
     ../Activation.h \
@@ -52,8 +52,8 @@ HEADERS += \
     ../LayerDropout.h \
     ../LayerGaussianNoise.h \
     ../LayerGlobalGain.h \
-    ../LayerPoolAveraging1D.h \
-    FrameNotes.h
+    ../LayerPoolAveraging1D.h
+
 
 	
 #GUI
@@ -62,14 +62,20 @@ SOURCES += \
     mainwindow.cpp \
     SimpleCurveWidget.cpp \
     DataSource.cpp \
-    MLEngineBeeDnn.cpp
+    MLEngineBeeDnn.cpp \
+	FrameNotes.cpp \
+    FrameGlobal.cpp
 	
 HEADERS  += \
     mainwindow.h \
     SimpleCurveWidget.h \
     DataSource.h \
-    MLEngineBeeDnn.h
+    MLEngineBeeDnn.h \
+	FrameNotes.h \
+    FrameGlobal.h
 
-FORMS    += mainwindow.ui \
-    FrameNotes.ui
+FORMS    += \
+	mainwindow.ui \
+    FrameNotes.ui \
+    FrameGlobal.ui
 
