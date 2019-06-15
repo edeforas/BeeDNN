@@ -4,6 +4,7 @@
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QClipboard>
+#include <QComboBox>
 
 #include <fstream>
 using namespace std;
@@ -36,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->frameNotes->set_main_window(this);
     ui->frameGlobal->set_main_window(this);
+    ui->frameLearning->set_main_window(this);
 
     vector<string> vsActivations;
     list_activations_available( vsActivations);
@@ -74,17 +76,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     _pEngine=nullptr;
 
-    //setup loss
-    vector<string> vsloss;
-    list_loss_available(vsloss);
-    for(unsigned int i=0;i<vsloss.size();i++)
-        ui->cbLossFunction->addItem(vsloss[i].data());
-
-    //setup optimizer
-    vector<string> vsOptimizers;
-    list_optimizers_available( vsOptimizers);
-    for(unsigned int i=0;i<vsOptimizers.size();i++)
-        ui->cbOptimizer->addItem(vsOptimizers[i].data());
 
     resizeDocks({ui->dockWidget},{1},Qt::Horizontal);
     _qsRegression=new SimpleCurveWidget;
@@ -109,8 +100,6 @@ void MainWindow::init_all()
 {
     ui->frameGlobal->init();
 
-    ui->cbLossFunction->setCurrentIndex(0);
-    ui->cbOptimizer->setCurrentText("Adam");
 
     for(int i=0;i<10;i++)
     {
@@ -171,12 +160,6 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
     if(bLearn)
         _bMustSave=true;
 
-    _pEngine->netTrain().set_epochs(ui->leEpochs->text().toInt());
-    _pEngine->netTrain().set_optimizer(ui->cbOptimizer->currentText().toStdString(),ui->leLearningRate->text().toFloat(),ui->leDecay->text().toFloat(),ui->leMomentum->text().toFloat());
-    _pEngine->netTrain().set_batchsize(ui->leBatchSize->text().toInt());
-    _pEngine->netTrain().set_keepbest(ui->cbKeepBest->isChecked());
-    _pEngine->netTrain().set_loss(ui->cbLossFunction->currentText().toStdString());
-    _pEngine->netTrain().set_reboost_every_epochs(ui->leReboost->text().toInt());
 
     if(bReset)
         _pEngine->init();
@@ -411,8 +394,6 @@ void MainWindow::net_to_ui()
     drawRegression();
     update_details();
     update_classification_tab();
-
-    ui->leEpochs->setText(to_string(_pEngine->netTrain().get_epochs()).c_str());
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::ui_to_net()
@@ -496,7 +477,7 @@ void MainWindow::ui_to_net()
         }
     }
 
-    _pEngine->netTrain().set_epochs(ui->leEpochs->text().toInt());
+    //  _pEngine->netTrain().set_epochs(ui->leEpochs->text().toInt());
 
     net_to_ui(); //updated changed input size
 
@@ -805,6 +786,36 @@ void MainWindow::model_changed(void * pSender)
         _pEngine->set_problem(ui->frameGlobal->problem_name()=="Classification");
         set_input_size(_pDataSource->data_cols());
         //        ui->frameGlobal->set_engine_name("BeeDNN");
+        _bMustSave=true;
+    }
+
+    if(pSender!=(void*)(ui->frameLearning))
+    {
+        string sOptimizer;
+        float fLearningRate,fDecay,fMomentum;
+        _pEngine->netTrain().get_optimizer(sOptimizer,fLearningRate,fDecay,fMomentum);
+
+        ui->frameLearning->setOptimizer(sOptimizer);
+        ui->frameLearning->setLearningRate(fLearningRate);
+        ui->frameLearning->setDecay(fDecay);
+        ui->frameLearning->setMomentum(fMomentum);
+
+        ui->frameLearning->setEpochs(_pEngine->netTrain().get_epochs());
+        ui->frameLearning->setBatchSize(_pEngine->netTrain().get_batchsize());
+        ui->frameLearning->setReboost(_pEngine->netTrain().get_reboost_every_epochs());
+
+
+        //_pEngine->netTrain().set_keepbest(ui->cbKeepBest->isChecked());
+        //_pEngine->netTrain().set_loss(ui->cbLossFunction->currentText().toStdString());
+    }
+    else
+    {
+        //todo
+        _pEngine->netTrain().set_optimizer(ui->frameLearning->optimizer(),ui->frameLearning->learningRate(),ui->frameLearning->decay(),ui->frameLearning->momentum());
+        _pEngine->netTrain().set_epochs(ui->frameLearning->epochs());
+        _pEngine->netTrain().set_batchsize(ui->frameLearning->batchSize());
+        _pEngine->netTrain().set_reboost_every_epochs(ui->frameLearning->reboost());
+
         _bMustSave=true;
     }
 

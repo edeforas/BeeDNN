@@ -32,7 +32,8 @@ SOURCES += \
     ../LayerDropout.cpp \
     ../LayerGaussianNoise.cpp \
     ../LayerGlobalGain.cpp \
-    ../LayerPoolAveraging1D.cpp
+    ../LayerPoolAveraging1D.cpp \
+    FrameLearning.cpp
 
 
 HEADERS += \
@@ -52,7 +53,8 @@ HEADERS += \
     ../LayerDropout.h \
     ../LayerGaussianNoise.h \
     ../LayerGlobalGain.h \
-    ../LayerPoolAveraging1D.h
+    ../LayerPoolAveraging1D.h \
+    FrameLearning.h
 
 
 	
@@ -77,5 +79,6 @@ HEADERS  += \
 FORMS    += \
 	mainwindow.ui \
     FrameNotes.ui \
-    FrameGlobal.ui
+    FrameGlobal.ui \
+    FrameLearning.ui
 
