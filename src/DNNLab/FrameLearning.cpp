@@ -60,7 +60,17 @@ void FrameLearning::on_cbKeepBest_stateChanged(int arg1)
 
     _pMainWindow->model_changed(this);
 }
-//////////////////////////////////////////////////////////////
+void FrameLearning::setKeepBest(bool bKeepBest)
+{
+    _bLock=true;
+    ui->cbKeepBest->setChecked(bKeepBest);
+    _bLock=false;
+}
+bool FrameLearning::keepBest()
+{
+    return ui->cbKeepBest->isChecked();
+}
+////////////////////////////////////////////////////////////////////
 void FrameLearning::on_cbLossFunction_currentTextChanged(const QString &arg1)
 {
     (void)arg1;
@@ -68,6 +78,16 @@ void FrameLearning::on_cbLossFunction_currentTextChanged(const QString &arg1)
         return;
 
     _pMainWindow->model_changed(this);
+}
+void FrameLearning::setLoss(string sLoss)
+{
+    _bLock=true;
+    ui->cbLossFunction->setCurrentText(sLoss.c_str());
+    _bLock=false;
+}
+string FrameLearning::loss()
+{
+    return ui->cbLossFunction->currentText().toStdString();
 }
 //////////////////////////////////////////////////////////////
 void FrameLearning::on_cbOptimizer_currentTextChanged(const QString &arg1)

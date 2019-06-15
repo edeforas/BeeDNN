@@ -24,6 +24,12 @@ public:
     void setOptimizer(string sOptimizer);
     string optimizer();
 
+    void setLoss(string sLoss);
+    string loss();
+
+    void setKeepBest(bool bKeepBest);
+    bool keepBest();
+
     void setEpochs(int iEpochs);
     int epochs();
 

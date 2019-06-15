@@ -785,7 +785,7 @@ void MainWindow::model_changed(void * pSender)
         _pDataSource->load(ui->frameGlobal->data_name());
         _pEngine->set_problem(ui->frameGlobal->problem_name()=="Classification");
         set_input_size(_pDataSource->data_cols());
-        //        ui->frameGlobal->set_engine_name("BeeDNN");
+        //        ui->frameGlobal->set_engine_name("BeeDNN"); //TODO
         _bMustSave=true;
     }
 
@@ -803,10 +803,8 @@ void MainWindow::model_changed(void * pSender)
         ui->frameLearning->setEpochs(_pEngine->netTrain().get_epochs());
         ui->frameLearning->setBatchSize(_pEngine->netTrain().get_batchsize());
         ui->frameLearning->setReboost(_pEngine->netTrain().get_reboost_every_epochs());
-
-
-        //_pEngine->netTrain().set_keepbest(ui->cbKeepBest->isChecked());
-        //_pEngine->netTrain().set_loss(ui->cbLossFunction->currentText().toStdString());
+        ui->frameLearning->setKeepBest(_pEngine->netTrain().get_keepbest());
+        ui->frameLearning->setLoss(_pEngine->netTrain().get_loss());
     }
     else
     {
@@ -815,6 +813,8 @@ void MainWindow::model_changed(void * pSender)
         _pEngine->netTrain().set_epochs(ui->frameLearning->epochs());
         _pEngine->netTrain().set_batchsize(ui->frameLearning->batchSize());
         _pEngine->netTrain().set_reboost_every_epochs(ui->frameLearning->reboost());
+        _pEngine->netTrain().set_keepbest(ui->frameLearning->keepBest());
+        _pEngine->netTrain().set_loss(ui->frameLearning->loss());
 
         _bMustSave=true;
     }
