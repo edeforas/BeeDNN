@@ -14,7 +14,7 @@
 MLEngineBeeDnn::MLEngineBeeDnn()
 {
     _iComputedEpochs=0;
-    _bClassification=true;
+    _bClassification=false;
 
     _pNet=new Net;
     _pTrain= new NetTrain;
