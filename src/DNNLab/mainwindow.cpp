@@ -365,7 +365,7 @@ void MainWindow::on_btnTrainMore_clicked()
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::net_to_ui()
 {
-    ui->frameGlobal->set_data_name(_pDataSource->name().c_str());
+    model_changed(0);
 
     auto layers= _pEngine->net().layers();
     for(unsigned int i=0;i<layers.size();i++)
@@ -413,7 +413,6 @@ void MainWindow::net_to_ui()
     update_classification_tab();
 
     ui->leEpochs->setText(to_string(_pEngine->netTrain().get_epochs()).c_str());
-    ui->frameGlobal->set_problem_name(_pEngine->is_classification_problem()?"Classification":"Regression");
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::ui_to_net()
@@ -796,16 +795,13 @@ void MainWindow::model_changed(void * pSender)
     {
         ui->frameGlobal->set_data_name(_pDataSource->name());
         ui->frameGlobal->set_problem_name(_pEngine->is_classification_problem()?"Classification":"Regression");
-        //        ui->frameGlobal->set_engine_name("BeeDNN");
+        ui->frameGlobal->set_engine_name("BeeDNN");
     }
     else
     {
         _pDataSource->load(ui->frameGlobal->data_name());
         _pEngine->set_problem(ui->frameGlobal->problem_name()=="Classification");
-
-
-           set_input_size(_pDataSource->data_cols());
-
+        set_input_size(_pDataSource->data_cols());
         //        ui->frameGlobal->set_engine_name("BeeDNN");
     }
 

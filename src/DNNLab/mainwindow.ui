@@ -220,7 +220,7 @@
      <x>0</x>
      <y>0</y>
      <width>1141</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -257,6 +257,12 @@
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="FrameGlobal" name="frameGlobal">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="frameShape">
         <enum>QFrame::StyledPanel</enum>
        </property>
