@@ -498,7 +498,6 @@ void MainWindow::ui_to_net()
 
     _pEngine->netTrain().set_epochs(ui->leEpochs->text().toInt());
 
-
     net_to_ui(); //updated changed input size
 
     _pEngine->init();
@@ -789,7 +788,10 @@ void MainWindow::model_changed(void * pSender)
         ui->frameNotes->setText(_sNotes);
     }
     else
+    {
         _sNotes=ui->frameNotes->text();
+        _bMustSave=true;
+    }
 
     if(pSender != (void*)(ui->frameGlobal ) )
     {
@@ -803,9 +805,9 @@ void MainWindow::model_changed(void * pSender)
         _pEngine->set_problem(ui->frameGlobal->problem_name()=="Classification");
         set_input_size(_pDataSource->data_cols());
         //        ui->frameGlobal->set_engine_name("BeeDNN");
+        _bMustSave=true;
     }
 
-    _bMustSave=true;
     updateTitle();
 }
 //////////////////////////////////////////////////////////////////////////////
