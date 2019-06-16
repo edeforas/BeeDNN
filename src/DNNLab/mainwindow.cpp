@@ -54,6 +54,12 @@ MainWindow::MainWindow(QWidget *parent) :
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::init_all()
 {
+    delete _pEngine;
+    _pEngine=new MLEngineBeeDnn;
+
+    delete _pDataSource;
+    _pDataSource=new DataSource;
+
     ui->frameGlobal->init();
     ui->frameNetwork->init();
 
@@ -69,11 +75,6 @@ void MainWindow::init_all()
     _curveColor=0xff0000; //red
     set_input_size(1);
 
-    delete _pEngine;
-    _pEngine=new MLEngineBeeDnn;
-
-    delete _pDataSource;
-    _pDataSource=new DataSource;
     _pDataSource->load(ui->frameGlobal->data_name());
 
     updateTitle();
@@ -311,7 +312,8 @@ void MainWindow::on_pushButton_2_clicked() //clear
 void MainWindow::set_input_size(int iSize)
 {
     _iInputSize=iSize;
-    ui->twNetwork->setItem(0,1,new QTableWidgetItem(to_string(_iInputSize).data()));
+    //ui->twNetwork->setItem(0,1,new QTableWidgetItem(to_string(_iInputSize).data()));
+    ui->frameNetwork->set_net(&(_pEngine->net()));
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::update_classification_tab()

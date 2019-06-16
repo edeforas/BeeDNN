@@ -10,6 +10,7 @@ class FrameLearning;
 }
 
 class MainWindow;
+class NetTrain;
 
 class FrameLearning : public QFrame
 {
@@ -20,6 +21,7 @@ public:
     ~FrameLearning();
 
     void set_main_window(MainWindow* pMainWindow);
+    void set_nettrain(NetTrain* pTrain);
 
     void setOptimizer(string sOptimizer);
     string optimizer();
@@ -62,6 +64,7 @@ private slots:
 private:
     Ui::FrameLearning *ui;
     MainWindow*_pMainWindow;
+    NetTrain* _pTrain;
     bool _bLock;
 };
 

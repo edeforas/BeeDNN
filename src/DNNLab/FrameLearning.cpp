@@ -11,7 +11,7 @@ FrameLearning::FrameLearning(QWidget *parent) :
     ui(new Ui::FrameLearning)
 {
     _pMainWindow=nullptr;
-
+_pTrain=nullptr;
     _bLock=true;
     ui->setupUi(this);
 
@@ -221,3 +221,10 @@ void FrameLearning::set_main_window(MainWindow* pMainWindow)
     _pMainWindow=pMainWindow;
 }
 //////////////////////////////////////////////////////////////
+    void FrameLearning::set_nettrain(NetTrain* pTrain)
+    {
+        _pTrain=pTrain;
+    }
+
+
+    //////////////////////////////////////////////////////////////
