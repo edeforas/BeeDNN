@@ -39,20 +39,40 @@ NetTrain::~NetTrain()
 void NetTrain::clear()
 { }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_optimizer(string sOptimizer, float fLearningRate, float fDecay, float fMomentum) //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov" ... -1.s is for default settings
+void NetTrain::set_optimizer(string sOptimizer) //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov"
 {
     _sOptimizer = sOptimizer;
-    _fLearningRate=fLearningRate;
-    _fDecay=fDecay;
-    _fMomentum=fMomentum;
+}
+string NetTrain::get_optimizer() const
+{
+    return _sOptimizer;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::get_optimizer(string& sOptimizer, float& fLearningRate, float& fDecay, float& fMomentum) const
+void NetTrain::set_learningrate(float fLearningRate) //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov"
 {
-    sOptimizer = _sOptimizer;
-    fLearningRate=_fLearningRate;
-    fDecay=_fDecay;
-    fMomentum=_fMomentum;
+    _fLearningRate = fLearningRate;
+}
+float NetTrain::get_learningrate() const
+{
+    return _fLearningRate;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void NetTrain::set_decay(float fDecay) // -1.f is for default settings
+{
+    _fDecay=fDecay;
+}
+float NetTrain::get_decay() const
+{
+    return _fDecay;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void NetTrain::set_momentum(float fMomentum) // -1.f is for default settings
+{
+    _fMomentum=fMomentum;
+}
+float NetTrain::get_momentum() const
+{
+    return _fMomentum;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::set_epochs(int iEpochs) //100 by default

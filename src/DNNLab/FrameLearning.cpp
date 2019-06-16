@@ -72,10 +72,9 @@ void FrameLearning::on_cbOptimizer_currentTextChanged(const QString &arg1)
     if(_bLock)
         return;
 
-    update_optimizer();
+    _pTrain->set_optimizer(ui->cbOptimizer->currentText().toStdString());
     _pMainWindow->model_changed(this);
 }
-
 //////////////////////////////////////////////////////////////
 void FrameLearning::on_leLearningRate_textChanged(const QString &arg1)
 {
@@ -83,7 +82,7 @@ void FrameLearning::on_leLearningRate_textChanged(const QString &arg1)
     if(_bLock)
         return;
 
-    update_optimizer();
+    _pTrain->set_learningrate(ui->leLearningRate->text().toFloat());
     _pMainWindow->model_changed(this);
 }
 //////////////////////////////////////////////////////////////
@@ -93,7 +92,7 @@ void FrameLearning::on_leDecay_textChanged(const QString &arg1)
     if(_bLock)
         return;
 
-    update_optimizer();
+    _pTrain->set_decay(ui->leDecay->text().toFloat());
     _pMainWindow->model_changed(this);
 }
 //////////////////////////////////////////////////////////////
@@ -103,10 +102,9 @@ void FrameLearning::on_leMomentum_textChanged(const QString &arg1)
     if(_bLock)
         return;
 
-    update_optimizer();
+    _pTrain->set_momentum(ui->leMomentum->text().toFloat());
     _pMainWindow->model_changed(this);
 }
-
 //////////////////////////////////////////////////////////////
 void FrameLearning::on_leEpochs_textChanged(const QString &arg1)
 {
@@ -156,11 +154,6 @@ void FrameLearning::set_nettrain(NetTrain* pTrain)
     ui->cbKeepBest->setChecked(_pTrain->get_keepbest());
 
     _bLock=false;
-}
-//////////////////////////////////////////////////////////////
-void FrameLearning::update_optimizer()
-{
-
 }
 //////////////////////////////////////////////////////////////
 

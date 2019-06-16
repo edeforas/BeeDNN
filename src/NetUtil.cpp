@@ -144,16 +144,10 @@ void write(const NetTrain& train,string & s)
     ss << "KeepBest=" << train.get_keepbest() << endl;
     ss << "ReboostEveryEpochs=" << train.get_reboost_every_epochs() << endl;
 
-    float fLearningrate;
-    float fDecay;
-    float fMomentum;
-    string sOptimizer;
-
-    train.get_optimizer(sOptimizer,fLearningrate,fDecay,fMomentum);
-    ss << "Optimizer=" << sOptimizer << endl;
-    ss << "LearningRate=" << fLearningrate << endl;
-    ss << "Decay=" << fDecay << endl;
-    ss << "Momentum=" << fMomentum << endl;
+    ss << "Optimizer=" << train.get_optimizer() << endl;
+    ss << "LearningRate=" << train.get_learningrate() << endl;
+    ss << "Decay=" << train.get_decay() << endl;
+    ss << "Momentum=" << train.get_momentum() << endl;
 
     s += ss.str();
 }
@@ -173,7 +167,10 @@ void read(const string& s,NetTrain& train)
     float fDecay=stof(find_key(s,"Decay"));
     float fMomentum=stof(find_key(s,"Momentum"));
 
-    train.set_optimizer(sOptimizer,fLearningRate,fDecay,fMomentum);
+    train.set_optimizer(sOptimizer);
+    train.set_learningrate(fLearningRate);
+    train.set_decay(fDecay);
+    train.set_momentum(fMomentum);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 bool save(string sFileName,const Net& net)
