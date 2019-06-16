@@ -130,25 +130,19 @@ void FrameNetwork::set_net(Net* pNet)
 //////////////////////////////////////////////////////////////
 void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
 {
+    (void)row;
+    (void)column;
+
     if(_bLock)
         return;
 
-    //todo update network
+    //rescan all for now
+    int iLastOut=_pNet->input_size();
+    _pNet->clear();
 
-
-    _pMainWindow->model_changed(this);
-}
-//////////////////////////////////////////////////////////////
-
-
-
-
-/*
- *
- *     bool bOk;
+    bool bOk;
     float fArg1=0.f;
-    _pEngine->clear();
-    int iLastOut=_iInputSize;
+
     for(int iRow=0;iRow<10;iRow++) //todo dynamic size
     {
         QComboBox* pCombo=(QComboBox*)(ui->twNetwork->cellWidget(iRow,0));
@@ -197,38 +191,33 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
                 float fRatio=0.2f; //by default
                 if(bOk)
                     fRatio=fArg1;
-                _pEngine->net().add_dropout_layer(iInSize,fRatio);
+                _pNet->add_dropout_layer(iInSize,fRatio);
             }
             else if(sType=="GaussianNoise")
             {
                 float fStd=1.f; //by default
                 if(bOk)
                     fStd=fArg1;
-                _pEngine->net().add_gaussian_noise_layer(iInSize,fStd);
+                _pNet->add_gaussian_noise_layer(iInSize,fStd);
             }
             else if(sType=="GlobalGain")
             {
                 float fGain=0.f; //by default, 0.f mean learned
                 if(bOk)
                     fGain=fArg1;
-                _pEngine->net().add_globalgain_layer(iInSize,fGain);
+                _pNet->add_globalgain_layer(iInSize,fGain);
             }
             else if(sType=="PoolAveraging1D")
-                _pEngine->net().add_poolaveraging1D_layer(iInSize,iOutSize);
+                _pNet->add_poolaveraging1D_layer(iInSize,iOutSize);
             else if(sType=="DenseAndBias")
-                _pEngine->net().add_dense_layer(iInSize,iOutSize,true);
+                _pNet->add_dense_layer(iInSize,iOutSize,true);
             else if(sType=="DenseNoBias")
-                _pEngine->net().add_dense_layer(iInSize,iOutSize,false);
+                _pNet->add_dense_layer(iInSize,iOutSize,false);
             else
-                _pEngine->net().add_activation_layer(sType);
+                _pNet->add_activation_layer(sType);
         }
     }
 
-    //  _pEngine->netTrain().set_epochs(ui->leEpochs->text().toInt());
-
-    net_to_ui(); //updated changed input size
-
-    _pEngine->init();
- *
- *
-*/
+    _pMainWindow->model_changed(this);
+}
+//////////////////////////////////////////////////////////////

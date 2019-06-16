@@ -172,6 +172,13 @@ int Net::output_size() const
 	return _iOutputSize;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
+int Net::input_size() const
+{
+    if(_layers.empty())
+        return 0;
+    return _layers[0]->in_size();
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
 void Net::update_input_size(int& iInSize)
 {
     //check if input size is coherent, else update it
