@@ -32,7 +32,6 @@ protected:
     virtual void closeEvent(QCloseEvent *event) override;
 
 private slots:
-    void on_pushButton_clicked();
     void on_actionQuit_triggered();
     void on_actionAbout_triggered();
     void on_cbEngine_currentTextChanged(const QString &arg1);
@@ -50,6 +49,8 @@ private slots:
     void on_pushButton_3_clicked();
     void on_btnTestOnly_clicked();
     void on_actionReload_triggered();
+
+    void on_btnTrainAndTest_clicked();
 
 private:
     void init_all();

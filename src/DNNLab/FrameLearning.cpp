@@ -5,6 +5,7 @@
 #include "Loss.h"
 #include "Optimizer.h"
 
+//////////////////////////////////////////////////////////////
 FrameLearning::FrameLearning(QWidget *parent) :
     QFrame(parent),
     ui(new Ui::FrameLearning)
@@ -26,30 +27,22 @@ FrameLearning::FrameLearning(QWidget *parent) :
     for(unsigned int i=0;i<vsOptimizers.size();i++)
         ui->cbOptimizer->addItem(vsOptimizers[i].data());
 
-    ui->cbLossFunction->setCurrentIndex(0);
+    //default init
+    ui->leBatchSize->setText("16");
+    ui->leLearningRate->setText("-1");
+    ui->leDecay->setText("-1");
+    ui->leMomentum->setText("-1");
+    ui->leReboost->setText("-1");
+    ui->cbKeepBest->setChecked(true);
     ui->cbOptimizer->setCurrentText("Adam");
+    ui->cbLossFunction->setCurrentIndex(0);
 
     _bLock=false;
 }
-
+//////////////////////////////////////////////////////////////
 FrameLearning::~FrameLearning()
 {
     delete ui;
-}
-//////////////////////////////////////////////////////////////
-void FrameLearning::on_btnTestOnly_clicked()
-{
-
-}
-//////////////////////////////////////////////////////////////
-void FrameLearning::on_btnTrainAndTest_clicked()
-{
-
-}
-//////////////////////////////////////////////////////////////
-void FrameLearning::on_btnTrainMore_clicked()
-{
-
 }
 //////////////////////////////////////////////////////////////
 void FrameLearning::on_cbKeepBest_stateChanged(int arg1)
@@ -136,15 +129,15 @@ void FrameLearning::on_leDecay_textChanged(const QString &arg1)
 
     _pMainWindow->model_changed(this);
 }
-void FrameLearning::setDecay(float fLearningRate)
+void FrameLearning::setDecay(float fDecay)
 {
     _bLock=true;
-    ui->leLearningRate->setText(to_string(fLearningRate).c_str());
+    ui->leDecay->setText(to_string(fDecay).c_str());
     _bLock=false;
 }
 float FrameLearning::decay()
 {
-    return ui->leLearningRate->text().toFloat();
+    return ui->leDecay->text().toFloat();
 }
 //////////////////////////////////////////////////////////////
 void FrameLearning::on_leMomentum_textChanged(const QString &arg1)

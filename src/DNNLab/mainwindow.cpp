@@ -137,17 +137,6 @@ MainWindow::~MainWindow()
     delete _pDataSource;
 }
 //////////////////////////////////////////////////////////////////////////
-void MainWindow::on_pushButton_clicked() //train & test
-{
-    if(QGuiApplication::keyboardModifiers() & Qt::ControlModifier)
-    {
-        for(int i=0;i<9;i++)
-            train_and_test(true,true);
-    }
-
-    train_and_test(true,true);
-}
-//////////////////////////////////////////////////////////////////////////
 void MainWindow::train_and_test(bool bReset,bool bLearn)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -820,5 +809,16 @@ void MainWindow::model_changed(void * pSender)
     }
 
     updateTitle();
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::on_btnTrainAndTest_clicked()
+{
+    if(QGuiApplication::keyboardModifiers() & Qt::ControlModifier)
+    {
+        for(int i=0;i<9;i++)
+            train_and_test(true,true);
+    }
+
+    train_and_test(true,true);
 }
 //////////////////////////////////////////////////////////////////////////////
