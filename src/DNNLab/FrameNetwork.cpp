@@ -68,12 +68,14 @@ FrameNetwork::~FrameNetwork()
 //////////////////////////////////////////////////////////////
 void FrameNetwork::init()
 {
+    _bLock=true;
     for(int i=0;i<10;i++)
     {
         ((QComboBox*)(ui->twNetwork->cellWidget(i,0)))->setCurrentIndex(0);
         ui->twNetwork->setItem(i,1,new QTableWidgetItem(""));
         ui->twNetwork->setItem(i,2,new QTableWidgetItem(""));
     }
+    _bLock=false;
 }
 //////////////////////////////////////////////////////////////
 void FrameNetwork::set_main_window(MainWindow* pMainWindow)
