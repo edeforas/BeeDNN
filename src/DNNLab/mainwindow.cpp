@@ -23,8 +23,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
   , ui(new Ui::MainWindow)
 {
-    _pDataSource=nullptr;
-    _pEngine=nullptr;
+    _pDataSource=new DataSource;
+    _pEngine=new MLEngineBeeDnn;
 
     ui->setupUi(this);
 
@@ -597,31 +597,10 @@ void MainWindow::model_changed(void * pSender)
 
     if(pSender!=(void*)(ui->frameLearning))
     {
-        string sOptimizer;
-        float fLearningRate,fDecay,fMomentum;
-        _pEngine->netTrain().get_optimizer(sOptimizer,fLearningRate,fDecay,fMomentum);
-
-        ui->frameLearning->setOptimizer(sOptimizer);
-        ui->frameLearning->setLearningRate(fLearningRate);
-        ui->frameLearning->setDecay(fDecay);
-        ui->frameLearning->setMomentum(fMomentum);
-
-        ui->frameLearning->setEpochs(_pEngine->netTrain().get_epochs());
-        ui->frameLearning->setBatchSize(_pEngine->netTrain().get_batchsize());
-        ui->frameLearning->setReboost(_pEngine->netTrain().get_reboost_every_epochs());
-        ui->frameLearning->setKeepBest(_pEngine->netTrain().get_keepbest());
-        ui->frameLearning->setLoss(_pEngine->netTrain().get_loss());
+        ui->frameLearning->set_nettrain(&_pEngine->netTrain());
     }
     else
     {
-        //todo
-        _pEngine->netTrain().set_optimizer(ui->frameLearning->optimizer(),ui->frameLearning->learningRate(),ui->frameLearning->decay(),ui->frameLearning->momentum());
-        _pEngine->netTrain().set_epochs(ui->frameLearning->epochs());
-        _pEngine->netTrain().set_batchsize(ui->frameLearning->batchSize());
-        _pEngine->netTrain().set_reboost_every_epochs(ui->frameLearning->reboost());
-        _pEngine->netTrain().set_keepbest(ui->frameLearning->keepBest());
-        _pEngine->netTrain().set_loss(ui->frameLearning->loss());
-
         _bMustSave=true;
     }
 

@@ -23,33 +23,6 @@ public:
     void set_main_window(MainWindow* pMainWindow);
     void set_nettrain(NetTrain* pTrain);
 
-    void setOptimizer(string sOptimizer);
-    string optimizer();
-
-    void setLoss(string sLoss);
-    string loss();
-
-    void setKeepBest(bool bKeepBest);
-    bool keepBest();
-
-    void setEpochs(int iEpochs);
-    int epochs();
-
-    void setReboost(int iEpochs);
-    int reboost();
-
-    void setBatchSize(int iBatchSize);
-    int batchSize();
-
-    void setLearningRate(float fLearningRate);
-    float learningRate();
-
-    void setDecay(float fDecay);
-    float decay();
-
-    void setMomentum(float fMomentum);
-    float momentum();
-
 private slots:
     void on_cbKeepBest_stateChanged(int arg1);
     void on_cbLossFunction_currentTextChanged(const QString &arg1);
@@ -62,6 +35,8 @@ private slots:
     void on_leReboost_textChanged(const QString &arg1);
 
 private:
+    void update_optimizer();
+
     Ui::FrameLearning *ui;
     MainWindow*_pMainWindow;
     NetTrain* _pTrain;
