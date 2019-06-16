@@ -65,7 +65,6 @@ private:
     void drawConfusionMatrix();
     void train_and_test(bool bReset, bool bLearn);
     void update_details();
-    void ui_to_net();
     void net_to_ui();
     void set_input_size(int iSize);
 

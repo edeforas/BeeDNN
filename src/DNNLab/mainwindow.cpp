@@ -15,14 +15,6 @@ using namespace std;
 
 #include "DataSource.h"
 
-#include "LayerDense.h"
-#include "LayerDropout.h"
-#include "LayerGlobalGain.h"
-#include "LayerGaussianNoise.h"
-
-#include "Activation.h"
-#include "Optimizer.h"
-#include "Loss.h"
 #include "ConfusionMatrix.h"
 #include "NetUtil.h"
 
@@ -31,51 +23,15 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
   , ui(new Ui::MainWindow)
 {
-    _pDataSource=new DataSource;
+    _pDataSource=nullptr;
+    _pEngine=nullptr;
 
     ui->setupUi(this);
 
     ui->frameNotes->set_main_window(this);
     ui->frameGlobal->set_main_window(this);
     ui->frameLearning->set_main_window(this);
-
-    vector<string> vsActivations;
-    list_activations_available( vsActivations);
-
-    QStringList qsl;
-    qsl+="LayerType";
-    qsl+="InSize";
-    qsl+="OutSize";
-    qsl+="Arg1";
-
-    ui->twNetwork->setHorizontalHeaderLabels(qsl);
-
-    for(int i=0;i<10;i++)
-    {
-        QComboBox*  qcbType=new QComboBox;
-        qcbType->addItem("");
-        qcbType->addItem("DenseAndBias");
-        qcbType->addItem("DenseNoBias");
-        qcbType->addItem("Dropout");
-        qcbType->addItem("GaussianNoise");
-        qcbType->addItem("GlobalGain");
-        qcbType->addItem("PoolAveraging1D");
-        qcbType->addItem("SoftMax");
-
-        qcbType->insertSeparator(8);
-
-        for(unsigned int a=0;a<vsActivations.size();a++)
-            qcbType->addItem(vsActivations[a].c_str());
-
-        ui->twNetwork->setCellWidget(i,0,qcbType);
-
-    }
-
-    ui->twNetwork->setItem(0,1,new QTableWidgetItem("1")); //first input size is 1
-    ui->twNetwork->adjustSize();
-
-    _pEngine=nullptr;
-
+    ui->frameNetwork->set_main_window(this);
 
     resizeDocks({ui->dockWidget},{1},Qt::Horizontal);
     _qsRegression=new SimpleCurveWidget;
@@ -99,14 +55,7 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::init_all()
 {
     ui->frameGlobal->init();
-
-
-    for(int i=0;i<10;i++)
-    {
-        ((QComboBox*)(ui->twNetwork->cellWidget(i,0)))->setCurrentIndex(0);
-        ui->twNetwork->setItem(i,1,new QTableWidgetItem(""));
-        ui->twNetwork->setItem(i,2,new QTableWidgetItem(""));
-    }
+    ui->frameNetwork->init();
 
     _qsAccuracy->clear();
     _qsLoss->clear();
@@ -125,8 +74,8 @@ void MainWindow::init_all()
 
     delete _pDataSource;
     _pDataSource=new DataSource;
-
     _pDataSource->load(ui->frameGlobal->data_name());
+
     updateTitle();
 }
 //////////////////////////////////////////////////////////////////////////
@@ -141,14 +90,8 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    //compute_truth();
-
-    if(bReset)
-        ui_to_net();
-
     if(bLearn)
         _bMustSave=true;
-
 
     if(bReset)
         _pEngine->init();
@@ -244,8 +187,6 @@ void MainWindow::drawRegression()
     vector<double> vRegression;
     MatrixFloat mIn(1,1),mOut;
 
-    //  compute_truth();
-
     float fVal=fInputMin;
     float fStep=(fInputMax-fInputMin)/(iNbPoint-1.f);
 
@@ -339,138 +280,12 @@ void MainWindow::net_to_ui()
 {
     model_changed(0);
 
-    auto layers= _pEngine->net().layers();
-    for(unsigned int i=0;i<layers.size();i++)
-    {
-        auto l=layers[i];
-        string sType=l->type();
-        if(sType=="Dense")
-        {
-            if(((LayerDense*)l)->has_bias())
-                sType="DenseAndBias";
-            else
-                sType="DenseNoBias";
-        }
-
-        ((QComboBox*)ui->twNetwork->cellWidget(i,0))->setCurrentText(sType.c_str());
-
-        if(sType=="GaussianNoise")
-        {
-            float fStd=((LayerGaussianNoise*)l)->get_std();
-            ui->twNetwork->setItem(i,3,new QTableWidgetItem(to_string(fStd).c_str()));
-        }
-
-        if(sType=="Dropout")
-        {
-            float fRate=((LayerDropout*)l)->get_rate();
-            ui->twNetwork->setItem(i,3,new QTableWidgetItem(to_string(fRate).c_str()));
-        }
-
-        if(sType=="GlobalGain")
-        {
-            float fGain=((LayerGlobalGain*)l)->gain();
-            ui->twNetwork->setItem(i,3,new QTableWidgetItem(to_string(fGain).c_str()));
-        }
-
-        if(l->in_size())
-            ui->twNetwork->setItem(i,1,new QTableWidgetItem(to_string(l->in_size()).c_str()));
-
-        if(l->out_size())
-            ui->twNetwork->setItem(i,2,new QTableWidgetItem(to_string(l->out_size()).c_str()));
-    }
+    //was updating twNet
 
     updateTitle();
     drawRegression();
     update_details();
     update_classification_tab();
-}
-//////////////////////////////////////////////////////////////////////////////
-void MainWindow::ui_to_net()
-{
-    bool bOk;
-    float fArg1=0.f;
-    _pEngine->clear();
-    int iLastOut=_iInputSize;
-    for(int iRow=0;iRow<10;iRow++) //todo dynamic size
-    {
-        QComboBox* pCombo=(QComboBox*)(ui->twNetwork->cellWidget(iRow,0));
-        if(!pCombo)
-            continue;
-        string sType=pCombo->currentText().toStdString();
-
-        QTableWidgetItem* pwiInSize=ui->twNetwork->item(iRow,1); //todo not used in activation
-        int iInSize=0;
-        if(!pwiInSize)
-            iInSize=iLastOut; //use last out
-        else
-        {
-            int iIn=pwiInSize->text().toInt(&bOk);
-            if(bOk)
-                iInSize=iIn;
-            else
-                iInSize=iLastOut;
-        }
-
-        QTableWidgetItem* pwiOutSize=ui->twNetwork->item(iRow,2); //todo not used in activation
-        int iOutSize;
-        if(!pwiOutSize)
-            iOutSize=iInSize; //same size (i.e. activation case)
-        else
-        {
-            int iOut=pwiOutSize->text().toInt(&bOk);
-            if(bOk)
-                iOutSize=iOut;
-            else
-                iOutSize=iInSize;
-        }
-
-        iLastOut=iOutSize;
-
-        QTableWidgetItem* pwArg1=ui->twNetwork->item(iRow,3);
-        if(pwArg1)
-            fArg1=pwArg1->text().toFloat(&bOk);
-        else
-            bOk=false;
-
-        if(!sType.empty())
-        {
-            if(sType=="Dropout")
-            {
-                float fRatio=0.2f; //by default
-                if(bOk)
-                    fRatio=fArg1;
-                _pEngine->net().add_dropout_layer(iInSize,fRatio);
-            }
-            else if(sType=="GaussianNoise")
-            {
-                float fStd=1.f; //by default
-                if(bOk)
-                    fStd=fArg1;
-                _pEngine->net().add_gaussian_noise_layer(iInSize,fStd);
-            }
-            else if(sType=="GlobalGain")
-            {
-                float fGain=0.f; //by default, 0.f mean learned
-                if(bOk)
-                    fGain=fArg1;
-                _pEngine->net().add_globalgain_layer(iInSize,fGain);
-            }
-            else if(sType=="PoolAveraging1D")
-                _pEngine->net().add_poolaveraging1D_layer(iInSize,iOutSize);
-            else if(sType=="DenseAndBias")
-                _pEngine->net().add_dense_layer(iInSize,iOutSize,true);
-            else if(sType=="DenseNoBias")
-                _pEngine->net().add_dense_layer(iInSize,iOutSize,false);
-            else
-                _pEngine->net().add_activation_layer(sType);
-        }
-    }
-
-    //  _pEngine->netTrain().set_epochs(ui->leEpochs->text().toInt());
-
-    net_to_ui(); //updated changed input size
-
-    _pEngine->init();
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_cbYLogAxis_stateChanged(int arg1)
@@ -805,6 +620,16 @@ void MainWindow::model_changed(void * pSender)
         _pEngine->netTrain().set_keepbest(ui->frameLearning->keepBest());
         _pEngine->netTrain().set_loss(ui->frameLearning->loss());
 
+        _bMustSave=true;
+    }
+
+    if(pSender != (void*)(ui->frameNetwork ) )
+    {
+        ui->frameNetwork->set_net(&(_pEngine->net()));
+    }
+    else
+    {
+        //net modified
         _bMustSave=true;
     }
 

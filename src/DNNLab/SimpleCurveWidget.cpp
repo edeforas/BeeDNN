@@ -38,7 +38,7 @@ SimpleCurveWidget::~SimpleCurveWidget()
 void SimpleCurveWidget::addCurve(const vector<float>& vfX, const vector<float>& vfY,unsigned int iColorRGB)
 {
     vector<double> vdX,vdY;
-    for(int i=0;i<vfX.size();i++)
+    for(unsigned int i=0;i<vfX.size();i++)
     {
         vdX.push_back((double)vfX[i]);
         vdY.push_back((double)vfY[i]);
@@ -152,7 +152,7 @@ void SimpleCurveWidget::compute_bounding_box()
     }
 
     //compute range with horizonal lines
-    for(int i=0;i<_horizontalLines.size();i++)
+    for(unsigned int i=0;i<_horizontalLines.size();i++)
     {
         if(_horizontalLines[i]<yMin)
             yMin=_horizontalLines[i];
@@ -220,7 +220,7 @@ void SimpleCurveWidget::replot_curve(int iCurve)
 //////////////////////////////////////////////////////////////////////////
 void SimpleCurveWidget::replot_axis()
 {  
-    for(int i=0;i<_horizontalLines.size();i++)
+    for(unsigned int i=0;i<_horizontalLines.size();i++)
     {
         QPen penBlack(Qt::black);
         penBlack.setCosmetic(true);
