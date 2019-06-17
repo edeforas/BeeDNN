@@ -13,6 +13,8 @@
 #include "LayerGlobalGain.h"
 #include "LayerGaussianNoise.h"
 
+#include <QObject>
+
 FrameNetwork::FrameNetwork(QWidget *parent) :
     QFrame(parent),
     ui(new Ui::FrameNetwork)
@@ -52,6 +54,8 @@ FrameNetwork::FrameNetwork(QWidget *parent) :
         for(unsigned int a=0;a<vsActivations.size();a++)
             qcbType->addItem(vsActivations[a].c_str());
 
+       // QObject::connect(qcbType,SIGN&QComboBox::currentIndexChanged, this,&FrameNetwork::on_type_changed);
+        connect(qcbType,SIGNAL(currentIndexChanged(int)), this, SLOT(type_changed()));
         ui->twNetwork->setCellWidget(i,0,qcbType);
     }
 
@@ -223,3 +227,10 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
     _pMainWindow->model_changed(this);
 }
 //////////////////////////////////////////////////////////////
+void FrameNetwork::type_changed()
+{
+	on_twNetwork_cellChanged(0, 0);
+}
+//////////////////////////////////////////////////////////////
+
+

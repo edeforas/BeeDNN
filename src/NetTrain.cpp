@@ -25,9 +25,9 @@ NetTrain::NetTrain():
     _iEpochs = 100;
     _iReboostEveryEpochs = -1; // -1 mean no reboost
 
-    _fLearningRate = 0.001f;
-    _fDecay = 0.9f;
-    _fMomentum = 0.9f;
+    _fLearningRate = -1.f; //default
+    _fDecay = -1.f; //default
+    _fMomentum = -1.f; //default
     _bIsclassificationProblem=false;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
