@@ -413,12 +413,6 @@ void MainWindow::on_actionOpen_triggered()
 
         load();
     }
-
-    //show intersting results from net
-    if(_pEngine->is_classification_problem())
-        ui->tabWidget->setCurrentIndex(2);
-    else
-        ui->tabWidget->setCurrentIndex(1);
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionSave_triggered()
@@ -485,6 +479,9 @@ bool MainWindow::save()
 bool MainWindow::load()
 {
     //todo use a file I/O class, properties?
+
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
     init_all();
 
     string s;
@@ -507,7 +504,21 @@ bool MainWindow::load()
 
     net_to_ui();
 
+    QApplication::restoreOverrideCursor();
+
+    //show intersting results from net
+    if(_pEngine->is_classification_problem())
+        ui->tabWidget->setCurrentIndex(2);
+    else
+        ui->tabWidget->setCurrentIndex(1);
+
     return true; //for now
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::load_file(string sFile)
+{
+    _sFileName=sFile;
+    load();
 }
 //////////////////////////////////////////////////////////////////////////////
 bool MainWindow::ask_save()

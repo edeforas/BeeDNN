@@ -90,6 +90,7 @@ void FrameNetwork::set_main_window(MainWindow* pMainWindow)
 void FrameNetwork::set_net(Net* pNet)
 {
     _pNet=pNet;
+	_bLock = true;
 
     //todo redraw all
     auto layers= _pNet->layers();
@@ -131,7 +132,7 @@ void FrameNetwork::set_net(Net* pNet)
         if(l->out_size())
             ui->twNetwork->setItem(i,2,new QTableWidgetItem(to_string(l->out_size()).c_str()));
     }
-
+	_bLock = false;
 }
 //////////////////////////////////////////////////////////////
 void FrameNetwork::on_twNetwork_cellChanged(int row, int column)

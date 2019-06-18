@@ -76,66 +76,6 @@ void FrameLearning::on_cbOptimizer_currentTextChanged(const QString &arg1)
     _pMainWindow->model_changed(this);
 }
 //////////////////////////////////////////////////////////////
-void FrameLearning::on_leLearningRate_textChanged(const QString &arg1)
-{
-    (void)arg1;
-    if(_bLock)
-        return;
-
-    _pTrain->set_learningrate(ui->leLearningRate->text().toFloat());
-    _pMainWindow->model_changed(this);
-}
-//////////////////////////////////////////////////////////////
-void FrameLearning::on_leDecay_textChanged(const QString &arg1)
-{
-    (void)arg1;
-    if(_bLock)
-        return;
-
-    _pTrain->set_decay(ui->leDecay->text().toFloat());
-    _pMainWindow->model_changed(this);
-}
-//////////////////////////////////////////////////////////////
-void FrameLearning::on_leMomentum_textChanged(const QString &arg1)
-{
-    (void)arg1;
-    if(_bLock)
-        return;
-
-    _pTrain->set_momentum(ui->leMomentum->text().toFloat());
-    _pMainWindow->model_changed(this);
-}
-//////////////////////////////////////////////////////////////
-void FrameLearning::on_leEpochs_textChanged(const QString &arg1)
-{
-    (void)arg1;
-    if(_bLock)
-        return;
-
-    _pTrain->set_epochs(ui->leEpochs->text().toInt());
-    _pMainWindow->model_changed(this);
-}
-//////////////////////////////////////////////////////////////
-void FrameLearning::on_leBatchSize_textChanged(const QString &arg1)
-{
-    (void)arg1;
-    if(_bLock)
-        return;
-
-    _pTrain->set_batchsize(ui->leBatchSize->text().toInt());
-    _pMainWindow->model_changed(this);
-}
-//////////////////////////////////////////////////////////////
-void FrameLearning::on_leReboost_textChanged(const QString &arg1)
-{
-    (void)arg1;
-    if(_bLock)
-        return;
-
-    _pTrain->set_reboost_every_epochs(ui->leReboost->text().toInt());
-    _pMainWindow->model_changed(this);
-}
-//////////////////////////////////////////////////////////////
 void FrameLearning::set_main_window(MainWindow* pMainWindow)
 {
     _pMainWindow=pMainWindow;
@@ -153,59 +93,65 @@ void FrameLearning::set_nettrain(NetTrain* pTrain)
     ui->cbLossFunction->setCurrentText(_pTrain->get_loss().c_str());
     ui->cbKeepBest->setChecked(_pTrain->get_keepbest());
 
+    ui->cbOptimizer->setCurrentText(_pTrain->get_optimizer().c_str());
+    ui->leLearningRate->setText(to_string(_pTrain->get_learningrate()).c_str());
+    ui->leDecay->setText(to_string(_pTrain->get_decay()).c_str());
+    ui->leMomentum->setText(to_string(_pTrain->get_momentum()).c_str());
+
     _bLock=false;
 }
 //////////////////////////////////////////////////////////////
 
-/*
- * void FrameLearning::setOptimizer(string sOptimizer)
+void FrameLearning::on_leLearningRate_editingFinished()
 {
-    _bLock=true;
-    ui->cbOptimizer->setCurrentText(sOptimizer.c_str());
-    _bLock=false;
+    if(_bLock)
+        return;
+
+    _pTrain->set_learningrate(ui->leLearningRate->text().toFloat());
+    _pMainWindow->model_changed(this);
 }
 
-string FrameLearning::optimizer()
+void FrameLearning::on_leReboost_editingFinished()
 {
-    return ui->cbOptimizer->currentText().toStdString();
-}
-*/
+    if(_bLock)
+        return;
 
-/*
-void FrameLearning::setMomentum(float fMomentum)
-{
-    _bLock=true;
-    ui->leMomentum->setText(to_string(fMomentum).c_str());
-    _bLock=false;
+    _pTrain->set_reboost_every_epochs(ui->leReboost->text().toInt());
+    _pMainWindow->model_changed(this);
 }
-float FrameLearning::momentum()
-{
-    return ui->leMomentum->text().toFloat();
-}
-*/
 
-/*
-void FrameLearning::setDecay(float fDecay)
+void FrameLearning::on_leBatchSize_editingFinished()
 {
-    _bLock=true;
-    ui->leDecay->setText(to_string(fDecay).c_str());
-    _bLock=false;
-}
-float FrameLearning::decay()
-{
-    return ui->leDecay->text().toFloat();
-}
-*/
+    if(_bLock)
+        return;
 
-/*
-void FrameLearning::setLearningRate(float fLearningRate)
-{
-    _bLock=true;
-    ui->leLearningRate->setText(to_string(fLearningRate).c_str());
-    _bLock=false;
+    _pTrain->set_batchsize(ui->leBatchSize->text().toInt());
+    _pMainWindow->model_changed(this);
 }
-float FrameLearning::learningRate()
+
+void FrameLearning::on_leEpochs_editingFinished()
 {
-    return ui->leLearningRate->text().toFloat();
+    if(_bLock)
+        return;
+
+    _pTrain->set_epochs(ui->leEpochs->text().toInt());
+    _pMainWindow->model_changed(this);
 }
-*/
+
+void FrameLearning::on_leMomentum_editingFinished()
+{
+    if(_bLock)
+        return;
+
+    _pTrain->set_momentum(ui->leMomentum->text().toFloat());
+    _pMainWindow->model_changed(this);
+}
+
+void FrameLearning::on_leDecay_editingFinished()
+{
+    if(_bLock)
+        return;
+
+    _pTrain->set_decay(ui->leDecay->text().toFloat());
+    _pMainWindow->model_changed(this);
+}

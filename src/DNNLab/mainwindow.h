@@ -26,7 +26,8 @@ public:
     ~MainWindow() override;
 
     void model_changed(void * pSender);
-
+	void load_file(string sFile);
+	
 protected:
     virtual void resizeEvent( QResizeEvent *e ) override;
     virtual void closeEvent(QCloseEvent *event) override;

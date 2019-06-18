@@ -160,7 +160,7 @@ void read(const string& s,NetTrain& train)
     train.set_batchsize(stoi(find_key(s,"BatchSize")));
     train.set_loss(find_key(s,"Loss"));
     train.set_keepbest(stoi(find_key(s,"KeepBest"))!=0);
-    train.set_reboost_every_epochs(stoi(find_key(s,"ReboostEveryEpochs"))!=0);
+    train.set_reboost_every_epochs(stoi(find_key(s,"ReboostEveryEpochs")));
 
     string sOptimizer=find_key(s,"Optimizer");
     float fLearningRate=stof(find_key(s,"LearningRate"));

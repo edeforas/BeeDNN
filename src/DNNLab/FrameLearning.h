@@ -17,7 +17,7 @@ class FrameLearning : public QFrame
     Q_OBJECT
 
 public:
-    explicit FrameLearning(QWidget *parent = 0);
+    explicit FrameLearning(QWidget *parent = nullptr);
     ~FrameLearning();
 
     void set_main_window(MainWindow* pMainWindow);
@@ -27,12 +27,12 @@ private slots:
     void on_cbKeepBest_stateChanged(int arg1);
     void on_cbLossFunction_currentTextChanged(const QString &arg1);
     void on_cbOptimizer_currentTextChanged(const QString &arg1);
-    void on_leLearningRate_textChanged(const QString &arg1);
-    void on_leDecay_textChanged(const QString &arg1);
-    void on_leMomentum_textChanged(const QString &arg1);
-    void on_leEpochs_textChanged(const QString &arg1);
-    void on_leBatchSize_textChanged(const QString &arg1);
-    void on_leReboost_textChanged(const QString &arg1);
+    void on_leLearningRate_editingFinished();
+    void on_leReboost_editingFinished();
+    void on_leBatchSize_editingFinished();
+    void on_leEpochs_editingFinished();
+    void on_leMomentum_editingFinished();
+    void on_leDecay_editingFinished();
 
 private:
     void update_optimizer();
