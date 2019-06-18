@@ -34,7 +34,6 @@ SOURCES += \
     ../LayerGlobalGain.cpp \
     ../LayerPoolAveraging1D.cpp
 
-
 HEADERS += \
     ../Activation.h \
     ../Layer.h \
@@ -54,8 +53,6 @@ HEADERS += \
     ../LayerGlobalGain.h \
     ../LayerPoolAveraging1D.h
 
-
-	
 #GUI
 SOURCES += \
     main.cpp\
@@ -63,19 +60,25 @@ SOURCES += \
     SimpleCurveWidget.cpp \
     DataSource.cpp \
     MLEngineBeeDnn.cpp \
-	FrameNotes.cpp \
-    FrameGlobal.cpp
+    FrameNetwork.cpp \
+    FrameNotes.cpp \
+    FrameGlobal.cpp \
+    FrameLearning.cpp
 	
 HEADERS  += \
     mainwindow.h \
     SimpleCurveWidget.h \
     DataSource.h \
     MLEngineBeeDnn.h \
-	FrameNotes.h \
-    FrameGlobal.h
+    FrameNetwork.h \
+    FrameNotes.h \
+    FrameGlobal.h \
+    FrameLearning.h
 
 FORMS    += \
-	mainwindow.ui \
+    mainwindow.ui \
     FrameNotes.ui \
-    FrameGlobal.ui
+    FrameNetwork.ui \
+    FrameGlobal.ui \
+    FrameLearning.ui
 

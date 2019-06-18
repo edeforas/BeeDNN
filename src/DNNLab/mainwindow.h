@@ -26,13 +26,13 @@ public:
     ~MainWindow() override;
 
     void model_changed(void * pSender);
-
+	void load_file(string sFile);
+	
 protected:
     virtual void resizeEvent( QResizeEvent *e ) override;
     virtual void closeEvent(QCloseEvent *event) override;
 
 private slots:
-    void on_pushButton_clicked();
     void on_actionQuit_triggered();
     void on_actionAbout_triggered();
     void on_cbEngine_currentTextChanged(const QString &arg1);
@@ -51,6 +51,8 @@ private slots:
     void on_btnTestOnly_clicked();
     void on_actionReload_triggered();
 
+    void on_btnTrainAndTest_clicked();
+
 private:
     void init_all();
     bool ask_save(); //return true if saved/ready to overwrite
@@ -64,7 +66,6 @@ private:
     void drawConfusionMatrix();
     void train_and_test(bool bReset, bool bLearn);
     void update_details();
-    void ui_to_net();
     void net_to_ui();
     void set_input_size(int iSize);
 

@@ -4,6 +4,7 @@
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QClipboard>
+#include <QComboBox>
 
 #include <fstream>
 using namespace std;
@@ -14,14 +15,6 @@ using namespace std;
 
 #include "DataSource.h"
 
-#include "LayerDense.h"
-#include "LayerDropout.h"
-#include "LayerGlobalGain.h"
-#include "LayerGaussianNoise.h"
-
-#include "Activation.h"
-#include "Optimizer.h"
-#include "Loss.h"
 #include "ConfusionMatrix.h"
 #include "NetUtil.h"
 
@@ -31,60 +24,14 @@ MainWindow::MainWindow(QWidget *parent) :
   , ui(new Ui::MainWindow)
 {
     _pDataSource=new DataSource;
+    _pEngine=new MLEngineBeeDnn;
 
     ui->setupUi(this);
 
     ui->frameNotes->set_main_window(this);
     ui->frameGlobal->set_main_window(this);
-
-    vector<string> vsActivations;
-    list_activations_available( vsActivations);
-
-    QStringList qsl;
-    qsl+="LayerType";
-    qsl+="InSize";
-    qsl+="OutSize";
-    qsl+="Arg1";
-
-    ui->twNetwork->setHorizontalHeaderLabels(qsl);
-
-    for(int i=0;i<10;i++)
-    {
-        QComboBox*  qcbType=new QComboBox;
-        qcbType->addItem("");
-        qcbType->addItem("DenseAndBias");
-        qcbType->addItem("DenseNoBias");
-        qcbType->addItem("Dropout");
-        qcbType->addItem("GaussianNoise");
-        qcbType->addItem("GlobalGain");
-        qcbType->addItem("PoolAveraging1D");
-        qcbType->addItem("SoftMax");
-
-        qcbType->insertSeparator(8);
-
-        for(unsigned int a=0;a<vsActivations.size();a++)
-            qcbType->addItem(vsActivations[a].c_str());
-
-        ui->twNetwork->setCellWidget(i,0,qcbType);
-
-    }
-
-    ui->twNetwork->setItem(0,1,new QTableWidgetItem("1")); //first input size is 1
-    ui->twNetwork->adjustSize();
-
-    _pEngine=nullptr;
-
-    //setup loss
-    vector<string> vsloss;
-    list_loss_available(vsloss);
-    for(unsigned int i=0;i<vsloss.size();i++)
-        ui->cbLossFunction->addItem(vsloss[i].data());
-
-    //setup optimizer
-    vector<string> vsOptimizers;
-    list_optimizers_available( vsOptimizers);
-    for(unsigned int i=0;i<vsOptimizers.size();i++)
-        ui->cbOptimizer->addItem(vsOptimizers[i].data());
+    ui->frameLearning->set_main_window(this);
+    ui->frameNetwork->set_main_window(this);
 
     resizeDocks({ui->dockWidget},{1},Qt::Horizontal);
     _qsRegression=new SimpleCurveWidget;
@@ -107,17 +54,14 @@ MainWindow::MainWindow(QWidget *parent) :
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::init_all()
 {
+    delete _pEngine;
+    _pEngine=new MLEngineBeeDnn;
+
+    delete _pDataSource;
+    _pDataSource=new DataSource;
+
     ui->frameGlobal->init();
-
-    ui->cbLossFunction->setCurrentIndex(0);
-    ui->cbOptimizer->setCurrentText("Adam");
-
-    for(int i=0;i<10;i++)
-    {
-        ((QComboBox*)(ui->twNetwork->cellWidget(i,0)))->setCurrentIndex(0);
-        ui->twNetwork->setItem(i,1,new QTableWidgetItem(""));
-        ui->twNetwork->setItem(i,2,new QTableWidgetItem(""));
-    }
+    ui->frameNetwork->init();
 
     _qsAccuracy->clear();
     _qsLoss->clear();
@@ -131,13 +75,8 @@ void MainWindow::init_all()
     _curveColor=0xff0000; //red
     set_input_size(1);
 
-    delete _pEngine;
-    _pEngine=new MLEngineBeeDnn;
-
-    delete _pDataSource;
-    _pDataSource=new DataSource;
-
     _pDataSource->load(ui->frameGlobal->data_name());
+
     updateTitle();
 }
 //////////////////////////////////////////////////////////////////////////
@@ -148,35 +87,12 @@ MainWindow::~MainWindow()
     delete _pDataSource;
 }
 //////////////////////////////////////////////////////////////////////////
-void MainWindow::on_pushButton_clicked() //train & test
-{
-    if(QGuiApplication::keyboardModifiers() & Qt::ControlModifier)
-    {
-        for(int i=0;i<9;i++)
-            train_and_test(true,true);
-    }
-
-    train_and_test(true,true);
-}
-//////////////////////////////////////////////////////////////////////////
 void MainWindow::train_and_test(bool bReset,bool bLearn)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    //compute_truth();
-
-    if(bReset)
-        ui_to_net();
-
     if(bLearn)
         _bMustSave=true;
-
-    _pEngine->netTrain().set_epochs(ui->leEpochs->text().toInt());
-    _pEngine->netTrain().set_optimizer(ui->cbOptimizer->currentText().toStdString(),ui->leLearningRate->text().toFloat(),ui->leDecay->text().toFloat(),ui->leMomentum->text().toFloat());
-    _pEngine->netTrain().set_batchsize(ui->leBatchSize->text().toInt());
-    _pEngine->netTrain().set_keepbest(ui->cbKeepBest->isChecked());
-    _pEngine->netTrain().set_loss(ui->cbLossFunction->currentText().toStdString());
-    _pEngine->netTrain().set_reboost_every_epochs(ui->leReboost->text().toInt());
 
     if(bReset)
         _pEngine->init();
@@ -272,8 +188,6 @@ void MainWindow::drawRegression()
     vector<double> vRegression;
     MatrixFloat mIn(1,1),mOut;
 
-    //  compute_truth();
-
     float fVal=fInputMin;
     float fStep=(fInputMax-fInputMin)/(iNbPoint-1.f);
 
@@ -367,140 +281,12 @@ void MainWindow::net_to_ui()
 {
     model_changed(0);
 
-    auto layers= _pEngine->net().layers();
-    for(unsigned int i=0;i<layers.size();i++)
-    {
-        auto l=layers[i];
-        string sType=l->type();
-        if(sType=="Dense")
-        {
-            if(((LayerDense*)l)->has_bias())
-                sType="DenseAndBias";
-            else
-                sType="DenseNoBias";
-        }
-
-        ((QComboBox*)ui->twNetwork->cellWidget(i,0))->setCurrentText(sType.c_str());
-
-        if(sType=="GaussianNoise")
-        {
-            float fStd=((LayerGaussianNoise*)l)->get_std();
-            ui->twNetwork->setItem(i,3,new QTableWidgetItem(to_string(fStd).c_str()));
-        }
-
-        if(sType=="Dropout")
-        {
-            float fRate=((LayerDropout*)l)->get_rate();
-            ui->twNetwork->setItem(i,3,new QTableWidgetItem(to_string(fRate).c_str()));
-        }
-
-        if(sType=="GlobalGain")
-        {
-            float fGain=((LayerGlobalGain*)l)->gain();
-            ui->twNetwork->setItem(i,3,new QTableWidgetItem(to_string(fGain).c_str()));
-        }
-
-        if(l->in_size())
-            ui->twNetwork->setItem(i,1,new QTableWidgetItem(to_string(l->in_size()).c_str()));
-
-        if(l->out_size())
-            ui->twNetwork->setItem(i,2,new QTableWidgetItem(to_string(l->out_size()).c_str()));
-    }
+    //was updating twNet
 
     updateTitle();
     drawRegression();
     update_details();
     update_classification_tab();
-
-    ui->leEpochs->setText(to_string(_pEngine->netTrain().get_epochs()).c_str());
-}
-//////////////////////////////////////////////////////////////////////////////
-void MainWindow::ui_to_net()
-{
-    bool bOk;
-    float fArg1=0.f;
-    _pEngine->clear();
-    int iLastOut=_iInputSize;
-    for(int iRow=0;iRow<10;iRow++) //todo dynamic size
-    {
-        QComboBox* pCombo=(QComboBox*)(ui->twNetwork->cellWidget(iRow,0));
-        if(!pCombo)
-            continue;
-        string sType=pCombo->currentText().toStdString();
-
-        QTableWidgetItem* pwiInSize=ui->twNetwork->item(iRow,1); //todo not used in activation
-        int iInSize=0;
-        if(!pwiInSize)
-            iInSize=iLastOut; //use last out
-        else
-        {
-            int iIn=pwiInSize->text().toInt(&bOk);
-            if(bOk)
-                iInSize=iIn;
-            else
-                iInSize=iLastOut;
-        }
-
-        QTableWidgetItem* pwiOutSize=ui->twNetwork->item(iRow,2); //todo not used in activation
-        int iOutSize;
-        if(!pwiOutSize)
-            iOutSize=iInSize; //same size (i.e. activation case)
-        else
-        {
-            int iOut=pwiOutSize->text().toInt(&bOk);
-            if(bOk)
-                iOutSize=iOut;
-            else
-                iOutSize=iInSize;
-        }
-
-        iLastOut=iOutSize;
-
-        QTableWidgetItem* pwArg1=ui->twNetwork->item(iRow,3);
-        if(pwArg1)
-            fArg1=pwArg1->text().toFloat(&bOk);
-        else
-            bOk=false;
-
-        if(!sType.empty())
-        {
-            if(sType=="Dropout")
-            {
-                float fRatio=0.2f; //by default
-                if(bOk)
-                    fRatio=fArg1;
-                _pEngine->net().add_dropout_layer(iInSize,fRatio);
-            }
-            else if(sType=="GaussianNoise")
-            {
-                float fStd=1.f; //by default
-                if(bOk)
-                    fStd=fArg1;
-                _pEngine->net().add_gaussian_noise_layer(iInSize,fStd);
-            }
-            else if(sType=="GlobalGain")
-            {
-                float fGain=0.f; //by default, 0.f mean learned
-                if(bOk)
-                    fGain=fArg1;
-                _pEngine->net().add_globalgain_layer(iInSize,fGain);
-            }
-            else if(sType=="PoolAveraging1D")
-                _pEngine->net().add_poolaveraging1D_layer(iInSize,iOutSize);
-            else if(sType=="DenseAndBias")
-                _pEngine->net().add_dense_layer(iInSize,iOutSize,true);
-            else if(sType=="DenseNoBias")
-                _pEngine->net().add_dense_layer(iInSize,iOutSize,false);
-            else
-                _pEngine->net().add_activation_layer(sType);
-        }
-    }
-
-    _pEngine->netTrain().set_epochs(ui->leEpochs->text().toInt());
-
-    net_to_ui(); //updated changed input size
-
-    _pEngine->init();
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_cbYLogAxis_stateChanged(int arg1)
@@ -526,7 +312,8 @@ void MainWindow::on_pushButton_2_clicked() //clear
 void MainWindow::set_input_size(int iSize)
 {
     _iInputSize=iSize;
-    ui->twNetwork->setItem(0,1,new QTableWidgetItem(to_string(_iInputSize).data()));
+    //ui->twNetwork->setItem(0,1,new QTableWidgetItem(to_string(_iInputSize).data()));
+    ui->frameNetwork->set_net(&(_pEngine->net()));
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::update_classification_tab()
@@ -626,12 +413,6 @@ void MainWindow::on_actionOpen_triggered()
 
         load();
     }
-
-    //show intersting results from net
-    if(_pEngine->is_classification_problem())
-        ui->tabWidget->setCurrentIndex(2);
-    else
-        ui->tabWidget->setCurrentIndex(1);
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionSave_triggered()
@@ -698,6 +479,9 @@ bool MainWindow::save()
 bool MainWindow::load()
 {
     //todo use a file I/O class, properties?
+
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
     init_all();
 
     string s;
@@ -720,7 +504,21 @@ bool MainWindow::load()
 
     net_to_ui();
 
+    QApplication::restoreOverrideCursor();
+
+    //show intersting results from net
+    if(_pEngine->is_classification_problem())
+        ui->tabWidget->setCurrentIndex(2);
+    else
+        ui->tabWidget->setCurrentIndex(1);
+
     return true; //for now
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::load_file(string sFile)
+{
+    _sFileName=sFile;
+    load();
 }
 //////////////////////////////////////////////////////////////////////////////
 bool MainWindow::ask_save()
@@ -804,10 +602,40 @@ void MainWindow::model_changed(void * pSender)
         _pDataSource->load(ui->frameGlobal->data_name());
         _pEngine->set_problem(ui->frameGlobal->problem_name()=="Classification");
         set_input_size(_pDataSource->data_cols());
-        //        ui->frameGlobal->set_engine_name("BeeDNN");
+        //        ui->frameGlobal->set_engine_name("BeeDNN"); //TODO
+        _bMustSave=true;
+    }
+
+    if(pSender!=(void*)(ui->frameLearning))
+    {
+        ui->frameLearning->set_nettrain(&_pEngine->netTrain());
+    }
+    else
+    {
+        _bMustSave=true;
+    }
+
+    if(pSender != (void*)(ui->frameNetwork ) )
+    {
+        ui->frameNetwork->set_net(&(_pEngine->net()));
+    }
+    else
+    {
+        //net modified
         _bMustSave=true;
     }
 
     updateTitle();
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::on_btnTrainAndTest_clicked()
+{
+    if(QGuiApplication::keyboardModifiers() & Qt::ControlModifier)
+    {
+        for(int i=0;i<9;i++)
+            train_and_test(true,true);
+    }
+
+    train_and_test(true,true);
 }
 //////////////////////////////////////////////////////////////////////////////

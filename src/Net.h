@@ -35,6 +35,7 @@ public:
     void add_poolaveraging1D_layer(int inSize, int outSize);
 
 	int output_size() const;
+    int input_size() const;
 
     const vector<Layer*> layers() const;
     Layer& layer(size_t iLayer);

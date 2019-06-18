@@ -57,14 +57,23 @@ public:
 	void set_epochs(int iEpochs); //100 by default
 	int get_epochs() const;
 
-	/// reboost helps the optimizer to have a new fresh start every N epochs, helps Adamax for example
+    /// reboost helps the optimizer to have a new fresh start every N epochs, improve Adamax, for example
 	void set_reboost_every_epochs(int iReboostEveryEpochs); //-1 by default -> disabled
 	int get_reboost_every_epochs() const;
 
 	void set_epoch_callback(std::function<void()> epochCallBack);
 
-	void set_optimizer(string sOptimizer,float fLearningRate=-1.f, float fDecay = -1.f, float fMomentum = -1.f); //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov" ... -1.s is for default settings
-    void get_optimizer(string& sOptimizer, float& fLearningRate, float& fDecay, float& fMomentum) const;
+    void set_optimizer(string sOptimizer); //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov" ...
+    string get_optimizer() const;
+
+    void set_learningrate(float fLearningRate=-1.f ); // -1.f is for default settings
+    float get_learningrate() const;
+
+    void set_decay( float fDecay = -1.f); // -1.s is for default settings
+    float get_decay() const;
+
+    void set_momentum( float fMomentum = -1.f); //" -1.f is for default settings
+    float get_momentum() const;
 
 	void set_batchsize(int iBatchSize); //16 by default
 	int get_batchsize() const;
