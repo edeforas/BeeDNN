@@ -98,6 +98,25 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+class ActivationDivideBy256 : public Activation
+{
+public:
+	string name() const override
+	{
+		return "DivideBy256";
+	}
+
+	float apply(float x) const override
+	{
+		return x * 0.00390625f; //in fix, use (x+127) >> 8;
+	}
+
+	float derivation(float x) const override
+	{
+        (void)x;
+		return 0.00390625f;
+	}
+};//////////////////////////////////////////////////////////////////////////////
 class ActivationElliot: public Activation
 {
 public:
@@ -604,6 +623,9 @@ Activation* get_activation(const string& sActivation)
     if(sActivation=="Bent")
         return new ActivationBent;
 
+	if (sActivation == "DivideBy256")
+		return new ActivationDivideBy256;
+
     if(sActivation=="Elliot")
         return new ActivationElliot;
 
@@ -680,6 +702,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("Asinh");
     vsActivations.push_back("Atan");
     vsActivations.push_back("Bent");
+    vsActivations.push_back("DivideBy256");
     vsActivations.push_back("Elliot");
     vsActivations.push_back("Elu");
     vsActivations.push_back("Exponential");
