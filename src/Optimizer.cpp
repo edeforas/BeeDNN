@@ -246,7 +246,7 @@ public:
 
     virtual void init() override
     {
-		if (_fLearningRate == -1.f) _fLearningRate = 0.01f;
+		if (_fLearningRate == -1.f) _fLearningRate = 0.001f;
 
         _m.resize(0,0);
         _v.resize(0,0);

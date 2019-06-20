@@ -172,11 +172,7 @@ void MLEngineBeeDnn::classify_all(const MatrixFloat & mSamples, MatrixFloat& mRe
 //////////////////////////////////////////////////////////////////////////////
 float MLEngineBeeDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)
 {
-    MatrixFloat mPredicted;
-    int iNbSamples=(int)mSamples.rows();
-
-    predict_all(mSamples,mPredicted);
-    return (mPredicted-mTruth).cwiseAbs2().sum()/iNbSamples;
+    return _pTrain->compute_loss(*_pNet,mSamples,mTruth);
 }
 //////////////////////////////////////////////////////////////////////////////
 

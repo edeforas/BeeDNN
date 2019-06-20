@@ -142,26 +142,38 @@ float NetTrain::compute_loss(const Net& net, const MatrixFloat &mSamples, const 
     net.forward(mSamples, mOut);
 
     float fLoss = 0.f;
-    for(int i=0;i<iNbSamples;i++) //todo optimize
-        fLoss += _pLoss->compute(mOut.row(i), mTruth.row(i));
 
+	if (mTruth.cols() == 1) //categorical
+	{
+		MatrixFloat mTruthOneHot;
+        labelToOneHot(mTruth, mTruthOneHot, (int)mOut.cols());
+		for (int i = 0; i < iNbSamples; i++) //todo optimize
+            fLoss += _pLoss->compute(mOut.row(i), mTruthOneHot.row(i)); //todo optimize
+	}
+	else
+	{
+		for (int i = 0; i < iNbSamples; i++) //todo optimize
+			fLoss += _pLoss->compute(mOut.row(i), mTruth.row(i));
+	}
     return fLoss /iNbSamples;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 float NetTrain::compute_accuracy(const Net& net, const MatrixFloat &mSamples, const MatrixFloat &mTruth)
 {
     int iNbSamples = (int)mSamples.rows();
-
-    if(mTruth.cols()!=1)
-        return 0.f;
-
-    if( (net.size()==0) || (iNbSamples==0) )
-        return 0.f;
+	
+	if ((net.size() == 0) || (iNbSamples == 0))
+		return 0.f;
 
     MatrixFloat mOut;
     net.forward(mSamples, mOut);
+	
+	//TODODO manage one hot and caterocial together
 
-    if(mOut.cols()!=1)
+	if (mTruth.cols() != 1) //todo
+		return 0.f;
+	
+	if(mOut.cols()!=1)
         return 0.f;
 
     int iGood=0;
