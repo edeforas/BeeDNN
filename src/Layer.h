@@ -23,13 +23,15 @@ public:
     virtual Layer* clone() const =0;
 
     string type() const;
+
+    void set_input_size(int iInputSize);
     int in_size() const;
     int out_size() const;
 
     virtual void forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const =0;
 	
-    virtual void init(); //init all layers
-    virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, /*Optimizer* pOptim,*/ MatrixFloat &mNewDelta)=0;
+    virtual void init();
+    virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta)=0;
 		
 	void set_train_mode(bool bTrainMode); //set to true to train, to false to test
 

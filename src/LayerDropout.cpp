@@ -13,7 +13,7 @@ LayerDropout::LayerDropout(int iSize,float fRate):
     Layer(iSize,iSize,"Dropout"),
     _fRate(fRate)
 {
-    create_mask(iSize);
+    LayerDropout::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
 LayerDropout::~LayerDropout()
@@ -34,17 +34,18 @@ void LayerDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDropout::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta)
 {
+    (void)mInput;
     mNewDelta= mDelta*_mask.asDiagonal();
 
-    create_mask((int)mInput.cols());
+    init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerDropout::create_mask(int iSize)
+void LayerDropout::init()
 {
-    _mask.resize(1, iSize);
+    _mask.resize(1, _iInSize);
 	_mask.setConstant(1.f);
 
-    for (int i = 0; i < iSize; i++) //todo distribute a proportion of 1, so we get exactly fRate
+    for (int i = 0; i < _iInSize; i++) //todo distribute a proportion of 1, so we get exactly fRate
     {
         if ( (rand()/(float)RAND_MAX) < _fRate)
             _mask(0, i) = 0.f;

@@ -312,6 +312,8 @@ void MainWindow::on_pushButton_2_clicked() //clear
 void MainWindow::set_input_size(int iSize)
 {
     _iInputSize=iSize;
+    _pEngine->net().set_input_size(_iInputSize);
+
     //ui->twNetwork->setItem(0,1,new QTableWidgetItem(to_string(_iInputSize).data()));
     ui->frameNetwork->set_net(&(_pEngine->net()));
 }

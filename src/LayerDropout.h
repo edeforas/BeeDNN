@@ -25,6 +25,8 @@ public:
 
     virtual Layer* clone() const override;
 
+    virtual void init() override;
+
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) const override;
 
     virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta) override;
@@ -32,7 +34,7 @@ public:
     float get_rate() const;
 
 private:
-    void create_mask(int iSize);
+    void create_mask();
 
     float _fRate;
     MatrixFloat _mask;

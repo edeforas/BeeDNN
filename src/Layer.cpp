@@ -28,6 +28,12 @@ string Layer::type() const
     return _sType;
 }
 ///////////////////////////////////////////////////////////////
+void Layer::set_input_size(int iInputSize)
+{
+    _iInSize=iInputSize;
+    init();
+}
+///////////////////////////////////////////////////////////////
 int Layer::in_size() const
 {
     return _iInSize;

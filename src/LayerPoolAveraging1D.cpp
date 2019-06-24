@@ -12,16 +12,7 @@
 LayerPoolAveraging1D::LayerPoolAveraging1D(int iInSize, int iOutSize) :
     Layer(iInSize , iOutSize, "PoolAveraging1D")
 {
-	assert(iOutSize>0);
-
-    int iWindowSize=iInSize/iOutSize;
-    float fInvWeight=1.f/iWindowSize;
-
-    _weight.setZero(_iInSize,_iOutSize);
-
-    for(int i=0;i<iOutSize;i++)
-        for(int j=0;j<iWindowSize;j++)
-            _weight(i*iWindowSize+j,i)=fInvWeight;
+    LayerPoolAveraging1D::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
 LayerPoolAveraging1D::~LayerPoolAveraging1D()
@@ -30,6 +21,20 @@ LayerPoolAveraging1D::~LayerPoolAveraging1D()
 Layer* LayerPoolAveraging1D::clone() const
 {
     return new LayerPoolAveraging1D(_iInSize,_iOutSize);
+}
+///////////////////////////////////////////////////////////////////////////////
+void LayerPoolAveraging1D::init()
+{
+    assert(_iOutSize>0);
+
+    int iWindowSize=_iInSize/_iOutSize;
+    float fInvWeight=1.f/iWindowSize;
+
+    _weight.setZero(_iInSize,_iOutSize);
+
+    for(int i=0;i<_iOutSize;i++)
+        for(int j=0;j<iWindowSize;j++)
+            _weight(i*iWindowSize+j,i)=fInvWeight;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerPoolAveraging1D::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const

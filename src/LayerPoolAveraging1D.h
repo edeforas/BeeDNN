@@ -19,6 +19,7 @@ public:
     virtual ~LayerPoolAveraging1D() override;
 
     virtual Layer* clone() const override;
+    virtual void init() override;
 
     virtual void forward(const MatrixFloat& mMatin, MatrixFloat &mMatOut) const override;
     virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta) override;

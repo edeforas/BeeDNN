@@ -15,8 +15,6 @@ LayerDense::LayerDense(int iInSize, int iOutSize, bool bHasBias) :
     Layer(iInSize , iOutSize, "Dense"),
     _bHasBias(bHasBias)
 {
-    _weight.resize(_iInSize+(bHasBias?1:0),_iOutSize);
-
     LayerDense::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -32,6 +30,8 @@ Layer* LayerDense::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDense::init()
 {
+    _weight.resize(_iInSize+(_bHasBias?1:0),_iOutSize);
+
     //Xavier uniform initialization
     float a =sqrtf(6.f/(_iInSize+_iOutSize));
     _weight.setRandom();
