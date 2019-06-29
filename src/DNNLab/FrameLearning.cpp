@@ -46,6 +46,11 @@ FrameLearning::~FrameLearning()
     delete ui;
 }
 //////////////////////////////////////////////////////////////
+void FrameLearning::init()
+{
+
+}
+//////////////////////////////////////////////////////////////
 void FrameLearning::on_cbKeepBest_stateChanged(int arg1)
 {
     (void)arg1;

@@ -20,6 +20,8 @@ public:
     explicit FrameLearning(QWidget *parent = nullptr);
     ~FrameLearning();
 
+    void init();
+
     void set_main_window(MainWindow* pMainWindow);
     void set_nettrain(NetTrain* pTrain);
 

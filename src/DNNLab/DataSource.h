@@ -31,7 +31,7 @@ public:
     bool has_train_data() const;
     bool has_test_data() const;
 
-    int data_cols() const;
+    int data_size() const;
     int annotation_cols() const;
 
 private:

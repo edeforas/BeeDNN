@@ -128,3 +128,4 @@ void FrameGlobal::on_cbData_currentIndexChanged(int index)
 
     _pMainWindow->model_changed(this);
 }
+

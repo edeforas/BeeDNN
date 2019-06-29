@@ -23,8 +23,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
   , ui(new Ui::MainWindow)
 {
-    _pDataSource=new DataSource;
-    _pEngine=new MLEngineBeeDnn;
+    _pDataSource=nullptr;
+    _pEngine=nullptr;
 
     ui->setupUi(this);
 
@@ -59,7 +59,10 @@ void MainWindow::init_all()
 
     delete _pDataSource;
     _pDataSource=new DataSource;
+	_pDataSource->load("Sin");
+	_pEngine->net().set_input_size(_pDataSource->data_size());
 
+    ui->frameLearning->init();
     ui->frameGlobal->init();
     ui->frameNetwork->init();
 
@@ -73,9 +76,8 @@ void MainWindow::init_all()
     //   _sFileName="";
 
     _curveColor=0xff0000; //red
-    set_input_size(1);
 
-    _pDataSource->load(ui->frameGlobal->data_name());
+    model_changed(0);
 
     updateTitle();
 }
@@ -313,9 +315,6 @@ void MainWindow::set_input_size(int iSize)
 {
     _iInputSize=iSize;
     _pEngine->net().set_input_size(_iInputSize);
-
-    //ui->twNetwork->setItem(0,1,new QTableWidgetItem(to_string(_iInputSize).data()));
-    ui->frameNetwork->set_net(&(_pEngine->net()));
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::update_classification_tab()
@@ -603,8 +602,7 @@ void MainWindow::model_changed(void * pSender)
     {
         _pDataSource->load(ui->frameGlobal->data_name());
         _pEngine->set_problem(ui->frameGlobal->problem_name()=="Classification");
-        set_input_size(_pDataSource->data_cols());
-        //        ui->frameGlobal->set_engine_name("BeeDNN"); //TODO
+        set_input_size(_pDataSource->data_size());
         _bMustSave=true;
     }
 

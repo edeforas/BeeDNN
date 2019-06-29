@@ -23,7 +23,6 @@ public:
     void set_main_window(MainWindow* pMainWindow);
     void set_net(Net* pNet);
 
-
 private slots:
     void on_twNetwork_cellChanged(int row, int column);
     void type_changed();

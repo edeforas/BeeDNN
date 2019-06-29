@@ -301,7 +301,7 @@ bool DataSource::has_test_data() const
     return _bHasTestData;
 }
 ////////////////////////////////////////////////////////////////////////
-int DataSource::data_cols() const
+int DataSource::data_size() const
 {
     return (int)_mTrainData.cols();
 }
