@@ -143,42 +143,62 @@ float NetTrain::compute_loss(const Net& net, const MatrixFloat &mSamples, const 
 
     float fLoss = 0.f;
 
-	if (mTruth.cols() == 1) //categorical
-	{
-		MatrixFloat mTruthOneHot;
-        labelToOneHot(mTruth, mTruthOneHot, (int)mOut.cols());
-		for (int i = 0; i < iNbSamples; i++) //todo optimize
-            fLoss += _pLoss->compute(mOut.row(i), mTruthOneHot.row(i)); //todo optimize
-	}
-	else
+	if (mTruth.cols() == mOut.cols())
 	{
 		for (int i = 0; i < iNbSamples; i++) //todo optimize
 			fLoss += _pLoss->compute(mOut.row(i), mTruth.row(i));
 	}
+	else if((mTruth.cols() == 1) && (mOut.cols() >1) ) //categorical
+	{
+		MatrixFloat mTruthOneHot;
+		labelToOneHot(mTruth, mTruthOneHot);
+		for (int i = 0; i < iNbSamples; i++) //todo optimize
+			fLoss += _pLoss->compute(mOut.row(i), mTruthOneHot.row(i)); //todo optimize
+	}
+
     return fLoss /iNbSamples;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 float NetTrain::compute_accuracy(const Net& net, const MatrixFloat &mSamples, const MatrixFloat &mTruth)
 {
     int iNbSamples = (int)mSamples.rows();
-	
-	if ((net.size() == 0) || (iNbSamples == 0))
-		return 0.f;
+
+    if ((net.size() == 0) || (iNbSamples == 0))
+        return 0.f;
 
     MatrixFloat mOut;
     net.forward(mSamples, mOut);
-	
-	//TODODO manage one hot and caterocial together
 
-	if (mTruth.cols() != 1) //todo
-		return 0.f;
-	
-	if(mOut.cols()!=1)
-        return 0.f;
+    if (mTruth.cols() != 1)
+    {
+		if (mOut.cols() == mTruth.cols())
+		{
+			//one hot everywhere
+			int iGood = 0;
+			for (int i = 0; i < iNbSamples; i++)
+			{
+				iGood += (argmax(mOut.row(i)) == argmax(mTruth.row(i)));
+			}
+
+			return 100.f*iGood / iNbSamples;
+		}
+       return 0.f;   //todo
+    }
 
     int iGood=0;
-    for(int i=0;i<iNbSamples;i++) //todo optimize
-        iGood += roundf(mOut(i))==mTruth(i);
+    if(mOut.cols()!=1)
+    {
+        int iGood=0;
+        for(int i=0;i<iNbSamples;i++)
+        {
+            iGood += (argmax(mOut.row(i)) ==mTruth(i));
+        }
+    }
+    else
+    {
+        for(int i=0;i<iNbSamples;i++)
+            iGood += roundf(mOut(i))==mTruth(i);
+    }
 
     return 100.f*iGood /iNbSamples;
 }
@@ -195,14 +215,12 @@ TrainResult NetTrain::train(Net& net,const MatrixFloat& mSamples,const MatrixFlo
         //create binary label
         MatrixFloat mTruthOneHot;
         labelToOneHot(mTruth, mTruthOneHot);
-        TrainResult tr=fit(net,mSamples, mTruthOneHot);
-        _bIsclassificationProblem=false;
-        return tr; //todo remove
+		TrainResult tr = fit(net, mSamples, mTruthOneHot);
+		return tr; //todo remove
     }
     else
     {
         TrainResult tr=fit(net,mSamples,mTruth);;
-        _bIsclassificationProblem=false;
         return tr; //todo remove
     }
 }
@@ -228,7 +246,6 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
 
     vector<Optimizer*> optimizers(nLayers);
 
-    MatrixFloat mLoss;
     float fLoss=0.f,fMinLoss=1.e10f;
     float fAccuracy=0.,fMaxAccuracy=-1.f;
 
@@ -312,19 +329,15 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
         if(_bKeepBest)
         {
             if(_bIsclassificationProblem)
-            {
+            {   //use accuracy
                 if(fMaxAccuracy<fAccuracy)
                 {
                     fMaxAccuracy=fAccuracy;
                     bestNet=net;
                 }
-
-
-                //use accuracy
             }
             else
-            {
-                //use loss
+            {   //use loss
                 if(fMinLoss>fLoss)
                 {
                     fMinLoss=fLoss;
@@ -333,7 +346,7 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
             }
         }
 
-        //reboost every epochs if asked
+        //reboost optimizers every epochs if asked
         if (_iReboostEveryEpochs != -1)
         {
             if (iReboost < _iReboostEveryEpochs)
@@ -351,13 +364,19 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
         delete optimizers[i];
 
     if(_bKeepBest)
-    {
         net=bestNet;
-        //tr.finalLoss=dMinLoss;
-    }
-    // else
-    //    tr.finalLoss=dLoss;
 
     return tr;
 }
+/////////////////////////////////////////////////////////////////////////////////////////////
+void NetTrain::set_problem(bool bClassification)
+{
+	_bIsclassificationProblem = bClassification;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
+bool NetTrain::is_classification_problem()
+{
+	return _bIsclassificationProblem;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////

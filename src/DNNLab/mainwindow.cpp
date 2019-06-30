@@ -23,8 +23,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
   , ui(new Ui::MainWindow)
 {
-    _pDataSource=new DataSource;
-    _pEngine=new MLEngineBeeDnn;
+    _pDataSource=nullptr;
+    _pEngine=nullptr;
 
     ui->setupUi(this);
 
@@ -59,7 +59,10 @@ void MainWindow::init_all()
 
     delete _pDataSource;
     _pDataSource=new DataSource;
+	_pDataSource->load("Sin");
+	_pEngine->net().set_input_size(_pDataSource->data_size());
 
+    ui->frameLearning->init();
     ui->frameGlobal->init();
     ui->frameNetwork->init();
 
@@ -73,9 +76,8 @@ void MainWindow::init_all()
     //   _sFileName="";
 
     _curveColor=0xff0000; //red
-    set_input_size(1);
 
-    _pDataSource->load(ui->frameGlobal->data_name());
+    model_changed(0);
 
     updateTitle();
 }
@@ -97,7 +99,7 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
     if(bReset)
         _pEngine->init();
 
-    _pEngine->set_problem(ui->frameGlobal->problem_name()=="Classification");
+    _pEngine->set_problem(ui->frameGlobal->is_classification_problem());
 
     if(bLearn)
     {
@@ -175,39 +177,84 @@ void MainWindow::drawRegression()
     _qsRegression->clear();
 
     if(_pEngine->is_classification_problem()==true)
-    {   //not a regression problem
-        return;
-    }
+        return; //not a regression problem
+    
+	_qsRegression->addHorizontalLine(0.);
 
-    //create ref sample and net output
-    unsigned int iNbPoint=100;
-    float fInputMin=-4.f;
-    float fInputMax=4.f;
-    vector<double> vTruth;
-    vector<double> vSamples;
-    vector<double> vRegression;
-    MatrixFloat mIn(1,1),mOut;
+	bool bPlotTrainTruth = true, bPlotTestTruth = false, bPlotTrainPredicted = false, bPlotTestPredicted = true; //todo use checkbox
+	bool bHasTrainData = _pDataSource->has_train_data();
+	bool bHasTestData = _pDataSource->has_test_data();
+	bPlotTrainTruth &= bHasTrainData;
+	bPlotTestTruth &= bHasTrainData;
+	bPlotTrainPredicted &= bHasTrainData;
+	bPlotTestPredicted &= bHasTestData;
+	const MatrixFloat& mTrainData = _pDataSource->train_data();
+	const MatrixFloat& mTestData = _pDataSource->test_data();
 
-    float fVal=fInputMin;
-    float fStep=(fInputMax-fInputMin)/(iNbPoint-1.f);
+	//plot train truth
+	if (bPlotTrainTruth)
+	{    
+		vector<double> vSamples;
+		vector<double> vTruth;
+		const MatrixFloat& mTrainTruth = _pDataSource->train_truth();
+		for (int i = 0; i < mTrainTruth.size(); i++)
+		{
+			vSamples.push_back(mTrainData(i));
+			vTruth.push_back(mTrainTruth(i));
+		}
 
-    for(unsigned int i=0;i<iNbPoint;i++)
-    {
-        mIn(0,0)=fVal;
-        vTruth.push_back((double)(_pDataSource->train_truth()(i,0)));
-        vSamples.push_back((double)(fVal));
-        _pEngine->predict(mIn,mOut);
+		_qsRegression->addCurve(vSamples, vTruth, 0xFF0000);
+	}
 
-        if(mOut.size()==0)
-            return; //todo
+	//plot test truth
+	if (bPlotTestTruth)
+	{
+		vector<double> vSamples;
+		vector<double> vTruth;
+		const MatrixFloat& mTestTruth = _pDataSource->test_truth();
+		for (int i = 0; i < mTestTruth.size(); i++)
+		{
+			vSamples.push_back(mTestData(i));
+			vTruth.push_back(mTestTruth(i));
+		}
 
-        vRegression.push_back((double)(mOut(0)));
-        fVal+=fStep;
-    }
+		_qsRegression->addCurve(vSamples, vTruth, 0x0000FF);
+	}
 
-    _qsRegression->addHorizontalLine(0.);
-    _qsRegression->addCurve(vSamples,vTruth,0xFF0000);
-    _qsRegression->addCurve(vSamples,vRegression,0xFF);
+	//plot predicted train
+	if (bPlotTrainPredicted)
+	{
+		MatrixFloat mPredictedTrain;
+		_pEngine->predict(mTrainData, mPredictedTrain);
+
+		vector<double> vSamples;
+		vector<double> vTruth;
+		for (int i = 0; i < mPredictedTrain.size(); i++)
+		{
+			vSamples.push_back(mTrainData(i));
+			vTruth.push_back(mPredictedTrain(i));
+		}
+
+		_qsRegression->addCurve(vSamples, vTruth, 0x7F0000);
+	}
+
+
+	//plot predicted test
+	if (bPlotTestPredicted)
+	{
+		MatrixFloat mPredictedTest;
+		_pEngine->predict(mTestData, mPredictedTest);
+
+		vector<double> vSamples;
+		vector<double> vTruth;
+		for (int i = 0; i < mPredictedTest.size(); i++)
+		{
+			vSamples.push_back(mTestData(i));
+			vTruth.push_back(mPredictedTest(i));
+		}
+
+		_qsRegression->addCurve(vSamples, vTruth, 0x00007F);
+	}
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionQuit_triggered()
@@ -313,9 +360,6 @@ void MainWindow::set_input_size(int iSize)
 {
     _iInputSize=iSize;
     _pEngine->net().set_input_size(_iInputSize);
-
-    //ui->twNetwork->setItem(0,1,new QTableWidgetItem(to_string(_iInputSize).data()));
-    ui->frameNetwork->set_net(&(_pEngine->net()));
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::update_classification_tab()
@@ -596,15 +640,14 @@ void MainWindow::model_changed(void * pSender)
     if(pSender != (void*)(ui->frameGlobal ) )
     {
         ui->frameGlobal->set_data_name(_pDataSource->name());
-        ui->frameGlobal->set_problem_name(_pEngine->is_classification_problem()?"Classification":"Regression");
+        ui->frameGlobal->set_problem(_pEngine->is_classification_problem());
         ui->frameGlobal->set_engine_name("BeeDNN");
     }
     else
     {
         _pDataSource->load(ui->frameGlobal->data_name());
-        _pEngine->set_problem(ui->frameGlobal->problem_name()=="Classification");
-        set_input_size(_pDataSource->data_cols());
-        //        ui->frameGlobal->set_engine_name("BeeDNN"); //TODO
+        _pEngine->set_problem(ui->frameGlobal->is_classification_problem());
+        set_input_size(_pDataSource->data_size());
         _bMustSave=true;
     }
 

@@ -88,13 +88,13 @@ void arraySub(MatrixFloat& m,float f)
 ///////////////////////////////////////////////////////////////////////////
 MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d)
 {
-    assert(d.rows() == 1);
-    assert(d.cols() == m.cols());
+    assert(d.cols() == 1);
+    assert(d.rows() == m.rows());
 
     MatrixFloat r=m;
 
     for(int l=0;l<r.rows();l++)
-        r.row(l)/=d(l,0);
+        r.row(l)/=d(l);
 
     return r;
 }

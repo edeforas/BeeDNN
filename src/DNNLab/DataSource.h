@@ -31,7 +31,7 @@ public:
     bool has_train_data() const;
     bool has_test_data() const;
 
-    int data_cols() const;
+    int data_size() const;
     int annotation_cols() const;
 
 private:
@@ -41,6 +41,7 @@ private:
     void load_and();
     void load_xor();
     void load_fisher();
+	float get_function_val(float x);
 
     MatrixFloat _mTrainData;
     MatrixFloat _mTrainTruth;

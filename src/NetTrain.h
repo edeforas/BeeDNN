@@ -84,6 +84,8 @@ public:
 	void set_loss(string sLoss); // "MeanSquareError" by default, ex "MeanSquareError" "CategorialCrossEntropy"
 	string get_loss() const;
 
+	void set_problem(bool bClassification);
+	bool is_classification_problem();
 
 private:
 	bool _bKeepBest;

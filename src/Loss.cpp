@@ -73,6 +73,51 @@ public:
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
+// as in :https://en.wikipedia.org/wiki/Hinge_loss
+class LossHinge : public Loss
+{
+public:
+	string name() const override
+	{
+		return "Hinge";
+	}
+
+	float compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget) const override
+	{
+		assert(mTarget.cols() == mPredicted.cols());
+		assert(mTarget.rows() == mPredicted.rows());
+
+		if (mTarget.size() == 0)
+			return 0.f;
+
+		//for now, element by element
+		float fMean = 0.f;
+		for (int i = 0; i < mTarget.size(); i++)
+			fMean += std::max(0.f, 1.f - mTarget(i)*mPredicted(i));
+
+		return fMean / mTarget.size();
+	}
+
+	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
+	{
+		assert(mTarget.cols() == mPredicted.cols());
+		assert(mTarget.rows() == mPredicted.rows());
+		
+		mGradientLoss.resize(mTarget.rows(), mTarget.cols());
+
+		for (int i = 0; i < mTarget.size(); i++)
+		{
+			float fProd = mTarget(i)*mPredicted(i);
+			if (1. - fProd > 0.f)
+			{
+				mGradientLoss(i) = -mTarget(i);
+			}
+			else
+				mGradientLoss(i) = 0.f;
+		}
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
 // same as MeanSquareError but do not divide by nbSamples
 // see https://isaacchanghau.github.io/post/loss_functions/
 class LossL2 : public Loss
@@ -207,6 +252,9 @@ Loss* create_loss(const string& sLoss)
     if(sLoss =="MeanAbsoluteError")
         return new LossMeanAbsoluteError;
 
+	if (sLoss == "Hinge")
+		return new LossHinge;
+
 	if (sLoss == "L2")
 		return new LossL2;
 
@@ -228,9 +276,10 @@ void list_loss_available(vector<string>& vsLoss)
 
     vsLoss.push_back("MeanSquaredError");
 	vsLoss.push_back("MeanAbsoluteError");
+//	vsLoss.push_back("Hinge");
 	vsLoss.push_back("L2");
 	vsLoss.push_back("L1");
-	vsLoss.push_back("CategoricalCrossEntropy");
+//	vsLoss.push_back("CategoricalCrossEntropy");
 	vsLoss.push_back("BinaryCrossEntropy");
 }
 //////////////////////////////////////////////////////////////////////////////
