@@ -143,18 +143,19 @@ float NetTrain::compute_loss(const Net& net, const MatrixFloat &mSamples, const 
 
     float fLoss = 0.f;
 
-    if( (mTruth.cols() == 1) && _bIsclassificationProblem )//categorical //todo
-    {
-        MatrixFloat mTruthOneHot;
-        labelToOneHot(mTruth, mTruthOneHot, (int)mOut.cols());
-        for (int i = 0; i < iNbSamples; i++) //todo optimize
-            fLoss += _pLoss->compute(mOut.row(i), mTruthOneHot.row(i)); //todo optimize
-    }
-    else
-    {
-        for (int i = 0; i < iNbSamples; i++) //todo optimize
-            fLoss += _pLoss->compute(mOut.row(i), mTruth.row(i));
-    }
+	if (mTruth.cols() == mOut.cols())
+	{
+		for (int i = 0; i < iNbSamples; i++) //todo optimize
+			fLoss += _pLoss->compute(mOut.row(i), mTruth.row(i));
+	}
+	else if((mTruth.cols() == 1) && (mOut.cols() >1) ) //categorical
+	{
+		MatrixFloat mTruthOneHot;
+		labelToOneHot(mTruth, mTruthOneHot);
+		for (int i = 0; i < iNbSamples; i++) //todo optimize
+			fLoss += _pLoss->compute(mOut.row(i), mTruthOneHot.row(i)); //todo optimize
+	}
+
     return fLoss /iNbSamples;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -170,8 +171,18 @@ float NetTrain::compute_accuracy(const Net& net, const MatrixFloat &mSamples, co
 
     if (mTruth.cols() != 1)
     {
-       return 0.f;
-       //todo
+		if (mOut.cols() == mTruth.cols())
+		{
+			//one hot everywhere
+			int iGood = 0;
+			for (int i = 0; i < iNbSamples; i++)
+			{
+				iGood += (argmax(mOut.row(i)) == argmax(mTruth.row(i)));
+			}
+
+			return 100.f*iGood / iNbSamples;
+		}
+       return 0.f;   //todo
     }
 
     int iGood=0;
@@ -204,14 +215,12 @@ TrainResult NetTrain::train(Net& net,const MatrixFloat& mSamples,const MatrixFlo
         //create binary label
         MatrixFloat mTruthOneHot;
         labelToOneHot(mTruth, mTruthOneHot);
-        TrainResult tr=fit(net,mSamples, mTruthOneHot);
-        _bIsclassificationProblem=false;
-        return tr; //todo remove
+		TrainResult tr = fit(net, mSamples, mTruthOneHot);
+		return tr; //todo remove
     }
     else
     {
         TrainResult tr=fit(net,mSamples,mTruth);;
-        _bIsclassificationProblem=false;
         return tr; //todo remove
     }
 }
@@ -359,4 +368,15 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
 
     return tr;
 }
+/////////////////////////////////////////////////////////////////////////////////////////////
+void NetTrain::set_problem(bool bClassification)
+{
+	_bIsclassificationProblem = bClassification;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
+bool NetTrain::is_classification_problem()
+{
+	return _bIsclassificationProblem;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////

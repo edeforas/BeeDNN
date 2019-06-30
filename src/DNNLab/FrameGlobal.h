@@ -29,8 +29,8 @@ public:
     string engine_name() const;
     void set_engine_name(string sEngineName);
 
-    string problem_name() const;
-    void set_problem_name(string sProblemName);
+    bool is_classification_problem() const;
+    void set_problem(bool bClassificationProblem);
 
 private slots:
     void on_cbEngine_currentTextChanged(const QString &arg1);

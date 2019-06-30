@@ -95,18 +95,19 @@ void FrameGlobal::set_engine_name(string sEngineName)
     _bLock=false;
 }
 
-string FrameGlobal::problem_name() const
+bool FrameGlobal::is_classification_problem() const
 {
-    return ui->cbProblem->currentText().toStdString();
+    return ui->cbProblem->currentText().toStdString()=="Classification";
 }
 
-void FrameGlobal::set_problem_name(string sProblemName)
+void FrameGlobal::set_problem(bool bClassificationProblem)
 {
     _bLock=true;
-    ui->cbProblem->setCurrentText(sProblemName.c_str());
+	string sProblem = bClassificationProblem ? "Classification" : "Regression";
+
+    ui->cbProblem->setCurrentText(sProblem.c_str());
     _bLock=false;
 }
-
 
 void FrameGlobal::on_cbData_currentIndexChanged(int index)
 {

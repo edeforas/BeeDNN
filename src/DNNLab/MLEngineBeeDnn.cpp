@@ -14,7 +14,6 @@
 MLEngineBeeDnn::MLEngineBeeDnn()
 {
     _iComputedEpochs=0;
-    _bClassification=false;
 
     _pNet=new Net;
     _pTrain= new NetTrain;
@@ -34,7 +33,7 @@ void MLEngineBeeDnn::clear()
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::write(string& s)
 {
-    s+="Problem="+string(_bClassification?"Classification":"Regression")+"\n";
+    s+="Problem="+string(_pTrain->is_classification_problem()?"Classification":"Regression")+"\n";  //todo remove?
 
     NetUtil::write(*_pTrain,s);
     s+="\n";
@@ -42,17 +41,13 @@ void MLEngineBeeDnn::write(string& s)
 }
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::read(const string& s)
-{
-    (void)s;
-
-    string sProblem=NetUtil::find_key(s,"Problem");
-
-    _bClassification=(sProblem=="Classification");
-
+{  
     NetUtil::read(s,*_pNet);
     NetUtil::read(s,*_pTrain);
 
-    //todo
+	string sProblem = NetUtil::find_key(s, "Problem");
+	bool bClassification = (sProblem == "Classification");
+	_pTrain->set_problem(bClassification);
 }
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::init()
@@ -75,7 +70,7 @@ void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat&
 
     _pTrain->clear(); //todo remove
 
-    if(_bClassification)
+    if(_pTrain->is_classification_problem()) //todo call 1 function in_pTrain , learn?
         tr=_pTrain->train(*_pNet,mSamples,mTruth);
     else
         tr=_pTrain->fit(*_pNet,mSamples,mTruth);
@@ -125,12 +120,13 @@ DNNTrainResult MLEngineBeeDnn::learn(const MatrixFloat& mSamples,const MatrixFlo
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::set_problem(bool bClassification)
 {
-    _bClassification=bClassification;
+	_pTrain->set_problem(bClassification);
+ //   _bClassification=bClassification;
 }
 //////////////////////////////////////////////////////////////////////////////
 bool MLEngineBeeDnn::is_classification_problem()
 {
-    return _bClassification;
+	return _pTrain->is_classification_problem();
 }
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::compute_confusion_matrix(const MatrixFloat & mSamples, const MatrixFloat& mTruth,MatrixFloat& mConfusionMatrix, float& fAccuracy)

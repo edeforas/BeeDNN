@@ -99,7 +99,7 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
     if(bReset)
         _pEngine->init();
 
-    _pEngine->set_problem(ui->frameGlobal->problem_name()=="Classification");
+    _pEngine->set_problem(ui->frameGlobal->is_classification_problem());
 
     if(bLearn)
     {
@@ -181,7 +181,13 @@ void MainWindow::drawRegression()
     
 	_qsRegression->addHorizontalLine(0.);
 
-	bool bPlotTrainTruth = true, bPlotTestTruth = true, bPlotTrainPredicted = true, bPlotTestPredicted = true; //todo use checkbox
+	bool bPlotTrainTruth = true, bPlotTestTruth = false, bPlotTrainPredicted = false, bPlotTestPredicted = true; //todo use checkbox
+	bool bHasTrainData = _pDataSource->has_train_data();
+	bool bHasTestData = _pDataSource->has_test_data();
+	bPlotTrainTruth &= bHasTrainData;
+	bPlotTestTruth &= bHasTrainData;
+	bPlotTrainPredicted &= bHasTrainData;
+	bPlotTestPredicted &= bHasTestData;
 	const MatrixFloat& mTrainData = _pDataSource->train_data();
 	const MatrixFloat& mTestData = _pDataSource->test_data();
 
@@ -634,13 +640,13 @@ void MainWindow::model_changed(void * pSender)
     if(pSender != (void*)(ui->frameGlobal ) )
     {
         ui->frameGlobal->set_data_name(_pDataSource->name());
-        ui->frameGlobal->set_problem_name(_pEngine->is_classification_problem()?"Classification":"Regression");
+        ui->frameGlobal->set_problem(_pEngine->is_classification_problem());
         ui->frameGlobal->set_engine_name("BeeDNN");
     }
     else
     {
         _pDataSource->load(ui->frameGlobal->data_name());
-        _pEngine->set_problem(ui->frameGlobal->problem_name()=="Classification");
+        _pEngine->set_problem(ui->frameGlobal->is_classification_problem());
         set_input_size(_pDataSource->data_size());
         _bMustSave=true;
     }

@@ -224,7 +224,7 @@ void DataSource::load_function()
         fVal+=dStep;
     }
 
-	int iNbPointsTest = 1000;
+	int iNbPointsTest = 199;
 	_mTestData.resize(iNbPointsTest, 1);
 	_mTestTruth.resize(iNbPointsTest, 1);
 	dStep = (fMax - fMin) / (iNbPointsTest - 1.f);

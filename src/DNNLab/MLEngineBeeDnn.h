@@ -63,7 +63,6 @@ private:
     vector<float> _vfLoss; //temp
     vector<float> _vfAccuracy; //temp
 
-    int _bClassification;
     int _iComputedEpochs;
 };
 
