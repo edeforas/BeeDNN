@@ -41,6 +41,7 @@ private:
     void load_and();
     void load_xor();
     void load_fisher();
+	float get_function_val(float x);
 
     MatrixFloat _mTrainData;
     MatrixFloat _mTrainTruth;

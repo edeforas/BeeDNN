@@ -23,14 +23,12 @@ FrameGlobal::FrameGlobal(QWidget *parent) :
     ui->cbData->insertSeparator(4);
 
     ui->cbData->addItem("Sin");
+	ui->cbData->addItem("Sin4Period");
     ui->cbData->addItem("Abs");
     ui->cbData->addItem("Parabolic");
     ui->cbData->addItem("Gamma");
     ui->cbData->addItem("Exp");
-    ui->cbData->addItem("Sqrt");
-    ui->cbData->addItem("Ln");
     ui->cbData->addItem("Gauss");
-    ui->cbData->addItem("Inverse");
     ui->cbData->addItem("Rectangular");
 
     init();

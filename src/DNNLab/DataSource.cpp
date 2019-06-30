@@ -87,10 +87,10 @@ void DataSource::load(const string& sName)
     if(sName=="MNIST")
         load_mnist();
 
-    else if(sName=="and")
+    else if(sName=="And")
         load_and();
 
-    else if(sName=="xor")
+    else if(sName=="Xor")
         load_xor();
 
     else if(sName=="TextFile")
@@ -210,60 +210,67 @@ void DataSource::load_function()
 {
     float fMin=-4.f;
     float fMax=4.f;
-    int iNbPoints=100;
 
-    _mTrainData.resize(iNbPoints,1);
-    _mTrainTruth.resize(iNbPoints,1);
-
-    float dStep=(fMax-fMin)/(iNbPoints-1.f);
-
+    int iNbPointsLearn = 100;
+    _mTrainData.resize(iNbPointsLearn,1);
+    _mTrainTruth.resize(iNbPointsLearn,1);
+    float dStep=(fMax-fMin)/(iNbPointsLearn-1.f);
     float fVal=fMin,fOut=0.f;
-
-    for( int i=0;i<iNbPoints;i++)
+    for( int i=0;i<iNbPointsLearn;i++)
     {
-        if(_sName=="Identity")
-            fOut=fVal;
-
-        if(_sName=="Sin")
-            fOut=sinf(fVal);
-
-        if(_sName=="Abs")
-            fOut=fabs(fVal);
-
-        if(_sName=="Parabolic")
-            fOut=fVal*fVal;
-
-        if(_sName=="Gamma")
-            fOut=tgammaf(fVal);
-
-        if(_sName=="Exp")
-            fOut=expf(fVal);
-
-        if(_sName=="Sqrt")
-            fOut=sqrtf(fVal);
-
-        if(_sName=="Ln")
-            fOut=logf(fVal);
-
-        if(_sName=="Gauss")
-            fOut=expf(-fVal*fVal);
-
-        if(_sName=="Inverse")
-            fOut=1.f/fVal;
-
-        if(_sName=="Rectangular")
-            fOut= (float)(((((int)fVal)+(fVal<0.f))+1) & 1 );
-
+		fOut = get_function_val(fVal);
         _mTrainData(i)=fVal;
         _mTrainTruth(i)=fOut;
         fVal+=dStep;
     }
 
-    _mTestData=_mTrainData;
-    _mTestTruth=_mTrainTruth;
+	int iNbPointsTest = 1000;
+	_mTestData.resize(iNbPointsTest, 1);
+	_mTestTruth.resize(iNbPointsTest, 1);
+	dStep = (fMax - fMin) / (iNbPointsTest - 1.f);
+	fVal = fMin, fOut = 0.f;
+	for (int i = 0; i < iNbPointsTest; i++)
+	{
+		fOut = get_function_val(fVal);
+		_mTestData(i) = fVal;
+		_mTestTruth(i) = fOut;
+		fVal += dStep;
+	}
 
     _bHasTrainData=true;
-    _bHasTestData=false;
+    _bHasTestData= true;
+}
+////////////////////////////////////////////////////////////////////////
+float DataSource::get_function_val(float x)
+{
+	if (_sName == "Identity")
+		return x;
+
+	if (_sName == "Sin")
+		return sinf(x);
+
+	if (_sName == "Sin4Period")
+		return sinf(x*4.f);
+
+	if (_sName == "Abs")
+		return fabs(x);
+
+	if (_sName == "Parabolic")
+		return x * x;
+
+	if (_sName == "Gamma")
+		return tgammaf(x);
+
+	if (_sName == "Exp")
+		return expf(x);
+
+	if (_sName == "Gauss")
+		return expf(-x * x);
+
+	if (_sName == "Rectangular")
+		return (float)(((((int)x) + (x < 0.f)) + 1) & 1);
+
+	return 0.f;
 }
 ////////////////////////////////////////////////////////////////////////
 const MatrixFloat& DataSource::train_data() const

@@ -177,39 +177,78 @@ void MainWindow::drawRegression()
     _qsRegression->clear();
 
     if(_pEngine->is_classification_problem()==true)
-    {   //not a regression problem
-        return;
-    }
+        return; //not a regression problem
+    
+	_qsRegression->addHorizontalLine(0.);
 
-    //create ref sample and net output
-    unsigned int iNbPoint=100;
-    float fInputMin=-4.f;
-    float fInputMax=4.f;
-    vector<double> vTruth;
-    vector<double> vSamples;
-    vector<double> vRegression;
-    MatrixFloat mIn(1,1),mOut;
+	bool bPlotTrainTruth = true, bPlotTestTruth = true, bPlotTrainPredicted = true, bPlotTestPredicted = true; //todo use checkbox
+	const MatrixFloat& mTrainData = _pDataSource->train_data();
+	const MatrixFloat& mTestData = _pDataSource->test_data();
 
-    float fVal=fInputMin;
-    float fStep=(fInputMax-fInputMin)/(iNbPoint-1.f);
+	//plot train truth
+	if (bPlotTrainTruth)
+	{    
+		vector<double> vSamples;
+		vector<double> vTruth;
+		const MatrixFloat& mTrainTruth = _pDataSource->train_truth();
+		for (int i = 0; i < mTrainTruth.size(); i++)
+		{
+			vSamples.push_back(mTrainData(i));
+			vTruth.push_back(mTrainTruth(i));
+		}
 
-    for(unsigned int i=0;i<iNbPoint;i++)
-    {
-        mIn(0,0)=fVal;
-        vTruth.push_back((double)(_pDataSource->train_truth()(i,0)));
-        vSamples.push_back((double)(fVal));
-        _pEngine->predict(mIn,mOut);
+		_qsRegression->addCurve(vSamples, vTruth, 0xFF0000);
+	}
 
-        if(mOut.size()==0)
-            return; //todo
+	//plot test truth
+	if (bPlotTestTruth)
+	{
+		vector<double> vSamples;
+		vector<double> vTruth;
+		const MatrixFloat& mTestTruth = _pDataSource->test_truth();
+		for (int i = 0; i < mTestTruth.size(); i++)
+		{
+			vSamples.push_back(mTestData(i));
+			vTruth.push_back(mTestTruth(i));
+		}
 
-        vRegression.push_back((double)(mOut(0)));
-        fVal+=fStep;
-    }
+		_qsRegression->addCurve(vSamples, vTruth, 0x0000FF);
+	}
 
-    _qsRegression->addHorizontalLine(0.);
-    _qsRegression->addCurve(vSamples,vTruth,0xFF0000);
-    _qsRegression->addCurve(vSamples,vRegression,0xFF);
+	//plot predicted train
+	if (bPlotTrainPredicted)
+	{
+		MatrixFloat mPredictedTrain;
+		_pEngine->predict(mTrainData, mPredictedTrain);
+
+		vector<double> vSamples;
+		vector<double> vTruth;
+		for (int i = 0; i < mPredictedTrain.size(); i++)
+		{
+			vSamples.push_back(mTrainData(i));
+			vTruth.push_back(mPredictedTrain(i));
+		}
+
+		_qsRegression->addCurve(vSamples, vTruth, 0x7F0000);
+	}
+
+
+	//plot predicted test
+	if (bPlotTestPredicted)
+	{
+		MatrixFloat mPredictedTest;
+		_pEngine->predict(mTestData, mPredictedTest);
+
+		vector<double> vSamples;
+		vector<double> vTruth;
+		for (int i = 0; i < mPredictedTest.size(); i++)
+		{
+			vSamples.push_back(mTestData(i));
+			vTruth.push_back(mPredictedTest(i));
+		}
+
+		_qsRegression->addCurve(vSamples, vTruth, 0x00007F);
+	}
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionQuit_triggered()
