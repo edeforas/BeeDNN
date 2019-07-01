@@ -279,7 +279,7 @@ void list_loss_available(vector<string>& vsLoss)
 //	vsLoss.push_back("Hinge");
 	vsLoss.push_back("L2");
 	vsLoss.push_back("L1");
-//	vsLoss.push_back("CategoricalCrossEntropy");
+	vsLoss.push_back("CategoricalCrossEntropy");
 	vsLoss.push_back("BinaryCrossEntropy");
 }
 //////////////////////////////////////////////////////////////////////////////
