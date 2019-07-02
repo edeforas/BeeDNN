@@ -179,6 +179,7 @@ public:
 };
 //////////////////////////////////////////////////////////////////////////////
 // from https://gombru.github.io/2018/05/23/cross_entropy_loss
+// and : https://sefiks.com/2017/12/17/a-gentle-introduction-to-cross-entropy-loss-function/
 class LossCategoricalCrossEntropy : public Loss
 {
 public:
@@ -200,7 +201,13 @@ public:
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
 
-		mGradientLoss = -(mTarget.cwiseQuotient(mPredicted.cwiseMax(1.e-8f))); //to avoid computing 1/0
+		mGradientLoss.resize(mTarget.rows(), mTarget.cols());
+		for (int i = 0; i < mTarget.size(); i++)
+		{
+			float p = mPredicted(i);
+			float y = mTarget(i);
+			mGradientLoss(i) = -(y / max(p, 1.e-8f))+ (1.f - y)/(max(1.e-8f, 1.f - p));
+		}
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -216,6 +223,7 @@ public:
 
 	float compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget) const override
 	{
+		assert(mTarget.cols() == 1);
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
 		
