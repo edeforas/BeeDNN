@@ -63,4 +63,4 @@ x64
 release
 debug
 *vcxproj.filters
-ui_*.h
+

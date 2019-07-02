@@ -1,0 +1,42 @@
+DataSource=Xor
+Problem=Classification
+Epochs=100
+BatchSize=1
+Loss=BinaryCrossEntropy
+KeepBest=1
+ReboostEveryEpochs=-1
+Optimizer=Adam
+LearningRate=-1
+Decay=-1
+Momentum=-1
+
+Engine=BeeDNN
+NbLayers=4
+
+Layer1.type=Dense
+Layer1.inSize=2
+Layer1.outSize=5
+Layer1.hasBias=1
+Layer1.weight=
+0.4591 0.118 -0.7017 -0.7244 0.1624 
+0.4189 0.8759 0.2287 0.5849 -0.7492 
+0.6239 0.05591 0.6089 -0.428 0.5699 
+
+Layer2.type=Relu
+
+Layer3.type=Dense
+Layer3.inSize=5
+Layer3.outSize=1
+Layer3.hasBias=1
+Layer3.weight=
+0.06831 
+-0.9941 
+0.42 
+-0.5696 
+0.5064 
+0.8814 
+
+Layer4.type=Sigmoid
+
+Notes=
+

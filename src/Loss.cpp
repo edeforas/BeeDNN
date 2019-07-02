@@ -276,7 +276,7 @@ void list_loss_available(vector<string>& vsLoss)
 
     vsLoss.push_back("MeanSquaredError");
 	vsLoss.push_back("MeanAbsoluteError");
-//	vsLoss.push_back("Hinge");
+	vsLoss.push_back("Hinge");
 	vsLoss.push_back("L2");
 	vsLoss.push_back("L1");
 	vsLoss.push_back("CategoricalCrossEntropy");
