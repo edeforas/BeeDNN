@@ -25,7 +25,7 @@ Layer* LayerSoftmax::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerSoftmax::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 {
-    mOut=cwiseExp(mIn);
+    mOut= mIn.array().exp();
 
     for(int i=0;i<mOut.rows();i++)
         mOut.row(i)/=mOut.row(i).sum();

@@ -94,8 +94,7 @@ void Net::add_dense_layer(int inSize,int outSize,bool bHasBias)
 void Net::add_globalgain_layer(int inSize, float fGlobalGain)
 {
     if(_iOutputSize!=0)
-        if(inSize!=_iOutputSize)
-            inSize=_iOutputSize;
+		inSize=_iOutputSize;
 
     _layers.push_back(new LayerGlobalGain(inSize,fGlobalGain));
 }

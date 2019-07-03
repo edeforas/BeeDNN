@@ -105,6 +105,15 @@ public:
         return *this;
     }
     
+	Matrix<T>& array() //for eigen compatibility
+	{
+		return *this;
+	}
+	const Matrix<T>& array() const //for eigen compatibility
+	{
+		return *this;
+	}
+
 	Matrix<T>& operator-()
 	{
 		for (int i = 0; i < size(); i++)
@@ -386,6 +395,46 @@ public:
 		return out;
 	}
 
+	Matrix<T> log() const //todo check applies on an array only
+	{
+		Matrix<T> out(*this);
+
+		for (int i = 0; i < _iSize; i++)
+			out(i) = logf(_data[i]);
+
+		return out;
+	}
+
+	Matrix<T> cosh() const //todo check applies on an array only
+	{
+		Matrix<T> out(*this);
+
+		for (int i = 0; i < _iSize; i++)
+			out(i) = coshf(_data[i]);
+
+		return out;
+	}
+
+	Matrix<T> tanh() const //todo check applies on an array only
+	{
+		Matrix<T> out(*this);
+
+		for (int i = 0; i < _iSize; i++)
+			out(i) = tanhf(_data[i]);
+
+		return out;
+	}
+
+	Matrix<T> exp() const //todo check applies on an array only
+	{
+		Matrix<T> out(*this);
+
+		for (int i = 0; i < _iSize; i++)
+			out(i) = expf(_data[i]);
+
+		return out;
+	}
+
 	Matrix<T> cwiseSqrt() const
     {
         Matrix<T> out(*this);
@@ -528,8 +577,6 @@ const MatrixFloatView fromRawBuffer(const float *pBuffer, int iRows, int iCols);
 MatrixFloat rowWiseSum(const MatrixFloat& m);
 MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d);
-MatrixFloat cwiseLog(const MatrixFloat& m);
-MatrixFloat cwiseExp(const MatrixFloat& m);
 void arraySub(MatrixFloat& m,float f);
 MatrixFloat randPerm(int iSize); //create a vector of index shuffled
 void applyRowPermutation(const MatrixFloat & mPermutationIndex, const MatrixFloat & mIn, MatrixFloat & mPermuted); 

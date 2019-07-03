@@ -49,34 +49,8 @@ MatrixFloat rowWiseSum(const MatrixFloat& m)
     return result;
 #endif
 }
+
 ///////////////////////////////////////////////////////////////////////////
-MatrixFloat cwiseLog(const MatrixFloat& m)
-{
-#ifdef USE_EIGEN
-    return m.array().log();
-#else
-    MatrixFloat result(m.rows(),m.cols());
-
-    for (int i = 0; i < m.size(); i++)
-        result(i) = log(m(i));
-
-    return result;
-#endif
-}
-///////////////////////////////////////////////////////////////////////////
-MatrixFloat cwiseExp(const MatrixFloat& m)
-{
-#ifdef USE_EIGEN
-    return m.array().exp();
-#else
-    MatrixFloat result(m.rows(),m.cols());
-
-    for (int i = 0; i < m.size(); i++)
-        result(i) = exp(m(i));
-
-    return result;
-#endif
-}///////////////////////////////////////////////////////////////////////////
 void arraySub(MatrixFloat& m,float f)
 {
 #ifdef USE_EIGEN

@@ -188,11 +188,8 @@ float NetTrain::compute_accuracy(const Net& net, const MatrixFloat &mSamples, co
     int iGood=0;
     if(mOut.cols()!=1)
     {
-        int iGood=0;
         for(int i=0;i<iNbSamples;i++)
-        {
             iGood += (argmax(mOut.row(i)) ==mTruth(i));
-        }
     }
     else
     {
@@ -246,8 +243,8 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
 
     vector<Optimizer*> optimizers(nLayers);
 
-    float fLoss=0.f,fMinLoss=1.e10f;
-    float fAccuracy=0.,fMaxAccuracy=-1.f;
+    float fMinLoss=1.e10f;
+    float fAccuracy=0.f , fMaxAccuracy=-1.f;
 
     tr.reset();
 
@@ -263,7 +260,7 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
 
     for(int iEpoch=0;iEpoch<_iEpochs;iEpoch++)
     {
-        fLoss=0.;
+        float fLoss=0.f;
 
         MatrixFloat mShuffle=randPerm(iNbSamples);
         MatrixFloat mSampleShuffled;
