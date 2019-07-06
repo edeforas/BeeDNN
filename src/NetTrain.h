@@ -18,24 +18,13 @@ using namespace std;
 
 class Optimizer;
 class Loss;
+class Net;
 
-class TrainResult
+class TrainResult //todo remove
 {
 public:
-    TrainResult()
-    { 
-    //	finalLoss=-1.;
-	}
-
-    void reset()
-    {
-        loss.clear();
-        accuracy.clear();
-    }
-
     vector<float> loss;
     vector<float> accuracy;
-    //double finalLoss;
 };
 
 class Layer;
@@ -88,9 +77,17 @@ public:
 	bool is_classification_problem();
 
 private:
+	void train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth);
+
+	//online statistics, i.e. loss, accuracy ...
+	void add_online_statistics(const MatrixFloat&mPredicted, const MatrixFloat&mTruth);
+	int _iOnlineAccuracyGood;
+	float _fOnlineLoss;
+
 	bool _bKeepBest;
 	int _iBatchSize;
 	int _iEpochs;
+	int _iNbLayers;
 	int _iReboostEveryEpochs;
 
     string _sOptimizer;
@@ -99,8 +96,13 @@ private:
 	float _fMomentum;
     bool _bIsclassificationProblem;
 
+	vector<Optimizer*> _optimizers;
+	vector<MatrixFloat> _inOut;
+	vector<MatrixFloat> _delta;
+
 	std::function<void()> _epochCallBack;
 
+	Net* _pNet;
 	Loss* _pLoss;
 };
 

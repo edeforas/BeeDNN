@@ -29,10 +29,20 @@ NetTrain::NetTrain():
     _fDecay = -1.f; //default
     _fMomentum = -1.f; //default
     _bIsclassificationProblem=false;
+	_iNbLayers=0;
+	_fOnlineLoss = 0.f;
+	_pNet = nullptr;
+
+	//_iOnlineAccuracyGood = 0;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 NetTrain::~NetTrain()
 {
+	for (int i = 0; i < _optimizers.size(); i++)
+		delete _optimizers[i];
+
+	_optimizers.clear();
+
     delete _pLoss;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -226,41 +236,41 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
 {
     TrainResult tr;
     int iNbSamples=(int)mSamples.rows();
-    int nLayers=(int)net.layers().size();
+	_iNbLayers =(int)net.layers().size();
     int iReboost = 0;
+
+    if(_iNbLayers ==0)
+        return tr;
+
+	_pNet = &net;
 
     Net bestNet;
 
-    int iBatchSize=_iBatchSize;
-    if(iBatchSize>iNbSamples)
-        iBatchSize=iNbSamples;
+    if(_iBatchSize >iNbSamples)
+		_iBatchSize =iNbSamples;
 
-    float fInvBatchSize=1.f/(float)iBatchSize;
+	_inOut.resize(_iNbLayers + 1);
 
-    vector<MatrixFloat> inOut(nLayers+1);
-    vector<MatrixFloat> deltaWeight(nLayers+1);
-    vector<MatrixFloat> delta(nLayers+1);
+    _delta.resize(_iNbLayers +1);
 
-    vector<Optimizer*> optimizers(nLayers);
+	for (int i = 0; i < _optimizers.size(); i++)
+		delete _optimizers[i];
+	_optimizers.clear();
 
     float fMinLoss=1.e10f;
     float fAccuracy=0.f , fMaxAccuracy=-1.f;
 
-    tr.reset();
-
-    if(nLayers==0)
-        return tr;
-
     //init all optimizers
-    for (int i = 0; i < nLayers; i++)
+    for (int i = 0; i < _iNbLayers; i++)
     {
-        optimizers[i] = create_optimizer(_sOptimizer);
-        optimizers[i]->set_params(_fLearningRate,_fDecay, _fMomentum);
+        _optimizers.push_back( create_optimizer(_sOptimizer));
+        _optimizers[i]->set_params(_fLearningRate,_fDecay, _fMomentum);
     }
 
     for(int iEpoch=0;iEpoch<_iEpochs;iEpoch++)
     {
-        float fLoss=0.f;
+        _fOnlineLoss=0.f;
+		_iOnlineAccuracyGood = 0;
 
         MatrixFloat mShuffle=randPerm(iNbSamples);
         MatrixFloat mSampleShuffled;
@@ -274,49 +284,30 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
 
         while(iBatchStart<iNbSamples)
         {
-            int iBatchEnd=iBatchStart+iBatchSize;
+            int iBatchEnd=iBatchStart+_iBatchSize;
             if(iBatchEnd>iNbSamples)
                 iBatchEnd=iNbSamples;
 
-            for(int i=0;i<nLayers+1;i++)
-                deltaWeight[i].setZero();
+      //      for(int i=0;i< _iNbLayers +1;i++)
+       //         deltaWeight[i].setZero();
 
             const MatrixFloat mSample = rowRange(mSampleShuffled, iBatchStart, iBatchEnd);
             const MatrixFloat mTarget = rowRange(mTruthShuffled, iBatchStart, iBatchEnd);
 
-            //forward pass with store
-            inOut[0]=mSample;
-            for(int i=0;i<nLayers;i++)
-                net.layer(i).forward(inOut[i],inOut[i+1]);
-
-            //compute loss
-            _pLoss->compute_gradient(inOut[nLayers], mTarget, delta[nLayers]);
-            fLoss += _pLoss->compute(inOut[nLayers], mTarget);
-
-            //backward pass with store, compute deltaWeight, optimize
-            for (int i = nLayers - 1; i >= 0; i--)
-            {
-                Layer& l = net.layer(i);
-                l.backpropagation(inOut[i], delta[i + 1], delta[i]);
-
-                if (l.has_weight())
-                {
-                    optimizers[i]->optimize(l.weights(), l.gradient_weights()* fInvBatchSize);
-                }
-            }
-
+			train_batch(mSample, mTarget);
+		
             iBatchStart=iBatchEnd;
         }
 
         net.set_train_mode(false);
-        fLoss/=iNbSamples;
+        _fOnlineLoss/=iNbSamples;
 
-        tr.loss.push_back(fLoss);
+        tr.loss.push_back(_fOnlineLoss);
 
         if(_bIsclassificationProblem)
         {
-            fAccuracy=compute_accuracy(net,mSamples,mTruth);
-            tr.accuracy.push_back(fAccuracy);
+            fAccuracy=100.f*_iOnlineAccuracyGood/ iNbSamples;
+           tr.accuracy.push_back(fAccuracy);
         }
 
         if (_epochCallBack)
@@ -335,9 +326,9 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
             }
             else
             {   //use loss
-                if(fMinLoss>fLoss)
+                if(fMinLoss>_fOnlineLoss)
                 {
-                    fMinLoss=fLoss;
+                    fMinLoss=_fOnlineLoss;
                     bestNet=net;
                 }
             }
@@ -351,19 +342,42 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
             else
             {
                 iReboost = 0;
-                for (int i = 0; i < nLayers; i++)
-                    optimizers[i]->init();
+                for (int i = 0; i < _iNbLayers; i++)
+                    _optimizers[i]->init();
             }
         }
     }
 
-    for (int i = 0; i < nLayers; i++)
-        delete optimizers[i];
-
-    if(_bKeepBest)
+	if(_bKeepBest)
         net=bestNet;
 
     return tr;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
+void NetTrain::train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth)
+{
+	//forward pass with store
+	_inOut[0] = mSample;
+	for (int i = 0; i < _iNbLayers; i++)
+		_pNet->layer(i).forward(_inOut[i], _inOut[i + 1]);
+
+	//compute error gradient
+	_pLoss->compute_gradient(_inOut[_iNbLayers], mTruth, _delta[_iNbLayers]);
+
+	//backward pass with optimizer
+	for (int i = _iNbLayers - 1; i >= 0; i--)
+	{
+		Layer& l = _pNet->layer(i);
+		l.backpropagation(_inOut[i], _delta[i + 1], _delta[i]);
+
+		if (l.has_weight())
+		{
+			_optimizers[i]->optimize(l.weights(), l.gradient_weights()*(1.f/_iBatchSize));
+		}
+	}
+
+	//store statistics
+	add_online_statistics(_inOut[_iNbLayers], mTruth);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::set_problem(bool bClassification)
@@ -375,5 +389,39 @@ bool NetTrain::is_classification_problem()
 {
 	return _bIsclassificationProblem;
 }
+/////////////////////////////////////////////////////////////////////////////////////////////
+void NetTrain::add_online_statistics(const MatrixFloat&mPredicted, const MatrixFloat&mTruth )
+{
+	//update loss
+	_fOnlineLoss += _pLoss->compute(mPredicted, mTruth);
+	   	  
+	if (!_bIsclassificationProblem)
+		return;
 
+	int iNbRows = (int)mPredicted.rows();
+	if (mPredicted.cols() == 1)
+	{
+		//categorical predicted, categorical truth
+		assert(mTruth.cols() == 1);
+		for (int i = 0; i < iNbRows; i++)
+			_iOnlineAccuracyGood += (roundf(mPredicted(i)) == mTruth(i));
+	}
+	else
+	{
+		//one hot predicted
+		if (mTruth.cols() == 1)
+		{
+			// categorical truth
+			for (int i = 0; i < iNbRows; i++)
+				_iOnlineAccuracyGood += (argmax(mPredicted.row(i)) == mTruth(i) );
+		}
+		else
+		{
+			// one hot truth
+			assert(mTruth.cols() == mPredicted.cols());
+			for (int i = 0; i < iNbRows; i++)
+				_iOnlineAccuracyGood += (argmax(mPredicted.row(i)) == argmax(mTruth.row(i)));
+		}
+	}
+}
 /////////////////////////////////////////////////////////////////////////////////////////////
