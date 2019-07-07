@@ -194,6 +194,36 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+//from : https://arxiv.org/pdf/1710.09967.pdf
+#define ISRLU_ALPHA (1.0f)
+class ActivationISRLU: public Activation
+{
+public:
+    string name() const override
+    {
+        return "ISRLU";
+    }
+
+    float apply(float x) const override
+    {
+        if(x>=0.f)
+            return x;
+        else
+            return x/sqrtf(1.f+ ISRLU_ALPHA*x*x);
+	}
+
+    float derivation(float x) const override
+    {
+        if(x>=0.f)
+            return 1.f;
+        else
+		{
+			float t=1.f/sqrtf(1.f+ ISRLU_ALPHA*x*x);
+			return t*t*t;
+		}
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
 class ActivationLinear: public Activation
 {
 public:
@@ -635,12 +665,15 @@ Activation* get_activation(const string& sActivation)
     if(sActivation=="Exponential")
         return new ActivationExponential;
 
-    if(sActivation=="HardSigmoid")
-        return new ActivationHardSigmoid;
-
     if(sActivation=="Gauss")
         return new ActivationGauss;
 
+    if(sActivation=="HardSigmoid")
+        return new ActivationHardSigmoid;
+
+    if(sActivation=="ISRLU")
+        return new ActivationISRLU;
+	
     if(sActivation=="Linear")
         return new ActivationLinear;
 
@@ -708,6 +741,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("Exponential");
     vsActivations.push_back("Gauss");
     vsActivations.push_back("HardSigmoid");
+	vsActivations.push_back("ISRLU");
     vsActivations.push_back("Linear");
     vsActivations.push_back("LeakyRelu");
     vsActivations.push_back("LeakyRelu256");
