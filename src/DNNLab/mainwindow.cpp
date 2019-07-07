@@ -126,6 +126,8 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
     update_classification_tab();
     update_details();
 
+	model_changed(0);
+
     QApplication::restoreOverrideCursor();
 }
 //////////////////////////////////////////////////////////////////////////

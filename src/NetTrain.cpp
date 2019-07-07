@@ -234,6 +234,9 @@ TrainResult NetTrain::train(Net& net,const MatrixFloat& mSamples,const MatrixFlo
 /////////////////////////////////////////////////////////////////////////////////////////////////
 TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruth)
 {
+	if(net.input_size()!= (int)mSamples.cols())
+		net.set_input_size((int)mSamples.cols());
+
     TrainResult tr;
     int iNbSamples=(int)mSamples.rows();
 	_iNbLayers =(int)net.layers().size();
@@ -287,9 +290,6 @@ TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat
             int iBatchEnd=iBatchStart+_iBatchSize;
             if(iBatchEnd>iNbSamples)
                 iBatchEnd=iNbSamples;
-
-      //      for(int i=0;i< _iNbLayers +1;i++)
-       //         deltaWeight[i].setZero();
 
             const MatrixFloat mSample = rowRange(mSampleShuffled, iBatchStart, iBatchEnd);
             const MatrixFloat mTarget = rowRange(mTruthShuffled, iBatchStart, iBatchEnd);

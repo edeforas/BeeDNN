@@ -30,7 +30,10 @@ Layer* LayerDense::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDense::init()
 {
-    _weight.resize(_iInSize+(_bHasBias?1:0),_iOutSize);
+	assert(_iInSize > 0);
+	assert(_iOutSize > 0);
+	
+	_weight.resize(_iInSize+(_bHasBias?1:0),_iOutSize);
 
     //Xavier uniform initialization
     float a =sqrtf(6.f/(_iInSize+_iOutSize));
