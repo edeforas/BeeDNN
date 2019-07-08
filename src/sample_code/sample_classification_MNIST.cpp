@@ -1,7 +1,7 @@
 // sample  classification MNIST similar as :
 // https://colab.research.google.com/github/tensorflow/docs/blob/master/site/en/tutorials/_index.ipynb
 
-//expect 97% on ref and test in less than 100s training time
+//expect 98% on ref and test in 5 minute training time
 
 #include <iostream>
 #include <chrono>
@@ -57,19 +57,20 @@ int main()
     }
 
 	//normalize data
-	mTestImages/= 255.f;
-	mRefImages/= 255.f;
+	mTestImages/= 256.f;
+	mRefImages/= 256.f;
   
 	//create simple net:
-    net.add_dense_layer(784,64);
-	net.add_activation_layer("Relu");
-	net.add_dense_layer(64, 10);
-	net.add_activation_layer("Sigmoid");
+    net.add_dense_layer(784, 256);
+	net.add_activation_layer("LeakyRelu");
+	net.add_dense_layer(256, 10);
+	net.add_softmax_layer();
 
 	//train net
 	cout << "training..." << endl;
 	NetTrain netTrain;
-	netTrain.set_epochs(10);
+	netTrain.set_epochs(6);
+	netTrain.set_loss("CategoricalCrossEntropy");
 	netTrain.set_epoch_callback(epoch_callback);
 	start = chrono::steady_clock::now();
 	netTrain.train(net, mRefImages, mRefLabels);

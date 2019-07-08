@@ -116,8 +116,8 @@ void DataSource::load_mnist()
 
     MNISTReader r;
     r.read_from_folder(".",_mTrainData,_mTrainTruth,_mTestData,_mTestTruth);
-    _mTrainData/=255.f;
-    _mTestData/=255.f;
+    _mTrainData/=256.f;
+    _mTestData/=256.f;
 
     _bHasTrainData=true;
     _bHasTestData=true;
