@@ -47,7 +47,7 @@ FrameNetwork::FrameNetwork(QWidget *parent) :
         qcbType->addItem("GaussianNoise");
         qcbType->addItem("GlobalGain");
         qcbType->addItem("PoolAveraging1D");
-        qcbType->addItem("SoftMax");
+        qcbType->addItem("Softmax");
 
         qcbType->insertSeparator(8);
 
@@ -220,6 +220,8 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
             }
             else if(sType=="PoolAveraging1D")
                 _pNet->add_poolaveraging1D_layer(iInSize,iOutSize);
+			else if (sType == "Softmax")
+				_pNet->add_softmax_layer();
             else if(sType=="DenseAndBias")
                 _pNet->add_dense_layer(iInSize,iOutSize,true);
             else if(sType=="DenseNoBias")
