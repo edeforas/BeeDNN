@@ -10,7 +10,7 @@ Implemented so far:
 - dropout layer, gaussian noise layer
 - global gain layer (WIP)
 - pool averaging 1D layer
-- softmax layer (WIP)
+- softmax layer
 - layers and activations are decoupled, can be in any orders
 - mini batch learn, SGD learn, batch learn
 - SGD, Momentum, Nesterov, Adam, Nadam, Adagrad, Adamax, RMSprop

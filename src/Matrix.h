@@ -156,6 +156,11 @@ public:
         _data=new T[_iSize];
     }
     
+	void resizeLike(const Matrix<T>& other)
+	{
+		resize(other.rows(), other.cols());
+	}
+	
     T* data()
     {
         return _data;
