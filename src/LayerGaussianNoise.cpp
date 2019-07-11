@@ -26,18 +26,18 @@ Layer* LayerGaussianNoise::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGaussianNoise::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 {
-    if(_bTrainMode)
+	if (_bTrainMode && (_fStd > 0.) )
 	{
 		default_random_engine RNGgenerator; //todo check perfs of init every time
 		normal_distribution<float> distNormal(0.f, _fStd); //todo check perfs of init every time
 
-		mOut.resize(mIn.rows(),mIn.cols());
-    
-		for(int i=0;i<mOut.size();i++)
-			mOut(i)=mIn(i)+ distNormal(RNGgenerator);
-    }
+		mOut.resize(mIn.rows(), mIn.cols());
+
+		for (int i = 0; i < mOut.size(); i++)
+			mOut(i) = mIn(i) + distNormal(RNGgenerator);
+	}
 	else
-        mOut = mIn; // in test mode
+		mOut = mIn; // in test mode or sigma==0.
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGaussianNoise::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta)
