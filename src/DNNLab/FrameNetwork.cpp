@@ -78,6 +78,7 @@ void FrameNetwork::init()
         ((QComboBox*)(ui->twNetwork->cellWidget(i,0)))->setCurrentIndex(0);
         ui->twNetwork->setItem(i,1,new QTableWidgetItem(""));
         ui->twNetwork->setItem(i,2,new QTableWidgetItem(""));
+        ui->twNetwork->setItem(i,3,new QTableWidgetItem(""));
     }
     _bLock=false;
 }
