@@ -106,7 +106,7 @@ void applyRowPermutation(const MatrixFloat & mPermutationIndex, const MatrixFloa
     assert(mPermutationIndex.rows() == mIn.rows());
     assert(mPermutationIndex.cols() == 1);
 
-    mPermuted.resize(mIn.rows(), mIn.cols());
+    mPermuted.resizeLike(mIn);
 
     for (int i = 0; i < mPermutationIndex.rows(); i++)
         mPermuted.row(i) = mIn.row((int)mPermutationIndex(i));

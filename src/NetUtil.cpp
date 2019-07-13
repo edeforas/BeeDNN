@@ -222,4 +222,46 @@ string find_key(string s,string sKey)
         return s2;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////
+bool check_net_size(const Net& net,int iInSize,int iOutSize)
+{
+	//check input size
+	if (net.input_size() != iInSize)
+	{
+		//todo LOG
+		return false;
+	}
+
+	int iLastSize = net.input_size();
+
+	//check output size
+	if (net.output_size() != iOutSize)
+	{
+		//todo LOG
+		return false;
+	}
+
+	if (net.size() == 0)
+		return true;
+
+	//check  each layer size
+	for(int i=1; i< net.size();i++)
+	{
+		const Layer& l1 = net.layer(i - 1);
+				
+		int size0 = l1.in_size();
+		int size1 = l1.out_size();
+
+		if ((size0 == 0) && (size1 == 0))
+			continue; //activation layer
+
+
+		//update last size
+
+			//todododo
+
+	}
+
+	return true;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////
 }

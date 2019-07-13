@@ -31,6 +31,8 @@ bool load(string sFileName,Net* pNet);
 
 string find_key(string s,string sKey);
 
+bool check_net_size(const Net& net, int iInSize, int iOutSize);
+
 };
 
 #endif

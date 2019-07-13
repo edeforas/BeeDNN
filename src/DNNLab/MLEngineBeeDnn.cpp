@@ -121,7 +121,6 @@ DNNTrainResult MLEngineBeeDnn::learn(const MatrixFloat& mSamples,const MatrixFlo
 void MLEngineBeeDnn::set_problem(bool bClassification)
 {
 	_pTrain->set_problem(bClassification);
- //   _bClassification=bClassification;
 }
 //////////////////////////////////////////////////////////////////////////////
 bool MLEngineBeeDnn::is_classification_problem()

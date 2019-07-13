@@ -29,7 +29,7 @@ Layer* LayerActivation::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerActivation::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 {
-    mOut.resize(mIn.rows(),mIn.cols());
+    mOut.resizeLike(mIn);
 
     for(int i=0;i<mOut.size();i++)
         mOut(i)=_pActivation->apply(mIn(i));
@@ -37,7 +37,7 @@ void LayerActivation::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerActivation::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta)
 {
-    mNewDelta.resize(mDelta.rows(),mDelta.cols());
+    mNewDelta.resizeLike(mDelta);
     for(int i=0;i<mNewDelta.size();i++)
         mNewDelta(i)=_pActivation->derivation(mInput(i))*mDelta(i);
 }
