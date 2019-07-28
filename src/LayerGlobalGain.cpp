@@ -11,14 +11,10 @@
 #include <cmath> // for sqrt
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerGlobalGain::LayerGlobalGain(int iInSize, float fGlobalGain) :
-    Layer(iInSize , iInSize, "GlobalGain")
+LayerGlobalGain::LayerGlobalGain() :
+    Layer(0 , 0, "GlobalGain")
 {
-    _bLearnable=(fGlobalGain==0.f); //for now
-
     _weight.resize(1,1);
-    _weight(0)=fGlobalGain;
-
     LayerGlobalGain::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -27,19 +23,15 @@ LayerGlobalGain::~LayerGlobalGain()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerGlobalGain::clone() const
 {
-    LayerGlobalGain* pLayer=new LayerGlobalGain(_iInSize,_weight(0));
+    LayerGlobalGain* pLayer=new LayerGlobalGain();
+	pLayer->weights() = _weight;
+
     return pLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGlobalGain::init()
 {
-    if(_bLearnable)
-    {
-        //Xavier uniform initialization
-        float a =sqrtf(6.f/(_iInSize+_iOutSize));
-        _weight.setRandom();
-        _weight*=a;
-    }
+    _weight.setOnes(); //init to one by default
 
     Layer::init();
 }
@@ -58,11 +50,6 @@ void LayerGlobalGain::backpropagation(const MatrixFloat &mInput,const MatrixFloa
 float LayerGlobalGain::gain() const
 {
     return _weight(0);
-}
-///////////////////////////////////////////////////////////////////////////////
-bool LayerGlobalGain::is_learned() const
-{
-    return _bLearnable;
 }
 ///////////////////////////////////////////////////////////////////////////////
 MatrixFloat& LayerGlobalGain::weights()

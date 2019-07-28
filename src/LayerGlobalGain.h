@@ -15,7 +15,7 @@
 class LayerGlobalGain : public Layer
 {
 public:
-    LayerGlobalGain(int iInSize,float fGlobalGain);
+    LayerGlobalGain();
     virtual ~LayerGlobalGain();
 
     virtual Layer* clone() const override;
@@ -26,7 +26,6 @@ public:
     virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta) override;
 
     float gain() const;
-    bool is_learned() const;
 
     virtual bool has_weight() override;
     virtual MatrixFloat& weights() override;
@@ -34,7 +33,6 @@ public:
 
 private:
     MatrixFloat _weight,_mDeltaWeight;
-    bool _bLearnable;
 };
 
 #endif

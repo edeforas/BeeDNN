@@ -112,8 +112,11 @@ void read(const string& s,Net& net)
 
         else if(sType=="GlobalGain")
         {
-            string sGain=find_key(s,sLayer+".globalGain");
-            net.add_globalgain_layer(iInSize,stof(sGain));
+            float fGain= stof(find_key(s,sLayer+".globalGain"));
+            net.add_globalgain_layer();
+			MatrixFloat mf(1, 1);
+			mf(0) = fGain;
+			net.layer(net.size() - 1).weights() = mf;
         }
 
         else if(sType=="Dropout")
@@ -231,7 +234,7 @@ bool check_net_size(const Net& net,int iInSize,int iOutSize)
 		return false;
 	}
 
-	int iLastSize = net.input_size();
+	//int iLastSize = net.input_size(); //todo
 
 	//check output size
 	if (net.output_size() != iOutSize)

@@ -125,12 +125,6 @@ void FrameNetwork::set_net(Net* pNet)
             ui->twNetwork->setItem(i,3,new QTableWidgetItem(to_string(fRate).c_str()));
         }
 
-        if(sType=="GlobalGain")
-        {
-            float fGain=((LayerGlobalGain*)l)->gain();
-            ui->twNetwork->setItem(i,3,new QTableWidgetItem(to_string(fGain).c_str()));
-        }
-
         if(l->in_size())
             ui->twNetwork->setItem(i,1,new QTableWidgetItem(to_string(l->in_size()).c_str()));
 
@@ -213,12 +207,7 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
                 _pNet->add_gaussian_noise_layer(iInSize,fStd);
             }
             else if(sType=="GlobalGain")
-            {
-                float fGain=0.f; //by default, 0.f mean learned
-                if(bOk)
-                    fGain=fArg1;
-                _pNet->add_globalgain_layer(iInSize,fGain);
-            }
+                _pNet->add_globalgain_layer();
             else if(sType=="PoolAveraging1D")
                 _pNet->add_poolaveraging1D_layer(iInSize,iOutSize);
 			else if (sType == "Softmax")
