@@ -143,6 +143,9 @@ bool NetTrain::get_keepbest() const
 /////////////////////////////////////////////////////////////////////////////////////////////////
 float NetTrain::compute_loss(const Net& net, const MatrixFloat &mSamples, const MatrixFloat &mTruth)
 {
+	if (!net.is_valid(mSamples.cols(), mTruth.cols()))
+		return 0.f;
+
     int iNbSamples = (int)mSamples.rows();
 
     if( (net.layers().size()==0) || (iNbSamples==0) )
@@ -234,10 +237,14 @@ TrainResult NetTrain::train(Net& net,const MatrixFloat& mSamples,const MatrixFlo
 /////////////////////////////////////////////////////////////////////////////////////////////////
 TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruth)
 {
-	if(net.input_size()!= (int)mSamples.cols())
+	if (net.input_size() != (int)mSamples.cols())
 		net.set_input_size((int)mSamples.cols());
 
-    TrainResult tr;
+    TrainResult tr;	
+	
+	if (!net.is_valid(mSamples.cols(), mTruth.cols()))
+		return tr;
+
     int iNbSamples=(int)mSamples.rows();
 	_iNbLayers =(int)net.layers().size();
     int iReboost = 0;

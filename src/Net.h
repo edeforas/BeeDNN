@@ -49,6 +49,8 @@ public:
 
     void set_train_mode(bool bTrainMode); // set to true if training, set to false if testing
 
+	bool is_valid(int iInSize, int iOutSize) const; //return true if all size ok
+
 private:
     void update_out_layer_input_size(int& iInSize);
 	bool _bTrainMode;

@@ -240,12 +240,14 @@ void MainWindow::drawRegression()
 		_qsRegression->addCurve(vSamples, vTruth, 0x7F0000);
 	}
 
-
 	//plot predicted test
 	if (bPlotTestPredicted)
 	{
 		MatrixFloat mPredictedTest;
 		_pEngine->predict(mTestData, mPredictedTest);
+
+		if (mPredictedTest.size() == 0)
+			return; //predict fails
 
 		vector<double> vSamples;
 		vector<double> vTruth;

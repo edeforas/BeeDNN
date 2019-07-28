@@ -56,7 +56,7 @@ void LayerDense::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDense::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mInputDelta)
 {
-    //split _weight in [weightnobias, bias] in computation in cases of bias
+    // optimisation: split _weight in [weightnobias, bias] in computation in cases of bias
 
     //backpropagation and computation of gradient
     if (_bHasBias)

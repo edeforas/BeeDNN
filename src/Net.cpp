@@ -199,3 +199,44 @@ void Net::update_out_layer_input_size(int& iInSize)
         iInSize=_iOutputSize;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
+bool Net::is_valid(int iInSize, int iOutSize) const
+{
+	//check input size
+	if (_iInputSize != iInSize)
+	{
+		//todo LOG
+		return false;
+	}
+
+	//int iLastSize = net.input_size(); //todo
+
+	//check output size
+	if (_iOutputSize != iOutSize)
+	{
+		//todo LOG
+		return false;
+	}
+
+	if (size() == 0) //no layers
+		return true;
+
+	//check  each layer size
+	for (int i = 1; i < size(); i++)
+	{
+		const Layer& l1 = layer(i - 1);
+
+		int size0 = l1.in_size();
+		int size1 = l1.out_size();
+
+		if ((size0 == 0) && (size1 == 0))
+			continue; //activation layer
+
+
+		//update last size
+
+			//todododo
+
+	}
+
+	return true;
+}
