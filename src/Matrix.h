@@ -176,11 +176,15 @@ public:
         std::fill(_data,_data+_iSize,b);
     }
 
-    void setZero()
-    {
-        setConstant(0.);
-    }
+	void setZero()
+	{
+		setConstant(0.);
+	}
 
+	void setOnes()
+	{
+		setConstant(1.);
+	}
     void setZero(int iRows,int iColumns)
     {
         resize(iRows,iColumns);

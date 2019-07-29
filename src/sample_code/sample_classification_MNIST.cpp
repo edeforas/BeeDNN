@@ -72,8 +72,9 @@ int main()
 	netTrain.set_epochs(6);
 	netTrain.set_loss("CategoricalCrossEntropy");
 	netTrain.set_epoch_callback(epoch_callback);
+	netTrain.set_learning_data(mRefImages, mRefLabels);
 	start = chrono::steady_clock::now();
-	netTrain.train(net, mRefImages, mRefLabels);
+	netTrain.train(net);
 
 	// the end, results are computed and displayed in epoch_callback
 	cout << "end of test." << endl;

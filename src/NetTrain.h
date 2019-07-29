@@ -40,8 +40,10 @@ public:
     float compute_loss(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth);
     float compute_accuracy(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth);
 
-    TrainResult train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruth);
-    TrainResult fit(Net& net, const MatrixFloat& mSamples, const MatrixFloat& mTruth);
+	void set_learning_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth);
+
+	TrainResult train(Net& net); //classification task
+	TrainResult fit(Net& net); //regression task
 
 	void set_epochs(int iEpochs); //100 by default
 	int get_epochs() const;
@@ -99,6 +101,9 @@ private:
 	vector<Optimizer*> _optimizers;
 	vector<MatrixFloat> _inOut;
 	vector<MatrixFloat> _delta;
+
+	const MatrixFloat* _pmSamples;
+	const MatrixFloat* _pmTruth;
 
 	std::function<void()> _epochCallBack;
 

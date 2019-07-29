@@ -27,7 +27,8 @@ int main()
 	netFit.set_epochs(2000);
 	netFit.set_optimizer("Nadam");
 	netFit.set_loss("BinaryCrossEntropy");
-	netFit.fit(net,mSamples,mTruth);
+	netFit.set_learning_data(mSamples, mTruth);
+	netFit.fit(net);
 
     //predict and show results
     MatrixFloat mOut;

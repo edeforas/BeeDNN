@@ -32,6 +32,7 @@ public:
     void add_dropout_layer(int iSize, float fRatio);
     void add_gaussian_noise_layer(int iSize, float fStd);
     void add_globalgain_layer();
+    void add_globalbias_layer();
     void add_poolaveraging1D_layer(int inSize, int outSize);
 
     void set_input_size(int iInputSize);

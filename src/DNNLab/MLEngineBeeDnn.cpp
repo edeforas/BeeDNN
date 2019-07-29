@@ -61,7 +61,7 @@ void MLEngineBeeDnn::init()
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
 {
-	if(!_pNet->is_valid(mIn.cols(), _pNet->output_size()))
+	if(!_pNet->is_valid((int)mIn.cols(), _pNet->output_size()))
 		return;
 
     _pNet->forward(mIn,mOut);
@@ -73,10 +73,12 @@ void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat&
 
     _pTrain->clear(); //todo remove
 
+	_pTrain->set_learning_data(mSamples, mTruth);
+
     if(_pTrain->is_classification_problem()) //todo call 1 function in_pTrain , learn?
-        tr=_pTrain->train(*_pNet,mSamples,mTruth);
+        tr=_pTrain->train(*_pNet);
     else
-        tr=_pTrain->fit(*_pNet,mSamples,mTruth);
+        tr=_pTrain->fit(*_pNet);
 
     _vfLoss.insert(end(_vfLoss),begin(tr.loss),end(tr.loss));
     _vfAccuracy.insert(end(_vfAccuracy),begin(tr.accuracy),end(tr.accuracy));

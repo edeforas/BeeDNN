@@ -33,7 +33,8 @@ NetTrain::NetTrain():
 	_fOnlineLoss = 0.f;
 	_pNet = nullptr;
 
-	//_iOnlineAccuracyGood = 0;
+	_pmSamples = nullptr;
+	_pmTruth = nullptr;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 NetTrain::~NetTrain()
@@ -143,7 +144,7 @@ bool NetTrain::get_keepbest() const
 /////////////////////////////////////////////////////////////////////////////////////////////////
 float NetTrain::compute_loss(const Net& net, const MatrixFloat &mSamples, const MatrixFloat &mTruth)
 {
-	if (!net.is_valid(mSamples.cols(), mTruth.cols()))
+	if (!net.is_valid((int)mSamples.cols(), (int)mTruth.cols()))
 		return 0.f;
 
     int iNbSamples = (int)mSamples.rows();
@@ -213,36 +214,46 @@ float NetTrain::compute_accuracy(const Net& net, const MatrixFloat &mSamples, co
     return 100.f*iGood /iNbSamples;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-TrainResult NetTrain::train(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruth)
+void NetTrain::set_learning_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth)
+{
+	_pmSamples = &mSamples;
+	_pmTruth = &mTruth;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+TrainResult NetTrain::train(Net& net)//,const MatrixFloat& mSamples,const MatrixFloat& mTruth)
 {
     if(net.layers().size()==0)
         return TrainResult(); //nothing to do
 
     _bIsclassificationProblem=true;
-    bool bTruthIsLabel= (mTruth.cols()==1);
+    bool bTruthIsLabel= (_pmTruth->cols()==1);
     if(bTruthIsLabel && (net.output_size()!=1) )
     {
         //create binary label
         MatrixFloat mTruthOneHot;
-        labelToOneHot(mTruth, mTruthOneHot);
-		TrainResult tr = fit(net, mSamples, mTruthOneHot);
+        labelToOneHot(*_pmTruth, mTruthOneHot);
+		set_learning_data(*_pmSamples, mTruthOneHot);
+		TrainResult tr = fit(net);
 		return tr; //todo remove
     }
     else
     {
-        TrainResult tr=fit(net,mSamples,mTruth);;
+		TrainResult tr = fit(net);
         return tr; //todo remove
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-TrainResult NetTrain::fit(Net& net,const MatrixFloat& mSamples,const MatrixFloat& mTruth)
+TrainResult NetTrain::fit(Net& net)
 {
+	const MatrixFloat& mSamples = *_pmSamples;
+	const MatrixFloat& mTruth = *_pmTruth;
+
 	if (net.input_size() != (int)mSamples.cols())
 		net.set_input_size((int)mSamples.cols());
 
     TrainResult tr;	
 	
-	if (!net.is_valid(mSamples.cols(), mTruth.cols()))
+	if (!net.is_valid((int)mSamples.cols(),(int) mTruth.cols()))
 		return tr;
 
     int iNbSamples=(int)mSamples.rows();

@@ -193,6 +193,39 @@ public:
         return -2.f*x*expf(-x*x);
     }
 };
+/////////////////////////////////////////////////////////////////////////////
+// HardELU, ELU approximation, quick and easy to convert in fixed point
+// Author is Minh Tri LE
+class ActivationHardELU: public Activation
+{
+public:
+    string name() const override
+    {
+        return "HardELU";
+    }
+
+    float apply(float x) const override
+    {
+        if(x>=0.f)
+            return x;
+
+        if(x<=-2.f)
+            return -1.f;
+
+        return x*0.5f;
+    }
+
+    float derivation(float x) const override
+    {
+        if(x>=0.f)
+            return 1.f;
+
+        if(x<=-2.f)
+            return 0.f;
+
+        return 0.5f;
+    }
+};
 //////////////////////////////////////////////////////////////////////////////
 //from : https://arxiv.org/pdf/1710.09967.pdf
 #define ISRLU_ALPHA (1.0f)
@@ -667,6 +700,9 @@ Activation* get_activation(const string& sActivation)
 
     if(sActivation=="Gauss")
         return new ActivationGauss;
+	
+	if(sActivation=="HardELU")
+        return new ActivationHardELU;
 
     if(sActivation=="HardSigmoid")
         return new ActivationHardSigmoid;
@@ -740,6 +776,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("Elu");
     vsActivations.push_back("Exponential");
     vsActivations.push_back("Gauss");
+    vsActivations.push_back("HardELU");
     vsActivations.push_back("HardSigmoid");
 	vsActivations.push_back("ISRLU");
     vsActivations.push_back("Linear");

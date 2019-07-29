@@ -1,18 +1,8 @@
 #ifndef MetaOptimizer_
 #define MetaOptimizer_
 
-#include <iostream>
-#include <fstream>
-#include <ctime>
-#include <thread>
-#include <string>
-#include <vector>
-using namespace std;
-
 #include "Net.h"
 #include "NetTrain.h"
-#include "NetUtil.h"
-#include "Matrix.h"
 
 class MetaOptimizer
 {
@@ -22,11 +12,14 @@ public:
 	
 	void set_net(Net* pNet);
 	void set_train(NetTrain* pTrain);
-
-
+	void set_nb_thread(int iNbThread); // default: use max available or if iNbThread set to zero
+	void run();
+	
 private:
+	static int run_thread(int iThread);
 	Net* _pNet;
 	NetTrain* _pTrain;
+	int _iNbThread;
 };
 
 #endif

@@ -30,7 +30,8 @@ int main()
     //train
     cout << "Training..." << endl;
 	NetTrain netfit;
-	netfit.fit(net,mSamples,mTruth);
+	netfit.set_learning_data(mSamples, mTruth);
+	netfit.fit(net);
 
     //display sin prediction
 	MatrixFloat mPredict;
