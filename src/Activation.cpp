@@ -418,12 +418,12 @@ public:
         return x>0.f ? 1.f/(1.f+x) : 0.f;
     }
 };//////////////////////////////////////////////////////////////////////////////
-class ActivationElu: public Activation
+class ActivationELU: public Activation
 {
 public:
     string name() const override
     {
-        return "Elu";
+        return "ELU";
     }
 
     float apply(float x) const override
@@ -692,8 +692,8 @@ Activation* get_activation(const string& sActivation)
     if(sActivation=="Elliot")
         return new ActivationElliot;
 
-    if(sActivation=="Elu")
-        return new ActivationElu;
+    if(sActivation=="ELU")
+        return new ActivationELU;
 
     if(sActivation=="Exponential")
         return new ActivationExponential;
@@ -773,7 +773,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("Bent");
     vsActivations.push_back("DivideBy256");
     vsActivations.push_back("Elliot");
-    vsActivations.push_back("Elu");
+    vsActivations.push_back("ELU");
     vsActivations.push_back("Exponential");
     vsActivations.push_back("Gauss");
     vsActivations.push_back("HardELU");

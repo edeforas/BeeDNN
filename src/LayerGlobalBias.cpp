@@ -8,8 +8,6 @@
 
 #include "LayerGlobalBias.h"
 
-#include <cmath> // for sqrt
-
 ///////////////////////////////////////////////////////////////////////////////
 LayerGlobalBias::LayerGlobalBias() :
     Layer(0 , 0, "GlobalGain")
@@ -31,7 +29,7 @@ Layer* LayerGlobalBias::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGlobalBias::init()
 {
-    _weight.setOnes(); //init to one by default
+    _weight.setZero(); //init to one by default
 
     Layer::init();
 }

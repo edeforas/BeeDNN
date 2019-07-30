@@ -8,8 +8,6 @@
 
 #include "LayerGlobalGain.h"
 
-#include <cmath> // for sqrt
-
 ///////////////////////////////////////////////////////////////////////////////
 LayerGlobalGain::LayerGlobalGain() :
     Layer(0 , 0, "GlobalGain")
