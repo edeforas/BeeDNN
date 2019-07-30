@@ -10,7 +10,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerGlobalBias::LayerGlobalBias() :
-    Layer(0 , 0, "GlobalGain")
+    Layer(0 , 0, "GlobalBias")
 {
     _weight.resize(1,1);
     LayerGlobalBias::init();
@@ -29,23 +29,25 @@ Layer* LayerGlobalBias::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGlobalBias::init()
 {
-    _weight.setZero(); //init to one by default
+    _weight.setZero(); //init to zero bias by default
 
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGlobalBias::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
 {
-//    mMatOut = mMatIn + _weight(0);   //TODO WIP
+    mMatOut = mMatIn.array() + _weight(0); //WIP
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGlobalBias::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta)
 {
-    mNewDelta = mDelta;// * _weight(0);
-    _mDeltaWeight = mInput*(mDelta.transpose()); //TODO WIP
+    (void)mInput;
+
+    mNewDelta = mDelta; //WIP
+    _mDeltaWeight = mDelta; //WIP
 }
 ///////////////////////////////////////////////////////////////////////////////
-float LayerGlobalBias::gain() const
+float LayerGlobalBias::bias() const
 {
     return _weight(0);
 }

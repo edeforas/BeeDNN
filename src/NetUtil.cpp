@@ -15,6 +15,7 @@
 #include "LayerDense.h"
 #include "LayerDropout.h"
 #include "LayerGlobalGain.h"
+#include "LayerGlobalBias.h"
 #include "LayerGaussianNoise.h"
 
 #include <sstream>
@@ -55,6 +56,12 @@ void write(const Net& net,string & s)
         {
             LayerGlobalGain* l=static_cast<LayerGlobalGain*>(layer);
             ss << "Layer" << i+1 << ".globalGain=" << l->gain() << endl;
+        }
+
+        else if(layer->type()=="GlobalBias")
+        {
+            LayerGlobalBias* l=static_cast<LayerGlobalBias*>(layer);
+            ss << "Layer" << i+1 << ".globalBias=" << l->bias() << endl;
         }
 
         else if(layer->type()=="Dropout")
@@ -117,6 +124,15 @@ void read(const string& s,Net& net)
 			MatrixFloat mf(1, 1);
 			mf(0) = fGain;
 			net.layer(net.size() - 1).weights() = mf;
+        }
+
+        else if(sType=="GlobalBias")
+        {
+            float fBias= stof(find_key(s,sLayer+".globalBias"));
+            net.add_globalbias_layer();
+            MatrixFloat mf(1, 1);
+            mf(0) = fBias;
+            net.layer(net.size() - 1).weights() = mf;
         }
 
         else if(sType=="Dropout")

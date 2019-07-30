@@ -11,6 +11,7 @@
 #include "LayerDense.h"
 #include "LayerDropout.h"
 #include "LayerGlobalGain.h"
+#include "LayerGlobalBias.h"
 #include "LayerGaussianNoise.h"
 
 #include <QObject>
@@ -46,7 +47,8 @@ FrameNetwork::FrameNetwork(QWidget *parent) :
         qcbType->addItem("Dropout");
         qcbType->addItem("GaussianNoise");
         qcbType->addItem("GlobalGain");
-        qcbType->addItem("PoolAveraging1D");
+		qcbType->addItem("GlobalBias");
+		qcbType->addItem("PoolAveraging1D");
         qcbType->addItem("Softmax");
 
         qcbType->insertSeparator(8);
@@ -199,6 +201,7 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
                     fRatio=fArg1;
                 _pNet->add_dropout_layer(iInSize,fRatio);
             }
+
             else if(sType=="GaussianNoise")
             {
                 float fStd=1.f; //by default
@@ -206,14 +209,22 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
                     fStd=fArg1;
                 _pNet->add_gaussian_noise_layer(iInSize,fStd);
             }
+
             else if(sType=="GlobalGain")
                 _pNet->add_globalgain_layer();
-            else if(sType=="PoolAveraging1D")
+			
+			else if (sType == "GlobalBias")
+				_pNet->add_globalbias_layer();
+			
+			else if(sType=="PoolAveraging1D")
                 _pNet->add_poolaveraging1D_layer(iInSize,iOutSize);
+
 			else if (sType == "Softmax")
 				_pNet->add_softmax_layer();
+
             else if(sType=="DenseAndBias")
                 _pNet->add_dense_layer(iInSize,iOutSize,true);
+
             else if(sType=="DenseNoBias")
                 _pNet->add_dense_layer(iInSize,iOutSize,false);
             else
