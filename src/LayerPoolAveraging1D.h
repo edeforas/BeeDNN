@@ -23,9 +23,6 @@ public:
 
     virtual void forward(const MatrixFloat& mMatin, MatrixFloat &mMatOut) const override;
     virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta) override;
-
-private:
-    MatrixFloat _weight;
 };
 
 #endif

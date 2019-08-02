@@ -62,28 +62,13 @@ void LayerDense::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mD
     if (_bHasBias)
     {
         mInputDelta = mDelta * _weight.topRows(_iInSize).transpose();
-        _deltaWeight = ((addColumnOfOne(mInput)).transpose())*mDelta; //todo optimize
+        _gradientWeight = ((addColumnOfOne(mInput)).transpose())*mDelta; //todo optimize
     }
     else
     {
         mInputDelta = mDelta * (_weight.transpose());
-        _deltaWeight = (mInput.transpose())*mDelta;
+        _gradientWeight = (mInput.transpose())*mDelta;
     }
-}
-///////////////////////////////////////////////////////////////////////////////
-MatrixFloat& LayerDense::weights()
-{
-    return _weight;
-}
-///////////////////////////////////////////////////////////////////////////////
-MatrixFloat& LayerDense::gradient_weights()
-{
-    return _deltaWeight;
-}
-///////////////////////////////////////////////////////////////////////////////
-bool LayerDense::has_weight()
-{
-    return true;
 }
 ///////////////////////////////////////////////////////////////
 bool LayerDense::has_bias() const

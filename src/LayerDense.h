@@ -27,12 +27,7 @@ public:
 
     bool has_bias() const;
 
-    virtual bool has_weight() override;
-    virtual MatrixFloat& weights() override;
-    virtual MatrixFloat& gradient_weights() override;
-
 private:
-    MatrixFloat _weight, _deltaWeight;
     bool _bHasBias;
 };
 

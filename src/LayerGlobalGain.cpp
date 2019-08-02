@@ -29,7 +29,7 @@ Layer* LayerGlobalGain::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGlobalGain::init()
 {
-    _weight.setOnes(); //init to one by default
+    _weight.setOnes(); // by default
 
     Layer::init();
 }
@@ -42,26 +42,11 @@ void LayerGlobalGain::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) co
 void LayerGlobalGain::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta)
 {
     mNewDelta = mDelta * _weight(0);
-    _mDeltaWeight = mInput*(mDelta.transpose());
+    _gradientWeight = mInput*(mDelta.transpose());
 }
 ///////////////////////////////////////////////////////////////////////////////
 float LayerGlobalGain::gain() const
 {
     return _weight(0);
-}
-///////////////////////////////////////////////////////////////////////////////
-MatrixFloat& LayerGlobalGain::weights()
-{
-    return _weight;
-}
-///////////////////////////////////////////////////////////////////////////////
-MatrixFloat& LayerGlobalGain::gradient_weights()
-{
-    return _mDeltaWeight;
-}
-///////////////////////////////////////////////////////////////////////////////
-bool LayerGlobalGain::has_weight()
-{
-    return true;
 }
 ///////////////////////////////////////////////////////////////

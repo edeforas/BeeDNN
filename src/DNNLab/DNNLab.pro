@@ -32,6 +32,7 @@ SOURCES += \
     ../LayerDropout.cpp \
     ../LayerGaussianNoise.cpp \
     ../LayerGlobalGain.cpp \
+    ../LayerGlobalBias.cpp \
     ../LayerPoolAveraging1D.cpp
 
 HEADERS += \
@@ -51,6 +52,7 @@ HEADERS += \
     ../LayerDropout.h \
     ../LayerGaussianNoise.h \
     ../LayerGlobalGain.h \
+    ../LayerGlobalBias.h \
     ../LayerPoolAveraging1D.h
 
 #GUI

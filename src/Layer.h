@@ -40,11 +40,11 @@ public:
     virtual MatrixFloat& gradient_weights();
 
 protected:
+    MatrixFloat _weight,_gradientWeight;
     int _iInSize, _iOutSize;
 	bool _bTrainMode;
 
 private:
-    MatrixFloat _weightVoid,_deltaWeightVoid; //for now
     string _sType;
 };
 
