@@ -35,6 +35,7 @@ class NetTrain
 public:
     NetTrain();
     virtual ~NetTrain();
+	NetTrain& operator=(const NetTrain& other);
 
     void clear();
     float compute_loss(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth);

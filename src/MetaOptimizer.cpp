@@ -40,15 +40,21 @@ void MetaOptimizer::run()
 	for (int i = 0; i < iNbThread; i++)
 	{
 		srand((unsigned int)time(NULL)); //avoid using the same global rand for every thread
-		vt[i] = std::thread(&run_thread, i);
+		vt[i] = std::thread(&run_thread, i,this);
 	}
 
 	for (int i = 0; i < iNbThread; i++)
 		vt[i].join();
 }
 ////////////////////////////////////////////////////////////////
-int MetaOptimizer::run_thread(int iThread)
+int MetaOptimizer::run_thread(int iThread, MetaOptimizer* self)
 {
+	//copy net WIP WIP
+	Net net2 = *(self->_pNet);
+	NetTrain train2 = *(self->_pTrain);
+
+	train2.train(net2);
+
 	return 0; //TODO WIP WIP
 }
 ////////////////////////////////////////////////////////////////

@@ -50,6 +50,41 @@ NetTrain::~NetTrain()
 void NetTrain::clear()
 { }
 /////////////////////////////////////////////////////////////////////////////////////////////////
+NetTrain& NetTrain::operator=(const NetTrain& other)
+{
+	clear();
+
+	_iOnlineAccuracyGood=other._iOnlineAccuracyGood;
+	_fOnlineLoss=other._fOnlineLoss;
+
+	_bKeepBest=other._bKeepBest;
+	_iBatchSize=other._iBatchSize;
+	_iEpochs=other._iEpochs;
+	_iNbLayers=other._iNbLayers;
+	_iReboostEveryEpochs=other._iReboostEveryEpochs;
+
+	_sOptimizer=other._sOptimizer;
+	_fLearningRate=other._fLearningRate;
+	_fDecay=other._fDecay;
+	_fMomentum=other._fMomentum;
+	_bIsclassificationProblem=other._bIsclassificationProblem;
+
+	for (int i = 0; i < other._optimizers.size(); i++)
+		_optimizers.push_back(create_optimizer(other._optimizers[i]->name())); // initialized
+
+	_inOut = other._inOut;
+	_delta = other._delta;
+
+	_pmSamples = other._pmSamples;
+	_pmTruth = other._pmTruth;
+
+	_epochCallBack = other._epochCallBack;
+	_pNet = other._pNet;
+	_pLoss = other._pLoss;
+
+	return *this;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::set_optimizer(string sOptimizer) //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov"
 {
     _sOptimizer = sOptimizer;

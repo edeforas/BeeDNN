@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_classification_xor",
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_regression_sin", "sample_code\sample_regression_sin.vcxproj", "{E6ED7C3E-C046-41EF-82C9-FD3792C43363}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_MetaOptimizer_MNIST", "sample_code\sample_MetaOptimizer_MNIST.vcxproj", "{619EC855-2EDB-40BA-B244-0E6345727D8D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -49,6 +51,14 @@ Global
 		{E6ED7C3E-C046-41EF-82C9-FD3792C43363}.Release|x64.Build.0 = Release|x64
 		{E6ED7C3E-C046-41EF-82C9-FD3792C43363}.Release|x86.ActiveCfg = Release|Win32
 		{E6ED7C3E-C046-41EF-82C9-FD3792C43363}.Release|x86.Build.0 = Release|Win32
+		{619EC855-2EDB-40BA-B244-0E6345727D8D}.Debug|x64.ActiveCfg = Debug|x64
+		{619EC855-2EDB-40BA-B244-0E6345727D8D}.Debug|x64.Build.0 = Debug|x64
+		{619EC855-2EDB-40BA-B244-0E6345727D8D}.Debug|x86.ActiveCfg = Debug|Win32
+		{619EC855-2EDB-40BA-B244-0E6345727D8D}.Debug|x86.Build.0 = Debug|Win32
+		{619EC855-2EDB-40BA-B244-0E6345727D8D}.Release|x64.ActiveCfg = Release|x64
+		{619EC855-2EDB-40BA-B244-0E6345727D8D}.Release|x64.Build.0 = Release|x64
+		{619EC855-2EDB-40BA-B244-0E6345727D8D}.Release|x86.ActiveCfg = Release|Win32
+		{619EC855-2EDB-40BA-B244-0E6345727D8D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

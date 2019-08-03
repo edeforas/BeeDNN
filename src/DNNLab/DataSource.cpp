@@ -258,9 +258,6 @@ float DataSource::get_function_val(float x)
 	if (_sName == "Parabolic")
 		return x * x;
 
-	if (_sName == "Gamma")
-		return tgammaf(x);
-
 	if (_sName == "Exp")
 		return expf(x);
 

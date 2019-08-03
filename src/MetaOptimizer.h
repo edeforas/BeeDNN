@@ -16,7 +16,7 @@ public:
 	void run();
 	
 private:
-	static int run_thread(int iThread);
+	static int run_thread(int iThread, MetaOptimizer* self);
 	Net* _pNet;
 	NetTrain* _pTrain;
 	int _iNbThread;
