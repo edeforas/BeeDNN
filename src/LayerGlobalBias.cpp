@@ -9,8 +9,8 @@
 #include "LayerGlobalBias.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerGlobalBias::LayerGlobalBias() :
-    Layer(0 , 0, "GlobalBias")
+LayerGlobalBias::LayerGlobalBias(int inSize) :
+    Layer(inSize, inSize, "GlobalBias")
 {
     _weight.resize(1,1);
     LayerGlobalBias::init();
@@ -21,7 +21,7 @@ LayerGlobalBias::~LayerGlobalBias()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerGlobalBias::clone() const
 {
-    LayerGlobalBias* pLayer=new LayerGlobalBias();
+    LayerGlobalBias* pLayer=new LayerGlobalBias(_iInSize);
 	pLayer->weights() = _weight;
 
     return pLayer;
@@ -36,15 +36,16 @@ void LayerGlobalBias::init()
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGlobalBias::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
 {
-    mMatOut = mMatIn.array() + _weight(0); //WIP
+    mMatOut = mMatIn.array() + _weight(0);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGlobalBias::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta)
 {
     (void)mInput;
 
-    mNewDelta = mDelta; //WIP
-    _gradientWeight = mDelta; //WIP
+    _gradientWeight = mDelta;
+
+    mNewDelta = mDelta;
 }
 ///////////////////////////////////////////////////////////////////////////////
 float LayerGlobalBias::bias() const

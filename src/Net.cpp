@@ -92,14 +92,16 @@ void Net::add_dense_layer(int inSize,int outSize,bool bHasBias)
 	_iOutputSize = outSize;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_globalgain_layer()
+void Net::add_globalgain_layer(int inSize)
 {
-    _layers.push_back(new LayerGlobalGain());
+    _layers.push_back(new LayerGlobalGain(inSize));
+	_iOutputSize = inSize;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_globalbias_layer()
+void Net::add_globalbias_layer(int inSize)
 {
-    _layers.push_back(new LayerGlobalBias());
+    _layers.push_back(new LayerGlobalBias(inSize));
+	_iOutputSize = inSize;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_poolaveraging1D_layer(int inSize, int iOutSize)

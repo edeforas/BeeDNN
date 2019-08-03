@@ -35,9 +35,9 @@ void LayerDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 void LayerDropout::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta)
 {
     (void)mInput;
-    mNewDelta= mDelta*_mask.asDiagonal();
-
     init();
+
+    mNewDelta= mDelta*_mask.asDiagonal();
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDropout::init()

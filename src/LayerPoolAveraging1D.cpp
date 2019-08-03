@@ -42,9 +42,10 @@ void LayerPoolAveraging1D::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOu
     mMatOut = mMatIn * _weight;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPoolAveraging1D::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mInputDelta)
+void LayerPoolAveraging1D::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta)
 {
     (void)mInput;
-    mInputDelta = mDelta * (_weight.transpose());
+
+    mNewDelta = mDelta * (_weight.transpose()); //to do , do not update weight!!!!!!!!!!!!!!!!! FAIL
 }
 ///////////////////////////////////////////////////////////////////////////////

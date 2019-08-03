@@ -9,8 +9,8 @@
 #include "LayerGlobalGain.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerGlobalGain::LayerGlobalGain() :
-    Layer(0 , 0, "GlobalGain")
+LayerGlobalGain::LayerGlobalGain(int iInSize) :
+    Layer(iInSize, iInSize, "GlobalGain")
 {
     _weight.resize(1,1);
     LayerGlobalGain::init();
@@ -21,7 +21,7 @@ LayerGlobalGain::~LayerGlobalGain()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerGlobalGain::clone() const
 {
-    LayerGlobalGain* pLayer=new LayerGlobalGain();
+    LayerGlobalGain* pLayer=new LayerGlobalGain(_iInSize);
 	pLayer->weights() = _weight;
 
     return pLayer;
@@ -41,8 +41,9 @@ void LayerGlobalGain::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) co
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGlobalGain::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta)
 {
+    _gradientWeight = (mInput.transpose())*mDelta;
+
     mNewDelta = mDelta * _weight(0);
-    _gradientWeight = mInput*(mDelta.transpose());
 }
 ///////////////////////////////////////////////////////////////////////////////
 float LayerGlobalGain::gain() const

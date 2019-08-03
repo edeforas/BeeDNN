@@ -211,10 +211,10 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
             }
 
             else if(sType=="GlobalGain")
-                _pNet->add_globalgain_layer();
+                _pNet->add_globalgain_layer(iInSize);
 			
 			else if (sType == "GlobalBias")
-				_pNet->add_globalbias_layer();
+				_pNet->add_globalbias_layer(iInSize);
 			
 			else if(sType=="PoolAveraging1D")
                 _pNet->add_poolaveraging1D_layer(iInSize,iOutSize);

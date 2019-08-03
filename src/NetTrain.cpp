@@ -366,7 +366,7 @@ TrainResult NetTrain::fit(Net& net)
         }
     }
 
-	if(_bKeepBest)
+	if( (_bKeepBest) && (bestNet.size()!=0) )
         net=bestNet;
 
     return tr;

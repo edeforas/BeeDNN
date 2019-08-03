@@ -15,7 +15,7 @@
 class LayerGlobalBias : public Layer
 {
 public:
-    LayerGlobalBias();
+    LayerGlobalBias(int inSize);
     virtual ~LayerGlobalBias();
 
     virtual Layer* clone() const override;

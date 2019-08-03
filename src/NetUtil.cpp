@@ -120,7 +120,7 @@ void read(const string& s,Net& net)
         else if(sType=="GlobalGain")
         {
             float fGain= stof(find_key(s,sLayer+".globalGain"));
-            net.add_globalgain_layer();
+            net.add_globalgain_layer(iInSize);
 			MatrixFloat mf(1, 1);
 			mf(0) = fGain;
 			net.layer(net.size() - 1).weights() = mf;
@@ -129,7 +129,7 @@ void read(const string& s,Net& net)
         else if(sType=="GlobalBias")
         {
             float fBias= stof(find_key(s,sLayer+".globalBias"));
-            net.add_globalbias_layer();
+            net.add_globalbias_layer(iInSize);
             MatrixFloat mf(1, 1);
             mf(0) = fBias;
             net.layer(net.size() - 1).weights() = mf;

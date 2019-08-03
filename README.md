@@ -8,8 +8,8 @@ No dependencies needed, every algorithm rewritten in C++ from scratch. There is 
 Implemented so far:
 - dense layer, with or without bias
 - dropout layer, gaussian noise layer
-- global gain layer (WIP)
-- pool averaging 1D layer
+- global gain layer , global bias layer
+- pool averaging 1D layer (WIP)
 - softmax layer
 - layers and activations are decoupled, can be in any orders
 - mini batch learn, SGD learn, batch learn
