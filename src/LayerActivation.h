@@ -20,7 +20,7 @@ class Activation;
 class LayerActivation : public Layer
 {
 public:
-    LayerActivation(const string& sActivation);
+    explicit LayerActivation(const string& sActivation);
     virtual ~LayerActivation() override;
 
     virtual Layer* clone() const override;

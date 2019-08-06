@@ -24,6 +24,7 @@ NetTrain::NetTrain():
     _bKeepBest = true;
     _iEpochs = 100;
     _iReboostEveryEpochs = -1; // -1 mean no reboost
+	_iOnlineAccuracyGood= 0;
 
     _fLearningRate = -1.f; //default
     _fDecay = -1.f; //default
@@ -79,13 +80,13 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
 	_pmTruth = other._pmTruth;
 
 	_epochCallBack = other._epochCallBack;
-	_pNet = other._pNet;
-	_pLoss = other._pLoss;
+	_pNet = nullptr;
+	_pLoss = create_loss(other._pLoss->name());
 
 	return *this;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_optimizer(string sOptimizer) //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov"
+void NetTrain::set_optimizer(const string& sOptimizer) //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov"
 {
     _sOptimizer = sOptimizer;
 }
@@ -146,7 +147,7 @@ void NetTrain::set_epoch_callback(std::function<void()> epochCallBack)
     _epochCallBack = epochCallBack;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_loss(string sLoss)
+void NetTrain::set_loss(const string&  sLoss)
 {
     delete _pLoss;
     _pLoss = create_loss(sLoss);
@@ -260,7 +261,7 @@ TrainResult NetTrain::train(Net& net)//,const MatrixFloat& mSamples,const Matrix
     if(net.layers().size()==0)
         return TrainResult(); //nothing to do
 
-    _bIsclassificationProblem=true;
+    _bIsclassificationProblem=true; //todo remove
     bool bTruthIsLabel= (_pmTruth->cols()==1);
     if(bTruthIsLabel && (net.output_size()!=1) )
     {

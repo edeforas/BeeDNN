@@ -49,11 +49,32 @@ void MetaOptimizer::run()
 ////////////////////////////////////////////////////////////////
 int MetaOptimizer::run_thread(int iThread, MetaOptimizer* self)
 {
-	//copy net WIP WIP
-	Net net2 = *(self->_pNet);
-	NetTrain train2 = *(self->_pTrain);
+	//copy ref net
+	Net netT;
+	netT= *(self->_pNet);
+	NetTrain trainT;
+	trainT= *(self->_pTrain);
 
-	train2.train(net2);
+	trainT.train(netT);
+
+	/*
+	
+	    MatrixFloat mClassRef;
+    net.classify_all(mRefImages, mClassRef);
+    ConfusionMatrix cmRef;
+    ClassificationResult crRef = cmRef.compute(mRefLabels, mClassRef);
+    cout << "% accuracy on Ref =" << crRef.accuracy << endl;
+	
+    MatrixFloat mClassTest;
+    net.classify_all(mTestImages, mClassTest);
+    ConfusionMatrix cmTest;
+    ClassificationResult crTest = cmTest.compute(mTestLabels, mClassTest);
+    cout << "% accuracy on Test=" << crTest.accuracy << endl;
+	*/
+
+
+
+
 
 	return 0; //TODO WIP WIP
 }

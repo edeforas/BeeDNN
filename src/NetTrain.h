@@ -55,7 +55,7 @@ public:
 
 	void set_epoch_callback(std::function<void()> epochCallBack);
 
-    void set_optimizer(string sOptimizer); //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov" ...
+    void set_optimizer(const string& sOptimizer); //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov" ...
     string get_optimizer() const;
 
     void set_learningrate(float fLearningRate=-1.f ); // -1.f is for default settings
@@ -73,7 +73,7 @@ public:
 	void set_keepbest(bool bKeepBest); //true by default: keep the best model of all epochs
 	bool get_keepbest() const;
 
-	void set_loss(string sLoss); // "MeanSquareError" by default, ex "MeanSquareError" "CategorialCrossEntropy"
+	void set_loss(const string&  sLoss); // "MeanSquareError" by default, ex "MeanSquareError" "CategorialCrossEntropy"
 	string get_loss() const;
 
 	void set_problem(bool bClassification);
