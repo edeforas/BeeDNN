@@ -11,7 +11,7 @@ int main()
 {
 	//load MNIST data
 	MatrixFloat mRefImages, mRefLabels, mTestImages, mTestLabels; 
-	cout << "loading MNIST database..." << endl;
+	cout << "Loading MNIST database..." << endl;
     MNISTReader mr;
     if(!mr.read_from_folder(".",mRefImages,mRefLabels, mTestImages,mTestLabels))
     {
@@ -19,7 +19,7 @@ int main()
         return -1;
     }
   
-	//decimate learning data for quicker results in this sample: bad
+	//decimate learning data for quicker results in this sample (bad in real case)
 	mRefImages = decimate(mRefImages, 10);
 	mRefLabels= decimate(mRefLabels, 10);
 	mTestImages = decimate(mTestImages, 10);
@@ -29,7 +29,7 @@ int main()
 	mTestImages /= 256.f;
 	mRefImages /= 256.f;
 
-	//create simple net:
+	//create simple net
 	Net net;
     net.add_dense_layer(784, 32);
 	net.add_activation_layer("Relu");
@@ -37,13 +37,14 @@ int main()
 	net.add_softmax_layer();
 
 	//train net
-	cout << "training..." << endl;
+	cout << "Training..." << endl;
 	NetTrain netTrain;
 	netTrain.set_epochs(10);
 	netTrain.set_loss("CategoricalCrossEntropy");
 
 	netTrain.set_learning_data(mRefImages, mRefLabels);
 
+	//create meta optimizer
 	MetaOptimizer optim;
 	optim.set_net(&net);
 	optim.set_train(&netTrain);
@@ -54,7 +55,7 @@ int main()
 
 	//WIP WIP
 
-	// the end, results are computed and displayed in epoch_callback
-	cout << "end of test." << endl;
+	// the end
+	cout << "End of test." << endl;
     return 0;
 }

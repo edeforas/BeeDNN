@@ -26,19 +26,19 @@ void epoch_callback()
 	start = next;
 
     iEpoch++;
-    cout << " epoch:" << iEpoch << " duration:" << delta << " ms" << endl;
+    cout << "Epoch: " << iEpoch << " duration: " << delta << " ms" << endl;
 
     MatrixFloat mClassRef;
     net.classify_all(mRefImages, mClassRef);
     ConfusionMatrix cmRef;
     ClassificationResult crRef = cmRef.compute(mRefLabels, mClassRef);
-    cout << "% accuracy on Ref =" << crRef.accuracy << endl;
+    cout << "Ref accuracy: " << crRef.accuracy << " %" << endl;
 	
     MatrixFloat mClassTest;
     net.classify_all(mTestImages, mClassTest);
     ConfusionMatrix cmTest;
     ClassificationResult crTest = cmTest.compute(mTestLabels, mClassTest);
-    cout << "% accuracy on Test=" << crTest.accuracy << endl;
+    cout << "Test accuracy: " << crTest.accuracy << " %" << endl;
 
     cout << endl;
 }
@@ -48,11 +48,11 @@ int main()
     iEpoch = 0;
 
 	//load MNIST data
-    cout << "loading MNIST database..." << endl;
+    cout << "Loading MNIST database..." << endl;
     MNISTReader mr;
     if(!mr.read_from_folder(".",mRefImages,mRefLabels, mTestImages,mTestLabels))
     {
-        cout << "MNIST samples not found, please check the *-ubyte files are in the executable folder" << endl;
+        cout << "MNIST samples not found, please check the *.ubyte files are in the executable folder" << endl;
         return -1;
     }
 
@@ -67,7 +67,7 @@ int main()
 	net.add_softmax_layer();
 
 	//train net
-	cout << "training..." << endl;
+	cout << "Training..." << endl <<endl;
 	NetTrain netTrain;
 	netTrain.set_epochs(6);
 	netTrain.set_loss("CategoricalCrossEntropy");
