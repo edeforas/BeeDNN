@@ -99,7 +99,7 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
     if(bReset)
         _pEngine->init();
 
-    _pEngine->set_problem(ui->frameGlobal->is_classification_problem());
+    _pEngine->set_classification_mode(ui->frameGlobal->is_classification_problem());
 
     if(bLearn)
     {
@@ -149,7 +149,7 @@ void MainWindow::drawAccuracy(vector<float> vfAccuracy)
     if(!ui->cbHoldOn->isChecked())
         _qsAccuracy->clear();
 
-    if(_pEngine->is_classification_problem())
+    if(_pEngine->is_classification_mode())
     {
         ui->gbTrainAccuracy->setTitle("Train accuracy");
 
@@ -178,7 +178,7 @@ void MainWindow::drawRegression()
 {
     _qsRegression->clear();
 
-    if(_pEngine->is_classification_problem()==true)
+    if(_pEngine->is_classification_mode()==true)
         return; //not a regression problem
     
 	_qsRegression->addHorizontalLine(0.);
@@ -368,7 +368,7 @@ void MainWindow::set_input_size(int iSize)
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::update_classification_tab()
 {
-    if(!_pEngine->is_classification_problem())
+    if(!_pEngine->is_classification_mode())
     { // not a classification problem
         ui->twConfusionMatrixTrain->clearContents();
         ui->leTrainAccuracy->setText("n/a");
@@ -393,7 +393,7 @@ void MainWindow::update_classification_tab()
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::drawConfusionMatrix()
 {
-    if(_pEngine->is_classification_problem()==false)
+    if(_pEngine->is_classification_mode()==false)
     { // not a classification problem
         ui->twConfusionMatrixTrain->clearContents();
         ui->leTrainAccuracy->setText("n/a");
@@ -557,7 +557,7 @@ bool MainWindow::load()
     QApplication::restoreOverrideCursor();
 
     //show intersting results from net
-    if(_pEngine->is_classification_problem())
+    if(_pEngine->is_classification_mode())
         ui->tabWidget->setCurrentIndex(2);
     else
         ui->tabWidget->setCurrentIndex(1);
@@ -644,13 +644,13 @@ void MainWindow::model_changed(void * pSender)
     if(pSender != (void*)(ui->frameGlobal ) )
     {
         ui->frameGlobal->set_data_name(_pDataSource->name());
-        ui->frameGlobal->set_problem(_pEngine->is_classification_problem());
+        ui->frameGlobal->set_problem(_pEngine->is_classification_mode());
         ui->frameGlobal->set_engine_name("BeeDNN");
     }
     else
     {
         _pDataSource->load(ui->frameGlobal->data_name());
-        _pEngine->set_problem(ui->frameGlobal->is_classification_problem());
+        _pEngine->set_classification_mode(ui->frameGlobal->is_classification_problem());
         set_input_size(_pDataSource->data_size());
         _bMustSave=true;
     }

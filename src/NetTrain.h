@@ -76,9 +76,6 @@ public:
 	void set_loss(const string&  sLoss); // "MeanSquareError" by default, ex "MeanSquareError" "CategorialCrossEntropy"
 	string get_loss() const;
 
-	void set_problem(bool bClassification);
-	bool is_classification_problem();
-
 private:
 	void train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth);
 
@@ -97,7 +94,6 @@ private:
     float _fLearningRate;
 	float _fDecay;
 	float _fMomentum;
-    bool _bIsclassificationProblem;
 
 	vector<Optimizer*> _optimizers;
 	vector<MatrixFloat> _inOut;

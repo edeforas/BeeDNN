@@ -29,6 +29,7 @@ Net::Net()
     _bTrainMode = false;
     _iInputSize = 0;
 	_iOutputSize = 0;
+	_bClassificationMode = true;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 Net::~Net()
@@ -56,6 +57,7 @@ Net& Net::operator=(const Net& other)
 
     _iInputSize= other._iInputSize;
 	_iOutputSize = other._iOutputSize;
+	_bClassificationMode = other._bClassificationMode;
 
 	return *this;
 }
@@ -120,15 +122,18 @@ void Net::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
         mTemp=mOut; //todo avoid resize
     }
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////
-int Net::classify(const MatrixFloat& mIn) const
+/////////////////////////////////////////////////////////////////////////////////////////////
+void Net::set_classification_mode(bool bClassificationMode)
 {
-    MatrixFloat mOut; //TODO needed?
-    forward(mIn,mOut);
-    return argmax(mOut);
+	_bClassificationMode = bClassificationMode;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-void Net::classify_all(const MatrixFloat& mIn, MatrixFloat& mClass) const
+bool Net::is_classification_mode() const
+{
+	return _bClassificationMode;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
+void Net::classify(const MatrixFloat& mIn, MatrixFloat& mClass) const
 {
     MatrixFloat mOut;
 	forward(mIn, mOut);
@@ -141,6 +146,14 @@ void Net::classify_all(const MatrixFloat& mIn, MatrixFloat& mClass) const
 		for (int i = 0; i < mOut.rows(); i++)
 			mClass(i, 0) = std::roundf(mOut(i, 0)); //categorical case
 	}
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void Net::predict(const MatrixFloat& mIn, MatrixFloat& mPredicted) const
+{
+	if (_bClassificationMode)
+		classify(mIn, mPredicted);
+	else
+		forward(mIn, mPredicted);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::set_train_mode(bool bTrainMode)

@@ -29,7 +29,7 @@ NetTrain::NetTrain():
     _fLearningRate = -1.f; //default
     _fDecay = -1.f; //default
     _fMomentum = -1.f; //default
-    _bIsclassificationProblem=false;
+
 	_iNbLayers=0;
 	_fOnlineLoss = 0.f;
 	_pNet = nullptr;
@@ -68,7 +68,6 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
 	_fLearningRate=other._fLearningRate;
 	_fDecay=other._fDecay;
 	_fMomentum=other._fMomentum;
-	_bIsclassificationProblem=other._bIsclassificationProblem;
 
 	for (int i = 0; i < other._optimizers.size(); i++)
 		_optimizers.push_back(create_optimizer(other._optimizers[i]->name())); // initialized
@@ -189,7 +188,7 @@ float NetTrain::compute_loss(const Net& net, const MatrixFloat &mSamples, const 
         return 0.f;
 
     MatrixFloat mOut;
-    net.forward(mSamples, mOut);
+    net.predict(mSamples, mOut);
 
     float fLoss = 0.f;
 
@@ -217,7 +216,7 @@ float NetTrain::compute_accuracy(const Net& net, const MatrixFloat &mSamples, co
         return 0.f;
 
     MatrixFloat mOut;
-    net.forward(mSamples, mOut);
+    net.predict(mSamples, mOut);
 
     if (mTruth.cols() != 1)
     {
@@ -261,7 +260,6 @@ TrainResult NetTrain::train(Net& net)//,const MatrixFloat& mSamples,const Matrix
     if(net.layers().size()==0)
         return TrainResult(); //nothing to do
 
-    _bIsclassificationProblem=true; //todo remove
     bool bTruthIsLabel= (_pmTruth->cols()==1);
     if(bTruthIsLabel && (net.output_size()!=1) )
     {
@@ -358,7 +356,7 @@ TrainResult NetTrain::fit(Net& net)
 
         tr.loss.push_back(_fOnlineLoss);
 
-        if(_bIsclassificationProblem)
+        if(net.is_classification_mode())
         {
             fAccuracy=100.f*_iOnlineAccuracyGood/ iNbSamples;
            tr.accuracy.push_back(fAccuracy);
@@ -370,7 +368,7 @@ TrainResult NetTrain::fit(Net& net)
         //keep the best model if asked
         if(_bKeepBest)
         {
-            if(_bIsclassificationProblem)
+            if(net.is_classification_mode())
             {   //use accuracy
                 if(fMaxAccuracy<fAccuracy)
                 {
@@ -434,22 +432,12 @@ void NetTrain::train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth
 	add_online_statistics(_inOut[_iNbLayers], mTruth);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_problem(bool bClassification)
-{
-	_bIsclassificationProblem = bClassification;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-bool NetTrain::is_classification_problem()
-{
-	return _bIsclassificationProblem;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::add_online_statistics(const MatrixFloat&mPredicted, const MatrixFloat&mTruth )
 {
 	//update loss
 	_fOnlineLoss += _pLoss->compute(mPredicted, mTruth);
 	   	  
-	if (!_bIsclassificationProblem)
+	if (!_pNet->is_classification_mode())
 		return;
 
 	int iNbRows = (int)mPredicted.rows();

@@ -16,6 +16,7 @@ int main()
     net.add_dense_layer(1,10);
     net.add_activation_layer("Relu");
 	net.add_dense_layer(10, 1);
+	net.set_classification_mode(false); //set in regression mode
 
     //set train data
     MatrixFloat mTruth(128,1);
@@ -35,7 +36,7 @@ int main()
 
     //display sin prediction
 	MatrixFloat mPredict;
-	net.forward(mSamples, mPredict);
+	net.predict(mSamples, mPredict);
     for(int i=0;i<mSamples.size();i+=8)
         cout << std::setprecision(4) << "x=" << mSamples(i,0) << "\ttruth=" << mTruth(i,0) << "\tpredict=" << mPredict(i,0) <<endl;
 

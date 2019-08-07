@@ -29,13 +29,13 @@ void epoch_callback()
     cout << "Epoch: " << iEpoch << " duration: " << delta << " ms" << endl;
 
     MatrixFloat mClassRef;
-    net.classify_all(mRefImages, mClassRef);
+    net.predict(mRefImages, mClassRef);
     ConfusionMatrix cmRef;
     ClassificationResult crRef = cmRef.compute(mRefLabels, mClassRef);
     cout << "Ref accuracy: " << crRef.accuracy << " %" << endl;
 	
     MatrixFloat mClassTest;
-    net.classify_all(mTestImages, mClassTest);
+    net.predict(mTestImages, mClassTest);
     ConfusionMatrix cmTest;
     ClassificationResult crTest = cmTest.compute(mTestLabels, mClassTest);
     cout << "Test accuracy: " << crTest.accuracy << " %" << endl;

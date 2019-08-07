@@ -45,8 +45,8 @@ public:
     NetTrain& netTrain();
     const NetTrain& netTrain() const;
 
-    void set_problem(bool bClassification); //classification or regression
-    bool is_classification_problem();
+    void set_classification_mode(bool bClassification); //classification or regression
+    bool is_classification_mode();
 
     virtual DNNTrainResult learn(const MatrixFloat& mSamples,const MatrixFloat& mTruth);
 

@@ -33,6 +33,9 @@ void write(const Net& net,string & s)
     ss << "Engine=BeeDNN" << endl;
     ss << "NbLayers=" << layers.size() << endl;
 
+	string sProblem= net.is_classification_mode()?"Classification":"Regression";
+	ss << "Problem=" << sProblem << endl;
+
     for(size_t i=0;i<layers.size();i++)
     {
         Layer* layer=layers[i];
@@ -87,6 +90,10 @@ void read(const string& s,Net& net)
     string sNbLayer=NetUtil::find_key(s,"NbLayers");
     int iNbLayers=stoi(sNbLayer);
 
+    string sProblem = NetUtil::find_key(s, "Problem");
+    bool bClassification = (sProblem == "Classification");
+    net.set_classification_mode(bClassification);
+ 
     for(int i=0;i<iNbLayers;i++)
     {
         string sLayer="Layer"+to_string(i+1);
