@@ -26,9 +26,6 @@ void read(const string& s,Net& net);
 void write(const NetTrain& train,string& s);
 void read(const string& s,NetTrain& train);
 
-bool save(string sFileName,const Net& net);
-bool load(string sFileName,Net* pNet);
-
 string find_key(string s,string sKey);
 
 };

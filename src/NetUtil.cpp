@@ -198,31 +198,6 @@ void read(const string& s,NetTrain& train)
     train.set_decay(fDecay);
     train.set_momentum(fMomentum);
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////
-bool save(string sFileName,const Net& net)
-{
-    string s;
-    write(net,s);
-    ofstream f(sFileName);
-    f << s;
-    f.close();
-
-    return true;
-}
-////////////////////////////////////////////////////////////////////////////////////////////////
-bool load(string sFileName,Net* pNet)
-{
-    (void)pNet;
-
-    ifstream f(sFileName);
-    /*
-    string s=to_string(pNet);
-    //TODO
-    f << s;
-    f.close();
-*/
-    return true;
-}
 ////////////////////////////////////////////////////////////////////////////////////////////////
 string find_key(string s,string sKey)
 {
