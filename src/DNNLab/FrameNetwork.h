@@ -27,6 +27,8 @@ private slots:
     void on_twNetwork_cellChanged(int row, int column);
     void type_changed();
 
+    void on_btnNetworkInsert_clicked();
+    void on_btnNetworkRemove_clicked();
 
 private:
     Ui::FrameNetwork *ui;

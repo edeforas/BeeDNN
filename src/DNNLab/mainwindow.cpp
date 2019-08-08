@@ -368,8 +368,8 @@ void MainWindow::set_input_size(int iSize)
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::update_classification_tab()
 {
-    if(!_pEngine->is_classification_mode())
-    { // not a classification problem
+    if(!_pEngine->is_classification_mode() || (_pEngine->net().size()==0) )
+    { // not a classification problem or empty
         ui->twConfusionMatrixTrain->clearContents();
         ui->leTrainAccuracy->setText("n/a");
         ui->leTestAccuracy->setText("n/a");

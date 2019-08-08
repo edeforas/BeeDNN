@@ -15,9 +15,6 @@ class NetTrain;
 #include <string>
 using namespace std;
 
-class Layer;
-#include "Matrix.h"
-
 namespace NetUtil {
 
 void write(const Net& net,string& s);

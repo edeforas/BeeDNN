@@ -36,19 +36,20 @@ int main()
 	net.add_dense_layer(32, 10);
 	net.add_softmax_layer();
 
-	//train net
-	cout << "Training..." << endl;
+	//set train settings
 	NetTrain netTrain;
 	netTrain.set_epochs(10);
 	netTrain.set_loss("CategoricalCrossEntropy");
-
 	netTrain.set_learning_data(mRefImages, mRefLabels);
 
-	//create meta optimizer
+	//create meta optimizer and run
+	cout << "Training..." << endl;
 	MetaOptimizer optim;
 	optim.set_net(&net);
 	optim.set_train(&netTrain);
 	optim.run();
+
+	//WIP WIP
 
 	//todo collect results and take the best
 	//todo accept variations in meta parameters
