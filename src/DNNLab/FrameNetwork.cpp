@@ -51,12 +51,11 @@ FrameNetwork::FrameNetwork(QWidget *parent) :
 		qcbType->addItem("PoolAveraging1D");
         qcbType->addItem("Softmax");
 
-        qcbType->insertSeparator(8);
+        qcbType->insertSeparator(9);
 
         for(unsigned int a=0;a<vsActivations.size();a++)
             qcbType->addItem(vsActivations[a].c_str());
 
-       // QObject::connect(qcbType,SIGN&QComboBox::currentIndexChanged, this,&FrameNetwork::on_type_changed);
         connect(qcbType,SIGNAL(currentIndexChanged(int)), this, SLOT(type_changed()));
         ui->twNetwork->setCellWidget(i,0,qcbType);
     }
