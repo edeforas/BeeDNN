@@ -1,5 +1,4 @@
 DataSource=Xor
-Problem=Classification
 Epochs=100
 BatchSize=1
 Loss=BinaryCrossEntropy
@@ -12,15 +11,16 @@ Momentum=-1
 
 Engine=BeeDNN
 NbLayers=4
+Problem=Classification
 
 Layer1.type=Dense
 Layer1.inSize=2
 Layer1.outSize=5
 Layer1.hasBias=1
 Layer1.weight=
-0.4591 0.118 -0.7017 -0.7244 0.1624 
-0.4189 0.8759 0.2287 0.5849 -0.7492 
-0.6239 0.05591 0.6089 -0.428 0.5699 
+-0.3122 0.9086 0.5528 -0.8849 -0.7642 
+0.2244 0.7585 0.6949 0.3751 -0.7647 
+-0.7962 1.02 -0.5522 -0.7775 0.7628 
 
 Layer2.type=Relu
 
@@ -29,14 +29,14 @@ Layer3.inSize=5
 Layer3.outSize=1
 Layer3.hasBias=1
 Layer3.weight=
-0.06831 
--0.9941 
-0.42 
--0.5696 
-0.5064 
-0.8814 
+0.7413 
+0.2628 
+-0.6257 
+-0.3001 
+-1.122 
+-0.2728 
 
 Layer4.type=Sigmoid
 
 Notes=
-
+ 

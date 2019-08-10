@@ -221,26 +221,23 @@ void FrameNetwork::type_changed()
 //////////////////////////////////////////////////////////////
 void FrameNetwork::on_btnNetworkInsert_clicked()
 {
-	int iRow;
-	auto selectedItems = ui->twNetwork->selectedItems();
-	if (selectedItems.size() == 0)
-		iRow=-1;
-	else
-		iRow = selectedItems[0]->row();
-	
+	int iRow = ui->twNetwork->currentRow();
+	if (iRow == -1)
+		return;
+
 	add_new_row(iRow);
+	on_twNetwork_cellChanged(0, 0);
 }
 //////////////////////////////////////////////////////////////
 void FrameNetwork::on_btnNetworkRemove_clicked()
 {
-	auto selectedItems = ui->twNetwork->selectedItems();
-	if (selectedItems.size() == 0)
+	int iRow = ui->twNetwork->currentRow();
+	if (iRow == -1)
 		return;
 
-	int iRow = selectedItems[0]->row();
 	ui->twNetwork->removeRow(iRow);
-	
-	add_new_row();
+	add_new_row(); // to keep at least 1 free row at the end
+	on_twNetwork_cellChanged(0, 0);
 }
 //////////////////////////////////////////////////////////////
 void FrameNetwork::add_new_row(int iRow)
@@ -266,7 +263,7 @@ void FrameNetwork::add_new_row(int iRow)
 	for (unsigned int a = 0; a < _vsActivations.size(); a++)
 		qcbType->addItem(_vsActivations[a].c_str());
 
-	connect(qcbType, SIGNAL(currentIndexChanged(int)), this, SLOT(type_changed()));
 	ui->twNetwork->setCellWidget(iRow, 0, qcbType);
+	connect(qcbType, SIGNAL(currentIndexChanged(int)), this, SLOT(type_changed()));
 }
 //////////////////////////////////////////////////////////////
