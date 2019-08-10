@@ -27,8 +27,7 @@ FrameNetwork::FrameNetwork(QWidget *parent) :
 
     ui->setupUi(this);
 
-    vector<string> vsActivations;
-    list_activations_available( vsActivations);
+    list_activations_available( _vsActivations);
 
     QStringList qsl;
     qsl+="LayerType";
@@ -39,26 +38,7 @@ FrameNetwork::FrameNetwork(QWidget *parent) :
     ui->twNetwork->setHorizontalHeaderLabels(qsl);
 
     for(int i=0;i<10;i++)
-    {
-        QComboBox*  qcbType=new QComboBox;
-        qcbType->addItem("");
-        qcbType->addItem("DenseAndBias");
-        qcbType->addItem("DenseNoBias");
-        qcbType->addItem("Dropout");
-        qcbType->addItem("GaussianNoise");
-        qcbType->addItem("GlobalGain");
-		qcbType->addItem("GlobalBias");
-		qcbType->addItem("PoolAveraging1D");
-        qcbType->addItem("Softmax");
-
-        qcbType->insertSeparator(9);
-
-        for(unsigned int a=0;a<vsActivations.size();a++)
-            qcbType->addItem(vsActivations[a].c_str());
-
-        connect(qcbType,SIGNAL(currentIndexChanged(int)), this, SLOT(type_changed()));
-        ui->twNetwork->setCellWidget(i,0,qcbType);
-    }
+		add_new_row();
 
     ui->twNetwork->setItem(0,1,new QTableWidgetItem("1")); //first input size is 1
     ui->twNetwork->adjustSize();
@@ -241,11 +221,52 @@ void FrameNetwork::type_changed()
 //////////////////////////////////////////////////////////////
 void FrameNetwork::on_btnNetworkInsert_clicked()
 {
-	//todo
+	int iRow;
+	auto selectedItems = ui->twNetwork->selectedItems();
+	if (selectedItems.size() == 0)
+		iRow=-1;
+	else
+		iRow = selectedItems[0]->row();
+	
+	add_new_row(iRow);
 }
 //////////////////////////////////////////////////////////////
 void FrameNetwork::on_btnNetworkRemove_clicked()
 {
-	//todo
+	auto selectedItems = ui->twNetwork->selectedItems();
+	if (selectedItems.size() == 0)
+		return;
+
+	int iRow = selectedItems[0]->row();
+	ui->twNetwork->removeRow(iRow);
+	
+	add_new_row();
+}
+//////////////////////////////////////////////////////////////
+void FrameNetwork::add_new_row(int iRow)
+{
+	if(iRow==-1)
+		iRow = ui->twNetwork->rowCount(); //append at the end
+	
+	ui->twNetwork->insertRow(iRow);
+
+	QComboBox*  qcbType = new QComboBox;
+	qcbType->addItem("");
+	qcbType->addItem("DenseAndBias");
+	qcbType->addItem("DenseNoBias");
+	qcbType->addItem("Dropout");
+	qcbType->addItem("GaussianNoise");
+	qcbType->addItem("GlobalGain");
+	qcbType->addItem("GlobalBias");
+	qcbType->addItem("PoolAveraging1D");
+	qcbType->addItem("Softmax");
+
+	qcbType->insertSeparator(9);
+
+	for (unsigned int a = 0; a < _vsActivations.size(); a++)
+		qcbType->addItem(_vsActivations[a].c_str());
+
+	connect(qcbType, SIGNAL(currentIndexChanged(int)), this, SLOT(type_changed()));
+	ui->twNetwork->setCellWidget(iRow, 0, qcbType);
 }
 //////////////////////////////////////////////////////////////

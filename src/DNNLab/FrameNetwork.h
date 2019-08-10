@@ -1,6 +1,10 @@
 #ifndef FrameNetwork_
 #define FrameNetwork_
 
+#include <vector>
+#include <string>
+using namespace std;
+
 #include <QFrame>
 
 namespace Ui {
@@ -32,6 +36,8 @@ private slots:
 
 private:
     Ui::FrameNetwork *ui;
+	void add_new_row(int iRow=-1);
+	vector<string> _vsActivations;
 
     MainWindow*_pMainWindow;
     Net* _pNet;
