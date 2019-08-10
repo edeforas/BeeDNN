@@ -175,6 +175,28 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+// Binary Step as in: https://en.wikipedia.org/wiki/Activation_function
+class ActivationBinaryStep : public Activation
+{
+public:
+	string name() const override
+	{
+		return "BinaryStep";
+	}
+
+	float apply(float x) const override
+	{
+		if (x > 0.f)
+			return 1.f;
+		else
+			return 0.f;
+	}
+	float derivation(float x) const override
+	{
+		return 0.f;
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
 class ActivationGauss: public Activation
 {
 public:
@@ -224,6 +246,69 @@ public:
             return 0.f;
 
         return 0.5f;
+    }
+};
+//////////////////////////////////////////////////////////////////////////////
+//HardShrink from https://nn.readthedocs.io/en/rtd/transfer/
+// default lambda is 0.5
+class ActivationHardShrink: public Activation
+{
+public:
+    string name() const override
+    {
+        return "HardShrink";
+    }
+
+    float apply(float x) const override
+    {
+        if(x>0.5f)
+            return x;
+
+        if(x<-0.5f)
+            return x;
+
+        return 0.f;
+    }
+    float derivation(float x) const override
+    {
+        if(x>0.5f)
+            return 1.f;
+
+        if(x<-0.5f)
+            return 1.f;
+
+        return 0.f;
+    }
+};
+//////////////////////////////////////////////////////////////////////////////
+//HardTanh from https://cs224d.stanford.edu/lecture_notes/LectureNotes3.pdf
+class ActivationHardTanh: public Activation
+{
+public:
+    string name() const override
+    {
+        return "HardTanh";
+    }
+
+    float apply(float x) const override
+    {
+        if(x>1.f)
+            return 1.f;
+
+        if(x<-1.f)
+            return -1.f;
+
+        return x;
+    }
+    float derivation(float x) const override
+    {
+        if(x>1.f)
+            return 0.f;
+
+        if(x<-1.f)
+            return 0.f;
+
+        return 1.f;
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -686,6 +771,9 @@ Activation* get_activation(const string& sActivation)
     if(sActivation=="Bent")
         return new ActivationBent;
 
+	if (sActivation == "BinaryStep")
+		return new ActivationBinaryStep;
+
 	if (sActivation == "DivideBy256")
 		return new ActivationDivideBy256;
 
@@ -706,6 +794,12 @@ Activation* get_activation(const string& sActivation)
 
     if(sActivation=="HardSigmoid")
         return new ActivationHardSigmoid;
+
+    if(sActivation=="HardShrink")
+        return new ActivationHardShrink;
+
+    if(sActivation=="HardTanh")
+        return new ActivationHardTanh;
 
     if(sActivation=="ISRLU")
         return new ActivationISRLU;
@@ -771,13 +865,16 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("Asinh");
     vsActivations.push_back("Atan");
     vsActivations.push_back("Bent");
-    vsActivations.push_back("DivideBy256");
+	vsActivations.push_back("BinaryStep");
+	vsActivations.push_back("DivideBy256");
     vsActivations.push_back("Elliot");
     vsActivations.push_back("ELU");
     vsActivations.push_back("Exponential");
     vsActivations.push_back("Gauss");
     vsActivations.push_back("HardELU");
     vsActivations.push_back("HardSigmoid");
+    vsActivations.push_back("HardShrink");
+    vsActivations.push_back("HardTanh");
 	vsActivations.push_back("ISRLU");
     vsActivations.push_back("Linear");
     vsActivations.push_back("LeakyRelu");
