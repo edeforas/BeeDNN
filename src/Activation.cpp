@@ -576,6 +576,38 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+//HardShrink from https://www.gabormelli.com/RKB/Softshrink_Activation_Function
+// default lambda is 0.5
+class ActivationSoftShrink: public Activation
+{
+public:
+    string name() const override
+    {
+        return "SoftShrink";
+    }
+
+    float apply(float x) const override
+    {
+        if(x>0.5f)
+            return x-0.5f;
+
+        if(x<-0.5f)
+            return x+0.5f;
+
+        return 0.f;
+    }
+    float derivation(float x) const override
+    {
+        if(x>0.5f)
+            return 1.f;
+
+        if(x<-0.5f)
+            return 1.f;
+
+        return 0.f;
+    }
+};
+//////////////////////////////////////////////////////////////////////////////
 class ActivationSoftSign: public Activation
 {
 public: 
@@ -848,7 +880,10 @@ Activation* get_activation(const string& sActivation)
 
     if(sActivation=="Swish")
         return new ActivationSwish;
-
+    
+	if(sActivation=="SoftShrink")
+        return new ActivationSoftShrink;
+	
     if(sActivation=="SoftSign")
         return new ActivationSoftSign;
 
@@ -886,6 +921,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("Relu6");
     vsActivations.push_back("Selu");
     vsActivations.push_back("SoftPlus");
+    vsActivations.push_back("SoftShrink");
     vsActivations.push_back("SoftSign");
     vsActivations.push_back("SQNL");
     vsActivations.push_back("Sigmoid");
