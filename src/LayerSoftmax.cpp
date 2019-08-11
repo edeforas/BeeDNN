@@ -38,10 +38,10 @@ void LayerSoftmax::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 }
 ///////////////////////////////////////////////////////////////////////////////
 // from https://medium.com/@14prakash/back-propagation-is-very-simple-who-made-it-complicated-97b794c97e5c
-void LayerSoftmax::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta)
+void LayerSoftmax::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
     MatrixFloat S;
-	mNewDelta.resizeLike(mDelta);
+	mGradientIn.resizeLike(mGradientOut);
 
 	for (int r = 0; r < mInput.rows(); r++) // todo simplify and optimize
 	{
@@ -52,7 +52,7 @@ void LayerSoftmax::backpropagation(const MatrixFloat &mInput,const MatrixFloat &
 		for (int c = 0; c < S.cols(); c++)
 		{
 			float expx = expf(S(c));
-			mNewDelta(r, c) = mDelta(r, c)*(expx*(s-expx)) / (s*s);
+			mGradientIn(r, c) = mGradientOut(r, c)*(expx*(s-expx)) / (s*s);
 		}
 	}
 }

@@ -29,7 +29,7 @@ public:
 
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) const override;
 
-    virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta) override;
+    virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 
     float get_rate() const;
 

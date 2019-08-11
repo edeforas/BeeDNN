@@ -97,7 +97,7 @@ private:
 
 	vector<Optimizer*> _optimizers;
 	vector<MatrixFloat> _inOut;
-	vector<MatrixFloat> _delta;
+	vector<MatrixFloat> _gradient;
 
 	const MatrixFloat* _pmSamples;
 	const MatrixFloat* _pmTruth;

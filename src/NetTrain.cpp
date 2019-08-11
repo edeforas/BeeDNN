@@ -73,7 +73,7 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
 		_optimizers.push_back(create_optimizer(other._optimizers[i]->name())); // initialized
 
 	_inOut = other._inOut;
-	_delta = other._delta;
+	_gradient = other._gradient;
 
 	_pmSamples = other._pmSamples;
 	_pmTruth = other._pmTruth;
@@ -306,7 +306,7 @@ TrainResult NetTrain::fit(Net& net)
 
 	_inOut.resize(_iNbLayers + 1);
 
-    _delta.resize(_iNbLayers +1);
+    _gradient.resize(_iNbLayers +1);
 
 	for (int i = 0; i < _optimizers.size(); i++)
 		delete _optimizers[i];
@@ -414,13 +414,13 @@ void NetTrain::train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth
 		_pNet->layer(i).forward(_inOut[i], _inOut[i + 1]);
 
 	//compute error gradient
-	_pLoss->compute_gradient(_inOut[_iNbLayers], mTruth, _delta[_iNbLayers]);
+	_pLoss->compute_gradient(_inOut[_iNbLayers], mTruth, _gradient[_iNbLayers]);
 
 	//backward pass with optimizer
 	for (int i = _iNbLayers - 1; i >= 0; i--)
 	{
 		Layer& l = _pNet->layer(i);
-		l.backpropagation(_inOut[i], _delta[i + 1], _delta[i]);
+		l.backpropagation(_inOut[i], _gradient[i + 1], _gradient[i]);
 
 		if (l.has_weight())
 		{
@@ -428,7 +428,7 @@ void NetTrain::train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth
 		}
 	}
 
-	//store statistics
+	//compute and save statistics
 	add_online_statistics(_inOut[_iNbLayers], mTruth);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////

@@ -20,6 +20,7 @@
 
 #include <sstream>
 #include <fstream>
+#include <filesystem>
 using namespace std;
 
 namespace NetUtil {

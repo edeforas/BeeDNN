@@ -40,10 +40,10 @@ void LayerGaussianNoise::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 		mOut = mIn; // in test mode or sigma==0.
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerGaussianNoise::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta)
+void LayerGaussianNoise::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
     (void)mInput;
-    mNewDelta= mDelta;
+    mGradientIn= mGradientOut;
 }
 ///////////////////////////////////////////////////////////////////////////////
 float LayerGaussianNoise::get_std() const

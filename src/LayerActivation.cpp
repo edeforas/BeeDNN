@@ -35,12 +35,12 @@ void LayerActivation::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
         mOut(i)=_pActivation->apply(mIn(i));
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerActivation::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta)
+void LayerActivation::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
-    mNewDelta.resizeLike(mInput);
-    for(int i=0;i<mNewDelta.size();i++)
-        mNewDelta(i)=_pActivation->derivation(mInput(i));
+    mGradientIn.resizeLike(mInput);
+    for(int i=0;i<mGradientIn.size();i++)
+        mGradientIn(i)=_pActivation->derivation(mInput(i));
 
-    mNewDelta = mNewDelta.cwiseProduct(mDelta);
+    mGradientIn = mGradientIn.cwiseProduct(mGradientOut);
 }
 ///////////////////////////////////////////////////////////////////////////////

@@ -23,7 +23,7 @@ public:
     virtual void init() override;
     virtual void forward(const MatrixFloat& mMatin, MatrixFloat &mMatOut) const override;
 
-    virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta) override;
+    virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 
     float bias() const;
 };

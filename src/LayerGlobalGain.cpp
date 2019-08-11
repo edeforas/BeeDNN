@@ -39,11 +39,11 @@ void LayerGlobalGain::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) co
     mMatOut = mMatIn * _weight(0);
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerGlobalGain::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mDelta, MatrixFloat &mNewDelta)
+void LayerGlobalGain::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
-    _gradientWeight = (mInput.transpose())*mDelta;
+    _gradientWeight = (mInput.transpose())*mGradientOut;
 
-    mNewDelta = mDelta * _weight(0);
+    mGradientIn = mGradientOut * _weight(0);
 }
 ///////////////////////////////////////////////////////////////////////////////
 float LayerGlobalGain::gain() const
