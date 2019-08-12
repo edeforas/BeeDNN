@@ -16,6 +16,46 @@ Activation::~Activation()
 { }
 
 //////////////////////////////////////////////////////////////////////////////
+// as in : https://stats.stackexchange.com/questions/115258/comprehensive-list-of-activation-functions-in-neural-networks-with-pros-cons
+class ActivationAbsolute: public Activation
+{
+public:
+    string name() const override
+    {
+        return "Absolute";
+    }
+
+    float apply(float x) const override
+    {
+        return fabs(x);
+    }
+
+    float derivation(float x) const override
+    {
+        return (x>=0.f)?1.f:-1.f;
+    }
+};
+//////////////////////////////////////////////////////////////////////////////
+// as in : http://mathworld.wolfram.com/InverseHyperbolicSine.html
+class ActivationAsinh: public Activation
+{
+public:
+    string name() const override
+    {
+        return "Asinh";
+    }
+
+    float apply(float x) const override
+    {
+        return asinhf(x);
+    }
+
+    float derivation(float x) const override
+    {
+        return 1.f/sqrtf(1.f+x*x);
+    }
+};
+//////////////////////////////////////////////////////////////////////////////
 class ActivationAtan: public Activation
 {
 public:
@@ -35,31 +75,13 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
-class ActivationAsinh: public Activation
-{
-public:
-    string name() const override
-    {
-        return "Asinh";
-    }
-
-    float apply(float x) const override
-    {
-        return asinhf(x);
-    }
-
-    float derivation(float x) const override
-    {
-        return 1.f/sqrtf(1.f+x*x); //http://mathworld.wolfram.com/InverseHyperbolicSine.html
-    }
-};
-//////////////////////////////////////////////////////////////////////////////
+// from: https://en.wikipedia.org/wiki/Activation_function
 class ActivationSin: public Activation
 {
 public:
     string name() const override
     {
-        return "Sin"; //from: https://en.wikipedia.org/wiki/Activation_function
+        return "Sin"; 
     }
 
     float apply(float x) const override
@@ -73,12 +95,13 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+//from: https://en.wikipedia.org/wiki/Activation_function
 class ActivationSinC: public Activation
 {
 public:
     string name() const override
     {
-        return "SinC"; //from: https://en.wikipedia.org/wiki/Activation_function
+        return "SinC"; 
     }
 
     float apply(float x) const override
@@ -314,6 +337,26 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+class ActivationIdentity : public Activation
+{
+public:
+	string name() const override
+	{
+		return "Identity";
+	}
+
+	float apply(float x) const override
+	{
+		return x;
+	}
+
+	float derivation(float x) const override
+	{
+		(void)x;
+		return 1.f;
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
 //from : https://arxiv.org/pdf/1710.09967.pdf
 #define ISRLU_ALPHA (1.0f)
 class ActivationISRLU: public Activation
@@ -342,26 +385,6 @@ public:
 			return t*t*t;
 		}
 	}
-};
-//////////////////////////////////////////////////////////////////////////////
-class ActivationLinear: public Activation
-{
-public:
-    string name() const override
-    {
-        return "Linear";
-    }
-
-    float apply(float x) const override
-    {
-        return x;
-    }
-
-    float derivation(float x) const override
-    {
-        (void)x;
-        return 1.f;
-    }
 };
 //////////////////////////////////////////////////////////////////////////////
 // LogSigmoid as in : https://nn.readthedocs.io/en/rtd/transfer/
@@ -815,6 +838,9 @@ public:
 //////////////////////////////////////////////////////////////////////////////
 Activation* get_activation(const string& sActivation)
 {
+    if(sActivation=="Absolute")
+        return new ActivationAbsolute;
+
     if(sActivation=="Asinh")
         return new ActivationAsinh;
 
@@ -854,12 +880,12 @@ Activation* get_activation(const string& sActivation)
     if(sActivation=="HardTanh")
         return new ActivationHardTanh;
 
+    if(sActivation=="Identity")
+        return new ActivationIdentity;
+
     if(sActivation=="ISRLU")
         return new ActivationISRLU;
 	
-    if(sActivation=="Linear")
-        return new ActivationLinear;
-
     if(sActivation=="LeakyRelu")
         return new ActivationLeakyRelu;
 
@@ -921,6 +947,7 @@ void list_activations_available(vector<string>& vsActivations)
 {
     vsActivations.clear();
 
+    vsActivations.push_back("Absolute");
     vsActivations.push_back("Asinh");
     vsActivations.push_back("Atan");
     vsActivations.push_back("Bent");
@@ -934,8 +961,8 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("HardSigmoid");
     vsActivations.push_back("HardShrink");
     vsActivations.push_back("HardTanh");
+    vsActivations.push_back("Identity");
 	vsActivations.push_back("ISRLU");
-    vsActivations.push_back("Linear");
     vsActivations.push_back("LeakyRelu");
     vsActivations.push_back("LeakyRelu256");
     vsActivations.push_back("LeakyTwiceRelu6");
