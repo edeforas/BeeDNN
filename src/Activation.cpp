@@ -193,6 +193,8 @@ public:
 	}
 	float derivation(float x) const override
 	{
+		(void)x;
+
 		return 0.f;
 	}
 };
@@ -360,6 +362,25 @@ public:
         (void)x;
         return 1.f;
     }
+};
+//////////////////////////////////////////////////////////////////////////////
+// LogSigmoid as in : https://nn.readthedocs.io/en/rtd/transfer/
+class ActivationLogSigmoid : public Activation
+{
+public:
+	string name() const override
+	{
+		return "LogSigmoid";
+	}
+
+	float apply(float x) const override
+	{
+		return logf(1.f / (1.f + expf(-x)));
+	}
+	float derivation(float x) const override
+	{
+		return 1.f / (1.f + expf(x));
+	}
 };
 //////////////////////////////////////////////////////////////////////////////
 class ActivationRelu: public Activation
@@ -848,7 +869,10 @@ Activation* get_activation(const string& sActivation)
     if(sActivation=="LeakyTwiceRelu6")
         return new ActivationLeakyTwiceRelu6;
 
-    if(sActivation=="NLRelu")
+	if (sActivation == "LogSigmoid")
+		return new ActivationLogSigmoid;
+	
+	if(sActivation=="NLRelu")
         return new ActivationNLRelu;
 
     if(sActivation=="Parablu")
@@ -915,6 +939,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("LeakyRelu");
     vsActivations.push_back("LeakyRelu256");
     vsActivations.push_back("LeakyTwiceRelu6");
+	vsActivations.push_back("LogSigmoid");
     vsActivations.push_back("NLRelu");
     vsActivations.push_back("Parablu");
     vsActivations.push_back("Relu");
