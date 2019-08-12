@@ -137,7 +137,7 @@ public:
 	float derivation(float x) const override
 	{
         (void)x;
-		return 0.00390625f;
+		return 0.00390625f; //1.f/256.f
 	}
 };//////////////////////////////////////////////////////////////////////////////
 class ActivationElliot: public Activation
@@ -175,7 +175,7 @@ public:
 
     float derivation(float x) const override
     {
-        return exp(x);
+        return expf(x);
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -525,7 +525,7 @@ public:
         if(x>6.f)
             return 0.2f;
 
-        return 1.f; //can be optimized
+        return 1.f;
     }
 };
 //////////////////////////////////////////////////////////////////////////////
