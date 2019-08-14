@@ -181,6 +181,7 @@
     <ClCompile Include="..\LayerGlobalBias.cpp" />
     <ClCompile Include="..\LayerGlobalGain.cpp" />
     <ClCompile Include="..\LayerPoolAveraging1D.cpp" />
+    <ClCompile Include="..\LayerPRelu.cpp" />
     <ClCompile Include="..\LayerSoftmax.cpp" />
     <ClCompile Include="..\Loss.cpp" />
     <ClCompile Include="..\Matrix.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="..\LayerGlobalBias.h" />
     <ClInclude Include="..\LayerGlobalGain.h" />
     <ClInclude Include="..\LayerPoolAveraging1D.h" />
+    <ClInclude Include="..\LayerPRelu.h" />
     <ClInclude Include="..\LayerSoftmax.h" />
     <ClInclude Include="..\Loss.h" />
     <ClInclude Include="..\Matrix.h" />

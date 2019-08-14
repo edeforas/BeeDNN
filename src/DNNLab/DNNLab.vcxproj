@@ -184,6 +184,7 @@
     <ClCompile Include="..\Activation.cpp" />
     <ClCompile Include="..\ConfusionMatrix.cpp" />
     <ClCompile Include="..\LayerGlobalBias.cpp" />
+    <ClCompile Include="..\LayerPRelu.cpp" />
     <ClCompile Include="DataSource.cpp" />
     <ClCompile Include="FrameGlobal.cpp" />
     <ClCompile Include="FrameLearning.cpp" />
@@ -213,6 +214,7 @@
     <ClInclude Include="..\Activation.h" />
     <ClInclude Include="..\ConfusionMatrix.h" />
     <ClInclude Include="..\LayerGlobalBias.h" />
+    <ClInclude Include="..\LayerPRelu.h" />
     <ClInclude Include="DataSource.h" />
     <QtMoc Include="FrameGlobal.h">
     </QtMoc>
