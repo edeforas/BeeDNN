@@ -14,9 +14,9 @@ int main()
     //construct net
     Net net;
     net.add_dense_layer(1,10);
-    net.add_activation_layer("Relu");
+	net.add_activation_layer("Relu");
 	net.add_dense_layer(10, 1);
-	net.set_classification_mode(false); //set in regression mode
+	net.set_classification_mode(false); //set regression mode
 
     //set train data
     MatrixFloat mTruth(128,1);
@@ -29,7 +29,7 @@ int main()
     }
 
     //train
-    cout << "Training..." << endl;
+    cout << "Fitting..." << endl;
 	NetTrain netfit;
 	netfit.set_learning_data(mSamples, mTruth);
 	netfit.fit(net);

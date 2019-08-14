@@ -31,8 +31,9 @@ void LayerPRelu::init()
 	assert(_iOutSize > 0);
 	
 	_weight.resize(1,_iInSize);
-
 	_weight.setConstant(0.25f);
+
+	_gradientWeight.resizeLike(_weight);
 
     Layer::init();
 }
@@ -51,16 +52,22 @@ void LayerPRelu::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerPRelu::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
-    //_gradientWeight =  mInput.cwiseProduct(mGradientOut);
+	//_gradientWeight.setConstant(30);
 
-	_gradientWeight.resizeLike(mGradientOut);
-
+	// compute gradient in and gradient weight
 	mGradientIn = mGradientOut;
 	for (int i = 0; i < mGradientIn.rows(); i++)
 		for (int j = 0; j < mGradientIn.cols(); j++)
 		{
-			if (mInput(i,j) < 0.f)
-				mGradientIn(i,j) *= _weight(j);
+			if (mInput(i, j) < 0.f)
+			{
+				mGradientIn(i, j) *= _weight(j);
+				_gradientWeight(j) += _weight(j);
+			}
+			else
+			{
+				_gradientWeight(j) = 0.f;
+			}
 		}
 }
 ///////////////////////////////////////////////////////////////

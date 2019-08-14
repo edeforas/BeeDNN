@@ -13,6 +13,7 @@
 #include "LayerGlobalGain.h"
 #include "LayerGlobalBias.h"
 #include "LayerGaussianNoise.h"
+#include "LayerPRelu.h"
 
 #include <QObject>
 
@@ -198,6 +199,9 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
 			else if(sType=="PoolAveraging1D")
                 _pNet->add_poolaveraging1D_layer(iInSize,iOutSize);
 
+			else if (sType == "PRelu")
+				_pNet->add_prelu_layer(iInSize);
+
 			else if (sType == "Softmax")
 				_pNet->add_softmax_layer();
 
@@ -256,9 +260,10 @@ void FrameNetwork::add_new_row(int iRow)
 	qcbType->addItem("GlobalGain");
 	qcbType->addItem("GlobalBias");
 	qcbType->addItem("PoolAveraging1D");
+	qcbType->addItem("PRelu");
 	qcbType->addItem("Softmax");
 
-	qcbType->insertSeparator(9);
+	qcbType->insertSeparator(10);
 
 	for (unsigned int a = 0; a < _vsActivations.size(); a++)
 		qcbType->addItem(_vsActivations[a].c_str());
