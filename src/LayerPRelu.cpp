@@ -52,8 +52,6 @@ void LayerPRelu::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerPRelu::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
-	//_gradientWeight.setConstant(30);
-
 	// compute gradient in and gradient weight
 	mGradientIn = mGradientOut;
 	for (int i = 0; i < mGradientIn.rows(); i++)
