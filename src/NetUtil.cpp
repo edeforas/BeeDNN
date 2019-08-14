@@ -17,6 +17,7 @@
 #include "LayerGlobalGain.h"
 #include "LayerGlobalBias.h"
 #include "LayerGaussianNoise.h"
+#include "LayerPRelu.h"
 
 #include <sstream>
 #include <fstream>
@@ -73,6 +74,12 @@ void write(const Net& net,string & s)
             LayerDropout* l=static_cast<LayerDropout*>(layer);
             ss << "Layer" << i+1 << ".rate=" << l->get_rate() << endl;
         }
+
+		else if (layer->type() == "PRelu")
+		{
+			ss << "Layer" << i + 1 << ".weight=" << endl;
+			ss << toString(layer->weights()) << endl;
+		}
 
         else if (layer->type() == "GaussianNoise")
         {
@@ -148,6 +155,16 @@ void read(const string& s,Net& net)
             string sRate=find_key(s,sLayer+".rate");
             net.add_dropout_layer(iInSize,stof(sRate));
         }
+
+		if (sType == "PRelu")
+		{
+			net.add_prelu_layer(iInSize);
+
+			string sWeight = find_key(s, sLayer + ".weight");
+			MatrixFloat mf = fromString(sWeight);
+			mf.resize(1,iInSize);
+			net.layer(net.size() - 1).weights() = mf;
+		}
 
         else if (sType == "GaussianNoise")
         {

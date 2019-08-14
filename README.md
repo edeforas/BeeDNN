@@ -11,6 +11,7 @@ Implemented so far:
 - global gain layer , global bias layer
 - pool averaging 1D layer (WIP)
 - Softmax layer
+- PRelu layer
 - layers and activations are decoupled, can be in any orders
 - mini batch learn, SGD learn, batch learn
 - SGD, Momentum, Nesterov, Adam, Nadam, Adagrad, Adamax, RMSprop

@@ -12,6 +12,7 @@
 #include "Matrix.h"
 
 #include "LayerActivation.h"
+#include "LayerPRelu.h"
 #include "LayerSoftmax.h"
 #include "LayerDense.h"
 #include "LayerDropout.h"
@@ -77,6 +78,11 @@ void Net::add_gaussian_noise_layer(int iSize, float fStd)
 void Net::add_activation_layer(string sType)
 {
     _layers.push_back(new LayerActivation(sType));
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void Net::add_prelu_layer(int inSize)
+{
+	_layers.push_back(new LayerPRelu(inSize));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_softmax_layer()
