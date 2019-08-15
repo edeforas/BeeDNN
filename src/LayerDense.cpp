@@ -56,25 +56,28 @@ void LayerDense::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDense::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
-    // optimisation: split _weight in [weightnobias, bias] in computation in cases of bias
-
-    //backpropagation and computation of gradient
     if (_bHasBias)
     {
-        _gradientWeight = ((addColumnOfOne(mInput)).transpose())*mGradientOut; //todo optimize
-
+		// optimisation: split _weight in [weightnobias, bias]
+		_gradientWeight = ((addColumnOfOne(mInput)).transpose())*mGradientOut; //todo optimize
         mGradientIn = mGradientOut * _weight.topRows(_iInSize).transpose();
     }
     else
     {
         _gradientWeight = (mInput.transpose())*mGradientOut;
-
         mGradientIn = mGradientOut * (_weight.transpose());
     }
+
+	_gradientWeight *= (1.f / mInput.rows());
 }
 ///////////////////////////////////////////////////////////////
 bool LayerDense::has_bias() const
 {
     return _bHasBias;
+}
+///////////////////////////////////////////////////////////////
+bool LayerDense::has_weight() const
+{
+	return true;
 }
 ///////////////////////////////////////////////////////////////

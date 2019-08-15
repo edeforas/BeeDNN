@@ -49,9 +49,9 @@ void Layer::set_train_mode(bool bTrainMode)
 	_bTrainMode = bTrainMode;
 }
 ///////////////////////////////////////////////////////////////
-bool Layer::has_weight()
+bool Layer::has_weight() const
 {
-    return _weight.size()!=0;
+    return false;
 }
 ///////////////////////////////////////////////////////////////
 MatrixFloat& Layer::weights()

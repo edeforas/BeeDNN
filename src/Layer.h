@@ -35,7 +35,7 @@ public:
 		
 	void set_train_mode(bool bTrainMode); //set to true to train, to false to test
 
-    virtual bool has_weight();
+    virtual bool has_weight() const;
     virtual MatrixFloat& weights();
     virtual MatrixFloat& gradient_weights();
 

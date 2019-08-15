@@ -67,5 +67,12 @@ void LayerPRelu::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mG
 				_gradientWeight(j) = 0.f;
 			}
 		}
+
+	_gradientWeight *= (1.f / mInput.rows());
+}
+///////////////////////////////////////////////////////////////
+bool LayerPRelu::has_weight() const
+{
+	return true;
 }
 ///////////////////////////////////////////////////////////////

@@ -424,7 +424,7 @@ void NetTrain::train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth
 
 		if (l.has_weight())
 		{
-			_optimizers[i]->optimize(l.weights(), l.gradient_weights()*(1.f/_iBatchSize));
+			_optimizers[i]->optimize(l.weights(), l.gradient_weights());
 		}
 	}
 

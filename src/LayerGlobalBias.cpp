@@ -43,7 +43,7 @@ void LayerGlobalBias::backpropagation(const MatrixFloat &mInput,const MatrixFloa
 {
     (void)mInput;
 
-    _gradientWeight = mGradientOut;
+    _gradientWeight = mGradientOut * (1.f / mInput.rows());
 
     mGradientIn = mGradientOut;
 }
@@ -51,5 +51,10 @@ void LayerGlobalBias::backpropagation(const MatrixFloat &mInput,const MatrixFloa
 float LayerGlobalBias::bias() const
 {
     return _weight(0);
+}
+///////////////////////////////////////////////////////////////
+bool LayerGlobalBias::has_weight() const
+{
+	return true;
 }
 ///////////////////////////////////////////////////////////////

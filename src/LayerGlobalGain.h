@@ -25,6 +25,8 @@ public:
 
     virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 
+	virtual bool has_weight() const override;
+
     float gain() const;
 };
 

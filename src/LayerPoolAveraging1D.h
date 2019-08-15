@@ -21,7 +21,7 @@ public:
     virtual Layer* clone() const override;
     virtual void init() override;
 
-	virtual bool has_weight() override;
+	virtual bool has_weight() const override;
 
     virtual void forward(const MatrixFloat& mMatin, MatrixFloat &mMatOut) const override;
     virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
