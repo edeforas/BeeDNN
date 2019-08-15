@@ -16,6 +16,7 @@
 #include "LayerDropout.h"
 #include "LayerGlobalGain.h"
 #include "LayerGlobalBias.h"
+#include "LayerSoftmax.h"
 #include "LayerGaussianNoise.h"
 #include "LayerPRelu.h"
 
@@ -156,7 +157,7 @@ void read(const string& s,Net& net)
             net.add_dropout_layer(iInSize,stof(sRate));
         }
 
-		if (sType == "PRelu")
+		else if (sType == "PRelu")
 		{
 			net.add_prelu_layer(iInSize);
 
@@ -171,6 +172,12 @@ void read(const string& s,Net& net)
             string sNoise=find_key(s,sLayer+".stdNoise");
             net.add_gaussian_noise_layer(iInSize,stof(sNoise));
         }
+
+		else if (sType == "Softmax")
+		{
+			net.add_softmax_layer();
+		}
+
         else
         {
             //activation layer
