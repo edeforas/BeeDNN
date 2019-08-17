@@ -182,7 +182,7 @@ public:
 		{
 			float p = mPredicted(i);
 			float y = mTarget(i);
-			fLoss += -(y*log(max(p, 1.e-8f)));
+			fLoss += -(y*logf(max(p, 1.e-8f)));
 		}
 		return fLoss / mTarget.size();
 	}
