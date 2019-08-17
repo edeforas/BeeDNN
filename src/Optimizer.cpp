@@ -7,7 +7,9 @@
 */
 
 #include "Optimizer.h"
+
 #include <cassert>
+#include <cmath>
 
 // Network optimizer as in:
 // http://cs231n.github.io/neural-networks-3/#update
