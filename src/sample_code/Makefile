@@ -5,7 +5,7 @@ ALL = sample_regression_sin
 all: $(ALL)
 
 sample_regression_sin: sample_regression_sin.cpp Makefile
-	$(CXX) $(CXXFLAGS) -lm sample_regression_sin.cpp -I.. ../*.cpp -o sample_regression_sin
+	$(CXX) $(CXXFLAGS) sample_regression_sin.cpp -I.. ../*.cpp -o sample_regression_sin -lm
 
 clean:
 	$(RM) $(ALL) *.o
