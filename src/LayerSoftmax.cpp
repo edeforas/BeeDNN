@@ -51,7 +51,7 @@ void LayerSoftmax::backpropagation(const MatrixFloat &mInput,const MatrixFloat &
 		float s = S.array().exp().sum();
 		for (int c = 0; c < S.cols(); c++)
 		{
-			float expx = expf(S(c));
+			float expx = exp(S(c));
 			mGradientIn(r, c) = mGradientOut(r, c)*(expx*(s-expx)) / (s*s);
 		}
 	}
