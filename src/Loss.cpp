@@ -250,22 +250,22 @@ Loss* create_loss(const string& sLoss)
     if(sLoss =="MeanSquaredError")
         return new LossMeanSquaredError;
 
-    if(sLoss =="MeanAbsoluteError")
+    else if(sLoss =="MeanAbsoluteError")
         return new LossMeanAbsoluteError;
 
-	if (sLoss == "L2")
+	else if(sLoss == "L2")
 		return new LossL2;
 
-	if (sLoss == "L1")
+	else if(sLoss == "L1")
 		return new LossL1;
 
-	if (sLoss == "LogCosh")
+	else if(sLoss == "LogCosh")
 		return new LossLogCosh;
 
-	if(sLoss =="CategoricalCrossEntropy")
+	else if(sLoss =="CategoricalCrossEntropy")
         return new LossCategoricalCrossEntropy;
 
-	if (sLoss == "BinaryCrossEntropy")
+	else if(sLoss == "BinaryCrossEntropy")
 		return new LossBinaryCrossEntropy;
 	
 	return nullptr;

@@ -292,12 +292,12 @@ TrainResult NetTrain::fit(Net& net)
 	if (!net.is_valid((int)mSamples.cols(),(int) mTruth.cols()))
 		return tr;
 
-    int iNbSamples=(int)mSamples.rows();
 	_iNbLayers =(int)net.layers().size();
-    int iReboost = 0;
-
     if(_iNbLayers ==0)
-        return tr;
+		return tr;
+
+    int iNbSamples=(int)mSamples.rows();
+    int iReboost = 0;
 
 	_pNet = &net;
 
@@ -310,7 +310,7 @@ TrainResult NetTrain::fit(Net& net)
 
     _gradient.resize(_iNbLayers +1);
 
-	for (int i = 0; i < _optimizers.size(); i++)
+	for (unsigned int i = 0; i < _optimizers.size(); i++)
 		delete _optimizers[i];
 	_optimizers.clear();
 

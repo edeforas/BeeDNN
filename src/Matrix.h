@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <cassert>
 #include <string>
+#include <cmath>
 using namespace std;
 
 #ifdef USE_EIGEN
