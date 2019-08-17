@@ -248,7 +248,7 @@ bool Net::is_valid(int iInSize, int iOutSize) const
 		return true;
 
 	//check  each layer size
-	for (int i = 1; i < size(); i++)
+	for (unsigned int i = 1; i < size(); i++)
 	{
 		const Layer& l1 = layer(i - 1);
 

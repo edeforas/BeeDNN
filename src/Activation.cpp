@@ -841,103 +841,103 @@ Activation* get_activation(const string& sActivation)
     if(sActivation=="Absolute")
         return new ActivationAbsolute;
 
-    if(sActivation=="Asinh")
+    else if(sActivation=="Asinh")
         return new ActivationAsinh;
 
-    if(sActivation=="Atan")
+    else if(sActivation=="Atan")
         return new ActivationAtan;
 
-    if(sActivation=="Bent")
+    else if(sActivation=="Bent")
         return new ActivationBent;
 
-	if (sActivation == "BinaryStep")
+	else if(sActivation == "BinaryStep")
 		return new ActivationBinaryStep;
 
-	if (sActivation == "DivideBy256")
+	else if(sActivation == "DivideBy256")
 		return new ActivationDivideBy256;
 
-    if(sActivation=="Elliot")
+    else if(sActivation=="Elliot")
         return new ActivationElliot;
 
-    if(sActivation=="ELU")
+    else if(sActivation=="ELU")
         return new ActivationELU;
 
-    if(sActivation=="Exponential")
+    else if(sActivation=="Exponential")
         return new ActivationExponential;
 
-    if(sActivation=="Gauss")
+    else if(sActivation=="Gauss")
         return new ActivationGauss;
 	
-	if(sActivation=="HardELU")
+	else if(sActivation=="HardELU")
         return new ActivationHardELU;
 
-    if(sActivation=="HardSigmoid")
+    else if(sActivation=="HardSigmoid")
         return new ActivationHardSigmoid;
 
-    if(sActivation=="HardShrink")
+    else if(sActivation=="HardShrink")
         return new ActivationHardShrink;
 
-    if(sActivation=="HardTanh")
+    else if(sActivation=="HardTanh")
         return new ActivationHardTanh;
 
-    if(sActivation=="Identity")
+    else if(sActivation=="Identity")
         return new ActivationIdentity;
 
-    if(sActivation=="ISRLU")
+    else if(sActivation=="ISRLU")
         return new ActivationISRLU;
 	
-    if(sActivation=="LeakyRelu")
+    else if(sActivation=="LeakyRelu")
         return new ActivationLeakyRelu;
 
-    if (sActivation=="LeakyRelu256")
+    else if(sActivation=="LeakyRelu256")
         return new ActivationLeakyRelu256;
 
-    if(sActivation=="LeakyTwiceRelu6")
+    else if(sActivation=="LeakyTwiceRelu6")
         return new ActivationLeakyTwiceRelu6;
 
-	if (sActivation == "LogSigmoid")
+	else if(sActivation == "LogSigmoid")
 		return new ActivationLogSigmoid;
 	
-	if(sActivation=="NLRelu")
+	else if(sActivation=="NLRelu")
         return new ActivationNLRelu;
 
-    if(sActivation=="Parablu")
+    else if(sActivation=="Parablu")
         return new ActivationParablu;
 
-    if(sActivation=="Relu")
+    else if(sActivation=="Relu")
         return new ActivationRelu;
 
-    if(sActivation=="Relu6")
+    else if(sActivation=="Relu6")
         return new ActivationRelu6;
 
-    if(sActivation=="Selu")
+    else if(sActivation=="Selu")
         return new ActivationSelu;
 
-    if(sActivation=="SQNL")
+    else if(sActivation=="SQNL")
         return new ActivationSQNL;
 
-    if(sActivation=="SoftPlus")
+    else if(sActivation=="SoftPlus")
         return new ActivationSoftPlus;
 
-    if(sActivation=="Sin")
+    else if(sActivation=="Sin")
         return new ActivationSin;
 
-    if(sActivation=="SinC")
+    else if(sActivation=="SinC")
         return new ActivationSinC;
 
-    if(sActivation=="Sigmoid")
+    else if(sActivation=="Sigmoid")
         return new ActivationSigmoid;
 
-    if(sActivation=="Swish")
+    else if(sActivation=="Swish")
         return new ActivationSwish;
     
-	if(sActivation=="SoftShrink")
+	else if(sActivation=="SoftShrink")
         return new ActivationSoftShrink;
 	
-    if(sActivation=="SoftSign")
+    else if(sActivation=="SoftSign")
         return new ActivationSoftSign;
 
-    if(sActivation=="Tanh")
+    else if(sActivation=="Tanh")
         return new ActivationTanh;
 
     return nullptr;

@@ -40,7 +40,7 @@ NetTrain::NetTrain():
 /////////////////////////////////////////////////////////////////////////////////////////////////
 NetTrain::~NetTrain()
 {
-	for (int i = 0; i < _optimizers.size(); i++)
+	for (unsigned int i = 0; i < _optimizers.size(); i++)
 		delete _optimizers[i];
 
 	_optimizers.clear();
@@ -69,7 +69,7 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
 	_fDecay=other._fDecay;
 	_fMomentum=other._fMomentum;
 
-	for (int i = 0; i < other._optimizers.size(); i++)
+	for (unsigned int i = 0; i < other._optimizers.size(); i++)
 		_optimizers.push_back(create_optimizer(other._optimizers[i]->name())); // initialized
 
 	_inOut = other._inOut;
