@@ -75,6 +75,27 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+// BipolarSigmoid as in: https://adl1995.github.io/an-overview-of-activation-functions-used-in-neural-networks.html
+class ActivationBipolarSigmoid: public Activation
+{
+public:
+    string name() const override
+    {
+        return "BipolarSigmoid";
+    }
+
+    float apply(float x) const override
+    {
+		float s=expf(x);
+        return (s-1.f)/(s+1.f);
+	}
+    float derivation(float x) const override
+    {
+		float s=expf(x);
+        return 2.f*s/((s+1.f)*(s+1.f)); //todo optimise
+    }
+};
+//////////////////////////////////////////////////////////////////////////////
 // from: https://en.wikipedia.org/wiki/Activation_function
 class ActivationSin: public Activation
 {
@@ -853,6 +874,9 @@ Activation* get_activation(const string& sActivation)
 	else if(sActivation == "BinaryStep")
 		return new ActivationBinaryStep;
 
+	else if(sActivation == "BipolarSigmoid")
+		return new ActivationBipolarSigmoid;
+
 	else if(sActivation == "DivideBy256")
 		return new ActivationDivideBy256;
 
@@ -952,6 +976,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("Atan");
     vsActivations.push_back("Bent");
 	vsActivations.push_back("BinaryStep");
+	vsActivations.push_back("BipolarSigmoid");
 	vsActivations.push_back("DivideBy256");
     vsActivations.push_back("Elliot");
     vsActivations.push_back("ELU");
