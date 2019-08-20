@@ -7,6 +7,22 @@ using namespace std;
 #include "Net.h"
 #include "NetTrain.h"
 
+/////////////////////////////////////////////////////////////////////
+// for testU only
+inline bool is_near(double a,double b, double tolerancis=1.e-10)
+{
+    return fabs(a-b)<tolerancis;
+}
+void test(bool bTest,string sMessage="")
+{
+    if(bTest) return;
+
+    cout << "Test failed: " << sMessage << endl;
+    exit(-1);
+}
+/////////////////////////////////////////////////////////////////////
+
+
 int main()
 {
     //construct network, 2 input, 1 output
@@ -32,5 +48,11 @@ int main()
 	net.predict(mSamples, mOut);
     cout << "0_xor_0=" << mOut(0) << endl << "0_xor_1=" << mOut(1) << endl << "1_xor_0=" << mOut(2) << endl << "1_xor_1=" << mOut(3) << endl;
 
+	//simple testU code
+	test(is_near(mOut(0),0));
+	test(is_near(mOut(1),1));
+	test(is_near(mOut(1),1));
+	test(is_near(mOut(0),0));
+	
     return 0;
 }
