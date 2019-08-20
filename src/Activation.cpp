@@ -96,50 +96,23 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
-// from: https://en.wikipedia.org/wiki/Activation_function
-class ActivationSin: public Activation
+// ComplementaryLogLog as in: https://stats.stackexchange.com/questions/115258/comprehensive-list-of-activation-functions-in-neural-networks-with-pros-cons
+class ActivationComplementaryLogLog : public Activation
 {
 public:
-    string name() const override
-    {
-        return "Sin"; 
-    }
+	string name() const override
+	{
+		return "ComplementaryLogLog";
+	}
 
-    float apply(float x) const override
-    {
-        return sinf(x);
-    }
-
-    float derivation(float x) const override
-    {
-        return cosf(x);
-    }
-};
-//////////////////////////////////////////////////////////////////////////////
-//from: https://en.wikipedia.org/wiki/Activation_function
-class ActivationSinC: public Activation
-{
-public:
-    string name() const override
-    {
-        return "SinC"; 
-    }
-
-    float apply(float x) const override
-    {
-        if(x==0.f)
-            return 1.f;
-
-        return sinf(x)/x;
-    }
-
-    float derivation(float x) const override
-    {
-        if(x==0.f)
-            return 0.f;
-
-        return cosf(x)/x-sinf(x)/(x*x);
-    }
+	float apply(float x) const override
+	{
+		return 1.f - expf(-expf(x));
+	}
+	float derivation(float x) const override
+	{
+		return expf(x-expf(x)); 
+	}
 };
 //////////////////////////////////////////////////////////////////////////////
 class ActivationDivideBy256 : public Activation
@@ -160,7 +133,8 @@ public:
         (void)x;
 		return 0.00390625f; //1.f/256.f
 	}
-};//////////////////////////////////////////////////////////////////////////////
+};
+//////////////////////////////////////////////////////////////////////////////
 class ActivationElliot: public Activation
 {
 public:
@@ -405,6 +379,52 @@ public:
 			float t=1.f/sqrtf(1.f+ ISRLU_ALPHA*x*x);
 			return t*t*t;
 		}
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
+// from: https://en.wikipedia.org/wiki/Activation_function
+class ActivationSin : public Activation
+{
+public:
+	string name() const override
+	{
+		return "Sin";
+	}
+
+	float apply(float x) const override
+	{
+		return sinf(x);
+	}
+
+	float derivation(float x) const override
+	{
+		return cosf(x);
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
+//from: https://en.wikipedia.org/wiki/Activation_function
+class ActivationSinC : public Activation
+{
+public:
+	string name() const override
+	{
+		return "SinC";
+	}
+
+	float apply(float x) const override
+	{
+		if (x == 0.f)
+			return 1.f;
+
+		return sinf(x) / x;
+	}
+
+	float derivation(float x) const override
+	{
+		if (x == 0.f)
+			return 0.f;
+
+		return cosf(x) / x - sinf(x) / (x*x);
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -877,6 +897,9 @@ Activation* get_activation(const string& sActivation)
 	else if(sActivation == "BipolarSigmoid")
 		return new ActivationBipolarSigmoid;
 
+	else if (sActivation == "ComplementaryLogLog")
+		return new ActivationComplementaryLogLog;
+
 	else if(sActivation == "DivideBy256")
 		return new ActivationDivideBy256;
 
@@ -977,6 +1000,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("Bent");
 	vsActivations.push_back("BinaryStep");
 	vsActivations.push_back("BipolarSigmoid");
+	vsActivations.push_back("ComplementaryLogLog");
 	vsActivations.push_back("DivideBy256");
     vsActivations.push_back("Elliot");
     vsActivations.push_back("ELU");
