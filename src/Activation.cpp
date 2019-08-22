@@ -75,6 +75,30 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+// Bipolar as in: https://stats.stackexchange.com/questions/115258/comprehensive-list-of-activation-functions-in-neural-networks-with-pros-cons
+class ActivationBipolar: public Activation
+{
+public:
+	string name() const override
+	{
+		return "Bipolar";
+	}
+
+	float apply(float x) const override
+	{
+		if (x > 0.f)
+			return 1.f;
+		else
+			return -1.f;
+	}
+	float derivation(float x) const override
+	{
+		(void)x;
+
+		return 0.f;
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
 // BipolarSigmoid as in: https://adl1995.github.io/an-overview-of-activation-functions-used-in-neural-networks.html
 class ActivationBipolarSigmoid: public Activation
 {
@@ -894,6 +918,9 @@ Activation* get_activation(const string& sActivation)
 	else if(sActivation == "BinaryStep")
 		return new ActivationBinaryStep;
 
+	else if(sActivation == "Bipolar")
+		return new ActivationBipolar;
+
 	else if(sActivation == "BipolarSigmoid")
 		return new ActivationBipolarSigmoid;
 
@@ -999,6 +1026,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("Atan");
     vsActivations.push_back("Bent");
 	vsActivations.push_back("BinaryStep");
+	vsActivations.push_back("Bipolar");
 	vsActivations.push_back("BipolarSigmoid");
 	vsActivations.push_back("ComplementaryLogLog");
 	vsActivations.push_back("DivideBy256");
