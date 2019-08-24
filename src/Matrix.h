@@ -455,7 +455,30 @@ public:
         return out;
     }
 
-    Matrix<T> cwiseMax(T f) const
+	Matrix<T> cwiseMin(T f) const
+	{
+		Matrix<T> out(*this);
+
+		for (int i = 0; i < _iSize; i++)
+			out(i) = std::min<T>(_data[i], f);
+
+		return out;
+	}
+	
+	Matrix<T> cwiseMin(const Matrix<T>& m) const
+	{
+		assert(m.rows() == rows());
+		assert(m.cols() == cols());
+
+		Matrix<T> out(*this);
+
+		for (int i = 0; i < _iSize; i++)
+			out(i) = std::min<T>(_data[i], m._data[i]);
+
+		return out;
+	}
+
+	Matrix<T> cwiseMax(T f) const
     {
         Matrix<T> out(*this);
 

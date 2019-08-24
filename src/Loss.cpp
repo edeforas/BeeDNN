@@ -71,7 +71,7 @@ public:
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
 
-        mGradientLoss=(mPredicted - mTarget).cwiseSign();
+        mGradientLoss=(mPredicted - mTarget).array().cwiseSign();
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
