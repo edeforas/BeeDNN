@@ -41,10 +41,8 @@ void LayerGlobalBias::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) co
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGlobalBias::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
-    (void)mInput;
-
-    _gradientWeight = mGradientOut * (1.f / mInput.rows());
-
+    _gradientWeight = colWiseMean(mInput);
+	
     mGradientIn = mGradientOut;
 }
 ///////////////////////////////////////////////////////////////////////////////

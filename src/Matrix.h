@@ -608,6 +608,7 @@ typedef Matrix<float> MatrixFloatView;
 MatrixFloatView fromRawBuffer(float *pBuffer, int iRows, int iCols);
 const MatrixFloatView fromRawBuffer(const float *pBuffer, int iRows, int iCols);
 MatrixFloat rowWiseSum(const MatrixFloat& m);
+MatrixFloat colWiseMean(const MatrixFloat& m);
 MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d);
 void arraySub(MatrixFloat& m,float f);
