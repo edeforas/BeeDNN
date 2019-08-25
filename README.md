@@ -14,7 +14,7 @@ Implemented so far:
 - PRelu layer
 - layers and activations are decoupled, can be in any orders
 - mini batch learn, SGD learn, batch learn
-- SGD, Momentum, Nesterov, Adam, Nadam, Adagrad, Adamax, RMSprop
+- SGD, Momentum, Nesterov, Adam, Nadam, Adagrad, Adamax, RMSprop, RPROP-
 - classification or regression, test and/or learn
 - many activation functions: Absolute, Asinh, Atan, Bent, BinaryStep, Bipolar, BipolarSigmoid, ComplementaryLogLog, Elliot, ELU, Exponential, Gauss, HardELU, HardSigmoid, HardShrink, HardTanh, ISRELU, Linear, LeakyRelu, LeakyRelu256, LogSigmoid, TwiceLeakyRelu6, NLRelu, Parablu, Relu, Relu6, Selu, SQNL, SoftPlus, Sin, SinC, Sigmoid, Swish, SoftShrink, SoftSign, Tanh
 - Loss functions can be: MeanSquareError, MeanAbsoluteError, L2, L1, LogCosh, CrossEntropy or BinaryCrossEntropy

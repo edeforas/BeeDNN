@@ -329,11 +329,20 @@ TrainResult NetTrain::fit(Net& net)
         _fOnlineLoss=0.f;
 		_iOnlineAccuracyGood = 0;
 
-        MatrixFloat mShuffle=randPerm(iNbSamples);
         MatrixFloat mSampleShuffled;
         MatrixFloat mTruthShuffled;
-        applyRowPermutation(mShuffle, mSamples, mSampleShuffled);
-        applyRowPermutation(mShuffle, mTruth, mTruthShuffled);
+
+		if (_iBatchSize < iNbSamples)
+		{
+			MatrixFloat mShuffle = randPerm(iNbSamples);
+			applyRowPermutation(mShuffle, mSamples, mSampleShuffled);
+			applyRowPermutation(mShuffle, mTruth, mTruthShuffled);
+		}
+		else
+		{
+			mSampleShuffled = mSamples; //todo remove copy
+			mTruthShuffled = mTruth;
+		}
 
         net.set_train_mode(true);
 

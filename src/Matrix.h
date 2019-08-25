@@ -455,7 +455,30 @@ public:
         return out;
     }
 
-    Matrix<T> cwiseMax(T f) const
+	Matrix<T> cwiseMin(T f) const
+	{
+		Matrix<T> out(*this);
+
+		for (int i = 0; i < _iSize; i++)
+			out(i) = std::min<T>(_data[i], f);
+
+		return out;
+	}
+	
+	Matrix<T> cwiseMin(const Matrix<T>& m) const
+	{
+		assert(m.rows() == rows());
+		assert(m.cols() == cols());
+
+		Matrix<T> out(*this);
+
+		for (int i = 0; i < _iSize; i++)
+			out(i) = std::min<T>(_data[i], m._data[i]);
+
+		return out;
+	}
+
+	Matrix<T> cwiseMax(T f) const
     {
         Matrix<T> out(*this);
 
@@ -585,6 +608,7 @@ typedef Matrix<float> MatrixFloatView;
 MatrixFloatView fromRawBuffer(float *pBuffer, int iRows, int iCols);
 const MatrixFloatView fromRawBuffer(const float *pBuffer, int iRows, int iCols);
 MatrixFloat rowWiseSum(const MatrixFloat& m);
+MatrixFloat colWiseMean(const MatrixFloat& m);
 MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d);
 void arraySub(MatrixFloat& m,float f);

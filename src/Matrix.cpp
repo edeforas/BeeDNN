@@ -49,7 +49,29 @@ MatrixFloat rowWiseSum(const MatrixFloat& m)
     return result;
 #endif
 }
+///////////////////////////////////////////////////////////////////////////
+MatrixFloat colWiseMean(const MatrixFloat& m)
+{
+#ifdef USE_EIGEN
+	return m.colwise().mean();
+#else
+	int r = m.rows();
+	int c = m.cols();
+	MatrixFloat result(1,c);
 
+	for (int j = 0; j < c; j++)
+	{
+		float f = 0.;
+		for (int i = 0; i < r; i++)
+		{
+			f += m(i, j);
+		}
+		result(0, j) = f / (float)r;
+	}
+
+	return result;
+#endif
+}
 ///////////////////////////////////////////////////////////////////////////
 void arraySub(MatrixFloat& m,float f)
 {

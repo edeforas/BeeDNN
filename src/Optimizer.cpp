@@ -402,10 +402,92 @@ private:
     float beta1, beta2, beta1_prod;
 };
 //////////////////////////////////////////////////////////
+class OptimizerRPROPm : public Optimizer
+{
+public:
+    OptimizerRPROPm()
+    {}
+
+    ~OptimizerRPROPm() override
+    {}
+
+	string name() const override
+	{
+		return "RPROP-";
+	}
+
+    virtual void init() override
+    {
+        _oldgradw.resize(0,0);
+		_mu.resize(0,0);	
+    }
+
+    virtual void optimize(MatrixFloat& w, const MatrixFloat& dw) override
+    {
+		assert(w.rows() == dw.rows());
+		assert(w.cols() == dw.cols());
+
+        // init if needed
+        if (_oldgradw.size() == 0)
+        {  
+			_mu.resizeLike(dw);
+			_mu.setOnes();
+			_oldgradw=dw;
+		}
+		
+		// update mu
+/*
+		sg=sign(gradw.*s.oldgradw);
+		s.mu(sg<0) *= 0.5;
+		s.mu(sg>0) *= 1.2;
+*/ 	
+		for(int i=0; i<_mu.size();i++)
+		{
+			float f=dw(i)*_oldgradw(i);
+
+			if(f<0.f)
+				_mu(i)*=0.5f;
+			else if(f>0.f)
+				_mu(i)*=1.2f;
+
+			if (_mu(i) > 50.f)
+				_mu(i) = 50.f;
+
+			if (_mu(i) < 1.e-6f)
+				_mu(i) = 1.e-6f;
+
+			if (dw(i) > 0.f)
+				w(i) -= _mu(i);
+			else if (dw(i) < 0.f)
+				w(i) += _mu(i);
+
+			//     w.array()-= _mu.array().cwiseProduct(dw.array().cwiseSign()); // w=w-s.mu.*sign(gradw);
+
+		
+		}
+
+   //     _mu = _mu.cwiseMax(1.e-6f); //s.mu(s.mu<1.e-6)=1.e-6;
+   //     _mu = _mu.cwiseMin(50.f); //	s.mu(s.mu>50)=50;
+
+		// update w
+   //     w.array()-= _mu.array().cwiseProduct(dw.array().cwiseSign()); // w=w-s.mu.*sign(gradw);
+		
+		_oldgradw=dw;
+    }
+private:
+    MatrixFloat _oldgradw,_mu;
+};
+//////////////////////////////////////////////////////////
 Optimizer* create_optimizer(const string& sOptimizer)
 {
-    if (sOptimizer == "SGD")
-        return new OptimizerSGD();
+    if (sOptimizer == "Adagrad")
+        return new OptimizerAdagrad;
+
+    if (sOptimizer == "Adam")
+        return new OptimizerAdam;
+
+    if (sOptimizer == "Adamax")
+        return new OptimizerAdamax;
 
     if (sOptimizer == "Momentum")
         return new OptimizerMomentum;
@@ -413,35 +495,33 @@ Optimizer* create_optimizer(const string& sOptimizer)
     if (sOptimizer == "Nesterov")
         return new OptimizerNesterov;
 
-    if (sOptimizer == "Adagrad")
-        return new OptimizerAdagrad;
-
-    if (sOptimizer == "Adam")
-        return new OptimizerAdam;
-
     if (sOptimizer == "Nadam")
         return new OptimizerNadam;
-
-    if (sOptimizer == "Adamax")
-        return new OptimizerAdamax;
 
     if (sOptimizer == "RMSProp")
         return new OptimizerRMSProp;
 
-    return nullptr;
+    if (sOptimizer == "RPROP-")
+        return new OptimizerRPROPm;
+
+    if (sOptimizer == "SGD")
+        return new OptimizerSGD();
+
+	return nullptr;
 }
 //////////////////////////////////////////////////////////////////////////////
 void list_optimizers_available(vector<string>& vsOptimizers)
 {
     vsOptimizers.clear();
 
-    vsOptimizers.push_back("SGD");
-    vsOptimizers.push_back("Momentum");
-    vsOptimizers.push_back("Nesterov");
     vsOptimizers.push_back("Adagrad");
     vsOptimizers.push_back("Adam");
     vsOptimizers.push_back("Nadam");
     vsOptimizers.push_back("Adamax");
+    vsOptimizers.push_back("Momentum");
+    vsOptimizers.push_back("Nesterov");
     vsOptimizers.push_back("RMSProp");
+    vsOptimizers.push_back("RPROP-");
+    vsOptimizers.push_back("SGD");
 }
 //////////////////////////////////////////////////////////////////////////////
