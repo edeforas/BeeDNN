@@ -402,6 +402,8 @@ private:
     float beta1, beta2, beta1_prod;
 };
 //////////////////////////////////////////////////////////
+//RPROP-  as in : https://pdfs.semanticscholar.org/df9c/6a3843d54a28138a596acc85a96367a064c2.pdf
+// or in paper : Improving the Rprop Learning Algorithm (Christian Igel and Michael Husken)
 class OptimizerRPROPm : public Optimizer
 {
 public:
@@ -431,52 +433,108 @@ public:
         if (_oldgradw.size() == 0)
         {  
 			_mu.resizeLike(dw);
-			_mu.setOnes();
+			_mu.setConstant(0.0125f);
 			_oldgradw=dw;
 		}
 		
-		// update mu
-/*
-		sg=sign(gradw.*s.oldgradw);
-		s.mu(sg<0) *= 0.5;
-		s.mu(sg>0) *= 1.2;
-*/ 	
 		for(int i=0; i<_mu.size();i++)
 		{
 			float f=dw(i)*_oldgradw(i);
-
+			float& mu=_mu(i);
+			
 			if(f<0.f)
-				_mu(i)*=0.5f;
+			{	
+				mu*=0.5f;
+				if (mu < 1.e-6f)
+					mu = 1.e-6f;
+			}
 			else if(f>0.f)
-				_mu(i)*=1.2f;
-
-			if (_mu(i) > 50.f)
-				_mu(i) = 50.f;
-
-			if (_mu(i) < 1.e-6f)
-				_mu(i) = 1.e-6f;
+			{
+				mu*=1.2f;
+				if (mu > 50.f)
+					mu = 50.f;
+			}
 
 			if (dw(i) > 0.f)
-				w(i) -= _mu(i);
+				w(i) -= mu;
 			else if (dw(i) < 0.f)
-				w(i) += _mu(i);
-
-			//     w.array()-= _mu.array().cwiseProduct(dw.array().cwiseSign()); // w=w-s.mu.*sign(gradw);
-
-		
+				w(i) += mu;
 		}
 
-   //     _mu = _mu.cwiseMax(1.e-6f); //s.mu(s.mu<1.e-6)=1.e-6;
-   //     _mu = _mu.cwiseMin(50.f); //	s.mu(s.mu>50)=50;
-
-		// update w
-   //     w.array()-= _mu.array().cwiseProduct(dw.array().cwiseSign()); // w=w-s.mu.*sign(gradw);
-		
 		_oldgradw=dw;
     }
 private:
     MatrixFloat _oldgradw,_mu;
 };
+//////////////////////////////////////////////////////////
+//iRPROP-  as in : https://pdfs.semanticscholar.org/df9c/6a3843d54a28138a596acc85a96367a064c2.pdf
+// or in paper : Improving the Rprop Learning Algorithm (Christian Igel and Michael Husken)
+class OptimizeriRPROPm : public Optimizer
+{
+public:
+	OptimizeriRPROPm()
+	{}
+
+	~OptimizeriRPROPm() override
+	{}
+
+	string name() const override
+	{
+		return "iRPROP-";
+	}
+
+	virtual void init() override
+	{
+		_oldgradw.resize(0, 0);
+		_mu.resize(0, 0);
+	}
+
+	virtual void optimize(MatrixFloat& w, const MatrixFloat& dw) override
+	{
+		assert(w.rows() == dw.rows());
+		assert(w.cols() == dw.cols());
+
+		// init if needed
+		if (_oldgradw.size() == 0)
+		{
+			_mu.resizeLike(dw);
+			_mu.setConstant(0.0125f);
+			_oldgradw = dw;
+		}
+
+		for (int i = 0; i < _mu.size(); i++)
+		{
+			float dwi = dw(i);
+			float f = dwi *_oldgradw(i);
+			float& mu = _mu(i);
+
+			if (f < 0.f)
+			{
+				mu *= 0.5f;
+				if (mu < 1.e-6f)
+					mu = 1.e-6f;
+
+				dwi = 0;
+			}
+			else if (f > 0.f)
+			{
+				mu *= 1.2f;
+				if (mu > 50.f)
+					mu = 50.f;
+			}
+
+			if (dwi > 0.f)
+				w(i) -= mu;
+			else if (dwi < 0.f)
+				w(i) += mu;
+		
+			_oldgradw(i) = dwi;
+		}
+	}
+private:
+	MatrixFloat _oldgradw, _mu;
+};
+
 //////////////////////////////////////////////////////////
 Optimizer* create_optimizer(const string& sOptimizer)
 {
@@ -504,7 +562,10 @@ Optimizer* create_optimizer(const string& sOptimizer)
     if (sOptimizer == "RPROP-")
         return new OptimizerRPROPm;
 
-    if (sOptimizer == "SGD")
+	if (sOptimizer == "iRPROP-")
+		return new OptimizeriRPROPm;
+	
+	if (sOptimizer == "SGD")
         return new OptimizerSGD();
 
 	return nullptr;
@@ -522,6 +583,7 @@ void list_optimizers_available(vector<string>& vsOptimizers)
     vsOptimizers.push_back("Nesterov");
     vsOptimizers.push_back("RMSProp");
     vsOptimizers.push_back("RPROP-");
-    vsOptimizers.push_back("SGD");
+	vsOptimizers.push_back("iRPROP-");
+	vsOptimizers.push_back("SGD");
 }
 //////////////////////////////////////////////////////////////////////////////
