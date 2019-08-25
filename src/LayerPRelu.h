@@ -15,7 +15,7 @@
 class LayerPRelu : public Layer
 {
 public:
-    LayerPRelu(int iInSize);
+    explicit LayerPRelu(int iInSize);
     virtual ~LayerPRelu() override;
 
     virtual Layer* clone() const override;

@@ -507,7 +507,7 @@ Optimizer* create_optimizer(const string& sOptimizer)
     if (sOptimizer == "SGD")
         return new OptimizerSGD();
 
-    return nullptr;
+	return nullptr;
 }
 //////////////////////////////////////////////////////////////////////////////
 void list_optimizers_available(vector<string>& vsOptimizers)
