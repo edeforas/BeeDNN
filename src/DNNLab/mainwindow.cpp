@@ -49,6 +49,14 @@ MainWindow::MainWindow(QWidget *parent) :
     _qsAccuracy->addYAxis();
     ui->layoutAccuracyCurve->addWidget(_qsAccuracy);
 
+	//resize docks to min size
+	QList<QDockWidget*> pLD;
+	pLD.append(ui->dockWidgetLearning);
+	pLD.append((ui->dockWidgetGlobal));
+	pLD.append(ui->dockwidgetNotes);
+	pLD.append((ui->dockWidgetResults));
+	resizeDocks(pLD, { 10,10,10,10 }, Qt::Horizontal);
+
     init_all();
 }
 //////////////////////////////////////////////////////////////////////////
