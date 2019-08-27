@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->frameLearning->set_main_window(this);
     ui->frameNetwork->set_main_window(this);
 
-    resizeDocks({ui->dockWidget},{1},Qt::Horizontal);
+   // resizeDocks({ui->dockWidget},{1},Qt::Horizontal);
     _qsRegression=new SimpleCurveWidget;
     _qsRegression->addXAxis();
     _qsRegression->addYAxis();

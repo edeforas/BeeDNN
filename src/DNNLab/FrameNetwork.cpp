@@ -270,5 +270,7 @@ void FrameNetwork::add_new_row(int iRow)
 
 	ui->twNetwork->setCellWidget(iRow, 0, qcbType);
 	connect(qcbType, SIGNAL(currentIndexChanged(int)), this, SLOT(type_changed()));
+
+    ui->twNetwork->resizeColumnToContents(0);
 }
 //////////////////////////////////////////////////////////////

@@ -220,7 +220,7 @@
      <x>0</x>
      <y>0</y>
      <width>1141</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -246,7 +246,7 @@
    <addaction name="menuFile"/>
    <addaction name="menuHelp"/>
   </widget>
-  <widget class="QDockWidget" name="dockWidget_7">
+  <widget class="QDockWidget" name="dockWidgetGlobal">
    <property name="windowTitle">
     <string>Global</string>
    </property>
@@ -308,7 +308,7 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QDockWidget" name="dockWidget_3">
+  <widget class="QDockWidget" name="dockWidgetLearning">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
      <horstretch>0</horstretch>
@@ -374,7 +374,7 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QDockWidget" name="dockWidget_4">
+  <widget class="QDockWidget" name="dockWidgetResults">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
      <horstretch>0</horstretch>
@@ -541,7 +541,7 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QDockWidget" name="dockNotes">
+  <widget class="QDockWidget" name="dockwidgetNotes">
    <property name="windowTitle">
     <string>Notes</string>
    </property>
