@@ -41,7 +41,8 @@ public:
     float compute_loss(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth);
     float compute_accuracy(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth);
 
-	void set_learning_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth);
+    void set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth);
+	void set_test_data(const MatrixFloat& mSamplesTest, const MatrixFloat& mTruthTest);
 
 	TrainResult train(Net& net); //classification task
 	TrainResult fit(Net& net); //regression task
@@ -49,7 +50,7 @@ public:
 	void set_epochs(int iEpochs); //100 by default
 	int get_epochs() const;
 
-    /// reboost helps the optimizer to have a new fresh start every N epochs, improve Adamax, for example
+    /// reboost helps the optimizer to have a new fresh start every N epochs, improve Adamax for example
 	void set_reboost_every_epochs(int iReboostEveryEpochs); //-1 by default -> disabled
 	int get_reboost_every_epochs() const;
 
@@ -101,6 +102,9 @@ private:
 
 	const MatrixFloat* _pmSamples;
 	const MatrixFloat* _pmTruth;
+
+	const MatrixFloat* _pmSamplesTest;
+	const MatrixFloat* _pmTruthTest;
 
 	std::function<void()> _epochCallBack;
 

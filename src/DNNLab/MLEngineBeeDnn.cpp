@@ -69,7 +69,7 @@ void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat&
 
     _pTrain->clear(); //todo remove
 
-	_pTrain->set_learning_data(mSamples, mTruth);
+	_pTrain->set_train_data(mSamples, mTruth);
 
     if(_pNet->is_classification_mode()) //todo call 1 function in_pTrain , learn?
         tr=_pTrain->train(*_pNet);

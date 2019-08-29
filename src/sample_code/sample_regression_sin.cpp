@@ -31,7 +31,7 @@ int main()
     //train
     cout << "Fitting..." << endl;
 	NetTrain netfit;
-	netfit.set_learning_data(mSamples, mTruth);
+	netfit.set_train_data(mSamples, mTruth);
 	netfit.fit(net);
 
     //display sin prediction

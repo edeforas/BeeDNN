@@ -55,7 +55,6 @@ public:
     virtual float compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth);
     virtual void compute_confusion_matrix(const MatrixFloat & mSamples, const MatrixFloat& mTruth, MatrixFloat& mConfusionMatrix, float& fAccuracy);
 
-
 private:
     Net* _pNet;
     NetTrain* _pTrain;

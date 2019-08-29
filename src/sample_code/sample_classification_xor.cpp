@@ -40,7 +40,7 @@ int main()
     //optimize network
 	NetTrain netFit;
 	netFit.set_epochs(1000);
-	netFit.set_learning_data(mSamples, mTruth);
+	netFit.set_train_data(mSamples, mTruth);
 	netFit.fit(net);
 
     //predict and show results

@@ -38,7 +38,6 @@ private slots:
     void on_cbEngine_currentTextChanged(const QString &arg1);
     void on_btnTrainMore_clicked();
     void on_cbYLogAxis_stateChanged(int arg1);
-    void on_buttonColor_clicked();
     void on_pushButton_2_clicked();
     void on_cbConfMatPercent_stateChanged(int arg1);
     void on_actionSave_as_triggered();
@@ -52,6 +51,9 @@ private slots:
     void on_actionReload_triggered();
 
     void on_btnTrainAndTest_clicked();
+
+    void on_buttonRefColor_clicked();
+    void on_buttonTestColor_clicked();
 
 private:
     void init_all();
@@ -77,7 +79,9 @@ private:
     SimpleCurveWidget* _qsRegression;
     SimpleCurveWidget* _qsLoss;
     SimpleCurveWidget* _qsAccuracy;
-    unsigned int _curveColor;
+    unsigned int _curveRefColor;
+    unsigned int _curveTestColor;
+
     int _iInputSize;
 
     bool _bMustSave;

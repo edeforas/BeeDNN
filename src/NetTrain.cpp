@@ -38,6 +38,9 @@ NetTrain::NetTrain():
 
 	_pmSamples = nullptr;
 	_pmTruth = nullptr;
+
+	_pmSamplesTest = nullptr;
+	_pmTruthTest = nullptr;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 NetTrain::~NetTrain()
@@ -251,10 +254,16 @@ float NetTrain::compute_accuracy(const Net& net, const MatrixFloat &mSamples, co
     return 100.f*iGood /iNbSamples;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_learning_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth)
+void NetTrain::set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth)
 {
 	_pmSamples = &mSamples;
 	_pmTruth = &mTruth;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void NetTrain::set_test_data(const MatrixFloat& mSamplesTest, const MatrixFloat& mTruthTest)
+{
+	_pmSamplesTest = &mSamplesTest;
+	_pmTruthTest = &mTruthTest;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 TrainResult NetTrain::train(Net& net)//,const MatrixFloat& mSamples,const MatrixFloat& mTruth)
@@ -268,7 +277,7 @@ TrainResult NetTrain::train(Net& net)//,const MatrixFloat& mSamples,const Matrix
         //create binary label
         MatrixFloat mTruthOneHot;
         labelToOneHot(*_pmTruth, mTruthOneHot);
-		set_learning_data(*_pmSamples, mTruthOneHot);
+        set_train_data(*_pmSamples, mTruthOneHot);
 		TrainResult tr = fit(net);
 		return tr; //todo remove
     }

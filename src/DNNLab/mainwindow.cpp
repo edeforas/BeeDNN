@@ -83,7 +83,8 @@ void MainWindow::init_all()
     _bMustSave=false;
     //   _sFileName="";
 
-    _curveColor=0xff0000; //red
+    _curveRefColor=0xff0000; //red
+    _curveTestColor=0x0000ff; //blue
 
     model_changed(0);
 
@@ -143,13 +144,13 @@ void MainWindow::drawLoss(vector<float> vfLoss)
 {
     if(!ui->cbHoldOn->isChecked())
         _qsLoss->clear();
+    _qsLoss->addHorizontalLine(0.);
 
     vector<float> x;
     for(unsigned int i=0;i<vfLoss.size();i++)
         x.push_back(i);
 
-    _qsLoss->addHorizontalLine(0.);
-    _qsLoss->addCurve(x,vfLoss,_curveColor);
+    _qsLoss->addCurve(x,vfLoss,_curveRefColor);
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::drawAccuracy(vector<float> vfAccuracy)
@@ -173,7 +174,7 @@ void MainWindow::drawAccuracy(vector<float> vfAccuracy)
         for(unsigned int i=0;i<vfAccuracy.size();i++)
             x.push_back(i);
 
-        _qsAccuracy->addCurve(x,vfAccuracy,_curveColor);
+        _qsAccuracy->addCurve(x,vfAccuracy,_curveRefColor);
     }
     else
     {
@@ -352,14 +353,6 @@ void MainWindow::on_cbYLogAxis_stateChanged(int arg1)
 {
     (void)arg1;
     _qsLoss->setYLogAxis(ui->cbYLogAxis->isChecked());
-}
-//////////////////////////////////////////////////////////////////////////////
-void MainWindow::on_buttonColor_clicked()
-{
-    QColorDialog qcd;
-    qcd.setCurrentColor(_curveColor);
-    qcd.exec();
-    _curveColor=qcd.currentColor().rgb();
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_pushButton_2_clicked() //clear
@@ -694,5 +687,21 @@ void MainWindow::on_btnTrainAndTest_clicked()
     }
 
     train_and_test(true,true);
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::on_buttonRefColor_clicked()
+{
+    QColorDialog qcd;
+    qcd.setCurrentColor(_curveRefColor);
+    qcd.exec();
+    _curveRefColor=qcd.currentColor().rgb(); //if pure white: not drawn
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::on_buttonTestColor_clicked()
+{
+    QColorDialog qcd;
+    qcd.setCurrentColor(_curveTestColor);
+    qcd.exec();
+    _curveTestColor=qcd.currentColor().rgb(); //if pure white: not drawn
 }
 //////////////////////////////////////////////////////////////////////////////
