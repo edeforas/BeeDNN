@@ -1,7 +1,7 @@
 // sample  classification MNIST similar as :
 // https://colab.research.google.com/github/tensorflow/docs/blob/master/site/en/tutorials/_index.ipynb
 
-//expect 98% on ref and test in 5 minute training time
+//expect 98% on ref and test after 13 epochs
 
 #include <iostream>
 #include <chrono>
@@ -69,10 +69,11 @@ int main()
 	//train net
 	cout << "Training..." << endl <<endl;
 	NetTrain netTrain;
-	netTrain.set_epochs(6);
+	netTrain.set_epochs(13);
+	netTrain.set_batchsize(64);
 	netTrain.set_loss("CategoricalCrossEntropy");
 	netTrain.set_epoch_callback(epoch_callback);
-	netTrain.set_learning_data(mRefImages, mRefLabels);
+	netTrain.set_train_data(mRefImages, mRefLabels);
 	start = chrono::steady_clock::now();
 	netTrain.train(net);
 

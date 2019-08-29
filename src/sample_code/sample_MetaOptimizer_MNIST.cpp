@@ -40,7 +40,7 @@ int main()
 	NetTrain netTrain;
 	netTrain.set_epochs(10);
 	netTrain.set_loss("CategoricalCrossEntropy");
-	netTrain.set_learning_data(mRefImages, mRefLabels);
+	netTrain.set_train_data(mRefImages, mRefLabels);
 
 	//create meta optimizer and run
 	cout << "Training..." << endl;
