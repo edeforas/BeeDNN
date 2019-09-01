@@ -29,7 +29,7 @@ FrameLearning::FrameLearning(QWidget *parent) :
         ui->cbOptimizer->addItem(vsOptimizers[i].data());
 
     //default init
-    ui->leBatchSize->setText("16");
+    ui->leBatchSize->setText("32");
     ui->leLearningRate->setText("-1");
     ui->leDecay->setText("-1");
     ui->leMomentum->setText("-1");

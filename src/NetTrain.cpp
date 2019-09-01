@@ -22,7 +22,7 @@ NetTrain::NetTrain():
     _sOptimizer("Adam")
 {
     _pLoss = create_loss("MeanSquaredError");
-    _iBatchSize = 16;
+    _iBatchSize = 32;
     _bKeepBest = true;
     _iEpochs = 100;
     _iReboostEveryEpochs = -1; // -1 mean no reboost
