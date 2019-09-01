@@ -11,10 +11,10 @@ using namespace std;
 
 int main()
 {
-    //construct net
+    //build net
     Net net;
     net.add_dense_layer(1,10);
-	net.add_activation_layer("Relu");
+	net.add_activation_layer("Tanh");
 	net.add_dense_layer(10, 1);
 	net.set_classification_mode(false); //set regression mode
 
@@ -34,13 +34,13 @@ int main()
 	netfit.set_train_data(mSamples, mTruth);
 	netfit.fit(net);
 
-    //display sin prediction
+    //print sin prediction
 	MatrixFloat mPredict;
 	net.predict(mSamples, mPredict);
     for(int i=0;i<mSamples.size();i+=8)
-        cout << std::setprecision(4) << "x=" << mSamples(i,0) << "\ttruth=" << mTruth(i,0) << "\tpredict=" << mPredict(i,0) <<endl;
+        cout << setprecision(4) << "x=" << mSamples(i,0) << "\ttruth=" << mTruth(i,0) << "\tpredict=" << mPredict(i,0) <<endl;
 
-    //compute and display loss
+    //compute and print loss
     float fLoss=netfit.compute_loss(net,mSamples,mTruth);
     cout << "Loss=" << fLoss << endl;
 

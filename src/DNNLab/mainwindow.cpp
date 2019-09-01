@@ -33,7 +33,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->frameLearning->set_main_window(this);
     ui->frameNetwork->set_main_window(this);
 
-   // resizeDocks({ui->dockWidget},{1},Qt::Horizontal);
     _qsRegression=new SimpleCurveWidget;
     _qsRegression->addXAxis();
     _qsRegression->addYAxis();
@@ -86,7 +85,7 @@ void MainWindow::init_all()
     _curveRefColor=0xff0000; //red
     _curveTestColor=0x0000ff; //blue
 
-    model_changed(0);
+    model_changed(nullptr);
 
     updateTitle();
 }
@@ -135,7 +134,7 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
     update_classification_tab();
     update_details();
 
-	model_changed(0);
+    model_changed(nullptr);
 
     QApplication::restoreOverrideCursor();
 }
@@ -210,8 +209,8 @@ void MainWindow::drawRegression()
 		const MatrixFloat& mTrainTruth = _pDataSource->train_truth();
 		for (int i = 0; i < mTrainTruth.size(); i++)
 		{
-			vSamples.push_back(mTrainData(i));
-			vTruth.push_back(mTrainTruth(i));
+            vSamples.push_back((double)mTrainData(i));
+            vTruth.push_back((double)mTrainTruth(i));
 		}
 
 		_qsRegression->addCurve(vSamples, vTruth, 0xFF0000);
@@ -225,8 +224,8 @@ void MainWindow::drawRegression()
 		const MatrixFloat& mTestTruth = _pDataSource->test_truth();
 		for (int i = 0; i < mTestTruth.size(); i++)
 		{
-			vSamples.push_back(mTestData(i));
-			vTruth.push_back(mTestTruth(i));
+            vSamples.push_back((double)mTestData(i));
+            vTruth.push_back((double)mTestTruth(i));
 		}
 
 		_qsRegression->addCurve(vSamples, vTruth, 0x0000FF);
@@ -242,8 +241,8 @@ void MainWindow::drawRegression()
 		vector<double> vTruth;
 		for (int i = 0; i < mPredictedTrain.size(); i++)
 		{
-			vSamples.push_back(mTrainData(i));
-			vTruth.push_back(mPredictedTrain(i));
+            vSamples.push_back((double)mTrainData(i));
+            vTruth.push_back((double)mPredictedTrain(i));
 		}
 
 		_qsRegression->addCurve(vSamples, vTruth, 0x7F0000);
@@ -262,8 +261,8 @@ void MainWindow::drawRegression()
 		vector<double> vTruth;
 		for (int i = 0; i < mPredictedTest.size(); i++)
 		{
-			vSamples.push_back(mTestData(i));
-			vTruth.push_back(mPredictedTest(i));
+            vSamples.push_back((double)mTestData(i));
+            vTruth.push_back((double)mPredictedTest(i));
 		}
 
 		_qsRegression->addCurve(vSamples, vTruth, 0x00007F);
@@ -339,7 +338,7 @@ void MainWindow::on_btnTrainMore_clicked()
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::net_to_ui()
 {
-    model_changed(0);
+    model_changed(nullptr);
 
     //was updating twNet
 
@@ -423,7 +422,7 @@ void MainWindow::drawConfusionMatrix()
 
     //colorize in yellow the diagonal
     for(int c=0;c<_mConfusionMatrix.cols();c++)
-        ui->twConfusionMatrixTrain->item(c,c)->setBackgroundColor(Qt::yellow);
+        ui->twConfusionMatrixTrain->item(c,c)->setBackground(Qt::yellow);
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_cbConfMatPercent_stateChanged(int arg1)
