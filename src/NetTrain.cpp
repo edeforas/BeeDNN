@@ -378,9 +378,15 @@ TrainResult NetTrain::fit(Net& net)
 
         if(net.is_classification_mode())
         {
-            fAccuracy=100.f*_iOnlineAccuracyGood/ iNbSamples;
-           tr.accuracy.push_back(fAccuracy);
+			fAccuracy=100.f*_iOnlineAccuracyGood/ iNbSamples;
+			tr.trainAccuracy.push_back(fAccuracy);
         }
+
+		if (_pmSamplesTest != 0)
+		{
+			fAccuracy = compute_accuracy(net, *_pmSamplesTest, *_pmTruthTest);
+			tr.testAccuracy.push_back(fAccuracy);
+		}
 
         if (_epochCallBack)
             _epochCallBack();

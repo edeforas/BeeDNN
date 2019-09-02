@@ -24,7 +24,8 @@ class TrainResult //todo remove
 {
 public:
     vector<float> loss;
-    vector<float> accuracy;
+    vector<float> trainAccuracy;
+	vector<float> testAccuracy;
 };
 
 class Layer;
@@ -71,10 +72,10 @@ public:
 	void set_batchsize(int iBatchSize); //16 by default
 	int get_batchsize() const;
 
-	void set_keepbest(bool bKeepBest); //true by default: keep the best model of all epochs
+	void set_keepbest(bool bKeepBest); //true by default: keep the best model of all epochs (evaluated on the test database)
 	bool get_keepbest() const;
 
-	void set_loss(const string&  sLoss); // "MeanSquareError" by default, ex "MeanSquareError" "CategorialCrossEntropy"
+	void set_loss(const string&  sLoss); // "MeanSquareError" by default, ex "MeanSquareError" "CategoricalCrossEntropy"
 	string get_loss() const;
 
 private:

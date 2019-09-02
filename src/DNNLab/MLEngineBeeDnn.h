@@ -19,7 +19,8 @@ public:
     int computedEpochs;
     double epochDuration; //in second
     vector<float> loss;
-    vector<float> accuracy;
+    vector<float> trainAccuracy;
+    vector<float> testAccuracy;
 };
 
 
@@ -60,7 +61,8 @@ private:
     NetTrain* _pTrain;
 
     vector<float> _vfLoss; //temp
-    vector<float> _vfAccuracy; //temp
+    vector<float> _vfTrainAccuracy; //temp
+    vector<float> _vfTestAccuracy; //temp
 
     int _iComputedEpochs;
 };

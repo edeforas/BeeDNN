@@ -117,7 +117,7 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
         ui->leTimeByEpoch->setText(QString::number(dtr.epochDuration));
 
         drawLoss(dtr.loss);
-        drawAccuracy(dtr.accuracy);
+        drawAccuracy(dtr.trainAccuracy,dtr.testAccuracy);
     }
     else
     {
@@ -152,7 +152,7 @@ void MainWindow::drawLoss(vector<float> vfLoss)
     _qsLoss->addCurve(x,vfLoss,_curveRefColor);
 }
 //////////////////////////////////////////////////////////////////////////
-void MainWindow::drawAccuracy(vector<float> vfAccuracy)
+void MainWindow::drawAccuracy(vector<float> vfTrainAccuracy,vector<float> vfTestAccuracy)
 {
     if(!ui->cbHoldOn->isChecked())
         _qsAccuracy->clear();
@@ -170,15 +170,20 @@ void MainWindow::drawAccuracy(vector<float> vfAccuracy)
 
         //draw accuracy
         vector<float> x;
-        for(unsigned int i=0;i<vfAccuracy.size();i++)
+        for(unsigned int i=0;i<vfTrainAccuracy.size();i++)
             x.push_back(i);
 
-        _qsAccuracy->addCurve(x,vfAccuracy,_curveRefColor);
+        _qsAccuracy->addCurve(x,vfTrainAccuracy,_curveRefColor);
+
+        if(!vfTestAccuracy.empty())
+        {
+            _qsAccuracy->addCurve(x,vfTestAccuracy,_curveTestColor);
+        }
     }
     else
     {
         //draw euclidian distance
-        ui->gbTrainAccuracy->setTitle("Train Euclidian distance");
+  //      ui->gbTrainAccuracy->setTitle("Train Euclidian distance");
     }
 }
 //////////////////////////////////////////////////////////////////////////
