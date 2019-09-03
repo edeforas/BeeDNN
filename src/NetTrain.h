@@ -23,8 +23,9 @@ class Net;
 class TrainResult //todo remove
 {
 public:
-    vector<float> loss;
-    vector<float> trainAccuracy;
+    vector<float> trainLoss;
+	vector<float> testLoss;
+	vector<float> trainAccuracy;
 	vector<float> testAccuracy;
 };
 

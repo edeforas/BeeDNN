@@ -59,7 +59,7 @@ private:
     void init_all();
     bool ask_save(); //return true if saved/ready to overwrite
 
-    void drawLoss(vector<float> vfLoss);
+	void drawLoss(vector<float> vfTrainLoss, vector<float> vfTestLoss);
     void drawAccuracy(vector<float> vfTrainAccuracy, vector<float> vfTestAccuracy);
     void updateTitle();
 

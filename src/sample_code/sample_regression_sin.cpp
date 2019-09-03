@@ -28,13 +28,13 @@ int main()
         mSamples(i,0)=x;
     }
 
-    //train
+    //train net
     cout << "Fitting..." << endl;
 	NetTrain netfit;
 	netfit.set_train_data(mSamples, mTruth);
 	netfit.fit(net);
 
-    //print sin prediction
+    //print truth and prediction
 	MatrixFloat mPredict;
 	net.predict(mSamples, mPredict);
     for(int i=0;i<mSamples.size();i+=8)

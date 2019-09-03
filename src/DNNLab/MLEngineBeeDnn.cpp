@@ -50,10 +50,13 @@ void MLEngineBeeDnn::init()
 {
     _pNet->init();
 
-    _vfLoss.clear();
-    _vfTrainAccuracy.clear();
+    _vfTrainLoss.clear();
+	_vfTestLoss.clear();
+	
+	_vfTrainAccuracy.clear();
     _vfTestAccuracy.clear();
-    _iComputedEpochs=0;
+    
+	_iComputedEpochs=0;
 }
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
@@ -77,11 +80,14 @@ void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat&
     else
         tr=_pTrain->fit(*_pNet);
 
-    _vfLoss.insert(end(_vfLoss),begin(tr.loss),end(tr.loss));
+    _vfTrainLoss.insert(end(_vfTrainLoss),begin(tr.trainLoss),end(tr.trainLoss));
     _vfTrainAccuracy.insert(end(_vfTrainAccuracy),begin(tr.trainAccuracy),end(tr.trainAccuracy));
 
-    if(!tr.testAccuracy.empty())
-        _vfTestAccuracy.insert(end(_vfTestAccuracy),begin(tr.testAccuracy),end(tr.testAccuracy));
+	if (!tr.testAccuracy.empty())
+	{
+		_vfTestAccuracy.insert(end(_vfTestAccuracy), begin(tr.testAccuracy), end(tr.testAccuracy));
+		_vfTestLoss.insert(end(_vfTestLoss), begin(tr.testLoss), end(tr.testLoss));
+	}
 }
 //////////////////////////////////////////////////////////////////////////////
 Net& MLEngineBeeDnn::net()
@@ -117,7 +123,9 @@ DNNTrainResult MLEngineBeeDnn::learn(const MatrixFloat& mSamples,const MatrixFlo
 
     r.epochDuration=chrono::duration_cast<chrono::microseconds> (endDuration-beginDuration).count()/1.e6/_pTrain->get_epochs();
     r.computedEpochs=_iComputedEpochs;
-    r.loss=_vfLoss;
+    r.trainLoss=_vfTrainLoss;
+	r.testLoss = _vfTestLoss;
+
     r.trainAccuracy=_vfTrainAccuracy;
     r.testAccuracy=_vfTestAccuracy;
 

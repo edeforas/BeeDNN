@@ -111,12 +111,14 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
 
     if(bLearn)
     {
+		_pEngine->netTrain().set_test_data(_pDataSource->test_data(), _pDataSource->test_truth());
+
         DNNTrainResult dtr =_pEngine->learn(_pDataSource->train_data(),_pDataSource->train_truth());
 
         ui->leComputedEpochs->setText(QString::number(dtr.computedEpochs));
         ui->leTimeByEpoch->setText(QString::number(dtr.epochDuration));
 
-        drawLoss(dtr.loss);
+        drawLoss(dtr.trainLoss,dtr.testLoss);
         drawAccuracy(dtr.trainAccuracy,dtr.testAccuracy);
     }
     else
@@ -139,17 +141,22 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
     QApplication::restoreOverrideCursor();
 }
 //////////////////////////////////////////////////////////////////////////
-void MainWindow::drawLoss(vector<float> vfLoss)
+void MainWindow::drawLoss(vector<float> vfTrainLoss, vector<float> vfTestLoss)
 {
     if(!ui->cbHoldOn->isChecked())
         _qsLoss->clear();
     _qsLoss->addHorizontalLine(0.);
 
     vector<float> x;
-    for(unsigned int i=0;i<vfLoss.size();i++)
+    for(unsigned int i=0;i<vfTrainLoss.size();i++)
         x.push_back(i);
 
-    _qsLoss->addCurve(x,vfLoss,_curveRefColor);
+    _qsLoss->addCurve(x,vfTrainLoss,_curveRefColor);
+
+	if (!vfTestLoss.empty())
+	{
+		_qsLoss->addCurve(x, vfTestLoss, _curveTestColor);
+	}
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::drawAccuracy(vector<float> vfTrainAccuracy,vector<float> vfTestAccuracy)

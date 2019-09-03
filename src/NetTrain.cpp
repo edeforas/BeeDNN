@@ -323,7 +323,7 @@ TrainResult NetTrain::fit(Net& net)
 		delete _optimizers[i];
 	_optimizers.clear();
 
-    float fMinLoss=1.e10f;
+    float fMinLoss=1.e10f, fLoss;
     float fAccuracy=0.f , fMaxAccuracy=-1.f;
 
     //init all optimizers
@@ -374,7 +374,7 @@ TrainResult NetTrain::fit(Net& net)
         net.set_train_mode(false);
         _fOnlineLoss/=iNbSamples;
 
-        tr.loss.push_back(_fOnlineLoss);
+        tr.trainLoss.push_back(_fOnlineLoss);
 
         if(net.is_classification_mode())
         {
@@ -386,6 +386,9 @@ TrainResult NetTrain::fit(Net& net)
 		{
 			fAccuracy = compute_accuracy(net, *_pmSamplesTest, *_pmTruthTest);
 			tr.testAccuracy.push_back(fAccuracy);
+
+			fLoss=compute_loss(net, *_pmSamplesTest, *_pmTruthTest);
+			tr.testLoss.push_back(fLoss);
 		}
 
         if (_epochCallBack)
