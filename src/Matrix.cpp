@@ -110,28 +110,32 @@ MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d)
 #endif
 }
 ///////////////////////////////////////////////////////////////////////////
-MatrixFloat randPerm(int iSize) //create a vector of index shuffled
+vector<int> randPerm(int iSize) //create a vector of index shuffled
 {
-    MatrixFloat m(iSize,1);
+	vector<int> v(iSize);
+	for (int i = 0; i < iSize; i++)
+		v[i] = i;
 
-    //create ordered vector
-    for(int i=0;i<iSize;i++)
-        m(i,0)=(float)i;
+	std::shuffle(v.begin(), v.end(), std::default_random_engine());
 
-    std::shuffle(m.data(),m.data()+m.size(), std::default_random_engine());
-
-    return m;
+    return v;
 }
 ///////////////////////////////////////////////////////////////////////////
-void applyRowPermutation(const MatrixFloat & mPermutationIndex, const MatrixFloat & mIn, MatrixFloat & mPermuted)
+void applyRowPermutation(const vector<int>& vPermutation, const MatrixFloat & mIn, MatrixFloat & mPermuted)
 {
-    assert(mPermutationIndex.rows() == mIn.rows());
-    assert(mPermutationIndex.cols() == 1);
+    assert(vPermutation.size() == mIn.rows());
 
     mPermuted.resizeLike(mIn);
 
-    for (int i = 0; i < mPermutationIndex.rows(); i++)
-        mPermuted.row(i) = mIn.row((int)mPermutationIndex(i));
+	for (int i = 0; i < vPermutation.size(); i++)
+	{
+		int iPerm= vPermutation[i];
+
+		assert(vPermutation[i] >=0);
+		assert(vPermutation[i] < mIn.rows());
+
+		mPermuted.row(i) = mIn.row(iPerm);
+	}
 }
 ///////////////////////////////////////////////////////////////////////////
 int argmax(const MatrixFloat& m)

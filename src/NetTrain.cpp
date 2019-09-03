@@ -343,9 +343,9 @@ TrainResult NetTrain::fit(Net& net)
 
 		if (_iBatchSize < iNbSamples)
 		{
-			MatrixFloat mShuffle = randPerm(iNbSamples);
-			applyRowPermutation(mShuffle, mSamples, mSampleShuffled);
-			applyRowPermutation(mShuffle, mTruth, mTruthShuffled);
+			auto vShuffle = randPerm(iNbSamples);
+			applyRowPermutation(vShuffle, mSamples, mSampleShuffled);
+			applyRowPermutation(vShuffle, mTruth, mTruthShuffled);
 		}
 		else
 		{
