@@ -42,8 +42,6 @@ void MLEngineBeeDnn::read(const string& s)
 {  
     NetUtil::read(s,*_pNet);
     NetUtil::read(s,*_pTrain);
-
-
 }
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::init()
@@ -69,24 +67,22 @@ void MLEngineBeeDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth)
 {
-    TrainResult tr;
-
     _pTrain->clear(); //todo remove
 
 	_pTrain->set_train_data(mSamples, mTruth);
 
     if(_pNet->is_classification_mode()) //todo call 1 function in_pTrain , learn?
-        tr=_pTrain->train(*_pNet);
+        _pTrain->train(*_pNet);
     else
-        tr=_pTrain->fit(*_pNet);
+        _pTrain->fit(*_pNet);
 
-    _vfTrainLoss.insert(end(_vfTrainLoss),begin(tr.trainLoss),end(tr.trainLoss));
-    _vfTrainAccuracy.insert(end(_vfTrainAccuracy),begin(tr.trainAccuracy),end(tr.trainAccuracy));
+    _vfTrainLoss.insert(end(_vfTrainLoss),begin(_pTrain->get_train_loss()),end(_pTrain->get_train_loss()));
+    _vfTrainAccuracy.insert(end(_vfTrainAccuracy),begin(_pTrain->get_train_accuracy()),end(_pTrain->get_train_accuracy()));
 
-	if (!tr.testAccuracy.empty())
+    if (!_pTrain->get_test_loss().empty())
 	{
-		_vfTestAccuracy.insert(end(_vfTestAccuracy), begin(tr.testAccuracy), end(tr.testAccuracy));
-		_vfTestLoss.insert(end(_vfTestLoss), begin(tr.testLoss), end(tr.testLoss));
+        _vfTestAccuracy.insert(end(_vfTestAccuracy), begin(_pTrain->get_test_accuracy()), end(_pTrain->get_test_accuracy()));
+        _vfTestLoss.insert(end(_vfTestLoss), begin(_pTrain->get_test_loss()), end(_pTrain->get_test_loss()));
 	}
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -99,7 +95,6 @@ const Net& MLEngineBeeDnn::net() const
 {
     return *_pNet;
 }
-
 //////////////////////////////////////////////////////////////////////////////
 NetTrain& MLEngineBeeDnn::netTrain()
 {

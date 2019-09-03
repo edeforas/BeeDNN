@@ -59,8 +59,8 @@ private:
     void init_all();
     bool ask_save(); //return true if saved/ready to overwrite
 
-	void drawLoss(vector<float> vfTrainLoss, vector<float> vfTestLoss);
-    void drawAccuracy(vector<float> vfTrainAccuracy, vector<float> vfTestAccuracy);
+    void drawLoss(const vector<float>& vfTrainLoss,const vector<float>& vfTestLoss);
+    void drawAccuracy(const vector<float> &vfTrainAccuracy, const vector<float> &vfTestAccuracy);
     void updateTitle();
 
     void drawRegression();

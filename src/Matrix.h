@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <cassert>
 #include <string>
+#include <vector>
 #include <cmath>
 using namespace std;
 
@@ -612,8 +613,8 @@ MatrixFloat colWiseMean(const MatrixFloat& m);
 MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d);
 void arraySub(MatrixFloat& m,float f);
-MatrixFloat randPerm(int iSize); //create a vector of index shuffled
-void applyRowPermutation(const MatrixFloat & mPermutationIndex, const MatrixFloat & mIn, MatrixFloat & mPermuted); 
+vector<int> randPerm(int iSize); //create a vector of index shuffled
+void applyRowPermutation(const vector<int>& vPermutation, const MatrixFloat & mIn, MatrixFloat & mPermuted);
 const MatrixFloat rowRange(const MatrixFloat& m, int iStartRow, int iEndRow); //create a row view starting at iStartRow to (not included) iEndRow
 MatrixFloat decimate(const MatrixFloat& m, int iRatio);
 int argmax(const MatrixFloat& m);

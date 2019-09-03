@@ -129,7 +129,7 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
     }
 
     float fLoss=_pEngine->compute_loss(_pDataSource->train_data(),_pDataSource->train_truth()); //final loss
-    ui->leMSE->setText(QString::number((double)fLoss));
+    ui->leTrainLoss->setText(QString::number((double)fLoss));
 
     updateTitle();
     drawRegression();
@@ -141,7 +141,7 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
     QApplication::restoreOverrideCursor();
 }
 //////////////////////////////////////////////////////////////////////////
-void MainWindow::drawLoss(vector<float> vfTrainLoss, vector<float> vfTestLoss)
+void MainWindow::drawLoss(const vector<float>& vfTrainLoss,const vector<float>& vfTestLoss)
 {
     if(!ui->cbHoldOn->isChecked())
         _qsLoss->clear();
@@ -159,7 +159,7 @@ void MainWindow::drawLoss(vector<float> vfTrainLoss, vector<float> vfTestLoss)
 	}
 }
 //////////////////////////////////////////////////////////////////////////
-void MainWindow::drawAccuracy(vector<float> vfTrainAccuracy,vector<float> vfTestAccuracy)
+void MainWindow::drawAccuracy(const vector<float>& vfTrainAccuracy,const vector<float>& vfTestAccuracy)
 {
     if(!ui->cbHoldOn->isChecked())
         _qsAccuracy->clear();
