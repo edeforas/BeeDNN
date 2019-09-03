@@ -75,9 +75,13 @@ public:
 
 	void set_keepbest(bool bKeepBest); //true by default: keep the best model of all epochs (evaluated on the test database)
 	bool get_keepbest() const;
+    const vector<float>& get_train_loss() const;
+    const vector<float>& get_test_loss() const;
 
 	void set_loss(const string&  sLoss); // "MeanSquareError" by default, ex "MeanSquareError" "CategoricalCrossEntropy"
 	string get_loss() const;
+    const vector<float>& get_train_accuracy() const;
+    const vector<float>& get_test_accuracy() const;
 
 private:
 	void train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth);
@@ -112,6 +116,10 @@ private:
 
 	Net* _pNet;
 	Loss* _pLoss;
+    vector<float> _trainLoss;
+    vector<float> _testLoss;
+    vector<float> _trainAccuracy;
+    vector<float> _testAccuracy;
 };
 
 #endif
