@@ -323,7 +323,7 @@ TrainResult NetTrain::fit(Net& net)
 		delete _optimizers[i];
 	_optimizers.clear();
 
-    float fMinLoss=1.e10f, fLoss;
+    float  fLoss = 0.f, fMinLoss=1.e20f;
     float fAccuracy=0.f , fMaxAccuracy=-1.f;
 
     //init all optimizers
@@ -372,9 +372,9 @@ TrainResult NetTrain::fit(Net& net)
         }
 
         net.set_train_mode(false);
-        _fOnlineLoss/=iNbSamples;
 
-        tr.trainLoss.push_back(_fOnlineLoss);
+        fLoss=_fOnlineLoss/iNbSamples;
+        tr.trainLoss.push_back(fLoss);
 
         if(net.is_classification_mode())
         {
@@ -395,7 +395,7 @@ TrainResult NetTrain::fit(Net& net)
             _epochCallBack();
 
         //keep the best model if asked
-        if(_bKeepBest)
+        if(_bKeepBest) // todo do it after n epochs
         {
             if(net.is_classification_mode())
             {   //use accuracy
@@ -407,9 +407,9 @@ TrainResult NetTrain::fit(Net& net)
             }
             else
             {   //use loss
-                if(fMinLoss>_fOnlineLoss)
+                if(fMinLoss> fLoss)
                 {
-                    fMinLoss=_fOnlineLoss;
+                    fMinLoss= fLoss;
                     bestNet=net;
                 }
             }
