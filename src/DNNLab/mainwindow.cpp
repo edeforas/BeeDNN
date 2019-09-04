@@ -134,7 +134,7 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
 
 	if (_pDataSource->has_test_data())
 	{
-		float fLoss = _pEngine->compute_loss(_pDataSource->test_data(), _pDataSource->test_truth()); //final loss
+		fLoss = _pEngine->compute_loss(_pDataSource->test_data(), _pDataSource->test_truth()); //final loss
 		ui->leTestLoss->setText(QString::number((double)fLoss));
 	}
 	else

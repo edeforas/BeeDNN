@@ -268,6 +268,8 @@ void FrameNetwork::add_new_row(int iRow)
 	for (unsigned int a = 0; a < _vsActivations.size(); a++)
 		qcbType->addItem(_vsActivations[a].c_str());
 
+    qcbType->setMaxVisibleItems(1000);
+
 	ui->twNetwork->setCellWidget(iRow, 0, qcbType);
 	connect(qcbType, SIGNAL(currentIndexChanged(int)), this, SLOT(type_changed()));
 

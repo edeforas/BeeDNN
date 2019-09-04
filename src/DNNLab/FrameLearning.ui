@@ -124,6 +124,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The batch size is commonly set at 32.&lt;/p&gt;&lt;p&gt;It can 0 or any value greater than nb_sample for a full batch&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
        <property name="text">
         <string>16</string>
        </property>

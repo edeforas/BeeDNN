@@ -43,7 +43,7 @@ int main()
 	netTrain.set_train_data(mRefImages, mRefLabels);
 
 	//create meta optimizer and run
-	cout << "Training..." << endl;
+	cout << "Training, with all the CPU cores ..." << endl;
 	MetaOptimizer optim;
 	optim.set_net(&net);
 	optim.set_train(&netTrain);

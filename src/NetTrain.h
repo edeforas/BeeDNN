@@ -106,8 +106,8 @@ private:
 	vector<MatrixFloat> _inOut;
 	vector<MatrixFloat> _gradient;
 
-	const MatrixFloat* _pmSamples;
-	const MatrixFloat* _pmTruth;
+    const MatrixFloat* _pmSamplesTrain;
+    const MatrixFloat* _pmTruthTrain;
 
 	const MatrixFloat* _pmSamplesTest;
 	const MatrixFloat* _pmTruthTest;
