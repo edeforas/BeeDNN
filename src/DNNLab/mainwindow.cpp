@@ -111,7 +111,8 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
 
     if(bLearn)
     {
-		_pEngine->netTrain().set_test_data(_pDataSource->test_data(), _pDataSource->test_truth());
+		if(_pDataSource->has_test_data())
+			_pEngine->netTrain().set_test_data(_pDataSource->test_data(), _pDataSource->test_truth());
 
         DNNTrainResult dtr =_pEngine->learn(_pDataSource->train_data(),_pDataSource->train_truth());
 
@@ -130,6 +131,14 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
 
     float fLoss=_pEngine->compute_loss(_pDataSource->train_data(),_pDataSource->train_truth()); //final loss
     ui->leTrainLoss->setText(QString::number((double)fLoss));
+
+	if (_pDataSource->has_test_data())
+	{
+		float fLoss = _pEngine->compute_loss(_pDataSource->test_data(), _pDataSource->test_truth()); //final loss
+		ui->leTestLoss->setText(QString::number((double)fLoss));
+	}
+	else
+		ui->leTestLoss->setText("n/a");
 
     updateTitle();
     drawRegression();
