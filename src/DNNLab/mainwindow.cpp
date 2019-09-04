@@ -198,6 +198,7 @@ void MainWindow::drawAccuracy(const vector<float>& vfTrainAccuracy,const vector<
     }
     else
     {
+		//todo
         //draw euclidian distance
   //      ui->gbTrainAccuracy->setTitle("Train Euclidian distance");
     }

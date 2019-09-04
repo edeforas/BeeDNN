@@ -237,10 +237,13 @@ bool Net::is_valid(int iInSize, int iOutSize) const
 
 	//int iLastSize = net.input_size(); //todo
 
+
+	return true;
+
 	//check output size
-	if (_iOutputSize != iOutSize)
+	if (_iOutputSize != iOutSize)// TODO check categorical data 
 	{
-		//todo LOG
+		//todo LOG // TODO check categorical data 
 		return false;
 	}
 
