@@ -35,14 +35,15 @@ public:
     int annotation_cols() const;
 
 private:
-    void load_mnist();
-	void load_mini_mnist();
+    bool load_mnist();
+    bool load_mini_mnist();
+    bool load_textfile();
+
     void load_function();
-    void load_textfile();
     void load_and();
     void load_xor();
-    void load_fisher();
-	float get_function_val(float x);
+
+    float get_function_val(float x);
 
     MatrixFloat _mTrainData;
     MatrixFloat _mTrainTruth;

@@ -34,118 +34,70 @@ void DataSource::read(const string& s)
 ////////////////////////////////////////////////////////////////////////
 void DataSource::load(const string& sName)
 {
-    clear();
-
     if(sName.empty())
-        return;
-
-    // if has an extention -> custom file
-    if(sName.find('.')!=string::npos)
     {
-        //create 4 file names (can no exist)
-        string sTrainData=sName;
-        string sTrainTruth=sName;
-        string sTestData=sName;
-        string sTestTruth=sName;
-
-        //create sTrainData
-        replace_last(sTrainData,"test","train");
-        replace_last(sTrainData,"truth","data");
-
-        //create sTrainTruth
-        replace_last(sTrainTruth,"test","train");
-        replace_last(sTrainTruth,"data","truth");
-
-        //create sTestData
-        replace_last(sTestData,"train","test");
-        replace_last(sTestData,"truth","data");
-
-        //create sTestTruth
-        replace_last(sTestTruth,"train","test");
-        replace_last(sTestTruth,"data","truth");
-
-        //try to load every file
-        _mTrainData=fromFile(sTrainData);
-        _mTrainTruth=fromFile(sTrainTruth);
-        _mTestData=fromFile(sTestData);
-        _mTestTruth=fromFile(sTestTruth);
-
-        _bHasTrainData=(_mTrainData.size()!=0) && (_mTrainTruth.size()!=0) ;
-        _bHasTestData=(_mTestData.size()!=0) && (_mTestTruth.size()!=0) && (sTrainData!=sTestData) && (sTrainTruth!=sTestTruth);
-
-        if(!_bHasTestData)
-        {
-            _mTestData.resize(0,0);
-            _mTestTruth.resize(0,0);
-        }
-
-        _sName=sName;
-
+        clear();
         return;
     }
 
-    if(sName=="MNIST")
+    if(sName == _sName)
+        return ; //already loaded
+    _sName=sName;
+
+    // if has an extension -> custom data file
+    if(_sName.find('.')!=string::npos)
+    {
+        if(!load_textfile())
+            clear();
+    }
+
+    else if(_sName=="MNIST")
         load_mnist();
 
-	else if (sName == "MiniMNIST")
-		load_mini_mnist();
-	
-	else if(sName=="And")
+    else if (_sName == "MiniMNIST")
+        load_mini_mnist();
+
+    else if(_sName=="And")
         load_and();
 
-    else if(sName=="Xor")
+    else if(_sName=="Xor")
         load_xor();
 
-    else if(sName=="TextFile")
-        load_textfile();
-
-    else if(sName=="Fisher")
-        load_fisher();
-
     else
-    {
-        _sName=sName;
         load_function();
-    }
-    _sName=sName;
 }
 ////////////////////////////////////////////////////////////////////////
-void DataSource::load_mnist()
+bool DataSource::load_mnist()
 {
-    if(_sName=="MNIST")
-        return;
-
-    _sName="MNIST";
-
     MNISTReader r;
-    r.read_from_folder(".",_mTrainData,_mTrainTruth,_mTestData,_mTestTruth);
+    if(!r.read_from_folder(".",_mTrainData,_mTrainTruth,_mTestData,_mTestTruth))
+        return false;
+
     _mTrainData/=256.f;
     _mTestData/=256.f;
 
     _bHasTrainData=true;
     _bHasTestData=true;
+
+    return true;
 }
 ////////////////////////////////////////////////////////////////////////
-void DataSource::load_mini_mnist() //MNIST decimated 10x for quick tests
+bool DataSource::load_mini_mnist() //MNIST decimated 10x for quick tests
 {
-	if (_sName == "MiniMNIST")
-		return;
+    if(!load_mnist())
+        return false;
 
-	load_mnist();
+    _mTrainData = decimate(_mTrainData, 10);
+    _mTrainTruth = decimate(_mTrainTruth, 10);
 
-	_sName = "MiniMNIST";
-	
-	_mTrainData = decimate(_mTrainData, 10);
-	_mTrainTruth = decimate(_mTrainTruth, 10);
+    _mTestData = decimate(_mTestData, 10);
+    _mTestTruth = decimate(_mTestTruth, 10);
 
-	_mTestData = decimate(_mTestData, 10);
-	_mTestTruth = decimate(_mTestTruth, 10);
+    return true;
 }
 ////////////////////////////////////////////////////////////////////////
 void DataSource::load_and()
 {
-    _sName="and";
-
     _mTrainData.resize(4,2);
     _mTrainData(0,0)=0; _mTrainData(0,1)=0;
     _mTrainData(1,0)=1; _mTrainData(1,1)=0;
@@ -167,8 +119,6 @@ void DataSource::load_and()
 ////////////////////////////////////////////////////////////////////////
 void DataSource::load_xor()
 {
-    _sName="xor";
-
     _mTrainData.resize(4,2);
     _mTrainData(0,0)=0; _mTrainData(0,1)=0;
     _mTrainData(1,0)=1; _mTrainData(1,1)=0;
@@ -188,41 +138,49 @@ void DataSource::load_xor()
     _bHasTestData=false;
 }
 ////////////////////////////////////////////////////////////////////////
-void DataSource::load_textfile()
+bool DataSource::load_textfile()
 {
-    if(_sName=="TextFile")
-        return;
+    //create 4 file names (may not exist)
+    string sTrainData=_sName;
+    string sTrainTruth=_sName;
+    string sTestData=_sName;
+    string sTestTruth=_sName;
 
-    _sName="TextFile";
+    //create sTrainData
+    replace_last(sTrainData,"test","train");
+    replace_last(sTrainData,"truth","data");
 
-    _mTrainData=fromFile("train_data.txt");
-    _mTrainTruth=fromFile("train_truth.txt");
+    //create sTrainTruth
+    replace_last(sTrainTruth,"test","train");
+    replace_last(sTrainTruth,"data","truth");
 
-    _mTestData=fromFile("test_data.txt");
-    _mTestTruth=fromFile("test_truth.txt");
+    //create sTestData
+    replace_last(sTestData,"train","test");
+    replace_last(sTestData,"truth","data");
 
-    _mTrainData/=256.f; //for now
-    _mTestData/=255.f; //for now;
+    //create sTestTruth
+    replace_last(sTestTruth,"train","test");
+    replace_last(sTestTruth,"data","truth");
 
-    _bHasTrainData=true;
-    _bHasTestData=true;
-}
-////////////////////////////////////////////////////////////////////////
-void DataSource::load_fisher()
-{
-    if(_sName=="Fisher")
-        return;
+    //try to load every file
+    _mTrainData=fromFile(sTrainData);
+    _mTrainTruth=fromFile(sTrainTruth);
 
-    _sName="Fisher";
+    if((sTrainData!=sTestData) && (sTrainTruth!=sTestTruth))
+    {
+        _mTestData=fromFile(sTestData);
+        _mTestTruth=fromFile(sTestTruth);
+    }
+    else
+    {
+        _mTestData.resize(0,0);
+        _mTestTruth.resize(0,0);
+    }
 
-    _mTrainData=fromFile("Fisher_data.txt");
-    _mTrainTruth=fromFile("Fisher_truth.txt");
+    _bHasTrainData=(_mTrainData.size()!=0) && (_mTrainTruth.size()!=0) ;
+    _bHasTestData=(_mTestData.size()!=0) && (_mTestTruth.size()!=0) ;
 
-    _mTestData=_mTrainData;
-    _mTestTruth=_mTrainTruth;
-
-    _bHasTrainData=true;
-    _bHasTestData=false;
+    return has_data();
 }
 ////////////////////////////////////////////////////////////////////////
 void DataSource::load_function()
@@ -237,24 +195,24 @@ void DataSource::load_function()
     float fVal=fMin,fOut=0.f;
     for( int i=0;i<iNbPointsLearn;i++)
     {
-		fOut = get_function_val(fVal);
+        fOut = get_function_val(fVal);
         _mTrainData(i)=fVal;
         _mTrainTruth(i)=fOut;
         fVal+=dStep;
     }
 
-	int iNbPointsTest = 199;
-	_mTestData.resize(iNbPointsTest, 1);
-	_mTestTruth.resize(iNbPointsTest, 1);
-	dStep = (fMax - fMin) / (iNbPointsTest - 1.f);
-	fVal = fMin, fOut = 0.f;
-	for (int i = 0; i < iNbPointsTest; i++)
-	{
-		fOut = get_function_val(fVal);
-		_mTestData(i) = fVal;
-		_mTestTruth(i) = fOut;
-		fVal += dStep;
-	}
+    int iNbPointsTest = 199;
+    _mTestData.resize(iNbPointsTest, 1);
+    _mTestTruth.resize(iNbPointsTest, 1);
+    dStep = (fMax - fMin) / (iNbPointsTest - 1.f);
+    fVal = fMin, fOut = 0.f;
+    for (int i = 0; i < iNbPointsTest; i++)
+    {
+        fOut = get_function_val(fVal);
+        _mTestData(i) = fVal;
+        _mTestTruth(i) = fOut;
+        fVal += dStep;
+    }
 
     _bHasTrainData=true;
     _bHasTestData= true;
@@ -262,31 +220,31 @@ void DataSource::load_function()
 ////////////////////////////////////////////////////////////////////////
 float DataSource::get_function_val(float x)
 {
-	if (_sName == "Identity")
-		return x;
+    if (_sName == "Identity")
+        return x;
 
-	if (_sName == "Sin")
-		return sinf(x);
+    if (_sName == "Sin")
+        return sinf(x);
 
-	if (_sName == "Sin4Period")
-		return sinf(x*4.f);
+    if (_sName == "Sin4Period")
+        return sinf(x*4.f);
 
-	if (_sName == "Abs")
-		return fabs(x);
+    if (_sName == "Abs")
+        return fabs(x);
 
-	if (_sName == "Parabolic")
-		return x * x;
+    if (_sName == "Parabolic")
+        return x * x;
 
-	if (_sName == "Exp")
-		return expf(x);
+    if (_sName == "Exp")
+        return expf(x);
 
-	if (_sName == "Gauss")
-		return expf(-x * x);
+    if (_sName == "Gauss")
+        return expf(-x * x);
 
-	if (_sName == "Rectangular")
-		return (float)(((((int)x) + (x < 0.f)) + 1) & 1);
+    if (_sName == "Rectangular")
+        return (float)(((((int)x) + (x < 0.f)) + 1) & 1);
 
-	return 0.f;
+    return 0.f;
 }
 ////////////////////////////////////////////////////////////////////////
 const MatrixFloat& DataSource::train_data() const

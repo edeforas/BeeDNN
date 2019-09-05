@@ -398,52 +398,55 @@ void MainWindow::update_classification_tab()
         return;
     }
 
+    //ref computation
     float fAccuracy=0.f;
+    if(_pDataSource->has_train_data())
+    {
+        _pEngine->compute_confusion_matrix(_pDataSource->train_data(),_pDataSource->train_truth(),_mConfusionMatrixTrain,fAccuracy);
+        ui->leTrainAccuracy->setText(QString::number((double)fAccuracy,'f',2));
+    }
+    else
+        ui->leTrainAccuracy->setText("n/a");
+
     if(_pDataSource->has_test_data())
     {
-        _pEngine->compute_confusion_matrix(_pDataSource->test_data(),_pDataSource->test_truth(),_mConfusionMatrix,fAccuracy);
+        _pEngine->compute_confusion_matrix(_pDataSource->test_data(),_pDataSource->test_truth(),_mConfusionMatrixTest,fAccuracy);
         ui->leTestAccuracy->setText(QString::number((double)fAccuracy,'f',2));
     }
     else
         ui->leTestAccuracy->setText("n/a");
 
-    _pEngine->compute_confusion_matrix(_pDataSource->train_data(),_pDataSource->train_truth(),_mConfusionMatrix,fAccuracy);
-    ui->leTrainAccuracy->setText(QString::number((double)fAccuracy,'f',2));
-
-    drawConfusionMatrix(); //for now on train data
+    drawConfusionMatrix();
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::drawConfusionMatrix()
 {
-    if(_pEngine->is_classification_mode()==false)
-    { // not a classification problem
-        ui->twConfusionMatrixTrain->clearContents();
-        ui->leTrainAccuracy->setText("n/a");
-        ui->leTestAccuracy->setText("n/a");
-        return;
-    }
+    //disp test matrix if exist and preferred
+    bool bDispTestIfExist=ui->cbDispTestIfExist->isChecked();
 
-    ui->twConfusionMatrixTrain->setColumnCount((int)_mConfusionMatrix.cols());
-    ui->twConfusionMatrixTrain->setRowCount((int)_mConfusionMatrix.rows());
+    auto mConfusionMatrix=(bDispTestIfExist && _pDataSource->has_test_data())? _mConfusionMatrixTest:_mConfusionMatrixTrain;
+
+    ui->twConfusionMatrixTrain->setColumnCount((int)mConfusionMatrix.cols());
+    ui->twConfusionMatrixTrain->setRowCount((int)mConfusionMatrix.rows());
 
     if(ui->cbConfMatPercent->isChecked())
     {
         MatrixFloat mConfMatPercent;
-        ConfusionMatrix::toPercent(_mConfusionMatrix,mConfMatPercent);
+        ConfusionMatrix::toPercent(mConfusionMatrix,mConfMatPercent);
 
-        for(int c=0;c<_mConfusionMatrix.cols();c++)
-            for(int r=0;r<_mConfusionMatrix.rows();r++)
+        for(int c=0;c<mConfusionMatrix.cols();c++)
+            for(int r=0;r<mConfusionMatrix.rows();r++)
                 ui->twConfusionMatrixTrain->setItem(r,c,new QTableWidgetItem(QString::number((double)mConfMatPercent(r,c),'f',1)));
     }
     else
     {
-        for(int c=0;c<_mConfusionMatrix.cols();c++)
-            for(int r=0;r<_mConfusionMatrix.rows();r++)
-                ui->twConfusionMatrixTrain->setItem(r,c,new QTableWidgetItem(to_string( (int)(_mConfusionMatrix(r,c))).data() ));
+        for(int c=0;c<mConfusionMatrix.cols();c++)
+            for(int r=0;r<mConfusionMatrix.rows();r++)
+                ui->twConfusionMatrixTrain->setItem(r,c,new QTableWidgetItem(to_string( (int)(mConfusionMatrix(r,c))).data() ));
     }
 
     //colorize in yellow the diagonal
-    for(int c=0;c<_mConfusionMatrix.cols();c++)
+    for(int c=0;c<mConfusionMatrix.cols();c++)
         ui->twConfusionMatrixTrain->item(c,c)->setBackground(Qt::yellow);
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -724,5 +727,11 @@ void MainWindow::on_buttonTestColor_clicked()
     qcd.setCurrentColor(_curveTestColor);
     qcd.exec();
     _curveTestColor=qcd.currentColor().rgb(); //if pure white: not drawn
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::on_cbDispTestIfExist_stateChanged(int arg1)
+{
+    (void)arg1;
+    drawConfusionMatrix();
 }
 //////////////////////////////////////////////////////////////////////////////

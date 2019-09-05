@@ -55,6 +55,8 @@ private slots:
     void on_buttonRefColor_clicked();
     void on_buttonTestColor_clicked();
 
+    void on_cbDispTestIfExist_stateChanged(int arg1);
+
 private:
     void init_all();
     bool ask_save(); //return true if saved/ready to overwrite
@@ -89,7 +91,7 @@ private:
 
     //state data, need to be saved
     MLEngineBeeDnn* _pEngine;
-    MatrixFloat _mConfusionMatrix;
+    MatrixFloat _mConfusionMatrixTrain,_mConfusionMatrixTest;
     DataSource* _pDataSource;
     string _sNotes;
 };
