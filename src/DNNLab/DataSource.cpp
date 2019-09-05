@@ -87,7 +87,10 @@ void DataSource::load(const string& sName)
     if(sName=="MNIST")
         load_mnist();
 
-    else if(sName=="And")
+	else if (sName == "MiniMNIST")
+		load_mini_mnist();
+	
+	else if(sName=="And")
         load_and();
 
     else if(sName=="Xor")
@@ -121,6 +124,22 @@ void DataSource::load_mnist()
 
     _bHasTrainData=true;
     _bHasTestData=true;
+}
+////////////////////////////////////////////////////////////////////////
+void DataSource::load_mini_mnist() //MNIST decimated 10x for quick tests
+{
+	if (_sName == "MiniMNIST")
+		return;
+
+	load_mnist();
+
+	_sName = "MiniMNIST";
+	
+	_mTrainData = decimate(_mTrainData, 10);
+	_mTrainTruth = decimate(_mTrainTruth, 10);
+
+	_mTestData = decimate(_mTestData, 10);
+	_mTestTruth = decimate(_mTestTruth, 10);
 }
 ////////////////////////////////////////////////////////////////////////
 void DataSource::load_and()
@@ -182,7 +201,7 @@ void DataSource::load_textfile()
     _mTestData=fromFile("test_data.txt");
     _mTestTruth=fromFile("test_truth.txt");
 
-    _mTrainData/=255.f; //for now
+    _mTrainData/=256.f; //for now
     _mTestData/=255.f; //for now;
 
     _bHasTrainData=true;

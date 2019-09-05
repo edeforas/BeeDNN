@@ -19,8 +19,9 @@ FrameGlobal::FrameGlobal(QWidget *parent) :
     ui->cbData->addItem("And");
     ui->cbData->addItem("Xor");
     ui->cbData->addItem("MNIST");
+	ui->cbData->addItem("MiniMNIST");
 
-    ui->cbData->insertSeparator(5);
+    ui->cbData->insertSeparator(6);
 
     ui->cbData->addItem("Sin");
 	ui->cbData->addItem("Sin4Period");

@@ -36,6 +36,7 @@ public:
 
 private:
     void load_mnist();
+	void load_mini_mnist();
     void load_function();
     void load_textfile();
     void load_and();
