@@ -27,7 +27,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -160,7 +160,7 @@
             <item>
              <widget class="QCheckBox" name="cbDispTestIfExist">
               <property name="text">
-               <string>Disp Test If Exist</string>
+               <string>DispTestIfAvailable</string>
               </property>
               <property name="checked">
                <bool>true</bool>
@@ -253,7 +253,7 @@
      <x>0</x>
      <y>0</y>
      <width>1141</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

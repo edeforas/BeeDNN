@@ -32,6 +32,8 @@ NetTrain::NetTrain():
     _fDecay = -1.f; //default
     _fMomentum = -1.f; //default
 
+	_bClassBalancingWeightLoss = true;
+
 	_iNbLayers=0;
 	_fOnlineLoss = 0.f;
 	_pNet = nullptr;
@@ -64,6 +66,10 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
 	_fOnlineLoss=other._fOnlineLoss;
 
 	_bKeepBest=other._bKeepBest;
+
+	_bClassBalancingWeightLoss = other._bClassBalancingWeightLoss;
+	_mClassWeight = other._mClassWeight;
+	
 	_iBatchSize=other._iBatchSize;
 	_iEpochs=other._iEpochs;
 	_iNbLayers=other._iNbLayers;
@@ -175,6 +181,16 @@ int NetTrain::get_batchsize() const
     return _iBatchSize;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
+void NetTrain::set_classbalancingweightloss(bool bBalancing) //true by default
+{
+	_bClassBalancingWeightLoss = bBalancing;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+bool NetTrain::get_classbalancingweightloss() const
+{
+	return _bClassBalancingWeightLoss;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::set_keepbest(bool bKeepBest) //true by default
 {
     _bKeepBest = bKeepBest;
@@ -185,7 +201,7 @@ bool NetTrain::get_keepbest() const
     return _bKeepBest;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-float NetTrain::compute_loss(const Net& net, const MatrixFloat &mSamples, const MatrixFloat &mTruth)
+float NetTrain::compute_loss(const Net& net, const MatrixFloat &mSamples, const MatrixFloat &mTruth, bool bBalancing)
 {
 	if (!net.is_valid((int)mSamples.cols(), (int)mTruth.cols()))
 		return 0.f;
@@ -216,7 +232,7 @@ float NetTrain::compute_loss(const Net& net, const MatrixFloat &mSamples, const 
     return fLoss /iNbSamples;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-float NetTrain::compute_accuracy(const Net& net, const MatrixFloat &mSamples, const MatrixFloat &mTruth)
+float NetTrain::compute_accuracy(const Net& net, const MatrixFloat &mSamples, const MatrixFloat &mTruth, bool bBalancing)
 {
     int iNbSamples = (int)mSamples.rows();
 
@@ -261,6 +277,8 @@ void NetTrain::set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mT
 {
     _pmSamplesTrain = &mSamples;
     _pmTruthTrain = &mTruth;
+
+	compute_class_weight();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::set_test_data(const MatrixFloat& mSamplesTest, const MatrixFloat& mTruthTest)
@@ -342,13 +360,13 @@ TrainResult NetTrain::fit(Net& net)
     {
         if (_pmSamplesTest == 0)
         {
-            fMaxAccuracy = compute_accuracy(net, *_pmSamplesTrain, *_pmTruthTrain);
-            fMinLoss=compute_loss(net, *_pmSamplesTrain, *_pmTruthTrain);
+            fMaxAccuracy = compute_accuracy(net, *_pmSamplesTrain, *_pmTruthTrain,_bClassBalancingWeightLoss);
+            fMinLoss=compute_loss(net, *_pmSamplesTrain, *_pmTruthTrain, _bClassBalancingWeightLoss);
         }
         else
         {
-            fMaxAccuracy = compute_accuracy(net, *_pmSamplesTest, *_pmTruthTest);
-            fMinLoss=compute_loss(net, *_pmSamplesTest, *_pmTruthTest);
+            fMaxAccuracy = compute_accuracy(net, *_pmSamplesTest, *_pmTruthTest,false);
+            fMinLoss=compute_loss(net, *_pmSamplesTest, *_pmTruthTest,false);
         }
         bestNet=net;
     }
@@ -405,10 +423,10 @@ TrainResult NetTrain::fit(Net& net)
 
 		if (_pmSamplesTest != 0)
 		{
-			fAccuracy = compute_accuracy(net, *_pmSamplesTest, *_pmTruthTest);
+			fAccuracy = compute_accuracy(net, *_pmSamplesTest, *_pmTruthTest,false);
 			tr.testAccuracy.push_back(fAccuracy);
 
-			fLoss=compute_loss(net, *_pmSamplesTest, *_pmTruthTest);
+			fLoss=compute_loss(net, *_pmSamplesTest, *_pmTruthTest,false);
 			tr.testLoss.push_back(fLoss);
 		}
 
@@ -535,5 +553,32 @@ const vector<float>& NetTrain::get_train_accuracy() const
 const vector<float>& NetTrain::get_test_accuracy() const
 {
     return _testAccuracy;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
+void NetTrain::compute_class_weight()
+{
+	if (!_bClassBalancingWeightLoss)
+	{
+		_mClassWeight.resize(0,0);
+		return;
+	}
+
+	int iNbClass = (int)_pmTruthTrain->maxCoeff() + 1; //guess the nb of class
+	_mClassWeight.setZero(iNbClass, 1);
+
+	for (int i = 0; i < _pmTruthTrain->rows(); i++)
+	{
+		_mClassWeight((int)(_pmTruthTrain->operator()(i)), 0)++;
+	}
+
+	_mClassWeight *= _mClassWeight.rows() / _mClassWeight.sum();
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
+void NetTrain::update_loss_balanced_weight(const MatrixFloat&mTruth, MatrixFloat& mLoss)
+{
+
+
+	//TODO
+
 }
 /////////////////////////////////////////////////////////////////////////////////////////////

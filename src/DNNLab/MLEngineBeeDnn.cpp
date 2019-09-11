@@ -42,8 +42,6 @@ void MLEngineBeeDnn::read(const string& s)
 {  
     NetUtil::read(s,*_pNet);
     NetUtil::read(s,*_pTrain);
-
-
 }
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::init()
@@ -99,7 +97,6 @@ const Net& MLEngineBeeDnn::net() const
 {
     return *_pNet;
 }
-
 //////////////////////////////////////////////////////////////////////////////
 NetTrain& MLEngineBeeDnn::netTrain()
 {
@@ -179,9 +176,9 @@ void MLEngineBeeDnn::classify_all(const MatrixFloat & mSamples, MatrixFloat& mRe
     }
 }
 //////////////////////////////////////////////////////////////////////////////
-float MLEngineBeeDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)
+float MLEngineBeeDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth, bool bBalancing)
 {
-    return _pTrain->compute_loss(*_pNet,mSamples,mTruth);
+    return _pTrain->compute_loss(*_pNet,mSamples,mTruth, bBalancing);
 }
 //////////////////////////////////////////////////////////////////////////////
 

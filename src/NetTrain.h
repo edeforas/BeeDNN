@@ -40,8 +40,8 @@ public:
 	NetTrain& operator=(const NetTrain& other);
 
     void clear();
-    float compute_loss(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth);
-    float compute_accuracy(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth);
+    float compute_loss(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth, bool bBalancing=false);
+    float compute_accuracy(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth , bool bBalancing=false);
 
     void set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth);
 	void set_test_data(const MatrixFloat& mSamplesTest, const MatrixFloat& mTruthTest);
@@ -58,7 +58,7 @@ public:
 
 	void set_epoch_callback(std::function<void()> epochCallBack);
 
-    void set_optimizer(const string& sOptimizer); //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov" ...
+    void set_optimizer(const string& sOptimizer); //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov" "iRPROP-" ...
     string get_optimizer() const;
 
     void set_learningrate(float fLearningRate=-1.f ); // -1.f is for default settings
@@ -70,8 +70,11 @@ public:
     void set_momentum( float fMomentum = -1.f); //" -1.f is for default settings
     float get_momentum() const;
 
-	void set_batchsize(int iBatchSize); //16 by default
+	void set_batchsize(int iBatchSize); //32 by default
 	int get_batchsize() const;
+
+	void set_classbalancingweightloss(bool bBalancing); //true by default
+	bool get_classbalancingweightloss() const;
 
 	void set_keepbest(bool bKeepBest); //true by default: keep the best model of all epochs (evaluated on the test database)
 	bool get_keepbest() const;
@@ -85,7 +88,11 @@ public:
 
 private:
 	void train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth);
-
+	
+	//class weight balancing loss
+	void compute_class_weight(); // is used for class balancing weight loss
+	void update_loss_balanced_weight(const MatrixFloat&mTruth, MatrixFloat& mLoss);
+	
 	//online statistics, i.e. loss, accuracy ...
 	void add_online_statistics(const MatrixFloat&mPredicted, const MatrixFloat&mTruth);
 	int _iOnlineAccuracyGood;
@@ -94,6 +101,7 @@ private:
 	bool _bKeepBest;
 	int _iBatchSize;
 	int _iEpochs;
+	bool _bClassBalancingWeightLoss;
 	int _iNbLayers;
 	int _iReboostEveryEpochs;
 
@@ -111,6 +119,8 @@ private:
 
 	const MatrixFloat* _pmSamplesTest;
 	const MatrixFloat* _pmTruthTest;
+
+	MatrixFloat _mClassWeight;
 
 	std::function<void()> _epochCallBack;
 

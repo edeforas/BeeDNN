@@ -129,12 +129,12 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
         _qsAccuracy->clear();
     }
 
-    float fLoss=_pEngine->compute_loss(_pDataSource->train_data(),_pDataSource->train_truth()); //final loss
+    float fLoss=_pEngine->compute_loss(_pDataSource->train_data(),_pDataSource->train_truth(),_pEngine->netTrain().get_classbalancingweightloss()); //final loss
     ui->leTrainLoss->setText(QString::number((double)fLoss));
 
 	if (_pDataSource->has_test_data())
 	{
-		fLoss = _pEngine->compute_loss(_pDataSource->test_data(), _pDataSource->test_truth()); //final loss
+		fLoss = _pEngine->compute_loss(_pDataSource->test_data(), _pDataSource->test_truth(),false); //final loss
 		ui->leTestLoss->setText(QString::number((double)fLoss));
 	}
 	else
