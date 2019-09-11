@@ -195,7 +195,7 @@ void write(const NetTrain& train,string & s)
     ss << "KeepBest=" << train.get_keepbest() << endl;
     ss << "ReboostEveryEpochs=" << train.get_reboost_every_epochs() << endl;
 
-	ss << "ClassBalancingWeightLoss" << train.get_classbalancingweightloss() << endl;
+	ss << "ClassBalancingWeightLoss=" << train.get_classbalancingweightloss() << endl;
 
     ss << "Optimizer=" << train.get_optimizer() << endl;
     ss << "LearningRate=" << train.get_learningrate() << endl;
