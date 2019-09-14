@@ -73,8 +73,8 @@ public:
 	void set_batchsize(int iBatchSize); //32 by default
 	int get_batchsize() const;
 
-	void set_classbalancingweightloss(bool bBalancing); //true by default
-	bool get_classbalancingweightloss() const;
+	void set_classbalancing(bool bBalancing); //true by default //use weight loss algorithm
+	bool get_classbalancing() const;
 
 	void set_keepbest(bool bKeepBest); //true by default: keep the best model of all epochs (evaluated on the test database)
 	bool get_keepbest() const;
@@ -90,8 +90,7 @@ private:
 	void train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth);
 	
 	//class weight balancing loss
-	void compute_class_weight(); // is used for class balancing weight loss
-	void update_loss_balanced_weight(const MatrixFloat&mTruth, MatrixFloat& mLoss);
+    void update_class_weight(); // compute balanced class weight loss (if asked) and update loss
 	
 	//online statistics, i.e. loss, accuracy ...
 	void add_online_statistics(const MatrixFloat&mPredicted, const MatrixFloat&mTruth);
@@ -119,8 +118,6 @@ private:
 
 	const MatrixFloat* _pmSamplesTest;
 	const MatrixFloat* _pmTruthTest;
-
-	MatrixFloat _mClassWeight;
 
 	std::function<void()> _epochCallBack;
 

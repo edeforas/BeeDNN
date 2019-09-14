@@ -16,6 +16,7 @@
 #include "Loss.h"
 
 #include <cmath>
+#include <cassert>
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 NetTrain::NetTrain():
@@ -68,7 +69,6 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
 	_bKeepBest=other._bKeepBest;
 
 	_bClassBalancingWeightLoss = other._bClassBalancingWeightLoss;
-	_mClassWeight = other._mClassWeight;
 	
 	_iBatchSize=other._iBatchSize;
 	_iEpochs=other._iEpochs;
@@ -164,6 +164,7 @@ void NetTrain::set_loss(const string&  sLoss)
 {
     delete _pLoss;
     _pLoss = create_loss(sLoss);
+	assert(_pLoss);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 string NetTrain::get_loss() const
@@ -181,12 +182,12 @@ int NetTrain::get_batchsize() const
     return _iBatchSize;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_classbalancingweightloss(bool bBalancing) //true by default
+void NetTrain::set_classbalancing(bool bBalancing) //true by default
 {
 	_bClassBalancingWeightLoss = bBalancing;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-bool NetTrain::get_classbalancingweightloss() const
+bool NetTrain::get_classbalancing() const
 {
 	return _bClassBalancingWeightLoss;
 }
@@ -277,8 +278,6 @@ void NetTrain::set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mT
 {
     _pmSamplesTrain = &mSamples;
     _pmTruthTrain = &mTruth;
-
-	compute_class_weight();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::set_test_data(const MatrixFloat& mSamplesTest, const MatrixFloat& mTruthTest)
@@ -311,6 +310,10 @@ TrainResult NetTrain::train(Net& net)//,const MatrixFloat& mSamples,const Matrix
 /////////////////////////////////////////////////////////////////////////////////////////////////
 TrainResult NetTrain::fit(Net& net)
 {
+	_pNet = &net;
+
+	update_class_weight();
+
     const MatrixFloat& mSamples = *_pmSamplesTrain;
     const MatrixFloat& mTruth = *_pmTruthTrain;
 
@@ -328,8 +331,6 @@ TrainResult NetTrain::fit(Net& net)
 
     int iNbSamples=(int)mSamples.rows();
     int iReboost = 0;
-
-	_pNet = &net;
 
     Net bestNet;
 
@@ -555,30 +556,29 @@ const vector<float>& NetTrain::get_test_accuracy() const
     return _testAccuracy;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::compute_class_weight()
+void NetTrain::update_class_weight()
 {
-	if (!_bClassBalancingWeightLoss)
+	MatrixFloat mClassWeight;
+	if ( (!_pNet->is_classification_mode()) || (!_bClassBalancingWeightLoss))
 	{
-		_mClassWeight.resize(0,0);
-		return;
+		mClassWeight.resize(0,0);
+	}
+	else
+	{
+		int iNbClass = (int)_pmTruthTrain->maxCoeff() + 1; //guess the nb of class
+		mClassWeight.setZero(iNbClass, 1);
+
+		for (int i = 0; i < _pmTruthTrain->rows(); i++)
+		{
+			mClassWeight((int)(_pmTruthTrain->operator()(i)), 0)++;
+		}
+
+		mClassWeight *= mClassWeight.rows() / mClassWeight.sum();
+
+		for (int i = 0; i < mClassWeight.size(); i++)
+			mClassWeight(i) = 1.f / mClassWeight(i);
 	}
 
-	int iNbClass = (int)_pmTruthTrain->maxCoeff() + 1; //guess the nb of class
-	_mClassWeight.setZero(iNbClass, 1);
-
-	for (int i = 0; i < _pmTruthTrain->rows(); i++)
-	{
-		_mClassWeight((int)(_pmTruthTrain->operator()(i)), 0)++;
-	}
-
-	_mClassWeight *= _mClassWeight.rows() / _mClassWeight.sum();
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::update_loss_balanced_weight(const MatrixFloat&mTruth, MatrixFloat& mLoss)
-{
-
-
-	//TODO
-
+	_pLoss->set_class_balancing(mClassWeight);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////

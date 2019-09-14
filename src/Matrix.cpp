@@ -82,6 +82,19 @@ void arraySub(MatrixFloat& m,float f)
 #endif
 }
 ///////////////////////////////////////////////////////////////////////////
+MatrixFloat rowWiseMult(const MatrixFloat& m, const MatrixFloat& d)
+{
+    assert(d.cols() == 1);
+    assert(d.rows() == m.rows());
+
+    MatrixFloat r=m;
+
+    for(int l=0;l<r.rows();l++)
+        r.row(l)*=d(l);
+
+    return r;
+}
+///////////////////////////////////////////////////////////////////////////
 MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d)
 {
     assert(d.cols() == 1);

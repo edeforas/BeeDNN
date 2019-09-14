@@ -11,14 +11,31 @@
 #include <cassert>
 #include <cmath>
 
-
 ////////////////////////////////////////////////////////////////
 Loss::Loss()
-{ }
+{
+	_bClassBalancing = false;
+}
 ////////////////////////////////////////////////////////////////
 Loss::~Loss()
 { }
 //////////////////////////////////////////////////////////////////////////////
+void Loss::set_class_balancing(const MatrixFloat& mWeight)
+{
+	_mWeightBalancing = mWeight;
+	_bClassBalancing = _mWeightBalancing.size() != 0;
+}
+//////////////////////////////////////////////////////////////////////////////
+void Loss::balance_gradient_with_weight(const MatrixFloat& mTarget, MatrixFloat& mGradient) const
+{
+	if (!_bClassBalancing)
+		return;
+
+	for (int i = 0; i < mGradient.rows(); i++)
+		mGradient.row(i) *= _mWeightBalancing((int)mTarget(i)); // todo check ?
+}
+//////////////////////////////////////////////////////////////////////////////
+
 class LossMeanSquaredError : public Loss
 {
 public:
@@ -34,8 +51,14 @@ public:
 
 		if (mTarget.size() == 0)
 			return 0.f;
-
-        return (mPredicted -mTarget ).cwiseAbs2().mean();
+		if(!_bClassBalancing)
+		    return (mPredicted -mTarget).cwiseAbs2().mean();
+		else
+		{
+			MatrixFloat mError = (mPredicted - mTarget).cwiseAbs2();
+			balance_gradient_with_weight(mTarget, mError);
+			return mError.mean();
+		}
 	}
 	
 	void compute_gradient(const MatrixFloat& mPredicted,const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
@@ -44,6 +67,7 @@ public:
 		assert(mTarget.rows() == mPredicted.rows());
 
 		mGradientLoss = mPredicted - mTarget;
+		balance_gradient_with_weight(mTarget, mGradientLoss);
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -72,6 +96,7 @@ public:
 		assert(mTarget.rows() == mPredicted.rows());
 
         mGradientLoss=(mPredicted - mTarget).array().cwiseSign();
+		balance_gradient_with_weight(mTarget, mGradientLoss);
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -102,6 +127,7 @@ public:
 		assert(mTarget.rows() == mPredicted.rows());
 
 		mGradientLoss = mPredicted - mTarget;
+		balance_gradient_with_weight(mTarget, mGradientLoss);
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -132,10 +158,10 @@ public:
 		assert(mTarget.rows() == mPredicted.rows());
 
 		mGradientLoss = (mPredicted - mTarget).cwiseSign();
+		balance_gradient_with_weight(mTarget, mGradientLoss);
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
-
 class LossLogCosh : public Loss
 {
 public:
@@ -161,6 +187,7 @@ public:
 		assert(mTarget.rows() == mPredicted.rows());
 
 		mGradientLoss = (mPredicted - mTarget).array().tanh();
+		balance_gradient_with_weight(mTarget, mGradientLoss);
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -183,8 +210,8 @@ public:
 		for (int i = 0; i < mTarget.size(); i++)
 		{
 			float p = mPredicted(i);
-			float y = mTarget(i);
-			fLoss += -(y*logf(max(p, 1.e-8f)));
+            float t = mTarget(i);
+            fLoss += -(t*logf(max(p, 1.e-8f)));
 		}
 		return fLoss / mTarget.size();
 	}
@@ -198,9 +225,10 @@ public:
 		for (int i = 0; i < mTarget.size(); i++)
 		{
 			float p = mPredicted(i);
-			float y = mTarget(i);
-			mGradientLoss(i) = -(y / max(p, 1.e-8f))+ (1.f - y)/(max(1.e-8f, 1.f - p));
+            float t = mTarget(i);
+            mGradientLoss(i) = -(t / max(p, 1.e-8f))+ (1.f - t)/(max(1.e-8f, 1.f - p));
 		}
+		//balance_gradient_with_weight(mTarget, mGradientLoss);
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -224,8 +252,8 @@ public:
 		for (int i = 0; i < mTarget.size(); i++)
 		{
 			float p = mPredicted(i);
-			float y = mTarget(i);
-			fLoss += -(y*log(max(p, 1.e-8f)) + (1.f - y)*log(max(1.e-8f, 1.f - p)));
+            float t = mTarget(i);
+            fLoss += -(t*log(max(p, 1.e-8f)) + (1.f - t)*log(max(1.e-8f, 1.f - p)));
 		}
 		return fLoss / mTarget.size();
 	}
@@ -239,9 +267,10 @@ public:
 		for (int i = 0; i < mTarget.size(); i++)
 		{
 			float p = mPredicted(i);
-			float y = mTarget(i);
-			mGradientLoss(i)= -(y / max(p,1.e-8f) - (1.f - y) / max((1.f - p),1.e-8f));
+            float t = mTarget(i);
+            mGradientLoss(i)= -(t / max(p,1.e-8f) - (1.f - t) / max((1.f - p),1.e-8f));
 		}
+		//balance_gradient_with_weight(mTarget, mGradientLoss);
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
