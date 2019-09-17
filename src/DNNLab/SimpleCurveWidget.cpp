@@ -55,6 +55,8 @@ void SimpleCurveWidget::setYLogAxis(bool bSetLogAxis)
 //////////////////////////////////////////////////////////////////////////
 void SimpleCurveWidget::addCurve(const vector<float>& vfX, const vector<float>& vfY,unsigned int iColorRGB)
 {
+    assert(vfX.size()==vfY.size());
+
     vector<double> vdX,vdY;
     for(unsigned int i=0;i<vfX.size();i++)
     {
@@ -67,12 +69,14 @@ void SimpleCurveWidget::addCurve(const vector<float>& vfX, const vector<float>& 
 //////////////////////////////////////////////////////////////////////////
 void SimpleCurveWidget::addCurve(const vector<double>& vdX, const vector<double>& vdY,unsigned int iColorRGB)
 {
+    assert(vdX.size()==vdY.size());
+
     QwtPlotCurve *curve = new QwtPlotCurve();
     curve->setRenderHint( QwtPlotItem::RenderAntialiased, true );
 
     QPolygonF points;
 
-    for(int i=0;i<vdX.size();i++)
+    for(unsigned int i=0;i<vdX.size();i++)
         points << QPointF(vdX[i], vdY[i]);
 
     curve->setSamples( points );
@@ -117,6 +121,7 @@ SimpleCurveWidget::~SimpleCurveWidget()
 //////////////////////////////////////////////////////////////////////////
 void SimpleCurveWidget::addCurve(const vector<float>& vfX, const vector<float>& vfY,unsigned int iColorRGB)
 {
+    assert(vfX.size()==vfY.size());
     vector<double> vdX,vdY;
     for(unsigned int i=0;i<vfX.size();i++)
     {
