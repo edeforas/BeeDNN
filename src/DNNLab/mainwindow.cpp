@@ -157,7 +157,7 @@ void MainWindow::drawLoss(const vector<float>& vfTrainLoss,const vector<float>& 
     _qsLoss->addHorizontalLine(0.);
 
     vector<float> x;
-    for(unsigned int i=0;i<vfTrainLoss.size();i++)
+    for(unsigned int i=1;i<=vfTrainLoss.size();i++)
         x.push_back(i);
 
     _qsLoss->addCurve(x,vfTrainLoss,_curveRefColor);
@@ -165,7 +165,7 @@ void MainWindow::drawLoss(const vector<float>& vfTrainLoss,const vector<float>& 
 	if (!vfTestLoss.empty())
 	{
         vector<float> x2; //todo remove
-        for(unsigned int i2=0;i2<vfTestLoss.size();i2++)
+        for(unsigned int i2=1;i2<=vfTestLoss.size();i2++)
             x2.push_back(i2);
 
         _qsLoss->addCurve(x2, vfTestLoss, _curveTestColor);
@@ -190,7 +190,7 @@ void MainWindow::drawAccuracy(const vector<float>& vfTrainAccuracy,const vector<
 
         //draw accuracy
         vector<float> x;
-        for(unsigned int i=0;i<vfTrainAccuracy.size();i++)
+        for(unsigned int i=1;i<=vfTrainAccuracy.size();i++)
             x.push_back(i);
 
         _qsAccuracy->addCurve(x,vfTrainAccuracy,_curveRefColor);
@@ -198,7 +198,7 @@ void MainWindow::drawAccuracy(const vector<float>& vfTrainAccuracy,const vector<
         if(!vfTestAccuracy.empty())
         {
             vector<float> x2;
-            for(unsigned int i2=0;i2<vfTestAccuracy.size();i2++)
+            for(unsigned int i2=1;i2<=vfTestAccuracy.size();i2++)
                 x2.push_back(i2);
 
             _qsAccuracy->addCurve(x2,vfTestAccuracy,_curveTestColor);
