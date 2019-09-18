@@ -33,7 +33,7 @@ NetTrain::NetTrain():
     _fDecay = -1.f; //default
     _fMomentum = -1.f; //default
 
-	_bClassBalancingWeightLoss = true;
+	_bClassBalancingWeightLoss = false;
 
 	_iNbLayers=0;
 	_fOnlineLoss = 0.f;

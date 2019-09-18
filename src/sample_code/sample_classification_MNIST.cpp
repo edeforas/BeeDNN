@@ -69,10 +69,10 @@ int main()
 	start = chrono::steady_clock::now();
 	netTrain.train(net);
 
-	MatrixFloat mClassRef;
-	net.predict(mRefImages, mClassRef);
+	MatrixFloat mClassPredicted;
+	net.predict(mRefImages, mClassPredicted);
 	ConfusionMatrix cmRef;
-	ClassificationResult crRef = cmRef.compute(mRefLabels, mClassRef);
+	ClassificationResult crRef = cmRef.compute(mRefLabels, mClassPredicted);
 	cout << "Ref accuracy: " << crRef.accuracy << " %" << endl;
 
 	MatrixFloat mClassTest;
@@ -81,7 +81,8 @@ int main()
 	ClassificationResult crTest = cmTest.compute(mTestLabels, mClassTest);
 	cout << "Test accuracy: " << crTest.accuracy << " %" << endl;
 
-	// the end, results are computed and displayed in epoch_callback
+	cout << "Test confusion matrix:" << endl << crTest.mConfMat << endl;
+
 	cout << "end of test." << endl;
     return 0;
 }

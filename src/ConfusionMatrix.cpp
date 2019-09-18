@@ -9,24 +9,26 @@
 #include "ConfusionMatrix.h"
 
 #include <cmath>
+#include <cassert>
 
 ///////////////////////////////////////////////////////////////////////////////
 ClassificationResult ConfusionMatrix::compute(const MatrixFloat& mRef,const MatrixFloat& mTest,int iNbClass)
 {
+	assert(mRef.rows() == mTest.rows());
+
     if(iNbClass==0)
         iNbClass=(int)mRef.maxCoeff()+1; //guess the nb of class
 
     ClassificationResult cr;
-    cr.mConfMat.resize(iNbClass,iNbClass);
-    cr.mConfMat.setZero();
+    cr.mConfMat.setZero(iNbClass, iNbClass);
 
     for(unsigned int i=0;i<(unsigned int)mRef.rows();i++)
     {
         //threshold label
-        int iLabel=(int)(std::roundf(mTest(i)));
-        iLabel=std::min(iLabel,iNbClass-1);
-        iLabel=std::max(iLabel,0);
-        cr.mConfMat((unsigned int)mRef(i),iLabel)++;
+        int iLabelPredicted=(int)(std::roundf(mTest(i)));
+		iLabelPredicted =std::min(iLabelPredicted,iNbClass-1);
+		iLabelPredicted =std::max(iLabelPredicted,0);
+        cr.mConfMat((unsigned int)mRef(i), iLabelPredicted)++;
     }
 
     //compute accuracy in percent
