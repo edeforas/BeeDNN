@@ -359,7 +359,7 @@ TrainResult NetTrain::fit(Net& net)
     //compute the accuracy at epoch 0, if keepbest is selected
     if(_bKeepBest)
     {
-        if (_pmSamplesTest == 0)
+        if (_pmSamplesTest == nullptr)
         {
             fMaxAccuracy = compute_accuracy(net, *_pmSamplesTrain, *_pmTruthTrain,_bClassBalancingWeightLoss);
             fMinLoss=compute_loss(net, *_pmSamplesTrain, *_pmTruthTrain, _bClassBalancingWeightLoss);
@@ -422,7 +422,7 @@ TrainResult NetTrain::fit(Net& net)
 			tr.trainAccuracy.push_back(fAccuracy);
         }
 
-		if (_pmSamplesTest != 0)
+        if (_pmSamplesTest != nullptr)
 		{
 			fAccuracy = compute_accuracy(net, *_pmSamplesTest, *_pmTruthTest,false);
 			tr.testAccuracy.push_back(fAccuracy);
