@@ -15,6 +15,7 @@ using namespace std;
 #include "ConfusionMatrix.h"
 
 Net net;
+NetTrain netTrain;
 MatrixFloat mRefImages, mRefLabels, mTestImages, mTestLabels;
 int iEpoch;
 chrono::steady_clock::time_point start;
@@ -29,7 +30,7 @@ void epoch_callback()
 
     iEpoch++;
     cout << "Epoch: " << iEpoch << " duration: " << delta << " ms" << endl;
-
+	cout << "Loss: " << netTrain.get_current_loss() << " Accuracy: " << netTrain.get_current_accuracy() << " %" << endl;
     cout << endl;
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -59,7 +60,6 @@ int main()
 
 	//train net
 	cout << "Training..." << endl <<endl;
-	NetTrain netTrain;
 	netTrain.set_epochs(10);
 	netTrain.set_batchsize(64);
 

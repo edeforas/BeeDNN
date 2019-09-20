@@ -144,8 +144,8 @@ void applyRowPermutation(const vector<int>& vPermutation, const MatrixFloat & mI
 	{
 		int iPerm= vPermutation[i];
 
-		assert(vPermutation[i] >=0);
-		assert(vPermutation[i] < mIn.rows());
+		assert(iPerm >=0);
+		assert(iPerm < mIn.rows());
 
 		mPermuted.row(i) = mIn.row(iPerm);
 	}

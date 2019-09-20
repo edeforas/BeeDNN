@@ -20,14 +20,7 @@ class Optimizer;
 class Loss;
 class Net;
 
-class TrainResult //todo remove
-{
-public:
-    vector<float> trainLoss;
-	vector<float> testLoss;
-	vector<float> trainAccuracy;
-	vector<float> testAccuracy;
-};
+
 
 class Layer;
 class Net;
@@ -46,8 +39,8 @@ public:
     void set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth);
 	void set_test_data(const MatrixFloat& mSamplesTest, const MatrixFloat& mTruthTest);
 
-	TrainResult train(Net& net); //classification task
-	TrainResult fit(Net& net); //regression task
+	void train(Net& net); //classification task
+	void fit(Net& net); //regression task
 
 	void set_epochs(int iEpochs); //100 by default
 	int get_epochs() const;
@@ -78,13 +71,17 @@ public:
 
 	void set_keepbest(bool bKeepBest); //true by default: keep the best model of all epochs (evaluated on the test database)
 	bool get_keepbest() const;
-    const vector<float>& get_train_loss() const;
-    const vector<float>& get_test_loss() const;
 
 	void set_loss(const string&  sLoss); // "MeanSquareError" by default, ex "MeanSquareError" "CategoricalCrossEntropy"
 	string get_loss() const;
+
+	const vector<float>& get_train_loss() const;
+	const vector<float>& get_test_loss() const;
     const vector<float>& get_train_accuracy() const;
     const vector<float>& get_test_accuracy() const;
+
+	float get_current_loss() const;
+	float get_current_accuracy() const;
 
 private:
 	void train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth);
@@ -127,6 +124,9 @@ private:
     vector<float> _testLoss;
     vector<float> _trainAccuracy;
     vector<float> _testAccuracy;
+
+	float _fCurrentLoss;
+	float _fCurrentAccuracy;
 };
 
 #endif
