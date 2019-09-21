@@ -29,6 +29,7 @@ SOURCES += \
     ../LayerSoftmax.cpp \
     ../LayerDense.cpp \
     ../LayerDropout.cpp \
+    ../LayerGaussianDropout.cpp \
     ../LayerGaussianNoise.cpp \
     ../LayerGlobalGain.cpp \
     ../LayerGlobalBias.cpp \
@@ -50,6 +51,7 @@ HEADERS += \
     ../LayerSoftmax.h \
     ../LayerDense.h \
     ../LayerDropout.h \
+    ../LayerGaussianDropout.h \
     ../LayerGaussianNoise.h \
     ../LayerGlobalGain.h \
     ../LayerGlobalBias.h \

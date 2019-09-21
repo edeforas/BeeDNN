@@ -6,13 +6,13 @@ The goal is to have a minimal, clear, and simple API and samples so everybody ca
 No dependencies needed, every algorithm rewritten in C++ from scratch. There is also a GUI application for live tests.
 
 Implemented so far:
-- dense layer, with or without bias
-- dropout layer, gaussian noise layer
-- global gain layer , global bias layer
-- pool averaging 1D layer (WIP)
+- Dense layer, with or without bias
+- Dropout layer, GaussianNoise layer, GaussianDropout layer
+- GlobalGain layer , GlobalBias layer
+- PoolAveraging1D layer (WIP)
 - Softmax layer
 - PRelu layer
-- layers and activations are decoupled, can be in any orders
+- layers and activations are decoupled and can be in any orders
 - mini batch learn, SGD learn, batch learn
 - optimizers: SGD, Momentum, Nesterov, Adam, Nadam, Adagrad, Adamax, RMSprop, RPROP-, iRPROP-
 - classification or regression, test and/or learn

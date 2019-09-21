@@ -26,24 +26,27 @@ Layer* LayerDropout::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 {
-    if(_bTrainMode)
-        mOut = mIn*_mask.asDiagonal(); //in learn mode
-    else
+    if(_bTrainMode && (_fRate!=0.f) )
+        mOut = mIn*_mask.asDiagonal(); //in train mode
+	else
         mOut = mIn; // in test mode
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDropout::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
     (void)mInput;
-    init();
 
+	assert(_bTrainMode);
     mGradientIn= mGradientOut*_mask.asDiagonal();
+	init();
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDropout::init()
 {
-    _mask.resize(1, _iInSize);
-	_mask.setConstant(1.f);
+    _mask.setOnes(1, _iInSize);
+
+    if(_fRate==0.f)
+        return;
 
     for (int i = 0; i < _iInSize; i++) //todo distribute a proportion of 1, so we get exactly fRate
     {

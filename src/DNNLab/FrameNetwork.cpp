@@ -10,6 +10,7 @@
 
 #include "LayerDense.h"
 #include "LayerDropout.h"
+#include "LayerGaussianDropout.h"
 #include "LayerGlobalGain.h"
 #include "LayerGlobalBias.h"
 #include "LayerGaussianNoise.h"
@@ -101,6 +102,12 @@ void FrameNetwork::set_net(Net* pNet)
             ui->twNetwork->setItem(i,3,new QTableWidgetItem(to_string(fStd).c_str()));
         }
 
+        if(sType=="GaussianDropout")
+        {
+            float fProba=((LayerGaussianDropout*)l)->get_proba();
+            ui->twNetwork->setItem(i,3,new QTableWidgetItem(to_string(fProba).c_str()));
+        }
+
         if(sType=="Dropout")
         {
             float fRate=((LayerDropout*)l)->get_rate();
@@ -190,6 +197,14 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
                 _pNet->add_gaussian_noise_layer(iInSize,fStd);
             }
 
+            else if(sType=="GaussianDropout")
+            {
+                float fProba=1.f; //by default
+                if(bOk)
+                    fProba=fArg1;
+                _pNet->add_gaussian_dropout_layer(iInSize,fProba);
+            }
+
             else if(sType=="GlobalGain")
                 _pNet->add_globalgain_layer(iInSize);
 			
@@ -257,13 +272,14 @@ void FrameNetwork::add_new_row(int iRow)
 	qcbType->addItem("DenseNoBias");
 	qcbType->addItem("Dropout");
 	qcbType->addItem("GaussianNoise");
+	qcbType->addItem("GaussianDropout");
 	qcbType->addItem("GlobalGain");
 	qcbType->addItem("GlobalBias");
 	qcbType->addItem("PoolAveraging1D");
 	qcbType->addItem("PRelu");
 	qcbType->addItem("Softmax");
 
-	qcbType->insertSeparator(10);
+    qcbType->insertSeparator(11);
 
 	for (unsigned int a = 0; a < _vsActivations.size(); a++)
 		qcbType->addItem(_vsActivations[a].c_str());
