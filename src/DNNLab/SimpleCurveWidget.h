@@ -21,6 +21,7 @@ public:
 
 class SimpleCurveWidget : public QwtPlot
 {
+Q_OBJECT
 public:
 
     SimpleCurveWidget();

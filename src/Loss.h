@@ -28,11 +28,11 @@ public:
 
     // loss weight class balancing, one row by class, ideal value = 1.f
 	// as in: https://towardsdatascience.com/handling-imbalanced-datasets-in-deep-learning-f48407a0e758 (chapter (1) )
-	// for no balancing, set to empty matrix
+	// for no balancing, set to empty matrix (default)
     void set_class_balancing(const MatrixFloat& mWeight);
 
 protected:
-    void balance_gradient_with_weight(const MatrixFloat& mTarget, MatrixFloat& mGradient) const;
+    void balance_with_weight(const MatrixFloat& mTarget, MatrixFloat& mGradient) const;
 
     MatrixFloat _mWeightBalancing;
 	bool _bClassBalancing;
