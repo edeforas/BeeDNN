@@ -333,4 +333,5 @@ void SimpleCurveWidget::addHorizontalLine(double dY)
     compute_bounding_box();
 }
 //////////////////////////////////////////////////////////////////////////
+
 #endif

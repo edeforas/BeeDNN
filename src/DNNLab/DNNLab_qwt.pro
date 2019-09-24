@@ -7,6 +7,7 @@ CONFIG += c++17
 DEFINES+= "USE_QWT"
 INCLUDEPATH += $$(QWT_PATH)/include
 LIBS += -L$$(QWT_PATH)\lib -lqwt
+DEFINES += QWT_DLL
 
 #eigen (optional)
 DEFINES+= "USE_EIGEN"
