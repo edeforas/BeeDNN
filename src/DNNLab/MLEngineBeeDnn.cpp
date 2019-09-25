@@ -173,9 +173,9 @@ void MLEngineBeeDnn::classify_all(const MatrixFloat & mSamples, MatrixFloat& mRe
     }
 }
 //////////////////////////////////////////////////////////////////////////////
-float MLEngineBeeDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth, bool bBalancing)
+float MLEngineBeeDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)
 {
-    return _pTrain->compute_loss(*_pNet,mSamples,mTruth, bBalancing);
+    return _pTrain->compute_loss(*_pNet,mSamples,mTruth);
 }
 //////////////////////////////////////////////////////////////////////////////
 

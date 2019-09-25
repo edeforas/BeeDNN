@@ -33,8 +33,8 @@ public:
 	NetTrain& operator=(const NetTrain& other);
 
     void clear();
-    float compute_loss(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth, bool bBalancing=false);
-    float compute_accuracy(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth , bool bBalancing=false);
+    float compute_loss(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth);
+    float compute_accuracy(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth);
 
     void set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth);
 	void set_test_data(const MatrixFloat& mSamplesTest, const MatrixFloat& mTruthTest);

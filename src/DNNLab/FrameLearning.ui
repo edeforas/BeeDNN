@@ -277,8 +277,14 @@
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QCheckBox" name="cbClassBalancingWeightLoss">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Class balancing with weight loss penalization&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="toolTipDuration">
+        <number>-1</number>
+       </property>
        <property name="text">
-        <string>ClassBalancingWeightLoss</string>
+        <string>ClassBalancing</string>
        </property>
        <property name="checked">
         <bool>false</bool>
