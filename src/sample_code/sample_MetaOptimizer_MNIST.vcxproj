@@ -177,6 +177,7 @@
     <ClCompile Include="..\LayerActivation.cpp" />
     <ClCompile Include="..\LayerDense.cpp" />
     <ClCompile Include="..\LayerDropout.cpp" />
+    <ClCompile Include="..\LayerGaussianDropout.cpp" />
     <ClCompile Include="..\LayerGaussianNoise.cpp" />
     <ClCompile Include="..\LayerGlobalBias.cpp" />
     <ClCompile Include="..\LayerGlobalGain.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="..\LayerActivation.h" />
     <ClInclude Include="..\LayerDense.h" />
     <ClInclude Include="..\LayerDropout.h" />
+    <ClInclude Include="..\LayerGaussianDropout.h" />
     <ClInclude Include="..\LayerGaussianNoise.h" />
     <ClInclude Include="..\LayerGlobalBias.h" />
     <ClInclude Include="..\LayerGlobalGain.h" />

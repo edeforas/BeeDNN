@@ -54,7 +54,7 @@ public:
 
     virtual void predict_all(const MatrixFloat & mSamples, MatrixFloat& mResult);
     void classify_all(const MatrixFloat & mSamples, MatrixFloat& mResultLabel);
-    virtual float compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth, bool bBalancing=false);
+    virtual float compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth);
     virtual void compute_confusion_matrix(const MatrixFloat & mSamples, const MatrixFloat& mTruth, MatrixFloat& mConfusionMatrix, float& fAccuracy);
 
 private:

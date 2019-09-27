@@ -182,23 +182,27 @@ public:
 	{
 		setConstant(0.);
 	}
-
-	void setOnes()
-	{
-		setConstant(1.);
-	}
     void setZero(int iRows,int iColumns)
     {
         resize(iRows,iColumns);
         setZero();
     }
 
+	void setOnes()
+	{
+		setConstant(1.);
+	}
+	void setOnes(int iRows, int iColumns)
+	{
+		resize(iRows, iColumns);
+		setOnes();
+	}
+
     void setRandom()
 	{
 	    for(int i=0;i<_iSize;i++)
             _data[i]=((T)rand()/(T)RAND_MAX-0.5f)*2.f;
 	}
-
 	void setRandom(int iRows, int iColumns)
 	{
 		resize(iRows, iColumns);
@@ -611,6 +615,7 @@ const MatrixFloatView fromRawBuffer(const float *pBuffer, int iRows, int iCols);
 MatrixFloat rowWiseSum(const MatrixFloat& m);
 MatrixFloat colWiseMean(const MatrixFloat& m);
 MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d);
+MatrixFloat rowWiseMult(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d);
 void arraySub(MatrixFloat& m,float f);
 vector<int> randPerm(int iSize); //create a vector of index shuffled

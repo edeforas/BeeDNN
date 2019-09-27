@@ -34,19 +34,26 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->frameNetwork->set_main_window(this);
 
     _qsRegression=new SimpleCurveWidget;
+
     _qsRegression->addXAxis();
     _qsRegression->addYAxis();
     ui->layoutRegression->addWidget(_qsRegression);
+    _qsRegression->setMinimumSize(0,0);
+    _qsRegression->setSizePolicy(QSizePolicy ::Expanding , QSizePolicy ::Expanding );
 
     _qsLoss=new SimpleCurveWidget;
     _qsLoss->addXAxis();
     _qsLoss->addYAxis();
     ui->layoutLossCurve->addWidget(_qsLoss);
+    _qsLoss->setMinimumSize(0,0);
+    _qsLoss->setSizePolicy(QSizePolicy ::Expanding , QSizePolicy ::Expanding );
 
     _qsAccuracy=new SimpleCurveWidget;
     _qsAccuracy->addXAxis();
     _qsAccuracy->addYAxis();
     ui->layoutAccuracyCurve->addWidget(_qsAccuracy);
+_qsAccuracy->setMinimumSize(0,0);
+    _qsAccuracy->setSizePolicy(QSizePolicy ::Expanding , QSizePolicy ::Expanding );
 
 	//resize docks to min size
 	QList<QDockWidget*> pLD;
@@ -129,12 +136,12 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
         _qsAccuracy->clear();
     }
 
-    float fLoss=_pEngine->compute_loss(_pDataSource->train_data(),_pDataSource->train_truth(),_pEngine->netTrain().get_classbalancingweightloss()); //final loss
+    float fLoss=_pEngine->compute_loss(_pDataSource->train_data(),_pDataSource->train_truth()); //final loss
     ui->leTrainLoss->setText(QString::number((double)fLoss));
 
 	if (_pDataSource->has_test_data())
 	{
-		fLoss = _pEngine->compute_loss(_pDataSource->test_data(), _pDataSource->test_truth(),false); //final loss
+        fLoss = _pEngine->compute_loss(_pDataSource->test_data(), _pDataSource->test_truth()); //final loss
 		ui->leTestLoss->setText(QString::number((double)fLoss));
 	}
 	else
@@ -157,14 +164,18 @@ void MainWindow::drawLoss(const vector<float>& vfTrainLoss,const vector<float>& 
     _qsLoss->addHorizontalLine(0.);
 
     vector<float> x;
-    for(unsigned int i=0;i<vfTrainLoss.size();i++)
+    for(unsigned int i=1;i<=vfTrainLoss.size();i++)
         x.push_back(i);
 
     _qsLoss->addCurve(x,vfTrainLoss,_curveRefColor);
 
 	if (!vfTestLoss.empty())
 	{
-		_qsLoss->addCurve(x, vfTestLoss, _curveTestColor);
+        vector<float> x2; //todo remove
+        for(unsigned int i2=1;i2<=vfTestLoss.size();i2++)
+            x2.push_back(i2);
+
+        _qsLoss->addCurve(x2, vfTestLoss, _curveTestColor);
 	}
 }
 //////////////////////////////////////////////////////////////////////////
@@ -186,14 +197,18 @@ void MainWindow::drawAccuracy(const vector<float>& vfTrainAccuracy,const vector<
 
         //draw accuracy
         vector<float> x;
-        for(unsigned int i=0;i<vfTrainAccuracy.size();i++)
+        for(unsigned int i=1;i<=vfTrainAccuracy.size();i++)
             x.push_back(i);
 
         _qsAccuracy->addCurve(x,vfTrainAccuracy,_curveRefColor);
 
         if(!vfTestAccuracy.empty())
         {
-            _qsAccuracy->addCurve(x,vfTestAccuracy,_curveTestColor);
+            vector<float> x2;
+            for(unsigned int i2=1;i2<=vfTestAccuracy.size();i2++)
+                x2.push_back(i2);
+
+            _qsAccuracy->addCurve(x2,vfTestAccuracy,_curveTestColor);
         }
     }
     else

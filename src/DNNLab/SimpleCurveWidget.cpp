@@ -1,14 +1,98 @@
 #include "SimpleCurveWidget.h"
 
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QWheelEvent>
-#include <QGraphicsSceneWheelEvent>
-
 #include <algorithm>
 #include <cassert>
 #include <cmath>
 
+#if USE_QWT
+
+#include <qwt_plot_curve.h>
+#include <qwt_plot_grid.h>
+#include <qwt_scale_engine.h>
+
+SimpleCurveWidget::SimpleCurveWidget(): QwtPlot()
+{
+    //    QwtPlotGrid *grid = new QwtPlotGrid();
+    //   grid->attach( this );
+
+    _zoomer = new QwtPlotZoomer(canvas() );
+}
+//////////////////////////////////////////////////////////////////////////
+SimpleCurveWidget::~SimpleCurveWidget()
+{ }
+//////////////////////////////////////////////////////////////////////////
+void SimpleCurveWidget::clear()
+{
+    detachItems();
+    replot();
+}
+//////////////////////////////////////////////////////////////////////////
+void SimpleCurveWidget::addXAxis()
+{
+    //TODO
+}
+//////////////////////////////////////////////////////////////////////////
+void SimpleCurveWidget::addYAxis()
+{
+    //TODO
+}
+//////////////////////////////////////////////////////////////////////////
+void SimpleCurveWidget::addHorizontalLine(double dY)
+{
+    (void)dY;
+    //TODO
+}
+//////////////////////////////////////////////////////////////////////////
+void SimpleCurveWidget::setYLogAxis(bool bSetLogAxis)
+{
+    if(bSetLogAxis)
+        setAxisScaleEngine(0, new QwtLogScaleEngine());
+    else
+        setAxisScaleEngine(0,new QwtLinearScaleEngine());
+
+    replot();
+}
+//////////////////////////////////////////////////////////////////////////
+void SimpleCurveWidget::addCurve(const vector<float>& vfX, const vector<float>& vfY,unsigned int iColorRGB)
+{
+    assert(vfX.size()==vfY.size());
+
+    vector<double> vdX,vdY;
+    for(unsigned int i=0;i<vfX.size();i++)
+    {
+        vdX.push_back((double)vfX[i]);
+        vdY.push_back((double)vfY[i]);
+    }
+
+    addCurve(vdX,vdY,iColorRGB);
+}
+//////////////////////////////////////////////////////////////////////////
+void SimpleCurveWidget::addCurve(const vector<double>& vdX, const vector<double>& vdY,unsigned int iColorRGB)
+{
+    assert(vdX.size()==vdY.size());
+
+    QwtPlotCurve *curve = new QwtPlotCurve();
+    curve->setRenderHint( QwtPlotItem::RenderAntialiased, true );
+
+    QPolygonF points;
+
+    for(unsigned int i=0;i<vdX.size();i++)
+        points << QPointF(vdX[i], vdY[i]);
+
+    curve->setSamples( points );
+    curve->setPen(QColor(iColorRGB));
+
+    curve->attach( this );
+    setAxisAutoScale(0);
+    _zoomer->setZoomBase();
+}
+//////////////////////////////////////////////////////////////////////////
+#else
+
+#include <QGraphicsScene>
+#include <QGraphicsView>
+#include <QWheelEvent>
+#include <QGraphicsSceneWheelEvent>
 //////////////////////////////////////////////////////////////////////////
 SimpleCurveWidget::SimpleCurveWidget(): QGraphicsView()
 {
@@ -37,6 +121,7 @@ SimpleCurveWidget::~SimpleCurveWidget()
 //////////////////////////////////////////////////////////////////////////
 void SimpleCurveWidget::addCurve(const vector<float>& vfX, const vector<float>& vfY,unsigned int iColorRGB)
 {
+    assert(vfX.size()==vfY.size());
     vector<double> vdX,vdY;
     for(unsigned int i=0;i<vfX.size();i++)
     {
@@ -249,3 +334,4 @@ void SimpleCurveWidget::addHorizontalLine(double dY)
 }
 //////////////////////////////////////////////////////////////////////////
 
+#endif

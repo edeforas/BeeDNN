@@ -31,6 +31,7 @@ public:
 	void add_prelu_layer(int inSize);
 	void add_softmax_layer();
     void add_dropout_layer(int iSize, float fRatio);
+    void add_gaussian_dropout_layer(int iSize, float fProba);
     void add_gaussian_noise_layer(int iSize, float fStd);
     void add_globalgain_layer(int iSize);
     void add_globalbias_layer(int iSize);

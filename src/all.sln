@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_regression_sin", "sa
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_MetaOptimizer_MNIST", "sample_code\sample_MetaOptimizer_MNIST.vcxproj", "{619EC855-2EDB-40BA-B244-0E6345727D8D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DNNLab_qwt", "DNNLab\DNNLab_qwt.vcxproj", "{1A46F9A0-A07F-4758-94AF-B6D02C5C9781}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -59,6 +61,12 @@ Global
 		{619EC855-2EDB-40BA-B244-0E6345727D8D}.Release|x64.Build.0 = Release|x64
 		{619EC855-2EDB-40BA-B244-0E6345727D8D}.Release|x86.ActiveCfg = Release|Win32
 		{619EC855-2EDB-40BA-B244-0E6345727D8D}.Release|x86.Build.0 = Release|Win32
+		{1A46F9A0-A07F-4758-94AF-B6D02C5C9781}.Debug|x64.ActiveCfg = Debug|x64
+		{1A46F9A0-A07F-4758-94AF-B6D02C5C9781}.Debug|x64.Build.0 = Debug|x64
+		{1A46F9A0-A07F-4758-94AF-B6D02C5C9781}.Debug|x86.ActiveCfg = Debug|x64
+		{1A46F9A0-A07F-4758-94AF-B6D02C5C9781}.Release|x64.ActiveCfg = Release|x64
+		{1A46F9A0-A07F-4758-94AF-B6D02C5C9781}.Release|x64.Build.0 = Release|x64
+		{1A46F9A0-A07F-4758-94AF-B6D02C5C9781}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

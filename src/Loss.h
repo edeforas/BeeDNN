@@ -24,7 +24,18 @@ public:
     virtual string name() const =0 ;
 
 	virtual float compute(const MatrixFloat& mPredicted,const MatrixFloat& mTarget) const =0 ;
-	virtual void compute_gradient(const MatrixFloat& mPredicted,const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const =0 ;
+    virtual void compute_gradient(const MatrixFloat& mPredicted,const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const =0 ;
+
+    // loss weight class balancing, one row by class, ideal value = 1.f
+	// as in: https://towardsdatascience.com/handling-imbalanced-datasets-in-deep-learning-f48407a0e758 (chapter (1) )
+	// for no balancing, set to empty matrix (default)
+    void set_class_balancing(const MatrixFloat& mWeight);
+
+protected:
+    void balance_with_weight(const MatrixFloat& mTarget, MatrixFloat& mGradient) const;
+
+    MatrixFloat _mWeightBalancing;
+	bool _bClassBalancing;
 };
 
 Loss* create_loss(const string & sLoss);

@@ -452,6 +452,25 @@ public:
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
+// Logit as in : https://adl1995.github.io/an-overview-of-activation-functions-used-in-neural-networks.html
+class ActivationLogit : public Activation
+{
+public:
+    string name() const override
+    {
+        return "Logit";
+    }
+
+    float apply(float x) const override
+    {
+        return logf(x / (1.f -x));
+    }
+    float derivation(float x) const override
+    {
+        return -x/(x-1.f);
+    }
+};
+//////////////////////////////////////////////////////////////////////////////
 // LogSigmoid as in : https://nn.readthedocs.io/en/rtd/transfer/
 class ActivationLogSigmoid : public Activation
 {
@@ -592,6 +611,26 @@ public:
 
         return 1.f;
     }
+};
+//////////////////////////////////////////////////////////////////////////////
+// Lecun's Tanh as in : https://adl1995.github.io/an-overview-of-activation-functions-used-in-neural-networks.html
+class ActivationLecunTanh : public Activation
+{
+public:
+	string name() const override
+	{
+		return "LecunTanh";
+	}
+
+	float apply(float x) const override
+	{
+		return 1.7159f*tanhf(x*0.666666f);
+	}
+	float derivation(float x) const override
+	{
+		float t = coshf(x*0.666666f);
+		return (1.7159f*0.666666f) / (t*t);
+	}
 };
 //////////////////////////////////////////////////////////////////////////////
 class ActivationNLRelu: public Activation
@@ -787,25 +826,6 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
-class ActivationTanh: public Activation
-{
-public:
-    string name() const override
-    {
-        return "Tanh";
-    }
-
-    float apply(float x) const override
-    {
-        return tanhf(x);
-    }
-    float derivation(float x) const override
-    {
-        float t=tanhf(x);
-        return 1.f-t*t;
-    }
-};
-//////////////////////////////////////////////////////////////////////////////
 //Swish as in the paper: Swish: A Self-Gated Activation Function
 class ActivationSwish: public Activation
 {
@@ -901,6 +921,46 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+class ActivationTanh : public Activation
+{
+public:
+	string name() const override
+	{
+		return "Tanh";
+	}
+
+	float apply(float x) const override
+	{
+		return tanhf(x);
+	}
+	float derivation(float x) const override
+	{
+		float t = tanhf(x);
+		return 1.f - t * t; //same as 1/square(cosh(x))
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
+// as in: https://keras.io/layers/advanced-activations/
+// for now with theta =1
+class ActivationThresholdedRelu : public Activation
+{
+public:
+	string name() const override
+	{
+        return "ThresholdedRelu";
+	}
+
+	float apply(float x) const override
+	{
+		return x >= 1.f ? x : 0.f;
+	}
+
+	float derivation(float x) const override
+	{
+		return x >= 1.f ? 1.f : 0.f;
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
 Activation* get_activation(const string& sActivation)
 {
     if(sActivation=="Absolute")
@@ -969,6 +1029,12 @@ Activation* get_activation(const string& sActivation)
     else if(sActivation=="LeakyTwiceRelu6")
         return new ActivationLeakyTwiceRelu6;
 
+	else if (sActivation == "LecunTanh")
+		return new ActivationLecunTanh;
+	
+	else if(sActivation == "Logit")
+        return new ActivationLogit;
+
 	else if(sActivation == "LogSigmoid")
 		return new ActivationLogSigmoid;
 	
@@ -1014,6 +1080,9 @@ Activation* get_activation(const string& sActivation)
     else if(sActivation=="Tanh")
         return new ActivationTanh;
 
+    else if (sActivation == "ThresholdedRelu")
+		return new ActivationThresholdedRelu;
+
     return nullptr;
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -1043,7 +1112,9 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("LeakyRelu");
     vsActivations.push_back("LeakyRelu256");
     vsActivations.push_back("LeakyTwiceRelu6");
-	vsActivations.push_back("LogSigmoid");
+	vsActivations.push_back("LecunTanh");
+    vsActivations.push_back("Logit");
+    vsActivations.push_back("LogSigmoid");
     vsActivations.push_back("NLRelu");
     vsActivations.push_back("Parablu");
     vsActivations.push_back("Relu");
@@ -1058,5 +1129,6 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("Sin");
     vsActivations.push_back("Swish");
     vsActivations.push_back("Tanh");
+	vsActivations.push_back("ThresholdedRelu");
 }
 //////////////////////////////////////////////////////////////////////////////

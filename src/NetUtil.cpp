@@ -195,7 +195,7 @@ void write(const NetTrain& train,string & s)
     ss << "KeepBest=" << train.get_keepbest() << endl;
     ss << "ReboostEveryEpochs=" << train.get_reboost_every_epochs() << endl;
 
-	ss << "ClassBalancingWeightLoss" << train.get_classbalancingweightloss() << endl;
+	ss << "ClassBalancingWeightLoss=" << train.get_classbalancing() << endl;
 
     ss << "Optimizer=" << train.get_optimizer() << endl;
     ss << "LearningRate=" << train.get_learningrate() << endl;
@@ -216,9 +216,9 @@ void read(const string& s,NetTrain& train)
     train.set_reboost_every_epochs(stoi(find_key(s,"ReboostEveryEpochs")));
 
 	if (!find_key(s, "ClassBalancingWeightLoss").empty())
-		train.set_classbalancingweightloss(stoi(find_key(s, "ClassBalancingWeightLoss")) != 0);
+		train.set_classbalancing(stoi(find_key(s, "ClassBalancingWeightLoss")) != 0);
 	else
-		train.set_classbalancingweightloss(true);
+		train.set_classbalancing(true);
 
     string sOptimizer=find_key(s,"Optimizer");
     float fLearningRate=stof(find_key(s,"LearningRate"));

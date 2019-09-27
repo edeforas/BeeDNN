@@ -142,6 +142,7 @@
   <ItemGroup>
     <ClCompile Include="..\Activation.cpp" />
     <ClCompile Include="..\ConfusionMatrix.cpp" />
+    <ClCompile Include="..\LayerGaussianDropout.cpp" />
     <ClCompile Include="DataSource.cpp" />
     <ClCompile Include="FrameGlobal.cpp" />
     <ClCompile Include="FrameLearning.cpp" />
@@ -172,6 +173,7 @@
   <ItemGroup>
     <ClInclude Include="..\Activation.h" />
     <ClInclude Include="..\ConfusionMatrix.h" />
+    <ClInclude Include="..\LayerGaussianDropout.h" />
     <ClInclude Include="DataSource.h" />
     <CustomBuild Include="FrameGlobal.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">FrameGlobal.h;release\moc_predefs.h;C:\QT\5.13.0\MSVC2017_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>

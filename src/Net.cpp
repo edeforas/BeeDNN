@@ -17,6 +17,7 @@
 #include "LayerDense.h"
 #include "LayerDropout.h"
 #include "LayerGaussianNoise.h"
+#include "LayerGaussianDropout.h"
 #include "LayerGlobalGain.h"
 #include "LayerGlobalBias.h"
 #include "LayerPoolAveraging1D.h"
@@ -67,6 +68,12 @@ void Net::add_dropout_layer(int iSize,float fRatio)
 {
     update_out_layer_input_size(iSize);
     _layers.push_back(new LayerDropout(iSize, fRatio));
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void Net::add_gaussian_dropout_layer(int iSize,float fProba)
+{
+    update_out_layer_input_size(iSize);
+    _layers.push_back(new LayerGaussianDropout(iSize, fProba));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_gaussian_noise_layer(int iSize, float fStd)

@@ -67,24 +67,21 @@ void MLEngineBeeDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth)
 {
-    TrainResult tr;
-
     _pTrain->clear(); //todo remove
-
 	_pTrain->set_train_data(mSamples, mTruth);
 
     if(_pNet->is_classification_mode()) //todo call 1 function in_pTrain , learn?
-        tr=_pTrain->train(*_pNet);
+        _pTrain->train(*_pNet);
     else
-        tr=_pTrain->fit(*_pNet);
+        _pTrain->fit(*_pNet);
 
-    _vfTrainLoss.insert(end(_vfTrainLoss),begin(tr.trainLoss),end(tr.trainLoss));
-    _vfTrainAccuracy.insert(end(_vfTrainAccuracy),begin(tr.trainAccuracy),end(tr.trainAccuracy));
+    _vfTrainLoss.insert(_vfTrainLoss.end(),_pTrain->get_train_loss().begin(),_pTrain->get_train_loss().end());
+    _vfTrainAccuracy.insert(_vfTrainAccuracy.end(),_pTrain->get_train_accuracy().begin(),_pTrain->get_train_accuracy().end());
 
-	if (!tr.testAccuracy.empty())
+    if (!_pTrain->get_test_accuracy().empty())
 	{
-		_vfTestAccuracy.insert(end(_vfTestAccuracy), begin(tr.testAccuracy), end(tr.testAccuracy));
-		_vfTestLoss.insert(end(_vfTestLoss), begin(tr.testLoss), end(tr.testLoss));
+        _vfTestAccuracy.insert(_vfTestAccuracy.end(), _pTrain->get_test_accuracy().begin(), _pTrain->get_test_accuracy().end());
+        _vfTestLoss.insert(_vfTestLoss.end(), _pTrain->get_test_loss().begin(), _pTrain->get_test_loss().end());
 	}
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -176,9 +173,9 @@ void MLEngineBeeDnn::classify_all(const MatrixFloat & mSamples, MatrixFloat& mRe
     }
 }
 //////////////////////////////////////////////////////////////////////////////
-float MLEngineBeeDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth, bool bBalancing)
+float MLEngineBeeDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)
 {
-    return _pTrain->compute_loss(*_pNet,mSamples,mTruth, bBalancing);
+    return _pTrain->compute_loss(*_pNet,mSamples,mTruth);
 }
 //////////////////////////////////////////////////////////////////////////////
 

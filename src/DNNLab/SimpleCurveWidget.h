@@ -1,8 +1,6 @@
 #ifndef SimpleCurve_
 #define SimpleCurve_
 
-#include <QGraphicsScene>
-#include <QGraphicsView>
 #include <vector>
 using namespace std;
 
@@ -17,21 +15,56 @@ public:
     unsigned int _iColorRGB;
 };
 
+#ifdef USE_QWT
+#include <qwt_plot.h>
+#include <qwt_plot_zoomer.h>
+
+class SimpleCurveWidget : public QwtPlot
+{
+Q_OBJECT
+public:
+
+    SimpleCurveWidget();
+    virtual ~SimpleCurveWidget();
+    void clear();
+
+    void addXAxis();
+    void addYAxis();
+    void addHorizontalLine(double dY);
+
+    void setYLogAxis(bool bSetLogAxis);
+
+    void addCurve(const vector<float>& vfX, const vector<float>& vfY,unsigned int iColorRGB=0xFFFFFF);
+    void addCurve(const vector<double>& vdX, const vector<double>& vdY,unsigned int iColorRGB=0xFFFFFF);
+
+private:
+    QwtPlotZoomer* _zoomer;
+
+};
+
+
+#else
+
+#include <QGraphicsScene>
+#include <QGraphicsView>
+
 class SimpleCurveWidget: public QGraphicsView
 {
 Q_OBJECT
 public:
+
+
     SimpleCurveWidget();
     virtual ~SimpleCurveWidget();
-
-    void addCurve(const vector<float>& vfX, const vector<float>& vfY,unsigned int iColorRGB=0xFFFFFF);
-    void addCurve(const vector<double>& vdX, const vector<double>& vdY,unsigned int iColorRGB=0xFFFFFF);
     void clear();
 
     void addXAxis();
+    void addYAxis();
     void addHorizontalLine(double dY);
 
-    void addYAxis();
+    void addCurve(const vector<float>& vfX, const vector<float>& vfY,unsigned int iColorRGB=0xFFFFFF);
+    void addCurve(const vector<double>& vdX, const vector<double>& vdY,unsigned int iColorRGB=0xFFFFFF);
+
     void setYLogAxis(bool bSetLogAxis);
 
 public slots:
@@ -57,4 +90,5 @@ private:
     QGraphicsScene _qs;
 };
 
+#endif
 #endif
