@@ -12,6 +12,7 @@ Implemented so far:
 - PoolAveraging1D layer (WIP)
 - Softmax layer
 - PRelu layer
+- Class balancing
 - layers and activations are decoupled and can be in any orders
 - mini batch learn, SGD learn, batch learn
 - optimizers: SGD, Momentum, Nesterov, Adam, Nadam, Adagrad, Adamax, RMSprop, RPROP-, iRPROP-
