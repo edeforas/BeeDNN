@@ -921,6 +921,44 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+// SQ-RBF as in : Computationally Efficient Radial Basis Function
+//                Adedamola Wuraola, Nitish D. Patel
+class ActivationSQRBF: public Activation
+{
+public:
+    string name() const override
+    {
+        return "SQ-RBF";
+    }
+
+    float apply(float x) const override
+    {
+        if(fabs(x)>=2.f)
+            return 0.f;
+
+		if(fabs(x)<=1.f)
+			return 1.f-x*x*0.5f;
+		
+        if(x>=0.f)
+            return x*x*0.5f-2.f*x+2.f; //todo factorize
+        else
+            return x*x*0.5f+2.f*x+2.f; //todo factorize
+    }
+    float derivation(float x) const override
+    {
+        if(fabs(x)>=2.f)
+            return 0.f;
+
+		if(fabs(x)<=1.f)
+			return 1.f-x;
+
+        if(x>=0.f)
+            return x-2.f;
+        else
+            return x+2.f;
+    }
+};
+//////////////////////////////////////////////////////////////////////////////
 class ActivationTanh : public Activation
 {
 public:
@@ -1056,6 +1094,9 @@ Activation* get_activation(const string& sActivation)
     else if(sActivation=="SQNL")
         return new ActivationSQNL;
 
+    else if(sActivation=="SQ-RBF")
+        return new ActivationSQRBF;
+
     else if(sActivation=="SoftPlus")
         return new ActivationSoftPlus;
 
@@ -1124,6 +1165,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("SoftShrink");
     vsActivations.push_back("SoftSign");
     vsActivations.push_back("SQNL");
+    vsActivations.push_back("SQ-RBF");
     vsActivations.push_back("Sigmoid");
     vsActivations.push_back("SinC");
     vsActivations.push_back("Sin");
