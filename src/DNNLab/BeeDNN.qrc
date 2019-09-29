@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/BeeDNN">
+        <file>BeeDNN.ico</file>
+    </qresource>
+</RCC>

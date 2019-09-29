@@ -315,14 +315,15 @@ void MainWindow::on_actionQuit_triggered()
 void MainWindow::on_actionAbout_triggered()
 {
     QMessageBox mb;
-    QString qsText="DNNLab";
+    QString qsText="DNNLab v1";
     qsText+= "\n";
     qsText+= "\n GitHub: https://github.com/edeforas/BeeDNN";
     qsText+= "\n by Etienne de Foras";
     qsText+="\n email: etienne.deforas@gmail.com";
 
-    mb.setText(qsText);
-    mb.exec();
+    mb.setText(qsText);  
+	mb.setIconPixmap(QPixmap(":/BeeDNN/BeeDNN.ico"));
+    mb.exec();		
 }
 //////////////////////////////////////////////////////////////////////////
 void MainWindow::resizeEvent( QResizeEvent *e )

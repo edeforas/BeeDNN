@@ -87,3 +87,7 @@ FORMS    += \
     FrameNetwork.ui \
     FrameGlobal.ui \
     FrameLearning.ui
+
+RESOURCES += BeeDNN.qrc
+RC_ICONS = BeeDNN.ico
+
