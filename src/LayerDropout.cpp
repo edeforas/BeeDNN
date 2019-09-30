@@ -8,6 +8,8 @@
 
 #include "LayerDropout.h"
 
+#include <cstdlib> //for rand
+
 ///////////////////////////////////////////////////////////////////////////////
 LayerDropout::LayerDropout(int iSize,float fRate):
     Layer(iSize,iSize,"Dropout"),
@@ -35,10 +37,15 @@ void LayerDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 void LayerDropout::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
     (void)mInput;
-
 	assert(_bTrainMode);
-    mGradientIn= mGradientOut*_mask.asDiagonal();
-	init();
+	
+	if(_fRate!=0.f)
+	{
+		mGradientIn= mGradientOut*_mask.asDiagonal();
+		init();
+	}
+	else
+		mGradientIn= mGradientOut;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDropout::init()

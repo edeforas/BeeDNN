@@ -978,6 +978,25 @@ public:
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
+class ActivationTanhShrink : public Activation
+{
+public:
+	string name() const override
+	{
+		return "TanhShrink";
+	}
+
+	float apply(float x) const override
+	{
+		return x-tanhf(x);
+	}
+	float derivation(float x) const override
+	{
+		float t = tanhf(x);
+		return  t * t;
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
 // as in: https://keras.io/layers/advanced-activations/
 // for now with theta =1
 class ActivationThresholdedRelu : public Activation
@@ -1121,6 +1140,9 @@ Activation* get_activation(const string& sActivation)
     else if(sActivation=="Tanh")
         return new ActivationTanh;
 
+    else if(sActivation=="TanhShrink")
+        return new ActivationTanhShrink;
+
     else if (sActivation == "ThresholdedRelu")
 		return new ActivationThresholdedRelu;
 
@@ -1171,6 +1193,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("Sin");
     vsActivations.push_back("Swish");
     vsActivations.push_back("Tanh");
+	vsActivations.push_back("TanhShrink");
 	vsActivations.push_back("ThresholdedRelu");
 }
 //////////////////////////////////////////////////////////////////////////////
