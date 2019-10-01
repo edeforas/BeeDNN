@@ -405,6 +405,34 @@ public:
 		}
 	}
 };
+
+//////////////////////////////////////////////////////////////////////////////
+// Mish from : https://arxiv.org/abs/1908.08681
+// and https://github.com/digantamisra98/Mish
+// or paper: Mish: A Self Regularized Non-Monotonic Neural Activation Function ; Diganta Misra
+class ActivationMish: public Activation
+{
+public:
+    string name() const override
+    {
+        return "Mish";
+    }
+
+    float apply(float x) const override
+    {
+		float tempSoftplus=log1pf(expf(x));
+        return x*tanhf(tempSoftplus);
+    }
+
+    float derivation(float x) const override
+    {
+		float ex=expf(x);
+        float w=4.f*(x+1.f) + 4.f*ex*ex + ex*ex*ex + ex*(4.f*x+6.f); //todo factorize
+		float delta=2.f*ex+ex*ex+2.f;  //todo factorize
+		return ex*w/(delta*delta);
+    }
+};
+
 //////////////////////////////////////////////////////////////////////////////
 // from: https://en.wikipedia.org/wiki/Activation_function
 class ActivationSin : public Activation
@@ -1094,6 +1122,9 @@ Activation* get_activation(const string& sActivation)
 
 	else if(sActivation == "LogSigmoid")
 		return new ActivationLogSigmoid;
+
+	else if(sActivation=="Mish")
+        return new ActivationMish;
 	
 	else if(sActivation=="NLRelu")
         return new ActivationNLRelu;
@@ -1178,6 +1209,7 @@ void list_activations_available(vector<string>& vsActivations)
 	vsActivations.push_back("LecunTanh");
     vsActivations.push_back("Logit");
     vsActivations.push_back("LogSigmoid");
+    vsActivations.push_back("Mish");	
     vsActivations.push_back("NLRelu");
     vsActivations.push_back("Parablu");
     vsActivations.push_back("Relu");
