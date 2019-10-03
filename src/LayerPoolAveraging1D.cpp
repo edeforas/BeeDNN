@@ -37,14 +37,14 @@ void LayerPoolAveraging1D::init()
             _weight(i*iWindowSize+j,i)=fInvWeight; //todo do not use a diagonal matrix for this computation
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPoolAveraging1D::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
+void LayerPoolAveraging1D::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 {
-    mMatOut = mMatIn * _weight; //todo do not use a diagonal matrix for this computation
+    mOut = mIn * _weight; //todo do not use a diagonal matrix for this computation
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPoolAveraging1D::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
+void LayerPoolAveraging1D::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
-    (void)mInput;
+    (void)mIn;
 
     mGradientIn = mGradientOut * (_weight.transpose()); //to do , do not update weight!!!!!!!!!!!!!!!!! FAIL
 }

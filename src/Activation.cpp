@@ -259,6 +259,31 @@ public:
         return -2.f*x*expf(-x*x);
     }
 };
+
+//////////////////////////////////////////////////////////////////////////////
+// GELU from the paper: https://arxiv.org/pdf/1606.08415.pdf
+// or GAUSSIAN ERROR LINEAR UNITS (GELUS) ; Dan Hendrycks and Kevin Gimpel
+// and https://medium.com/@shoray.goel/gelu-gaussian-error-linear-unit-4ec59fb2e47c
+// approximation version and numbers rounded to 1e-6
+class ActivationGELU: public Activation
+{
+public:
+    string name() const override
+    {
+        return "GELU";
+    }
+
+    float apply(float x) const override
+    {
+        return 0.5f*x*(1.f+tanhf(1.772454f*x*(1.f+0.044715f*x*x)));
+    }
+
+    float derivation(float x) const override
+    {
+        float fSech=1.f/coshf(1.772454f*x*(0.044715f*x*x+1.f));
+        return 0.5f*tanh(1.772454f*x*(0.044715f*x*x+1.f))+x*(0.118883f*x*x+0.886227f)*fSech*fSech+0.5f;
+    }
+};
 /////////////////////////////////////////////////////////////////////////////
 // HardELU, ELU approximation, quick and easy to convert in fixed point
 // Author is Minh Tri LE
@@ -426,10 +451,19 @@ public:
 
     float derivation(float x) const override
     {
+        /*
+        //paper version, todo factorize to avoid divergence inf/inf
 		float ex=expf(x);
         float w=4.f*(x+1.f) + 4.f*ex*ex + ex*ex*ex + ex*(4.f*x+6.f); //todo factorize
 		float delta=2.f*ex+ex*ex+2.f;  //todo factorize
 		return ex*w/(delta*delta);
+        */
+
+        //version from derivative definition
+        float ex=expf(x);
+        float tempSoftplus=log1pf(ex);
+        float tempSech=1.f/coshf(tempSoftplus);
+        return tanh(tempSoftplus)+  x*ex*tempSech * tempSech/(ex+1);
     }
 };
 
@@ -1087,7 +1121,10 @@ Activation* get_activation(const string& sActivation)
     else if(sActivation=="Gauss")
         return new ActivationGauss;
 	
-	else if(sActivation=="HardELU")
+    else if(sActivation=="GELU")
+        return new ActivationGELU;
+
+    else if(sActivation=="HardELU")
         return new ActivationHardELU;
 
     else if(sActivation=="HardSigmoid")
@@ -1197,6 +1234,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("ELU");
     vsActivations.push_back("Exponential");
     vsActivations.push_back("Gauss");
+    vsActivations.push_back("GELU");
     vsActivations.push_back("HardELU");
     vsActivations.push_back("HardSigmoid");
     vsActivations.push_back("HardShrink");

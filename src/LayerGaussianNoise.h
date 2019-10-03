@@ -27,7 +27,7 @@ public:
 
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) const override;
 
-    virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
+    virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 
     float get_std() const;
 

@@ -46,29 +46,29 @@ void LayerDense::init()
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerDense::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
+void LayerDense::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 {
     if (_bHasBias)
-        mMatOut = rowWiseAdd(mMatIn *_weight.topRows(_iInSize) , _weight.row(_iInSize)); //split _weight in [weightnobias, bias] in computation
+        mOut = rowWiseAdd(mIn *_weight.topRows(_iInSize) , _weight.row(_iInSize)); //split _weight in [weightnobias, bias] in computation
     else
-        mMatOut = mMatIn * _weight;
+        mOut = mIn * _weight;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerDense::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
+void LayerDense::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
     if (_bHasBias)
     {
 		// optimisation: split _weight in [weightnobias, bias]
-		_gradientWeight = ((addColumnOfOne(mInput)).transpose())*mGradientOut; //todo optimize
+		_gradientWeight = ((addColumnOfOne(mIn)).transpose())*mGradientOut; //todo optimize
         mGradientIn = mGradientOut * _weight.topRows(_iInSize).transpose();
     }
     else
     {
-        _gradientWeight = (mInput.transpose())*mGradientOut;
+        _gradientWeight = (mIn.transpose())*mGradientOut;
         mGradientIn = mGradientOut * (_weight.transpose());
     }
 
-	_gradientWeight *= (1.f / mInput.rows());
+	_gradientWeight *= (1.f / mIn.rows());
 }
 ///////////////////////////////////////////////////////////////
 bool LayerDense::has_bias() const

@@ -34,9 +34,9 @@ void LayerDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
         mOut = mIn; // in test mode
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerDropout::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
+void LayerDropout::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
-    (void)mInput;
+    (void)mIn;
 	assert(_bTrainMode);
 	
 	if(_fRate!=0.f)

@@ -43,9 +43,9 @@ void LayerGaussianDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut) con
         mOut = mIn; // in test mode
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerGaussianDropout::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
+void LayerGaussianDropout::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
-    (void)mInput;
+    (void)mIn;
 	assert(_bTrainMode);
     mGradientIn= mGradientOut*_mask.asDiagonal();
 	init();

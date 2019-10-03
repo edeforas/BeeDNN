@@ -23,8 +23,8 @@ public:
 
 	virtual bool has_weight() const override;
 
-    virtual void forward(const MatrixFloat& mMatin, MatrixFloat &mMatOut) const override;
-    virtual void backpropagation(const MatrixFloat &mInput,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
+    virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) const override;
+    virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 };
 
 #endif

@@ -34,14 +34,14 @@ void LayerGlobalBias::init()
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerGlobalBias::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
+void LayerGlobalBias::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 {
-    mMatOut = mMatIn.array() + _weight(0);
+    mOut = mIn.array() + _weight(0);
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerGlobalBias::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
+void LayerGlobalBias::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
-    _gradientWeight = colWiseMean(mInput);
+    _gradientWeight = colWiseMean(mIn);
 	
     mGradientIn = mGradientOut;
 }

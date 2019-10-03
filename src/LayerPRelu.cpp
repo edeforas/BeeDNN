@@ -38,26 +38,26 @@ void LayerPRelu::init()
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPRelu::forward(const MatrixFloat& mMatIn,MatrixFloat& mMatOut) const
+void LayerPRelu::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 {
-    mMatOut = mMatIn;
+    mOut = mIn;
 
-	for (int i = 0; i < mMatOut.rows(); i++)
-		for (int j = 0; j < mMatOut.cols(); j++)
+	for (int i = 0; i < mOut.rows(); i++)
+		for (int j = 0; j < mOut.cols(); j++)
 		{
-			if (mMatOut(i,j) < 0.f)
-				mMatOut(i,j) *= _weight(j);
+			if (mOut(i,j) < 0.f)
+				mOut(i,j) *= _weight(j);
 		}
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPRelu::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
+void LayerPRelu::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
 	// compute gradient in and gradient weight
 	mGradientIn = mGradientOut;
 	for (int i = 0; i < mGradientIn.rows(); i++)
 		for (int j = 0; j < mGradientIn.cols(); j++)
 		{
-			if (mInput(i, j) < 0.f)
+			if (mIn(i, j) < 0.f)
 			{
 				mGradientIn(i, j) *= _weight(j);
 				_gradientWeight(j) += _weight(j);
@@ -68,7 +68,7 @@ void LayerPRelu::backpropagation(const MatrixFloat &mInput,const MatrixFloat &mG
 			}
 		}
 
-	_gradientWeight *= (1.f / mInput.rows());
+	_gradientWeight *= (1.f / mIn.rows());
 }
 ///////////////////////////////////////////////////////////////
 bool LayerPRelu::has_weight() const
