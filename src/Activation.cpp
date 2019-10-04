@@ -264,7 +264,7 @@ public:
 // GELU from the paper: https://arxiv.org/pdf/1606.08415.pdf
 // or GAUSSIAN ERROR LINEAR UNITS (GELUS) ; Dan Hendrycks and Kevin Gimpel
 // and https://medium.com/@shoray.goel/gelu-gaussian-error-linear-unit-4ec59fb2e47c
-// approximation version and numbers rounded to 1e-6
+// approximation version and numbers rounded to 1.e-6
 class ActivationGELU: public Activation
 {
 public:
@@ -430,7 +430,6 @@ public:
 		}
 	}
 };
-
 //////////////////////////////////////////////////////////////////////////////
 // Mish from : https://arxiv.org/abs/1908.08681
 // and https://github.com/digantamisra98/Mish
@@ -442,31 +441,20 @@ public:
     {
         return "Mish";
     }
-
     float apply(float x) const override
     {
 		float tempSoftplus=log1pf(expf(x));
         return x*tanhf(tempSoftplus);
     }
-
     float derivation(float x) const override
     {
-        /*
-        //paper version, todo factorize to avoid divergence inf/inf
-		float ex=expf(x);
-        float w=4.f*(x+1.f) + 4.f*ex*ex + ex*ex*ex + ex*(4.f*x+6.f); //todo factorize
-		float delta=2.f*ex+ex*ex+2.f;  //todo factorize
-		return ex*w/(delta*delta);
-        */
-
-        //version from derivative definition
+        //version from derivative computation
         float ex=expf(x);
         float tempSoftplus=log1pf(ex);
         float tempSech=1.f/coshf(tempSoftplus);
-        return tanh(tempSoftplus)+  x*ex*tempSech * tempSech/(ex+1);
+        return tanh(tempSoftplus)+  x*ex*tempSech * tempSech/(ex+1.f);
     }
 };
-
 //////////////////////////////////////////////////////////////////////////////
 // from: https://en.wikipedia.org/wiki/Activation_function
 class ActivationSin : public Activation
@@ -581,24 +569,24 @@ public:
 
     float apply(float x) const override
     {
-        if(x>=6)
-            return 6;
+        if(x>=6.f)
+            return 6.f;
 
-        if(x<=0)
-            return 0;
+        if(x<=0.f)
+            return 0.f;
 
         return x;
     }
 
     float derivation(float x) const override
     {
-        if(x>=6)
-            return 0;
+        if(x>=6.f)
+            return 0.f;
 
-        if(x<=0)
-            return 0;
+        if(x<=0.f)
+            return 0.f;
 
-        return 1;
+        return 1.f;
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -857,6 +845,27 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+// from : https://arxiv.org/pdf/1702.03118.pdf
+// or paper : Sigmoid-Weighted Linear Units for Neural Network Function ; Stefan Elfwinga Eiji Uchibea Kenji Doyab
+class ActivationSiLU: public Activation
+{
+public:
+    string name() const override
+    {
+        return "SiLU";
+    }
+    float apply(float x) const override
+    {
+        return x/(1.f+expf(-x));
+    }
+    float derivation(float x) const override
+    {
+        float ex=expf(-x);
+        float exinv=1.f/(1.f+ex);
+        return exinv*(1.f+x*ex*exinv);
+    }
+};
+//////////////////////////////////////////////////////////////////////////////
 // hard sigmoid as in: https://github.com/Theano/Theano/blob/master/theano/tensor/nnet/sigm.py#L277
 class ActivationHardSigmoid: public Activation
 {
@@ -904,7 +913,7 @@ public:
     float derivation(float x) const override
     {
         float s=1.f/(1.f+expf(-x));
-        return s*(x+1-x*s); //todo optimize
+        return s*(x+1.f-x*s); //todo optimize
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -983,8 +992,7 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
-// SQ-RBF as in : Computationally Efficient Radial Basis Function
-//                Adedamola Wuraola, Nitish D. Patel
+// SQ-RBF as in : Computationally Efficient Radial Basis Function ; Adedamola Wuraola, Nitish D. Patel
 class ActivationSQRBF: public Activation
 {
 public:
@@ -1187,14 +1195,17 @@ Activation* get_activation(const string& sActivation)
     else if(sActivation=="SoftPlus")
         return new ActivationSoftPlus;
 
+    else if(sActivation=="Sigmoid")
+        return new ActivationSigmoid;
+
+    else if(sActivation=="SiLU")
+        return new ActivationSiLU;
+
     else if(sActivation=="Sin")
         return new ActivationSin;
 
     else if(sActivation=="SinC")
         return new ActivationSinC;
-
-    else if(sActivation=="Sigmoid")
-        return new ActivationSigmoid;
 
     else if(sActivation=="Swish")
         return new ActivationSwish;
@@ -1259,6 +1270,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("SQNL");
     vsActivations.push_back("SQ-RBF");
     vsActivations.push_back("Sigmoid");
+    vsActivations.push_back("SiLU");
     vsActivations.push_back("SinC");
     vsActivations.push_back("Sin");
     vsActivations.push_back("Swish");

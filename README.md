@@ -17,7 +17,7 @@ Implemented so far:
 - mini batch learn, SGD learn, batch learn
 - optimizers: SGD, Momentum, Nesterov, Adam, Nadam, Adagrad, Adamax, RMSprop, RPROP-, iRPROP-
 - classification or regression, test and/or learn
-- many activation functions: Absolute, Asinh, Atan, Bent, BinaryStep, Bipolar, BipolarSigmoid, ComplementaryLogLog, Elliot, ELU, Exponential, Gauss, GELU, HardELU, HardSigmoid, HardShrink, HardTanh, ISRELU, Linear, LeakyRelu, LeakyRelu256, LecunTanh, Logit, LogSigmoid, TwiceLeakyRelu6, Mish, NLRelu, Parablu, Relu, Relu6, Selu, SQNL, SQ-RBF, SoftPlus, Sin, SinC, Sigmoid, Swish, SoftShrink, SoftSign, Tanh, TanhShrink, ThresholdedRelu
+- many activation functions: Absolute, Asinh, Atan, Bent, BinaryStep, Bipolar, BipolarSigmoid, ComplementaryLogLog, Elliot, ELU, Exponential, Gauss, GELU, HardELU, HardSigmoid, HardShrink, HardTanh, ISRELU, Linear, LeakyRelu, LeakyRelu256, LecunTanh, Logit, LogSigmoid, TwiceLeakyRelu6, Mish, NLRelu, Parablu, Relu, Relu6, Selu, SQNL, SQ-RBF, SoftPlus, Sin, SinC, Sigmoid, SiLU, Swish, SoftShrink, SoftSign, Tanh, TanhShrink, ThresholdedRelu
 - Loss functions can be: MeanSquareError, MeanAbsoluteError, L2, L1, LogCosh, CrossEntropy or BinaryCrossEntropy
 - optional eigen use (http://eigen.tuxfamily.org), or use internal matrix library
 - network and weights are saved in a plain .txt file
