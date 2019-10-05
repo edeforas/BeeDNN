@@ -11,7 +11,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_regression_sin", "sa
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_MetaOptimizer_MNIST", "sample_code\sample_MetaOptimizer_MNIST.vcxproj", "{619EC855-2EDB-40BA-B244-0E6345727D8D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DNNLab_qwt", "DNNLab\DNNLab_qwt.vcxproj", "{1A46F9A0-A07F-4758-94AF-B6D02C5C9781}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DNNLab", "DNNLab\DNNLab.vcxproj", "{1A46F9A0-A07F-4758-94AF-B6D02C5C9781}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

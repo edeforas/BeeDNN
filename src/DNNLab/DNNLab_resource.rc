@@ -1,6 +1,6 @@
 #include <windows.h>
 
-IDI_ICON1	ICON	DISCARDABLE	"BeeDNN.ico"
+IDI_ICON1	ICON	DISCARDABLE	"C:\\Etienne\\src\\github\\BeeDNN\\src\\DNNLab\\BeeDNN.ico"
 
 VS_VERSION_INFO VERSIONINFO
 	FILEVERSION 0,0,0,0
@@ -23,8 +23,8 @@ VS_VERSION_INFO VERSIONINFO
 				VALUE "FileDescription", "\0"
 				VALUE "FileVersion", "0.0.0.0\0"
 				VALUE "LegalCopyright", "\0"
-				VALUE "OriginalFilename", "DNNLab_qwt.exe\0"
-				VALUE "ProductName", "DNNLab_qwt\0"
+				VALUE "OriginalFilename", "DNNLab.exe\0"
+				VALUE "ProductName", "DNNLab\0"
 				VALUE "ProductVersion", "0.0.0.0\0"
 			END
 		END
