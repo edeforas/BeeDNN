@@ -866,6 +866,31 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+// from : https://arxiv.org/pdf/1702.03118.pdf
+// or paper : Sigmoid-Weighted Linear Units for Neural Network Function ; Stefan Elfwinga Eiji Uchibea Kenji Doyab
+class ActivationdSiLU: public Activation
+{
+public:
+    string name() const override
+    {
+        return "dSiLU";
+    }
+    float apply(float x) const override
+    {
+        float ex=expf(-x);
+        float exinv=1.f/(1.f+ex);
+        return exinv*(1.f+x*ex*exinv);
+    }
+    float derivation(float x) const override
+    {
+        float ex=expf(-x);
+        float exinv=1.f/(1.f+ex);
+
+//		return -x*ex*exinv*exinv+2.f*ex*exinv*exinv+2.f*x*ex*ex*exinv*exinv*exinv;
+		return ex*exinv*exinv*(2.f+x*(2.f*ex*exinv-1.f));
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
 // hard sigmoid as in: https://github.com/Theano/Theano/blob/master/theano/tensor/nnet/sigm.py#L277
 class ActivationHardSigmoid: public Activation
 {
@@ -1117,6 +1142,9 @@ Activation* get_activation(const string& sActivation)
 	else if(sActivation == "DivideBy256")
 		return new ActivationDivideBy256;
 
+	else if(sActivation == "dSiLU")
+		return new ActivationdSiLU;
+
     else if(sActivation=="Elliot")
         return new ActivationElliot;
 
@@ -1241,6 +1269,7 @@ void list_activations_available(vector<string>& vsActivations)
 	vsActivations.push_back("BipolarSigmoid");
 	vsActivations.push_back("ComplementaryLogLog");
 	vsActivations.push_back("DivideBy256");
+	vsActivations.push_back("dSiLU");
     vsActivations.push_back("Elliot");
     vsActivations.push_back("ELU");
     vsActivations.push_back("Exponential");
