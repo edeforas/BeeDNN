@@ -31,8 +31,9 @@ int main()
     //train net
     cout << "Fitting..." << endl;
 	NetTrain netfit;
+	netfit.set_net(net);
 	netfit.set_train_data(mSamples, mTruth);
-	netfit.fit(net);
+	netfit.fit();
 
     //print truth and prediction
 	MatrixFloat mPredict;
@@ -41,7 +42,7 @@ int main()
         cout << setprecision(4) << "x=" << mSamples(i,0) << "\ttruth=" << mTruth(i,0) << "\tpredict=" << mPredict(i,0) <<endl;
 
     //compute and print loss
-    float fLoss=netfit.compute_loss(net,mSamples,mTruth);
+    float fLoss=netfit.compute_loss(mSamples,mTruth);
     cout << "Loss=" << fLoss << endl;
 
     return 0;

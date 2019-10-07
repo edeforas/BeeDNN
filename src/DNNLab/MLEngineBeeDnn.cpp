@@ -69,11 +69,12 @@ void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat&
 {
     _pTrain->clear(); //todo remove
 	_pTrain->set_train_data(mSamples, mTruth);
+    _pTrain->set_net(*_pNet);
 
     if(_pNet->is_classification_mode()) //todo call 1 function in_pTrain , learn?
-        _pTrain->train(*_pNet);
+        _pTrain->train();
     else
-        _pTrain->fit(*_pNet);
+        _pTrain->fit();
 
     _vfTrainLoss.insert(_vfTrainLoss.end(),_pTrain->get_train_loss().begin(),_pTrain->get_train_loss().end());
     _vfTrainAccuracy.insert(_vfTrainAccuracy.end(),_pTrain->get_train_accuracy().begin(),_pTrain->get_train_accuracy().end());
@@ -175,7 +176,7 @@ void MLEngineBeeDnn::classify_all(const MatrixFloat & mSamples, MatrixFloat& mRe
 //////////////////////////////////////////////////////////////////////////////
 float MLEngineBeeDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)
 {
-    return _pTrain->compute_loss(*_pNet,mSamples,mTruth);
+    return _pTrain->compute_loss(mSamples,mTruth);
 }
 //////////////////////////////////////////////////////////////////////////////
 

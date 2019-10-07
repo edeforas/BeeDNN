@@ -60,6 +60,7 @@ int main()
 
 	//train net
 	cout << "Training..." << endl <<endl;
+	netTrain.set_net(net);
 	netTrain.set_epochs(10);
 	netTrain.set_batchsize(64);
 
@@ -67,7 +68,7 @@ int main()
 	netTrain.set_epoch_callback(epoch_callback);
 	netTrain.set_train_data(mRefImages, mRefLabels);
 	start = chrono::steady_clock::now();
-	netTrain.train(net);
+	netTrain.train();
 
 	MatrixFloat mClassPredicted;
 	net.predict(mRefImages, mClassPredicted);

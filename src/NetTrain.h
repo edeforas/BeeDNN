@@ -20,11 +20,6 @@ class Optimizer;
 class Loss;
 class Net;
 
-
-
-class Layer;
-class Net;
-
 class NetTrain
 {
 public:
@@ -33,14 +28,13 @@ public:
 	NetTrain& operator=(const NetTrain& other);
 
     void clear();
-    float compute_loss(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth);
-    float compute_accuracy(const Net &net, const MatrixFloat & mSamples, const MatrixFloat& mTruth);
-
+	
+	void set_net(Net& net);
     void set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth);
 	void set_test_data(const MatrixFloat& mSamplesTest, const MatrixFloat& mTruthTest);
 
-	void train(Net& net); //classification task
-	void fit(Net& net); //regression task
+	void train(); //classification task
+	void fit(); //regression task
 
 	void set_epochs(int iEpochs); //100 by default
 	int get_epochs() const;
@@ -75,6 +69,9 @@ public:
 	void set_loss(const string&  sLoss); // "MeanSquareError" by default, ex "MeanSquareError" "CategoricalCrossEntropy"
 	string get_loss() const;
 
+	float compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth);
+	float compute_accuracy(const MatrixFloat & mSamples, const MatrixFloat& mTruth);
+
 	const vector<float>& get_train_loss() const;
 	const vector<float>& get_test_loss() const;
     const vector<float>& get_train_accuracy() const;
@@ -84,13 +81,11 @@ public:
 	float get_current_accuracy() const;
 
 private:
-	void train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth);
-	
-	//class weight balancing loss
+	void train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth); //all the backprop is here	
     void update_class_weight(); // compute balanced class weight loss (if asked) and update loss
-	
-	//online statistics, i.e. loss, accuracy ...
-	void add_online_statistics(const MatrixFloat&mPredicted, const MatrixFloat&mTruth);
+	void add_online_statistics(const MatrixFloat&mPredicted, const MatrixFloat&mTruth);	//online statistics, i.e. loss, accuracy ..
+	void clear_optimizers();
+
 	int _iOnlineAccuracyGood;
 	float _fOnlineLoss;
 
@@ -106,6 +101,9 @@ private:
 	float _fDecay;
 	float _fMomentum;
 
+	Net* _pNet;
+	Loss* _pLoss;
+
 	vector<Optimizer*> _optimizers;
 	vector<MatrixFloat> _inOut;
 	vector<MatrixFloat> _gradient;
@@ -118,8 +116,6 @@ private:
 
 	std::function<void()> _epochCallBack;
 
-	Net* _pNet;
-	Loss* _pLoss;
     vector<float> _trainLoss;
     vector<float> _testLoss;
     vector<float> _trainAccuracy;

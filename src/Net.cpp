@@ -200,7 +200,8 @@ size_t Net::size() const
 void Net::init()
 {
     if(_layers.empty())
-        return ;
+        return;
+
     _layers[0]->set_input_size(_iInputSize);
 
     for(unsigned int i=0;i<_layers.size();i++)

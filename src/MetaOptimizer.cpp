@@ -50,12 +50,11 @@ void MetaOptimizer::run()
 int MetaOptimizer::run_thread(int iThread, MetaOptimizer* self)
 {
 	//copy ref net
-	Net netT;
-	netT= *(self->_pNet);
+	Net netT= *(self->_pNet);
 	NetTrain trainT;
 	trainT= *(self->_pTrain);
-
-	trainT.train(netT);
+	trainT.set_net(netT);
+	trainT.train();
 
 	/*
 	
