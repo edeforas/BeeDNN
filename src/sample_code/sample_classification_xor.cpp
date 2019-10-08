@@ -22,7 +22,6 @@ void test(bool bTest,string sMessage="")
 }
 /////////////////////////////////////////////////////////////////////
 
-
 int main()
 {
     //construct network, 2 input, 1 output
@@ -39,14 +38,15 @@ int main()
 
     //optimize network
 	NetTrain netFit;
+	netFit.set_net(net);
 	netFit.set_epochs(1000);
 	netFit.set_train_data(mSamples, mTruth);
-	netFit.fit(net);
 
-    //predict and show results
-    MatrixFloat mOut;
+	//predict and show results
+	netFit.train();
+	MatrixFloat mOut;
 	net.predict(mSamples, mOut);
-    cout << "0_xor_0=" << mOut(0) << endl << "0_xor_1=" << mOut(1) << endl << "1_xor_0=" << mOut(2) << endl << "1_xor_1=" << mOut(3) << endl;
+	cout << "0_xor_0=" << mOut(0) << endl << "0_xor_1=" << mOut(1) << endl << "1_xor_0=" << mOut(2) << endl << "1_xor_1=" << mOut(3) << endl;
 
 	//simple testU code
 	test(is_near(mOut(0),0));

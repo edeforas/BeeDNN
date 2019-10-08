@@ -227,7 +227,7 @@ bool NetTrain::get_keepbest() const
     return _bKeepBest;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-float NetTrain::compute_loss(const MatrixFloat &mSamples, const MatrixFloat &mTruth)
+float NetTrain::compute_loss(const MatrixFloat &mSamples, const MatrixFloat &mTruth) const
 {
 	if (!_pNet->is_valid((int)mSamples.cols(), (int)mTruth.cols()))
 		return 0.f;
@@ -258,7 +258,7 @@ float NetTrain::compute_loss(const MatrixFloat &mSamples, const MatrixFloat &mTr
     return fLoss /iNbSamples;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-float NetTrain::compute_accuracy(const MatrixFloat &mSamples, const MatrixFloat &mTruth)
+float NetTrain::compute_accuracy(const MatrixFloat &mSamples, const MatrixFloat &mTruth) const
 {
     int iNbSamples = (int)mSamples.rows();
 
@@ -313,32 +313,25 @@ void NetTrain::set_test_data(const MatrixFloat& mSamplesTest, const MatrixFloat&
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::train()
 {
+	MatrixFloat mTruthOneHot;
+	bool bBetterNetFound = false;
+
 	if (_pNet == nullptr)
 		return;
 
-    if(_pNet->layers().size()==0)
-        return ; //nothing to do
-
-    bool bTruthIsLabel= (_pmTruthTrain->cols()==1);
-    if(bTruthIsLabel && (_pNet->output_size()!=1) )
-    {
-        //create binary label
-        MatrixFloat mTruthOneHot; // todo object lifetime !!!!!!
-        labelToOneHot(*_pmTruthTrain, mTruthOneHot);
-        set_train_data(*_pmSamplesTrain, mTruthOneHot); //TODODODODO!!
-		fit();
-    }
-	else
-		fit();
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::fit()
-{
-	if (_pNet == nullptr)
-		return;
-
-	if (_iNbLayers == 0)
+	if (_pNet->layers().size() == 0)
 		return; //nothing to do
+
+	if (_pNet->is_classification_mode())
+	{
+		bool bTruthIsLabel = (_pmTruthTrain->cols() == 1);
+		if (bTruthIsLabel && (_pNet->output_size() != 1))
+		{
+			//create binary label	
+			labelToOneHot(*_pmTruthTrain, mTruthOneHot);
+			set_train_data(*_pmSamplesTrain, mTruthOneHot);
+		}
+	}
 
 	update_class_weight();
 
@@ -408,7 +401,6 @@ void NetTrain::fit()
         MatrixFloat mSampleShuffled;
         MatrixFloat mTruthShuffled;
 
-
         if (iBatchSizeLocal < iNbSamples)
         {
             auto vShuffle = randPerm(iNbSamples);
@@ -450,13 +442,14 @@ void NetTrain::fit()
             _trainAccuracy.push_back(_fCurrentAccuracy);
         }
 
+		// 
         if (_pmSamplesTest != nullptr)
-        {
-			_fCurrentAccuracy = compute_accuracy( *_pmSamplesTest, *_pmTruthTest);
-            _testAccuracy.push_back(_fCurrentAccuracy);
+        { 	//should we use the test db to keep the best model?
+			float fTestLoss =compute_loss( *_pmSamplesTest, *_pmTruthTest);
+            _testLoss.push_back(fTestLoss);
 
-			_fCurrentLoss =compute_loss( *_pmSamplesTest, *_pmTruthTest);
-            _testLoss.push_back(_fCurrentLoss);
+			float fTestAccuracy = compute_accuracy( *_pmSamplesTest, *_pmTruthTest);
+            _testAccuracy.push_back(fTestAccuracy);
         }
 
         if (_epochCallBack)
@@ -471,6 +464,7 @@ void NetTrain::fit()
                 {
                     fMaxAccuracy= _fCurrentAccuracy;
                     bestNet= *_pNet;
+					bBetterNetFound = true;
                 }
             }
             else
@@ -479,6 +473,7 @@ void NetTrain::fit()
                 {
                     fMinLoss= _fCurrentLoss;
                     bestNet= *_pNet;
+					bBetterNetFound = true;
                 }
             }
         }
@@ -497,7 +492,7 @@ void NetTrain::fit()
         }
     }
 
-	if( (_bKeepBest) && (bestNet.size()!=0) )
+	if(bBetterNetFound )
 		(*_pNet).operator=(bestNet);
 
     return ;

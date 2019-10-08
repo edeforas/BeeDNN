@@ -33,7 +33,7 @@ int main()
 	NetTrain netfit;
 	netfit.set_net(net);
 	netfit.set_train_data(mSamples, mTruth);
-	netfit.fit();
+	netfit.train();
 
     //print truth and prediction
 	MatrixFloat mPredict;

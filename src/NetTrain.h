@@ -33,8 +33,7 @@ public:
     void set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth);
 	void set_test_data(const MatrixFloat& mSamplesTest, const MatrixFloat& mTruthTest);
 
-	void train(); //classification task
-	void fit(); //regression task
+	void train();
 
 	void set_epochs(int iEpochs); //100 by default
 	int get_epochs() const;
@@ -69,8 +68,8 @@ public:
 	void set_loss(const string&  sLoss); // "MeanSquareError" by default, ex "MeanSquareError" "CategoricalCrossEntropy"
 	string get_loss() const;
 
-	float compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth);
-	float compute_accuracy(const MatrixFloat & mSamples, const MatrixFloat& mTruth);
+	float compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth) const;
+	float compute_accuracy(const MatrixFloat & mSamples, const MatrixFloat& mTruth) const;
 
 	const vector<float>& get_train_loss() const;
 	const vector<float>& get_test_loss() const;
