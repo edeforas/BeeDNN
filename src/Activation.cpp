@@ -159,6 +159,42 @@ public:
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
+// ELiSH as in: https://arxiv.org/pdf/1808.00783.pdf
+// or paper: The Quest for the Golden Activation Function ; Mina Basirat and Peter M. Roth
+class ActivationELiSH: public Activation
+{
+public:
+    string name() const override
+    {
+        return "ELiSH";
+    }
+
+    float apply(float x) const override
+    {
+        float exm=expf(-x);
+        if(x>=0.f)
+            return x/(1.f+exm);
+		else
+            return (1.f/exm-1.f)/(1.f+exm);
+	}
+    float derivation(float x) const override
+    {
+		if(x>=0.f)
+		{
+			float exm=expf(-x);
+            float invex=1.f/(exm+1.f);
+			return invex+x*exm*invex*invex;
+		}
+		else
+		{
+            float exm=expf(-x);
+            float invex=1.f/(exm+1.f);
+            float ex=1.f/exm;
+            return ex*invex+exm*(ex-1.f)*invex*invex;
+		}
+    }
+};
+//////////////////////////////////////////////////////////////////////////////
 class ActivationElliot: public Activation
 {
 public:
@@ -1145,6 +1181,9 @@ Activation* get_activation(const string& sActivation)
 	else if(sActivation == "dSiLU")
 		return new ActivationdSiLU;
 
+    else if(sActivation=="ELiSH")
+        return new ActivationELiSH;
+
     else if(sActivation=="Elliot")
         return new ActivationElliot;
 
@@ -1270,6 +1309,7 @@ void list_activations_available(vector<string>& vsActivations)
 	vsActivations.push_back("ComplementaryLogLog");
 	vsActivations.push_back("DivideBy256");
 	vsActivations.push_back("dSiLU");
+    vsActivations.push_back("ELiSH");
     vsActivations.push_back("Elliot");
     vsActivations.push_back("ELU");
     vsActivations.push_back("Exponential");

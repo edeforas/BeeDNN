@@ -9,6 +9,7 @@
 #include <qwt_plot_curve.h>
 #include <qwt_plot_grid.h>
 #include <qwt_scale_engine.h>
+#include <qwt_plot_marker.h>
 
 SimpleCurveWidget::SimpleCurveWidget(): QwtPlot()
 {
@@ -16,6 +17,7 @@ SimpleCurveWidget::SimpleCurveWidget(): QwtPlot()
     //   grid->attach( this );
 
     _zoomer = new QwtPlotZoomer(canvas() );
+//    _zoomer->setTrackerMode(QwtPlotZoomer::AlwaysOn); //show always mouse coordinate
 }
 //////////////////////////////////////////////////////////////////////////
 SimpleCurveWidget::~SimpleCurveWidget()
@@ -29,18 +31,20 @@ void SimpleCurveWidget::clear()
 //////////////////////////////////////////////////////////////////////////
 void SimpleCurveWidget::addXAxis()
 {
-    //TODO
+    enableAxis(xBottom );
 }
 //////////////////////////////////////////////////////////////////////////
 void SimpleCurveWidget::addYAxis()
 {
-    //TODO
+    enableAxis(yLeft );
 }
 //////////////////////////////////////////////////////////////////////////
 void SimpleCurveWidget::addHorizontalLine(double dY)
 {
-    (void)dY;
-    //TODO
+    QwtPlotMarker *mY = new QwtPlotMarker();
+    mY->setLineStyle(QwtPlotMarker::HLine);
+    mY->setYValue(dY);
+    mY->attach(this);
 }
 //////////////////////////////////////////////////////////////////////////
 void SimpleCurveWidget::setYLogAxis(bool bSetLogAxis)
@@ -83,7 +87,9 @@ void SimpleCurveWidget::addCurve(const vector<double>& vdX, const vector<double>
     curve->setPen(QColor(iColorRGB));
 
     curve->attach( this );
+
     setAxisAutoScale(0);
+    setAxisAutoScale(2);
     _zoomer->setZoomBase();
 }
 //////////////////////////////////////////////////////////////////////////

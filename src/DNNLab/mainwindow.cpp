@@ -34,23 +34,23 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->frameNetwork->set_main_window(this);
 
     _qsRegression=new SimpleCurveWidget;
+//    _qsRegression->addXAxis();
+//    _qsRegression->addYAxis();
 
-    _qsRegression->addXAxis();
-    _qsRegression->addYAxis();
     ui->layoutRegression->addWidget(_qsRegression);
     _qsRegression->setMinimumSize(0,0);
     _qsRegression->setSizePolicy(QSizePolicy ::Expanding , QSizePolicy ::Expanding );
 
     _qsLoss=new SimpleCurveWidget;
-    _qsLoss->addXAxis();
-    _qsLoss->addYAxis();
+    //_qsLoss->addXAxis();
+    //_qsLoss->addYAxis();
     ui->layoutLossCurve->addWidget(_qsLoss);
     _qsLoss->setMinimumSize(0,0);
     _qsLoss->setSizePolicy(QSizePolicy ::Expanding , QSizePolicy ::Expanding );
 
     _qsAccuracy=new SimpleCurveWidget;
-    _qsAccuracy->addXAxis();
-    _qsAccuracy->addYAxis();
+    //_qsAccuracy->addXAxis();
+    //_qsAccuracy->addYAxis();
     ui->layoutAccuracyCurve->addWidget(_qsAccuracy);
 _qsAccuracy->setMinimumSize(0,0);
     _qsAccuracy->setSizePolicy(QSizePolicy ::Expanding , QSizePolicy ::Expanding );
