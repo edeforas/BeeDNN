@@ -2,7 +2,6 @@ import math
 import numpy as np
 import copy
 
-
 ############################## layers
 class layer:
   def __init__(self):
@@ -145,8 +144,6 @@ class layer_dense_nobias(layer):
   def __init__(self,inSize,outSize):
     super().__init__()
     self.learnable = True
-    self.inSize = inSize
-    self.outSize = outSize
     self.w = np.random.rand(inSize,outSize) * 2. - 1.
 
   def forward(self,x):
@@ -155,9 +152,9 @@ class layer_dense_nobias(layer):
   def forward_and_gradient(self,x):
     self.dydw = x
     return x @ self.w
+
   def backpropagation(self,dldy):
-    dldw = self.dydw.transpose() @ dldy
-    self.dldw = dldw.mean(axis=0)
+    self.dldw = self.dydw.transpose() @ dldy
     return dldy @ (self.w.transpose())
 
 

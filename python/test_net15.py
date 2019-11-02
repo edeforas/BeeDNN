@@ -10,17 +10,15 @@ truth = np.exp(sample)
 
 # construct net
 n = nn.net()
-#n.append(nn.layer_dense_nobias(1,3))
-n.append(nn.layer_bias())
-n.append(nn.layer_gain())
+n.append(nn.layer_dense_nobias(1,3))
 n.append(nn.layer_relu())
-n.append(nn.layer_bias())
-n.append(nn.layer_gain())
-#n.append(nn.layer_bias())
+n.append(nn.layer_dense_nobias(3,5))
+n.append(nn.layer_relu())
+n.append(nn.layer_dense_nobias(5,1))
 
 # construct optimizer
 train = nn.net_train()
-train.set_optimizer(nn.optimizer_RPROPm())
+train.set_optimizer(nn.optimizer_momentum())
 train.epochs = 200
 train.set_loss(nn.loss_mse())
 train.train(n,sample,truth)
