@@ -16,8 +16,8 @@ n.append(nn.layer_dense(5,1))
 
 # construct optimizer
 train = nn.net_train()
-train.set_optimizer(nn.optimizer_sgd())
-train.epochs = 100
+train.set_optimizer(nn.optimizer_step())
+train.epochs = 1000
 train.set_loss(nn.loss_mse())
 train.train(n,sample,truth)
 

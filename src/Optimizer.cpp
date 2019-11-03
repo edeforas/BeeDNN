@@ -34,6 +34,36 @@ void Optimizer::set_params(float fLearningRate, float fDecay, float fMomentum)  
 	init();
 }
 //////////////////////////////////////////////////////////
+class OptimizerStep : public Optimizer
+{
+public:	
+    OptimizerStep()
+    {}
+
+    ~OptimizerStep() override
+    {}
+	
+	string name() const override
+	{
+		return "Step";
+	}
+
+    virtual void init() override
+    {
+		if (_fLearningRate == -1.f) _fLearningRate = 0.01f;
+	}
+
+    virtual void optimize(MatrixFloat& w,const MatrixFloat& dw) override
+    {
+		assert(w.rows() == dw.rows());
+		assert(w.cols() == dw.cols());
+
+        // Vanilla update
+        //	x += -learning_rate * dx
+        w -=  dw.cwiseSign() * _fLearningRate ;
+    }
+};
+//////////////////////////////////////////////////////////
 class OptimizerSGD : public Optimizer
 {
 public:	
@@ -568,6 +598,9 @@ Optimizer* create_optimizer(const string& sOptimizer)
 	if (sOptimizer == "SGD")
         return new OptimizerSGD();
 
+	if (sOptimizer == "Step")
+        return new OptimizerStep();
+
 	return nullptr;
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -585,5 +618,6 @@ void list_optimizers_available(vector<string>& vsOptimizers)
     vsOptimizers.push_back("RPROP-");
 	vsOptimizers.push_back("iRPROP-");
 	vsOptimizers.push_back("SGD");
+	vsOptimizers.push_back("Step");
 }
 //////////////////////////////////////////////////////////////////////////////

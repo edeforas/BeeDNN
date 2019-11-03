@@ -390,6 +390,16 @@ public:
         return out;
     }
 
+	Matrix<T> cwiseSign() const
+	{
+		Matrix<T> out(*this);
+
+		for (int i = 0; i < _iSize; i++)
+			out(i) = std::copysign(1.,_data[i]);
+
+		return out;
+	}
+
 	Matrix<T> cwiseAbs2() const
     {
         Matrix<T> out(*this);
@@ -399,16 +409,6 @@ public:
 
         return out;
     }
-
-	Matrix<T> cwiseSign() const
-	{
-		Matrix<T> out(*this);
-
-		for (int i = 0; i < _iSize; i++)
-			out(i) = (_data[i] >= 0.f)*2.f -1.f;
-
-		return out;
-	}
 
 	Matrix<T> log() const //todo check applies on an array only
 	{
