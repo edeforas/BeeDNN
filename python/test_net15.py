@@ -5,21 +5,19 @@ import matplotlib.pyplot as plt
 import BeeDNN as nn
 
 #create train data
-sample = np.arange(-4.,4.,0.01)[:,np.newaxis]
+sample = np.arange(-4.,4.,0.1)[:,np.newaxis]
 truth = np.exp(sample)
 
 # construct net
 n = nn.net()
-n.append(nn.layer_dense_nobias(1,3))
+n.append(nn.layer_dense(1,5))
 n.append(nn.layer_relu())
-n.append(nn.layer_dense_nobias(3,5))
-n.append(nn.layer_relu())
-n.append(nn.layer_dense_nobias(5,1))
+n.append(nn.layer_dense(5,1))
 
 # construct optimizer
 train = nn.net_train()
-train.set_optimizer(nn.optimizer_momentum())
-train.epochs = 200
+train.set_optimizer(nn.optimizer_sgd())
+train.epochs = 100
 train.set_loss(nn.loss_mse())
 train.train(n,sample,truth)
 

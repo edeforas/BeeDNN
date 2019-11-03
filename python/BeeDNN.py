@@ -81,7 +81,7 @@ class layer_swish(layer):
     return x * y
 
 ####################################### special layers
-class layer_bias(layer):
+class layer_global_bias(layer):
   def __init__(self):
     super().__init__()
     self.learnable = True
@@ -93,10 +93,10 @@ class layer_bias(layer):
   def forward_and_gradient(self,x):
     return x + self.w[0]
   def backpropagation(self,dldy):
-    self.dldw = dldy.mean(axis=0)
+    self.dldw = np.atleast_1d(dldy.mean()) #(axis=0)
     return dldy
 
-class layer_gain(layer):
+class layer_global_gain(layer):
   def __init__(self):
     super().__init__()
     self.learnable = True
@@ -111,40 +111,15 @@ class layer_gain(layer):
     self.dydw = x
     return x * self.w[0]
   def backpropagation(self,dldy):
-    self.dldw = (self.dydw * dldy).mean(axis=0)
+    self.dldw = np.atleast_1d((self.dydw * dldy).mean())
     return dldy * self.dydx
 
-"""
-	
-	
-class layer_affine(layer):
-  def __init__(self):
-    super().__init__()
-    self.learnable=True
-    self.w=np.zeros(2)
-    self.w[0]=1.
-    self.w[1]=0.
-
-  def forward(self,x):
-      return x*self.w[0]+self.w[1]
-  
-  def forward_and_gradient(self,x):
-    self.dydx=self.w[0]
-    self.dydw=np.concatenate((x,x*0.+1.),axis=1)
-    return x*self.w[0]+self.w[1]
-	
-  def backpropagation(self,dldy):
-    self.dldw=self.dydw*dldy
-    return dldy * self.dydx
-"""
-	
-	
-	
 class layer_dense_nobias(layer):
   def __init__(self,inSize,outSize):
     super().__init__()
     self.learnable = True
-    self.w = np.random.rand(inSize,outSize) * 2. - 1.
+    a=np.sqrt(6./(inSize+outSize)) # Xavier uniform initialization
+    self.w = a*(np.random.rand(inSize,outSize) * 2. - 1.)
 
   def forward(self,x):
     return x @ self.w
@@ -157,6 +132,27 @@ class layer_dense_nobias(layer):
     self.dldw = self.dydw.transpose() @ dldy
     return dldy @ (self.w.transpose())
 
+
+class layer_dense(layer): # with bias
+  def __init__(self,inSize,outSize):
+    super().__init__()
+    self.learnable = True
+    a=np.sqrt(6./(inSize+outSize)) # Xavier uniform initialization
+    self.w = a*(np.random.rand(inSize+1,outSize) * 2. - 1.)
+
+  def forward(self,x):
+    xplusone=np.concatenate((x,np.ones((x.shape[0],1))),axis=1)
+    return xplusone @ self.w
+  
+  def forward_and_gradient(self,x):
+    #un=np.ones(x.shape[0],1,dtype=float)
+    xplusone=np.concatenate((x,np.ones((x.shape[0],1))),axis=1)
+    self.dydw = xplusone
+    return xplusone @ self.w
+
+  def backpropagation(self,dldy):
+    self.dldw = self.dydw.transpose() @ dldy
+    return dldy @ (self.w[:-1,:].transpose())
 
 ############################ losses
 class layer_loss(layer):
@@ -210,6 +206,8 @@ class optimizer_step(optimizer):
 class optimizer_sgd(optimizer):
   lr = 0.01
   def optimize(self,w,dw):
+    if w.shape!=dw.shape:
+        print("bad shape in optimizer sgd")
     return w - dw * self.lr
     
 class optimizer_momentum(optimizer):
