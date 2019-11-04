@@ -3,7 +3,7 @@ import numpy as np
 import copy
 
 ############################## layers
-class layer:
+class Layer:
   def __init__(self):
     self.w = 0. 
     self.dydx = 1.
@@ -20,42 +20,100 @@ class layer:
   def backpropagation(self,dldy):
     return dldy * self.dydx
 
-class layer_identity(layer):
+# see https://stats.stackexchange.com/questions/115258/comprehensive-list-of-activation-functions-in-neural-networks-with-pros-cons
+class LayerAbsolute(Layer):
   def forward(self,x):
-      return x 
+    return np.abs(x)
+  def forward_and_gradient(self,x):
+    self.dydx = np.sign(x) * 1.
+    return np.abs(x)
+    
+# see http://mathworld.wolfram.com/InverseHyperbolicSine.html    
+class LayerASinh(Layer):
+  def forward(self,x):
+    return np.arcsinh(x)
+  def forward_and_gradient(self,x):
+    self.dydx = 1. / np.sqrt(1. + x * x)
+    return np.arcsinh(x)
+
+class LayerIdentity(Layer):
+  def forward(self,x):
+    return x 
   def forward_and_gradient(self,x):
     return x
 
-class layer_relu(layer):
+# see https://stats.stackexchange.com/questions/115258/comprehensive-list-of-activation-functions-in-neural-networks-with-pros-cons
+class LayerBipolar(Layer):
   def forward(self,x):
-      return (x > 0.) * x
+    return np.sign(x)*1.
+  def forward_and_gradient(self,x):
+    self.dydx = x*0.
+    return np.sign(x)*1.
+
+#see https://adl1995.github.io/an-overview-of-activation-functions-used-in-neural-networks.html
+class LayerBipolarSigmoid(Layer):
+  def forward(self,x):
+    s=np.exp(x)
+    return (s-1.)/(s+1.)
+  def forward_and_gradient(self,x):
+    s=np.exp(x)
+    self.dydx=2.*s/((s+1.)*(s+1.))
+    return (s-1.)/(s+1.)
+
+class LayerRELU(Layer):
+  def forward(self,x):
+    return (x > 0.) * x
   def forward_and_gradient(self,x):
     self.dydx = (x > 0.) * 1.
     return (x > 0.) * x
     
-class layer_tanh(layer):
+class LayerTanh(Layer):
   def forward(self,x):
-      return np.tanh(x)
+    return np.tanh(x)
   def forward_and_gradient(self,x):
     y = np.tanh(x)
     self.dydx = 1. - y * y
     return y
 
-class layer_atan(layer):
+class LayerTanhShrink(Layer):
   def forward(self,x):
-      return np.arctan(x)
+    return x-np.tanh(x)
+  def forward_and_gradient(self,x):
+    y = np.tanh(x)
+    self.dydx = y * y
+    return x-y
+
+class LayerAtan(Layer):
+  def forward(self,x):
+    return np.arctan(x)
   def forward_and_gradient(self,x):
     self.dydx = 1. / (1. + x * x)
     return np.arctan(x)
 
-class layer_complementaryloglog(layer):
+# see https://stats.stackexchange.com/questions/115258/comprehensive-list-of-activation-functions-in-neural-networks-with-pros-cons
+class LayerComplementaryLogLog(Layer):
   def forward(self,x):
-      return 1. - np.exp(-np.exp(x))
+    return 1. - np.exp(-np.exp(x))
   def forward_and_gradient(self,x):
     self.dydx = np.exp(x - np.exp(x))
     return 1. - np.exp(-np.exp(x))
 
-class layer_sigmoid(layer):
+class LayerExponential(Layer):
+  def forward(self,x):
+    return np.exp(x)
+  def forward_and_gradient(self,x):
+    self.dydx = np.exp(x)
+    return self.dydx
+
+class LayerGauss(Layer):
+  def forward(self,x):
+    return np.exp(-x*x)
+  def forward_and_gradient(self,x):
+    u=np.exp(-x*x)
+    self.dydx = -2.*x*u
+    return u
+
+class LayerSigmoid(Layer):
   def forward(self,x):
     y = 1. / (1. + np.exp(-x))
     return y
@@ -64,14 +122,15 @@ class layer_sigmoid(layer):
     self.dydx = y * (1. - y)
     return y
 
-class layer_softplus(layer):
+class LayerSoftplus(Layer):
   def forward(self,x):
     return np.log1p(np.exp(x))
   def forward_and_gradient(self,x):
     self.dydx = 1. / (1. + np.exp(-x))
     return np.log1p(np.exp(x))
 
-class layer_swish(layer):
+# see paper: Swish: A Self-Gated Activation Function
+class LayerSwish(Layer):
   def forward(self,x):
     y = x / (1. + np.exp(-x))
     return y
@@ -81,7 +140,7 @@ class layer_swish(layer):
     return x * y
 
 ####################################### special layers
-class layer_global_bias(layer):
+class LayerGlobalBias(Layer):
   def __init__(self):
     super().__init__()
     self.learnable = True
@@ -93,10 +152,10 @@ class layer_global_bias(layer):
   def forward_and_gradient(self,x):
     return x + self.w[0]
   def backpropagation(self,dldy):
-    self.dldw = np.atleast_1d(dldy.mean()) #(axis=0)
+    self.dldw = np.atleast_1d(dldy.mean())
     return dldy
 
-class layer_global_gain(layer):
+class LayerGlobalGain(Layer):
   def __init__(self):
     super().__init__()
     self.learnable = True
@@ -114,7 +173,7 @@ class layer_global_gain(layer):
     self.dldw = np.atleast_1d((self.dydw * dldy).mean())
     return dldy * self.dydx
 
-class layer_dense_nobias(layer):
+class LayerDenseNoBias(Layer):
   def __init__(self,inSize,outSize):
     super().__init__()
     self.learnable = True
@@ -130,10 +189,10 @@ class layer_dense_nobias(layer):
 
   def backpropagation(self,dldy):
     self.dldw = self.dydw.transpose() @ dldy
+    self.dldw *= (1./(self.dydw.shape[0]))
     return dldy @ (self.w.transpose())
 
-
-class layer_dense(layer): # with bias
+class LayerDense(Layer): # with bias
   def __init__(self,inSize,outSize):
     super().__init__()
     self.learnable = True
@@ -145,29 +204,26 @@ class layer_dense(layer): # with bias
     return xplusone @ self.w
   
   def forward_and_gradient(self,x):
-    #un=np.ones(x.shape[0],1,dtype=float)
     xplusone=np.concatenate((x,np.ones((x.shape[0],1))),axis=1)
     self.dydw = xplusone
     return xplusone @ self.w
 
   def backpropagation(self,dldy):
     self.dldw = self.dydw.transpose() @ dldy
+    self.dldw *= (1./(self.dydw.shape[0]))
     return dldy @ (self.w[:-1,:].transpose())
 
 ############################ losses
-class layer_loss(layer):
+class LayerLoss(Layer):
     def __init__(self):
       super().__init__()
     
     def set_truth(self,truth):
-      pass
+      self.truth = truth
 
-class loss_mse(layer_loss):
+class LossMSE(LayerLoss): #mean square error
   def __init__(self):
     super().__init__()
-
-  def set_truth(self,truth):
-    self.truth = truth
 
   def forward(self,x):
     d = x - self.truth
@@ -178,12 +234,22 @@ class loss_mse(layer_loss):
     self.dydx = d
     return d * d * 0.5
 
-class loss_logcosh(layer_loss):
+class LossMAE(LayerLoss): #mean absolute error
   def __init__(self):
     super().__init__()
 
-  def set_truth(self,truth):
-    self.truth = truth
+  def forward(self,x):
+    d = x - self.truth
+    return np.abs(d)
+  
+  def forward_and_gradient(self,x):
+    d = x - self.truth
+    self.dydx = np.sign(d)
+    return np.abs(d)
+
+class LossLogCosh(LayerLoss):
+  def __init__(self):
+    super().__init__()
 
   def forward(self,x):
     d = x - self.truth
@@ -195,23 +261,21 @@ class loss_logcosh(layer_loss):
     return  np.log(np.cosh(d))
 
 ############################## optimizers
-class optimizer:
+class Optimizer:
   def optimize(self,w,dw):
     pass
 
-class optimizer_step(optimizer):
+class OptimizerStep(Optimizer):
   lr = 0.01
   def optimize(self,w,dw):
     return w - np.sign(dw) * self.lr
 
-class optimizer_sgd(optimizer):
+class OptimizerSGD(Optimizer):
   lr = 0.01
   def optimize(self,w,dw):
-    if w.shape!=dw.shape:
-        print("bad shape in optimizer sgd")
     return w - dw * self.lr
     
-class optimizer_momentum(optimizer):
+class OptimizerMomentum(Optimizer):
   lr = 0.01
   momentum = 0.9
   init = False
@@ -224,7 +288,7 @@ class optimizer_momentum(optimizer):
     w = w + self.v
     return w
 
-class optimizer_RPROPm(optimizer):
+class OptimizerRPROPm(Optimizer):
   init = False
   
   def optimize(self,w,dw):
@@ -244,7 +308,7 @@ class optimizer_RPROPm(optimizer):
     return w
 
 ######################################### net
-class net:
+class Net:
   def __init__(self):
     self.layers = list()
 
@@ -257,11 +321,11 @@ class net:
       out = l.forward(out)
     return out
 
-class net_train:
-  optim = optimizer_RPROPm()
+class NetTrain:
+  optim = OptimizerMomentum()
   loss_layer = None
   epochs = 100
-  batch_size = 0
+  batch_size = 32
   n = None
 
   def set_loss(self,layerloss):
@@ -330,6 +394,6 @@ class net_train:
             l.w = optiml[i].optimize(l.w,l.dldw)
 
         #save stats
-        sumloss+=predictedloss.sum(axis=0)
+        sumloss+=predictedloss.sum()
 
       self.epoch_loss = np.append(self.epoch_loss,sumloss / nbsamples)
