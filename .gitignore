@@ -65,3 +65,4 @@ debug
 *vcxproj.filters
 
 ui_*.h
+*.pyc

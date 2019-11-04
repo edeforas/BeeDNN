@@ -196,7 +196,8 @@ class loss_logcosh(layer_loss):
 
 ############################## optimizers
 class optimizer:
-  pass
+  def optimize(self,w,dw):
+    pass
 
 class optimizer_step(optimizer):
   lr = 0.01
@@ -232,14 +233,11 @@ class optimizer_RPROPm(optimizer):
       self.olddw = dw
       self.init = True
       
-    min_mu = 1.e-6
-    max_mu = 50.
-
     sg = np.sign(dw * self.olddw)
     self.mu[sg < 0.] *= 0.5
     self.mu[sg > 0.] *= 1.2
-    self.mu[self.mu < min_mu] = min_mu
-    self.mu[self.mu > max_mu] = max_mu
+    np.maximum(self.mu,1.e-6,self.mu)
+    np.minimum(self.mu,50.,self.mu)
 
     w = w - self.mu * np.sign(dw)
     self.olddw = dw

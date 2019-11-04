@@ -6,17 +6,17 @@ import BeeDNN as nn
 
 #create train data
 sample = np.arange(-4.,4.,0.1)[:,np.newaxis]
-truth = np.exp(sample)
+truth = np.sin(sample)
 
 # construct net
 n = nn.net()
-n.append(nn.layer_dense(1,5))
+n.append(nn.layer_dense(1,20))
 n.append(nn.layer_relu())
-n.append(nn.layer_dense(5,1))
+n.append(nn.layer_dense(20,1))
 
 # construct optimizer
 train = nn.net_train()
-train.set_optimizer(nn.optimizer_step())
+train.set_optimizer(nn.optimizer_RPROPm())
 train.epochs = 1000
 train.set_loss(nn.loss_mse())
 train.train(n,sample,truth)
