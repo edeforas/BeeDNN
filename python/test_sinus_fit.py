@@ -10,13 +10,14 @@ truth = np.sin(sample)
 
 # construct net
 n = nn.Net()
+n.classification_mode=False
 n.append(nn.LayerDense(1,20))
 n.append(nn.LayerRELU())
 n.append(nn.LayerDense(20,1))
 
 # optimize net
 train = nn.NetTrain()
-train.epochs = 1000
+train.epochs = 100
 train.batch_size=32
 train.set_optimizer(nn.OptimizerMomentum())
 train.set_loss(nn.LossMSE())

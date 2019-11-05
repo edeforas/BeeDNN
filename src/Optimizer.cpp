@@ -58,8 +58,8 @@ public:
 		assert(w.rows() == dw.rows());
 		assert(w.cols() == dw.cols());
 
-        // Vanilla update
-        //	x += -learning_rate * dx
+        // Vanilla step update
+        //	x =x -learning_rate * gradient_direction
         w -=  dw.cwiseSign() * _fLearningRate ;
     }
 };

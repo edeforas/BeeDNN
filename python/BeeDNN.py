@@ -42,6 +42,13 @@ class LayerIdentity(Layer):
   def forward_and_gradient(self,x):
     return x
 
+class LayerDivideBy256(Layer): # usefull for byte conversion
+  def forward(self,x):
+    return x*0.00390625 # 0.00390625 == 1./256.
+  def forward_and_gradient(self,x):
+    self.dydx = 0.00390625
+    return x*0.00390625
+
 # see https://stats.stackexchange.com/questions/115258/comprehensive-list-of-activation-functions-in-neural-networks-with-pros-cons
 class LayerBipolar(Layer):
   def forward(self,x):
@@ -309,6 +316,7 @@ class OptimizerRPROPm(Optimizer):
 
 ######################################### net
 class Net:
+  classification_mode=True
   def __init__(self):
     self.layers = list()
 
@@ -319,6 +327,12 @@ class Net:
     out = x
     for l in self.layers:
       out = l.forward(out)
+
+    if self.classification_mode:
+      if out.size>1:
+        outa=np.argmax(out,axis=0)
+      else:
+        np.round(out,out)
     return out
 
 class NetTrain:

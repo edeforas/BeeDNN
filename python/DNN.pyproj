@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{ec031762-a457-47aa-9b02-244ff2720633}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>test_fit.py</StartupFile>
+    <StartupFile>test_xor.py</StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -20,7 +20,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BeeDNN.py" />
-    <Compile Include="test_fit.py" />
+    <Compile Include="test_sinus_fit.py" />
+    <Compile Include="test_xor.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>
