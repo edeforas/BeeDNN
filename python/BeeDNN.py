@@ -329,10 +329,10 @@ class Net:
       out = l.forward(out)
 
     if self.classification_mode:
-      if out.size>1:
-        outa=np.argmax(out,axis=0)
+      if out.shape[1]>1:
+        out=np.argmax(out,axis=0)
       else:
-        np.round(out,out)
+        out=np.around(out)
     return out
 
 class NetTrain:

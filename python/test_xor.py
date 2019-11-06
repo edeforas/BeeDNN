@@ -8,6 +8,9 @@ from mpl_toolkits.mplot3d import Axes3D
 
 import BeeDNN as nn
 
+print("Simple xor learning and classification")
+print("Plot the Mean square error and a smooth decision surface (not stairs) ...")
+
 # create train data
 sample=np.zeros((4,2))
 sample[0,0]=0 ; sample[1,0]=0 ; sample[2,0]=1 ; sample[3,0]=1
@@ -33,19 +36,21 @@ train.train(n,sample,truth)
 # plot loss
 plt.plot(train.epoch_loss)
 plt.grid()
-plt.title('MSE vs. epochs')
+plt.title('Mean Square error vs. epochs')
 plt.show()
 
 # plot predicted in 3D surface, without the last classification step
-x=np.linspace(-2,2,20)
-y=np.linspace(-2,2,20)
+x=np.linspace(-1,2,20) #extrapole +/-1
+y=np.linspace(-1,2,20) #extrapole +/-1
 X,Y=np.meshgrid(x,y)
 Xr=np.atleast_2d(np.ravel(X)).transpose()
 Yr=np.atleast_2d(np.ravel(Y)).transpose()
 XY=np.concatenate((Xr,Yr),axis=1)
+n.classification_mode=False # to show smooth decision surface (not stairs) 
 Z=n.forward(XY)
 Z=Z.reshape(X.shape)
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 ax.plot_surface(X, Y, Z,cmap=cm.coolwarm, antialiased=False)
+plt.title("Smooth decision surface")
 plt.show()
