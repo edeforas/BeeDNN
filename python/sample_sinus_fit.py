@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 
 import BeeDNN as nn
 
+print("Simple Sinus fit using small net")
+print("Plot the Mean square error and a the predicted sinus")
+
 # create train data
 sample = np.arange(-4.,4.,0.01)[:,np.newaxis]
 truth = np.sin(sample)
@@ -35,5 +38,5 @@ y = n.forward(x)
 plt.plot(sample,truth)
 plt.plot(sample,y)
 plt.grid()
-plt.title('truth vs. predicted')
+plt.title('Truth vs. Predicted')
 plt.show()

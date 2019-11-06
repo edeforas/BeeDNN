@@ -20,8 +20,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BeeDNN.py" />
-    <Compile Include="test_sinus_fit.py" />
-    <Compile Include="test_xor.py" />
+    <Compile Include="sample_sinus_fit.py" />
+    <Compile Include="sample_xor.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>
