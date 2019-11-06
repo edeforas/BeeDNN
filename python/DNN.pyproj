@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{ec031762-a457-47aa-9b02-244ff2720633}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>test_xor.py</StartupFile>
+    <StartupFile>sample_sinus_fit.py</StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
