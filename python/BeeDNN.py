@@ -192,9 +192,9 @@ class LayerGlobalGain(Layer):
     return dldy * self.dydx
 
 class LayerAddUniformNoise(Layer):
-  def __init__(self):
+  def __init__(self,noise=0.1):
     super().__init__()
-    self.noise=0.1
+    self.noise=noise
  
   def forward(self,x):
     if self.training:
