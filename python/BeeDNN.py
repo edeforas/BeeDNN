@@ -125,6 +125,15 @@ class LayerLogit(Layer):
       self.dydx = -x/(x-1.)
     return np.log(x/(1.-x))
 
+class LayerLeakyRELU(Layer):
+  def forward(self,x):
+    if self.training:
+      self.dydx=np.ones(x.shape)
+      self.dydx[x<0.]=0.01
+    u=x #todo cleanup and optimize
+    u[u<0.] *= 0.01
+    return u
+
 #see LogSigmoid as in : https://nn.readthedocs.io/en/rtd/transfer/
 class LayerLogSigmoid(Layer):
   def forward(self,x):
@@ -236,6 +245,18 @@ class LayerDense(Layer): # with bias
     self.dldw *= (1./(self.dydw.shape[0]))
     return dldy @ (self.w[:-1,:].transpose())
 
+class LayerSoftmax(Layer):
+  def __init__(self):
+    super().__init__()
+
+  def forward(self,x):
+    maxbyrow=np.max(x,axis=1)
+    ex=np.exp(x-maxbyrow[:,None])
+    if self.training:
+      s=np.sum(ex,axis=1)
+      self.dydx=ex*(s-ex)/(s*s)
+    return ex/np.sum(ex)
+
 ############################ losses
 class LayerLoss(Layer):
     def __init__(self):
@@ -273,6 +294,18 @@ class LossLogCosh(LayerLoss):
     if self.training:
       self.dydx = np.tanh(d)
     return  np.log(np.cosh(d))
+
+# see https://ml-cheatsheet.readthedocs.io/en/latest/loss_functions.html
+class LossBinaryCrossEntropy(LayerLoss):
+  def __init__(self):
+    super().__init__()
+  
+  def forward(self,x): #todo test x.size ==1
+    p=x
+    t=self.truth
+    if self.training:
+      self.dydx = np.atleast_2d(-t/np.maximum(1.e-8,p) +(1.-t)/np.maximum(1.e-8,1.-p) )
+    return  np.atleast_2d(-t*np.log(np.maximum(p,1.e-8)) -(1.-t)*np.log(np.maximum(1.e-8,1.-p)))
 
 ############################## optimizers
 class Optimizer:
