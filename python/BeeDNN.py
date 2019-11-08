@@ -250,12 +250,12 @@ class LayerSoftmax(Layer):
     super().__init__()
 
   def forward(self,x):
-    maxbyrow=np.max(x,axis=1)
-    ex=np.exp(x-maxbyrow[:,None])
+    max_row=np.max(x,axis=1)
+    ex=np.exp(x-max_row[:,None])
+    sum_row=np.atleast_2d(np.sum(ex,axis=1)).transpose()
     if self.training:
-      s=np.sum(ex,axis=1)
-      self.dydx=ex*(s-ex)/(s*s)
-    return ex/np.sum(ex)
+      self.dydx=-ex*(ex-sum_row)/(sum_row*sum_row)
+    return ex/sum_row
 
 ############################ losses
 class LayerLoss(Layer):
@@ -306,6 +306,19 @@ class LossBinaryCrossEntropy(LayerLoss):
     if self.training:
       self.dydx = np.atleast_2d(-t/np.maximum(1.e-8,p) +(1.-t)/np.maximum(1.e-8,1.-p) )
     return  np.atleast_2d(-t*np.log(np.maximum(p,1.e-8)) -(1.-t)*np.log(np.maximum(1.e-8,1.-p)))
+
+# see // from https://gombru.github.io/2018/05/23/cross_entropy_loss
+class LossCrossEntropy(LayerLoss):
+  def __init__(self):
+    super().__init__()
+  
+  def forward(self,x):
+    p_max=np.maximum(x,1.e-8)
+    t=self.truth
+    if self.training:
+      ump_max=np.maximum(1.-x,1.e-8)
+      self.dydx = -t/p_max+(1.-t)/ump_max
+    return  np.atleast_2d(np.mean(-t*np.log(p_max),axis=1))
 
 ############################## optimizers
 class Optimizer:
