@@ -16,6 +16,7 @@ INCLUDEPATH += $$(EIGEN_PATH)
 #net library
 INCLUDEPATH += ..
 SOURCES += \
+    ../LayerUniformNoise.cpp \
     ../Net.cpp \
     ../NetUtil.cpp \
     ../NetTrain.cpp \
@@ -40,6 +41,7 @@ SOURCES += \
 HEADERS += \
     ../Activation.h \
     ../Layer.h \
+    ../LayerUniformNoise.h \
     ../Matrix.h \
     ../ConfusionMatrix.h \
     ../MNISTReader.h \
