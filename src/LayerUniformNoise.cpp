@@ -29,7 +29,7 @@ void LayerUniformNoise::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 	if (_bTrainMode && (_fNoise > 0.) )
 	{
 		default_random_engine RNGgenerator; //todo check perfs of init every time
-		std::uniform_real<float> distUniform(-_fNoise, _fNoise); //todo check perfs of init every time
+		std::uniform_real_distribution<float> distUniform(-_fNoise, _fNoise); //todo check perfs of init every time
 
 		mOut.resize(mIn.rows(), mIn.cols());
 
