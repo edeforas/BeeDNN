@@ -16,6 +16,7 @@
 #include "LayerSoftmax.h"
 #include "LayerDense.h"
 #include "LayerDropout.h"
+#include "LayerUniformNoise.h"
 #include "LayerGaussianNoise.h"
 #include "LayerGaussianDropout.h"
 #include "LayerGlobalGain.h"
@@ -80,6 +81,12 @@ void Net::add_gaussian_noise_layer(int iSize, float fStd)
 {
     update_out_layer_input_size(iSize);
 	_layers.push_back(new LayerGaussianNoise(iSize, fStd));
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void Net::add_uniform_noise_layer(int iSize, float fNoise)
+{
+	update_out_layer_input_size(iSize);
+	_layers.push_back(new LayerUniformNoise(iSize, fNoise));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_activation_layer(string sType)

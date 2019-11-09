@@ -230,12 +230,12 @@ public:
 //////////////////////////////////////////////////////////////////////////////
 // from https://gombru.github.io/2018/05/23/cross_entropy_loss
 // and : https://sefiks.com/2017/12/17/a-gentle-introduction-to-cross-entropy-loss-function/
-class LossCategoricalCrossEntropy : public Loss
+class LossCrossEntropy : public Loss
 {
 public:
 	string name() const override
 	{
-		return "CategoricalCrossEntropy";
+		return "CrossEntropy";
 	}
 	
 	float compute(const MatrixFloat& mPredicted,const MatrixFloat& mTarget) const override
@@ -343,8 +343,8 @@ Loss* create_loss(const string& sLoss)
 	else if(sLoss == "LogCosh")
 		return new LossLogCosh;
 
-	else if(sLoss =="CategoricalCrossEntropy")
-        return new LossCategoricalCrossEntropy;
+	else if(sLoss =="CrossEntropy")
+        return new LossCrossEntropy;
 
 	else if(sLoss == "BinaryCrossEntropy")
 		return new LossBinaryCrossEntropy;
@@ -361,7 +361,7 @@ void list_loss_available(vector<string>& vsLoss)
 	vsLoss.push_back("L2");
 	vsLoss.push_back("L1");
 	vsLoss.push_back("LogCosh");
-	vsLoss.push_back("CategoricalCrossEntropy");
+	vsLoss.push_back("CrossEntropy");
 	vsLoss.push_back("BinaryCrossEntropy");
 }
 //////////////////////////////////////////////////////////////////////////////

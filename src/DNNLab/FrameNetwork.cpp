@@ -13,6 +13,7 @@
 #include "LayerGaussianDropout.h"
 #include "LayerGlobalGain.h"
 #include "LayerGlobalBias.h"
+#include "LayerUniformNoise.h"
 #include "LayerGaussianNoise.h"
 #include "LayerPRelu.h"
 
@@ -95,6 +96,12 @@ void FrameNetwork::set_net(Net* pNet)
         }
 
         ((QComboBox*)ui->twNetwork->cellWidget(i,0))->setCurrentText(sType.c_str());
+
+		if (sType == "UniformNoise")
+		{
+			float fNoise = ((LayerUniformNoise*)l)->get_noise();
+			ui->twNetwork->setItem(i, 3, new QTableWidgetItem(to_string(fNoise).c_str()));
+		}
 
         if(sType=="GaussianNoise")
         {
@@ -189,6 +196,14 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
                 _pNet->add_dropout_layer(iInSize,fRatio);
             }
 
+			else if (sType == "UniformNoise")
+			{
+				float fNoise = 0.1f; //by default
+				if (bOk)
+					fNoise = fArg1;
+				_pNet->add_uniform_noise_layer(iInSize, fNoise);
+			}
+
             else if(sType=="GaussianNoise")
             {
                 float fStd=1.f; //by default
@@ -271,6 +286,7 @@ void FrameNetwork::add_new_row(int iRow)
 	qcbType->addItem("DenseAndBias");
 	qcbType->addItem("DenseNoBias");
 	qcbType->addItem("Dropout");
+	qcbType->addItem("UniformNoise");
 	qcbType->addItem("GaussianNoise");
 	qcbType->addItem("GaussianDropout");
 	qcbType->addItem("GlobalGain");

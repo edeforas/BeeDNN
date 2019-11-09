@@ -307,7 +307,7 @@ class LossBinaryCrossEntropy(LayerLoss):
       self.dydx = np.atleast_2d(-t/np.maximum(1.e-8,p) +(1.-t)/np.maximum(1.e-8,1.-p) )
     return  np.atleast_2d(-t*np.log(np.maximum(p,1.e-8)) -(1.-t)*np.log(np.maximum(1.e-8,1.-p)))
 
-# see // from https://gombru.github.io/2018/05/23/cross_entropy_loss
+# see https://gombru.github.io/2018/05/23/cross_entropy_loss
 class LossCrossEntropy(LayerLoss):
   def __init__(self):
     super().__init__()
