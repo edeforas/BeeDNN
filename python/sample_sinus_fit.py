@@ -4,8 +4,7 @@ import matplotlib.pyplot as plt
 
 import BeeDNN as nn
 
-print("Simple Sinus fit using small network")
-print("Plot the Mean square error and the predicted sinus function")
+# Simple Sinus regression ( fit) using small network
 
 # create train data
 sample = np.arange(-4.,4.,0.01)[:,np.newaxis]
@@ -23,13 +22,13 @@ train = nn.NetTrain()
 train.epochs = 100
 train.batch_size=32
 train.set_optimizer(nn.OptimizerMomentum())
-train.set_loss(nn.LossMSE())
+train.set_loss(nn.LossMSE()) # simple Mean Square Error
 train.train(n,sample,truth)
 
 # plot loss
 plt.plot(train.epoch_loss)
 plt.grid()
-plt.title('MSE vs. epochs')
+plt.title('MSE Loss vs. epochs')
 plt.show(block=False)
 
 # plot truth curve and predicted

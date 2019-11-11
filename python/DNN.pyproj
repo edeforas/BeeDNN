@@ -22,6 +22,7 @@
     <Compile Include="BeeDNN.py" />
     <Compile Include="sample_sinus_fit.py" />
     <Compile Include="sample_xor.py" />
+    <Compile Include="test_softmax.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>

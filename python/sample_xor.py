@@ -1,12 +1,10 @@
 import math
 import numpy as np
-
 import matplotlib.pyplot as plt
 
 import BeeDNN as nn
 
-print("Simple xor learning and classification")
-print("Plot the Mean square error and a smooth decision surface")
+#simple xor classification
 
 # create train data
 sample=np.zeros((4,2))
@@ -25,9 +23,9 @@ n.append(nn.LayerDense(3,1))
 # optimize net
 train = nn.NetTrain()
 train.epochs = 200
-train.batch_size=0 #if set to zero, use full batch
-train.set_optimizer(nn.OptimizerRPROPm())
-train.set_loss(nn.LossMSE())
+train.batch_size=0 #if set to 0, use full batch
+train.set_optimizer(nn.OptimizerRPROPm())  # work best with full batch size
+train.set_loss(nn.LossMSE()) # simple Mean Square Error
 train.train(n,sample,truth)
 
 # plot loss
@@ -36,7 +34,7 @@ plt.grid()
 plt.title('Mean Square error vs. epochs')
 plt.show(block=False)
 
-# plot predicted smooth surface (without the last stairs step)
+# plot predicted smooth surface (without the last stair step)
 plt.figure()
 x=np.linspace(-0.5,1.5,100) #extrapole +/-0.5
 y=np.linspace(-0.5,1.5,100) #extrapole +/-0.5
@@ -44,7 +42,7 @@ X,Y=np.meshgrid(x,y)
 Xr=np.atleast_2d(np.ravel(X)).transpose()
 Yr=np.atleast_2d(np.ravel(Y)).transpose()
 XY=np.concatenate((Xr,Yr),axis=1)
-n.classification_mode=False # to show smooth decision surface (not stairs) 
+n.classification_mode=False # comment to show real decision surface (with stairs)
 Z=n.forward(XY)
 Z=Z.reshape(X.shape)
 plt.pcolormesh(X,Y,Z)
