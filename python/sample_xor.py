@@ -15,7 +15,6 @@ truth[0,0]=0 ; truth[1,0]=1  ; truth[2,0]=1 ; truth[3,0]=0
 
 # construct net
 n = nn.Net()
-#n.append(nn.LayerAddUniformNoise()) # uncomment this to reduce overfitting
 n.append(nn.LayerDense(2,3))
 n.append(nn.LayerTanh())
 n.append(nn.LayerDense(3,1))

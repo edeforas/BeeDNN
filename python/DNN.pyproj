@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{ec031762-a457-47aa-9b02-244ff2720633}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>sample_sinus_fit.py</StartupFile>
+    <StartupFile>sample_xor.py</StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -22,7 +22,7 @@
     <Compile Include="BeeDNN.py" />
     <Compile Include="sample_sinus_fit.py" />
     <Compile Include="sample_xor.py" />
-    <Compile Include="test_softmax.py" />
+    <Compile Include="sample_xor_softmax.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>

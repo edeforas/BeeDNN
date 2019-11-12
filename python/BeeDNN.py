@@ -46,6 +46,12 @@ class LayerArcTan(Layer):
       self.dydx = 1. / (1. + x * x)
     return np.arctan(x)
 
+class LayerBent(Layer):
+  def forward(self,x):
+    if self.training:
+      self.dydx = x/(2.*np.sqrt(x*x+1.))+1.;
+    return (np.sqrt(x*x+1.)-1.)*0.5+x;
+
 #see Binary Step as in: https://en.wikipedia.org/wiki/Activation_function
 class LayerBinaryStep(Layer):
   def forward(self,x):
@@ -75,42 +81,21 @@ class LayerComplementaryLogLog(Layer):
       self.dydx = np.exp(x - np.exp(x))
     return 1. - np.exp(-np.exp(x))
 
-class LayerElliot(Layer):
-  def forward(self,x):
-    d=1./(1.+np.abs(x))
-    if self.training:
-        self.dydx = 0.5*d*d
-    return 0.5*x*d+0.5
-
-class LayerIdentity(Layer):
-  def forward(self,x):
-    return x 
-
 class LayerDivideBy256(Layer): # usefull for byte conversion
   def forward(self,x):
     if self.training:
       self.dydx = 0.00390625 # 0.00390625 == 1./256.
     return x*0.00390625
 
-class LayerRELU(Layer):
+# see Sigmoid-Weighted Linear Units for Neural Network Function ; Stefan Elfwinga Eiji Uchibea Kenji Doyab
+class LayerdSiLU(Layer):
   def forward(self,x):
+    ex=np.exp(-x)
+    exinv=1./(1.+ex)
     if self.training:
-      self.dydx = (x > 0.) * 1.
-    return (x > 0.) * x
-    
-class LayerTanh(Layer):
-  def forward(self,x):
-    y = np.tanh(x)
-    if self.training:
-      self.dydx = 1. - y * y
-    return y
+      self.dydx = ex*exinv*exinv*(2.+x*(2.*ex*exinv-1.));
 
-class LayerTanhShrink(Layer):
-  def forward(self,x):
-    y = np.tanh(x)
-    if self.training:
-      self.dydx = y * y
-    return x-y
+    return exinv*(1+x*ex*exinv)
 
 class LayerExponential(Layer):
   def forward(self,x):
@@ -126,20 +111,62 @@ class LayerGauss(Layer):
       self.dydx = -2.*x*u
     return u
 
-#see Logit as in : https://adl1995.github.io/an-overview-of-activation-functions-used-in-neural-networks.html
-class LayerLogit(Layer):
+# see https://cs224d.stanford.edu/lecture_notes/LectureNotes3.pdf
+class LayerHardTanh(Layer):
   def forward(self,x):
     if self.training:
-      self.dydx = -x/(x-1.)
-    return np.log(x/(1.-x))
+      self.dydx=np.ones(x.shape,dtype=np.float32)
+      self.dydx[x<-1.]=0.
+      self.dydx[x>1.]=0.
+    u=x
+    u[x<-1.] = -1.
+    u[x>1.] = 1.
+    return u
+
+# HardELU, ELU fixed point approximation ; Author is Minh Tri LE
+class LayerHardELU(Layer):
+  def forward(self,x):
+    if self.training:
+      self.dydx=np.ones(x.shape,dtype=np.float32)
+      self.dydx[ (x<-0.) & (x>-2.) ]=0.5
+      self.dydx[ x<-2. ]=0.
+    u=x
+    u[ (x<-0.) & (x>-2.) ] *= 0.5
+    u[x<-2.] = -1.
+    return u
+
+
+# see  https://nn.readthedocs.io/en/rtd/transfer/ (lambda=0.5)	
+class LayerHardShrink(Layer):
+  def forward(self,x):
+    if self.training:
+      self.dydx=np.ones(x.shape,dtype=np.float32)
+      self.dydx[(x<0.5) & (x>-0.5)]=0.
+    u=x
+    u[ (x<0.5) & (x>-0.5) ] = 0.
+    return u	
+
+class LayerIdentity(Layer):
+  def forward(self,x):
+    return x 
 
 class LayerLeakyRELU(Layer):
   def forward(self,x):
     if self.training:
-      self.dydx=np.ones(x.shape)
+      self.dydx=np.ones(x.shape,dtype=np.float32)
       self.dydx[x<0.]=0.01
-    u=x #todo cleanup and optimize
+    u=x
     u[u<0.] *= 0.01
+    return u
+
+# easy to convert in fixedpoint (0.00390625= 1/256 = (1>>8) )
+class LayerLeakyRELU256(Layer):
+  def forward(self,x):
+    if self.training:
+      self.dydx=np.ones(x.shape,dtype=np.float32)
+      self.dydx[x<0.]=0.00390625
+    u=x
+    u[u<0.] *= 0.00390625
     return u
 
 #see LogSigmoid as in : https://nn.readthedocs.io/en/rtd/transfer/
@@ -149,6 +176,30 @@ class LayerLogSigmoid(Layer):
       self.dydx = 1./(1.+np.exp(x))
     return np.log(1./(1+np.exp(-x)))
 
+#see Logit as in : https://adl1995.github.io/an-overview-of-activation-functions-used-in-neural-networks.html
+class LayerLogit(Layer):
+  def forward(self,x):
+    if self.training:
+      self.dydx = -x/(x-1.)
+    return np.log(x/(1.-x))
+	
+class LayerRELU(Layer):
+  def forward(self,x):
+    if self.training:
+      self.dydx = (x > 0.) * 1.
+    return (x > 0.) * x
+
+class LayerRELU6(Layer):
+  def forward(self,x):
+    if self.training:
+      self.dydx=np.ones(x.shape,dtype=np.float32)
+      self.dydx[x<0.]=0.
+      self.dydx[x>6.]=0.
+    u=x
+    u[x<0.] = 0.
+    u[x>6.] = 6.
+    return u
+	
 class LayerSigmoid(Layer):
   def forward(self,x):
     y = 1. / (1. + np.exp(-x))
@@ -156,11 +207,18 @@ class LayerSigmoid(Layer):
       self.dydx = y * (1. - y)
     return y
 
-class LayerSoftplus(Layer):
+class LayerSoftPlus(Layer):
   def forward(self,x):
     if self.training:
       self.dydx = 1. / (1. + np.exp(-x))
     return np.log1p(np.exp(x))
+
+class LayerSoftSign(Layer):
+  def forward(self,x):
+    d=1.+np.abs(x)
+    if self.training:
+      self.dydx = 1. / (d*d)
+    return x/d
 
 # see paper: Swish: A Self-Gated Activation Function
 class LayerSwish(Layer):
@@ -170,6 +228,15 @@ class LayerSwish(Layer):
       self.dydx = y * (x + 1. - x * y)
     return x * y
 
+# see Sigmoid-Weighted Linear Units for Neural Network Function ; Stefan Elfwinga Eiji Uchibea Kenji Doyab
+class LayerSiLU(Layer):
+  def forward(self,x):
+    ex=np.exp(-x)
+    exinv=1./(1.+ex)
+    if self.training:
+      self.dydx = exinv*(1+x*ex*exinv)
+    return x *exinv
+
 # see https://en.wikipedia.org/wiki/Activation_function
 class LayerSin(Layer):
   def forward(self,x):
@@ -177,12 +244,26 @@ class LayerSin(Layer):
       self.dydx = np.cos(x)
     return np.sin(x)
 
+class LayerTanh(Layer):
+  def forward(self,x):
+    y = np.tanh(x)
+    if self.training:
+      self.dydx = 1. - y * y
+    return y
+
+class LayerTanhShrink(Layer):
+  def forward(self,x):
+    y = np.tanh(x)
+    if self.training:
+      self.dydx = y * y
+    return x-y
+
 ####################################### special layers
 class LayerGlobalBias(Layer):
   def __init__(self):
     super().__init__()
     self.learnable = True
-    self.w = np.zeros(1)
+    self.w = np.zeros(1,dtype=np.float32)
     self.w[0] = 0.
 
   def forward(self,x):
@@ -195,7 +276,7 @@ class LayerGlobalGain(Layer):
   def __init__(self):
     super().__init__()
     self.learnable = True
-    self.w = np.zeros(1)
+    self.w = np.zeros(1,dtype=np.float32)
     self.w[0] = 1.
  
   def forward(self,x):
@@ -207,6 +288,16 @@ class LayerGlobalGain(Layer):
   def backpropagation(self,dldy):
     self.dldw = np.atleast_1d((self.dydw * dldy).mean())
     return dldy * self.dydx
+
+class LayerAddGaussianNoise(Layer):
+  def __init__(self,stdev=0.1):
+    super().__init__()
+    self.stdev=stdev
+ 
+  def forward(self,x):
+    if self.training:
+      x += np.random.normal(0, self.stdev,x.shape)
+    return x
 
 class LayerAddUniformNoise(Layer):
   def __init__(self,noise=0.1):
@@ -243,7 +334,7 @@ class LayerDense(Layer): # with bias
     self.w = a*(np.random.rand(inSize+1,outSize) * 2. - 1.)
  
   def forward(self,x):
-    xplusone=np.concatenate((x,np.ones((x.shape[0],1))),axis=1)
+    xplusone=np.concatenate((x,np.ones((x.shape[0],1),dtype=np.float32)),axis=1)
     if self.training:
       self.dydw = xplusone
     return xplusone @ self.w
@@ -431,7 +522,7 @@ class NetTrain:
     self.n = n
     nblayer = len(n.layers)
     nbsamples = len(sample)
-    self.epoch_loss = np.zeros((0,0))
+    self.epoch_loss = np.zeros((0,0),dtype=np.float32)
 
     #init optimizer
     optiml = list()
