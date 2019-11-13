@@ -32,11 +32,16 @@ public:
 	void add_softmax_layer();
     void add_dropout_layer(int iSize, float fRatio);
     void add_gaussian_dropout_layer(int iSize, float fProba);
+	
 	void add_uniform_noise_layer(int iSize, float fNoise);
 	void add_gaussian_noise_layer(int iSize, float fStd);
-    void add_globalgain_layer(int iSize);
-    void add_globalbias_layer(int iSize);
-    void add_poolaveraging1D_layer(int inSize, int outSize);
+    
+	void add_globalgain_layer(int iSize);
+    
+	void add_globalbias_layer(int iSize);
+	void add_bias_layer(int iSize);
+	
+	void add_poolaveraging1D_layer(int inSize, int outSize);
 
     void set_input_size(int iInputSize);
 	int output_size() const;

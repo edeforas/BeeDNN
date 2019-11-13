@@ -21,6 +21,7 @@
 #include "LayerGaussianDropout.h"
 #include "LayerGlobalGain.h"
 #include "LayerGlobalBias.h"
+#include "LayerBias.h"
 #include "LayerPoolAveraging1D.h"
 
 #include <cmath>
@@ -123,6 +124,12 @@ void Net::add_globalgain_layer(int inSize)
 void Net::add_globalbias_layer(int inSize)
 {
     _layers.push_back(new LayerGlobalBias(inSize));
+	_iOutputSize = inSize;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void Net::add_bias_layer(int inSize)
+{
+	_layers.push_back(new LayerBias(inSize));
 	_iOutputSize = inSize;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////

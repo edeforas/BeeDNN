@@ -13,6 +13,7 @@
 #include "LayerGaussianDropout.h"
 #include "LayerGlobalGain.h"
 #include "LayerGlobalBias.h"
+#include "LayerBias.h"
 #include "LayerUniformNoise.h"
 #include "LayerGaussianNoise.h"
 #include "LayerPRelu.h"
@@ -226,7 +227,10 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
 			else if (sType == "GlobalBias")
 				_pNet->add_globalbias_layer(iInSize);
 			
-			else if(sType=="PoolAveraging1D")
+            else if (sType == "Bias")
+                _pNet->add_bias_layer(iInSize);
+
+            else if(sType=="PoolAveraging1D")
                 _pNet->add_poolaveraging1D_layer(iInSize,iOutSize);
 
 			else if (sType == "PRelu")
@@ -291,7 +295,8 @@ void FrameNetwork::add_new_row(int iRow)
 	qcbType->addItem("GaussianDropout");
 	qcbType->addItem("GlobalGain");
 	qcbType->addItem("GlobalBias");
-	qcbType->addItem("PoolAveraging1D");
+    qcbType->addItem("Bias");
+    qcbType->addItem("PoolAveraging1D");
 	qcbType->addItem("PRelu");
 	qcbType->addItem("Softmax");
 
