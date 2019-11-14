@@ -49,8 +49,8 @@ class LayerArcTan(Layer):
 class LayerBent(Layer):
   def forward(self,x):
     if self.training:
-      self.dydx = x/(2.*np.sqrt(x*x+1.))+1.;
-    return (np.sqrt(x*x+1.)-1.)*0.5+x;
+      self.dydx = x/(2.*np.sqrt(x*x+1.))+1.
+    return (np.sqrt(x*x+1.)-1.)*0.5+x
 
 #see Binary Step as in: https://en.wikipedia.org/wiki/Activation_function
 class LayerBinaryStep(Layer):
@@ -93,7 +93,7 @@ class LayerdSiLU(Layer):
     ex=np.exp(-x)
     exinv=1./(1.+ex)
     if self.training:
-      self.dydx = ex*exinv*exinv*(2.+x*(2.*ex*exinv-1.));
+      self.dydx = ex*exinv*exinv*(2.+x*(2.*ex*exinv-1.))
 
     return exinv*(1+x*ex*exinv)
 
@@ -458,12 +458,14 @@ class OptimizerMomentum(Optimizer):
     w = w + self.v
     return w
 
+# RPROP-  as in : https://pdfs.semanticscholar.org/df9c/6a3843d54a28138a596acc85a96367a064c2.pdf
+# or in paper : Improving the Rprop Learning Algorithm (Christian Igel and Michael Husken)
 class OptimizerRPROPm(Optimizer):
   init = False
   
   def optimize(self,w,dw):
     if not self.init:
-      self.mu = 0. * w
+      self.mu = 0.0125 * np.ones(w.shape)
       self.olddw = dw
       self.init = True
       

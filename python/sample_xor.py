@@ -21,7 +21,7 @@ n.append(nn.LayerDense(3,1))
 
 # optimize net
 train = nn.NetTrain()
-train.epochs = 200
+train.epochs = 100
 train.batch_size=0 #if set to 0, use full batch
 train.set_optimizer(nn.OptimizerRPROPm())  # work best with full batch size
 train.set_loss(nn.LossMSE()) # simple Mean Square Error
