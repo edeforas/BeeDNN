@@ -304,7 +304,7 @@ void FrameNetwork::add_new_row(int iRow)
     qcbType->addItem("PRelu");
 	qcbType->addItem("Softmax");
 
-    qcbType->insertSeparator(13);
+    qcbType->insertSeparator(14);
 
 	for (unsigned int a = 0; a < _vsActivations.size(); a++)
 		qcbType->addItem(_vsActivations[a].c_str());
