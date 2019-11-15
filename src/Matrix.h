@@ -395,7 +395,7 @@ public:
 		Matrix<T> out(*this);
 
 		for (int i = 0; i < _iSize; i++)
-			out(i) = std::copysign(1.,_data[i]);
+			out(i) = std::copysignf(1.f,_data[i]);
 
 		return out;
 	}

@@ -26,7 +26,7 @@ Layer* LayerDropout::clone() const
     return new LayerDropout(_iInSize,_fRate);
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
+void LayerDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
     if(_bTrainMode && (_fRate!=0.f) )
         mOut = mIn*_mask.asDiagonal(); //in train mode

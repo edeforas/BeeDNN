@@ -34,7 +34,7 @@ void LayerGlobalGain::init()
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerGlobalGain::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
+void LayerGlobalGain::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
     mOut = mIn * _weight(0);
 }

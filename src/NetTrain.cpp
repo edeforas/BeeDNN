@@ -22,8 +22,11 @@
 NetTrain::NetTrain():
     _sOptimizer("Adam")
 {
-	_fCurrentLoss=1.e20f;
-	_fCurrentAccuracy=0.f;
+	_fTrainLoss=0.f;
+	_fTrainAccuracy=0.f;
+
+	_fTestLoss=0.f;
+	_fTestAccuracy=0.f;
 
     _pLoss = create_loss("MeanSquaredError");
     _iBatchSize = 32;
@@ -75,8 +78,10 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
     _iOnlineAccuracyGood=other._iOnlineAccuracyGood;
     _fOnlineLoss=other._fOnlineLoss;
 
-	_fCurrentLoss=other._fCurrentLoss;
-	_fCurrentAccuracy=other._fCurrentAccuracy;
+	_fTrainLoss=other._fTrainLoss;
+	_fTrainAccuracy=other._fTrainAccuracy;
+	_fTestLoss = other._fTestLoss;
+	_fTestAccuracy = other._fTestAccuracy;
 
     _bKeepBest=other._bKeepBest;
 
@@ -348,8 +353,10 @@ void NetTrain::train()
     _testLoss.clear();
     _trainAccuracy.clear();
     _testAccuracy.clear();
-	_fCurrentLoss = 1.e10f;
-	_fCurrentAccuracy = 0;
+	_fTrainLoss = 1.e10f;
+	_fTrainAccuracy = 0;
+	_fTestLoss = 1.e10f;
+	_fTestAccuracy = 0;
 
     int iNbSamples=(int)mSamples.rows();
     int iReboost = 0;
@@ -433,24 +440,30 @@ void NetTrain::train()
 
 		_pNet->set_train_mode(false);
 
-		_fCurrentLoss =_fOnlineLoss/iNbSamples;
-        _trainLoss.push_back(_fCurrentLoss);
+		_fTrainLoss =_fOnlineLoss/iNbSamples;
+        _trainLoss.push_back(_fTrainLoss);
 
         if(_pNet->is_classification_mode())
         {
-			_fCurrentAccuracy =100.f*_iOnlineAccuracyGood/ iNbSamples;
-            _trainAccuracy.push_back(_fCurrentAccuracy);
+			_fTrainAccuracy =100.f*_iOnlineAccuracyGood/ iNbSamples;
+            _trainAccuracy.push_back(_fTrainAccuracy);
         }
+		float fSelectedLoss = _fTrainLoss;
+		float fSelectedAccuracy = _fTrainAccuracy;
 
-		// 
+		// if having test data, compute stats with it
         if (_pmSamplesTest != nullptr)
-        { 	//should we use the test db to keep the best model?
-			float fTestLoss =compute_loss( *_pmSamplesTest, *_pmTruthTest);
-            _testLoss.push_back(fTestLoss);
+        { 	//use the test db to keep the best model
+			_fTestLoss =compute_loss( *_pmSamplesTest, *_pmTruthTest);
+            _testLoss.push_back(_fTestLoss);
 
-			float fTestAccuracy = compute_accuracy( *_pmSamplesTest, *_pmTruthTest);
-            _testAccuracy.push_back(fTestAccuracy);
-        }
+			_fTestAccuracy = compute_accuracy( *_pmSamplesTest, *_pmTruthTest);
+            _testAccuracy.push_back(_fTestAccuracy);
+
+			fSelectedLoss = _fTestLoss;
+			fSelectedAccuracy = _fTestAccuracy;
+		}
+
 
         if (_epochCallBack)
             _epochCallBack();
@@ -460,18 +473,18 @@ void NetTrain::train()
         {
             if(_pNet->is_classification_mode())
             {   //use accuracy
-                if(fMaxAccuracy< _fCurrentAccuracy)
+                if(fMaxAccuracy< fSelectedAccuracy)
                 {
-                    fMaxAccuracy= _fCurrentAccuracy;
+                    fMaxAccuracy= fSelectedAccuracy;
                     bestNet= *_pNet;
 					bBetterNetFound = true;
                 }
             }
             else
             {   //use loss
-                if(fMinLoss> _fCurrentLoss)
+                if(fMinLoss> fSelectedLoss)
                 {
-                    fMinLoss= _fCurrentLoss;
+                    fMinLoss= fSelectedLoss;
                     bestNet= *_pNet;
 					bBetterNetFound = true;
                 }
@@ -564,6 +577,11 @@ const vector<float>& NetTrain::get_train_loss() const
     return _trainLoss;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
+float NetTrain::get_current_test_loss() const
+{
+	return _fTestLoss;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
 const vector<float>& NetTrain::get_test_loss() const
 {
     return _testLoss;
@@ -574,19 +592,24 @@ const vector<float>& NetTrain::get_train_accuracy() const
     return _trainAccuracy;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
+float NetTrain::get_current_test_accuracy() const
+{
+	return _fTestAccuracy;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
 const vector<float>& NetTrain::get_test_accuracy() const
 {
     return _testAccuracy;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-float NetTrain::get_current_loss() const
+float NetTrain::get_current_train_loss() const
 {
-	return _fCurrentLoss;
+	return _fTrainLoss;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-float NetTrain::get_current_accuracy() const
+float NetTrain::get_current_train_accuracy() const
 {
-	return _fCurrentAccuracy;
+	return _fTrainAccuracy;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::update_class_weight()

@@ -46,7 +46,7 @@ void LayerDense::init()
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerDense::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
+void LayerDense::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
     if (_bHasBias)
         mOut = rowWiseAdd(mIn *_weight.topRows(_iInSize) , _weight.row(_iInSize)); //split _weight in [weightnobias, bias] in computation

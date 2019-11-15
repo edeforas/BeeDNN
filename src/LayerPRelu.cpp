@@ -38,7 +38,7 @@ void LayerPRelu::init()
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPRelu::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
+void LayerPRelu::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
     mOut = mIn;
 

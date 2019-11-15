@@ -33,7 +33,7 @@ void LayerBias::init()
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerBias::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
+void LayerBias::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
     mOut = rowWiseAdd( mIn.array() , _weight);
 }

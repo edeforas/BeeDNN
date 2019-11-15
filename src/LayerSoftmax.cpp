@@ -23,7 +23,7 @@ Layer* LayerSoftmax::clone() const
     return new LayerSoftmax();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerSoftmax::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
+void LayerSoftmax::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	MatrixFloat S;
 	mOut.resizeLike(mIn);

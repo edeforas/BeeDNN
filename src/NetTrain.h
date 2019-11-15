@@ -73,11 +73,13 @@ public:
 
 	const vector<float>& get_train_loss() const;
 	const vector<float>& get_test_loss() const;
-    const vector<float>& get_train_accuracy() const;
-    const vector<float>& get_test_accuracy() const;
+	const vector<float>& get_train_accuracy() const;
+	const vector<float>& get_test_accuracy() const;
 
-	float get_current_loss() const;
-	float get_current_accuracy() const;
+	float get_current_train_loss() const;
+	float get_current_train_accuracy() const;
+	float get_current_test_loss() const;
+	float get_current_test_accuracy() const;
 
 private:
 	void train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth); //all the backprop is here	
@@ -120,8 +122,10 @@ private:
     vector<float> _trainAccuracy;
     vector<float> _testAccuracy;
 
-	float _fCurrentLoss;
-	float _fCurrentAccuracy;
+	float _fTrainLoss;
+	float _fTrainAccuracy;
+	float _fTestLoss;
+	float _fTestAccuracy;
 };
 
 #endif

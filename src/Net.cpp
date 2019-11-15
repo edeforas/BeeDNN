@@ -22,7 +22,9 @@
 #include "LayerGlobalGain.h"
 #include "LayerGlobalBias.h"
 #include "LayerBias.h"
+
 #include "LayerPoolAveraging1D.h"
+#include "LayerPoolMax1D.h"
 
 #include <cmath>
 using namespace std;
@@ -137,6 +139,13 @@ void Net::add_poolaveraging1D_layer(int inSize, int iOutSize)
 {
     update_out_layer_input_size(inSize);
     _layers.push_back(new LayerPoolAveraging1D(inSize, iOutSize));
+	_iOutputSize = iOutSize;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void Net::add_poolmax1D_layer(int inSize, int iOutSize)
+{
+	update_out_layer_input_size(inSize);
+	_layers.push_back(new LayerPoolMax1D(inSize, iOutSize));
 	_iOutputSize = iOutSize;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////

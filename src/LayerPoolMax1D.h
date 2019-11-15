@@ -6,33 +6,22 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerGaussianNoise_
-#define LayerGaussianNoise_
+#ifndef LayerPoolMax1D_
+#define LayerPoolMax1D_
 
 #include "Layer.h"
 #include "Matrix.h"
 
-#include <string>
-using namespace std;
-
-class Activation;
-
-class LayerGaussianNoise : public Layer
+class LayerPoolMax1D : public Layer
 {
 public:
-    LayerGaussianNoise(int iSize,float fStd);
-    virtual ~LayerGaussianNoise() override;
+    LayerPoolMax1D(int iInSize,int iWindowSize);
+    virtual ~LayerPoolMax1D() override;
 
     virtual Layer* clone() const override;
 
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
-
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
-
-    float get_std() const;
-
-private:
-    float _fStd;
 };
 
 #endif

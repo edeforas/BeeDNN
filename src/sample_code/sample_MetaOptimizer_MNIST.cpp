@@ -31,19 +31,20 @@ int main()
 
 	//create simple net
 	Net net;
-    net.add_dense_layer(784, 32);
+    net.add_dense_layer(784, 128);
 	net.add_activation_layer("Relu");
-	net.add_dense_layer(32, 10);
+	net.add_dense_layer(128, 10);
 	net.add_softmax_layer();
 
 	//set train settings
 	NetTrain netTrain;
-	netTrain.set_epochs(10);
-	netTrain.set_loss("CategoricalCrossEntropy");
+	netTrain.set_epochs(20);
+	netTrain.set_loss("CrossEntropy");
 	netTrain.set_train_data(mRefImages, mRefLabels);
+	netTrain.set_test_data(mTestImages, mTestLabels);
 
 	//create meta optimizer and run
-	cout << "Training, with all the CPU cores ..." << endl;
+	cout << "Training with all cores ..." << endl;
 	MetaOptimizer optim;
 	optim.set_net(&net);
 	optim.set_train(&netTrain);

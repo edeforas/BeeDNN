@@ -30,8 +30,10 @@ void epoch_callback()
 
     iEpoch++;
     cout << "Epoch: " << iEpoch << " duration: " << delta << " ms" << endl;
-	cout << "Loss: " << netTrain.get_current_loss() << " Accuracy: " << netTrain.get_current_accuracy() << " %" << endl;
-    cout << endl;
+	cout << "TrainLoss: " << netTrain.get_current_train_loss() << " TrainAccuracy: " << netTrain.get_current_train_accuracy() << " %" ;
+	cout << " TestAccuracy: " << netTrain.get_current_test_accuracy() << " %" << endl;
+
+	cout << endl;
 }
 //////////////////////////////////////////////////////////////////////////////
 int main()
@@ -52,7 +54,7 @@ int main()
 	mRefImages/= 256.f;
   
 	//create simple net:
-    net.add_dense_layer(784, 128);
+	net.add_dense_layer(784, 128);
 	net.add_activation_layer("Relu");
 	net.add_dropout_layer(128,0.1f);
 	net.add_dense_layer(128, 10);
@@ -64,9 +66,10 @@ int main()
 	netTrain.set_epochs(10);
 	netTrain.set_batchsize(64);
 
-	netTrain.set_loss("CategoricalCrossEntropy");
+	netTrain.set_loss("CrossEntropy");
 	netTrain.set_epoch_callback(epoch_callback);
 	netTrain.set_train_data(mRefImages, mRefLabels);
+	netTrain.set_test_data(mTestImages, mTestLabels);
 	start = chrono::steady_clock::now();
 	netTrain.train();
 

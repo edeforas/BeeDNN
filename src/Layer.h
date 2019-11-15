@@ -28,11 +28,11 @@ public:
     int in_size() const;
     int out_size() const;
 
-    virtual void forward(const MatrixFloat& mIn,MatrixFloat& mOut) const =0;
+    virtual void forward(const MatrixFloat& mIn,MatrixFloat& mOut) =0;
 	
     virtual void init();
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)=0;
-		
+	
 	void set_train_mode(bool bTrainMode); //set to true to train, to false to test
 
     virtual bool has_weight() const;

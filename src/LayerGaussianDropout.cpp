@@ -35,7 +35,7 @@ Layer* LayerGaussianDropout::clone() const
     return new LayerGaussianDropout(_iInSize,_fProba);
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerGaussianDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
+void LayerGaussianDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
     if(_bTrainMode)
         mOut = mIn*_mask.asDiagonal(); //in learn mode

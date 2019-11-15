@@ -24,7 +24,7 @@ Layer* LayerGaussianNoise::clone() const
     return new LayerGaussianNoise(_iInSize,_fStd);
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerGaussianNoise::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
+void LayerGaussianNoise::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	if (_bTrainMode && (_fStd > 0.) )
 	{

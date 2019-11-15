@@ -182,7 +182,7 @@ class LayerLogit(Layer):
     if self.training:
       self.dydx = -x/(x-1.)
     return np.log(x/(1.-x))
-	
+
 class LayerRELU(Layer):
   def forward(self,x):
     if self.training:
@@ -199,7 +199,7 @@ class LayerRELU6(Layer):
     u[x<0.] = 0.
     u[x>6.] = 6.
     return u
-	
+
 class LayerSigmoid(Layer):
   def forward(self,x):
     y = 1. / (1. + np.exp(-x))
