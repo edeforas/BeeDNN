@@ -1,7 +1,7 @@
 // sample  classification MNIST similar as :
 // https://colab.research.google.com/github/tensorflow/docs/blob/master/site/en/tutorials/_index.ipynb
 
-// accuracy >98% on ref and test after 10 epochs (7s by epochs)
+// accuracy >98% on ref and test after 10 epochs (3s by epochs)
 
 #include <iostream>
 #include <chrono>
@@ -52,7 +52,7 @@ int main()
 	//create simple net:
 	net.add_dense_layer(784, 128);
 	net.add_activation_layer("Relu");
-	net.add_dropout_layer(128,0.1f);
+	net.add_dropout_layer(128,0.1f); //reduce overfitting
 	net.add_dense_layer(128, 10);
 	net.add_softmax_layer();
 
@@ -61,9 +61,9 @@ int main()
 	netTrain.set_epochs(12);
 	netTrain.set_batchsize(128);
 	netTrain.set_loss("CrossEntropy");
-	netTrain.set_epoch_callback(epoch_callback);
+	netTrain.set_epoch_callback(epoch_callback); //optional , to show the progress
 	netTrain.set_train_data(mRefImages, mRefLabels);
-	netTrain.set_test_data(mTestImages, mTestLabels);
+	netTrain.set_test_data(mTestImages, mTestLabels); //optional, not used for training, helps to keep the final best model
 
 	// train net
 	cout << "Training..." << endl << endl;
