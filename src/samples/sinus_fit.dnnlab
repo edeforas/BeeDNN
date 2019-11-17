@@ -1,44 +1,38 @@
 DataSource=Sin
-Problem=Regression
-Epochs=100
-BatchSize=16
+Epochs=1000
+BatchSize=0
 Loss=MeanSquaredError
 KeepBest=1
 ReboostEveryEpochs=-1
-Optimizer=Adamax
+ClassBalancingWeightLoss=1
+Optimizer=iRPROP-
 LearningRate=-1
 Decay=-1
 Momentum=-1
 
 Engine=BeeDNN
 NbLayers=3
+Problem=Regression
 
 Layer1.type=Dense
 Layer1.inSize=1
-Layer1.outSize=10
+Layer1.outSize=3
 Layer1.hasBias=1
 Layer1.weight=
--0.6368 0.6677 0.6996 -0.466 -0.1364 -0.7213 0.761 0.2175 -0.1472 0.1642 
-0.2731 0.5235 -0.3686 -1.23 0.2985 -0.6919 -2.237 0.3427 0.6443 0.03968 
+0.5735 -0.5948 0.4979 
+1.641 1.712 0.01686 
 
 Layer2.type=Tanh
 
 Layer3.type=Dense
-Layer3.inSize=10
+Layer3.inSize=3
 Layer3.outSize=1
 Layer3.hasBias=1
 Layer3.weight=
--0.925 
-0.787 
-0.7884 
-1.653 
-0.6364 
--0.7572 
--0.9395 
--1.003 
-0.7318 
--1.169 
--0.05402 
+-2.154 
+2.055 
+2.653 
+0.02863 
 
 Notes=
-
+   

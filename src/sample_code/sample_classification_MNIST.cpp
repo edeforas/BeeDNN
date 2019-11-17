@@ -1,9 +1,7 @@
 // sample  classification MNIST similar as :
 // https://colab.research.google.com/github/tensorflow/docs/blob/master/site/en/tutorials/_index.ipynb
 
-//near 98% on ref and test after 10 epochs (3s by epochs)
-
-#include <cstdlib>
+// accuracy >98% on ref and test after 10 epochs (7s by epochs)
 
 #include <iostream>
 #include <chrono>
@@ -40,7 +38,7 @@ int main()
 {
     iEpoch = 0;
 
-	//load MNIST data
+	//load and normalize MNIST data
     cout << "Loading MNIST database..." << endl;
     MNISTReader mr;
     if(!mr.read_from_folder(".",mRefImages,mRefLabels, mTestImages,mTestLabels))
@@ -48,8 +46,6 @@ int main()
         cout << "MNIST samples not found, please check the *.ubyte files are in the executable folder" << endl;
         return -1;
     }
-
-	//normalize data
 	mTestImages/= 256.f;
 	mRefImages/= 256.f;
   
@@ -60,19 +56,21 @@ int main()
 	net.add_dense_layer(128, 10);
 	net.add_softmax_layer();
 
-	//train net
-	cout << "Training..." << endl <<endl;
+	//setup train options
 	netTrain.set_net(net);
-	netTrain.set_epochs(10);
-	netTrain.set_batchsize(64);
-
+	netTrain.set_epochs(12);
+	netTrain.set_batchsize(128);
 	netTrain.set_loss("CrossEntropy");
 	netTrain.set_epoch_callback(epoch_callback);
 	netTrain.set_train_data(mRefImages, mRefLabels);
 	netTrain.set_test_data(mTestImages, mTestLabels);
+
+	// train net
+	cout << "Training..." << endl << endl;
 	start = chrono::steady_clock::now();
 	netTrain.train();
 
+	// show train results
 	MatrixFloat mClassPredicted;
 	net.predict(mRefImages, mClassPredicted);
 	ConfusionMatrix cmRef;
@@ -84,7 +82,6 @@ int main()
 	ConfusionMatrix cmTest;
 	ClassificationResult crTest = cmTest.compute(mTestLabels, mClassTest);
 	cout << "Test accuracy: " << crTest.accuracy << " %" << endl;
-
 	cout << "Test confusion matrix:" << endl << crTest.mConfMat << endl;
 
 	cout << "end of test." << endl;

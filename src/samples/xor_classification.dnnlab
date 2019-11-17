@@ -4,6 +4,7 @@ BatchSize=1
 Loss=BinaryCrossEntropy
 KeepBest=1
 ReboostEveryEpochs=-1
+ClassBalancingWeightLoss=1
 Optimizer=Adam
 LearningRate=-1
 Decay=-1
@@ -39,4 +40,5 @@ Layer3.weight=
 Layer4.type=Sigmoid
 
 Notes=
- 
+Toy sample:
+- Sigmoid output + BinaryCross entropy

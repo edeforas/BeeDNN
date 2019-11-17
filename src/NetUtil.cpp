@@ -17,12 +17,12 @@
 #include "LayerGlobalGain.h"
 #include "LayerGlobalBias.h"
 #include "LayerSoftmax.h"
+#include "LayerUniformNoise.h"
 #include "LayerGaussianNoise.h"
 #include "LayerPRelu.h"
 
 #include <sstream>
 #include <fstream>
-//#include <filesystem>
 using namespace std;
 
 namespace NetUtil {
@@ -87,7 +87,13 @@ void write(const Net& net,string & s)
             LayerGaussianNoise* l = static_cast<LayerGaussianNoise*>(layer);
             ss << "Layer" << i+1 << ".stdNoise=" << l->get_std() << endl;
         }
-    }
+		else if (layer->type() == "UniformNoise")
+		{
+			LayerUniformNoise* l = static_cast<LayerUniformNoise*>(layer);
+			ss << "Layer" << i + 1 << ".noise=" << l->get_noise() << endl;
+		}
+	
+	}
 
     s+=ss.str();
 }
@@ -172,6 +178,12 @@ void read(const string& s,Net& net)
             string sNoise=find_key(s,sLayer+".stdNoise");
             net.add_gaussian_noise_layer(iInSize,stof(sNoise));
         }
+
+		else if (sType == "UniformNoise")
+		{
+			string sNoise = find_key(s, sLayer + ".noise");
+			net.add_uniform_noise_layer(iInSize, stof(sNoise));
+		}
 
 		else if (sType == "Softmax")
 		{

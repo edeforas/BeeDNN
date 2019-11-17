@@ -1,13 +1,23 @@
 QT       += core gui widgets
-TARGET = DNNLab
 TEMPLATE = app
 CONFIG += c++17
 
 #qwt (optional)
 DEFINES+= "USE_QWT"
 INCLUDEPATH += $$(QWT_PATH)/include
-LIBS += -L$$(QWT_PATH)\lib -lqwt
 DEFINES += QWT_DLL
+
+
+CONFIG( debug, debug|release ) {
+	TARGET = DNNLab_debug
+	LIBS += -L$$(QWT_PATH)\lib -lqwtd
+} else {
+	TARGET = DNNLab
+	LIBS += -L$$(QWT_PATH)\lib -lqwt
+}
+
+
+
 
 #eigen (optional)
 DEFINES+= "USE_EIGEN"

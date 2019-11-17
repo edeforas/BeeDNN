@@ -1,10 +1,10 @@
 DataSource=Fisher_data.txt
-Problem=Classification
 Epochs=100
 BatchSize=16
 Loss=MeanSquaredError
 KeepBest=1
 ReboostEveryEpochs=-1
+ClassBalancingWeightLoss=1
 Optimizer=Nadam
 LearningRate=-1
 Decay=-1
@@ -12,6 +12,7 @@ Momentum=-1
 
 Engine=BeeDNN
 NbLayers=1
+Problem=Classification
 
 Layer1.type=Dense
 Layer1.inSize=4
@@ -25,4 +26,4 @@ Layer1.weight=
 0.1255 
 
 Notes=
-99.33% with one perceptron !
+ 99.33% with one perceptron !
