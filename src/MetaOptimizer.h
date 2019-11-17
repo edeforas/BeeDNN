@@ -10,8 +10,8 @@ public:
 	MetaOptimizer();
 	~MetaOptimizer();
 	
-	void set_net(Net* pNet);
-	void set_train(NetTrain* pTrain);
+	void set_net(Net& net);
+	void set_train(NetTrain& train);
 	void set_nb_thread(int iNbThread); // default: use max available or if iNbThread set to zero
 	void run();
 	

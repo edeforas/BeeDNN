@@ -14,14 +14,14 @@ MetaOptimizer::MetaOptimizer()
 MetaOptimizer::~MetaOptimizer()
 { }
 //////////////////////////////////////////////////////////////////////////////
-void MetaOptimizer::set_net(Net* pNet)
+void MetaOptimizer::set_net(Net& net)
 {
-	_pNet = pNet;
+	_pNet = &net;
 }
 //////////////////////////////////////////////////////////////////////////////
-void MetaOptimizer::set_train(NetTrain* pTrain)
+void MetaOptimizer::set_train(NetTrain& train)
 {
-	_pTrain = pTrain;
+	_pTrain = &train;
 }
 //////////////////////////////////////////////////////////////////////////////
 void MetaOptimizer::set_nb_thread(int iNbThread)
@@ -49,32 +49,15 @@ void MetaOptimizer::run()
 ////////////////////////////////////////////////////////////////
 int MetaOptimizer::run_thread(int iThread, MetaOptimizer* self)
 {
-	//copy ref net
+	//copy ref net and train
 	Net netT= *(self->_pNet);
 	NetTrain trainT;
 	trainT= *(self->_pTrain);
 	trainT.set_net(netT);
 	trainT.train();
 
-	/*
-	
-	    MatrixFloat mClassRef;
-    net.classify_all(mRefImages, mClassRef);
-    ConfusionMatrix cmRef;
-    ClassificationResult crRef = cmRef.compute(mRefLabels, mClassRef);
-    cout << "% accuracy on Ref =" << crRef.accuracy << endl;
-	
-    MatrixFloat mClassTest;
-    net.classify_all(mTestImages, mClassTest);
-    ConfusionMatrix cmTest;
-    ClassificationResult crTest = cmTest.compute(mTestLabels, mClassTest);
-    cout << "% accuracy on Test=" << crTest.accuracy << endl;
-	*/
 
-
-
-
-
+	   	 
 	return 0; //TODO WIP WIP
 }
 ////////////////////////////////////////////////////////////////

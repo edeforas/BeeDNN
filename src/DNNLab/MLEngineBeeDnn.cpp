@@ -17,6 +17,7 @@ MLEngineBeeDnn::MLEngineBeeDnn()
 
     _pNet=new Net;
     _pTrain= new NetTrain;
+	_pTrain->set_net(*_pNet);
 }
 //////////////////////////////////////////////////////////////////////////////
 MLEngineBeeDnn::~MLEngineBeeDnn()

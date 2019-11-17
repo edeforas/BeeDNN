@@ -46,8 +46,8 @@ int main()
 	//create meta optimizer and run
 	cout << "Training with all cores ..." << endl;
 	MetaOptimizer optim;
-	optim.set_net(&net);
-	optim.set_train(&netTrain);
+	optim.set_net(net);
+	optim.set_train(netTrain);
 	optim.run();
 
 	//WIP WIP

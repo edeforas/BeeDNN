@@ -234,6 +234,8 @@ bool NetTrain::get_keepbest() const
 /////////////////////////////////////////////////////////////////////////////////////////////////
 float NetTrain::compute_loss(const MatrixFloat &mSamples, const MatrixFloat &mTruth) const
 {
+	assert(_pNet);
+
 	if (!_pNet->is_valid((int)mSamples.cols(), (int)mTruth.cols()))
 		return 0.f;
 
