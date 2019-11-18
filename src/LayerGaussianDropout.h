@@ -13,6 +13,7 @@
 #include "Matrix.h"
 
 #include <string>
+#include <random>
 using namespace std;
 
 class Activation;
@@ -34,7 +35,8 @@ public:
     float get_proba() const;
 
 private:
-    void create_mask();
+	default_random_engine _RNGgenerator;
+	normal_distribution<float> _distNormal;
 
     float _fProba;
     float _fStdev;

@@ -13,6 +13,7 @@
 #include "Matrix.h"
 
 #include <string>
+#include <random>
 using namespace std;
 
 class Activation;
@@ -34,7 +35,8 @@ public:
     float get_rate() const;
 
 private:
-    void create_mask();
+	default_random_engine _RNGgenerator;
+	bernoulli_distribution _distBernoulli;
 
     float _fRate;
     MatrixFloat _mask;

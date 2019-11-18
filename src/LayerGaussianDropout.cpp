@@ -9,21 +9,14 @@
 // GaussianDropout as in: https://keras.io/layers/noise/
 
 #include "LayerGaussianDropout.h"
-#include <random>
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerGaussianDropout::LayerGaussianDropout(int iSize,float fProba):
     Layer(iSize,iSize,"GaussianDropout"),
-    _fProba(fProba)
+    _fProba(fProba),
+	_fStdev( sqrtf(_fProba / (1.f - _fProba))),
+	_distNormal(1., _fStdev)
 {
-	if(_fProba>1.f)
-		_fProba=1.f;
-	
-	if(_fProba<0.f)
-		_fProba=0.f;
-	
-	_fStdev=sqrtf(_fProba / (1.f - _fProba));
-	
     LayerGaussianDropout::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -53,13 +46,10 @@ void LayerGaussianDropout::backpropagation(const MatrixFloat &mIn,const MatrixFl
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGaussianDropout::init()
 {
-	default_random_engine RNGgenerator; //todo check perfs of init every time
-	normal_distribution<float> distNormal(1.f, _fStdev); //todo check perfs of init every time
-
     _mask.resize(1, _iInSize);
 
     for (int i = 0; i < _iInSize; i++)
-		_mask(0, i) = distNormal(RNGgenerator);
+		_mask(0, i) = _distNormal(_RNGgenerator);
 }
 ///////////////////////////////////////////////////////////////////////////////
 float LayerGaussianDropout::get_proba() const

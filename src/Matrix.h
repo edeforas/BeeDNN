@@ -616,6 +616,7 @@ MatrixFloat rowWiseSum(const MatrixFloat& m);
 MatrixFloat colWiseMean(const MatrixFloat& m);
 MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat rowWiseMult(const MatrixFloat& m, const MatrixFloat& d);
+MatrixFloat colWiseMult(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d);
 void arraySub(MatrixFloat& m,float f);
 vector<int> randPerm(int iSize); //create a vector of index shuffled

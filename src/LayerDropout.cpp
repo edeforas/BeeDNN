@@ -8,12 +8,11 @@
 
 #include "LayerDropout.h"
 
-#include <cstdlib> //for rand
-
 ///////////////////////////////////////////////////////////////////////////////
 LayerDropout::LayerDropout(int iSize,float fRate):
     Layer(iSize,iSize,"Dropout"),
-    _fRate(fRate)
+    _fRate(fRate),
+	_distBernoulli(fRate)
 {
     LayerDropout::init();
 }
@@ -55,9 +54,9 @@ void LayerDropout::init()
     if(_fRate==0.f)
         return;
 
-    for (int i = 0; i < _iInSize; i++) //todo distribute a proportion of 1, so we get exactly fRate
+    for (int i = 0; i < _iInSize; i++)
     {
-        if ( (rand()/(float)RAND_MAX) < _fRate)
+        if (_distBernoulli(_RNGgenerator))
             _mask(0, i) = 0.f;
     }
 

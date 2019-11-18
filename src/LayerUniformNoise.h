@@ -13,6 +13,7 @@
 #include "Matrix.h"
 
 #include <string>
+#include <random>
 using namespace std;
 
 class Activation;
@@ -33,6 +34,9 @@ public:
 
 private:
     float _fNoise;
+	default_random_engine _RNGgenerator;
+	uniform_real_distribution<float> _distUniform;
+
 };
 
 #endif
