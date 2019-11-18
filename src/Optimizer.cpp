@@ -193,7 +193,7 @@ public:
 
     virtual void init() override
     {
-		if (_fLearningRate == -1.f) _fLearningRate = 0.01f;
+		if (_fLearningRate == -1.f) _fLearningRate = 0.001f;
 
         _cache.resize(0,0);
     }
@@ -322,7 +322,7 @@ class OptimizerNadam : public Optimizer
 public:
     OptimizerNadam()
     {
-		_fLearningRate =0.002f;
+		_fLearningRate =0.001f;
         beta1=0.9f;
         beta2=0.999f;
 		beta1_prod = 0.f;
@@ -399,7 +399,7 @@ public:
 
     virtual void init() override
     {
-		if (_fLearningRate == -1.f) _fLearningRate = 0.002f;
+		if (_fLearningRate == -1.f) _fLearningRate = 0.001f;
 
         _m.resize(0,0);
         _u.resize(0,0);
