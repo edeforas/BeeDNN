@@ -150,11 +150,11 @@ vector<int> randPerm(int iSize) //create a vector of index shuffled
 ///////////////////////////////////////////////////////////////////////////
 void applyRowPermutation(const vector<int>& vPermutation, const MatrixFloat & mIn, MatrixFloat & mPermuted)
 {
-    assert(vPermutation.size() == mIn.rows());
+    assert((int)vPermutation.size() == mIn.rows());
 
     mPermuted.resizeLike(mIn);
 
-	for (int i = 0; i < vPermutation.size(); i++)
+	for (int i = 0; i < (int)(vPermutation.size()); i++)
 	{
 		int iPerm= vPermutation[i];
 

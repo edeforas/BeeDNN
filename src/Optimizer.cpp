@@ -592,7 +592,7 @@ Optimizer* create_optimizer(const string& sOptimizer)
     if (sOptimizer == "RPROP-")
         return new OptimizerRPROPm;
 
-	if (sOptimizer == "iRPROP-")
+    if (sOptimizer == "iRPROP-")
         return new OptimizeriRPROPm;
 	
 	if (sOptimizer == "SGD")

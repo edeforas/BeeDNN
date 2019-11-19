@@ -28,9 +28,10 @@ int main()
         mSamples(i,0)=x;
     }
 
-    //train net
+    //setup and train net
     cout << "Fitting..." << endl;
 	NetTrain netfit;
+	netfit.set_epochs(200);
 	netfit.set_net(net);
 	netfit.set_train_data(mSamples, mTruth);
 	netfit.train();
