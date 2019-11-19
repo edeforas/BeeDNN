@@ -50,10 +50,9 @@ int main()
 	mRefImages/= 256.f;
   
 	//create simple net:
-	net.add_uniform_noise_layer(784, 0.01f); //reduce overfitting
 	net.add_dense_layer(784, 128);
 	net.add_activation_layer("Relu");
-	net.add_dropout_layer(128,0.1f); //reduce overfitting
+	net.add_dropout_layer(128,0.2f); //reduce overfitting
 	net.add_dense_layer(128, 10);
 	net.add_softmax_layer();
 

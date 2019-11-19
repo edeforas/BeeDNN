@@ -31,9 +31,9 @@ Layer* LayerGaussianDropout::clone() const
 void LayerGaussianDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
     if(_bTrainMode)
-        mOut = mIn*_mask.asDiagonal(); //in learn mode
+        mOut = mIn*_mask.asDiagonal();
     else
-        mOut = mIn; // in test mode
+        mOut = mIn;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGaussianDropout::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)

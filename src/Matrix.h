@@ -178,6 +178,12 @@ public:
         std::fill(_data,_data+_iSize,b);
     }
 
+	void setConstant(int iRows, int iColumns, T b)
+	{
+		resize(iRows, iColumns);
+		setConstant(b);
+	}
+
 	void setZero()
 	{
 		setConstant(0.);
