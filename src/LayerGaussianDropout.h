@@ -35,12 +35,12 @@ public:
     float get_proba() const;
 
 private:
+	float _fProba;
+	float _fStdev;
+	MatrixFloat _mask;
+
 	default_random_engine _RNGgenerator;
 	normal_distribution<float> _distNormal;
-
-    float _fProba;
-    float _fStdev;
-	MatrixFloat _mask;
 };
 
 #endif

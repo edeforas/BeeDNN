@@ -82,7 +82,7 @@ void arraySub(MatrixFloat& m,float f)
 #endif
 }
 ///////////////////////////////////////////////////////////////////////////
-MatrixFloat colWiseMult(const MatrixFloat& m, const MatrixFloat& d)
+/*MatrixFloat colWiseMult(const MatrixFloat& m, const MatrixFloat& d)
 {
 	assert(d.cols() == m.cols());
 	assert(d.rows() == 1);
@@ -94,6 +94,7 @@ MatrixFloat colWiseMult(const MatrixFloat& m, const MatrixFloat& d)
 
 	return r;
 }
+*/
 ///////////////////////////////////////////////////////////////////////////
 MatrixFloat rowWiseMult(const MatrixFloat& m, const MatrixFloat& d)
 {

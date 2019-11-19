@@ -35,11 +35,11 @@ public:
     float get_rate() const;
 
 private:
+	float _fRate;
+	MatrixFloat _mask;
+
 	default_random_engine _RNGgenerator;
 	bernoulli_distribution _distBernoulli;
-
-    float _fRate;
-    MatrixFloat _mask;
 };
 
 #endif

@@ -367,10 +367,10 @@ void NetTrain::train()
 
     //accept batch size == 0 or greater than nb samples  -> full size
     int iBatchSizeLocal=_iBatchSize;
-    if( (iBatchSizeLocal >iNbSamples) || (iBatchSizeLocal ==0))
+    if( (iBatchSizeLocal >iNbSamples) || (iBatchSizeLocal ==0) )
         iBatchSizeLocal =iNbSamples;
 
-	_inOut.resize(_iNbLayers + 1);
+    _inOut.resize(_iNbLayers + 1);
 
     _gradient.resize(_iNbLayers +1);
 
