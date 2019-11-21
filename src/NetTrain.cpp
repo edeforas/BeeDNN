@@ -245,24 +245,8 @@ float NetTrain::compute_loss(const MatrixFloat &mSamples, const MatrixFloat &mTr
         return 0.f;
 
     MatrixFloat mOut;
-	_pNet->predict(mSamples, mOut);
-
-    float fLoss = 0.f;
-
-	if (mTruth.cols() == mOut.cols())
-	{
-		for (int i = 0; i < iNbSamples; i++) //todo optimize
-			fLoss += _pLoss->compute(mOut.row(i), mTruth.row(i));
-	}
-	else if((mTruth.cols() == 1) && (mOut.cols() >1) ) // convert to categorical
-	{
-		MatrixFloat mTruthOneHot;
-		labelToOneHot(mTruth, mTruthOneHot);
-		for (int i = 0; i < iNbSamples; i++) //todo optimize
-			fLoss += _pLoss->compute(mOut.row(i), mTruthOneHot.row(i)); //todo optimize
-	}
-
-    return fLoss /iNbSamples;
+	_pNet->forward(mSamples, mOut);
+    return _pLoss->compute(mOut,mTruth);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 float NetTrain::compute_accuracy(const MatrixFloat &mSamples, const MatrixFloat &mTruth) const
@@ -273,7 +257,7 @@ float NetTrain::compute_accuracy(const MatrixFloat &mSamples, const MatrixFloat 
         return 0.f;
 
     MatrixFloat mOut;
-	_pNet->predict(mSamples, mOut);
+	_pNet->forward(mSamples, mOut);
 
     if (mTruth.cols() != 1)
     {
@@ -334,8 +318,8 @@ void NetTrain::train()
 		if (bTruthIsLabel && (_pNet->output_size() != 1))
 		{
 			//create binary label	
-			labelToOneHot(*_pmTruthTrain, mTruthOneHot);
-			set_train_data(*_pmSamplesTrain, mTruthOneHot);
+//			labelToOneHot(*_pmTruthTrain, mTruthOneHot);
+//			set_train_data(*_pmSamplesTrain, mTruthOneHot);
 		}
 	}
 

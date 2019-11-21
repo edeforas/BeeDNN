@@ -60,7 +60,7 @@ int main()
 	netTrain.set_net(net);
 	netTrain.set_epochs(15);
 	netTrain.set_batchsize(64);
-	netTrain.set_loss("CrossEntropy");
+	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_epoch_callback(epoch_callback); //optional , to show the progress
 	netTrain.set_train_data(mRefImages, mRefLabels);
 	netTrain.set_test_data(mTestImages, mTestLabels); //optional, not used for training, helps to keep the final best model
@@ -72,17 +72,24 @@ int main()
 
 	// show train results
 	MatrixFloat mClassPredicted;
-	net.predict(mRefImages, mClassPredicted);
+	net.classify(mRefImages, mClassPredicted);
 	ConfusionMatrix cmRef;
 	ClassificationResult crRef = cmRef.compute(mRefLabels, mClassPredicted);
 	cout << "Ref accuracy: " << crRef.accuracy << " %" << endl;
 
 	MatrixFloat mClassTest;
-	net.predict(mTestImages, mClassTest);
+	net.classify(mTestImages, mClassTest);
 	ConfusionMatrix cmTest;
 	ClassificationResult crTest = cmTest.compute(mTestLabels, mClassTest);
 	cout << "Test accuracy: " << crTest.accuracy << " %" << endl;
 	cout << "Test confusion matrix:" << endl << crTest.mConfMat << endl;
+
+	//testu function
+	if (crTest.accuracy < 98.f)
+	{
+		cout << "test failed! accuracy=" << crTest.accuracy << endl;
+		return -1;
+	}
 
 	cout << "end of test." << endl;
     return 0;

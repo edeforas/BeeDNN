@@ -595,13 +595,13 @@ Optimizer* create_optimizer(const string& sOptimizer)
     if (sOptimizer == "iRPROP-")
         return new OptimizeriRPROPm;
 	
-	if (sOptimizer == "SGD")
+    if (sOptimizer == "SGD")
         return new OptimizerSGD();
 
-	if (sOptimizer == "Step")
+    if (sOptimizer == "Step")
         return new OptimizerStep();
 
-	return nullptr;
+    return nullptr;
 }
 //////////////////////////////////////////////////////////////////////////////
 void list_optimizers_available(vector<string>& vsOptimizers)

@@ -63,7 +63,7 @@ void MLEngineBeeDnn::predict(const MatrixFloat& mIn, MatrixFloat& mOut)
     if(!_pNet->is_valid((int)mIn.cols(), _pNet->output_size()))
         return;
 
-    _pNet->predict(mIn,mOut);
+    _pNet->forward(mIn,mOut);
 }
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::learn_epochs(const MatrixFloat& mSamples,const MatrixFloat& mTruth)
@@ -149,13 +149,15 @@ void MLEngineBeeDnn::compute_confusion_matrix(const MatrixFloat & mSamples, cons
 void MLEngineBeeDnn::predict_all(const MatrixFloat & mSamples, MatrixFloat& mResult)
 {
     MatrixFloat temp;
+    _pNet->forward(mSamples,mResult);
+    /*
     for(int i=0;i<mSamples.rows();i++)
     {
         predict(mSamples.row(i),temp);
         if(i==0)
             mResult.resize(mSamples.rows(),temp.cols());
         mResult.row(i)=temp;
-    }
+    }*/
 }
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::classify_all(const MatrixFloat & mSamples, MatrixFloat& mResultLabel)
@@ -164,11 +166,8 @@ void MLEngineBeeDnn::classify_all(const MatrixFloat & mSamples, MatrixFloat& mRe
     mResultLabel.resize(mSamples.rows(),1);
     for(int i=0;i<mSamples.rows();i++)
     {
-        predict(mSamples.row(i),temp);
-        if(temp.cols()!=1)
-            mResultLabel(i,0)=(float)argmax(temp);
-        else
-            mResultLabel(i,0)=temp(0,0); //case of "output is a label"
+        _pNet->classify(mSamples.row(i),temp);
+        mResultLabel(i,0)=temp(0,0); //case of "output is a label"
     }
 }
 //////////////////////////////////////////////////////////////////////////////

@@ -9,6 +9,21 @@ using namespace std;
 #include "Net.h"
 #include "NetTrain.h"
 
+/////////////////////////////////////////////////////////////////////
+// for testU only
+inline bool is_near(double a, double b, double tolerancis = 1.e-10)
+{
+	return fabs(a - b) < tolerancis;
+}
+void test(bool bTest, string sMessage = "")
+{
+	if (bTest) return;
+
+	cout << "Test failed: " << sMessage << endl;
+	exit(-1);
+}
+/////////////////////////////////////////////////////////////////////
+
 int main()
 {
     //build net
@@ -31,20 +46,23 @@ int main()
     //setup and train net
     cout << "Fitting..." << endl;
 	NetTrain netfit;
-	netfit.set_epochs(200);
+	netfit.set_epochs(1000);
 	netfit.set_net(net);
 	netfit.set_train_data(mSamples, mTruth);
 	netfit.train();
 
     //print truth and prediction
 	MatrixFloat mPredict;
-	net.predict(mSamples, mPredict);
-    for(int i=0;i<mSamples.size();i+=8)
-        cout << setprecision(4) << "x=" << mSamples(i,0) << "\ttruth=" << mTruth(i,0) << "\tpredict=" << mPredict(i,0) <<endl;
-
+	net.forward(mSamples, mPredict);
+	for (int i = 0; i < mSamples.size(); i += 8)
+	{
+		cout << setprecision(4) << "x=" << mSamples(i, 0) << "\ttruth=" << mTruth(i, 0) << "\tpredict=" << mPredict(i, 0) << endl;
+		test(is_near(mTruth(i, 0), mPredict(i, 0), 0.05));
+	}
     //compute and print loss
     float fLoss=netfit.compute_loss(mSamples,mTruth);
     cout << "Loss=" << fLoss << endl;
 
+	cout << "end of test." << endl;
     return 0;
 }
