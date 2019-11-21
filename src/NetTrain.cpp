@@ -321,7 +321,6 @@ void NetTrain::set_test_data(const MatrixFloat& mSamplesTest, const MatrixFloat&
 void NetTrain::train()
 {
 	MatrixFloat mTruthOneHot;
-	bool bBetterNetFound = false;
 
 	if (_pNet == nullptr)
 		return;
@@ -479,7 +478,6 @@ void NetTrain::train()
                 {
                     fMaxAccuracy= fSelectedAccuracy;
                     bestNet= *_pNet;
-					bBetterNetFound = true;
                 }
             }
             else
@@ -488,7 +486,6 @@ void NetTrain::train()
                 {
                     fMinLoss= fSelectedLoss;
                     bestNet= *_pNet;
-					bBetterNetFound = true;
                 }
             }
         }
@@ -507,7 +504,7 @@ void NetTrain::train()
         }
     }
 
-	if(bBetterNetFound )
+	if(_bKeepBest)
 		(*_pNet).operator=(bestNet);
 
     return ;
