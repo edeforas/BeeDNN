@@ -186,9 +186,9 @@ void Net::classify(const MatrixFloat& mIn, MatrixFloat& mClass) const
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::predict(const MatrixFloat& mIn, MatrixFloat& mPredicted) const
 {
-	if (_bClassificationMode)
-		classify(mIn, mPredicted);
-	else
+//	if (_bClassificationMode)
+//		classify(mIn, mPredicted);
+//	else
 		forward(mIn, mPredicted);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////

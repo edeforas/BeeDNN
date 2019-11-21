@@ -254,7 +254,7 @@ float NetTrain::compute_loss(const MatrixFloat &mSamples, const MatrixFloat &mTr
 		for (int i = 0; i < iNbSamples; i++) //todo optimize
 			fLoss += _pLoss->compute(mOut.row(i), mTruth.row(i));
 	}
-	else if((mTruth.cols() == 1) && (mOut.cols() >1) ) //categorical
+	else if((mTruth.cols() == 1) && (mOut.cols() >1) ) // convert to categorical
 	{
 		MatrixFloat mTruthOneHot;
 		labelToOneHot(mTruth, mTruthOneHot);
