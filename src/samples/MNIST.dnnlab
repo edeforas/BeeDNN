@@ -1,7 +1,7 @@
 DataSource=MNIST
 Epochs=20
 BatchSize=64
-Loss=CategoricalCrossEntropy
+Loss=SparseCategoricalCrossEntropy
 KeepBest=1
 ReboostEveryEpochs=-1
 ClassBalancingWeightLoss=1

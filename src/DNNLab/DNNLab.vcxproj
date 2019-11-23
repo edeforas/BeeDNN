@@ -97,6 +97,7 @@
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <WarningLevel>Level3</WarningLevel>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <AdditionalDependencies>C:\dev\Qwt_6.1.4\lib\qwt.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
