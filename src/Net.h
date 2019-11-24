@@ -43,6 +43,7 @@ public:
 	
 	void add_poolaveraging1D_layer(int inSize, int outSize);
 	void add_poolmax1D_layer(int inSize, int outSize);
+	void add_poolmax2D_layer(int iInRow, int iInCols, int iRowFactor = 2, int iColFactor = 2);
 
     void set_input_size(int iInputSize);
 	int output_size() const;
