@@ -184,6 +184,7 @@
     <ClCompile Include="..\LayerGlobalGain.cpp" />
     <ClCompile Include="..\LayerPoolAveraging1D.cpp" />
     <ClCompile Include="..\LayerPoolMax1D.cpp" />
+    <ClCompile Include="..\LayerPoolMax2D.cpp" />
     <ClCompile Include="..\LayerPRelu.cpp" />
     <ClCompile Include="..\LayerSoftmax.cpp" />
     <ClCompile Include="..\LayerUniformNoise.cpp" />
@@ -209,6 +210,7 @@
     <ClInclude Include="..\LayerGlobalGain.h" />
     <ClInclude Include="..\LayerPoolAveraging1D.h" />
     <ClInclude Include="..\LayerPoolMax1D.h" />
+    <ClInclude Include="..\LayerPoolMax2D.h" />
     <ClInclude Include="..\LayerPRelu.h" />
     <ClInclude Include="..\LayerSoftmax.h" />
     <ClInclude Include="..\LayerUniformNoise.h" />
