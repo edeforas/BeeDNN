@@ -32,50 +32,57 @@ Layer* LayerPoolMax2D::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerPoolMax2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
-	mOut.resize(_iOutRows, _iOutCols);
+	mOut = mIn;
+	
+	mOut.resize(mIn.rows(), _iOutRows* _iOutCols);
 	if(_bTrainMode)
-		_mMaxOrig.resize(_iOutRows, _iOutCols); //index to selected input max data
+		_mMaxOrig.resize(mIn.rows() ,_iOutRows* _iOutCols); //index to selected input max data
 
 	//not optimized yet
-	for (int r = 0; r < _iOutRows; r++)
-		for (int c = 0; c < _iOutCols; c++)
-		{
-			float fMax = -1.e38f;
-			int iPosIn = -1;
-
-			for(int ri= r*_iRowFactor; ri< r*_iRowFactor+ _iRowFactor;ri++)
-				for (int ci = c * _iColFactor; ci < c*_iColFactor + _iColFactor; ci++)
-					if (mIn(ri, ci) > fMax)
+	for (int l = 0; l < mIn.rows(); l++)
+	{
+		auto lIn = mIn.row(l);
+		auto lOut = mOut.row(l);
+		for (int r = 0; r < _iOutRows; r++)
+			for (int c = 0; c < _iOutCols; c++)
+			{
+				float fMax = -1.e38f;
+				int iPosIn = -1;
+				
+				for (int ri = r * _iRowFactor; ri < r*_iRowFactor + _iRowFactor; ri++)
+					for (int ci = c * _iColFactor; ci < c*_iColFactor + _iColFactor; ci++)
 					{
-						fMax = mIn(ri, ci);
-						iPosIn = ri * _iInCols + ci; //flat index
+						int iIndex = ri * _iInCols + ci; //flat index
+						float fSample = lIn(iIndex);
+						
+						if (fSample > fMax)
+						{
+							fMax = fSample;
+							iPosIn = iIndex;
+						}
 					}
-
-			mOut(r, c) = fMax;
-			if(_bTrainMode)
-				_mMaxOrig(r, c) = (float)iPosIn;
-		}
+				
+				int iIndexOut = r * _iColFactor + c;
+				lOut(iIndexOut) = fMax;
+				if (_bTrainMode)
+					_mMaxOrig.row(l)(iIndexOut) = (float)iPosIn;
+			}
+	}
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerPoolMax2D::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
     (void)mIn;
 
-	_gradientWeight.setZero(_iInRows, _iInCols);
-	mGradientIn.resize(_iInRows, _iInCols);
+	mGradientIn.setZero(mGradientOut.rows(),_iInRows* _iInCols);
 
-
-
-	// uses _mMaxOrig
-
-
-	/*
-	mGradientIn.setZero(mIn.rows(),mIn.cols()); //todo optimize everything
-	for (int l = 0; l < mIn.rows(); l++)
+	for (int l = 0; l < mGradientOut.rows(); l++)
 	{
-		for (int iOut = 0; iOut < mGradientOut.cols(); iOut++)
-			mGradientIn(l, (int)_gradientWeight(l, iOut)) = mGradientOut(l, iOut);
+		auto lOut = mGradientOut.row(l);
+		auto lIn = mGradientIn.row(l);
+
+		for(int i=0;i< mGradientOut.cols();i++)
+			lIn((int)_mMaxOrig(i)) = lOut(i);
 	}
-	*/
 }
 ///////////////////////////////////////////////////////////////////////////////
