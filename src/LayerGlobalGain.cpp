@@ -43,6 +43,9 @@ void LayerGlobalGain::backpropagation(const MatrixFloat &mIn,const MatrixFloat &
 {
     _gradientWeight = ((mIn.transpose())*mGradientOut)*(1.f /mIn.rows());
 
+	if (_bFirstLayer)
+		return;
+
     mGradientIn = mGradientOut * _weight(0);
 }
 ///////////////////////////////////////////////////////////////////////////////

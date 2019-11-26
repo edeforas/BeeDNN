@@ -41,7 +41,11 @@ void LayerGaussianNoise::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 void LayerGaussianNoise::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
     (void)mIn;
-    mGradientIn= mGradientOut;
+ 
+	if (_bFirstLayer)
+		return;
+
+	mGradientIn= mGradientOut;
 }
 ///////////////////////////////////////////////////////////////////////////////
 float LayerGaussianNoise::get_std() const

@@ -16,9 +16,7 @@ LayerGaussianDropout::LayerGaussianDropout(int iSize,float fProba):
     _fProba(fProba),
 	_fStdev( sqrtf(_fProba / (1.f - _fProba))),
 	_distNormal(1., _fStdev)
-{
-    LayerGaussianDropout::init();
-}
+{ }
 ///////////////////////////////////////////////////////////////////////////////
 LayerGaussianDropout::~LayerGaussianDropout()
 { }
@@ -30,26 +28,28 @@ Layer* LayerGaussianDropout::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGaussianDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
-    if(_bTrainMode)
-        mOut = mIn*_mask.asDiagonal();
-    else
+	if (_bTrainMode)
+	{
+		_mask.resize(1, _iInSize);
+
+		for (int i = 0; i < _iInSize; i++)
+			_mask(0, i) = _distNormal(_RNGgenerator);
+		
+		mOut = mIn * _mask.asDiagonal();
+	}
+	else
         mOut = mIn;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGaussianDropout::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
-    (void)mIn;
+	(void)mIn;
 	assert(_bTrainMode);
-    mGradientIn= mGradientOut*_mask.asDiagonal();
-	init();
-}
-///////////////////////////////////////////////////////////////////////////////
-void LayerGaussianDropout::init()
-{
-    _mask.resize(1, _iInSize);
 
-    for (int i = 0; i < _iInSize; i++)
-		_mask(0, i) = _distNormal(_RNGgenerator);
+	if (_bFirstLayer)
+		return;
+
+	mGradientIn= mGradientOut*_mask.asDiagonal();
 }
 ///////////////////////////////////////////////////////////////////////////////
 float LayerGaussianDropout::get_proba() const

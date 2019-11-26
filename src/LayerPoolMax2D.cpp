@@ -74,6 +74,9 @@ void LayerPoolMax2D::backpropagation(const MatrixFloat &mIn,const MatrixFloat &m
 {
     (void)mIn;
 
+	if (_bFirstLayer)
+		return;
+
 	mGradientIn.setZero(mGradientOut.rows(),_iInRows* _iInCols);
 
 	for (int l = 0; l < mGradientOut.rows(); l++)

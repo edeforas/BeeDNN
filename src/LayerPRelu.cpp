@@ -52,6 +52,8 @@ void LayerPRelu::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 ///////////////////////////////////////////////////////////////////////////////
 void LayerPRelu::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
+	//todo manage _bFirstLayer
+
 	// compute gradient in and gradient weight
 	mGradientIn = mGradientOut;
 	for (int i = 0; i < mGradientIn.rows(); i++)

@@ -43,6 +43,9 @@ void LayerGlobalBias::backpropagation(const MatrixFloat &mIn,const MatrixFloat &
 {
     _gradientWeight = colWiseMean(mIn);
 	
+	if (_bFirstLayer)
+		return;
+
     mGradientIn = mGradientOut;
 }
 ///////////////////////////////////////////////////////////////////////////////

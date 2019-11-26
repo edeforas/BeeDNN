@@ -27,6 +27,7 @@ public:
     void set_input_size(int iInputSize);
     int in_size() const;
     int out_size() const;
+	void set_first_layer(bool bFirstLayer);
 
     virtual void forward(const MatrixFloat& mIn,MatrixFloat& mOut) =0;
 	
@@ -43,6 +44,7 @@ protected:
     MatrixFloat _weight,_gradientWeight;
     int _iInSize, _iOutSize;
 	bool _bTrainMode;
+	bool _bFirstLayer;
 
 private:
     string _sType;
