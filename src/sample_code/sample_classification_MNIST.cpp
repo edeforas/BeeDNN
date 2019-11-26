@@ -1,7 +1,7 @@
 // sample  classification MNIST similar as :
 // https://colab.research.google.com/github/tensorflow/docs/blob/master/site/en/tutorials/_index.ipynb
 
-// accuracy >98% on ref and test after 12 epochs (5s by epochs)
+// accuracy ~ 98.2% , on test db, after 15 epochs (5s by epochs)
 
 #include <iostream>
 #include <chrono>

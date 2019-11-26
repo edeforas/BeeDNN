@@ -1,5 +1,5 @@
-// sample  classification MNIST similar as :
-// testing poolmax2D
+// sample MNIST classification with a poolmax2D
+// 96% accuracy after 20 epochs, 1s/epochs
 
 #include <iostream>
 #include <chrono>
@@ -48,18 +48,18 @@ int main()
 	mRefImages/= 256.f;
   
 	//create simple net:
-	net.add_poolmax2D_layer(28,28, 2, 2);
-	net.add_dense_layer(784/4, 32);
+	net.add_poolmax2D_layer(28,28, 2, 2); //input rows, input cols, factor rows, factor cols
+	net.add_dense_layer(784/4, 32); // new size is 4x smaller
 	net.add_activation_layer("Relu");
 	net.add_dense_layer(32, 10);
 	net.add_softmax_layer();
 
 	//setup train options
 	netTrain.set_net(net);
-	netTrain.set_epochs(15);
+	netTrain.set_epochs(20);
 	netTrain.set_batchsize(64);
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
-	netTrain.set_epoch_callback(epoch_callback); //optional , to show the progress
+	netTrain.set_epoch_callback(epoch_callback); //optional, show progress
 	netTrain.set_train_data(mRefImages, mRefLabels);
 	netTrain.set_test_data(mTestImages, mTestLabels); //optional, not used for training, helps to keep the final best model
 
