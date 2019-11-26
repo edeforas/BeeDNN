@@ -36,7 +36,7 @@ void LayerPoolMax2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 	
 	mOut.resize(mIn.rows(), _iOutRows* _iOutCols);
 	if(_bTrainMode)
-		_mMaxOrig.resize(mIn.rows() ,_iOutRows* _iOutCols); //index to selected input max data
+		_mMaxIndex.resize(mIn.rows() ,_iOutRows* _iOutCols); //index to selected input max data
 
 	//not optimized yet
 	for (int l = 0; l < mIn.rows(); l++)
@@ -62,10 +62,10 @@ void LayerPoolMax2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 						}
 					}
 				
-				int iIndexOut = r * _iColFactor + c;
+				int iIndexOut = r * _iOutCols + c;
 				lOut(iIndexOut) = fMax;
 				if (_bTrainMode)
-					_mMaxOrig.row(l)(iIndexOut) = (float)iPosIn;
+					_mMaxIndex.row(l)(iIndexOut) = (float)iPosIn;
 			}
 	}
 }
@@ -82,7 +82,7 @@ void LayerPoolMax2D::backpropagation(const MatrixFloat &mIn,const MatrixFloat &m
 		auto lIn = mGradientIn.row(l);
 
 		for(int i=0;i< mGradientOut.cols();i++)
-			lIn((int)_mMaxOrig(i)) = lOut(i);
+			lIn((int)_mMaxIndex(i)) = lOut(i);
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////

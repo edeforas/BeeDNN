@@ -31,7 +31,7 @@ private:
 	int _iOutRows;
 	int _iOutCols;
 
-	MatrixFloat _mMaxOrig;
+	MatrixFloat _mMaxIndex;
 };
 
 #endif
