@@ -110,7 +110,7 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
 	_pmTruthTest = other._pmTruthTest;
 
 	_epochCallBack = other._epochCallBack;
-	_pNet = other._pNet;
+	set_net(*other._pNet);
 	_pLoss = create_loss(other._pLoss->name());
 
 	_trainLoss= other._trainLoss;
@@ -125,6 +125,9 @@ void NetTrain::set_net(Net& net)
 {
 	_pNet = &net;
 	_iNbLayers = (int)_pNet->layers().size();
+	if (_iNbLayers != 0)
+		_pNet->layers()[0]->set_first_layer(true);
+	
 	clear_optimizers();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////

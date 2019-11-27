@@ -38,6 +38,9 @@ void LayerUniformNoise::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 ///////////////////////////////////////////////////////////////////////////////
 void LayerUniformNoise::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
+	if (_bFirstLayer)
+		return;
+
     (void)mIn;
     mGradientIn= mGradientOut;
 }

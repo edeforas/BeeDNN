@@ -39,6 +39,9 @@ void LayerActivation::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 ///////////////////////////////////////////////////////////////////////////////
 void LayerActivation::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
+	if (_bFirstLayer)
+		return;
+
     mGradientIn.resizeLike(mIn);
     for(int i=0;i<mGradientIn.size();i++)
         mGradientIn(i)=_pActivation->derivation(mIn(i));

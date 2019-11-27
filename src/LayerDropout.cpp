@@ -45,6 +45,9 @@ void LayerDropout::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGr
 {
     (void)mIn;
 
+	if (_bFirstLayer)
+		return;
+
 	if(_fRate!=0.f)
 		mGradientIn= mGradientOut.cwiseProduct(_mask);
 	else

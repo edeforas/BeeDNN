@@ -6,39 +6,32 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerGaussianDropout_
-#define LayerGaussianDropout_
+#ifndef LayerPoolMax2D_
+#define LayerPoolMax2D_
 
 #include "Layer.h"
 #include "Matrix.h"
 
-#include <string>
-#include <random>
-using namespace std;
-
-class Activation;
-
-class LayerGaussianDropout : public Layer
+class LayerPoolMax2D : public Layer
 {
 public:
-    LayerGaussianDropout(int iSize,float fProba);
-    virtual ~LayerGaussianDropout() override;
+	LayerPoolMax2D(int iInRows, int iInCols, int iRowFactor = 2, int iColFactor = 2);
+    virtual ~LayerPoolMax2D() override;
 
     virtual Layer* clone() const override;
 
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
-
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 
-    float get_proba() const;
-
 private:
-	float _fProba;
-	float _fStdev;
-	MatrixFloat _mask;
+	int _iInRows;
+	int _iInCols;
+	int _iRowFactor;
+	int _iColFactor;
+	int _iOutRows;
+	int _iOutCols;
 
-	default_random_engine _RNGgenerator;
-	normal_distribution<float> _distNormal;
+	MatrixFloat _mMaxIndex;
 };
 
 #endif

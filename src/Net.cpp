@@ -25,6 +25,7 @@
 
 #include "LayerPoolAveraging1D.h"
 #include "LayerPoolMax1D.h"
+#include "LayerPoolMax2D.h"
 
 #include <cmath>
 using namespace std;
@@ -147,6 +148,13 @@ void Net::add_poolmax1D_layer(int inSize, int iOutSize)
 	update_out_layer_input_size(inSize);
 	_layers.push_back(new LayerPoolMax1D(inSize, iOutSize));
 	_iOutputSize = iOutSize;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void Net::add_poolmax2D_layer(int iInRow, int iInCols, int iRowFactor, int iColFactor)
+{
+//	update_out_layer_input_size(iInRow*iInCols);
+	_layers.push_back(new LayerPoolMax2D(iInRow, iInCols, iRowFactor, iColFactor));
+	_iOutputSize = iInRow * iInCols/( iRowFactor* iColFactor);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const

@@ -15,6 +15,7 @@ _iOutSize(iOutSize),
 _sType(sType)
 { 
 	_bTrainMode = false;
+	_bFirstLayer = false;
 }
 ////////////////////////////////////////////////////////////////
 Layer::~Layer()
@@ -42,6 +43,11 @@ int Layer::in_size() const
 int Layer::out_size() const
 {
     return _iOutSize;
+}
+///////////////////////////////////////////////////////////////
+void Layer::set_first_layer(bool bFirstLayer)
+{
+	_bFirstLayer = bFirstLayer;
 }
 ///////////////////////////////////////////////////////////////
 void Layer::set_train_mode(bool bTrainMode)

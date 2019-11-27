@@ -46,6 +46,9 @@ void LayerPoolAveraging1D::backpropagation(const MatrixFloat &mIn,const MatrixFl
 {
     (void)mIn;
 
+	if (_bFirstLayer)
+		return;
+
     mGradientIn = mGradientOut * (_weight.transpose()); //to do , do not update weight!!!!!!!!!!!!!!!!! FAIL
 }
 ///////////////////////////////////////////////////////////////////////////////

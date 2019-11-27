@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_MetaOptimizer_MNIST"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DNNLab", "DNNLab\DNNLab.vcxproj", "{1A46F9A0-A07F-4758-94AF-B6D02C5C9781}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_classification_MNIST_poolmax2D", "sample_code\sample_classification_MNIST_poolmax2D.vcxproj", "{403A924B-3D94-4D3A-92FE-B06537C7DBB4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -59,6 +61,14 @@ Global
 		{1A46F9A0-A07F-4758-94AF-B6D02C5C9781}.Release|x64.ActiveCfg = Release|x64
 		{1A46F9A0-A07F-4758-94AF-B6D02C5C9781}.Release|x64.Build.0 = Release|x64
 		{1A46F9A0-A07F-4758-94AF-B6D02C5C9781}.Release|x86.ActiveCfg = Release|x64
+		{403A924B-3D94-4D3A-92FE-B06537C7DBB4}.Debug|x64.ActiveCfg = Debug|x64
+		{403A924B-3D94-4D3A-92FE-B06537C7DBB4}.Debug|x64.Build.0 = Debug|x64
+		{403A924B-3D94-4D3A-92FE-B06537C7DBB4}.Debug|x86.ActiveCfg = Debug|Win32
+		{403A924B-3D94-4D3A-92FE-B06537C7DBB4}.Debug|x86.Build.0 = Debug|Win32
+		{403A924B-3D94-4D3A-92FE-B06537C7DBB4}.Release|x64.ActiveCfg = Release|x64
+		{403A924B-3D94-4D3A-92FE-B06537C7DBB4}.Release|x64.Build.0 = Release|x64
+		{403A924B-3D94-4D3A-92FE-B06537C7DBB4}.Release|x86.ActiveCfg = Release|Win32
+		{403A924B-3D94-4D3A-92FE-B06537C7DBB4}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -40,6 +40,9 @@ void LayerSoftmax::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 // from https://medium.com/@14prakash/back-propagation-is-very-simple-who-made-it-complicated-97b794c97e5c
 void LayerSoftmax::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
+	if (_bFirstLayer)
+		return;
+
     MatrixFloat S;
 	mGradientIn.resizeLike(mGradientOut);
 

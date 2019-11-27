@@ -68,6 +68,9 @@ void LayerPoolMax1D::backpropagation(const MatrixFloat &mIn,const MatrixFloat &m
 {
     (void)mIn;
 
+	if (_bFirstLayer)
+		return;
+
 	mGradientIn.setZero(mIn.rows(),mIn.cols()); //todo optimize everything
 	for (int l = 0; l < mIn.rows(); l++)
 	{
