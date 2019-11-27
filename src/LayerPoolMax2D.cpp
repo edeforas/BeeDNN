@@ -25,6 +25,14 @@ LayerPoolMax2D::LayerPoolMax2D(int iInRows, int iInCols, int iRowFactor, int iCo
 LayerPoolMax2D::~LayerPoolMax2D()
 { }
 ///////////////////////////////////////////////////////////////////////////////
+void LayerPoolMax2D::get_params(int& iInRows, int& iInCols, int& iRowFactor, int& iColFactor)
+{
+	iInRows = _iInRows;
+	iInCols = _iInCols;
+	iRowFactor = _iRowFactor;
+	iColFactor= _iColFactor;
+}
+///////////////////////////////////////////////////////////////////////////////
 Layer* LayerPoolMax2D::clone() const
 {
     return new LayerPoolMax2D(_iInRows, _iInCols, _iRowFactor, _iColFactor);

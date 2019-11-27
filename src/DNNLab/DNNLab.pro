@@ -48,6 +48,7 @@ SOURCES += \
     ../LayerGlobalGain.cpp \
     ../LayerGlobalBias.cpp \
     ../LayerPRelu.cpp \
+    ../LayerPoolMax2D.cpp
     ../LayerPoolAveraging1D.cpp
 
 HEADERS += \
@@ -73,6 +74,7 @@ HEADERS += \
     ../LayerGlobalGain.h \
     ../LayerGlobalBias.h \
     ../LayerPRelu.h \
+    ../LayerPoolMax2D.h
     ../LayerPoolAveraging1D.h
 
 #GUI

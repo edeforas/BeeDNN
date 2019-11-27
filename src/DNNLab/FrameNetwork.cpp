@@ -17,6 +17,7 @@
 #include "LayerUniformNoise.h"
 #include "LayerGaussianNoise.h"
 #include "LayerPRelu.h"
+#include "LayerPoolMax2D.h"
 
 #include <QObject>
 
@@ -78,7 +79,7 @@ void FrameNetwork::set_net(Net* pNet)
     _pNet=pNet;
 	_bLock = true;
 
-    // write input size
+    // write input size, TODO 2D size
     if(_pNet->layers().empty())
         ui->twNetwork->setItem(0,1,new QTableWidgetItem(to_string(_pNet->input_size()).data()));
 
@@ -122,7 +123,16 @@ void FrameNetwork::set_net(Net* pNet)
             ui->twNetwork->setItem(i,3,new QTableWidgetItem(to_string(fRate).c_str()));
         }
 
-        if(l->in_size())
+		if (sType == "PoolMax2D")
+		{
+			//TODO 2D
+
+			float fRate = ((LayerDropout*)l)->get_rate();
+			ui->twNetwork->setItem(i, 3, new QTableWidgetItem(to_string(fRate).c_str()));
+		}
+
+		
+		if(l->in_size())
             ui->twNetwork->setItem(i,1,new QTableWidgetItem(to_string(l->in_size()).c_str()));
 
         if(l->out_size())
@@ -139,22 +149,21 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
     if(_bLock)
         return;
 
-    //rescan all for now
+    //rescan all (for now)
     int iLastOut=_pNet->input_size();
     _pNet->clear();
 
-    bool bOk;
-    float fArg1=0.f;
-
     for(int iRow=0;iRow<10;iRow++) //todo dynamic size
     {
-        QComboBox* pCombo=(QComboBox*)(ui->twNetwork->cellWidget(iRow,0));
+		bool bOk=false;
+		QComboBox* pCombo=(QComboBox*)(ui->twNetwork->cellWidget(iRow,0));
         if(!pCombo)
             continue;
         string sType=pCombo->currentText().toStdString();
 
-        QTableWidgetItem* pwiInSize=ui->twNetwork->item(iRow,1); //todo not used in activation
-        int iInSize=0;
+		//scan input size TODO 2D
+		QTableWidgetItem* pwiInSize=ui->twNetwork->item(iRow,1); //todo not used in activation
+        int iInSize=0, iInSize2=0;
         if(!pwiInSize)
             iInSize=iLastOut; //use last out
         else
@@ -166,6 +175,7 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
                 iInSize=iLastOut;
         }
 
+		//scan output size TODO 2D
         QTableWidgetItem* pwiOutSize=ui->twNetwork->item(iRow,2); //todo not used in activation
         int iOutSize;
         if(!pwiOutSize)
@@ -178,10 +188,11 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
             else
                 iOutSize=iInSize;
         }
-
         iLastOut=iOutSize;
 
-        QTableWidgetItem* pwArg1=ui->twNetwork->item(iRow,3);
+		//scan arguments TODO 2D
+        float fArg1=0.f, fArg2=0.f;
+		QTableWidgetItem* pwArg1=ui->twNetwork->item(iRow,3);
         if(pwArg1)
             fArg1=pwArg1->text().toFloat(&bOk);
         else
@@ -236,7 +247,10 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
             else if(sType=="PoolMax1D")
                 _pNet->add_poolmax1D_layer(iInSize,iOutSize);
 
-            else if (sType == "PRelu")
+			else if (sType == "PoolMax2D")
+				_pNet->add_poolmax2D_layer(iInSize, iInSize2, (int)fArg1, (int)fArg2);
+			
+			else if (sType == "PRelu")
 				_pNet->add_prelu_layer(iInSize);
 
 			else if (sType == "Softmax")
@@ -301,10 +315,11 @@ void FrameNetwork::add_new_row(int iRow)
     qcbType->addItem("Bias");
     qcbType->addItem("PoolAveraging1D");
     qcbType->addItem("PoolMax1D");
-    qcbType->addItem("PRelu");
+	qcbType->addItem("PoolMax2D");
+	qcbType->addItem("PRelu");
 	qcbType->addItem("Softmax");
 
-    qcbType->insertSeparator(14);
+    qcbType->insertSeparator(15);
 
 	for (unsigned int a = 0; a < _vsActivations.size(); a++)
 		qcbType->addItem(_vsActivations[a].c_str());

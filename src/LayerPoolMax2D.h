@@ -18,6 +18,8 @@ public:
 	LayerPoolMax2D(int iInRows, int iInCols, int iRowFactor = 2, int iColFactor = 2);
     virtual ~LayerPoolMax2D() override;
 
+	void get_params(int& iInRows, int& iInCols, int& iRowFactor, int& iColFactor);
+
     virtual Layer* clone() const override;
 
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
