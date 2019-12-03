@@ -37,7 +37,7 @@ private slots:
 private:
     Ui::FrameNetwork *ui;
 	void add_new_row(int iRow=-1);
-	void parse_cell(string sCell, float& fVal1, float& fVal2);
+	void parse_cell(string sCell, float& fVal1, float& fVal2, float& fVal3);
 		
 	vector<string> _vsActivations;
 

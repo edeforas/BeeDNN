@@ -164,7 +164,7 @@ void MLEngineBeeDnn::classify_all(const MatrixFloat & mSamples, MatrixFloat& mRe
 {
     MatrixFloat temp;
     mResultLabel.resize(mSamples.rows(),1);
-    for(int i=0;i<mSamples.rows();i++)
+    for(int i=0;i<mSamples.rows();i++) //todo use batch_size (faster)
     {
         _pNet->classify(mSamples.row(i),temp);
         mResultLabel(i,0)=temp(0,0); //case of "output is a label"

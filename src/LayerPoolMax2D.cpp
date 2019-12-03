@@ -30,6 +30,7 @@ void LayerPoolMax2D::get_params(int& iInRows, int& iInCols, int & iPlanes, int& 
 {
 	iInRows = _iInRows;
 	iInCols = _iInCols;
+	iPlanes = _iInPlanes;
 	iRowFactor = _iRowFactor;
 	iColFactor= _iColFactor;
 }

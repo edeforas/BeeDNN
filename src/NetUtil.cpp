@@ -201,9 +201,10 @@ void read(const string& s,Net& net)
 		{
 			int inSizeX = stoi(find_key(s, sLayer + ".inRows"));
 			int inSizeY = stoi(find_key(s, sLayer + ".inCols"));
+			int inPlanes = stoi(find_key(s, sLayer + ".inPlanes"));
 			int factorX = stoi(find_key(s, sLayer + ".rowFactor"));
 			int factorY = stoi(find_key(s, sLayer + ".colFactor"));
-			net.add_poolmax2D_layer(inSizeX, inSizeY, factorX, factorY);
+			net.add_poolmax2D_layer(inSizeX, inSizeY, inPlanes, factorX, factorY);
 		}
 
 		else if (sType == "Softmax")
