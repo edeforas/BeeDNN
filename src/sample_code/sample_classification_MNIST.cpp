@@ -87,10 +87,10 @@ int main()
 	//testu function
 	if (crTest.accuracy < 98.f)
 	{
-		cout << "test failed! accuracy=" << crTest.accuracy << endl;
+		cout << "Test failed! accuracy=" << crTest.accuracy << endl;
 		return -1;
 	}
 
-	cout << "end of test." << endl;
+	cout << "Test succeded." << endl;
     return 0;
 }

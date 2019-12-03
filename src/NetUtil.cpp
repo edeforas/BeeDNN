@@ -97,10 +97,11 @@ void write(const Net& net,string & s)
 		{
 			LayerPoolMax2D* l = static_cast<LayerPoolMax2D*>(layer);
 
-			int inRows, inCols, rowFactor, colFactor;
-			l->get_params(inRows, inCols, rowFactor, colFactor);
+			int inRows, inCols, iPlanes, rowFactor, colFactor;
+			l->get_params(inRows, inCols, iPlanes, rowFactor, colFactor);
 			ss << "Layer" << i + 1 << ".inRows=" << inRows << endl;
 			ss << "Layer" << i + 1 << ".inCols=" << inCols << endl;
+			ss << "Layer" << i + 1 << ".inPlanes=" << iPlanes << endl;
 			ss << "Layer" << i + 1 << ".rowFactor=" << rowFactor << endl;
 			ss << "Layer" << i + 1 << ".colFactor=" << colFactor << endl;
 		}

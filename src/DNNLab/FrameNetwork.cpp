@@ -21,6 +21,21 @@
 
 #include <QObject>
 
+
+#include <sstream>
+#include <vector>
+using namespace std;
+
+void split(string s,vector<string>& vsItems)
+{
+	vsItems.clear();
+	
+    istringstream f(s);
+    string sitem;    
+    while (getline(f, sitem, ','))
+        vsItems.push_back(sitem);
+}
+
 FrameNetwork::FrameNetwork(QWidget *parent) :
     QFrame(parent),
     ui(new Ui::FrameNetwork)
@@ -74,6 +89,24 @@ void FrameNetwork::set_main_window(MainWindow* pMainWindow)
     _pMainWindow=pMainWindow;
 }
 //////////////////////////////////////////////////////////////
+void FrameNetwork::parse_cell(string sCell, float& fVal1, float& fVal2)
+{
+	fVal1 = 0.f;
+	fVal2 = 0.f;
+	vector<string> vsItems;
+	split(sCell, vsItems);
+
+	if (vsItems.size() == 0)
+		return;
+
+	fVal1 = stof( vsItems[0]);
+
+	if (vsItems.size() == 1)
+		return;
+
+	fVal2 = stof(vsItems[1]);
+}
+//////////////////////////////////////////////////////////////
 void FrameNetwork::set_net(Net* pNet)
 {
     _pNet=pNet;
@@ -123,20 +156,23 @@ void FrameNetwork::set_net(Net* pNet)
             ui->twNetwork->setItem(i,3,new QTableWidgetItem(to_string(fRate).c_str()));
         }
 
+		if (l->in_size())
+			ui->twNetwork->setItem(i, 1, new QTableWidgetItem(to_string(l->in_size()).c_str()));
+
+		if (l->out_size())
+			ui->twNetwork->setItem(i, 2, new QTableWidgetItem(to_string(l->out_size()).c_str()));
+
+		// overwrite cells in case of 2d
 		if (sType == "PoolMax2D")
 		{
-			//TODO 2D
-
-			float fRate = ((LayerDropout*)l)->get_rate();
-			ui->twNetwork->setItem(i, 3, new QTableWidgetItem(to_string(fRate).c_str()));
+			LayerPoolMax2D* lpm=((LayerPoolMax2D*)l);
+			int iInRows, iInCols, iPlanes, iRowFactor, iColFactor;
+			lpm->get_params(iInRows,iInCols,iPlanes, iRowFactor,iColFactor);
+			string cell1 = to_string(iInRows) + "," + to_string(iInCols); // + "," + to_string(iPlanes); //todo add iPlane output
+			string cell3 = to_string(iRowFactor) + "," + to_string(iColFactor);
+			ui->twNetwork->setItem(i, 1, new QTableWidgetItem(cell1.c_str()));
+			ui->twNetwork->setItem(i, 3, new QTableWidgetItem(cell3.c_str()));
 		}
-
-		
-		if(l->in_size())
-            ui->twNetwork->setItem(i,1,new QTableWidgetItem(to_string(l->in_size()).c_str()));
-
-        if(l->out_size())
-            ui->twNetwork->setItem(i,2,new QTableWidgetItem(to_string(l->out_size()).c_str()));
     }
 	_bLock = false;
 }
@@ -164,16 +200,22 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
 		//scan input size TODO 2D
 		QTableWidgetItem* pwiInSize=ui->twNetwork->item(iRow,1); //todo not used in activation
         int iInSize=0, iInSize2=0;
-        if(!pwiInSize)
-            iInSize=iLastOut; //use last out
-        else
+		if (!pwiInSize)
+		{
+			iInSize = iLastOut; //use last out
+		}
+		else
         {
-            int iIn=pwiInSize->text().toInt(&bOk);
-            if(bOk)
-                iInSize=iIn;
-            else
-                iInSize=iLastOut;
-        }
+			float f1, f2;
+			parse_cell(pwiInSize->text().toStdString(), f1, f2);
+			if (f1 != 0.f)
+			{
+				iInSize = (int)f1;
+				iInSize2 = f2;
+			}
+			else
+				iInSize = iLastOut;
+		}
 
 		//scan output size TODO 2D
         QTableWidgetItem* pwiOutSize=ui->twNetwork->item(iRow,2); //todo not used in activation
@@ -194,9 +236,9 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
         float fArg1=0.f, fArg2=0.f;
 		QTableWidgetItem* pwArg1=ui->twNetwork->item(iRow,3);
         if(pwArg1)
-            fArg1=pwArg1->text().toFloat(&bOk);
-        else
-            bOk=false;
+			parse_cell(pwArg1->text().toStdString(), fArg1, fArg2);
+		else
+			bOk=false;
 
         if(!sType.empty())
         {
@@ -319,7 +361,7 @@ void FrameNetwork::add_new_row(int iRow)
 	qcbType->addItem("PRelu");
 	qcbType->addItem("Softmax");
 
-    qcbType->insertSeparator(15);
+    qcbType->insertSeparator(qcbType->count());
 
 	for (unsigned int a = 0; a < _vsActivations.size(); a++)
 		qcbType->addItem(_vsActivations[a].c_str());

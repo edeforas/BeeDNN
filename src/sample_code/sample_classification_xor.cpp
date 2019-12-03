@@ -54,6 +54,6 @@ int main()
 	test(is_near(mOut(1),1));
 	test(is_near(mOut(0),0));
 	
-	cout << "end of test." << endl;
+	cout << "Test succeded." << endl;
     return 0;
 }
