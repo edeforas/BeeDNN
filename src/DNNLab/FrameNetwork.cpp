@@ -297,7 +297,7 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
                 _pNet->add_poolmax1D_layer(iInSize,iOutSize);
 
 			else if (sType == "PoolMax2D")
-				_pNet->add_poolmax2D_layer(iInSize, iInSize2, min(iInSize3,1), (int)fArg1, (int)fArg2);
+				_pNet->add_poolmax2D_layer(iInSize, iInSize2, max(iInSize3,1), max((int)fArg1,1), max((int)fArg2,1));
 			
 			else if (sType == "PRelu")
 				_pNet->add_prelu_layer(iInSize);
