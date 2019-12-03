@@ -75,49 +75,51 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
 {
     clear();
 
-    _iOnlineAccuracyGood=other._iOnlineAccuracyGood;
-    _fOnlineLoss=other._fOnlineLoss;
+    set_keepbest(other._bKeepBest);
+	set_classbalancing(other._bClassBalancingWeightLoss);
+    set_batchsize(other._iBatchSize);
+    set_epochs(other._iEpochs);
+	set_reboost_every_epochs(other._iReboostEveryEpochs);
+	set_loss(other._pLoss->name());
 
-	_fTrainLoss=other._fTrainLoss;
-	_fTrainAccuracy=other._fTrainAccuracy;
+	_iOnlineAccuracyGood = other._iOnlineAccuracyGood;
+	_fOnlineLoss = other._fOnlineLoss;
+
+	_fTrainLoss = other._fTrainLoss;
+	_fTrainAccuracy = other._fTrainAccuracy;
 	_fTestLoss = other._fTestLoss;
 	_fTestAccuracy = other._fTestAccuracy;
+	_iNbLayers=other._iNbLayers;
 
-    _bKeepBest=other._bKeepBest;
-
-    _bClassBalancingWeightLoss = other._bClassBalancingWeightLoss;
-
-    _iBatchSize=other._iBatchSize;
-    _iEpochs=other._iEpochs;
-    _iNbLayers=other._iNbLayers;
-    _iReboostEveryEpochs=other._iReboostEveryEpochs;
-
-    _sOptimizer=other._sOptimizer;
+	set_optimizer(other._sOptimizer);
     _fLearningRate=other._fLearningRate;
     _fDecay=other._fDecay;
     _fMomentum=other._fMomentum;
 
-    for (unsigned int i = 0; i < other._optimizers.size(); i++)
-        _optimizers.push_back(create_optimizer(other._optimizers[i]->name())); // initialized
+//   for (unsigned int i = 0; i < other._optimizers.size(); i++)
+//       _optimizers.push_back(create_optimizer(other._optimizers[i]->name())); // initialized
 
     _inOut = other._inOut;
     _gradient = other._gradient;
 
+
+//	set_train_data(other._pmSamplesTrain, other._pmTruthTrain);
+//	set_test_data(other._pmSamplesTest, other._pmTruthTest);
+
     _pmSamplesTrain = other._pmSamplesTrain;
     _pmTruthTrain = other._pmTruthTrain;
 
-	_pmSamplesTest = other._pmSamplesTest;
+/*	_pmSamplesTest = other._pmSamplesTest;
 	_pmTruthTest = other._pmTruthTest;
-
-	_epochCallBack = other._epochCallBack;
-	set_net(*other._pNet);
-	_pLoss = create_loss(other._pLoss->name());
-
+	*/
+//	_epochCallBack = other._epochCallBack;
+//	set_net(other._pNet);
+/*
 	_trainLoss= other._trainLoss;
 	_testLoss= other._testLoss;
 	_trainAccuracy= other._trainAccuracy;
 	_testAccuracy= other._testAccuracy;
-
+*/
 	return *this;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,6 +131,11 @@ void NetTrain::set_net(Net& net)
 		_pNet->layers()[0]->set_first_layer(true);
 	
 	clear_optimizers();
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+Net& NetTrain::net()
+{
+	return *_pNet;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::set_optimizer(const string& sOptimizer) //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov"

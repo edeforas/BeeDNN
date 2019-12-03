@@ -1,23 +1,19 @@
 #include "MetaOptimizer.h"
 
+#include "Net.h"
+
 #include <ctime>
 #include <thread>
 
 //////////////////////////////////////////////////////////////////////////////
 MetaOptimizer::MetaOptimizer()
 {
-	_pNet = nullptr;
 	_pTrain = nullptr;
 	_iNbThread = 0;
 }
 //////////////////////////////////////////////////////////////////////////////
 MetaOptimizer::~MetaOptimizer()
 { }
-//////////////////////////////////////////////////////////////////////////////
-void MetaOptimizer::set_net(Net& net)
-{
-	_pNet = &net;
-}
 //////////////////////////////////////////////////////////////////////////////
 void MetaOptimizer::set_train(NetTrain& train)
 {
@@ -49,15 +45,18 @@ void MetaOptimizer::run()
 ////////////////////////////////////////////////////////////////
 int MetaOptimizer::run_thread(int iThread, MetaOptimizer* self)
 {
-	//copy ref net and train
-	Net netT= *(self->_pNet);
+	//hard copy ref net and train
+	Net netT;
 	NetTrain trainT;
-	trainT= *(self->_pTrain);
+	
+	netT = self->_pTrain->net();
+	trainT = *(self->_pTrain);
+	
 	trainT.set_net(netT);
 	trainT.train();
+	
+	//TODO WIP WIP
 
-
-	   	 
-	return 0; //TODO WIP WIP
+	return 0; 
 }
 ////////////////////////////////////////////////////////////////

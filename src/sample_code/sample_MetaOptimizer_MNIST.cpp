@@ -39,16 +39,16 @@ int main()
 	//set train settings
 	NetTrain netTrain;
 	netTrain.set_epochs(20);
-	netTrain.set_loss("CrossEntropy");
+	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_train_data(mRefImages, mRefLabels);
 	netTrain.set_test_data(mTestImages, mTestLabels);
+	netTrain.set_net(net);
 
 	//create meta optimizer and run
 	cout << "Training with all cores ..." << endl;
 	MetaOptimizer optim;
-	optim.set_net(net);
 	optim.set_train(netTrain);
-	optim.run();
+	optim.run(); // will use 100% CPU
 
 	//WIP WIP
 
