@@ -53,8 +53,8 @@ void LayerPoolMax2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 	{
 		for (int l = 0; l < mIn.rows(); l++)
 		{
-			auto lIn = mIn.row(l+plane*_iInRows);
-			auto lOut = mOut.row(l+plane*_iOutRows);
+			const float* lIn = mIn.row(l).data()+ plane * _iInRows*_iInCols;
+			float* lOut = mOut.row(l).data()+plane*_iOutRows*_iOutCols;
 			for (int r = 0; r < _iOutRows; r++)
 			{
 				for (int c = 0; c < _iOutCols; c++)
@@ -65,8 +65,8 @@ void LayerPoolMax2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 					for (int ri = r * _iRowFactor; ri < r*_iRowFactor + _iRowFactor; ri++)
 						for (int ci = c * _iColFactor; ci < c*_iColFactor + _iColFactor; ci++)
 						{
-							int iIndex = ri * _iInCols + ci; //flat index
-							float fSample = lIn(iIndex);
+							int iIndex = ri * _iInCols + ci; //flat index in plane
+							float fSample = lIn[iIndex];
 							
 							if (fSample > fMax)
 							{
@@ -76,9 +76,9 @@ void LayerPoolMax2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 						}
 					
 					int iIndexOut = r * _iOutCols + c;
-					lOut(iIndexOut) = fMax;
+					lOut[iIndexOut] = fMax;
 					if (_bTrainMode)
-						_mMaxIndex.row(l+plane*_iOutRows)(iIndexOut) = (float)iPosIn;
+						_mMaxIndex(l,plane*_iOutRows*_iOutCols+iIndexOut) = (float)iPosIn;
 				}
 			}
 		}
@@ -94,15 +94,17 @@ void LayerPoolMax2D::backpropagation(const MatrixFloat &mIn,const MatrixFloat &m
 
 	mGradientIn.setZero(mGradientOut.rows(),_iInRows* _iInCols*_iInPlanes);
 
-	for (int plane = 0; plane < _iInPlanes; plane++)
+	for (int l = 0; l < mGradientOut.rows(); l++)
 	{
-		for (int l = 0; l < mGradientOut.rows(); l++)
+		for (int plane = 0; plane < _iInPlanes; plane++)
 		{
-			auto lOut = mGradientOut.row(l+plane* _iInRows);
-			auto lIn = mGradientIn.row(l+plane*_iOutRows);
+			const float* lOut = mGradientOut.row(l).data() +plane * _iOutRows*_iOutCols;
+			float* lIn = mGradientIn.row(l).data() +plane * _iInRows*_iInCols;
 
-			for(int i=0;i< mGradientOut.cols();i++)
-				lIn((int)_mMaxIndex(i)) = lOut(i);
+			for (int i = 0; i < mGradientOut.cols(); i++)
+			{
+				lIn[(int)_mMaxIndex(i)] = lOut[i];//bug here
+			}
 		}
 	}
 }

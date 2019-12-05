@@ -47,10 +47,15 @@ int main()
 	mRefImages/= 256.f;
   
 	//create simple net:
-	net.add_dense_layer(1024*3, 256);
-	net.add_activation_layer("Relu");
-	//	net.add_dropout_layer(32,0.2f); //reduce overfitting
-	net.add_dense_layer(256, 10);
+	net.add_activation_layer("Identity");
+	net.add_poolmax2D_layer(32, 32, 3, 2, 2);
+	//net.add_poolmax2D_layer(16, 16, 3, 2, 2);
+	//net.add_dense_layer(16*16*3, 128);
+	//net.add_activation_layer("Relu");
+//	net.add_poolmax2D_layer(16, 16, 3, 2, 2);
+	net.add_dense_layer(16 * 16 * 3, 10);
+//	net.add_activation_layer("Relu");
+//	net.add_dense_layer(128, 10);
 	net.add_softmax_layer();
 
 	//setup train options

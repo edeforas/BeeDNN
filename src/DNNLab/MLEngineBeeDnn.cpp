@@ -148,27 +148,12 @@ void MLEngineBeeDnn::compute_confusion_matrix(const MatrixFloat & mSamples, cons
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::predict_all(const MatrixFloat & mSamples, MatrixFloat& mResult)
 {
-    MatrixFloat temp;
     _pNet->forward(mSamples,mResult);
-    /*
-    for(int i=0;i<mSamples.rows();i++)
-    {
-        predict(mSamples.row(i),temp);
-        if(i==0)
-            mResult.resize(mSamples.rows(),temp.cols());
-        mResult.row(i)=temp;
-    }*/
 }
 //////////////////////////////////////////////////////////////////////////////
 void MLEngineBeeDnn::classify_all(const MatrixFloat & mSamples, MatrixFloat& mResultLabel)
 {
-    MatrixFloat temp;
-    mResultLabel.resize(mSamples.rows(),1);
-    for(int i=0;i<mSamples.rows();i++) //todo use batch_size (faster)
-    {
-        _pNet->classify(mSamples.row(i),temp);
-        mResultLabel(i,0)=temp(0,0); //case of "output is a label"
-    }
+	_pNet->classify(mSamples, mResultLabel);
 }
 //////////////////////////////////////////////////////////////////////////////
 float MLEngineBeeDnn::compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth)
