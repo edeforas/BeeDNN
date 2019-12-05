@@ -224,7 +224,8 @@ void DataSource::load_function()
     _mTestData.resize(iNbPointsTest, 1);
     _mTestTruth.resize(iNbPointsTest, 1);
     dStep = (fMax - fMin) / (iNbPointsTest - 1.f);
-    fVal = fMin, fOut = 0.f;
+    fVal = fMin;
+    fOut = 0.f;
     for (int i = 0; i < iNbPointsTest; i++)
     {
         fOut = get_function_val(fVal);
