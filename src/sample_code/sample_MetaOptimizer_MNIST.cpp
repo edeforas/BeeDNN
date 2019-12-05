@@ -6,6 +6,18 @@ using namespace std;
 #include "MNISTReader.h"
 #include "MetaOptimizer.h"
 
+//run multiple runs of same net optimization and keep the better
+
+//////////////////////////////////////////////////////////////////////////////
+void better_solution_callback(NetTrain& train)
+{
+	cout << "Better solution found: Accuracy= " << train.get_current_test_accuracy() << endl;
+
+	//save this solution into a file
+	//todo
+
+	cout << endl;
+}
 //////////////////////////////////////////////////////////////////////////////
 int main()
 {
@@ -38,24 +50,18 @@ int main()
 
 	//set train settings
 	NetTrain netTrain;
-	netTrain.set_epochs(20);
-	netTrain.set_loss("CrossEntropy");
+	netTrain.set_epochs(10);
+	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_train_data(mRefImages, mRefLabels);
 	netTrain.set_test_data(mTestImages, mTestLabels);
+	netTrain.set_net(net);
 
-	//create meta optimizer and run
+	//create meta optimizer and run //for now, no parameters variations
 	cout << "Training with all cores ..." << endl;
 	MetaOptimizer optim;
-	optim.set_net(net);
 	optim.set_train(netTrain);
-	optim.run();
-
-	//WIP WIP
-
-	//todo collect results and take the best
-	//todo accept variations in meta parameters
-
-	//WIP WIP
+	optim.set_better_solution_callback(better_solution_callback);
+	optim.run(); // will use 100% CPU
 
 	// the end
 	cout << "End of test." << endl;

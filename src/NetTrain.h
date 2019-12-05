@@ -30,6 +30,7 @@ public:
     void clear();
 	
 	void set_net(Net& net);
+	Net& net();
     void set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth);
 	void set_test_data(const MatrixFloat& mSamplesTest, const MatrixFloat& mTruthTest);
 

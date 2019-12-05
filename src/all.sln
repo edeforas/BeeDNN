@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DNNLab", "DNNLab\DNNLab.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_classification_MNIST_poolmax2D", "sample_code\sample_classification_MNIST_poolmax2D.vcxproj", "{403A924B-3D94-4D3A-92FE-B06537C7DBB4}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_classification_CIFAR10", "sample_code\sample_classification_CIFAR10.vcxproj", "{39345D70-FA19-483B-97C6-334F817A5F62}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -69,6 +71,14 @@ Global
 		{403A924B-3D94-4D3A-92FE-B06537C7DBB4}.Release|x64.Build.0 = Release|x64
 		{403A924B-3D94-4D3A-92FE-B06537C7DBB4}.Release|x86.ActiveCfg = Release|Win32
 		{403A924B-3D94-4D3A-92FE-B06537C7DBB4}.Release|x86.Build.0 = Release|Win32
+		{39345D70-FA19-483B-97C6-334F817A5F62}.Debug|x64.ActiveCfg = Debug|x64
+		{39345D70-FA19-483B-97C6-334F817A5F62}.Debug|x64.Build.0 = Debug|x64
+		{39345D70-FA19-483B-97C6-334F817A5F62}.Debug|x86.ActiveCfg = Debug|Win32
+		{39345D70-FA19-483B-97C6-334F817A5F62}.Debug|x86.Build.0 = Debug|Win32
+		{39345D70-FA19-483B-97C6-334F817A5F62}.Release|x64.ActiveCfg = Release|x64
+		{39345D70-FA19-483B-97C6-334F817A5F62}.Release|x64.Build.0 = Release|x64
+		{39345D70-FA19-483B-97C6-334F817A5F62}.Release|x86.ActiveCfg = Release|Win32
+		{39345D70-FA19-483B-97C6-334F817A5F62}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

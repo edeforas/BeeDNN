@@ -1,5 +1,4 @@
-// sample MNIST classification with a poolmax2D
-// 96% accuracy after 20 epochs, 1s/epochs
+// sample  classification CIFAR10 similar as :
 
 #include <iostream>
 #include <chrono>
@@ -7,7 +6,7 @@ using namespace std;
 
 #include "Net.h"
 #include "NetTrain.h"
-#include "MNISTReader.h"
+#include "CIFAR10Reader.h"
 #include "ConfusionMatrix.h"
 
 Net net;
@@ -36,30 +35,30 @@ int main()
 {
     iEpoch = 0;
 
-	//load and normalize MNIST data
-    cout << "Loading MNIST database..." << endl;
-    MNISTReader mr;
+	//load and normalize CIFAR10 data
+    cout << "Loading CIFAR10 database..." << endl;
+    CIFAR10Reader mr;
     if(!mr.read_from_folder(".",mRefImages,mRefLabels, mTestImages,mTestLabels))
     {
-        cout << "MNIST samples not found, please check the *.ubyte files are in the executable folder" << endl;
+        cout << "CIFAR10 samples not found, please check the CIFAR10 *.bin files are in the executable folder" << endl;
         return -1;
     }
 	mTestImages/= 256.f;
 	mRefImages/= 256.f;
   
 	//create simple net:
-	net.add_poolmax2D_layer(28,28,1, 2, 2); //input rows, input cols,input nbplanes, factor rows, factor cols
-	net.add_dense_layer(784/4, 32); // new size is 4x smaller
+	net.add_dense_layer(1024*3, 256);
 	net.add_activation_layer("Relu");
-	net.add_dense_layer(32, 10);
+	//	net.add_dropout_layer(32,0.2f); //reduce overfitting
+	net.add_dense_layer(256, 10);
 	net.add_softmax_layer();
 
 	//setup train options
 	netTrain.set_net(net);
-	netTrain.set_epochs(20);
+	netTrain.set_epochs(50);
 	netTrain.set_batchsize(64);
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
-	netTrain.set_epoch_callback(epoch_callback); //optional, show progress
+	netTrain.set_epoch_callback(epoch_callback); //optional , to show the progress
 	netTrain.set_train_data(mRefImages, mRefLabels);
 	netTrain.set_test_data(mTestImages, mTestLabels); //optional, not used for training, helps to keep the final best model
 
@@ -81,15 +80,6 @@ int main()
 	ClassificationResult crTest = cmTest.compute(mTestLabels, mClassTest);
 	cout << "Test accuracy: " << crTest.accuracy << " %" << endl;
 	cout << "Test confusion matrix:" << endl << crTest.mConfMat << endl;
-	
-	//testu function
-	if (crTest.accuracy < 96.f)
-	{
-		cout << "Test failed! accuracy=" << crTest.accuracy << endl;
-		return -1;
-	}
 
-
-	cout << "Test succeded." << endl;
     return 0;
 }

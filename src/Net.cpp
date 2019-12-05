@@ -150,11 +150,11 @@ void Net::add_poolmax1D_layer(int inSize, int iOutSize)
 	_iOutputSize = iOutSize;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_poolmax2D_layer(int iInRow, int iInCols, int iRowFactor, int iColFactor)
+void Net::add_poolmax2D_layer(int iInRow, int iInCols, int iInPlanes, int iRowFactor, int iColFactor)
 {
 //	update_out_layer_input_size(iInRow*iInCols);
-	_layers.push_back(new LayerPoolMax2D(iInRow, iInCols, iRowFactor, iColFactor));
-	_iOutputSize = iInRow * iInCols/( iRowFactor* iColFactor);
+	_layers.push_back(new LayerPoolMax2D(iInRow, iInCols, iInPlanes, iRowFactor, iColFactor));
+	_iOutputSize = iInPlanes* iInRow * iInCols/( iRowFactor* iColFactor);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const

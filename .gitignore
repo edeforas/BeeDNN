@@ -66,3 +66,4 @@ debug
 
 ui_*.h
 *.pyc
+*.bin

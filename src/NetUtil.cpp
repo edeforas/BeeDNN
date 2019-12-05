@@ -20,6 +20,7 @@
 #include "LayerUniformNoise.h"
 #include "LayerGaussianNoise.h"
 #include "LayerPRelu.h"
+#include "LayerPoolMax2D.h"
 
 #include <sstream>
 #include <fstream>
@@ -92,7 +93,18 @@ void write(const Net& net,string & s)
 			LayerUniformNoise* l = static_cast<LayerUniformNoise*>(layer);
 			ss << "Layer" << i + 1 << ".noise=" << l->get_noise() << endl;
 		}
-	
+		else if (layer->type() == "PoolMax2D")
+		{
+			LayerPoolMax2D* l = static_cast<LayerPoolMax2D*>(layer);
+
+			int inRows, inCols, iPlanes, rowFactor, colFactor;
+			l->get_params(inRows, inCols, iPlanes, rowFactor, colFactor);
+			ss << "Layer" << i + 1 << ".inRows=" << inRows << endl;
+			ss << "Layer" << i + 1 << ".inCols=" << inCols << endl;
+			ss << "Layer" << i + 1 << ".inPlanes=" << iPlanes << endl;
+			ss << "Layer" << i + 1 << ".rowFactor=" << rowFactor << endl;
+			ss << "Layer" << i + 1 << ".colFactor=" << colFactor << endl;
+		}
 	}
 
     s+=ss.str();
@@ -183,6 +195,16 @@ void read(const string& s,Net& net)
 		{
 			string sNoise = find_key(s, sLayer + ".noise");
 			net.add_uniform_noise_layer(iInSize, stof(sNoise));
+		}
+
+		else if (sType == "PoolMax2D")
+		{
+			int inSizeX = stoi(find_key(s, sLayer + ".inRows"));
+			int inSizeY = stoi(find_key(s, sLayer + ".inCols"));
+			int inPlanes = stoi(find_key(s, sLayer + ".inPlanes"));
+			int factorX = stoi(find_key(s, sLayer + ".rowFactor"));
+			int factorY = stoi(find_key(s, sLayer + ".colFactor"));
+			net.add_poolmax2D_layer(inSizeX, inSizeY, inPlanes, factorX, factorY);
 		}
 
 		else if (sType == "Softmax")

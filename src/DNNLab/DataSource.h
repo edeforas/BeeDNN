@@ -37,6 +37,7 @@ public:
 private:
     bool load_mnist();
     bool load_mini_mnist();
+    bool load_cifar10();
     bool load_textfile();
 
     void load_function();
