@@ -22,6 +22,7 @@
 NetTrain::NetTrain():
     _sOptimizer("Adam")
 {
+	_epochCallBack = nullptr;
 	_fTrainLoss=0.f;
 	_fTrainAccuracy=0.f;
 
@@ -314,7 +315,7 @@ void NetTrain::set_test_data(const MatrixFloat& mSamplesTest, const MatrixFloat&
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::train()
 {
-	MatrixFloat mTruthOneHot;
+//	MatrixFloat mTruthOneHot;
 
 	if (_pNet == nullptr)
 		return;
@@ -322,16 +323,16 @@ void NetTrain::train()
 	if (_pNet->layers().size() == 0)
 		return; //nothing to do
 
-	if (_pNet->is_classification_mode())
-	{
-		bool bTruthIsLabel = (_pmTruthTrain->cols() == 1);
-		if (bTruthIsLabel && (_pNet->output_size() != 1))
-		{
+//	if (_pNet->is_classification_mode())
+//	{
+//		bool bTruthIsLabel = (_pmTruthTrain->cols() == 1);
+//		if (bTruthIsLabel && (_pNet->output_size() != 1))
+//		{
 			//create binary label	
 //			labelToOneHot(*_pmTruthTrain, mTruthOneHot);
 //			set_train_data(*_pmSamplesTrain, mTruthOneHot);
-		}
-	}
+//		}
+//	}
 
 	update_class_weight();
 

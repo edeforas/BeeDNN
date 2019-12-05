@@ -10,6 +10,7 @@ MetaOptimizer::MetaOptimizer()
 {
 	_pTrain = nullptr;
 	_iNbThread = 0;
+	_betterSolutionCallBack = nullptr;
 }
 //////////////////////////////////////////////////////////////////////////////
 MetaOptimizer::~MetaOptimizer()
@@ -53,10 +54,22 @@ int MetaOptimizer::run_thread(int iThread, MetaOptimizer* self)
 	trainT = *(self->_pTrain);
 	
 	trainT.set_net(netT);
-	trainT.train();
+
+	// lambda epoch callback:
+	trainT.set_epoch_callback([&]()
+		{
+			//todo call optimizer callback with trainT as arg
 	
-	//TODO WIP WIP
+		}
+	);
+
+	trainT.train();
 
 	return 0; 
+}
+////////////////////////////////////////////////////////////////
+void MetaOptimizer::set_better_solution_callback(std::function<void(NetTrain& train)> betterSolutionCallBack)
+{
+	_betterSolutionCallBack = betterSolutionCallBack;
 }
 ////////////////////////////////////////////////////////////////
