@@ -47,15 +47,15 @@ int main()
 	mRefImages/= 256.f;
   
 	//create simple net:
-	net.add_dense_layer(1024*3, 32);
+	net.add_dense_layer(1024*3, 256);
 	net.add_activation_layer("Relu");
 	//	net.add_dropout_layer(32,0.2f); //reduce overfitting
-	net.add_dense_layer(32, 10);
+	net.add_dense_layer(256, 10);
 	net.add_softmax_layer();
 
 	//setup train options
 	netTrain.set_net(net);
-	netTrain.set_epochs(20);
+	netTrain.set_epochs(50);
 	netTrain.set_batchsize(64);
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_epoch_callback(epoch_callback); //optional , to show the progress

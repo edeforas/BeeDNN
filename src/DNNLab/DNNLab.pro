@@ -26,6 +26,7 @@ INCLUDEPATH += $$(EIGEN_PATH)
 #net library
 INCLUDEPATH += ..
 SOURCES += \
+    ../CIFAR10Reader.cpp \
     ../LayerBias.cpp \
     ../LayerPoolMax1D.cpp \
     ../LayerUniformNoise.cpp \
@@ -48,11 +49,12 @@ SOURCES += \
     ../LayerGlobalGain.cpp \
     ../LayerGlobalBias.cpp \
     ../LayerPRelu.cpp \
-    ../LayerPoolMax2D.cpp
+    ../LayerPoolMax2D.cpp \
     ../LayerPoolAveraging1D.cpp
 
 HEADERS += \
     ../Activation.h \
+    ../CIFAR10Reader.h \
     ../Layer.h \
     ../LayerBias.h \
     ../LayerPoolMax1D.h \
@@ -74,7 +76,7 @@ HEADERS += \
     ../LayerGlobalGain.h \
     ../LayerGlobalBias.h \
     ../LayerPRelu.h \
-    ../LayerPoolMax2D.h
+    ../LayerPoolMax2D.h \
     ../LayerPoolAveraging1D.h
 
 #GUI

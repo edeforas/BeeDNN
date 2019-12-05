@@ -2,6 +2,7 @@
 
 #include "NetUtil.h"
 #include "MNISTReader.h"
+#include "CIFAR10Reader.h"
 
 ////////////////////////////////////////////////////////////////////////
 void replace_last(string& s, string sOld,string sNew)
@@ -57,6 +58,9 @@ void DataSource::load(const string& sName)
     else if (_sName == "MiniMNIST")
         load_mini_mnist();
 
+    else if(_sName=="CIFAR10")
+        load_cifar10();
+
     else if(_sName=="And")
         load_and();
 
@@ -92,6 +96,21 @@ bool DataSource::load_mini_mnist() //MNIST decimated 10x for quick tests
 
     _mTestData = decimate(_mTestData, 10);
     _mTestTruth = decimate(_mTestTruth, 10);
+
+    return true;
+}
+////////////////////////////////////////////////////////////////////////
+bool DataSource::load_cifar10()
+{
+    CIFAR10Reader r;
+    if(!r.read_from_folder(".",_mTrainData,_mTrainTruth,_mTestData,_mTestTruth))
+        return false;
+
+    _mTrainData/=256.f;
+    _mTestData/=256.f;
+
+    _bHasTrainData=true;
+    _bHasTestData=true;
 
     return true;
 }
