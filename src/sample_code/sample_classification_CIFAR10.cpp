@@ -1,4 +1,4 @@
-// sample  classification CIFAR10 similar as :
+// sample  classification CIFAR10, lwo accuracy but simple
 
 #include <iostream>
 #include <chrono>
@@ -49,19 +49,15 @@ int main()
 	//create simple net:
 	net.add_activation_layer("Identity");
 	net.add_poolmax2D_layer(32, 32, 3, 2, 2);
-	//net.add_poolmax2D_layer(16, 16, 3, 2, 2);
-	//net.add_dense_layer(16*16*3, 128);
-	//net.add_activation_layer("Relu");
-//	net.add_poolmax2D_layer(16, 16, 3, 2, 2);
-	net.add_dense_layer(16 * 16 * 3, 10);
-//	net.add_activation_layer("Relu");
-//	net.add_dense_layer(128, 10);
+	net.add_dense_layer(16 * 16 * 3, 256);
+	net.add_activation_layer("Relu");
+	net.add_dense_layer(256, 10);
 	net.add_softmax_layer();
 
 	//setup train options
 	netTrain.set_net(net);
-	netTrain.set_epochs(50);
-	netTrain.set_batchsize(64);
+	netTrain.set_epochs(30);
+	netTrain.set_batchsize(256);
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_epoch_callback(epoch_callback); //optional , to show the progress
 	netTrain.set_train_data(mRefImages, mRefLabels);

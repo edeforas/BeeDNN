@@ -33,32 +33,32 @@ bool CIFAR10Reader::read_from_folder(const string& sFolder,MatrixFloat& mRefImag
     if(!read_batch(sRefImages1,mImage, mTruth))
         return false;
 
-	mRefImages.block(0, 0, 10000, 32 * 32 * 3) = mImage;
-	mRefLabels.block(0, 0, 10000, 1) = mTruth;
+	copyInto(mImage, mRefImages, 0);
+	copyInto(mTruth, mRefLabels, 0);
 
     if(!read_batch(sRefImages2,mImage, mTruth))
         return false;
 
-	mRefImages.block(10000, 0, 10000, 32 * 32 * 3) = mImage;
-	mRefLabels.block(10000, 0, 10000, 1) = mTruth;
+	copyInto(mImage, mRefImages, 10000);
+	copyInto(mTruth, mRefLabels, 10000);
 
     if(!read_batch(sRefImages3,mImage, mTruth))
         return false;
 
-	mRefImages.block(20000,0,10000, 32 * 32 *3)=mImage;
-	mRefLabels.block(20000,0,10000,1)=mTruth;
+	copyInto(mImage, mRefImages, 20000);
+	copyInto(mTruth, mRefLabels, 20000);
 
 	if (!read_batch(sRefImages4, mImage, mTruth))
 		return false;
 
-	mRefImages.block(30000,0,10000, 32 * 32 *3)=mImage;
-	mRefLabels.block(30000,0,10000,1)=mTruth;
+	copyInto(mImage, mRefImages, 30000);
+	copyInto(mTruth, mRefLabels, 30000);
 
     if(!read_batch(sRefImages5,mImage, mTruth))
         return false;
 
-	mRefImages.block(40000,0,10000, 32 * 32 *3)=mImage;
-	mRefLabels.block(40000,0,10000,1)=mTruth;
+	copyInto(mImage, mRefImages, 40000);
+	copyInto(mTruth, mRefLabels, 40000);
 
 	//for test, we can write directly into the matrix
     if(!read_batch(sTestImages,mTestImages, mTestLabels))

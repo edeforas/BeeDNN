@@ -35,6 +35,15 @@ MatrixFloatView fromRawBuffer(float *pBuffer,int iRows,int iCols)
 #endif
 }
 ///////////////////////////////////////////////////////////////////////////
+void copyInto(const MatrixFloat& mToCopy, MatrixFloat& m, int iStartRow)
+{
+#ifdef USE_EIGEN
+	m.block(iStartRow, 0, mToCopy.rows(), mToCopy.cols()) = mToCopy;
+#else
+	std::copy(mToCopy.data(), mToCopy.data() + mToCopy.size(), m.data()+ iStartRow*m.cols());
+#endif
+}
+///////////////////////////////////////////////////////////////////////////
 MatrixFloat rowWiseSum(const MatrixFloat& m)
 {
 #ifdef USE_EIGEN
