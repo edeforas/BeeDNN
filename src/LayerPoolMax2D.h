@@ -34,6 +34,9 @@ private:
 	int _iOutRows;
 	int _iOutCols;
 
+	int _iInPlaneSize;
+	int _iOutPlaneSize;
+
 	MatrixFloat _mMaxIndex;
 };
 
