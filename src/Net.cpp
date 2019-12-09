@@ -26,6 +26,7 @@
 #include "LayerPoolAveraging1D.h"
 #include "LayerPoolMax1D.h"
 #include "LayerPoolMax2D.h"
+#include "LayerConvolution2D.h"
 
 #include <cmath>
 using namespace std;
@@ -155,6 +156,12 @@ void Net::add_poolmax2D_layer(int iInRow, int iInCols, int iInPlanes, int iRowFa
 //	update_out_layer_input_size(iInRow*iInCols);
 	_layers.push_back(new LayerPoolMax2D(iInRow, iInCols, iInPlanes, iRowFactor, iColFactor));
 	_iOutputSize = iInPlanes* iInRow * iInCols/( iRowFactor* iColFactor);
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void Net::add_convolution2D_layer(int iInRows, int iInCols, int iInPlanes, int iKernelRows, int iKernelCols, int  iOutPlanes)
+{
+	_layers.push_back(new LayerConvolution2D(iInRows, iInCols, iInPlanes, iKernelRows, iKernelCols, iOutPlanes));
+	//_iOutputSize = iInPlanes * iInRow * iInCols / (iRowFactor* iColFactor);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const

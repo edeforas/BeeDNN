@@ -28,6 +28,7 @@ INCLUDEPATH += ..
 SOURCES += \
     ../CIFAR10Reader.cpp \
     ../LayerBias.cpp \
+    ../LayerConvolution2D.cpp \
     ../LayerPoolMax1D.cpp \
     ../LayerUniformNoise.cpp \
     ../Net.cpp \
@@ -57,6 +58,7 @@ HEADERS += \
     ../CIFAR10Reader.h \
     ../Layer.h \
     ../LayerBias.h \
+    ../LayerConvolution2D.h \
     ../LayerPoolMax1D.h \
     ../LayerUniformNoise.h \
     ../Matrix.h \
