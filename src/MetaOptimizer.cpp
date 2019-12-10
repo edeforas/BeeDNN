@@ -8,6 +8,7 @@
 //////////////////////////////////////////////////////////////////////////////
 MetaOptimizer::MetaOptimizer()
 {
+	_fBestAccuracy = -1.;
 	_pTrain = nullptr;
 	_iNbThread = 0;
 	_betterSolutionCallBack = nullptr;
@@ -28,6 +29,8 @@ void MetaOptimizer::set_nb_thread(int iNbThread)
 //////////////////////////////////////////////////////////////////////////////
 void MetaOptimizer::run()
 {
+	_fBestAccuracy = -1.;
+
 	int iNbThread = _iNbThread;
 	if(iNbThread==0) //auto case
 		iNbThread = (int)(thread::hardware_concurrency());
@@ -42,6 +45,18 @@ void MetaOptimizer::run()
 
 	for (int i = 0; i < iNbThread; i++)
 		vt[i].join();
+}
+////////////////////////////////////////////////////////////////
+void MetaOptimizer::new_epoch(NetTrain& trainT)
+{
+	//todo add locks
+
+	if (trainT.get_current_test_accuracy() > _fBestAccuracy)
+	{
+		_fBestAccuracy = trainT.get_current_test_accuracy();
+
+		_betterSolutionCallBack(trainT);
+	}
 }
 ////////////////////////////////////////////////////////////////
 int MetaOptimizer::run_thread(int iThread, MetaOptimizer* self)
@@ -59,7 +74,7 @@ int MetaOptimizer::run_thread(int iThread, MetaOptimizer* self)
 	trainT.set_epoch_callback([&]()
 		{
 			//todo call optimizer callback with trainT as arg
-	
+		self->new_epoch(trainT);
 		}
 	);
 

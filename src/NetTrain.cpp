@@ -110,9 +110,9 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
     _pmSamplesTrain = other._pmSamplesTrain;
     _pmTruthTrain = other._pmTruthTrain;
 
-/*	_pmSamplesTest = other._pmSamplesTest;
+	_pmSamplesTest = other._pmSamplesTest;
 	_pmTruthTest = other._pmTruthTest;
-	*/
+	
 //	_epochCallBack = other._epochCallBack;
 //	set_net(other._pNet);
 /*
@@ -459,7 +459,6 @@ void NetTrain::train()
 			fSelectedLoss = _fTestLoss;
 			fSelectedAccuracy = _fTestAccuracy;
 		}
-
 
         if (_epochCallBack)
             _epochCallBack();

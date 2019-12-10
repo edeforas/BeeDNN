@@ -13,8 +13,7 @@ void better_solution_callback(NetTrain& train)
 {
 	cout << "Better solution found: Accuracy= " << train.get_current_test_accuracy() << endl;
 
-	//save this solution into a file
-	//todo
+	//todo save this solution into a file
 
 	cout << endl;
 }
@@ -31,26 +30,20 @@ int main()
         return -1;
     }
   
-	//decimate learning data for quicker results in this sample (bad in real case)
-	mRefImages = decimate(mRefImages, 10);
-	mRefLabels= decimate(mRefLabels, 10);
-	mTestImages = decimate(mTestImages, 10);
-	mTestLabels = decimate(mTestLabels, 10);
-
 	//normalize pixels data
 	mTestImages /= 256.f;
 	mRefImages /= 256.f;
 
 	//create simple net
 	Net net;
-    net.add_dense_layer(784, 128);
+    net.add_dense_layer(784, 256);
 	net.add_activation_layer("Relu");
-	net.add_dense_layer(128, 10);
+	net.add_dense_layer(256, 10);
 	net.add_softmax_layer();
 
 	//set train settings
 	NetTrain netTrain;
-	netTrain.set_epochs(10);
+	netTrain.set_epochs(30);
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_train_data(mRefImages, mRefLabels);
 	netTrain.set_test_data(mTestImages, mTestLabels);

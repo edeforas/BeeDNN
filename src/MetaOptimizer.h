@@ -18,10 +18,12 @@ public:
 	void set_better_solution_callback(std::function<void(NetTrain& train)> betterSolutionCallBack);
 
 private:
+	void new_epoch(NetTrain& trainT);
 	static int run_thread(int iThread, MetaOptimizer* self);
 	std::function<void(NetTrain& train)> _betterSolutionCallBack;
 	NetTrain* _pTrain;
 	int _iNbThread;
+	float _fBestAccuracy;
 };
 
 #endif
