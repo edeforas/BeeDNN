@@ -6,6 +6,8 @@
     in the LICENSE.txt file.
 */
 
+//for now, stride=1, no bias, mode ='valid'
+
 #include "LayerConvolution2D.h"
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -16,7 +18,7 @@ void LayerConvolution2D::conv_and_add(const MatrixFloat& mImage,const MatrixFloa
 }
 ///////////////////////////////////////////////////////////////////////////////
 LayerConvolution2D::LayerConvolution2D(int iInRows, int iInCols,int iInPlanes, int iKernelRows, int iKernelCols,int  iOutPlanes) :
-    Layer(iInRows*iInCols*iInPlanes, 0 /*todo*/, "Convolution2D")
+    Layer(iInRows*iInCols*iInPlanes, 0 , "Convolution2D")
 {
 	_iInRows = iInRows;
 	_iInCols = iInCols;
@@ -25,11 +27,13 @@ LayerConvolution2D::LayerConvolution2D(int iInRows, int iInCols,int iInPlanes, i
 	_iKernelCols = iKernelCols;
 	_iOutPlanes = iOutPlanes;
 	
-	_iBorderRows=iKernelRows>>1; //remove the odd bit
-	_iBorderCols=iKernelCols>>1; //remove the odd bit
+	_iBorderRows=iKernelRows>>1;
+	_iBorderCols=iKernelCols>>1;
 
 	_iOutRows=_iInRows-2* _iBorderRows;
 	_iOutCols=_iInCols-2* _iBorderCols;
+
+	_iOutSize = _iOutRows * _iOutCols*_iOutPlanes;
 
 	LayerConvolution2D::init();
 }

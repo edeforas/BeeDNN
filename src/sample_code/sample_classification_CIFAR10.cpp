@@ -1,4 +1,4 @@
-// sample  classification CIFAR10, lwo accuracy but simple
+// sample  classification CIFAR10, low accuracy for now (50%), but simple
 
 #include <iostream>
 #include <chrono>
@@ -47,7 +47,6 @@ int main()
 	mRefImages/= 256.f;
   
 	//create simple net:
-	net.add_activation_layer("Identity");
 	net.add_poolmax2D_layer(32, 32, 3, 2, 2);
 	net.add_dense_layer(16 * 16 * 3, 256);
 	net.add_activation_layer("Relu");
