@@ -195,6 +195,7 @@
     <ClCompile Include="..\MNISTReader.cpp" />
     <ClCompile Include="..\Net.cpp" />
     <ClCompile Include="..\NetTrain.cpp" />
+    <ClCompile Include="..\NetUtil.cpp" />
     <ClCompile Include="..\Optimizer.cpp" />
     <ClCompile Include="sample_MetaOptimizer_MNIST.cpp" />
   </ItemGroup>
@@ -223,6 +224,7 @@
     <ClInclude Include="..\MNISTReader.h" />
     <ClInclude Include="..\Net.h" />
     <ClInclude Include="..\NetTrain.h" />
+    <ClInclude Include="..\NetUtil.h" />
     <ClInclude Include="..\Optimizer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
