@@ -46,9 +46,7 @@ int main()
     net.add_dense_layer(784, 256);
 	net.add_activation_layer("Relu");
 	net.add_dropout_layer(256,0.2f);
-	net.add_dense_layer(256, 32);
-	net.add_activation_layer("Relu");
-	net.add_dense_layer(32, 10);
+	net.add_dense_layer(256, 10);
 	net.add_softmax_layer();
 
 	//set train settings

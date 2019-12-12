@@ -138,7 +138,7 @@ vector<int> randPerm(int iSize) //create a vector of index shuffled
 	for (int i = 0; i < iSize; i++)
 		v[i] = i;
 
-	std::shuffle(v.begin(), v.end(), std::default_random_engine());
+	std::shuffle(v.begin(), v.end(), randomEngine());
 
     return v;
 }
@@ -341,5 +341,19 @@ const MatrixFloat rowRange(const MatrixFloat& m, int iStartRow, int iEndRow)
     assert(m.rows() >= iEndRow);
 
     return fromRawBuffer(m.data() + iStartRow * m.cols(), iEndRow- iStartRow, (int)m.cols());
+}
+///////////////////////////////////////////////////////////////////////////
+default_random_engine& randomEngine()
+{
+	static default_random_engine rng;
+	return rng;
+}
+///////////////////////////////////////////////////////////////////////////
+void setRandomUniform(MatrixFloat& m, float fMin, float fMax)
+{
+	uniform_real_distribution<float> dis(fMin, fMax);
+
+	for (int i = 0; i < m.size(); i++)
+		m(i) = dis(randomEngine());
 }
 ///////////////////////////////////////////////////////////////////////////

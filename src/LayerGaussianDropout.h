@@ -37,7 +37,6 @@ private:
 	float _fStdev;
 	MatrixFloat _mask;
 
-	default_random_engine _RNGgenerator;
 	normal_distribution<float> _distNormal;
 };
 

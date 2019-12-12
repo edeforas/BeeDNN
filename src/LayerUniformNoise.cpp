@@ -30,7 +30,7 @@ void LayerUniformNoise::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 		mOut.resize(mIn.rows(), mIn.cols());
 
 		for (int i = 0; i < mOut.size(); i++)
-			mOut(i) = mIn(i) + _distUniform(_RNGgenerator);
+			mOut(i) = mIn(i) + _distUniform(randomEngine());
 	}
 	else
 		mOut = mIn; // in test mode or sigma==0.

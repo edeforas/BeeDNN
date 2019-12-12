@@ -32,7 +32,7 @@ void LayerDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 		_mask.setConstant(mIn.rows(), mIn.cols(), 1.f / (1.f - _fRate));
 		
 		for(int i=0;i< _mask.size();i++)
-			if (_distBernoulli(_RNGgenerator))
+			if (_distBernoulli(randomEngine()))
 				_mask(i) = 0.f;
 
 		mOut = mIn.cwiseProduct(_mask);

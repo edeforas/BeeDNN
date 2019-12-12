@@ -34,7 +34,6 @@ public:
 
 private:
     float _fNoise;
-	default_random_engine _RNGgenerator;
 	uniform_real_distribution<float> _distUniform;
 
 };

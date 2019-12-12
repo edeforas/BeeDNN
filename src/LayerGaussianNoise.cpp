@@ -32,7 +32,7 @@ void LayerGaussianNoise::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 		mOut.resize(mIn.rows(), mIn.cols());
 
 		for (int i = 0; i < mOut.size(); i++)
-			mOut(i) = mIn(i) + _distNormal(_RNGgenerator);
+			mOut(i) = mIn(i) + _distNormal(randomEngine());
 	}
 	else
 		mOut = mIn; // in test mode or sigma==0.

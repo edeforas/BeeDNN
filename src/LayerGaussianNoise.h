@@ -34,7 +34,6 @@ public:
 
 private:
     float _fStd;
-	default_random_engine _RNGgenerator;
 	normal_distribution<float> _distNormal;
 };
 

@@ -65,6 +65,10 @@ int MetaOptimizer::run_thread(int iThread, MetaOptimizer* self)
 	Net netT;
 	NetTrain trainT;
 	
+	//change rand seed for each threads
+	for (int i = 0; i < iThread; i++)
+		randomEngine()();
+
 	netT = self->_pTrain->net();
 	trainT = *(self->_pTrain);
 	

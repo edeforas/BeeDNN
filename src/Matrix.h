@@ -14,6 +14,7 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <random>
 using namespace std;
 
 #ifdef USE_EIGEN
@@ -206,9 +207,9 @@ public:
 
     void setRandom()
 	{
-	    for(int i=0;i<_iSize;i++)
-            _data[i]=((T)rand()/(T)RAND_MAX-0.5f)*2.f;
+		setRandomUniform(*this, -1.f, 1.f);
 	}
+
 	void setRandom(int iRows, int iColumns)
 	{
 		resize(iRows, iColumns);
@@ -639,6 +640,10 @@ string toString(const MatrixFloat& m);
 const MatrixFloat fromFile(const string& sFile);
 const MatrixFloat fromString(const string& s);
 bool toFile(const string& sFile, const MatrixFloat & m);
+
+void setRandomUniform(MatrixFloat& m, float fMin, float fMax);
+
+default_random_engine& randomEngine();
 
 #endif
 
