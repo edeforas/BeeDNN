@@ -15,7 +15,7 @@ LayerGaussianDropout::LayerGaussianDropout(int iSize,float fProba):
     Layer(iSize,iSize,"GaussianDropout"),
     _fProba(fProba),
 	_fStdev( sqrtf(_fProba / (1.f - _fProba))),
-	_distNormal(1., _fStdev)
+	_distNormal(1.f, _fStdev)
 { }
 ///////////////////////////////////////////////////////////////////////////////
 LayerGaussianDropout::~LayerGaussianDropout()

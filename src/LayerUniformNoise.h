@@ -12,7 +12,6 @@
 #include "Layer.h"
 #include "Matrix.h"
 
-#include <string>
 #include <random>
 using namespace std;
 
@@ -27,7 +26,6 @@ public:
     virtual Layer* clone() const override;
 
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
-
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 
     float get_noise() const;

@@ -17,7 +17,7 @@ void better_solution_callback(NetTrain& train)
 {
 	cout << "Better solution found: Accuracy= " << train.get_current_test_accuracy() << endl;
 
-	// save solution to disk using a string
+	// save solution to disk using a string buffer
 	string s;
 	NetUtil::write(train,s); //save train
 	NetUtil::write(train.net(),s); // save net

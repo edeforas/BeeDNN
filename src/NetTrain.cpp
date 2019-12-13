@@ -97,9 +97,6 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
     _fDecay=other._fDecay;
     _fMomentum=other._fMomentum;
 
-//   for (unsigned int i = 0; i < other._optimizers.size(); i++)
-//       _optimizers.push_back(create_optimizer(other._optimizers[i]->name())); // initialized
-
     _inOut = other._inOut;
     _gradient = other._gradient;
 
@@ -323,17 +320,6 @@ void NetTrain::train()
 	if (_pNet->layers().size() == 0)
 		return; //nothing to do
 
-//	if (_pNet->is_classification_mode())
-//	{
-//		bool bTruthIsLabel = (_pmTruthTrain->cols() == 1);
-//		if (bTruthIsLabel && (_pNet->output_size() != 1))
-//		{
-			//create binary label	
-//			labelToOneHot(*_pmTruthTrain, mTruthOneHot);
-//			set_train_data(*_pmSamplesTrain, mTruthOneHot);
-//		}
-//	}
-
 	update_class_weight();
 
     const MatrixFloat& mSamples = *_pmSamplesTrain;
@@ -449,7 +435,8 @@ void NetTrain::train()
 
 		// if having test data, compute stats with it
         if (_pmSamplesTest != nullptr)
-        { 	//use the test db to keep the best model
+        { 	
+			//use the test_db to keep the best model
 			_fTestLoss =compute_loss( *_pmSamplesTest, *_pmTruthTest);
             _testLoss.push_back(_fTestLoss);
 

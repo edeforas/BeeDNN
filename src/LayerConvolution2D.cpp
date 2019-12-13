@@ -13,8 +13,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::conv_and_add(const MatrixFloat& mImage,const MatrixFloat& mKernel, MatrixFloat&mOut)
 {
-	
-	
+	//todo
 }
 ///////////////////////////////////////////////////////////////////////////////
 LayerConvolution2D::LayerConvolution2D(int iInRows, int iInCols,int iInPlanes, int iKernelRows, int iKernelCols,int  iOutPlanes) :

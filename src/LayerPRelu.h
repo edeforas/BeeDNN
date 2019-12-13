@@ -20,10 +20,10 @@ public:
 
     virtual Layer* clone() const override;
 
-    virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
-
     virtual void init() override;
-    virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
+	
+	virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
+	virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 
 	virtual bool has_weight() const override;
 };
