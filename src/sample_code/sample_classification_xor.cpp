@@ -26,9 +26,9 @@ int main()
 {
     //construct network, 2 input, 1 output
     Net net;
-    net.add_dense_layer(2,5);
+    net.add_dense_layer(2,10);
 	net.add_activation_layer("Relu");
-	net.add_dense_layer(5, 1);
+	net.add_dense_layer(10, 1);
 
     //set the train data
     float dSamples[]={ 0,0 , 0,1 , 1,0 , 1,1 };
