@@ -26,14 +26,14 @@ Layer* LayerSoftmax::clone() const
 void LayerSoftmax::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	MatrixFloat S;
-	mOut.resizeLike(mIn);
+	mOut=mIn;
 
 	for (int r = 0; r < mOut.rows(); r++)// todo simplify and optimize
 	{
-		S = mIn.row(r); 
+		S = mOut.row(r); 
 		S.array() -= S.maxCoeff(); //remove max
 		S = S.array().exp();
-		mOut.row(r)=  S / S.sum();
+		mOut.row(r) =S/ S.sum();
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -50,11 +50,12 @@ void LayerSoftmax::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGr
 	{
 		S = mIn.row(r);
 		S.array() -= S.maxCoeff(); //remove max
+		S = S.array().exp();
 
-		float s = S.array().exp().sum();
+		float s = S.sum();
 		for (int c = 0; c < S.cols(); c++)
 		{
-			float expx = expf(S(c));
+			float expx = S(c);
 			mGradientIn(r, c) = mGradientOut(r, c)*(expx*(s-expx)) / (s*s);
 		}
 	}

@@ -633,7 +633,6 @@ MatrixFloat decimate(const MatrixFloat& m, int iRatio);
 int argmax(const MatrixFloat& m);
 void labelToOneHot(const MatrixFloat& mLabel, MatrixFloat& mOneMat, int iNbClass=0);
 void rowsArgmax(const MatrixFloat& m, MatrixFloat& argM); //compute the argmax row by row
-void contatenateVerticallyInto(const MatrixFloat& mA, const MatrixFloat& mB, MatrixFloat& mAB);
 const MatrixFloat addColumnOfOne(const MatrixFloat& m);
 
 string toString(const MatrixFloat& m);

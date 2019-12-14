@@ -230,25 +230,6 @@ string toString(const MatrixFloat& m)
     return ss.str();
 }
 ///////////////////////////////////////////////////////////////////////////
-void contatenateVerticallyInto(const MatrixFloat& mA, const MatrixFloat& mB, MatrixFloat& mAB)
-{
-    assert(mA.cols()== mB.cols());
-
-    int iRowA = (int)mA.rows();
-    int iRowB = (int)mB.rows();
-    int iCols = (int)mA.cols();
-
-    mAB.resize(iRowA + iRowB, iCols);
-
-#ifdef USE_EIGEN
-    mAB << mA , mB;
-#else
-    //todo check mA and mB are not view on other matrixes with reduced columns (horizontal stride pb)
-    std::copy(mA.data(), mA.data() + mA.size(), mAB.data());
-    std::copy(mB.data(), mB.data() + mB.size(), mAB.data() + mA.size());
-#endif
-}
-///////////////////////////////////////////////////////////////////////////
 const MatrixFloat addColumnOfOne(const MatrixFloat& m)
 {
     // todo : slow

@@ -11,6 +11,7 @@ MetaOptimizer::MetaOptimizer()
 	_fBestAccuracy = -1.;
 	_pTrain = nullptr;
 	_iNbThread = 0;
+	_iNRepeatAll = 1;
 	_betterSolutionCallBack = nullptr;
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -27,24 +28,32 @@ void MetaOptimizer::set_nb_thread(int iNbThread)
 	_iNbThread = iNbThread;
 }
 //////////////////////////////////////////////////////////////////////////////
+void MetaOptimizer::set_repeat_all(int iNbRepeatAll)
+{
+	_iNRepeatAll = iNbRepeatAll;
+}
+//////////////////////////////////////////////////////////////////////////////
 void MetaOptimizer::run()
 {
-	_fBestAccuracy = -1.;
-
-	int iNbThread = _iNbThread;
-	if(iNbThread==0) //auto case
-		iNbThread = (int)(thread::hardware_concurrency());
-	
-	vector<thread> vt(iNbThread);
-
-	for (int i = 0; i < iNbThread; i++)
+	for (int iRepeat = 0; iRepeat < _iNRepeatAll; iRepeat++)
 	{
-		srand((unsigned int)time(NULL)); //avoid using the same global rand for every thread
-		vt[i] = std::thread(&run_thread, i,this);
-	}
+		_fBestAccuracy = -1.;
 
-	for (int i = 0; i < iNbThread; i++)
-		vt[i].join();
+		int iNbThread = _iNbThread;
+		if (iNbThread == 0) //auto case
+			iNbThread = (int)(thread::hardware_concurrency());
+
+		vector<thread> vt(iNbThread);
+
+		for (int i = 0; i < iNbThread; i++)
+		{
+			srand((unsigned int)time(NULL)); //avoid using the same global rand for every thread
+			vt[i] = std::thread(&run_thread, i, this);
+		}
+
+		for (int i = 0; i < iNbThread; i++)
+			vt[i].join();
+	}
 }
 ////////////////////////////////////////////////////////////////
 void MetaOptimizer::new_epoch(NetTrain& trainT)
