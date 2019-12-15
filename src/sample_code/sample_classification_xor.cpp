@@ -26,7 +26,6 @@ int main()
 {
     //construct network, 2 input, 1 output
     Net net;
-	net.set_input_shape(2,1,1);
     net.add_dense_layer(10);
 	net.add_activation_layer("Relu");
 	net.add_dense_layer(1);

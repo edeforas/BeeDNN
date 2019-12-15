@@ -244,9 +244,6 @@ float NetTrain::compute_loss(const MatrixFloat &mSamples, const MatrixFloat &mTr
 {
 	assert(_pNet);
 
-	if (!_pNet->is_valid((int)mSamples.cols(), (int)mTruth.cols()))
-		return 0.f;
-
     int iNbSamples = (int)mSamples.rows();
 
     if( (_pNet->layers().size()==0) || (iNbSamples==0) )
@@ -312,8 +309,6 @@ void NetTrain::set_test_data(const MatrixFloat& mSamplesTest, const MatrixFloat&
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::train()
 {
-//	MatrixFloat mTruthOneHot;
-
 	if (_pNet == nullptr)
 		return;
 
@@ -327,9 +322,6 @@ void NetTrain::train()
 
 	if (_pNet->input_size() != (int)mSamples.cols())
 		_pNet->set_input_shape((int)mSamples.cols());
-
-	if (!_pNet->is_valid((int)mSamples.cols(),(int) mTruth.cols()))
-		return ;
 
     _trainLoss.clear();
     _testLoss.clear();

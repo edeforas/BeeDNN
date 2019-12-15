@@ -151,8 +151,19 @@ void Net::add_convolution2D_layer(int iKernelRows, int iKernelCols, int  iOutPla
 	_layers.push_back(new LayerConvolution2D( iKernelRows, iKernelCols, iOutPlanes));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
+void Net::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
+	if (_iInputSize == 0) //lazy init
+	{
+		init();
+		if (_iInputSize == 0)    //if no input size defined, use first data size
+		{
+			set_input_shape(mIn.cols(), 1, 1);
+			init();
+			assert(_iInputSize != 0);
+		}
+	}
+
     MatrixFloat mTemp=mIn;
     for(unsigned int i=0;i<_layers.size();i++)
     {
@@ -171,7 +182,7 @@ bool Net::is_classification_mode() const
 	return _bClassificationMode;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-void Net::classify(const MatrixFloat& mIn, MatrixFloat& mClass) const
+void Net::classify(const MatrixFloat& mIn, MatrixFloat& mClass)
 {
     MatrixFloat mOut;
 	forward(mIn, mOut);
@@ -220,6 +231,8 @@ void Net::init()
 	int iCols = _iInputCols;
 	int iPlanes = _iInputPlanes;
 
+	_iInputSize = _iInputRows * _iInputCols*_iInputPlanes;
+
 	for (unsigned int i = 0; i < _layers.size(); i++)
 	{
 		_layers[i]->set_shape(iRows, iCols, iPlanes, iRows, iCols, iPlanes);
@@ -233,8 +246,7 @@ void Net::set_input_shape(int iInputRows, int iInputCols, int iInputPlanes)
 	_iInputCols = iInputCols;
 	_iInputPlanes = iInputPlanes;
 
-    _iInputSize= _iInputRows* _iInputCols*_iInputPlanes;
-	init();
+	_iInputSize = 0; //force init in forward
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 int Net::output_size() const
@@ -247,47 +259,3 @@ int Net::input_size() const
     return _iInputSize;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-bool Net::is_valid(int iInSize, int iOutSize) const
-{
-	//check input size
-	if (_iInputSize != iInSize)
-	{
-		//todo LOG
-		return false;
-	}
-
-	//int iLastSize = net.input_size(); //todo
-
-
-	return true;
-
-	//check output size
-	if (_iOutputSize != iOutSize)// TODO check categorical data 
-	{
-		//todo LOG // TODO check categorical data 
-		return false;
-	}
-
-	if (size() == 0) //no layers
-		return true;
-
-	//check  each layer size
-	for (unsigned int i = 1; i < size(); i++)
-	{
-		const Layer& l1 = layer(i - 1);
-
-		int size0 = l1.in_size();
-		int size1 = l1.out_size();
-
-		if ((size0 == 0) && (size1 == 0))
-			continue; //activation layer
-
-
-		//update last size
-
-			//todododo
-
-	}
-
-	return true;
-}

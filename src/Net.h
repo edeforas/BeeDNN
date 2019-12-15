@@ -58,12 +58,10 @@ public:
 	void set_classification_mode(bool bClassificationMode); //true by default
 	bool is_classification_mode() const;
 
-	void forward(const MatrixFloat& mIn, MatrixFloat& mOut) const;
-	void classify(const MatrixFloat& mIn, MatrixFloat& mClass) const;
+	void forward(const MatrixFloat& mIn, MatrixFloat& mOut);
+	void classify(const MatrixFloat& mIn, MatrixFloat& mClass);
 
     void set_train_mode(bool bTrainMode); // set to true if training, set to false if testing (default)
-
-	bool is_valid(int iInSize, int iOutSize) const; //return true if all size ok
 
 private:
 	bool _bTrainMode;
