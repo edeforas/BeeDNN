@@ -326,7 +326,7 @@ void NetTrain::train()
     const MatrixFloat& mTruth = *_pmTruthTrain;
 
 	if (_pNet->input_size() != (int)mSamples.cols())
-		_pNet->set_input_size((int)mSamples.cols());
+		_pNet->set_input_shape((int)mSamples.cols());
 
 	if (!_pNet->is_valid((int)mSamples.cols(),(int) mTruth.cols()))
 		return ;

@@ -9,8 +9,8 @@
 #include "LayerUniformNoise.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerUniformNoise::LayerUniformNoise(int iSize,float fNoise):
-    Layer(iSize,iSize,"UniformNoise"),
+LayerUniformNoise::LayerUniformNoise(float fNoise):
+    Layer("UniformNoise"),
     _fNoise(fNoise),
 	_distUniform(-fNoise, fNoise)
 { }
@@ -20,7 +20,7 @@ LayerUniformNoise::~LayerUniformNoise()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerUniformNoise::clone() const
 {
-    return new LayerUniformNoise(_iInSize,_fNoise);
+    return new LayerUniformNoise(_fNoise);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerUniformNoise::forward(const MatrixFloat& mIn,MatrixFloat& mOut)

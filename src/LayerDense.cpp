@@ -11,11 +11,11 @@
 #include <cmath> // for sqrt
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerDense::LayerDense(int iInSize, int iOutSize, bool bHasBias) :
-    Layer(iInSize , iOutSize, "Dense"),
+LayerDense::LayerDense(int iOutSize, bool bHasBias) :
+    Layer("Dense"),
     _bHasBias(bHasBias)
 {
-    LayerDense::init();
+	_iOutputSize = iOutSize;
 }
 ///////////////////////////////////////////////////////////////////////////////
 LayerDense::~LayerDense()
@@ -23,20 +23,20 @@ LayerDense::~LayerDense()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerDense::clone() const
 {
-    LayerDense* pLayer=new LayerDense(_iInSize,_iOutSize,_bHasBias);
+    LayerDense* pLayer=new LayerDense(_iOutputSize,_bHasBias);
     pLayer->_weight=_weight;
     return pLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDense::init()
 {
-	assert(_iInSize > 0);
-	assert(_iOutSize > 0);
+	assert(_iInputSize > 0);
+	assert(_iOutputSize > 0);
 	
-	_weight.resize(_iInSize+(_bHasBias?1:0),_iOutSize);
+	_weight.resize(_iInputSize+(_bHasBias?1:0),_iOutputSize);
 
     //Xavier uniform initialization
-    float a =sqrtf(6.f/(_iInSize+_iOutSize));
+    float a =sqrtf(6.f/(_iInputSize+_iOutputSize));
     _weight.setRandom();
     _weight*=a;
 
@@ -48,8 +48,10 @@ void LayerDense::init()
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDense::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
+	assert(_iInputSize != 0);
+
     if (_bHasBias)
-        mOut = rowWiseAdd(mIn *_weight.topRows(_iInSize) , _weight.row(_iInSize)); //split _weight in [weightnobias, bias] in computation
+        mOut = rowWiseAdd(mIn *_weight.topRows(_iInputSize) , _weight.row(_iInputSize)); //split _weight in [weightnobias, bias] in computation
     else
         mOut = mIn * _weight;
 }
@@ -64,7 +66,7 @@ void LayerDense::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGrad
 		if (_bFirstLayer)
 			return;
 
-		mGradientIn = mGradientOut * _weight.topRows(_iInSize).transpose();
+		mGradientIn = mGradientOut * _weight.topRows(_iInputSize).transpose();
     }
     else
     {

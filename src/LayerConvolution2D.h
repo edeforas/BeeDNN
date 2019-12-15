@@ -15,10 +15,10 @@
 class LayerConvolution2D : public Layer
 {
 public:
-	LayerConvolution2D(int iInRows, int iInCols,int iInPlanes, int iKernelRows, int iKernelCols,int  iOutPlanes);
+	LayerConvolution2D( int iKernelRows, int iKernelCols,int  iOutPlanes);
     virtual ~LayerConvolution2D() override;
 
-	void get_params(int& iInRows, int& iInCols,int& iInPlanes, int& iKernelRows, int& iKernelCols,int& iOutPlanes);
+	void get_params(int& iKernelRows, int& iKernelCols,int& iOutPlanes);
 
     virtual Layer* clone() const override;
 
@@ -28,16 +28,10 @@ public:
 private:
 	void conv_and_add(const MatrixFloat& mImage,const MatrixFloat& mKernel, MatrixFloat&mOut);
 
-	int _iInRows;
-	int _iInCols;
-	int _iInPlanes;
 	int _iKernelRows;
 	int _iKernelCols;
-	int _iOutPlanes;
 	int _iBorderRows;
 	int _iBorderCols;
-	int _iOutRows;
-	int _iOutCols;
 };
 
 #endif

@@ -9,10 +9,9 @@
 #include "LayerGlobalBias.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerGlobalBias::LayerGlobalBias(int inSize) :
-    Layer(inSize, inSize, "GlobalBias")
+LayerGlobalBias::LayerGlobalBias() :
+    Layer("GlobalBias")
 {
-    _weight.resize(1,1);
     LayerGlobalBias::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -21,7 +20,7 @@ LayerGlobalBias::~LayerGlobalBias()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerGlobalBias::clone() const
 {
-    LayerGlobalBias* pLayer=new LayerGlobalBias(_iInSize);
+    LayerGlobalBias* pLayer=new LayerGlobalBias();
 	pLayer->weights() = _weight;
 
     return pLayer;
@@ -29,7 +28,7 @@ Layer* LayerGlobalBias::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGlobalBias::init()
 {
-    _weight.setZero(); // by default
+    _weight.setZero(1,1); // by default
 
     Layer::init();
 }

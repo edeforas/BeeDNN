@@ -172,12 +172,10 @@ void FrameNetwork::set_net(Net* pNet)
 		if (sType == "PoolMax2D")
 		{
 			LayerPoolMax2D* lpm=((LayerPoolMax2D*)l);
-			int iInRows, iInCols, iPlanes, iRowFactor, iColFactor;
-			lpm->get_params(iInRows,iInCols,iPlanes, iRowFactor,iColFactor);
-			string cell1 = to_string(iInRows) + "," + to_string(iInCols) + "," + to_string(iPlanes);
-			string cell3 = to_string(iRowFactor) + "," + to_string(iColFactor);
+			int iRowFactor, iColFactor;
+			lpm->get_params(iRowFactor,iColFactor);
+			string cell1 = to_string(iRowFactor) + "," + to_string(iColFactor);
 			ui->twNetwork->setItem(i, 1, new QTableWidgetItem(cell1.c_str()));
-			ui->twNetwork->setItem(i, 3, new QTableWidgetItem(cell3.c_str()));
 		}
     }
 	_bLock = false;
@@ -254,7 +252,7 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
                 float fRatio=0.2f; //by default
                 if(bOk)
                     fRatio=fArg1;
-                _pNet->add_dropout_layer(iInSize,fRatio);
+                _pNet->add_dropout_layer(fRatio);
             }
 
 			else if (sType == "UniformNoise")
@@ -262,7 +260,7 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
 				float fNoise = 0.1f; //by default
 				if (bOk)
 					fNoise = fArg1;
-				_pNet->add_uniform_noise_layer(iInSize, fNoise);
+				_pNet->add_uniform_noise_layer( fNoise);
 			}
 
             else if(sType=="GaussianNoise")
@@ -270,7 +268,7 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
                 float fStd=1.f; //by default
                 if(bOk)
                     fStd=fArg1;
-                _pNet->add_gaussian_noise_layer(iInSize,fStd);
+                _pNet->add_gaussian_noise_layer(fStd);
             }
 
             else if(sType=="GaussianDropout")
@@ -278,38 +276,38 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
                 float fProba=1.f; //by default
                 if(bOk)
                     fProba=fArg1;
-                _pNet->add_gaussian_dropout_layer(iInSize,fProba);
+                _pNet->add_gaussian_dropout_layer(fProba);
             }
 
             else if(sType=="GlobalGain")
-                _pNet->add_globalgain_layer(iInSize);
+                _pNet->add_globalgain_layer();
 			
 			else if (sType == "GlobalBias")
-				_pNet->add_globalbias_layer(iInSize);
+				_pNet->add_globalbias_layer();
 			
             else if (sType == "Bias")
-                _pNet->add_bias_layer(iInSize);
+                _pNet->add_bias_layer();
 
             else if(sType=="PoolAveraging1D")
-                _pNet->add_poolaveraging1D_layer(iInSize,iOutSize);
+                _pNet->add_poolaveraging1D_layer(iOutSize);
 
             else if(sType=="PoolMax1D")
-                _pNet->add_poolmax1D_layer(iInSize,iOutSize);
+                _pNet->add_poolmax1D_layer(iOutSize);
 
 			else if (sType == "PoolMax2D")
-				_pNet->add_poolmax2D_layer(iInSize, iInSize2, max(iInSize3,1), max((int)fArg1,1), max((int)fArg2,1));
+				_pNet->add_poolmax2D_layer( max((int)fArg1,1), max((int)fArg2,1));
 			
 			else if (sType == "PRelu")
-				_pNet->add_prelu_layer(iInSize);
+				_pNet->add_prelu_layer();
 
 			else if (sType == "Softmax")
 				_pNet->add_softmax_layer();
 
             else if(sType=="DenseAndBias")
-                _pNet->add_dense_layer(iInSize,iOutSize,true);
+                _pNet->add_dense_layer(iOutSize,true);
 
             else if(sType=="DenseNoBias")
-                _pNet->add_dense_layer(iInSize,iOutSize,false);
+                _pNet->add_dense_layer(iOutSize,false);
             else
                 _pNet->add_activation_layer(sType);
         }

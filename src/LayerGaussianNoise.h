@@ -20,7 +20,7 @@ class Activation;
 class LayerGaussianNoise : public Layer
 {
 public:
-    LayerGaussianNoise(int iSize,float fStd);
+    LayerGaussianNoise(float fStd);
     virtual ~LayerGaussianNoise() override;
 
     virtual Layer* clone() const override;

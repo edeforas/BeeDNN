@@ -15,7 +15,7 @@
 class LayerBias : public Layer
 {
 public:
-    explicit LayerBias(int inSize);
+    explicit LayerBias();
     virtual ~LayerBias();
 
     virtual Layer* clone() const override;

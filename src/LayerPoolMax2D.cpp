@@ -9,49 +9,45 @@
 #include "LayerPoolMax2D.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerPoolMax2D::LayerPoolMax2D(int iInRows, int iInCols, int iInPlanes, int iRowFactor, int iColFactor) :
-    Layer(iInPlanes*iInRows*iInCols, iInPlanes*iInRows*iInCols/(iRowFactor*iColFactor), "PoolMax2D")
+LayerPoolMax2D::LayerPoolMax2D(int iRowFactor, int iColFactor) :
+    Layer("PoolMax2D")
 {
-	_iInRows = iInRows;
-	_iInCols = iInCols;
-	_iInPlanes = iInPlanes;
 	_iRowFactor = iRowFactor;
 	_iColFactor = iColFactor;
-	_iOutRows = iInRows/iRowFactor;
-	_iOutCols = iInCols/iColFactor;
-	_iInPlaneSize = _iInRows * _iInCols;
-	_iOutPlaneSize = _iOutRows * _iOutCols;
-
-    LayerPoolMax2D::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
 LayerPoolMax2D::~LayerPoolMax2D()
 { }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPoolMax2D::get_params(int& iInRows, int& iInCols, int & iPlanes, int& iRowFactor, int& iColFactor)
+void LayerPoolMax2D::get_params(int& iRowFactor, int& iColFactor)
 {
-	iInRows = _iInRows;
-	iInCols = _iInCols;
-	iPlanes = _iInPlanes;
 	iRowFactor = _iRowFactor;
 	iColFactor= _iColFactor;
 }
 ///////////////////////////////////////////////////////////////////////////////
+void LayerPoolMax2D::init()
+{
+	_iOutputRows = _iInputRows / _iRowFactor;
+	_iOutputCols = _iInputCols / _iColFactor;
+	_iInPlaneSize = _iInputRows * _iInputCols;
+	_iOutPlaneSize = _iOutputRows * _iOutputCols;
+}
+///////////////////////////////////////////////////////////////////////////////
 Layer* LayerPoolMax2D::clone() const
 {
-    return new LayerPoolMax2D(_iInRows, _iInCols, _iInPlanes, _iRowFactor, _iColFactor);
+    return new LayerPoolMax2D(_iRowFactor, _iColFactor);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerPoolMax2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	mOut = mIn;
 	
-	mOut.resize(mIn.rows(), _iOutPlaneSize*_iInPlanes);
+	mOut.resize(mIn.rows(), _iOutPlaneSize*_iInputPlanes);
 	if(_bTrainMode)
 		_mMaxIndex.resizeLike(mOut); //index to selected input max data
 
 	//not optimized yet
-	for (int plane = 0; plane < _iInPlanes; plane++)
+	for (int plane = 0; plane < _iInputPlanes; plane++)
 	{
 		for (int l = 0; l < mIn.rows(); l++)
 		{
@@ -68,7 +64,7 @@ void LayerPoolMax2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 					{
 						for (int ci = c * _iColFactor; ci < c*_iColFactor + _iColFactor; ci++)
 						{
-							int iIndex = ri * _iInCols + ci; //flat index in plane
+							int iIndex = ri * _iInputCols + ci; //flat index in plane
 							float fSample = lIn[iIndex];
 
 							if (fSample > fMax)
@@ -96,11 +92,11 @@ void LayerPoolMax2D::backpropagation(const MatrixFloat &mIn,const MatrixFloat &m
 	if (_bFirstLayer)
 		return;
 
-	mGradientIn.setZero(mGradientOut.rows(), _iInPlaneSize*_iInPlanes);
+	mGradientIn.setZero(mGradientOut.rows(), _iInPlaneSize*_iInputPlanes);
 
 	for (int l = 0; l < mGradientOut.rows(); l++)
 	{
-		for (int plane = 0; plane < _iInPlanes; plane++)
+		for (int plane = 0; plane < _iInputPlanes; plane++)
 		{
 			const float* lOut = mGradientOut.row(l).data() +plane * _iOutPlaneSize;
 			float* lIn = mGradientIn.row(l).data() +plane * _iInPlaneSize;

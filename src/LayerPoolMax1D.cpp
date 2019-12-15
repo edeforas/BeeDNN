@@ -9,10 +9,10 @@
 #include "LayerPoolMax1D.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerPoolMax1D::LayerPoolMax1D(int iInSize, int iOutSize) :
-    Layer(iInSize , iOutSize, "PoolMax1D")
+LayerPoolMax1D::LayerPoolMax1D(int iOutSize) :
+    Layer("PoolMax1D")
 {
-    LayerPoolMax1D::init();
+	_iOutputSize = iOutSize;
 }
 ///////////////////////////////////////////////////////////////////////////////
 LayerPoolMax1D::~LayerPoolMax1D()
@@ -20,24 +20,24 @@ LayerPoolMax1D::~LayerPoolMax1D()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerPoolMax1D::clone() const
 {
-    return new LayerPoolMax1D(_iInSize,_iOutSize);
+    return new LayerPoolMax1D(_iOutputSize);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerPoolMax1D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
-	mOut.resize(mIn.rows(), _iOutSize);
-	int iWindowSize=_iInSize/_iOutSize;
+	mOut.resize(mIn.rows(), _iOutputSize);
+	int iWindowSize=_iInputSize/_iOutputSize;
 	
 	if (_bTrainMode)
 	{
-		_gradientWeight.setZero(mIn.rows(), _iOutSize);
+		_gradientWeight.setZero(mIn.rows(), _iOutputSize);
 	}
 
 	for (int l = 0; l < mIn.rows(); l++)
 	{
 		int iOut = 0;
 
-		for (int iw = 0; iw < _iOutSize; iw++) //todo optimize everything
+		for (int iw = 0; iw < _iOutputSize; iw++) //todo optimize everything
 		{
 			int iStart = iw * iWindowSize;
 			int iEnd = iStart + iWindowSize;

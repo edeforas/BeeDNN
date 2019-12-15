@@ -9,19 +9,16 @@
 #include "LayerGlobalGain.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerGlobalGain::LayerGlobalGain(int iInSize) :
-    Layer(iInSize, iInSize, "GlobalGain")
-{
-    _weight.resize(1,1);
-    LayerGlobalGain::init();
-}
+LayerGlobalGain::LayerGlobalGain() :
+    Layer("GlobalGain")
+{ }
 ///////////////////////////////////////////////////////////////////////////////
 LayerGlobalGain::~LayerGlobalGain()
 { }
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerGlobalGain::clone() const
 {
-    LayerGlobalGain* pLayer=new LayerGlobalGain(_iInSize);
+    LayerGlobalGain* pLayer=new LayerGlobalGain();
 	pLayer->weights() = _weight;
 
     return pLayer;
@@ -29,7 +26,7 @@ Layer* LayerGlobalGain::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGlobalGain::init()
 {
-    _weight.setOnes(); // by default
+    _weight.setOnes(1,1); // by default
 
     Layer::init();
 }

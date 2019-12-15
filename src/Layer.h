@@ -17,21 +17,22 @@ using namespace std;
 class Layer
 {
 public:
-    Layer(int iInSize, int iOutSize,const string& sType);
+    Layer(const string& sType);
     virtual ~Layer();
 
     virtual Layer* clone() const =0;
 
+	virtual void init();
+
     string type() const;
 
-    void set_input_size(int iInputSize);
     int in_size() const;
     int out_size() const;
 	void set_first_layer(bool bFirstLayer);
 
     virtual void forward(const MatrixFloat& mIn,MatrixFloat& mOut) =0;
 	
-    virtual void init();
+    virtual void set_shape(int iInputRows,int iInputCols,int iInputPlanes,int& iOutputRows, int& iOutputCols,int & iOutputPlanes);
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)=0;
 	
 	void set_train_mode(bool bTrainMode); //set to true to train, to false to test
@@ -42,7 +43,10 @@ public:
 
 protected:
     MatrixFloat _weight,_gradientWeight;
-    int _iInSize, _iOutSize;
+    int _iInputSize, _iOutputSize;
+	int _iInputRows, _iInputCols, _iInputPlanes;
+	int _iOutputRows, _iOutputCols, _iOutputPlanes;
+
 	bool _bTrainMode;
 	bool _bFirstLayer;
 

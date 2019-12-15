@@ -9,9 +9,10 @@
 #include "LayerPoolAveraging1D.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerPoolAveraging1D::LayerPoolAveraging1D(int iInSize, int iOutSize) :
-    Layer(iInSize , iOutSize, "PoolAveraging1D")
+LayerPoolAveraging1D::LayerPoolAveraging1D(int iOutSize) :
+    Layer("PoolAveraging1D")
 {
+	_iOutputSize = iOutSize;
     LayerPoolAveraging1D::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -20,19 +21,19 @@ LayerPoolAveraging1D::~LayerPoolAveraging1D()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerPoolAveraging1D::clone() const
 {
-    return new LayerPoolAveraging1D(_iInSize,_iOutSize);
+    return new LayerPoolAveraging1D(_iOutputSize);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerPoolAveraging1D::init()
 {
-    assert(_iOutSize>0);
+    assert(_iOutputSize>0);
 
-    int iWindowSize=_iInSize/_iOutSize;
+    int iWindowSize=_iInputSize/_iOutputSize;
     float fInvWeight=1.f/iWindowSize;
 
-    _weight.setZero(_iInSize,_iOutSize);
+    _weight.setZero(_iInputSize,_iOutputSize);
 
-    for(int i=0;i<_iOutSize;i++)
+    for(int i=0;i<_iOutputSize;i++)
         for(int j=0;j<iWindowSize;j++)
             _weight(i*iWindowSize+j,i)=fInvWeight; //todo do not use a diagonal matrix for this computation
 }

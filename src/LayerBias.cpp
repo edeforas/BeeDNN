@@ -9,10 +9,9 @@
 #include "LayerBias.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerBias::LayerBias(int inSize) :
-    Layer(inSize, inSize, "GlobalBias")
+LayerBias::LayerBias() :
+    Layer("Bias")
 {
-    _weight.resize(1,inSize);
     LayerBias::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -21,7 +20,7 @@ LayerBias::~LayerBias()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerBias::clone() const
 {
-    LayerBias* pLayer=new LayerBias(_iInSize);
+    LayerBias* pLayer=new LayerBias();
 	pLayer->weights() = _weight;
 
     return pLayer;
@@ -29,8 +28,8 @@ Layer* LayerBias::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerBias::init()
 {
-    _weight.setZero();
-    Layer::init();
+    _weight.setZero(1, _iInputSize);
+	Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerBias::forward(const MatrixFloat& mIn,MatrixFloat& mOut)

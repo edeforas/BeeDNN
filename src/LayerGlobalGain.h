@@ -15,7 +15,7 @@
 class LayerGlobalGain : public Layer
 {
 public:
-    explicit LayerGlobalGain(int iInSize);
+    explicit LayerGlobalGain();
     virtual ~LayerGlobalGain();
 
     virtual Layer* clone() const override;

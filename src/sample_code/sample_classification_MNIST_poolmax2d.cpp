@@ -46,12 +46,13 @@ int main()
     }
 	mTestImages/= 256.f;
 	mRefImages/= 256.f;
-  
+	net.set_input_shape(28, 28, 1);
+
 	//create simple net:
-	net.add_poolmax2D_layer(28,28,1, 2, 2); //input rows, input cols,input nbplanes, factor rows, factor cols
-	net.add_dense_layer(784/4, 32); // new size is 4x smaller
+	net.add_poolmax2D_layer(2, 2); //input rows, input cols,input nbplanes, factor rows, factor cols
+	net.add_dense_layer(32); // new size is 4x smaller
 	net.add_activation_layer("Relu");
-	net.add_dense_layer(32, 10);
+	net.add_dense_layer( 10);
 	net.add_softmax_layer();
 
 	//setup train options

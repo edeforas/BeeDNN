@@ -9,8 +9,8 @@
 #include "LayerPRelu.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerPRelu::LayerPRelu(int iInSize) :
-    Layer(iInSize , iInSize, "PRelu")
+LayerPRelu::LayerPRelu() :
+    Layer("PRelu")
 {
     LayerPRelu::init();
 }
@@ -20,17 +20,17 @@ LayerPRelu::~LayerPRelu()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerPRelu::clone() const
 {
-    LayerPRelu* pLayer=new LayerPRelu(_iInSize);
+    LayerPRelu* pLayer=new LayerPRelu();
     pLayer->_weight=_weight;
     return pLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerPRelu::init()
 {
-	assert(_iInSize > 0);
-	assert(_iOutSize > 0);
+	assert(_iInputSize > 0);
+	assert(_iOutputSize > 0);
 	
-	_weight.resize(1,_iInSize);
+	_weight.resize(1,_iInputSize);
 	_weight.setConstant(0.25f);
 
 	_gradientWeight.resizeLike(_weight);

@@ -15,7 +15,7 @@
 class LayerPoolAveraging1D : public Layer
 {
 public:
-    LayerPoolAveraging1D(int iInSize,int iWindowSize);
+    LayerPoolAveraging1D(int iWindowSize);
     virtual ~LayerPoolAveraging1D() override;
 
     virtual Layer* clone() const override;

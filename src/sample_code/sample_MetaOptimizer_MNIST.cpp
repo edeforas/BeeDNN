@@ -43,10 +43,11 @@ int main()
 
 	//create simple net
 	Net net;
-    net.add_dense_layer(784, 256);
+	net.set_input_shape(28, 28, 1);
+	net.add_dense_layer(256);
 	net.add_activation_layer("Relu");
-	net.add_dropout_layer(256,0.2f);
-	net.add_dense_layer(256, 10);
+	net.add_dropout_layer(0.2f);
+	net.add_dense_layer(10);
 	net.add_softmax_layer();
 
 	//set train settings

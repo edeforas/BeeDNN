@@ -16,23 +16,20 @@ void LayerConvolution2D::conv_and_add(const MatrixFloat& mImage,const MatrixFloa
 	//todo
 }
 ///////////////////////////////////////////////////////////////////////////////
-LayerConvolution2D::LayerConvolution2D(int iInRows, int iInCols,int iInPlanes, int iKernelRows, int iKernelCols,int  iOutPlanes) :
-    Layer(iInRows*iInCols*iInPlanes, 0 , "Convolution2D")
+LayerConvolution2D::LayerConvolution2D(int iKernelRows, int iKernelCols,int  iOutPlanes) :
+    Layer( "Convolution2D")
 {
-	_iInRows = iInRows;
-	_iInCols = iInCols;
-	_iInPlanes = iInPlanes;
 	_iKernelRows = iKernelRows;
 	_iKernelCols = iKernelCols;
-	_iOutPlanes = iOutPlanes;
+	_iOutputPlanes = iOutPlanes;
 	
 	_iBorderRows=iKernelRows>>1;
 	_iBorderCols=iKernelCols>>1;
 
-	_iOutRows=_iInRows-2* _iBorderRows;
-	_iOutCols=_iInCols-2* _iBorderCols;
+	_iOutputRows=_iInputRows-2* _iBorderRows;
+	_iOutputCols=_iInputCols-2* _iBorderCols;
 
-	_iOutSize = _iOutRows * _iOutCols*_iOutPlanes;
+	_iOutputSize = _iOutputRows * _iOutputCols*_iOutputPlanes;
 
 	LayerConvolution2D::init();
 }
@@ -40,27 +37,24 @@ LayerConvolution2D::LayerConvolution2D(int iInRows, int iInCols,int iInPlanes, i
 LayerConvolution2D::~LayerConvolution2D()
 { }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerConvolution2D::get_params(int& iInRows, int& iInCols,int& iInPlanes, int& iKernelRows, int& iKernelCols,int& iOutPlanes)
+void LayerConvolution2D::get_params(int& iKernelRows, int& iKernelCols,int& iOutPlanes)
 {
-	iInRows = _iInRows;
-	iInCols = _iInCols;
-	iInPlanes = _iInPlanes;
 	iKernelRows = _iKernelRows;
 	iKernelCols = _iKernelCols;
-	iOutPlanes = _iOutPlanes;
+	iOutPlanes = _iOutputPlanes;
 }
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerConvolution2D::clone() const
 {
-    return new LayerConvolution2D(_iInRows, _iInCols,_iInPlanes,_iKernelRows,_iKernelCols,_iOutPlanes);
+    return new LayerConvolution2D(_iKernelRows,_iKernelCols,_iOutputPlanes);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
-	mOut.setZero(mIn.rows(), _iOutPlanes*_iOutRows*_iOutCols);
+	mOut.setZero(mIn.rows(), _iOutputSize);
 	for(int iSample=0; iSample<mIn.rows();iSample++)
 	{
-		for(int iPlane=0; iPlane<_iInPlanes;iPlane++)
+		for(int iPlane=0; iPlane<_iInputPlanes;iPlane++)
 		{
 			//Matrix mImage()
 			

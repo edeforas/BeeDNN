@@ -45,12 +45,13 @@ int main()
     }
 	mTestImages/= 256.f;
 	mRefImages/= 256.f;
-  
+	net.set_input_shape(32, 32, 3);
+
 	//create simple net:
-	net.add_poolmax2D_layer(32, 32, 3, 2, 2);
-	net.add_dense_layer(16 * 16 * 3, 256);
+	net.add_poolmax2D_layer(2, 2);
+	net.add_dense_layer(256);
 	net.add_activation_layer("Relu");
-	net.add_dense_layer(256, 10);
+	net.add_dense_layer(10);
 	net.add_softmax_layer();
 
 	//setup train options

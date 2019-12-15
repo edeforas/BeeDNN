@@ -48,12 +48,13 @@ int main()
     }
 	mTestImages/= 256.f;
 	mRefImages/= 256.f;
-  
+	net.set_input_shape(28, 28, 1);
+
 	//create simple net:
-	net.add_dense_layer(784, 128);
+	net.add_dense_layer(128);
 	net.add_activation_layer("Relu");
-	net.add_dropout_layer(128,0.2f); //reduce overfitting
-	net.add_dense_layer(128, 10);
+	net.add_dropout_layer(0.2f); //reduce overfitting
+	net.add_dense_layer(10);
 	net.add_softmax_layer();
 
 	//setup train options

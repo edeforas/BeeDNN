@@ -28,9 +28,9 @@ int main()
 {
     //build net
     Net net;
-    net.add_dense_layer(1,10);
+    net.add_dense_layer(10);
 	net.add_activation_layer("Tanh");
-	net.add_dense_layer(10, 1);
+	net.add_dense_layer(1);
 	net.set_classification_mode(false); //set regression mode
 
     //set train data

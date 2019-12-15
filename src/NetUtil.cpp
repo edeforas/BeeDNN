@@ -97,11 +97,8 @@ void write(const Net& net,string & s)
 		{
 			LayerPoolMax2D* l = static_cast<LayerPoolMax2D*>(layer);
 
-			int inRows, inCols, iPlanes, rowFactor, colFactor;
-			l->get_params(inRows, inCols, iPlanes, rowFactor, colFactor);
-			ss << "Layer" << i + 1 << ".inRows=" << inRows << endl;
-			ss << "Layer" << i + 1 << ".inCols=" << inCols << endl;
-			ss << "Layer" << i + 1 << ".inPlanes=" << iPlanes << endl;
+			int rowFactor, colFactor;
+			l->get_params(rowFactor, colFactor);
 			ss << "Layer" << i + 1 << ".rowFactor=" << rowFactor << endl;
 			ss << "Layer" << i + 1 << ".colFactor=" << colFactor << endl;
 		}
@@ -143,8 +140,7 @@ void read(const string& s,Net& net)
         {
             string sHasBias=find_key(s,sLayer+".hasBias");
             bool bHasBias=sHasBias!="0";
-            net.add_dense_layer(iInSize,iOutSize,bHasBias);
-
+            net.add_dense_layer(iOutSize,bHasBias);
             string sWeight=find_key(s,sLayer+".weight");
             MatrixFloat mf=fromString(sWeight);
             mf.resize(iInSize+(bHasBias?1:0),iOutSize);
@@ -154,7 +150,7 @@ void read(const string& s,Net& net)
         else if(sType=="GlobalGain")
         {
             float fGain= stof(find_key(s,sLayer+".globalGain"));
-            net.add_globalgain_layer(iInSize);
+            net.add_globalgain_layer();
 			MatrixFloat mf(1, 1);
 			mf(0) = fGain;
 			net.layer(net.size() - 1).weights() = mf;
@@ -163,7 +159,7 @@ void read(const string& s,Net& net)
         else if(sType=="GlobalBias")
         {
             float fBias= stof(find_key(s,sLayer+".globalBias"));
-            net.add_globalbias_layer(iInSize);
+            net.add_globalbias_layer();
             MatrixFloat mf(1, 1);
             mf(0) = fBias;
             net.layer(net.size() - 1).weights() = mf;
@@ -172,12 +168,12 @@ void read(const string& s,Net& net)
         else if(sType=="Dropout")
         {
             string sRate=find_key(s,sLayer+".rate");
-            net.add_dropout_layer(iInSize,stof(sRate));
+            net.add_dropout_layer(stof(sRate));
         }
 
 		else if (sType == "PRelu")
 		{
-			net.add_prelu_layer(iInSize);
+			net.add_prelu_layer();
 
 			string sWeight = find_key(s, sLayer + ".weight");
 			MatrixFloat mf = fromString(sWeight);
@@ -188,23 +184,20 @@ void read(const string& s,Net& net)
         else if (sType == "GaussianNoise")
         {
             string sNoise=find_key(s,sLayer+".stdNoise");
-            net.add_gaussian_noise_layer(iInSize,stof(sNoise));
+            net.add_gaussian_noise_layer(stof(sNoise));
         }
 
 		else if (sType == "UniformNoise")
 		{
 			string sNoise = find_key(s, sLayer + ".noise");
-			net.add_uniform_noise_layer(iInSize, stof(sNoise));
+			net.add_uniform_noise_layer(stof(sNoise));
 		}
 
 		else if (sType == "PoolMax2D")
 		{
-			int inSizeX = stoi(find_key(s, sLayer + ".inRows"));
-			int inSizeY = stoi(find_key(s, sLayer + ".inCols"));
-			int inPlanes = stoi(find_key(s, sLayer + ".inPlanes"));
 			int factorX = stoi(find_key(s, sLayer + ".rowFactor"));
 			int factorY = stoi(find_key(s, sLayer + ".colFactor"));
-			net.add_poolmax2D_layer(inSizeX, inSizeY, inPlanes, factorX, factorY);
+			net.add_poolmax2D_layer(factorX, factorY);
 		}
 
 		else if (sType == "Softmax")

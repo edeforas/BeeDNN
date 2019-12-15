@@ -9,13 +9,21 @@
 #include "Layer.h"
 
 ////////////////////////////////////////////////////////////////
-Layer::Layer(int iInSize, int iOutSize,const string& sType):
-_iInSize(iInSize),
-_iOutSize(iOutSize),
+Layer::Layer(const string& sType):
+_iInputSize(0),
+_iOutputSize(0),
 _sType(sType)
 { 
 	_bTrainMode = false;
 	_bFirstLayer = false;
+
+	_iInputRows = 0;
+	_iInputCols = 0;
+	_iInputPlanes = 0;
+
+	_iOutputRows = 0;
+	_iOutputCols = 0;
+	_iOutputPlanes = 0;
 }
 ////////////////////////////////////////////////////////////////
 Layer::~Layer()
@@ -23,26 +31,38 @@ Layer::~Layer()
 ////////////////////////////////////////////////////////////////
 void Layer::init()
 { }
+////////////////////////////////////////////////////////////////
+void Layer::set_shape(int iInputRows, int iInputCols, int iInputPlanes, int& iOutputRows, int& iOutputCols, int & iOutputPlanes)
+{ 
+	_iInputRows = iInputRows;
+	_iInputCols = iInputCols;
+	_iInputPlanes = iInputPlanes;
+
+	iOutputRows = iInputRows;
+	iOutputCols = iInputCols;
+	iOutputPlanes = iInputPlanes;
+
+	_iOutputRows = iOutputRows;
+	_iOutputCols = iOutputCols;
+	_iOutputPlanes = iOutputPlanes;
+
+	_iInputSize = iInputRows * iInputCols*iInputPlanes;
+	_iOutputSize = iOutputRows * iOutputCols*iOutputPlanes;
+}
 ///////////////////////////////////////////////////////////////
 string Layer::type() const
 {
     return _sType;
 }
 ///////////////////////////////////////////////////////////////
-void Layer::set_input_size(int iInputSize)
-{
-    _iInSize=iInputSize;
-    init();
-}
-///////////////////////////////////////////////////////////////
 int Layer::in_size() const
 {
-    return _iInSize;
+    return _iInputSize;
 }
 ///////////////////////////////////////////////////////////////
 int Layer::out_size() const
 {
-    return _iOutSize;
+    return _iOutputSize;
 }
 ///////////////////////////////////////////////////////////////
 void Layer::set_first_layer(bool bFirstLayer)
