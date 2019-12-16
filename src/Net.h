@@ -37,7 +37,8 @@ public:
 	void add_gaussian_noise_layer(int iSize, float fStd);
     
 	void add_globalgain_layer();
-    
+	void add_gain_layer();
+
 	void add_globalbias_layer();
 	void add_bias_layer();
 	
