@@ -288,7 +288,7 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
 				_pNet->add_globalbias_layer();
 			
             else if (sType == "Bias")
-                _pNet->add_bias_layer(iInSize);
+                _pNet->add_bias_layer();
 
             else if(sType=="PoolAveraging1D")
                 _pNet->add_poolaveraging1D_layer(iInSize,iOutSize);

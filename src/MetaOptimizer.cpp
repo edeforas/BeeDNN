@@ -47,7 +47,6 @@ void MetaOptimizer::run()
 
 		for (int i = 0; i < iNbThread; i++)
 		{
-			srand((unsigned int)time(NULL)); //avoid using the same global rand for every thread
 			vt[i] = std::thread(&run_thread, i, this);
 		}
 

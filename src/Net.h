@@ -39,7 +39,7 @@ public:
 	void add_globalgain_layer();
     
 	void add_globalbias_layer();
-	void add_bias_layer(int iSize);
+	void add_bias_layer();
 	
 	void add_poolaveraging1D_layer(int inSize, int outSize);
 	void add_poolmax1D_layer(int inSize, int outSize);

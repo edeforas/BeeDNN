@@ -129,10 +129,9 @@ void Net::add_globalbias_layer()
     _layers.push_back(new LayerGlobalBias());
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_bias_layer(int inSize)
+void Net::add_bias_layer()
 {
-	_layers.push_back(new LayerBias(inSize));
-	_iOutputSize = inSize;
+	_layers.push_back(new LayerBias());
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_poolaveraging1D_layer(int inSize, int iOutSize)
