@@ -89,3 +89,21 @@ bool LayerDense::has_weight() const
 	return true;
 }
 ///////////////////////////////////////////////////////////////
+void LayerDense::set_shape(int iInputRows, int iInputCols, int iInputPlanes, int& iOutputRows, int& iOutputCols, int & iOutputPlanes)
+{
+	_iInputRows = iInputRows;
+	_iInputCols = iInputCols;
+	_iInputPlanes = iInputPlanes;
+
+	iOutputRows = _iOutputSize;
+	iOutputCols = 1;
+	iOutputPlanes = 1;
+
+	_iOutputRows = iOutputRows;
+	_iOutputCols = iOutputCols;
+	_iOutputPlanes = iOutputPlanes;
+
+	_iInputSize = iInputRows * iInputCols*iInputPlanes;
+	_iOutputSize = iOutputRows * iOutputCols*iOutputPlanes;
+}
+////////////////////////////////////////////////////////////////

@@ -20,6 +20,8 @@ public:
 
     virtual Layer* clone() const override;
 
+	virtual void set_shape(int iInputRows, int iInputCols, int iInputPlanes, int& iOutputRows, int& iOutputCols, int & iOutputPlanes);
+
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
 
     virtual void init() override;

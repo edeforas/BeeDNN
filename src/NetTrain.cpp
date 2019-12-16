@@ -319,10 +319,10 @@ void NetTrain::train()
 
     const MatrixFloat& mSamples = *_pmSamplesTrain;
     const MatrixFloat& mTruth = *_pmTruthTrain;
-
+	/*
 	if (_pNet->input_size() != (int)mSamples.cols())
 		_pNet->set_input_shape((int)mSamples.cols());
-
+	*/
     _trainLoss.clear();
     _testLoss.clear();
     _trainAccuracy.clear();

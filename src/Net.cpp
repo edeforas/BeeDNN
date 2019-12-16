@@ -232,6 +232,9 @@ void Net::init()
 	int iPlanes = _iInputPlanes;
 
 	_iInputSize = _iInputRows * _iInputCols*_iInputPlanes;
+	
+	if (_iInputSize == 0) // too early
+		return;
 
 	for (unsigned int i = 0; i < _layers.size(); i++)
 	{
