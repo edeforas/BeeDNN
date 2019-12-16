@@ -73,8 +73,3 @@ void LayerPRelu::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGrad
 	_gradientWeight *= (1.f / mIn.rows());
 }
 ///////////////////////////////////////////////////////////////
-bool LayerPRelu::has_weight() const
-{
-	return true;
-}
-///////////////////////////////////////////////////////////////

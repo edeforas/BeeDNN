@@ -27,8 +27,6 @@ public:
 
     bool has_bias() const;
 
-	virtual bool has_weight() const override;
-
 private:
     bool _bHasBias;
 };
