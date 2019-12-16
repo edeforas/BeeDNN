@@ -62,13 +62,13 @@ void write(const Net& net,string & s)
         else if(layer->type()=="GlobalGain")
         {
             LayerGlobalGain* l=static_cast<LayerGlobalGain*>(layer);
-            ss << "Layer" << i+1 << ".globalGain=" << l->gain() << endl;
+            ss << "Layer" << i+1 << ".globalGain=" << l->weights()(0) << endl;
         }
 
         else if(layer->type()=="GlobalBias")
         {
             LayerGlobalBias* l=static_cast<LayerGlobalBias*>(layer);
-            ss << "Layer" << i+1 << ".globalBias=" << l->bias() << endl;
+            ss << "Layer" << i+1 << ".globalBias=" << l->weights()(0) << endl;
         }
 
         else if(layer->type()=="Dropout")
@@ -154,7 +154,7 @@ void read(const string& s,Net& net)
         else if(sType=="GlobalGain")
         {
             float fGain= stof(find_key(s,sLayer+".globalGain"));
-            net.add_globalgain_layer(iInSize);
+            net.add_globalgain_layer();
 			MatrixFloat mf(1, 1);
 			mf(0) = fGain;
 			net.layer(net.size() - 1).weights() = mf;
@@ -163,7 +163,7 @@ void read(const string& s,Net& net)
         else if(sType=="GlobalBias")
         {
             float fBias= stof(find_key(s,sLayer+".globalBias"));
-            net.add_globalbias_layer(iInSize);
+            net.add_globalbias_layer();
             MatrixFloat mf(1, 1);
             mf(0) = fBias;
             net.layer(net.size() - 1).weights() = mf;

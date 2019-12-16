@@ -9,10 +9,11 @@
 #include "LayerGlobalGain.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerGlobalGain::LayerGlobalGain(int iInSize) :
-    Layer(iInSize, iInSize, "GlobalGain")
+LayerGlobalGain::LayerGlobalGain():
+    Layer(0, 0, "GlobalGain")
 {
     _weight.resize(1,1);
+	_gradientWeight.resize(1, 1);
     LayerGlobalGain::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -21,7 +22,7 @@ LayerGlobalGain::~LayerGlobalGain()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerGlobalGain::clone() const
 {
-    LayerGlobalGain* pLayer=new LayerGlobalGain(_iInSize);
+    LayerGlobalGain* pLayer=new LayerGlobalGain();
 	pLayer->weights() = _weight;
 
     return pLayer;
@@ -31,7 +32,7 @@ void LayerGlobalGain::init()
 {
     _weight.setOnes(); // by default
 
-    Layer::init();
+	Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGlobalGain::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
@@ -41,7 +42,7 @@ void LayerGlobalGain::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGlobalGain::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
-    _gradientWeight = ((mIn.transpose())*mGradientOut)*(1.f /mIn.rows());
+    _gradientWeight(0) = ((mIn.transpose())*mGradientOut).mean();
 
 	if (_bFirstLayer)
 		return;
@@ -49,13 +50,3 @@ void LayerGlobalGain::backpropagation(const MatrixFloat &mIn,const MatrixFloat &
     mGradientIn = mGradientOut * _weight(0);
 }
 ///////////////////////////////////////////////////////////////////////////////
-float LayerGlobalGain::gain() const
-{
-    return _weight(0);
-}
-///////////////////////////////////////////////////////////////
-bool LayerGlobalGain::has_weight() const
-{
-	return true;
-}
-///////////////////////////////////////////////////////////////
