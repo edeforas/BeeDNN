@@ -52,7 +52,7 @@ int main()
 	//create simple net:
 	net.add_dense_layer(784, 128);
 	net.add_activation_layer("Relu");
-	net.add_dropout_layer(128,0.2f); //reduce overfitting
+	net.add_dropout_layer(0.2f); //reduce overfitting
 	net.add_dense_layer(128, 10);
 	net.add_softmax_layer();
 

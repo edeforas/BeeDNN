@@ -45,7 +45,7 @@ int main()
 	Net net;
     net.add_dense_layer(784, 256);
 	net.add_activation_layer("Relu");
-	net.add_dropout_layer(256,0.2f);
+	net.add_dropout_layer(0.2f);
 	net.add_dense_layer(256, 10);
 	net.add_softmax_layer();
 

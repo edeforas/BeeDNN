@@ -71,28 +71,24 @@ Net& Net::operator=(const Net& other)
 	return *this;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_dropout_layer(int iSize,float fRatio)
+void Net::add_dropout_layer(float fRatio)
 {
-    update_out_layer_input_size(iSize);
-    _layers.push_back(new LayerDropout(iSize, fRatio));
+    _layers.push_back(new LayerDropout(fRatio));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_gaussian_dropout_layer(int iSize,float fProba)
+void Net::add_gaussian_dropout_layer(float fProba)
 {
-    update_out_layer_input_size(iSize);
-    _layers.push_back(new LayerGaussianDropout(iSize, fProba));
+    _layers.push_back(new LayerGaussianDropout(fProba));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_gaussian_noise_layer(int iSize, float fStd)
+void Net::add_gaussian_noise_layer(float fStd)
 {
-    update_out_layer_input_size(iSize);
-	_layers.push_back(new LayerGaussianNoise(iSize, fStd));
+	_layers.push_back(new LayerGaussianNoise(fStd));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_uniform_noise_layer(int iSize, float fNoise)
+void Net::add_uniform_noise_layer(float fNoise)
 {
-	update_out_layer_input_size(iSize);
-	_layers.push_back(new LayerUniformNoise(iSize, fNoise));
+	_layers.push_back(new LayerUniformNoise( fNoise));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_activation_layer(string sType)
@@ -100,9 +96,9 @@ void Net::add_activation_layer(string sType)
     _layers.push_back(new LayerActivation(sType));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_prelu_layer(int inSize)
+void Net::add_prelu_layer()
 {
-	_layers.push_back(new LayerPRelu(inSize));
+	_layers.push_back(new LayerPRelu());
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_softmax_layer()

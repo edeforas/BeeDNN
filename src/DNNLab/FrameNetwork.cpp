@@ -254,7 +254,7 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
                 float fRatio=0.2f; //by default
                 if(bOk)
                     fRatio=fArg1;
-                _pNet->add_dropout_layer(iInSize,fRatio);
+                _pNet->add_dropout_layer(fRatio);
             }
 
 			else if (sType == "UniformNoise")
@@ -262,7 +262,7 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
 				float fNoise = 0.1f; //by default
 				if (bOk)
 					fNoise = fArg1;
-				_pNet->add_uniform_noise_layer(iInSize, fNoise);
+				_pNet->add_uniform_noise_layer(fNoise);
 			}
 
             else if(sType=="GaussianNoise")
@@ -270,7 +270,7 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
                 float fStd=1.f; //by default
                 if(bOk)
                     fStd=fArg1;
-                _pNet->add_gaussian_noise_layer(iInSize,fStd);
+                _pNet->add_gaussian_noise_layer(fStd);
             }
 
             else if(sType=="GaussianDropout")
@@ -278,7 +278,7 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
                 float fProba=1.f; //by default
                 if(bOk)
                     fProba=fArg1;
-                _pNet->add_gaussian_dropout_layer(iInSize,fProba);
+                _pNet->add_gaussian_dropout_layer(fProba);
             }
 
             else if(sType=="GlobalGain")
@@ -300,7 +300,7 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
 				_pNet->add_poolmax2D_layer(iInSize, iInSize2, max(iInSize3,1), max((int)fArg1,1), max((int)fArg2,1));
 			
 			else if (sType == "PRelu")
-				_pNet->add_prelu_layer(iInSize);
+				_pNet->add_prelu_layer();
 
 			else if (sType == "Softmax")
 				_pNet->add_softmax_layer();

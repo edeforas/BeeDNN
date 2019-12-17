@@ -9,8 +9,8 @@
 #include "LayerPRelu.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerPRelu::LayerPRelu(int iInSize) :
-    Layer(iInSize , iInSize, "PRelu")
+LayerPRelu::LayerPRelu() :
+    Layer(0 , 0, "PRelu")
 {
     LayerPRelu::init();
 }
@@ -20,26 +20,26 @@ LayerPRelu::~LayerPRelu()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerPRelu::clone() const
 {
-    LayerPRelu* pLayer=new LayerPRelu(_iInSize);
+    LayerPRelu* pLayer=new LayerPRelu();
     pLayer->_weight=_weight;
     return pLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerPRelu::init()
 {
-	assert(_iInSize > 0);
-	assert(_iOutSize > 0);
-	
-	_weight.resize(1,_iInSize);
-	_weight.setConstant(0.25f);
-
-	_gradientWeight.resizeLike(_weight);
-
+	_weight.resize(0,0);
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerPRelu::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
+	if (_weight.size() == 0)
+	{
+		_weight.resize(1,_iInSize);
+		_weight.setConstant(0.25f);
+		_gradientWeight.resizeLike(_weight);
+	}
+
     mOut = mIn;
 
 	for (int i = 0; i < mOut.rows(); i++)

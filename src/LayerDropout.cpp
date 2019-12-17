@@ -11,8 +11,8 @@
 #include "LayerDropout.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerDropout::LayerDropout(int iSize,float fRate):
-    Layer(iSize,iSize,"Dropout"),
+LayerDropout::LayerDropout(float fRate):
+    Layer(0,0,"Dropout"),
     _fRate(fRate),
 	_distBernoulli(fRate)
 { }
@@ -22,7 +22,7 @@ LayerDropout::~LayerDropout()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerDropout::clone() const
 {
-    return new LayerDropout(_iInSize,_fRate);
+    return new LayerDropout(_fRate);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut)

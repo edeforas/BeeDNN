@@ -172,12 +172,12 @@ void read(const string& s,Net& net)
         else if(sType=="Dropout")
         {
             string sRate=find_key(s,sLayer+".rate");
-            net.add_dropout_layer(iInSize,stof(sRate));
+            net.add_dropout_layer(stof(sRate));
         }
 
 		else if (sType == "PRelu")
 		{
-			net.add_prelu_layer(iInSize);
+			net.add_prelu_layer();
 
 			string sWeight = find_key(s, sLayer + ".weight");
 			MatrixFloat mf = fromString(sWeight);
@@ -188,13 +188,13 @@ void read(const string& s,Net& net)
         else if (sType == "GaussianNoise")
         {
             string sNoise=find_key(s,sLayer+".stdNoise");
-            net.add_gaussian_noise_layer(iInSize,stof(sNoise));
+            net.add_gaussian_noise_layer(stof(sNoise));
         }
 
 		else if (sType == "UniformNoise")
 		{
 			string sNoise = find_key(s, sLayer + ".noise");
-			net.add_uniform_noise_layer(iInSize, stof(sNoise));
+			net.add_uniform_noise_layer(stof(sNoise));
 		}
 
 		else if (sType == "PoolMax2D")

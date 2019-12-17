@@ -48,6 +48,7 @@ SOURCES += \
     ../LayerGaussianDropout.cpp \
     ../LayerGaussianNoise.cpp \
     ../LayerGlobalGain.cpp \
+    ../LayerGain.cpp \
     ../LayerGlobalBias.cpp \
     ../LayerPRelu.cpp \
     ../LayerPoolMax2D.cpp \
@@ -76,6 +77,7 @@ HEADERS += \
     ../LayerGaussianDropout.h \
     ../LayerGaussianNoise.h \
     ../LayerGlobalGain.h \
+    ../LayerGain.h \
     ../LayerGlobalBias.h \
     ../LayerPRelu.h \
     ../LayerPoolMax2D.h \

@@ -28,13 +28,13 @@ public:
 
     void add_dense_layer(int inSize, int outSize, bool bHasBias=true);
 	void add_activation_layer(string sType);
-	void add_prelu_layer(int inSize);
+	void add_prelu_layer();
 	void add_softmax_layer();
-    void add_dropout_layer(int iSize, float fRatio);
-    void add_gaussian_dropout_layer(int iSize, float fProba);
+    void add_dropout_layer(float fRatio);
+    void add_gaussian_dropout_layer(float fProba);
 	
-	void add_uniform_noise_layer(int iSize, float fNoise);
-	void add_gaussian_noise_layer(int iSize, float fStd);
+	void add_uniform_noise_layer(float fNoise);
+	void add_gaussian_noise_layer(float fStd);
     
 	void add_globalgain_layer();
 	void add_gain_layer();
