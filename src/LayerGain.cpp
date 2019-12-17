@@ -48,17 +48,16 @@ void LayerGain::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGain::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
-	//todo manage _bFirstLayer
-	_gradientWeight.setZero(1,_weight.cols());
-	// compute gradient in and gradient weight
-	mGradientIn = mGradientOut;
+	_gradientWeight = colWiseMean((mIn.transpose())*mGradientOut);
+
+	if (_bFirstLayer)
+		return;
+
+	mGradientIn = mGradientOut; //colWiseMult(mGradientOut ,_weight); //
 	for (int i = 0; i < mGradientIn.rows(); i++)
 		for (int j = 0; j < mGradientIn.cols(); j++)
 		{
 			mGradientIn(i, j) *= _weight(j);
-			_gradientWeight(j) += mIn(i,j);
 		}
-
-	_gradientWeight *= (1.f / mIn.rows());
 }
 ///////////////////////////////////////////////////////////////

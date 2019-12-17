@@ -35,7 +35,7 @@ void LayerPRelu::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	if (_weight.size() == 0)
 	{
-		_weight.resize(1,_iInSize);
+		_weight.resize(1, mIn.cols());
 		_weight.setConstant(0.25f);
 		_gradientWeight.resizeLike(_weight);
 	}
