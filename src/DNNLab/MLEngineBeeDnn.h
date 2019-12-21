@@ -30,7 +30,6 @@ public:
     MLEngineBeeDnn();
     virtual ~MLEngineBeeDnn() ;
 
-     void clear() ;
      void init() ;
 
 	Net& net();

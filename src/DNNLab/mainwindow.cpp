@@ -111,8 +111,10 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
     if(bLearn)
         _bMustSave=true;
 
-    if(bReset)
-        _pEngine->init();
+	if (bReset)
+	{
+		_pEngine->init();
+	}
 
     _pEngine->net().set_classification_mode(ui->frameGlobal->is_classification_problem());
 

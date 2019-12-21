@@ -22,7 +22,8 @@ Layer* LayerPRelu::clone() const
 {
     LayerPRelu* pLayer=new LayerPRelu();
     pLayer->_weight=_weight;
-    return pLayer;
+	pLayer->_gradientWeight = _gradientWeight;
+	return pLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerPRelu::init()
