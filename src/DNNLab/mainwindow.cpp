@@ -441,7 +441,7 @@ void MainWindow::update_classification_tab()
 		ConfusionMatrix cm;
 		ClassificationResult result = cm.compute(_pDataSource->test_truth(), mTest);
 
-		_mConfusionMatrixTrain = result.mConfMat;
+		_mConfusionMatrixTest = result.mConfMat;
 		fAccuracy = (float)result.accuracy;
         ui->leTestAccuracy->setText(QString::number((double)fAccuracy,'f',2));
     }
