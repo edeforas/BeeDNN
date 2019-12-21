@@ -22,12 +22,12 @@ public:
 
     virtual Layer* clone() const override;
 
+	virtual void init();
+
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 
 private:
-	void conv_and_add(const MatrixFloat& mImage,const MatrixFloat& mKernel, MatrixFloat&mOut);
-
 	int _iInRows;
 	int _iInCols;
 	int _iInPlanes;
@@ -38,6 +38,7 @@ private:
 	int _iBorderCols;
 	int _iOutRows;
 	int _iOutCols;
+	int _iKernelSize;
 };
 
 #endif

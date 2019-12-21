@@ -11,7 +11,8 @@
 #include "LayerConvolution2D.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-void LayerConvolution2D::conv_and_add(const MatrixFloat& mImage,const MatrixFloat& mKernel, MatrixFloat&mOut)
+// no bias, mode 'valid', no strides
+void raw_convolution(const float* fIn, int iInRows, int iIncols, int iInplanes, const float *fKernel, int iKernelRows, int iKernelCols, float* fOut, int iOutPlanes)
 {
 	//todo
 }
@@ -26,6 +27,8 @@ LayerConvolution2D::LayerConvolution2D(int iInRows, int iInCols,int iInPlanes, i
 	_iKernelCols = iKernelCols;
 	_iOutPlanes = iOutPlanes;
 	
+	_iKernelSize = _iKernelRows * _iKernelCols*_iInPlanes*_iOutPlanes;
+
 	_iBorderRows=iKernelRows>>1;
 	_iBorderCols=iKernelCols>>1;
 
@@ -58,28 +61,31 @@ Layer* LayerConvolution2D::clone() const
 void LayerConvolution2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	mOut.setZero(mIn.rows(), _iOutPlanes*_iOutRows*_iOutCols);
-	for(int iSample=0; iSample<mIn.rows();iSample++)
-	{
-		for(int iPlane=0; iPlane<_iInPlanes;iPlane++)
-		{
-			//Matrix mImage()
-			
-			//conv_and_add()
-		
-		}
-	}
-	
 
+	for (int iSample = 0; iSample < mIn.rows(); iSample++)
+	{
+		raw_convolution(mIn.row(iSample).data(), _iInRows, _iInCols, _iInPlanes, _weight.data(), _iKernelRows, _iKernelCols, mOut.row(iSample).data(), _iOutPlanes);
+	}
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
     (void)mIn;
 
+	mGradientIn = mIn;
+
 	if (_bFirstLayer)
 		return;
 
 	//todo
 
+}
+///////////////////////////////////////////////////////////////////////////////
+void LayerConvolution2D::init()
+{
+	_weight.resize(_iKernelSize, 1);
+	_weight.setRandom();
+
+	_gradientWeight.setZero(_iKernelSize, 1);
 }
 ///////////////////////////////////////////////////////////////////////////////

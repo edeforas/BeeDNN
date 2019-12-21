@@ -114,7 +114,7 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
     if(bReset)
         _pEngine->init();
 
-    _pEngine->set_classification_mode(ui->frameGlobal->is_classification_problem());
+    _pEngine->net().set_classification_mode(ui->frameGlobal->is_classification_problem());
 
     if(bLearn)
     {
@@ -136,12 +136,12 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
         _qsAccuracy->clear();
     }
 
-    float fLoss=_pEngine->compute_loss(_pDataSource->train_data(),_pDataSource->train_truth()); //final loss
+    float fLoss=_pEngine->netTrain().compute_loss(_pDataSource->train_data(),_pDataSource->train_truth()); //final loss
     ui->leTrainLoss->setText(QString::number((double)fLoss));
 
 	if (_pDataSource->has_test_data())
 	{
-        fLoss = _pEngine->compute_loss(_pDataSource->test_data(), _pDataSource->test_truth()); //final loss
+        fLoss = _pEngine->netTrain().compute_loss(_pDataSource->test_data(), _pDataSource->test_truth()); //final loss
 		ui->leTestLoss->setText(QString::number((double)fLoss));
 	}
 	else
@@ -184,7 +184,7 @@ void MainWindow::drawAccuracy(const vector<float>& vfTrainAccuracy,const vector<
     if(!ui->cbHoldOn->isChecked())
         _qsAccuracy->clear();
 
-    if(_pEngine->is_classification_mode())
+    if(_pEngine->net().is_classification_mode())
     {
         ui->gbTrainAccuracy->setTitle("Train accuracy");
 
@@ -223,7 +223,7 @@ void MainWindow::drawRegression()
 {
     _qsRegression->clear();
 
-    if(_pEngine->is_classification_mode()==true)
+    if(_pEngine->net().is_classification_mode()==true)
         return; //not a regression problem
     
 	_qsRegression->addHorizontalLine(0.);
@@ -272,7 +272,7 @@ void MainWindow::drawRegression()
 	if (bPlotTrainPredicted)
 	{
 		MatrixFloat mPredictedTrain;
-		_pEngine->predict(mTrainData, mPredictedTrain);
+		_pEngine->net().forward(mTrainData, mPredictedTrain);
 
 		vector<double> vSamples;
 		vector<double> vTruth;
@@ -289,7 +289,7 @@ void MainWindow::drawRegression()
 	if (bPlotTestPredicted)
 	{
 		MatrixFloat mPredictedTest;
-		_pEngine->predict(mTestData, mPredictedTest);
+		_pEngine->net().forward(mTestData, mPredictedTest);
 
 		if (mPredictedTest.size() == 0)
 			return; //predict fails
@@ -347,7 +347,9 @@ void MainWindow::update_details()
     string s;
     _pDataSource->write(s);
     s+="\n";
-    _pEngine->write(s);
+	NetUtil::write(_pEngine->netTrain(), s);
+	s += "\n";
+	NetUtil::write(_pEngine->net(), s);
 
     ui->peDetails->setPlainText(s.c_str());
 }
@@ -406,7 +408,7 @@ void MainWindow::set_input_size(int iSize)
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::update_classification_tab()
 {
-    if(!_pEngine->is_classification_mode() || (_pEngine->net().size()==0) )
+    if(!_pEngine->net().is_classification_mode() || (_pEngine->net().size()==0) )
     { // not a classification problem or empty
         ui->twConfusionMatrixTrain->clearContents();
         ui->leTrainAccuracy->setText("n/a");
@@ -418,15 +420,27 @@ void MainWindow::update_classification_tab()
     float fAccuracy=0.f;
     if(_pDataSource->has_train_data())
     {
-        _pEngine->compute_confusion_matrix(_pDataSource->train_data(),_pDataSource->train_truth(),_mConfusionMatrixTrain,fAccuracy);
-        ui->leTrainAccuracy->setText(QString::number((double)fAccuracy,'f',2));
+		MatrixFloat mTest;
+		_pEngine->net().classify(_pDataSource->train_data(), mTest);
+		ConfusionMatrix cm;
+		ClassificationResult result = cm.compute(_pDataSource->train_truth(), mTest);
+
+		_mConfusionMatrixTrain = result.mConfMat;
+		fAccuracy = (float)result.accuracy;
+		ui->leTrainAccuracy->setText(QString::number((double)fAccuracy,'f',2));
     }
     else
         ui->leTrainAccuracy->setText("n/a");
 
     if(_pDataSource->has_test_data())
     {
-        _pEngine->compute_confusion_matrix(_pDataSource->test_data(),_pDataSource->test_truth(),_mConfusionMatrixTest,fAccuracy);
+		MatrixFloat mTest;
+		_pEngine->net().classify(_pDataSource->test_data(), mTest);
+		ConfusionMatrix cm;
+		ClassificationResult result = cm.compute(_pDataSource->test_truth(), mTest);
+
+		_mConfusionMatrixTrain = result.mConfMat;
+		fAccuracy = (float)result.accuracy;
         ui->leTestAccuracy->setText(QString::number((double)fAccuracy,'f',2));
     }
     else
@@ -555,7 +569,10 @@ bool MainWindow::save()
 {
     string s;
     _pDataSource->write(s);
-    _pEngine->write(s);
+	s += "\n";
+	NetUtil::write(_pEngine->netTrain(), s);
+	s += "\n";
+	NetUtil::write(_pEngine->net(), s);
     s+="\nNotes=\n"+_sNotes+"\n";
 
     ofstream out(_sFileName,ios::binary); //todo test
@@ -587,7 +604,9 @@ bool MainWindow::load()
             s+=" "+line; //todo keep \n int multilines string
     }
 
-    _pEngine->read(s);
+	NetUtil::read(s, _pEngine->net());
+	NetUtil::read(s, _pEngine->netTrain());
+
     _pDataSource->read(s);
     _sNotes=NetUtil::find_key(s,"Notes");
 
@@ -598,7 +617,7 @@ bool MainWindow::load()
     QApplication::restoreOverrideCursor();
 
     //show intersting results from net
-    if(_pEngine->is_classification_mode())
+    if(_pEngine->net().is_classification_mode())
         ui->tabWidget->setCurrentIndex(2);
     else
         ui->tabWidget->setCurrentIndex(1);
@@ -685,13 +704,13 @@ void MainWindow::model_changed(void * pSender)
     if(pSender != (void*)(ui->frameGlobal ) )
     {
         ui->frameGlobal->set_data_name(_pDataSource->name());
-        ui->frameGlobal->set_problem(_pEngine->is_classification_mode());
+        ui->frameGlobal->set_problem(_pEngine->net().is_classification_mode());
         ui->frameGlobal->set_engine_name("BeeDNN");
     }
     else
     {
         _pDataSource->load(ui->frameGlobal->data_name());
-        _pEngine->set_classification_mode(ui->frameGlobal->is_classification_problem());
+        _pEngine->net().set_classification_mode(ui->frameGlobal->is_classification_problem());
         set_input_size(_pDataSource->data_size());
         _bMustSave=true;
     }
