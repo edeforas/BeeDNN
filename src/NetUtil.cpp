@@ -15,7 +15,9 @@
 #include "LayerDense.h"
 #include "LayerDropout.h"
 #include "LayerGlobalGain.h"
+#include "LayerGain.h"
 #include "LayerGlobalBias.h"
+#include "LayerBias.h"
 #include "LayerSoftmax.h"
 #include "LayerUniformNoise.h"
 #include "LayerGaussianNoise.h"
@@ -65,11 +67,23 @@ void write(const Net& net,string & s)
             ss << "Layer" << i+1 << ".globalGain=" << l->weights()(0) << endl;
         }
 
-        else if(layer->type()=="GlobalBias")
+		else if (layer->type() == "Gain")
+		{
+			LayerGain* l = static_cast<LayerGain*>(layer);
+			ss << "Layer" << i + 1 << ".gain=" << toString(l->weights()) << endl;
+		}
+		
+		else if(layer->type()=="GlobalBias")
         {
             LayerGlobalBias* l=static_cast<LayerGlobalBias*>(layer);
             ss << "Layer" << i+1 << ".globalBias=" << l->weights()(0) << endl;
         }
+
+		else if (layer->type() == "Bias")
+		{
+			LayerBias* l = static_cast<LayerBias*>(layer);
+			ss << "Layer" << i + 1 << ".bias=" << toString(l->weights()) << endl;
+		}
 
         else if(layer->type()=="Dropout")
         {
@@ -160,7 +174,15 @@ void read(const string& s,Net& net)
 			net.layer(net.size() - 1).weights() = mf;
         }
 
-        else if(sType=="GlobalBias")
+		else if (sType == "Gain")
+		{
+			string sWeight = find_key(s, sLayer + ".gain");
+			MatrixFloat mf = fromString(sWeight);
+			net.add_gain_layer();
+			net.layer(net.size() - 1).weights() = mf;
+		}
+		
+		else if(sType=="GlobalBias")
         {
             float fBias= stof(find_key(s,sLayer+".globalBias"));
             net.add_globalbias_layer();
@@ -168,6 +190,14 @@ void read(const string& s,Net& net)
             mf(0) = fBias;
             net.layer(net.size() - 1).weights() = mf;
         }
+
+		else if (sType == "Bias")
+		{
+			string sWeight = find_key(s, sLayer + ".bias");
+			MatrixFloat mf = fromString(sWeight);
+			net.add_bias_layer();
+			net.layer(net.size() - 1).weights() = mf;
+		}
 
         else if(sType=="Dropout")
         {
@@ -178,7 +208,6 @@ void read(const string& s,Net& net)
 		else if (sType == "PRelu")
 		{
 			net.add_prelu_layer();
-
 			string sWeight = find_key(s, sLayer + ".weight");
 			MatrixFloat mf = fromString(sWeight);
 			mf.resize(1,iInSize);
