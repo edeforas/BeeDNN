@@ -14,6 +14,16 @@
 // no bias, mode 'valid', no strides
 void raw_convolution(const float* fIn, int iInRows, int iIncols, int iInplanes, const float *fKernel, int iKernelRows, int iKernelCols, float* fOut, int iOutPlanes)
 {
+	(void)fIn;
+	(void)iInRows;
+	(void)iIncols;
+	(void)iInplanes;
+	(void)fKernel;
+	(void)iKernelRows;
+	(void)iKernelCols;
+	(void)fOut;
+	(void)iOutPlanes;
+	
 	//todo
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -71,6 +81,8 @@ void LayerConvolution2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 void LayerConvolution2D::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
     (void)mIn;
+	(void)mGradientOut;
+	(void)mGradientIn;
 
 	mGradientIn = mIn;
 

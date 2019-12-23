@@ -20,7 +20,7 @@ class Activation;
 class LayerUniformNoise : public Layer
 {
 public:
-    LayerUniformNoise(float fNoise);
+    explicit LayerUniformNoise(float fNoise);
     virtual ~LayerUniformNoise() override;
 
     virtual Layer* clone() const override;

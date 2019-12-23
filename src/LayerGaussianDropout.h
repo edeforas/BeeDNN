@@ -20,7 +20,7 @@ class Activation;
 class LayerGaussianDropout : public Layer
 {
 public:
-    LayerGaussianDropout(float fProba);
+    explicit LayerGaussianDropout(float fProba);
     virtual ~LayerGaussianDropout() override;
 
     virtual Layer* clone() const override;

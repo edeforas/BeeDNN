@@ -15,7 +15,7 @@
 class LayerPoolMax1D : public Layer
 {
 public:
-    LayerPoolMax1D(int iInSize,int iWindowSize);
+    explicit LayerPoolMax1D(int iInSize,int iWindowSize);
     virtual ~LayerPoolMax1D() override;
 
     virtual Layer* clone() const override;

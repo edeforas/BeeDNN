@@ -20,7 +20,7 @@ class Activation;
 class LayerDropout : public Layer
 {
 public:
-    LayerDropout(float fRate);
+    explicit LayerDropout(float fRate);
     virtual ~LayerDropout() override;
 
     virtual Layer* clone() const override;

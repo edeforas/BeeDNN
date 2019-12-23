@@ -10,7 +10,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerBias::LayerBias() :
-    Layer(0, 0, "GlobalBias")
+    Layer(0, 0, "Bias")
 {
     LayerBias::init();
 }

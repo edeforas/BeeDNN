@@ -15,7 +15,7 @@
 class LayerPoolMax2D : public Layer
 {
 public:
-	LayerPoolMax2D(int iInRows, int iInCols,int iInPlanes, int iRowFactor = 2, int iColFactor = 2);
+	explicit LayerPoolMax2D(int iInRows, int iInCols,int iInPlanes, int iRowFactor = 2, int iColFactor = 2);
     virtual ~LayerPoolMax2D() override;
 
 	void get_params(int& iInRows, int& iInCols,int& iInPlanes, int& iRowFactor, int& iColFactor);

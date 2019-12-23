@@ -111,8 +111,10 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
 	_pmTruthTest = other._pmTruthTest;
 	
 //	_epochCallBack = other._epochCallBack;
-//	set_net(other._pNet);
-/*
+
+	set_net(*(other._pNet));
+
+	/*
 	_trainLoss= other._trainLoss;
 	_testLoss= other._testLoss;
 	_trainAccuracy= other._trainAccuracy;
