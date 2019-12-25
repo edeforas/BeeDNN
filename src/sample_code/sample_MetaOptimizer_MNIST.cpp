@@ -57,7 +57,7 @@ int main()
 	netTrain.set_test_data(mTestImages, mTestLabels);
 	netTrain.set_net(net);
 
-	//create meta optimizer and run in // (for now, only weights variations)
+	//create meta optimizer and run in parallel (for now, only weights variations)
 	cout << "Training with all cores ..." << endl;
 	MetaOptimizer optim;
 	optim.set_train(netTrain);

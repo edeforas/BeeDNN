@@ -42,7 +42,9 @@ void LayerBias::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 ///////////////////////////////////////////////////////////////////////////////
 void LayerBias::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
-    _gradientWeight = colWiseMean(mIn);
+	(void)mIn;
+	
+	_gradientWeight = colWiseMean(mGradientOut);
 
 	if (_bFirstLayer)
 		return;
