@@ -12,7 +12,6 @@
 #include "Layer.h"
 #include "Matrix.h"
 
-#include <string>
 #include <random>
 using namespace std;
 
@@ -21,13 +20,12 @@ class Activation;
 class LayerDropout : public Layer
 {
 public:
-    LayerDropout(int iSize,float fRate);
+    explicit LayerDropout(float fRate);
     virtual ~LayerDropout() override;
 
     virtual Layer* clone() const override;
 
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
-
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 
     float get_rate() const;
@@ -36,7 +34,6 @@ private:
 	float _fRate;
 	MatrixFloat _mask;
 
-	default_random_engine _RNGgenerator;
 	bernoulli_distribution _distBernoulli;
 };
 

@@ -14,6 +14,7 @@
 #include "LayerGlobalGain.h"
 #include "LayerGlobalBias.h"
 #include "LayerBias.h"
+#include "LayerGain.h"
 #include "LayerUniformNoise.h"
 #include "LayerGaussianNoise.h"
 #include "LayerPRelu.h"
@@ -254,7 +255,7 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
                 float fRatio=0.2f; //by default
                 if(bOk)
                     fRatio=fArg1;
-                _pNet->add_dropout_layer(iInSize,fRatio);
+                _pNet->add_dropout_layer(fRatio);
             }
 
 			else if (sType == "UniformNoise")
@@ -262,7 +263,7 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
 				float fNoise = 0.1f; //by default
 				if (bOk)
 					fNoise = fArg1;
-				_pNet->add_uniform_noise_layer(iInSize, fNoise);
+				_pNet->add_uniform_noise_layer(fNoise);
 			}
 
             else if(sType=="GaussianNoise")
@@ -270,7 +271,7 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
                 float fStd=1.f; //by default
                 if(bOk)
                     fStd=fArg1;
-                _pNet->add_gaussian_noise_layer(iInSize,fStd);
+                _pNet->add_gaussian_noise_layer(fStd);
             }
 
             else if(sType=="GaussianDropout")
@@ -278,19 +279,22 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
                 float fProba=1.f; //by default
                 if(bOk)
                     fProba=fArg1;
-                _pNet->add_gaussian_dropout_layer(iInSize,fProba);
+                _pNet->add_gaussian_dropout_layer(fProba);
             }
 
             else if(sType=="GlobalGain")
-                _pNet->add_globalgain_layer(iInSize);
+                _pNet->add_globalgain_layer();
 			
 			else if (sType == "GlobalBias")
-				_pNet->add_globalbias_layer(iInSize);
+				_pNet->add_globalbias_layer();
 			
             else if (sType == "Bias")
-                _pNet->add_bias_layer(iInSize);
+                _pNet->add_bias_layer();
 
-            else if(sType=="PoolAveraging1D")
+			else if (sType == "Gain")
+				_pNet->add_gain_layer();
+			
+			else if(sType=="PoolAveraging1D")
                 _pNet->add_poolaveraging1D_layer(iInSize,iOutSize);
 
             else if(sType=="PoolMax1D")
@@ -300,7 +304,7 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
 				_pNet->add_poolmax2D_layer(iInSize, iInSize2, max(iInSize3,1), max((int)fArg1,1), max((int)fArg2,1));
 			
 			else if (sType == "PRelu")
-				_pNet->add_prelu_layer(iInSize);
+				_pNet->add_prelu_layer();
 
 			else if (sType == "Softmax")
 				_pNet->add_softmax_layer();
@@ -360,6 +364,7 @@ void FrameNetwork::add_new_row(int iRow)
 	qcbType->addItem("GaussianNoise");
 	qcbType->addItem("GaussianDropout");
 	qcbType->addItem("GlobalGain");
+	qcbType->addItem("Gain");
 	qcbType->addItem("GlobalBias");
     qcbType->addItem("Bias");
     qcbType->addItem("PoolAveraging1D");

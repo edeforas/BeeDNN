@@ -11,8 +11,8 @@
 #include "LayerDropout.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerDropout::LayerDropout(int iSize,float fRate):
-    Layer(iSize,iSize,"Dropout"),
+LayerDropout::LayerDropout(float fRate):
+    Layer(0,0,"Dropout"),
     _fRate(fRate),
 	_distBernoulli(fRate)
 { }
@@ -22,7 +22,7 @@ LayerDropout::~LayerDropout()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerDropout::clone() const
 {
-    return new LayerDropout(_iInSize,_fRate);
+    return new LayerDropout(_fRate);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
@@ -32,7 +32,7 @@ void LayerDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 		_mask.setConstant(mIn.rows(), mIn.cols(), 1.f / (1.f - _fRate));
 		
 		for(int i=0;i< _mask.size();i++)
-			if (_distBernoulli(_RNGgenerator))
+			if (_distBernoulli(randomEngine()))
 				_mask(i) = 0.f;
 
 		mOut = mIn.cwiseProduct(_mask);

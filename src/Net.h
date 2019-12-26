@@ -28,22 +28,24 @@ public:
 
     void add_dense_layer(int inSize, int outSize, bool bHasBias=true);
 	void add_activation_layer(string sType);
-	void add_prelu_layer(int inSize);
+	void add_prelu_layer();
 	void add_softmax_layer();
-    void add_dropout_layer(int iSize, float fRatio);
-    void add_gaussian_dropout_layer(int iSize, float fProba);
+    void add_dropout_layer(float fRatio);
+    void add_gaussian_dropout_layer(float fProba);
 	
-	void add_uniform_noise_layer(int iSize, float fNoise);
-	void add_gaussian_noise_layer(int iSize, float fStd);
+	void add_uniform_noise_layer(float fNoise);
+	void add_gaussian_noise_layer(float fStd);
     
-	void add_globalgain_layer(int iSize);
-    
-	void add_globalbias_layer(int iSize);
-	void add_bias_layer(int iSize);
+	void add_globalgain_layer();
+	void add_gain_layer();
+
+	void add_globalbias_layer();
+	void add_bias_layer();
 	
 	void add_poolaveraging1D_layer(int inSize, int outSize);
 	void add_poolmax1D_layer(int inSize, int outSize);
 	void add_poolmax2D_layer(int iInRow, int iInCols, int iInPlanes, int iRowFactor = 2, int iColFactor = 2);
+	void add_convolution2D_layer(int iInRows, int iInCols, int iInPlanes, int iKernelRows, int iKernelCols, int  iOutPlanes);
 
     void set_input_size(int iInputSize);
 	int output_size() const;

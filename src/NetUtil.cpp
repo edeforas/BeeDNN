@@ -15,7 +15,9 @@
 #include "LayerDense.h"
 #include "LayerDropout.h"
 #include "LayerGlobalGain.h"
+#include "LayerGain.h"
 #include "LayerGlobalBias.h"
+#include "LayerBias.h"
 #include "LayerSoftmax.h"
 #include "LayerUniformNoise.h"
 #include "LayerGaussianNoise.h"
@@ -62,14 +64,26 @@ void write(const Net& net,string & s)
         else if(layer->type()=="GlobalGain")
         {
             LayerGlobalGain* l=static_cast<LayerGlobalGain*>(layer);
-            ss << "Layer" << i+1 << ".globalGain=" << l->gain() << endl;
+            ss << "Layer" << i+1 << ".globalGain=" << l->weights()(0) << endl;
         }
 
-        else if(layer->type()=="GlobalBias")
+		else if (layer->type() == "Gain")
+		{
+			LayerGain* l = static_cast<LayerGain*>(layer);
+			ss << "Layer" << i + 1 << ".gain=" << toString(l->weights()) << endl;
+		}
+		
+		else if(layer->type()=="GlobalBias")
         {
             LayerGlobalBias* l=static_cast<LayerGlobalBias*>(layer);
-            ss << "Layer" << i+1 << ".globalBias=" << l->bias() << endl;
+            ss << "Layer" << i+1 << ".globalBias=" << l->weights()(0) << endl;
         }
+
+		else if (layer->type() == "Bias")
+		{
+			LayerBias* l = static_cast<LayerBias*>(layer);
+			ss << "Layer" << i + 1 << ".bias=" << toString(l->weights()) << endl;
+		}
 
         else if(layer->type()=="Dropout")
         {
@@ -154,31 +168,46 @@ void read(const string& s,Net& net)
         else if(sType=="GlobalGain")
         {
             float fGain= stof(find_key(s,sLayer+".globalGain"));
-            net.add_globalgain_layer(iInSize);
+            net.add_globalgain_layer();
 			MatrixFloat mf(1, 1);
 			mf(0) = fGain;
 			net.layer(net.size() - 1).weights() = mf;
         }
 
-        else if(sType=="GlobalBias")
+		else if (sType == "Gain")
+		{
+			string sWeight = find_key(s, sLayer + ".gain");
+			MatrixFloat mf = fromString(sWeight);
+			net.add_gain_layer();
+			net.layer(net.size() - 1).weights() = mf;
+		}
+		
+		else if(sType=="GlobalBias")
         {
             float fBias= stof(find_key(s,sLayer+".globalBias"));
-            net.add_globalbias_layer(iInSize);
+            net.add_globalbias_layer();
             MatrixFloat mf(1, 1);
             mf(0) = fBias;
             net.layer(net.size() - 1).weights() = mf;
         }
 
+		else if (sType == "Bias")
+		{
+			string sWeight = find_key(s, sLayer + ".bias");
+			MatrixFloat mf = fromString(sWeight);
+			net.add_bias_layer();
+			net.layer(net.size() - 1).weights() = mf;
+		}
+
         else if(sType=="Dropout")
         {
             string sRate=find_key(s,sLayer+".rate");
-            net.add_dropout_layer(iInSize,stof(sRate));
+            net.add_dropout_layer(stof(sRate));
         }
 
 		else if (sType == "PRelu")
 		{
-			net.add_prelu_layer(iInSize);
-
+			net.add_prelu_layer();
 			string sWeight = find_key(s, sLayer + ".weight");
 			MatrixFloat mf = fromString(sWeight);
 			mf.resize(1,iInSize);
@@ -188,13 +217,13 @@ void read(const string& s,Net& net)
         else if (sType == "GaussianNoise")
         {
             string sNoise=find_key(s,sLayer+".stdNoise");
-            net.add_gaussian_noise_layer(iInSize,stof(sNoise));
+            net.add_gaussian_noise_layer(stof(sNoise));
         }
 
 		else if (sType == "UniformNoise")
 		{
 			string sNoise = find_key(s, sLayer + ".noise");
-			net.add_uniform_noise_layer(iInSize, stof(sNoise));
+			net.add_uniform_noise_layer(stof(sNoise));
 		}
 
 		else if (sType == "PoolMax2D")

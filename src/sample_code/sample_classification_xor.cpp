@@ -26,9 +26,9 @@ int main()
 {
     //construct network, 2 input, 1 output
     Net net;
-    net.add_dense_layer(2,3);
+    net.add_dense_layer(2,10);
 	net.add_activation_layer("Relu");
-	net.add_dense_layer(3, 1);
+	net.add_dense_layer(10, 1);
 
     //set the train data
     float dSamples[]={ 0,0 , 0,1 , 1,0 , 1,1 };
@@ -39,7 +39,7 @@ int main()
     //optimize network
 	NetTrain netFit;
 	netFit.set_net(net);
-	netFit.set_epochs(1000);
+	netFit.set_epochs(500);
 	netFit.set_train_data(mSamples, mTruth);
 
 	//predict and show results
@@ -51,8 +51,8 @@ int main()
 	//simple testU code
 	test(is_near(mOut(0),0));
 	test(is_near(mOut(1),1));
-	test(is_near(mOut(1),1));
-	test(is_near(mOut(0),0));
+	test(is_near(mOut(2),1));
+	test(is_near(mOut(3),0));
 	
 	cout << "Test succeded." << endl;
     return 0;

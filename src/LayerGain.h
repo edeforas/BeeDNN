@@ -6,24 +6,24 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerGlobalGain_
-#define LayerGlobalGain_
+#ifndef LayerGain_
+#define LayerGain_
 
 #include "Layer.h"
 #include "Matrix.h"
 
-class LayerGlobalGain : public Layer
+class LayerGain : public Layer
 {
 public:
-    explicit LayerGlobalGain();
-    virtual ~LayerGlobalGain();
+    explicit LayerGain();
+    virtual ~LayerGain() override;
 
     virtual Layer* clone() const override;
 
     virtual void init() override;
-
-    virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
-    virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
+	
+	virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
+	virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 };
 
 #endif

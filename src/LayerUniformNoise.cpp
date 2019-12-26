@@ -9,8 +9,8 @@
 #include "LayerUniformNoise.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerUniformNoise::LayerUniformNoise(int iSize,float fNoise):
-    Layer(iSize,iSize,"UniformNoise"),
+LayerUniformNoise::LayerUniformNoise(float fNoise):
+    Layer(0,0,"UniformNoise"),
     _fNoise(fNoise),
 	_distUniform(-fNoise, fNoise)
 { }
@@ -20,7 +20,7 @@ LayerUniformNoise::~LayerUniformNoise()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerUniformNoise::clone() const
 {
-    return new LayerUniformNoise(_iInSize,_fNoise);
+    return new LayerUniformNoise(_fNoise);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerUniformNoise::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
@@ -30,7 +30,7 @@ void LayerUniformNoise::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 		mOut.resize(mIn.rows(), mIn.cols());
 
 		for (int i = 0; i < mOut.size(); i++)
-			mOut(i) = mIn(i) + _distUniform(_RNGgenerator);
+			mOut(i) = mIn(i) + _distUniform(randomEngine());
 	}
 	else
 		mOut = mIn; // in test mode or sigma==0.

@@ -28,6 +28,7 @@ INCLUDEPATH += ..
 SOURCES += \
     ../CIFAR10Reader.cpp \
     ../LayerBias.cpp \
+    ../LayerConvolution2D.cpp \
     ../LayerPoolMax1D.cpp \
     ../LayerUniformNoise.cpp \
     ../Net.cpp \
@@ -47,6 +48,7 @@ SOURCES += \
     ../LayerGaussianDropout.cpp \
     ../LayerGaussianNoise.cpp \
     ../LayerGlobalGain.cpp \
+    ../LayerGain.cpp \
     ../LayerGlobalBias.cpp \
     ../LayerPRelu.cpp \
     ../LayerPoolMax2D.cpp \
@@ -57,6 +59,7 @@ HEADERS += \
     ../CIFAR10Reader.h \
     ../Layer.h \
     ../LayerBias.h \
+    ../LayerConvolution2D.h \
     ../LayerPoolMax1D.h \
     ../LayerUniformNoise.h \
     ../Matrix.h \
@@ -74,6 +77,7 @@ HEADERS += \
     ../LayerGaussianDropout.h \
     ../LayerGaussianNoise.h \
     ../LayerGlobalGain.h \
+    ../LayerGain.h \
     ../LayerGlobalBias.h \
     ../LayerPRelu.h \
     ../LayerPoolMax2D.h \

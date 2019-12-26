@@ -176,8 +176,10 @@
     <ClCompile Include="..\Layer.cpp" />
     <ClCompile Include="..\LayerActivation.cpp" />
     <ClCompile Include="..\LayerBias.cpp" />
+    <ClCompile Include="..\LayerConvolution2D.cpp" />
     <ClCompile Include="..\LayerDense.cpp" />
     <ClCompile Include="..\LayerDropout.cpp" />
+    <ClCompile Include="..\LayerGain.cpp" />
     <ClCompile Include="..\LayerGaussianDropout.cpp" />
     <ClCompile Include="..\LayerGaussianNoise.cpp" />
     <ClCompile Include="..\LayerGlobalBias.cpp" />
@@ -194,6 +196,7 @@
     <ClCompile Include="..\MNISTReader.cpp" />
     <ClCompile Include="..\Net.cpp" />
     <ClCompile Include="..\NetTrain.cpp" />
+    <ClCompile Include="..\NetUtil.cpp" />
     <ClCompile Include="..\Optimizer.cpp" />
     <ClCompile Include="sample_MetaOptimizer_MNIST.cpp" />
   </ItemGroup>
@@ -203,6 +206,7 @@
     <ClInclude Include="..\Layer.h" />
     <ClInclude Include="..\LayerActivation.h" />
     <ClInclude Include="..\LayerBias.h" />
+    <ClInclude Include="..\LayerConvolution2D.h" />
     <ClInclude Include="..\LayerDense.h" />
     <ClInclude Include="..\LayerDropout.h" />
     <ClInclude Include="..\LayerGaussianDropout.h" />
@@ -221,6 +225,7 @@
     <ClInclude Include="..\MNISTReader.h" />
     <ClInclude Include="..\Net.h" />
     <ClInclude Include="..\NetTrain.h" />
+    <ClInclude Include="..\NetUtil.h" />
     <ClInclude Include="..\Optimizer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

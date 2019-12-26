@@ -11,11 +11,11 @@
 #include "LayerGaussianDropout.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerGaussianDropout::LayerGaussianDropout(int iSize,float fProba):
-    Layer(iSize,iSize,"GaussianDropout"),
+LayerGaussianDropout::LayerGaussianDropout(float fProba):
+    Layer(0,0,"GaussianDropout"),
     _fProba(fProba),
 	_fStdev( sqrtf(_fProba / (1.f - _fProba))),
-	_distNormal(1., _fStdev)
+	_distNormal(1.f, _fStdev)
 { }
 ///////////////////////////////////////////////////////////////////////////////
 LayerGaussianDropout::~LayerGaussianDropout()
@@ -23,17 +23,17 @@ LayerGaussianDropout::~LayerGaussianDropout()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerGaussianDropout::clone() const
 {
-    return new LayerGaussianDropout(_iInSize,_fProba);
+    return new LayerGaussianDropout(_fProba);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGaussianDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	if (_bTrainMode)
 	{
-		_mask.resize(1, _iInSize);
+		_mask.resize(1, mIn.size());
 
-		for (int i = 0; i < _iInSize; i++)
-			_mask(0, i) = _distNormal(_RNGgenerator);
+		for (int i = 0; i < _mask.size(); i++)
+			_mask(0, i) = _distNormal(randomEngine());
 		
 		mOut = mIn * _mask.asDiagonal();
 	}

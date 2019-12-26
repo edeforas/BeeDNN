@@ -6,71 +6,58 @@
     in the LICENSE.txt file.
 */
 
-#include "LayerPRelu.h"
+#include "LayerGain.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerPRelu::LayerPRelu() :
-    Layer(0 , 0, "PRelu")
+LayerGain::LayerGain() :
+    Layer(0 , 0, "Gain")
 {
-    LayerPRelu::init();
+    LayerGain::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-LayerPRelu::~LayerPRelu()
+LayerGain::~LayerGain()
 { }
 ///////////////////////////////////////////////////////////////////////////////
-Layer* LayerPRelu::clone() const
+Layer* LayerGain::clone() const
 {
-    LayerPRelu* pLayer=new LayerPRelu();
+    LayerGain* pLayer=new LayerGain();
     pLayer->_weight=_weight;
-	pLayer->_gradientWeight = _gradientWeight;
-	return pLayer;
+    return pLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPRelu::init()
+void LayerGain::init()
 {
 	_weight.resize(0,0);
+
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPRelu::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerGain::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
-	if (_weight.size() == 0)
-	{
-		_weight.resize(1, mIn.cols());
-		_weight.setConstant(0.25f);
-		_gradientWeight.resizeLike(_weight);
-	}
-
+	if(_weight.size()==0)
+		_weight.setOnes(1,mIn.cols());
+	
     mOut = mIn;
 
 	for (int i = 0; i < mOut.rows(); i++)
 		for (int j = 0; j < mOut.cols(); j++)
 		{
-			if (mOut(i,j) < 0.f)
-				mOut(i,j) *= _weight(j);
+			mOut(i,j) *= _weight(j);
 		}
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPRelu::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
+void LayerGain::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
-	//todo manage _bFirstLayer
+	_gradientWeight = colWiseMean((mIn.transpose())*mGradientOut);
 
-	// compute gradient in and gradient weight
-	mGradientIn = mGradientOut;
+	if (_bFirstLayer)
+		return;
+
+	mGradientIn = mGradientOut; //colWiseMult(mGradientOut ,_weight); //
 	for (int i = 0; i < mGradientIn.rows(); i++)
 		for (int j = 0; j < mGradientIn.cols(); j++)
 		{
-			if (mIn(i, j) < 0.f)
-			{
-				mGradientIn(i, j) *= _weight(j);
-				_gradientWeight(j) += _weight(j);
-			}
-			else
-			{
-				_gradientWeight(j) = 0.f;
-			}
+			mGradientIn(i, j) *= _weight(j);
 		}
-
-	_gradientWeight *= (1.f / mIn.rows());
 }
 ///////////////////////////////////////////////////////////////

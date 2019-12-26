@@ -12,11 +12,6 @@
 #include "Layer.h"
 #include "Matrix.h"
 
-#include <string>
-using namespace std;
-
-class Activation;
-
 class LayerSoftmax : public Layer
 {
 public:
@@ -26,9 +21,7 @@ public:
     virtual Layer* clone() const override;
 
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
-	
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
-
 };
 
 #endif

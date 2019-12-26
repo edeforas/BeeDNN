@@ -6,21 +6,23 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerPoolMax2D_
-#define LayerPoolMax2D_
+#ifndef LayerConvolution2D_
+#define LayerConvolution2D_
 
 #include "Layer.h"
 #include "Matrix.h"
 
-class LayerPoolMax2D : public Layer
+class LayerConvolution2D : public Layer
 {
 public:
-	explicit LayerPoolMax2D(int iInRows, int iInCols,int iInPlanes, int iRowFactor = 2, int iColFactor = 2);
-    virtual ~LayerPoolMax2D() override;
+	LayerConvolution2D(int iInRows, int iInCols,int iInPlanes, int iKernelRows, int iKernelCols,int  iOutPlanes);
+    virtual ~LayerConvolution2D() override;
 
-	void get_params(int& iInRows, int& iInCols,int& iInPlanes, int& iRowFactor, int& iColFactor);
+	void get_params(int& iInRows, int& iInCols,int& iInPlanes, int& iKernelRows, int& iKernelCols,int& iOutPlanes);
 
     virtual Layer* clone() const override;
+
+	virtual void init() override;
 
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
@@ -29,15 +31,14 @@ private:
 	int _iInRows;
 	int _iInCols;
 	int _iInPlanes;
-	int _iRowFactor;
-	int _iColFactor;
+	int _iKernelRows;
+	int _iKernelCols;
+	int _iOutPlanes;
+	int _iBorderRows;
+	int _iBorderCols;
 	int _iOutRows;
 	int _iOutCols;
-
-	int _iInPlaneSize;
-	int _iOutPlaneSize;
-
-	MatrixFloat _mMaxIndex;
+	int _iKernelSize;
 };
 
 #endif

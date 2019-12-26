@@ -57,7 +57,7 @@ void Layer::set_train_mode(bool bTrainMode)
 ///////////////////////////////////////////////////////////////
 bool Layer::has_weight() const
 {
-    return false; //not learnable by default
+    return _weight.size()!=0.;
 }
 ///////////////////////////////////////////////////////////////
 MatrixFloat& Layer::weights()

@@ -138,7 +138,7 @@ vector<int> randPerm(int iSize) //create a vector of index shuffled
 	for (int i = 0; i < iSize; i++)
 		v[i] = i;
 
-	std::shuffle(v.begin(), v.end(), std::default_random_engine());
+	std::shuffle(v.begin(), v.end(), randomEngine());
 
     return v;
 }
@@ -228,25 +228,6 @@ string toString(const MatrixFloat& m)
     }
 
     return ss.str();
-}
-///////////////////////////////////////////////////////////////////////////
-void contatenateVerticallyInto(const MatrixFloat& mA, const MatrixFloat& mB, MatrixFloat& mAB)
-{
-    assert(mA.cols()== mB.cols());
-
-    int iRowA = (int)mA.rows();
-    int iRowB = (int)mB.rows();
-    int iCols = (int)mA.cols();
-
-    mAB.resize(iRowA + iRowB, iCols);
-
-#ifdef USE_EIGEN
-    mAB << mA , mB;
-#else
-    //todo check mA and mB are not view on other matrixes with reduced columns (horizontal stride pb)
-    std::copy(mA.data(), mA.data() + mA.size(), mAB.data());
-    std::copy(mB.data(), mB.data() + mB.size(), mAB.data() + mA.size());
-#endif
 }
 ///////////////////////////////////////////////////////////////////////////
 const MatrixFloat addColumnOfOne(const MatrixFloat& m)
@@ -341,5 +322,19 @@ const MatrixFloat rowRange(const MatrixFloat& m, int iStartRow, int iEndRow)
     assert(m.rows() >= iEndRow);
 
     return fromRawBuffer(m.data() + iStartRow * m.cols(), iEndRow- iStartRow, (int)m.cols());
+}
+///////////////////////////////////////////////////////////////////////////
+default_random_engine& randomEngine()
+{
+	static default_random_engine rng;
+	return rng;
+}
+///////////////////////////////////////////////////////////////////////////
+void setRandomUniform(MatrixFloat& m, float fMin, float fMax)
+{
+	uniform_real_distribution<float> dis(fMin, fMax);
+
+	for (int i = 0; i < m.size(); i++)
+		m(i) = dis(randomEngine());
 }
 ///////////////////////////////////////////////////////////////////////////

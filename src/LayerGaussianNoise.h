@@ -12,7 +12,6 @@
 #include "Layer.h"
 #include "Matrix.h"
 
-#include <string>
 #include <random>
 using namespace std;
 
@@ -21,20 +20,18 @@ class Activation;
 class LayerGaussianNoise : public Layer
 {
 public:
-    LayerGaussianNoise(int iSize,float fStd);
+    explicit LayerGaussianNoise(float fStd);
     virtual ~LayerGaussianNoise() override;
 
     virtual Layer* clone() const override;
 
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
-
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 
     float get_std() const;
 
 private:
     float _fStd;
-	default_random_engine _RNGgenerator;
 	normal_distribution<float> _distNormal;
 };
 

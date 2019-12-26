@@ -9,10 +9,11 @@
 #include "LayerGlobalBias.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerGlobalBias::LayerGlobalBias(int inSize) :
-    Layer(inSize, inSize, "GlobalBias")
+LayerGlobalBias::LayerGlobalBias() :
+    Layer(0, 0, "GlobalBias")
 {
     _weight.resize(1,1);
+	_gradientWeight.resize(1, 1);
     LayerGlobalBias::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -21,16 +22,14 @@ LayerGlobalBias::~LayerGlobalBias()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerGlobalBias::clone() const
 {
-    LayerGlobalBias* pLayer=new LayerGlobalBias(_iInSize);
+    LayerGlobalBias* pLayer=new LayerGlobalBias();
 	pLayer->weights() = _weight;
-
     return pLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGlobalBias::init()
 {
-    _weight.setZero(); // by default
-
+    _weight.setZero();
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -41,7 +40,7 @@ void LayerGlobalBias::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGlobalBias::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
-    _gradientWeight = colWiseMean(mIn);
+	_gradientWeight(0) = mGradientOut.mean();
 	
 	if (_bFirstLayer)
 		return;
@@ -49,13 +48,3 @@ void LayerGlobalBias::backpropagation(const MatrixFloat &mIn,const MatrixFloat &
     mGradientIn = mGradientOut;
 }
 ///////////////////////////////////////////////////////////////////////////////
-float LayerGlobalBias::bias() const
-{
-    return _weight(0);
-}
-///////////////////////////////////////////////////////////////
-bool LayerGlobalBias::has_weight() const
-{
-	return true;
-}
-///////////////////////////////////////////////////////////////

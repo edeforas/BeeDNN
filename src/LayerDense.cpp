@@ -40,8 +40,8 @@ void LayerDense::init()
     _weight.setRandom();
     _weight*=a;
 
- //      if (_bHasBias)
- //          _weight.row(_iInSize).setZero(); //removed for now: accuracy is worse with bias initialized with zero
+    if (_bHasBias)
+        _weight.row(_iInSize).setZero();
 
     Layer::init();
 }
@@ -80,10 +80,5 @@ void LayerDense::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGrad
 bool LayerDense::has_bias() const
 {
     return _bHasBias;
-}
-///////////////////////////////////////////////////////////////
-bool LayerDense::has_weight() const
-{
-	return true;
 }
 ///////////////////////////////////////////////////////////////

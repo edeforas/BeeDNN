@@ -14,14 +14,20 @@ public:
 	
 	void set_train(NetTrain& train);
 	void set_nb_thread(int iNbThread); // default: use max available or if iNbThread is zero
+	
+	void set_repeat_all(int iNRepeatAll);
+	
 	void run();
 	void set_better_solution_callback(std::function<void(NetTrain& train)> betterSolutionCallBack);
 
 private:
+	void new_epoch(NetTrain& trainT);
 	static int run_thread(int iThread, MetaOptimizer* self);
 	std::function<void(NetTrain& train)> _betterSolutionCallBack;
 	NetTrain* _pTrain;
 	int _iNbThread;
+	int _iNRepeatAll;
+	float _fBestAccuracy;
 };
 
 #endif

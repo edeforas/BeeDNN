@@ -20,12 +20,14 @@
 #include "LayerGaussianNoise.h"
 #include "LayerGaussianDropout.h"
 #include "LayerGlobalGain.h"
+#include "LayerGain.h"
 #include "LayerGlobalBias.h"
 #include "LayerBias.h"
 
 #include "LayerPoolAveraging1D.h"
 #include "LayerPoolMax1D.h"
 #include "LayerPoolMax2D.h"
+#include "LayerConvolution2D.h"
 
 #include <cmath>
 using namespace std;
@@ -69,28 +71,24 @@ Net& Net::operator=(const Net& other)
 	return *this;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_dropout_layer(int iSize,float fRatio)
+void Net::add_dropout_layer(float fRatio)
 {
-    update_out_layer_input_size(iSize);
-    _layers.push_back(new LayerDropout(iSize, fRatio));
+    _layers.push_back(new LayerDropout(fRatio));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_gaussian_dropout_layer(int iSize,float fProba)
+void Net::add_gaussian_dropout_layer(float fProba)
 {
-    update_out_layer_input_size(iSize);
-    _layers.push_back(new LayerGaussianDropout(iSize, fProba));
+    _layers.push_back(new LayerGaussianDropout(fProba));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_gaussian_noise_layer(int iSize, float fStd)
+void Net::add_gaussian_noise_layer(float fStd)
 {
-    update_out_layer_input_size(iSize);
-	_layers.push_back(new LayerGaussianNoise(iSize, fStd));
+	_layers.push_back(new LayerGaussianNoise(fStd));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_uniform_noise_layer(int iSize, float fNoise)
+void Net::add_uniform_noise_layer(float fNoise)
 {
-	update_out_layer_input_size(iSize);
-	_layers.push_back(new LayerUniformNoise(iSize, fNoise));
+	_layers.push_back(new LayerUniformNoise( fNoise));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_activation_layer(string sType)
@@ -98,9 +96,9 @@ void Net::add_activation_layer(string sType)
     _layers.push_back(new LayerActivation(sType));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_prelu_layer(int inSize)
+void Net::add_prelu_layer()
 {
-	_layers.push_back(new LayerPRelu(inSize));
+	_layers.push_back(new LayerPRelu());
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_softmax_layer()
@@ -118,22 +116,24 @@ void Net::add_dense_layer(int inSize,int outSize,bool bHasBias)
 	_iOutputSize = outSize;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_globalgain_layer(int inSize)
+void Net::add_globalgain_layer()
 {
-    _layers.push_back(new LayerGlobalGain(inSize));
-	_iOutputSize = inSize;
+    _layers.push_back(new LayerGlobalGain());
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_globalbias_layer(int inSize)
+void Net::add_gain_layer()
 {
-    _layers.push_back(new LayerGlobalBias(inSize));
-	_iOutputSize = inSize;
+	_layers.push_back(new LayerGain());
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_bias_layer(int inSize)
+void Net::add_globalbias_layer()
 {
-	_layers.push_back(new LayerBias(inSize));
-	_iOutputSize = inSize;
+    _layers.push_back(new LayerGlobalBias());
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void Net::add_bias_layer()
+{
+	_layers.push_back(new LayerBias());
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_poolaveraging1D_layer(int inSize, int iOutSize)
@@ -155,6 +155,12 @@ void Net::add_poolmax2D_layer(int iInRow, int iInCols, int iInPlanes, int iRowFa
 //	update_out_layer_input_size(iInRow*iInCols);
 	_layers.push_back(new LayerPoolMax2D(iInRow, iInCols, iInPlanes, iRowFactor, iColFactor));
 	_iOutputSize = iInPlanes* iInRow * iInCols/( iRowFactor* iColFactor);
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void Net::add_convolution2D_layer(int iInRows, int iInCols, int iInPlanes, int iKernelRows, int iKernelCols, int  iOutPlanes)
+{
+	_layers.push_back(new LayerConvolution2D(iInRows, iInCols, iInPlanes, iKernelRows, iKernelCols, iOutPlanes));
+	//_iOutputSize = iInPlanes * iInRow * iInCols / (iRowFactor* iColFactor);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const

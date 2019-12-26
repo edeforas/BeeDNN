@@ -11,8 +11,8 @@
 #include <random>
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerGaussianNoise::LayerGaussianNoise(int iSize,float fStd):
-    Layer(iSize,iSize,"GaussianNoise"),
+LayerGaussianNoise::LayerGaussianNoise(float fStd):
+    Layer(0,0,"GaussianNoise"),
     _fStd(fStd),
 	_distNormal(0.f, fStd)
 { }
@@ -22,7 +22,7 @@ LayerGaussianNoise::~LayerGaussianNoise()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerGaussianNoise::clone() const
 {
-    return new LayerGaussianNoise(_iInSize,_fStd);
+    return new LayerGaussianNoise(_fStd);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGaussianNoise::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
@@ -32,7 +32,7 @@ void LayerGaussianNoise::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 		mOut.resize(mIn.rows(), mIn.cols());
 
 		for (int i = 0; i < mOut.size(); i++)
-			mOut(i) = mIn(i) + _distNormal(_RNGgenerator);
+			mOut(i) = mIn(i) + _distNormal(randomEngine());
 	}
 	else
 		mOut = mIn; // in test mode or sigma==0.
