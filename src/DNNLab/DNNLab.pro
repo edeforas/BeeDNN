@@ -29,7 +29,6 @@ SOURCES += \
     ../CIFAR10Reader.cpp \
     ../LayerBias.cpp \
     ../LayerConvolution2D.cpp \
-    ../LayerPoolMax1D.cpp \
     ../LayerUniformNoise.cpp \
     ../Net.cpp \
     ../NetUtil.cpp \
@@ -51,8 +50,7 @@ SOURCES += \
     ../LayerGain.cpp \
     ../LayerGlobalBias.cpp \
     ../LayerPRelu.cpp \
-    ../LayerPoolMax2D.cpp \
-    ../LayerPoolAveraging1D.cpp
+    ../LayerPoolMax2D.cpp
 
 HEADERS += \
     ../Activation.h \
@@ -60,7 +58,6 @@ HEADERS += \
     ../Layer.h \
     ../LayerBias.h \
     ../LayerConvolution2D.h \
-    ../LayerPoolMax1D.h \
     ../LayerUniformNoise.h \
     ../Matrix.h \
     ../ConfusionMatrix.h \
@@ -80,8 +77,7 @@ HEADERS += \
     ../LayerGain.h \
     ../LayerGlobalBias.h \
     ../LayerPRelu.h \
-    ../LayerPoolMax2D.h \
-    ../LayerPoolAveraging1D.h
+    ../LayerPoolMax2D.h
 
 #GUI
 SOURCES += \

@@ -293,12 +293,6 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
 
 			else if (sType == "Gain")
 				_pNet->add_gain_layer();
-			
-			else if(sType=="PoolAveraging1D")
-                _pNet->add_poolaveraging1D_layer(iInSize,iOutSize);
-
-            else if(sType=="PoolMax1D")
-                _pNet->add_poolmax1D_layer(iInSize,iOutSize);
 
 			else if (sType == "PoolMax2D")
 				_pNet->add_poolmax2D_layer(iInSize, iInSize2, max(iInSize3,1), max((int)fArg1,1), max((int)fArg2,1));
@@ -367,8 +361,6 @@ void FrameNetwork::add_new_row(int iRow)
 	qcbType->addItem("Gain");
 	qcbType->addItem("GlobalBias");
     qcbType->addItem("Bias");
-    qcbType->addItem("PoolAveraging1D");
-    qcbType->addItem("PoolMax1D");
 	qcbType->addItem("PoolMax2D");
 	qcbType->addItem("PRelu");
 	qcbType->addItem("Softmax");

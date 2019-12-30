@@ -74,25 +74,25 @@
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Configuration)\build_sample_classification_mnist_poolmax2d\</IntDir>
+    <IntDir>$(Configuration)\build_sample_classification_mnist_conv2d\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Platform)\$(Configuration)\build_sample_classification_mnist_poolmax2d\</IntDir>
+    <IntDir>$(Platform)\$(Configuration)\build_sample_classification_mnist_conv2d\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Configuration)\build_sample_classification_mnist_poolmax2d\</IntDir>
+    <IntDir>$(Configuration)\build_sample_classification_mnist_conv2d\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Platform)\$(Configuration)\build_sample_classification_mnist_poolmax2d\</IntDir>
+    <IntDir>$(Platform)\$(Configuration)\build_sample_classification_mnist_conv2d\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -184,8 +184,6 @@
     <ClCompile Include="..\LayerGaussianNoise.cpp" />
     <ClCompile Include="..\LayerGlobalBias.cpp" />
     <ClCompile Include="..\LayerGlobalGain.cpp" />
-    <ClCompile Include="..\LayerPoolAveraging1D.cpp" />
-    <ClCompile Include="..\LayerPoolMax1D.cpp" />
     <ClCompile Include="..\LayerPoolMax2D.cpp" />
     <ClCompile Include="..\LayerPRelu.cpp" />
     <ClCompile Include="..\LayerSoftmax.cpp" />
@@ -212,8 +210,6 @@
     <ClInclude Include="..\LayerGaussianNoise.h" />
     <ClInclude Include="..\LayerGlobalBias.h" />
     <ClInclude Include="..\LayerGlobalGain.h" />
-    <ClInclude Include="..\LayerPoolAveraging1D.h" />
-    <ClInclude Include="..\LayerPoolMax1D.h" />
     <ClInclude Include="..\LayerPoolMax2D.h" />
     <ClInclude Include="..\LayerPRelu.h" />
     <ClInclude Include="..\LayerSoftmax.h" />

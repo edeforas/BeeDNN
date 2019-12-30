@@ -42,10 +42,8 @@ public:
 	void add_globalbias_layer();
 	void add_bias_layer();
 	
-	void add_poolaveraging1D_layer(int inSize, int outSize);
-	void add_poolmax1D_layer(int inSize, int outSize);
-	void add_poolmax2D_layer(int iInRow, int iInCols, int iInPlanes, int iRowFactor = 2, int iColFactor = 2);
-	void add_convolution2D_layer(int iInRows, int iInCols, int iInPlanes, int iKernelRows, int iKernelCols, int  iOutPlanes);
+	void add_poolmax2D_layer(int iInRow, int iInCols, int iInChannels, int iRowFactor = 2, int iColFactor = 2);
+	void add_convolution2D_layer(int iInRows, int iInCols, int iInChannels, int iKernelRows, int iKernelCols, int  iOutChannels);
 
     void set_input_size(int iInputSize);
 	int output_size() const;

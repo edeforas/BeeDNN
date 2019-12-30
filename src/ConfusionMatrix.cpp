@@ -17,7 +17,7 @@ ClassificationResult ConfusionMatrix::compute(const MatrixFloat& mRef,const Matr
 	assert(mRef.rows() == mTest.rows());
 
     if(iNbClass==0)
-        iNbClass=(int)mRef.maxCoeff()+1; //guess the nb of class
+        iNbClass=(int)mRef.maxCoeff()+1; //guess the number of class
 
     ClassificationResult cr;
     cr.mConfMat.setZero(iNbClass, iNbClass);
@@ -32,9 +32,9 @@ ClassificationResult ConfusionMatrix::compute(const MatrixFloat& mRef,const Matr
     }
 
     //compute accuracy in percent
-    double dTrace=cr.mConfMat.trace();
-    double dSum=cr.mConfMat.sum();
-    cr.accuracy=dTrace/dSum*100.;
+    float fTrace=cr.mConfMat.trace();
+    float fSum=cr.mConfMat.sum();
+    cr.accuracy=fTrace/fSum*100.f;
 
     return cr;
 }
@@ -45,4 +45,3 @@ void ConfusionMatrix::toPercent(const MatrixFloat& mConf, MatrixFloat& mConfPerc
     mConfPercent=rowWiseDivide(mConf,mSumRow)*100.f;
 }
 ///////////////////////////////////////////////////////////////////////////////
-

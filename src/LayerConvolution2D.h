@@ -15,10 +15,10 @@
 class LayerConvolution2D : public Layer
 {
 public:
-	LayerConvolution2D(int iInRows, int iInCols,int iInPlanes, int iKernelRows, int iKernelCols,int  iOutPlanes);
+	LayerConvolution2D(int iInRows, int iInCols,int iInChannels, int iKernelRows, int iKernelCols,int iOutChannels);
     virtual ~LayerConvolution2D() override;
 
-	void get_params(int& iInRows, int& iInCols,int& iInPlanes, int& iKernelRows, int& iKernelCols,int& iOutPlanes);
+	void get_params(int& iInRows, int& iInCols,int& iInChannels, int& iKernelRows, int& iKernelCols,int& iOutChannels);
 
     virtual Layer* clone() const override;
 
@@ -28,17 +28,23 @@ public:
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 
 private:
+	void convolution2d(const float* fIn, const float *fKernel, float* fOut);
+	void im2col(const MatrixFloat & mIn);
+	void col2im(MatrixFloat & mIn);
+
 	int _iInRows;
 	int _iInCols;
-	int _iInPlanes;
+	int _iInChannels;
 	int _iKernelRows;
 	int _iKernelCols;
-	int _iOutPlanes;
+	int _iOutChannels;
 	int _iBorderRows;
 	int _iBorderCols;
 	int _iOutRows;
 	int _iOutCols;
 	int _iKernelSize;
+
+	MatrixFloat _rawIn; // im2col format
 };
 
 #endif

@@ -13,7 +13,7 @@
 
 struct ClassificationResult
 {
-    double accuracy;
+    float accuracy;
     MatrixFloat mConfMat;
 };
 

@@ -24,8 +24,6 @@
 #include "LayerGlobalBias.h"
 #include "LayerBias.h"
 
-#include "LayerPoolAveraging1D.h"
-#include "LayerPoolMax1D.h"
 #include "LayerPoolMax2D.h"
 #include "LayerConvolution2D.h"
 
@@ -136,31 +134,16 @@ void Net::add_bias_layer()
 	_layers.push_back(new LayerBias());
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_poolaveraging1D_layer(int inSize, int iOutSize)
+void Net::add_poolmax2D_layer(int iInRow, int iInCols, int iInChannels, int iRowFactor, int iColFactor)
 {
-    update_out_layer_input_size(inSize);
-    _layers.push_back(new LayerPoolAveraging1D(inSize, iOutSize));
-	_iOutputSize = iOutSize;
+	_layers.push_back(new LayerPoolMax2D(iInRow, iInCols, iInChannels, iRowFactor, iColFactor));
+	_iOutputSize = iInChannels * iInRow * iInCols/( iRowFactor* iColFactor);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_poolmax1D_layer(int inSize, int iOutSize)
+void Net::add_convolution2D_layer(int iInRows, int iInCols, int iInChannels, int iKernelRows, int iKernelCols, int  iOutChannels)
 {
-	update_out_layer_input_size(inSize);
-	_layers.push_back(new LayerPoolMax1D(inSize, iOutSize));
-	_iOutputSize = iOutSize;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_poolmax2D_layer(int iInRow, int iInCols, int iInPlanes, int iRowFactor, int iColFactor)
-{
-//	update_out_layer_input_size(iInRow*iInCols);
-	_layers.push_back(new LayerPoolMax2D(iInRow, iInCols, iInPlanes, iRowFactor, iColFactor));
-	_iOutputSize = iInPlanes* iInRow * iInCols/( iRowFactor* iColFactor);
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_convolution2D_layer(int iInRows, int iInCols, int iInPlanes, int iKernelRows, int iKernelCols, int  iOutPlanes)
-{
-	_layers.push_back(new LayerConvolution2D(iInRows, iInCols, iInPlanes, iKernelRows, iKernelCols, iOutPlanes));
-	//_iOutputSize = iInPlanes * iInRow * iInCols / (iRowFactor* iColFactor);
+	_layers.push_back(new LayerConvolution2D(iInRows, iInCols, iInChannels, iKernelRows, iKernelCols, iOutChannels));
+	//_iOutputSize = iInChannels * iInRow * iInCols / (iRowFactor* iColFactor);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const

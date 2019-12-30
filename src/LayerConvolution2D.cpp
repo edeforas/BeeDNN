@@ -11,33 +11,17 @@
 #include "LayerConvolution2D.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-// no bias, mode 'valid', no strides
-void raw_convolution(const float* fIn, int iInRows, int iIncols, int iInplanes, const float *fKernel, int iKernelRows, int iKernelCols, float* fOut, int iOutPlanes)
-{
-	(void)fIn;
-	(void)iInRows;
-	(void)iIncols;
-	(void)iInplanes;
-	(void)fKernel;
-	(void)iKernelRows;
-	(void)iKernelCols;
-	(void)fOut;
-	(void)iOutPlanes;
-	
-	//todo
-}
-///////////////////////////////////////////////////////////////////////////////
-LayerConvolution2D::LayerConvolution2D(int iInRows, int iInCols,int iInPlanes, int iKernelRows, int iKernelCols,int  iOutPlanes) :
-    Layer(iInRows*iInCols*iInPlanes, 0 , "Convolution2D")
+LayerConvolution2D::LayerConvolution2D(int iInRows, int iInCols, int iInChannels, int iKernelRows, int iKernelCols, int iOutChannels) :
+    Layer(iInRows*iInCols*iInChannels, 0 , "Convolution2D")
 {
 	_iInRows = iInRows;
 	_iInCols = iInCols;
-	_iInPlanes = iInPlanes;
+	_iInChannels = iInChannels;
 	_iKernelRows = iKernelRows;
 	_iKernelCols = iKernelCols;
-	_iOutPlanes = iOutPlanes;
+	_iOutChannels = iOutChannels;
 	
-	_iKernelSize = _iKernelRows * _iKernelCols*_iInPlanes*_iOutPlanes;
+	_iKernelSize = _iKernelRows * _iKernelCols*_iInChannels*_iOutChannels;
 
 	_iBorderRows=iKernelRows>>1;
 	_iBorderCols=iKernelCols>>1;
@@ -45,7 +29,7 @@ LayerConvolution2D::LayerConvolution2D(int iInRows, int iInCols,int iInPlanes, i
 	_iOutRows=_iInRows-2* _iBorderRows;
 	_iOutCols=_iInCols-2* _iBorderCols;
 
-	_iOutSize = _iOutRows * _iOutCols*_iOutPlanes;
+	_iOutSize = _iOutRows * _iOutCols*iOutChannels;
 
 	LayerConvolution2D::init();
 }
@@ -53,28 +37,28 @@ LayerConvolution2D::LayerConvolution2D(int iInRows, int iInCols,int iInPlanes, i
 LayerConvolution2D::~LayerConvolution2D()
 { }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerConvolution2D::get_params(int& iInRows, int& iInCols,int& iInPlanes, int& iKernelRows, int& iKernelCols,int& iOutPlanes)
+void LayerConvolution2D::get_params(int& iInRows, int& iInCols,int& iInChannels, int& iKernelRows, int& iKernelCols,int& iOutChannels)
 {
 	iInRows = _iInRows;
 	iInCols = _iInCols;
-	iInPlanes = _iInPlanes;
+	iInChannels = _iInChannels;
 	iKernelRows = _iKernelRows;
 	iKernelCols = _iKernelCols;
-	iOutPlanes = _iOutPlanes;
+	iOutChannels = _iOutChannels;
 }
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerConvolution2D::clone() const
 {
-    return new LayerConvolution2D(_iInRows, _iInCols,_iInPlanes,_iKernelRows,_iKernelCols,_iOutPlanes);
+    return new LayerConvolution2D(_iInRows, _iInCols, _iInChannels,_iKernelRows,_iKernelCols,_iOutChannels);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
-	mOut.setZero(mIn.rows(), _iOutPlanes*_iOutRows*_iOutCols);
+	mOut.setZero(mIn.rows(), _iOutChannels*_iOutRows*_iOutCols);
 
 	for (int iSample = 0; iSample < mIn.rows(); iSample++)
 	{
-		raw_convolution(mIn.row(iSample).data(), _iInRows, _iInCols, _iInPlanes, _weight.data(), _iKernelRows, _iKernelCols, mOut.row(iSample).data(), _iOutPlanes);
+		convolution2d(mIn.row(iSample).data(), _weight.data(), mOut.row(iSample).data());
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -99,5 +83,44 @@ void LayerConvolution2D::init()
 	_weight.setRandom();
 
 	_gradientWeight.setZero(_iKernelSize, 1);
+}
+///////////////////////////////////////////////////////////////////////////////
+void LayerConvolution2D::im2col(const MatrixFloat & mIn)
+{
+}
+///////////////////////////////////////////////////////////////////////////////
+void LayerConvolution2D::col2im(MatrixFloat & mIn)
+{
+}
+///////////////////////////////////////////////////////////////////////////////
+// no bias, mode 'valid', no strides
+// for now, uses im2col algorithm
+void LayerConvolution2D::convolution2d(const float* fIn,const float *fKernel, float* fOut)
+{
+	//int iHalfKernelRow = iKernelRows >> 1;
+	//int iHalfKernelCols = iKernelCols >> 1;
+
+	int iOutRow = _iInRows - _iKernelRows + 1;
+	int iOutCols = _iInCols - _iKernelCols + 1;
+	int iOutPlaneSize = iOutRow * iOutCols;
+
+	for (int iOutPlane = 0; iOutPlane < _iOutChannels; iOutPlane++)
+	{
+		// set output accumulator plane to zero	
+		float* fOutPlane = fOut + iOutPlane * iOutPlaneSize;
+		for (int i = 0; i < iOutPlaneSize; i++)
+			fOutPlane[i] = 0.f;
+
+		//now convol and accumulate every inputplane
+		for (int iInPlane = 0; iInPlane < _iInChannels; iInPlane++)
+		{
+
+
+
+		}
+	}
+
+
+	(void)fKernel;
 }
 ///////////////////////////////////////////////////////////////////////////////

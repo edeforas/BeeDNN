@@ -271,18 +271,6 @@ class LayerGlobalBias(Layer):
     self.dldw = np.atleast_1d(dldy.mean())
     return dldy
 
-class LayerBias(Layer): #one bias by node
-  def __init__(self,inSize):
-    super().__init__()
-    self.learnable = True
-    self.w = np.zeros((1,inSize),dtype=np.float32)
-
-  def forward(self,x):
-    return x + self.w
-  def backpropagation(self,dldy):
-    self.dldw = np.atleast_1d(dldy.mean())
-    return dldy
-
 class LayerGlobalGain(Layer):
   def __init__(self):
     super().__init__()

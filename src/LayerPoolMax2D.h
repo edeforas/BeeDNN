@@ -15,10 +15,10 @@
 class LayerPoolMax2D : public Layer
 {
 public:
-	explicit LayerPoolMax2D(int iInRows, int iInCols,int iInPlanes, int iRowFactor = 2, int iColFactor = 2);
+	explicit LayerPoolMax2D(int iInRows, int iInCols,int iInChannels, int iRowFactor = 2, int iColFactor = 2);
     virtual ~LayerPoolMax2D() override;
 
-	void get_params(int& iInRows, int& iInCols,int& iInPlanes, int& iRowFactor, int& iColFactor);
+	void get_params(int& iInRows, int& iInCols,int& iInChannels, int& iRowFactor, int& iColFactor);
 
     virtual Layer* clone() const override;
 
@@ -28,7 +28,7 @@ public:
 private:
 	int _iInRows;
 	int _iInCols;
-	int _iInPlanes;
+	int _iInChannels;
 	int _iRowFactor;
 	int _iColFactor;
 	int _iOutRows;

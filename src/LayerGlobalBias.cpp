@@ -40,6 +40,8 @@ void LayerGlobalBias::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGlobalBias::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
+	(void)mIn;
+
 	_gradientWeight(0) = mGradientOut.mean();
 	
 	if (_bFirstLayer)
