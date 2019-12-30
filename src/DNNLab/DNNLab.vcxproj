@@ -36,13 +36,7 @@
     <IntermediateDirectory>debug\</IntermediateDirectory>
     <PrimaryOutput>DNNLab_debug</PrimaryOutput>
   </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <PropertyGroup Condition="'$(QtMsBuild)'=='' or !Exists('$(QtMsBuild)\qt.targets')">
-    <QtMsBuild>$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
-  </PropertyGroup>
-  <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
-    <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
-  </Target>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" /><PropertyGroup Condition="'$(QtMsBuild)'=='' or !Exists('$(QtMsBuild)\qt.targets')"><QtMsBuild>$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild></PropertyGroup><Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')"><Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." /></Target>
   <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
@@ -50,29 +44,15 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
   </ImportGroup>
-  <PropertyGroup Label="UserMacros" />
-  <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
-    <Import Project="$(QtMsBuild)\qt_defaults.props" />
-  </ImportGroup>
-  <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <QtInstall>msvc2017_64</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
-  </PropertyGroup>
-  <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <QtInstall>msvc2017_64</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
-  </PropertyGroup>
-  <ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')">
-    <Import Project="$(QtMsBuild)\qt.props" />
-  </ImportGroup>
+  <PropertyGroup Label="UserMacros" /><ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')"><Import Project="$(QtMsBuild)\qt_defaults.props" /></ImportGroup><PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'"><QtInstall>msvc2017_64</QtInstall><QtModules>core;gui;widgets</QtModules></PropertyGroup><PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|x64'"><QtInstall>msvc2017_64</QtInstall><QtModules>core;gui;widgets</QtModules></PropertyGroup><ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')"><Import Project="$(QtMsBuild)\qt.props" /></ImportGroup>
   <PropertyGroup>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">DNNLab</TargetName>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">DNNLab_debug</TargetName>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
   </PropertyGroup>
@@ -86,17 +66,16 @@
       <DisableSpecificWarnings>4577;4467;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ExceptionHandling>Sync</ExceptionHandling>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ObjectFileName>release\</ObjectFileName>
       <Optimization>MaxSpeed</Optimization>
       <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;USE_QWT;QWT_DLL;USE_EIGEN;QT_NO_DEBUG;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
-      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName></ProgramDataBaseFileName>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <WarningLevel>Level3</WarningLevel>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-    </ClCompile>
+    <MultiProcessorCompilation>true</MultiProcessorCompilation></ClCompile>
     <Link>
       <AdditionalDependencies>C:\dev\Qwt_6.1.4\lib\qwt.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\dev\Qwt_6.1.4\lib;C:\openssl\lib;C:\Utils\postgresql\pgsql\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -118,27 +97,7 @@
     <ResourceCompile>
       <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;USE_QWT;QWT_DLL;USE_EIGEN;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
-    <QtMoc>
-      <CompilerFlavor>msvc</CompilerFlavor>
-      <Include>./$(Configuration)/moc_predefs.h</Include>
-      <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
-      <DynamicSource>output</DynamicSource>
-      <QtMocDir>$(Configuration)</QtMocDir>
-      <QtMocFileName>moc_%(Filename).cpp</QtMocFileName>
-    </QtMoc>
-    <QtRcc>
-      <InitFuncName>BeeDNN</InitFuncName>
-      <Compression>default</Compression>
-      <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
-      <QtRccDir>$(Configuration)</QtRccDir>
-      <QtRccFileName>qrc_%(Filename).cpp</QtRccFileName>
-    </QtRcc>
-    <QtUic>
-      <ExecutionDescription>Uic'ing %(Identity)...</ExecutionDescription>
-      <QtUicDir>$(ProjectDir)</QtUicDir>
-      <QtUicFileName>ui_%(Filename).h</QtUicFileName>
-    </QtUic>
-  </ItemDefinitionGroup>
+  <QtMoc><CompilerFlavor>msvc</CompilerFlavor><Include>./$(Configuration)/moc_predefs.h</Include><ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription><DynamicSource>output</DynamicSource><QtMocDir>$(Configuration)</QtMocDir><QtMocFileName>moc_%(Filename).cpp</QtMocFileName></QtMoc><QtRcc><InitFuncName>BeeDNN</InitFuncName><Compression>default</Compression><ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription><QtRccDir>$(Configuration)</QtRccDir><QtRccFileName>qrc_%(Filename).cpp</QtRccFileName></QtRcc><QtUic><ExecutionDescription>Uic'ing %(Identity)...</ExecutionDescription><QtUicDir>$(ProjectDir)</QtUicDir><QtUicFileName>ui_%(Filename).h</QtUicFileName></QtUic></ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;C:\dev\Qwt_6.1.4\include;C:\dev\eigen;..;$(QTDIR)\include;debug;\include;$(QTDIR)\mkspecs\win32-msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -149,7 +108,7 @@
       <DisableSpecificWarnings>4577;4467;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ExceptionHandling>Sync</ExceptionHandling>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ObjectFileName>debug\</ObjectFileName>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;USE_QWT;QWT_DLL;USE_EIGEN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
@@ -157,9 +116,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <WarningLevel>Level3</WarningLevel>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
-    </ClCompile>
+    <MultiProcessorCompilation>true</MultiProcessorCompilation></ClCompile>
     <Link>
       <AdditionalDependencies>C:\dev\Qwt_6.1.4\lib\qwtd.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\dev\Qwt_6.1.4\lib;C:\openssl\lib;C:\Utils\postgresql\pgsql\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -180,32 +137,11 @@
     <ResourceCompile>
       <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;USE_QWT;QWT_DLL;USE_EIGEN;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
-    <QtMoc>
-      <CompilerFlavor>msvc</CompilerFlavor>
-      <Include>./$(Configuration)/moc_predefs.h</Include>
-      <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
-      <DynamicSource>output</DynamicSource>
-      <QtMocDir>$(Configuration)</QtMocDir>
-      <QtMocFileName>moc_%(Filename).cpp</QtMocFileName>
-    </QtMoc>
-    <QtRcc>
-      <InitFuncName>BeeDNN</InitFuncName>
-      <Compression>default</Compression>
-      <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
-      <QtRccDir>$(Configuration)</QtRccDir>
-      <QtRccFileName>qrc_%(Filename).cpp</QtRccFileName>
-    </QtRcc>
-    <QtUic>
-      <ExecutionDescription>Uic'ing %(Identity)...</ExecutionDescription>
-      <QtUicDir>$(ProjectDir)</QtUicDir>
-      <QtUicFileName>ui_%(Filename).h</QtUicFileName>
-    </QtUic>
-  </ItemDefinitionGroup>
+  <QtMoc><CompilerFlavor>msvc</CompilerFlavor><Include>./$(Configuration)/moc_predefs.h</Include><ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription><DynamicSource>output</DynamicSource><QtMocDir>$(Configuration)</QtMocDir><QtMocFileName>moc_%(Filename).cpp</QtMocFileName></QtMoc><QtRcc><InitFuncName>BeeDNN</InitFuncName><Compression>default</Compression><ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription><QtRccDir>$(Configuration)</QtRccDir><QtRccFileName>qrc_%(Filename).cpp</QtRccFileName></QtRcc><QtUic><ExecutionDescription>Uic'ing %(Identity)...</ExecutionDescription><QtUicDir>$(ProjectDir)</QtUicDir><QtUicFileName>ui_%(Filename).h</QtUicFileName></QtUic></ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Activation.cpp" />
     <ClCompile Include="..\CIFAR10Reader.cpp" />
     <ClCompile Include="..\ConfusionMatrix.cpp" />
-    <ClCompile Include="..\LayerGain.cpp" />
     <ClCompile Include="DataSource.cpp" />
     <ClCompile Include="FrameGlobal.cpp" />
     <ClCompile Include="FrameLearning.cpp" />
@@ -217,6 +153,7 @@
     <ClCompile Include="..\LayerConvolution2D.cpp" />
     <ClCompile Include="..\LayerDense.cpp" />
     <ClCompile Include="..\LayerDropout.cpp" />
+    <ClCompile Include="..\LayerGain.cpp" />
     <ClCompile Include="..\LayerGaussianDropout.cpp" />
     <ClCompile Include="..\LayerGaussianNoise.cpp" />
     <ClCompile Include="..\LayerGlobalBias.cpp" />
@@ -241,15 +178,46 @@
     <ClInclude Include="..\Activation.h" />
     <ClInclude Include="..\CIFAR10Reader.h" />
     <ClInclude Include="..\ConfusionMatrix.h" />
-    <ClInclude Include="..\LayerGain.h" />
     <ClInclude Include="DataSource.h" />
     <QtMoc Include="FrameGlobal.h">
+      
+      
+      
+      
+      
+      
+      
+      
     </QtMoc>
     <QtMoc Include="FrameLearning.h">
+      
+      
+      
+      
+      
+      
+      
+      
     </QtMoc>
     <QtMoc Include="FrameNetwork.h">
+      
+      
+      
+      
+      
+      
+      
+      
     </QtMoc>
     <QtMoc Include="FrameNotes.h">
+      
+      
+      
+      
+      
+      
+      
+      
     </QtMoc>
     <ClInclude Include="..\Layer.h" />
     <ClInclude Include="..\LayerActivation.h" />
@@ -257,6 +225,7 @@
     <ClInclude Include="..\LayerConvolution2D.h" />
     <ClInclude Include="..\LayerDense.h" />
     <ClInclude Include="..\LayerDropout.h" />
+    <ClInclude Include="..\LayerGain.h" />
     <ClInclude Include="..\LayerGaussianDropout.h" />
     <ClInclude Include="..\LayerGaussianNoise.h" />
     <ClInclude Include="..\LayerGlobalBias.h" />
@@ -274,11 +243,39 @@
     <ClInclude Include="..\NetUtil.h" />
     <ClInclude Include="..\Optimizer.h" />
     <QtMoc Include="SimpleCurveWidget.h">
+      
+      
+      
+      
+      
+      
+      
+      
     </QtMoc>
     <QtMoc Include="mainwindow.h">
+      
+      
+      
+      
+      
+      
+      
+      
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <CustomBuild Include="debug\moc_predefs.h.cbt">
       <FileType>Document</FileType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -295,22 +292,83 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\moc_predefs.h;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </CustomBuild>
+    
+    
+    
+    
+    
+    
+    
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="FrameGlobal.ui">
+      
+      
+      
+      
+      
+      
+      
+      
+      
     </QtUic>
     <QtUic Include="FrameLearning.ui">
+      
+      
+      
+      
+      
+      
+      
+      
+      
     </QtUic>
     <QtUic Include="FrameNetwork.ui">
+      
+      
+      
+      
+      
+      
+      
+      
+      
     </QtUic>
     <QtUic Include="FrameNotes.ui">
+      
+      
+      
+      
+      
+      
+      
+      
+      
     </QtUic>
     <QtUic Include="mainwindow.ui">
+      
+      
+      
+      
+      
+      
+      
+      
+      
     </QtUic>
   </ItemGroup>
   <ItemGroup>
     <None Include="BeeDNN.ico" />
     <QtRcc Include="BeeDNN.qrc">
+      
+      
+      
+      
+      
+      
+      
+      
+      
     </QtRcc>
   </ItemGroup>
   <ItemGroup>
@@ -321,9 +379,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ResourceCompile>
   </ItemGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
-    <Import Project="$(QtMsBuild)\qt.targets" />
-  </ImportGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" /><ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')"><Import Project="$(QtMsBuild)\qt.targets" /></ImportGroup>
   <ImportGroup Label="ExtensionTargets" />
 </Project>
