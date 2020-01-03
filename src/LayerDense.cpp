@@ -51,7 +51,7 @@ void LayerDense::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
     if (_bHasBias)
         mOut = rowWiseAdd(mIn *_weight.topRows(_iInSize) , _weight.row(_iInSize)); //split _weight in [weightnobias, bias] in computation
     else
-        mOut = mIn * _weight;
+        mOut = mIn * _weight; //todo use W*x instead of x*W
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDense::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)

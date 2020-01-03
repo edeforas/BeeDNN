@@ -28,9 +28,7 @@ public:
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 
 private:
-	void convolution2d(const float* fIn, const float *fKernel, float* fOut);
 	void im2col(const MatrixFloat & mIn);
-	void col2im(MatrixFloat & mIn);
 
 	int _iInRows;
 	int _iInCols;
@@ -42,9 +40,9 @@ private:
 	int _iBorderCols;
 	int _iOutRows;
 	int _iOutCols;
-	int _iKernelSize;
+//	int _iKernelSize;
 
-	MatrixFloat _rawIn; // im2col format
+	MatrixFloat _im2col; // input image, im2col format
 };
 
 #endif

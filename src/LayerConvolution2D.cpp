@@ -21,7 +21,7 @@ LayerConvolution2D::LayerConvolution2D(int iInRows, int iInCols, int iInChannels
 	_iKernelCols = iKernelCols;
 	_iOutChannels = iOutChannels;
 	
-	_iKernelSize = _iKernelRows * _iKernelCols*_iInChannels*_iOutChannels;
+//	_iKernelSize = _iKernelRows * _iKernelCols*_iInChannels*_iOutChannels;
 
 	_iBorderRows=iKernelRows>>1;
 	_iBorderCols=iKernelCols>>1;
@@ -29,7 +29,7 @@ LayerConvolution2D::LayerConvolution2D(int iInRows, int iInCols, int iInChannels
 	_iOutRows=_iInRows-2* _iBorderRows;
 	_iOutCols=_iInCols-2* _iBorderCols;
 
-	_iOutSize = _iOutRows * _iOutCols*iOutChannels;
+//	_iOutSize = _iOutRows * _iOutCols*iOutChannels;
 
 	LayerConvolution2D::init();
 }
@@ -54,73 +54,36 @@ Layer* LayerConvolution2D::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
-	mOut.setZero(mIn.rows(), _iOutChannels*_iOutRows*_iOutCols);
-
-	for (int iSample = 0; iSample < mIn.rows(); iSample++)
-	{
-		convolution2d(mIn.row(iSample).data(), _weight.data(), mOut.row(iSample).data());
-	}
+	mOut = _weight * _im2col;
+	mOut.resize(_iOutChannels, _iOutRows * _iOutCols); //use conservativeResize ? 
+													   //todo reshape correctly
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
-    (void)mIn;
-	(void)mGradientOut;
-	(void)mGradientIn;
+	//from dense layer:
 
-	mGradientIn = mIn;
+	_gradientWeight = (mIn.transpose())*mGradientOut*(1.f / mIn.rows());
 
 	if (_bFirstLayer)
 		return;
 
-	//todo
-
+	mGradientIn = mGradientOut * (_weight.transpose());
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::init()
 {
-	_weight.resize(_iKernelSize, 1);
-	_weight.setRandom();
+	_weight.resize(_iOutChannels, _iKernelRows * _iKernelCols*_iInChannels);
+	setRandomUniform(_weight);
 
-	_gradientWeight.setZero(_iKernelSize, 1);
+	_gradientWeight.resizeLike(_weight);
+	_gradientWeight.setZero();
+
+	_im2col.resize(_iKernelRows * _iKernelCols*_iInChannels, _iOutRows * _iOutCols* _iInCols);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::im2col(const MatrixFloat & mIn)
 {
-}
-///////////////////////////////////////////////////////////////////////////////
-void LayerConvolution2D::col2im(MatrixFloat & mIn)
-{
-}
-///////////////////////////////////////////////////////////////////////////////
-// no bias, mode 'valid', no strides
-// for now, uses im2col algorithm
-void LayerConvolution2D::convolution2d(const float* fIn,const float *fKernel, float* fOut)
-{
-	//int iHalfKernelRow = iKernelRows >> 1;
-	//int iHalfKernelCols = iKernelCols >> 1;
-
-	int iOutRow = _iInRows - _iKernelRows + 1;
-	int iOutCols = _iInCols - _iKernelCols + 1;
-	int iOutPlaneSize = iOutRow * iOutCols;
-
-	for (int iOutPlane = 0; iOutPlane < _iOutChannels; iOutPlane++)
-	{
-		// set output accumulator plane to zero	
-		float* fOutPlane = fOut + iOutPlane * iOutPlaneSize;
-		for (int i = 0; i < iOutPlaneSize; i++)
-			fOutPlane[i] = 0.f;
-
-		//now convol and accumulate every inputplane
-		for (int iInPlane = 0; iInPlane < _iInChannels; iInPlane++)
-		{
-
-
-
-		}
-	}
-
-
-	(void)fKernel;
+	//todo
 }
 ///////////////////////////////////////////////////////////////////////////////
