@@ -6,7 +6,7 @@
     in the LICENSE.txt file.
 */
 
-//for now, stride=1, no bias, mode ='valid'
+//for now, stride=1, no bias (add LayerBias just after this one, for now) , mode ='valid'
 
 #include "LayerConvolution2D.h"
 
@@ -17,19 +17,16 @@ LayerConvolution2D::LayerConvolution2D(int iInRows, int iInCols, int iInChannels
 	_iInRows = iInRows;
 	_iInCols = iInCols;
 	_iInChannels = iInChannels;
+	_iSamples = 0;// wiil be redefined later
 	_iKernelRows = iKernelRows;
 	_iKernelCols = iKernelCols;
 	_iOutChannels = iOutChannels;
 	
-//	_iKernelSize = _iKernelRows * _iKernelCols*_iInChannels*_iOutChannels;
-
 	_iBorderRows=iKernelRows>>1;
 	_iBorderCols=iKernelCols>>1;
 
 	_iOutRows=_iInRows-2* _iBorderRows;
 	_iOutCols=_iInCols-2* _iBorderCols;
-
-//	_iOutSize = _iOutRows * _iOutCols*iOutChannels;
 
 	LayerConvolution2D::init();
 }
@@ -54,36 +51,58 @@ Layer* LayerConvolution2D::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
+	im2col(mIn);
 	mOut = _weight * _im2col;
-	mOut.resize(_iOutChannels, _iOutRows * _iOutCols); //use conservativeResize ? 
-													   //todo reshape correctly
+	col2im(mOut);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
-	//from dense layer:
-
+	(void)mIn;
+	assert(mGradientOut.rows() == _iSamples);
+	assert(mGradientOut.cols() == _iOutRows * _iOutCols*_iOutChannels);
+	
+	//from dense layer: todo?
+	//todo
 	_gradientWeight = (mIn.transpose())*mGradientOut*(1.f / mIn.rows());
+
+	assert(_gradientWeight.rows() == _weight.rows());
+	assert(_gradientWeight.cols() == _weight.cols());
 
 	if (_bFirstLayer)
 		return;
 
+	//todo
 	mGradientIn = mGradientOut * (_weight.transpose());
+
+	assert(mGradientIn.rows() == _iSamples);
+	assert(mGradientIn.cols() == _iInRows * _iInCols*_iInChannels);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::init()
 {
-	_weight.resize(_iOutChannels, _iKernelRows * _iKernelCols*_iInChannels);
+	_weight.resize(_iOutChannels, _iKernelRows * _iKernelCols * _iInChannels);
 	setRandomUniform(_weight);
 
 	_gradientWeight.resizeLike(_weight);
 	_gradientWeight.setZero();
-
-	_im2col.resize(_iKernelRows * _iKernelCols*_iInChannels, _iOutRows * _iOutCols* _iInCols);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::im2col(const MatrixFloat & mIn)
 {
+	(void)mIn;
+	_iSamples = (int)mIn.rows();
+
+	_im2col.resize(_iKernelRows * _iKernelCols*_iInChannels, _iOutRows * _iOutCols* _iSamples);
+
 	//todo
+}
+///////////////////////////////////////////////////////////////////////////////
+void LayerConvolution2D::col2im(MatrixFloat & mOut)
+{
+	(void)mOut;
+	mOut.resize(_iSamples, _iOutChannels* _iOutRows * _iOutCols);
+
+	//todo inplace restripe
 }
 ///////////////////////////////////////////////////////////////////////////////

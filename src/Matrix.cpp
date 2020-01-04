@@ -82,15 +82,6 @@ MatrixFloat colWiseMean(const MatrixFloat& m)
 #endif
 }
 ///////////////////////////////////////////////////////////////////////////
-void arraySub(MatrixFloat& m,float f)
-{
-#ifdef USE_EIGEN
-    m.array()-=f;
-#else
-    m-=f;
-#endif
-}
-///////////////////////////////////////////////////////////////////////////
 MatrixFloat rowWiseMult(const MatrixFloat& m, const MatrixFloat& d)
 {
     assert(d.rows() == m.rows());
@@ -180,19 +171,6 @@ int argmax(const MatrixFloat& m)
     }
 
     return iIndex;
-}
-///////////////////////////////////////////////////////////////////////////
-void labelToOneHot(const MatrixFloat& mLabel, MatrixFloat& mOneMat, int iNbClass)
-{
-    assert(mLabel.cols() == 1);
-
-    if (iNbClass == 0)
-        iNbClass = (int)mLabel.maxCoeff() + 1; //guess the nb of class
-
-    mOneMat.setZero(mLabel.rows(), iNbClass);
-
-    for (int i = 0; i < mLabel.rows(); i++)
-        mOneMat(i, (int)mLabel(i)) = 1;
 }
 ///////////////////////////////////////////////////////////////////////////
 void rowsArgmax(const MatrixFloat& m, MatrixFloat& argM)

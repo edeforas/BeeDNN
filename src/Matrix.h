@@ -625,13 +625,11 @@ MatrixFloat colWiseMean(const MatrixFloat& m);
 MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat rowWiseMult(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d);
-void arraySub(MatrixFloat& m,float f);
 vector<int> randPerm(int iSize); //create a vector of index shuffled
 void applyRowPermutation(const vector<int>& vPermutation, const MatrixFloat & mIn, MatrixFloat & mPermuted);
 const MatrixFloat rowRange(const MatrixFloat& m, int iStartRow, int iEndRow); //create a row view starting at iStartRow to (not included) iEndRow
 MatrixFloat decimate(const MatrixFloat& m, int iRatio);
 int argmax(const MatrixFloat& m);
-void labelToOneHot(const MatrixFloat& mLabel, MatrixFloat& mOneMat, int iNbClass=0);
 void rowsArgmax(const MatrixFloat& m, MatrixFloat& argM); //compute the argmax row by row
 const MatrixFloat addColumnOfOne(const MatrixFloat& m);
 

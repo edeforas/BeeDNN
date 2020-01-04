@@ -29,9 +29,11 @@ public:
 
 private:
 	void im2col(const MatrixFloat & mIn);
+	void col2im(MatrixFloat & mOut);
 
 	int _iInRows;
 	int _iInCols;
+	int _iSamples;
 	int _iInChannels;
 	int _iKernelRows;
 	int _iKernelCols;
@@ -40,7 +42,6 @@ private:
 	int _iBorderCols;
 	int _iOutRows;
 	int _iOutCols;
-//	int _iKernelSize;
 
 	MatrixFloat _im2col; // input image, im2col format
 };
