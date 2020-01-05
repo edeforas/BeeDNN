@@ -103,10 +103,17 @@ void LayerConvolution2D::im2col(const MatrixFloat & mIn)
 void LayerConvolution2D::col2im(MatrixFloat & mOut)
 {
 	mOut.resize(_iSamples * _iOutChannels, _iOutRows * _iOutCols );
-	for (int iSample = 0; iSample < _iSamples; iSample++)
+	_col2im = mOut; //for now, use a copy, todo optimize
+
+	for (int iOutChannel = 0; iOutChannel < _iOutChannels; iOutChannel++)
 	{
-		//todo inplace permute rows
-	
+		for (int iSample = 0; iSample < _iSamples; iSample++)
+		{
+			int iOrigRow = iSample+ iOutChannel* _iSamples;
+			int iDestRow = iOutChannel+ iSample* _iOutChannels;
+
+			mOut.row(iDestRow) = _col2im.row(iOrigRow);
+		}
 	}
 	mOut.resize(_iSamples, _iOutRows * _iOutCols * _iOutChannels);
 }

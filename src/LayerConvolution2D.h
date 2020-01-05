@@ -44,6 +44,7 @@ private:
 	int _iOutCols;
 
 	MatrixFloat _im2col; // input image, im2col format
+	MatrixFloat _col2im; // temporary image for col2im
 };
 
 #endif
