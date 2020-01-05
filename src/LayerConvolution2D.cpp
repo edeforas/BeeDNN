@@ -90,20 +90,40 @@ void LayerConvolution2D::init()
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::im2col(const MatrixFloat & mIn)
 {
+	//for now, no optimsations
 	_iSamples = (int)mIn.rows();
 	_im2col.resize(_iKernelRows * _iKernelCols*_iInChannels, _iOutRows * _iOutCols* _iSamples);
 
 	for (int iSample = 0; iSample < _iSamples; iSample++)
 	{
-		//todo fill matrix
+		for (int iInChannel = 0; iInChannel < _iInChannels; iInChannel++)
+		{
+			for (int iKRow = -_iBorderRows; iKRow <= _iBorderRows; iKRow++)
+			{
+				for (int iKCol = -_iBorderCols; iKCol <= _iBorderCols; iKCol++)
+				{
+					for (int iOutRow = 0; iOutRow < _iOutRows; iOutRow++)
+					{
+						for (int iOutCol = 0; iOutCol < _iOutCols; iOutCol++)
+						{
+							int iRowInPlane = iOutRow+iKRow+ _iBorderRows;
+							int iColInPlane = iOutCol+iKCol+ _iBorderCols;
 
+							float f = mIn(iSample, iInChannel*_iInRows*_iInCols + iRowInPlane*_iInCols+ iColInPlane);
+
+							_im2col(iInChannel*_iKernelRows * _iKernelCols, iOutRow*_iOutCols + iOutCol) = f;
+						}
+					}
+				}
+			}
+		}
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::col2im(MatrixFloat & mOut)
 {
 	mOut.resize(_iSamples * _iOutChannels, _iOutRows * _iOutCols );
-	_col2im = mOut; //for now, use a copy, todo optimize
+	_col2im = mOut; //for now use a copy, todo optimize?
 
 	for (int iOutChannel = 0; iOutChannel < _iOutChannels; iOutChannel++)
 	{
