@@ -17,7 +17,7 @@ LayerConvolution2D::LayerConvolution2D(int iInRows, int iInCols, int iInChannels
 	_iInRows = iInRows;
 	_iInCols = iInCols;
 	_iInChannels = iInChannels;
-	_iSamples = 0;// wiil be redefined later
+	_iSamples = 0;// set in forward()
 	_iKernelRows = iKernelRows;
 	_iKernelCols = iKernelCols;
 	_iOutChannels = iOutChannels;
@@ -90,19 +90,24 @@ void LayerConvolution2D::init()
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::im2col(const MatrixFloat & mIn)
 {
-	(void)mIn;
 	_iSamples = (int)mIn.rows();
-
 	_im2col.resize(_iKernelRows * _iKernelCols*_iInChannels, _iOutRows * _iOutCols* _iSamples);
 
-	//todo
+	for (int iSample = 0; iSample < _iSamples; iSample++)
+	{
+		//todo fill matrix
+
+	}
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::col2im(MatrixFloat & mOut)
 {
-	(void)mOut;
-	mOut.resize(_iSamples, _iOutChannels* _iOutRows * _iOutCols);
-
-	//todo inplace restripe
+	mOut.resize(_iSamples * _iOutChannels, _iOutRows * _iOutCols );
+	for (int iSample = 0; iSample < _iSamples; iSample++)
+	{
+		//todo inplace permute rows
+	
+	}
+	mOut.resize(_iSamples, _iOutRows * _iOutCols * _iOutChannels);
 }
 ///////////////////////////////////////////////////////////////////////////////
