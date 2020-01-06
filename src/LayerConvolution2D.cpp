@@ -98,20 +98,20 @@ void LayerConvolution2D::im2col(const MatrixFloat & mIn)
 	{
 		for (int iInChannel = 0; iInChannel < _iInChannels; iInChannel++)
 		{
-			for (int iKRow = -_iBorderRows; iKRow <= _iBorderRows; iKRow++)
+			for (int iKRow = 0; iKRow < _iKernelRows; iKRow++)
 			{
-				for (int iKCol = -_iBorderCols; iKCol <= _iBorderCols; iKCol++)
+				for (int iKCol = 0; iKCol < _iKernelCols; iKCol++)
 				{
 					for (int iOutRow = 0; iOutRow < _iOutRows; iOutRow++)
 					{
 						for (int iOutCol = 0; iOutCol < _iOutCols; iOutCol++)
 						{
-							int iRowInPlane = iOutRow+iKRow+ _iBorderRows;
-							int iColInPlane = iOutCol+iKCol+ _iBorderCols;
+							int iRowInPlane = iOutRow+iKRow;
+							int iColInPlane = iOutCol+iKCol;
 
 							float f = mIn(iSample, iInChannel*_iInRows*_iInCols + iRowInPlane*_iInCols+ iColInPlane);
 
-							_im2col(iInChannel*_iKernelRows * _iKernelCols, iOutRow*_iOutCols + iOutCol) = f;
+							_im2col(iInChannel*_iKernelRows * _iKernelCols + iKRow * _iKernelCols + iKCol, iSample*_iOutCols*_iOutRows + iOutRow*_iOutCols + iOutCol) = f;
 						}
 					}
 				}
