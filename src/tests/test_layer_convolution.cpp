@@ -4,6 +4,29 @@ using namespace std;
 #include "LayerConvolution2D.h"
 
 //////////////////////////////////////////////////////////////////////////////
+void im2col_col2im()
+{
+	cout << "Simple im2col_col2im test:" << endl;
+
+	MatrixFloat mIn, mCol, mIm;
+	mIn.setZero(5, 5);
+	mIn(0, 0) = 100;
+
+	mIn(4, 4) = 144;
+	mIn(2, 2) = 122;
+	mIn.resize(1, 5 * 5);
+
+	LayerConvolution2D conv2d(5, 5, 1, 3, 3, 1);
+	conv2d.im2col(mIn, mCol);
+	conv2d.col2im(mCol,mIm);
+
+	mIn.resize(5, 5);
+	mIm.resize(5, 5);
+	cout << "Image:" << endl << toString(mIn) << endl << endl;
+	cout << "Im2Col:" << endl << toString(mCol) << endl << endl;
+	cout << "Col2Im:" << endl << toString(mIm) << endl << endl;
+}
+//////////////////////////////////////////////////////////////////////////////
 void simple_image_conv2d()
 {
 	cout << "Simple convolution test:" << endl;
@@ -114,7 +137,7 @@ void image_2_output_channels_conv2d()
 //////////////////////////////////////////////////////////////////////////////
 void forward_conv2d_backprop_sgd()
 {
-	cout << "Forward Conv2D Backprop test:" << endl;
+	cout << "Forward Conv2D and Backpropagation test:" << endl << endl;
 
 	MatrixFloat mIn, mOut, mKernel, mGradientOut, mGradientIn;
 	mIn.setZero(5, 5);
@@ -140,16 +163,22 @@ void forward_conv2d_backprop_sgd()
 
 	//disp forward
 	mOut.resize(3, 3);
-	cout << "Forward Conv2D Backprop:" << endl;
+	cout << "Forward :" << endl;
 	cout << toString(mOut) << endl << endl;
 
 	//disp backpropagation
-	cout << "Forward Conv2D Backprop:" << endl;
+	conv2d.gradient_weights().resize(3, 3);
+	cout << "Backprop Weight gradient :" << endl;
 	cout << toString(conv2d.gradient_weights()) << endl << endl;
+
+	mGradientIn.resize(5, 5);
+	cout << "Backprop Input gradient :" << endl;
+	cout << toString(mGradientIn) << endl << endl;
 }
 /////////////////////////////////////////////////////////////////
 int main()
 {
+	im2col_col2im();
 	simple_image_conv2d();
 	batch_conv2d();
 	image_2_input_channels_conv2d();

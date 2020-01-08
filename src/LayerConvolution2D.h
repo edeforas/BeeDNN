@@ -27,9 +27,11 @@ public:
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 
+	void im2col(const MatrixFloat & mIn, MatrixFloat & mCol);
+	void col2im(const MatrixFloat & mCol, MatrixFloat & mIm);
+
 private:
-	void im2col(const MatrixFloat & mIn);
-	void col2im(MatrixFloat & mOut);
+	void reshape_out(MatrixFloat & mOut);
 
 	int _iInRows;
 	int _iInCols;
@@ -44,7 +46,7 @@ private:
 	int _iOutCols;
 
 	MatrixFloat _im2col; // input image, im2col format
-	MatrixFloat _col2im; // temporary image for col2im
+	MatrixFloat _tempOut; // temporary image
 };
 
 #endif

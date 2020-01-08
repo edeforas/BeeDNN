@@ -6,7 +6,7 @@
     in the LICENSE.txt file.
 */
 
-//for now, stride=1, no bias (add LayerBias just after this one, for now) , mode ='valid'
+//for now: stride=1, no bias (add LayerBias just after this one gives same results), mode ='valid'
 
 #include "LayerConvolution2D.h"
 
@@ -46,14 +46,17 @@ void LayerConvolution2D::get_params(int& iInRows, int& iInCols,int& iInChannels,
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerConvolution2D::clone() const
 {
-    return new LayerConvolution2D(_iInRows, _iInCols, _iInChannels,_iKernelRows,_iKernelCols,_iOutChannels);
+	LayerConvolution2D* pLayer = new LayerConvolution2D(_iInRows, _iInCols, _iInChannels,_iKernelRows,_iKernelCols,_iOutChannels);
+	pLayer->weights() = _weight;
+	pLayer->gradient_weights() = _gradientWeight;
+	return pLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
-	im2col(mIn);
+	im2col(mIn, _im2col);
 	mOut = _weight * _im2col;
-	col2im(mOut);
+	reshape_out(mOut);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
@@ -62,8 +65,11 @@ void LayerConvolution2D::backpropagation(const MatrixFloat &mIn,const MatrixFloa
 	assert(mGradientOut.rows() == _iSamples);
 	assert(mGradientOut.cols() == _iOutRows * _iOutCols*_iOutChannels);
 	
+	MatrixFloat mGradientUnflat = mGradientOut;
+	mGradientUnflat.resize(_iOutChannels, _iOutRows*_iOutCols*_iSamples); //todo correct reshape!
+
 	//todo batch
-	_gradientWeight = mGradientOut*_im2col.transpose();
+	_gradientWeight = mGradientUnflat *_im2col.transpose();
 
 	assert(_gradientWeight.rows() == _weight.rows());
 	assert(_gradientWeight.cols() == _weight.cols());
@@ -71,8 +77,9 @@ void LayerConvolution2D::backpropagation(const MatrixFloat &mIn,const MatrixFloa
 	if (_bFirstLayer)
 		return;
 
-	//todo
-	mGradientIn = mGradientOut * (_weight.transpose());
+	//todo batches
+	MatrixFloat mGradientCol= _weight.transpose()*mGradientOut;
+	col2im(mGradientCol, mGradientIn);
 
 	assert(mGradientIn.rows() == mIn.rows());
 	assert(mGradientIn.cols() == mIn.cols());
@@ -87,11 +94,11 @@ void LayerConvolution2D::init()
 	_gradientWeight.setZero();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerConvolution2D::im2col(const MatrixFloat & mIn)
+void LayerConvolution2D::im2col(const MatrixFloat & mIn, MatrixFloat & mCol)
 {
-	//for now, no optimsations
+	//for now, no optimisations
 	_iSamples = (int)mIn.rows();
-	_im2col.resize(_iKernelRows * _iKernelCols*_iInChannels, _iOutRows * _iOutCols* _iSamples);
+	mCol.resize(_iKernelRows * _iKernelCols*_iInChannels, _iOutRows * _iOutCols* _iSamples);
 
 	for (int iSample = 0; iSample < _iSamples; iSample++)
 	{
@@ -110,7 +117,7 @@ void LayerConvolution2D::im2col(const MatrixFloat & mIn)
 
 							float f = mIn(iSample, iInChannel*_iInRows*_iInCols + iRowInPlane*_iInCols+ iColInPlane);
 
-							_im2col(iInChannel*_iKernelRows * _iKernelCols + iKRow * _iKernelCols + iKCol, iSample*_iOutCols*_iOutRows + iOutRow*_iOutCols + iOutCol) = f;
+							mCol(iInChannel*_iKernelRows * _iKernelCols + iKRow * _iKernelCols + iKCol, iSample*_iOutCols*_iOutRows + iOutRow*_iOutCols + iOutCol) = f;
 						}
 					}
 				}
@@ -119,10 +126,46 @@ void LayerConvolution2D::im2col(const MatrixFloat & mIn)
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerConvolution2D::col2im(MatrixFloat & mOut)
+void LayerConvolution2D::col2im(const MatrixFloat & mCol, MatrixFloat & mIm)
 {
+	//for now, no optimizations
+	mIm.setZero(_iSamples, _iInChannels* _iInRows * _iInCols);
+	for (int iSample = 0; iSample < _iSamples; iSample++)
+	{
+		for (int iInChannel = 0; iInChannel < _iInChannels; iInChannel++)
+		{
+			for (int iKRow = 0; iKRow < _iKernelRows; iKRow++)
+			{
+				for (int iKCol = 0; iKCol < _iKernelCols; iKCol++)
+				{
+					for (int iOutRow = 0; iOutRow < _iOutRows; iOutRow++)
+					{
+						for (int iOutCol = 0; iOutCol < _iOutCols; iOutCol++)
+						{
+							int iRowInPlane = iOutRow + iKRow;
+							int iColInPlane = iOutCol + iKCol;
+
+							float f=mCol(iInChannel*_iKernelRows * _iKernelCols + iKRow * _iKernelCols + iKCol, iSample*_iOutCols*_iOutRows + iOutRow * _iOutCols + iOutCol);
+
+							mIm(iSample, iInChannel*_iInRows*_iInCols + iRowInPlane * _iInCols + iColInPlane) += f;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	//rescale data to compute mean instead of sum  todo correct divide on borders
+	mIm *= (1.f / (_iKernelRows* _iKernelCols* _iOutChannels));
+	mIm.resize(_iSamples, _iInChannels* _iInRows * _iInCols);
+}
+///////////////////////////////////////////////////////////////////////////////
+void LayerConvolution2D::reshape_out(MatrixFloat & mOut)
+{
+	assert(mOut.size() == _iSamples * _iOutChannels*_iOutRows * _iOutCols);
+
 	mOut.resize(_iSamples * _iOutChannels, _iOutRows * _iOutCols );
-	_col2im = mOut; //for now use a copy, todo optimize?
+	_tempOut = mOut; //for now use a copy, quicker or slower than std::swap?
 
 	for (int iOutChannel = 0; iOutChannel < _iOutChannels; iOutChannel++)
 	{
@@ -131,7 +174,7 @@ void LayerConvolution2D::col2im(MatrixFloat & mOut)
 			int iOrigRow = iSample+ iOutChannel* _iSamples;
 			int iDestRow = iOutChannel+ iSample* _iOutChannels;
 
-			mOut.row(iDestRow) = _col2im.row(iOrigRow);
+			mOut.row(iDestRow) = _tempOut.row(iOrigRow);
 		}
 	}
 	mOut.resize(_iSamples, _iOutRows * _iOutCols * _iOutChannels);
