@@ -19,7 +19,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_classification_CIFAR
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_classification_MNIST_conv2D", "sample_code\sample_classification_MNIST_conv2D.vcxproj", "{65B2045F-1A31-4FF7-B25F-5EF87551F03E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_layer_forward", "tests\test_layer_forward.vcxproj", "{F1B17300-0846-4456-9B79-9B30ACADA3F6}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_layer_convolution", "tests\test_layer_convolution.vcxproj", "{F1B17300-0846-4456-9B79-9B30ACADA3F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

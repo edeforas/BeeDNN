@@ -62,9 +62,8 @@ void LayerConvolution2D::backpropagation(const MatrixFloat &mIn,const MatrixFloa
 	assert(mGradientOut.rows() == _iSamples);
 	assert(mGradientOut.cols() == _iOutRows * _iOutCols*_iOutChannels);
 	
-	//from dense layer: todo?
-	//todo
-	_gradientWeight = (mIn.transpose())*mGradientOut*(1.f / mIn.rows());
+	//todo batch
+	_gradientWeight = mGradientOut*_im2col.transpose();
 
 	assert(_gradientWeight.rows() == _weight.rows());
 	assert(_gradientWeight.cols() == _weight.cols());
@@ -75,8 +74,8 @@ void LayerConvolution2D::backpropagation(const MatrixFloat &mIn,const MatrixFloa
 	//todo
 	mGradientIn = mGradientOut * (_weight.transpose());
 
-	assert(mGradientIn.rows() == _iSamples);
-	assert(mGradientIn.cols() == _iInRows * _iInCols*_iInChannels);
+	assert(mGradientIn.rows() == mIn.rows());
+	assert(mGradientIn.cols() == mIn.cols());
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::init()

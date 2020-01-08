@@ -111,6 +111,42 @@ void image_2_output_channels_conv2d()
 	cout << "Image 2 output channels convoluted:" << endl;
 	cout << toString(mOut) << endl << endl;
 }
+//////////////////////////////////////////////////////////////////////////////
+void forward_conv2d_backprop_sgd()
+{
+	cout << "Forward Conv2D Backprop test:" << endl;
+
+	MatrixFloat mIn, mOut, mKernel, mGradientOut, mGradientIn;
+	mIn.setZero(5, 5);
+	mIn(2, 2) = 1;
+	mIn.resize(1, 5 * 5);
+
+	mKernel.setZero(3, 3);
+	mKernel(1, 0) = 1;
+	mKernel(1, 1) = 2;
+	mKernel(1, 2) = 1;
+	mKernel.resize(1, 3 * 3);
+
+	LayerConvolution2D conv2d(5, 5, 1, 3, 3, 1);
+
+	//forward
+	conv2d.weights() = mKernel;
+	conv2d.forward(mIn, mOut);
+
+	//backpropagation
+	mGradientOut = mOut* 0.1f;
+	mGradientOut(3+1) = -1.f;
+	conv2d.backpropagation(mIn, mGradientOut, mGradientIn);
+
+	//disp forward
+	mOut.resize(3, 3);
+	cout << "Forward Conv2D Backprop:" << endl;
+	cout << toString(mOut) << endl << endl;
+
+	//disp backpropagation
+	cout << "Forward Conv2D Backprop:" << endl;
+	cout << toString(conv2d.gradient_weights()) << endl << endl;
+}
 /////////////////////////////////////////////////////////////////
 int main()
 {
@@ -118,5 +154,6 @@ int main()
 	batch_conv2d();
 	image_2_input_channels_conv2d();
 	image_2_output_channels_conv2d();
+	forward_conv2d_backprop_sgd();
 }
 /////////////////////////////////////////////////////////////////

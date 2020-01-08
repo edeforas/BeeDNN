@@ -51,7 +51,7 @@ void LayerDense::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
     if (_bHasBias)
         mOut = rowWiseAdd(mIn *_weight.topRows(_iInSize) , _weight.row(_iInSize)); //split _weight in [weightnobias, bias] in computation
     else
-        mOut = mIn * _weight; //todo use W*x instead of x*W
+        mOut = mIn * _weight; //todo use W*x instead of x*W ?
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDense::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
@@ -68,6 +68,8 @@ void LayerDense::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGrad
     }
     else
     {
+		// average the gradient as in:
+		// https://stats.stackexchange.com/questions/183840/sum-or-average-of-gradients-in-mini-batch-gradient-decent
         _gradientWeight = (mIn.transpose())*mGradientOut*(1.f / mIn.rows());
 
 		if (_bFirstLayer)
