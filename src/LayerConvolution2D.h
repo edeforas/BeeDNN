@@ -31,7 +31,8 @@ public:
 	void col2im(const MatrixFloat & mCol, MatrixFloat & mIm);
 
 private:
-	void reshape_out(MatrixFloat & mOut);
+	void reshape_to_out(MatrixFloat & mOut);
+	void reshape_from_out(MatrixFloat & mOut);
 
 	int _iInRows;
 	int _iInCols;
@@ -46,7 +47,7 @@ private:
 	int _iOutCols;
 
 	MatrixFloat _im2col; // input image, im2col format
-	MatrixFloat _tempOut; // temporary image
+	MatrixFloat _tempImg; // temporary image, to avoid malloc
 };
 
 #endif

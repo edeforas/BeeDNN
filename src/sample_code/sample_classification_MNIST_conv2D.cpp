@@ -1,5 +1,5 @@
-// sample MNIST classification with a poolmax2D
-// 96% accuracy after 20 epochs, 1s/epochs
+// sample MNIST classification with a conv2d and poolmax2D
+// 96% accuracy after 10 epochs, 5s/epochs
 
 #include <iostream>
 #include <chrono>
@@ -46,22 +46,26 @@ int main()
     }
 	mTestImages/= 256.f;
 	mRefImages/= 256.f;
-  /*
+  
+	// reduce data size for this test
 	mRefImages = decimate(mRefImages, 10);
 	mRefLabels = decimate(mRefLabels, 10);
 	mTestImages = decimate(mTestImages, 10);
 	mTestLabels = decimate(mTestLabels, 10);
-	*/
+	
 	//create simple net:
 	net.add_convolution2D_layer(28, 28, 1, 3, 3, 16	);
 	net.add_bias_layer();
-	net.add_activation_layer("Relu");	
-	net.add_dense_layer(26*26*16, 10);
+	net.add_activation_layer("Relu");
+	net.add_poolmax2D_layer(26, 26, 16, 2, 2);
+	net.add_dense_layer(13*13*16, 64);
+	net.add_activation_layer("Relu");
+	net.add_dense_layer(64, 10);
 	net.add_softmax_layer();
 
 	//setup train options
 	netTrain.set_net(net);
-	netTrain.set_epochs(50);
+	netTrain.set_epochs(10);
 	netTrain.set_batchsize(32);
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_epoch_callback(epoch_callback); //optional, show progress
@@ -88,12 +92,11 @@ int main()
 	cout << "Test confusion matrix:" << endl << crTest.mConfMat << endl;
 	
 	//testu function
-/*	if (crTest.accuracy < 96.f)
+	if (crTest.accuracy < 95.f)
 	{
 		cout << "Test failed! accuracy=" << crTest.accuracy << endl;
 		return -1;
 	}
-	*/
 
 	cout << "Test succeded." << endl;
     return 0;
