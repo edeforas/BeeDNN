@@ -113,7 +113,8 @@ MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d)
     assert(d.rows() == 1);
     assert(d.cols() == m.cols());
 
-	/* //eigen call rmoved for now, slower than direct call
+/* 
+//eigen function removed for now, slower than direct computation!
 #ifdef USE_EIGEN
     return m + d.replicate(m.rows(), 1);
 #else

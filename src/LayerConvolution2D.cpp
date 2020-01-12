@@ -152,7 +152,7 @@ void LayerConvolution2D::col2im(const MatrixFloat & mCol, MatrixFloat & mIm)
 		}
 	}
 
-	//rescale data to compute mean instead of sum  todo correct divide on borders
+	//rescale data to compute mean instead of sum. ?Todo correct divide on borders?
 	mIm *= (1.f / (_iKernelRows* _iKernelCols* _iOutChannels));
 	mIm.resize(_iSamples, _iInChannels* _iInRows * _iInCols);
 }
