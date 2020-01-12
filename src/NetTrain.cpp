@@ -314,8 +314,6 @@ void NetTrain::set_test_data(const MatrixFloat& mSamplesTest, const MatrixFloat&
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::train()
 {
-//	MatrixFloat mTruthOneHot;
-
 	if (_pNet == nullptr)
 		return;
 
