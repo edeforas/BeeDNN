@@ -1,5 +1,5 @@
 // sample MNIST classification with a conv2d and poolmax2D
-// 96% accuracy after 10 epochs, 5s/epochs
+// 96% accuracy after 10 epochs, 4s/epochs ( data reduced by factor 10)
 
 #include <iostream>
 #include <chrono>

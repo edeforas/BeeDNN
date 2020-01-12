@@ -113,14 +113,16 @@ MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d)
     assert(d.rows() == 1);
     assert(d.cols() == m.cols());
 
+	/* //eigen call rmoved for now, slower than direct call
 #ifdef USE_EIGEN
     return m + d.replicate(m.rows(), 1);
 #else
+*/
     MatrixFloat r = m;
     for (int l = 0; l < r.rows(); l++)
         r.row(l) += d;
     return r;
-#endif
+//#endif
 }
 ///////////////////////////////////////////////////////////////////////////
 vector<int> randPerm(int iSize) //create a vector of index shuffled

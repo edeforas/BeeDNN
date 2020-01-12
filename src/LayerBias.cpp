@@ -37,7 +37,7 @@ void LayerBias::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 	if(_weight.size()==0)
 		_weight.setZero(1, mIn.cols());
 
-    mOut = rowWiseAdd( mIn.array() , _weight);
+    mOut = rowWiseAdd( mIn/*.array()*/ , _weight);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerBias::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
