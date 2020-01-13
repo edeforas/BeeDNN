@@ -238,6 +238,7 @@ int Net::input_size() const
 /////////////////////////////////////////////////////////////////////////////////////////////
 void Net::update_out_layer_input_size(int& iInSize)
 {
+	return;
     //check if input size is coherent, else update it
     if(_iInputSize==0)
         _iInputSize=iInSize;
