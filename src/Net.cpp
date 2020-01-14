@@ -35,7 +35,6 @@ Net::Net()
 { 
     _bTrainMode = false;
     _iInputSize = 0;
-	_iOutputSize = 0;
 	_bClassificationMode = true;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,7 +51,6 @@ void Net::clear()
     _layers.clear();
     _bTrainMode=false;
     _iInputSize=0;
-	_iOutputSize = 0;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 Net& Net::operator=(const Net& other)
@@ -63,7 +61,6 @@ Net& Net::operator=(const Net& other)
         _layers.push_back(other._layers[i]->clone());
 
     _iInputSize= other._iInputSize;
-	_iOutputSize = other._iOutputSize;
 	_bClassificationMode = other._bClassificationMode;
 
 	return *this;
@@ -106,12 +103,7 @@ void Net::add_softmax_layer()
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_dense_layer(int inSize,int outSize,bool bHasBias)
 {
-    update_out_layer_input_size(inSize);
-    if(outSize==0)
-        outSize=1;
-
     _layers.push_back(new LayerDense(inSize,outSize, bHasBias));
-	_iOutputSize = outSize;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_globalgain_layer()
@@ -137,13 +129,11 @@ void Net::add_bias_layer()
 void Net::add_poolmax2D_layer(int iInRow, int iInCols, int iInChannels, int iRowFactor, int iColFactor)
 {
 	_layers.push_back(new LayerPoolMax2D(iInRow, iInCols, iInChannels, iRowFactor, iColFactor));
-	_iOutputSize = iInChannels * iInRow * iInCols/( iRowFactor* iColFactor);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::add_convolution2D_layer(int iInRows, int iInCols, int iInChannels, int iKernelRows, int iKernelCols, int  iOutChannels)
 {
 	_layers.push_back(new LayerConvolution2D(iInRows, iInCols, iInChannels, iKernelRows, iKernelCols, iOutChannels));
-	//_iOutputSize = iInChannels * iInRow * iInCols / (iRowFactor* iColFactor);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
@@ -214,11 +204,10 @@ void Net::init()
     if(_layers.empty())
         return;
 
-    _layers[0]->set_input_size(_iInputSize);
-
     for(unsigned int i=0;i<_layers.size();i++)
         _layers[i]->init();
 }
+
 /////////////////////////////////////////////////////////////////////////////////////////////
 void Net::set_input_size(int iInputSize)
 {
@@ -226,68 +215,8 @@ void Net::set_input_size(int iInputSize)
 	init();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-int Net::output_size() const
-{
-	return _iOutputSize;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
 int Net::input_size() const
 {
     return _iInputSize;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-void Net::update_out_layer_input_size(int& iInSize)
-{
-	return;
-    //check if input size is coherent, else update it
-    if(_iInputSize==0)
-        _iInputSize=iInSize;
-
-    if(_iOutputSize!=0)
-        iInSize=_iOutputSize;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-bool Net::is_valid(int iInSize, int iOutSize) const
-{
-	//check input size
-	if (_iInputSize != iInSize)
-	{
-		//todo LOG
-		return false;
-	}
-
-	//int iLastSize = net.input_size(); //todo
-
-
-	return true;
-
-	//check output size
-	if (_iOutputSize != iOutSize)// TODO check categorical data 
-	{
-		//todo LOG // TODO check categorical data 
-		return false;
-	}
-
-	if (size() == 0) //no layers
-		return true;
-
-	//check  each layer size
-	for (unsigned int i = 1; i < size(); i++)
-	{
-		const Layer& l1 = layer(i - 1);
-
-		int size0 = l1.in_size();
-		int size1 = l1.out_size();
-
-		if ((size0 == 0) && (size1 == 0))
-			continue; //activation layer
-
-
-		//update last size
-
-			//todododo
-
-	}
-
-	return true;
-}

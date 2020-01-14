@@ -44,9 +44,8 @@ public:
 	
 	void add_poolmax2D_layer(int iInRow, int iInCols, int iInChannels, int iRowFactor = 2, int iColFactor = 2);
 	void add_convolution2D_layer(int iInRows, int iInCols, int iInChannels, int iKernelRows, int iKernelCols, int  iOutChannels);
-
+	
     void set_input_size(int iInputSize);
-	int output_size() const;
     int input_size() const;
 
     const vector<Layer*> layers() const;
@@ -62,13 +61,10 @@ public:
 
     void set_train_mode(bool bTrainMode); // set to true if training, set to false if testing (default)
 
-	bool is_valid(int iInSize, int iOutSize) const; //return true if all size ok
-
 private:
-    void update_out_layer_input_size(int& iInSize);
 	bool _bTrainMode;
 	vector<Layer*> _layers;
-    int _iInputSize, _iOutputSize;
+    int _iInputSize;
 	bool _bClassificationMode;
 };
 

@@ -48,6 +48,7 @@ int main()
 	mRefImages/= 256.f;
   
 	// reduce data size for this test
+	cout << "Decimating MNIST database (ratio=10) ..." << endl;
 	mRefImages = decimate(mRefImages, 10);
 	mRefLabels = decimate(mRefLabels, 10);
 	mTestImages = decimate(mTestImages, 10);

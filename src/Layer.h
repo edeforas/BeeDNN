@@ -24,7 +24,6 @@ public:
 
     string type() const;
 
-    void set_input_size(int iInputSize);
     int in_size() const;
     int out_size() const;
 	void set_first_layer(bool bFirstLayer);
