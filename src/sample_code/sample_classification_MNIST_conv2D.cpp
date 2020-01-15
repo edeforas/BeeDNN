@@ -54,7 +54,7 @@ int main()
 	mTestImages = decimate(mTestImages, 10);
 	mTestLabels = decimate(mTestLabels, 10);
 	
-	//create simple net:
+	//create simple toy convolution net:
 	Net net;
 	net.add_convolution2D_layer(28, 28, 1, 3, 3, 16);
 	net.add_bias_layer();

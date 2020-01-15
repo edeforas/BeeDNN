@@ -23,6 +23,7 @@
 #include "LayerGaussianNoise.h"
 #include "LayerPRelu.h"
 #include "LayerPoolMax2D.h"
+#include "LayerConvolution2D.h"
 
 #include <sstream>
 #include <fstream>
@@ -111,13 +112,30 @@ void write(const Net& net,string & s)
 		{
 			LayerPoolMax2D* l = static_cast<LayerPoolMax2D*>(layer);
 
-			int inRows, inCols, iPlanes, rowFactor, colFactor;
-			l->get_params(inRows, inCols, iPlanes, rowFactor, colFactor);
+			int inRows, inCols, iChannels, rowFactor, colFactor;
+			l->get_params(inRows, inCols, iChannels, rowFactor, colFactor);
 			ss << "Layer" << i + 1 << ".inRows=" << inRows << endl;
 			ss << "Layer" << i + 1 << ".inCols=" << inCols << endl;
-			ss << "Layer" << i + 1 << ".inPlanes=" << iPlanes << endl;
+			ss << "Layer" << i + 1 << ".inChannels=" << iChannels << endl;
 			ss << "Layer" << i + 1 << ".rowFactor=" << rowFactor << endl;
 			ss << "Layer" << i + 1 << ".colFactor=" << colFactor << endl;
+		}
+		else if (layer->type() == "Convolution2D")
+		{
+			LayerConvolution2D* l = static_cast<LayerConvolution2D*>(layer);
+
+			ss << "Layer" << i + 1 << ".weight=" << endl;
+			ss << toString(l->weights()) << endl;
+
+			int inRows, inCols, inChannels, kernelRows, kernelCols, outChannels;
+			l->get_params(inRows, inCols, inChannels, kernelRows, kernelCols, outChannels);
+
+			ss << "Layer" << i + 1 << ".inRows=" << inRows << endl;
+			ss << "Layer" << i + 1 << ".inCols=" << inCols << endl;
+			ss << "Layer" << i + 1 << ".inChannels=" << inChannels << endl;
+			ss << "Layer" << i + 1 << ".kernelRows=" << kernelRows << endl;
+			ss << "Layer" << i + 1 << ".kernelCols=" << kernelCols << endl;
+			ss << "Layer" << i + 1 << ".outChannels=" << outChannels << endl;
 		}
 	}
 
@@ -230,10 +248,25 @@ void read(const string& s,Net& net)
 		{
 			int inSizeX = stoi(find_key(s, sLayer + ".inRows"));
 			int inSizeY = stoi(find_key(s, sLayer + ".inCols"));
-			int inPlanes = stoi(find_key(s, sLayer + ".inPlanes"));
+			int inChannels = stoi(find_key(s, sLayer + ".inChannels"));
 			int factorX = stoi(find_key(s, sLayer + ".rowFactor"));
 			int factorY = stoi(find_key(s, sLayer + ".colFactor"));
-			net.add_poolmax2D_layer(inSizeX, inSizeY, inPlanes, factorX, factorY);
+			net.add_poolmax2D_layer(inSizeX, inSizeY, inChannels, factorX, factorY);
+		}
+
+		else if (sType == "Convolution2D")
+		{
+			int inSizeX = stoi(find_key(s, sLayer + ".inRows"));
+			int inSizeY = stoi(find_key(s, sLayer + ".inCols"));
+			int inChannels = stoi(find_key(s, sLayer + ".inChannels"));
+			int kernelRows = stoi(find_key(s, sLayer + ".kernelRows"));
+			int kernelCols = stoi(find_key(s, sLayer + ".kernelCols"));
+			int outChannels = stoi(find_key(s, sLayer + ".outChannels"));
+			net.add_convolution2D_layer(inSizeX, inSizeY, inChannels, kernelRows, kernelCols, outChannels);
+
+			string sWeight = find_key(s, sLayer + ".weight");
+			MatrixFloat mf = fromString(sWeight);
+			net.layer(net.size() - 1).weights() = mf;
 		}
 
 		else if (sType == "Softmax")
