@@ -21,7 +21,7 @@ public:
     ~FrameGlobal();
 
     void init();
-    void set_main_window(MainWindow* _pMainWindow);
+    void set_main_window(MainWindow* pMainWindow);
 
     string data_name() const;
     void set_data_name(string sDataName);

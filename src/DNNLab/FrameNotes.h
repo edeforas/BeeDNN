@@ -20,7 +20,7 @@ public:
     explicit FrameNotes(QWidget *parent = nullptr);
     ~FrameNotes();
 
-    void set_main_window(MainWindow* _pMainWindow);
+    void set_main_window(MainWindow* pMainWindow);
     string text() const;
     void setText(const string& sText);
 

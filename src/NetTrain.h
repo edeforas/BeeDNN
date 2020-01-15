@@ -69,8 +69,7 @@ public:
 	void set_loss(const string&  sLoss); // "MeanSquareError" by default, ex "MeanSquareError" "CategoricalCrossEntropy"
 	string get_loss() const;
 
-	float compute_loss(const MatrixFloat & mSamples, const MatrixFloat& mTruth) const;
-	float compute_accuracy(const MatrixFloat & mSamples, const MatrixFloat& mTruth) const;
+	float compute_loss_accuracy(const MatrixFloat & mSamples, const MatrixFloat& mTruth,float* pfAccuracy = nullptr) const;
 
 	const vector<float>& get_train_loss() const;
 	const vector<float>& get_test_loss() const;

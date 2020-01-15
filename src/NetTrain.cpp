@@ -100,26 +100,22 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
     _inOut = other._inOut;
     _gradient = other._gradient;
 
+	_trainLoss = other._trainLoss;
+	_trainAccuracy = other._trainAccuracy;
 
-//	set_train_data(other._pmSamplesTrain, other._pmTruthTrain);
-//	set_test_data(other._pmSamplesTest, other._pmTruthTest);
+	_testLoss = other._testLoss;
+	_testAccuracy = other._testAccuracy;
+
+	_epochCallBack = other._epochCallBack;
 
     _pmSamplesTrain = other._pmSamplesTrain;
     _pmTruthTrain = other._pmTruthTrain;
 
 	_pmSamplesTest = other._pmSamplesTest;
 	_pmTruthTest = other._pmTruthTest;
-	
-//	_epochCallBack = other._epochCallBack;
 
 	set_net(*(other._pNet));
 
-	/*
-	_trainLoss= other._trainLoss;
-	_testLoss= other._testLoss;
-	_trainAccuracy= other._trainAccuracy;
-	_testAccuracy= other._testAccuracy;
-*/
 	return *this;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -242,62 +238,57 @@ bool NetTrain::get_keepbest() const
     return _bKeepBest;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-float NetTrain::compute_loss(const MatrixFloat &mSamples, const MatrixFloat &mTruth) const
+float NetTrain::compute_loss_accuracy(const MatrixFloat &mSamples, const MatrixFloat &mTruth,float * pfAccuracy) const
 {
-	assert(_pNet);
+    int iNbSamples = (int)mSamples.rows();
 
-/*	if (!_pNet->is_valid((int)mSamples.cols(), (int)mTruth.cols()))
+	if ((_pNet->layers().size() == 0) || (iNbSamples == 0))
+	{
+		if (pfAccuracy)
+			*pfAccuracy = 0.f;
 		return 0.f;
-		*/
-    int iNbSamples = (int)mSamples.rows();
-
-    if( (_pNet->layers().size()==0) || (iNbSamples==0) )
-        return 0.f;
-
-    MatrixFloat mOut;
-	_pNet->forward(mSamples, mOut);
-    return _pLoss->compute(mOut,mTruth);
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
-float NetTrain::compute_accuracy(const MatrixFloat &mSamples, const MatrixFloat &mTruth) const
-{
-    int iNbSamples = (int)mSamples.rows();
-
-    if ((_pNet->size() == 0) || (iNbSamples == 0))
-        return 0.f;
+	}
 
     MatrixFloat mOut;
 	_pNet->forward(mSamples, mOut);
 
-    if (mTruth.cols() != 1)
-    {
-		if (mOut.cols() == mTruth.cols())
+	if (pfAccuracy)
+	{
+		if (mTruth.cols() != 1)
 		{
-			//one hot everywhere
-			int iGood = 0;
-			for (int i = 0; i < iNbSamples; i++)
+			if (mOut.cols() == mTruth.cols())
 			{
-				iGood += (argmax(mOut.row(i)) == argmax(mTruth.row(i)));
+				//one hot everywhere
+				int iGood = 0;
+				for (int i = 0; i < iNbSamples; i++)
+				{
+					iGood += (argmax(mOut.row(i)) == argmax(mTruth.row(i)));
+				}
+
+				*pfAccuracy= 100.f*iGood / iNbSamples;
+			}
+			else
+				*pfAccuracy= 0.f;   //todo
+		}
+		else
+		{
+			int iGood = 0;
+			if (mOut.cols() != 1)
+			{
+				for (int i = 0; i < iNbSamples; i++)
+					iGood += (argmax(mOut.row(i)) == mTruth(i));
+			}
+			else
+			{
+				for (int i = 0; i < iNbSamples; i++)
+					iGood += roundf(mOut(i)) == mTruth(i);
 			}
 
-			return 100.f*iGood / iNbSamples;
+			*pfAccuracy= 100.f*iGood / iNbSamples;
 		}
-       return 0.f;   //todo
-    }
+	}
 
-    int iGood=0;
-    if(mOut.cols()!=1)
-    {
-        for(int i=0;i<iNbSamples;i++)
-            iGood += (argmax(mOut.row(i)) ==mTruth(i));
-    }
-    else
-    {
-        for(int i=0;i<iNbSamples;i++)
-            iGood += roundf(mOut(i))==mTruth(i);
-    }
-
-    return 100.f*iGood /iNbSamples;
+    return _pLoss->compute(mOut,mTruth);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth)
@@ -371,13 +362,11 @@ void NetTrain::train()
     {
         if (_pmSamplesTest == nullptr)
         {
-            fMaxAccuracy = compute_accuracy( *_pmSamplesTrain, *_pmTruthTrain);
-            fMinLoss=compute_loss(*_pmSamplesTrain, *_pmTruthTrain);
+            fMinLoss=compute_loss_accuracy(*_pmSamplesTrain, *_pmTruthTrain,&fMaxAccuracy);
         }
         else
         {
-            fMaxAccuracy = compute_accuracy( *_pmSamplesTest, *_pmTruthTest);
-            fMinLoss=compute_loss( *_pmSamplesTest, *_pmTruthTest);
+            fMinLoss=compute_loss_accuracy( *_pmSamplesTest, *_pmTruthTest,&fMaxAccuracy);
         }
         bestNet= *_pNet;
     }
@@ -437,10 +426,8 @@ void NetTrain::train()
         if (_pmSamplesTest != nullptr)
         { 	
 			//use the test_db to keep the best model
-			_fTestLoss =compute_loss( *_pmSamplesTest, *_pmTruthTest);
+			_fTestLoss =compute_loss_accuracy( *_pmSamplesTest, *_pmTruthTest,&_fTestAccuracy);
             _testLoss.push_back(_fTestLoss);
-
-			_fTestAccuracy = compute_accuracy( *_pmSamplesTest, *_pmTruthTest);
             _testAccuracy.push_back(_fTestAccuracy);
 
 			fSelectedLoss = _fTestLoss;

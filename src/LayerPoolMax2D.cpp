@@ -28,7 +28,7 @@ LayerPoolMax2D::LayerPoolMax2D(int iInRows, int iInCols, int iInChannels, int iR
 LayerPoolMax2D::~LayerPoolMax2D()
 { }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPoolMax2D::get_params(int& iInRows, int& iInCols, int & iInChannels, int& iRowFactor, int& iColFactor)
+void LayerPoolMax2D::get_params(int& iInRows, int& iInCols, int & iInChannels, int& iRowFactor, int& iColFactor) const
 {
 	iInRows = _iInRows;
 	iInCols = _iInCols;

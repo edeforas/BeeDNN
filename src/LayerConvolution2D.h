@@ -18,7 +18,7 @@ public:
 	LayerConvolution2D(int iInRows, int iInCols,int iInChannels, int iKernelRows, int iKernelCols,int iOutChannels);
     virtual ~LayerConvolution2D() override;
 
-	void get_params(int& iInRows, int& iInCols,int& iInChannels, int& iKernelRows, int& iKernelCols,int& iOutChannels);
+	void get_params(int& iInRows, int& iInCols,int& iInChannels, int& iKernelRows, int& iKernelCols,int& iOutChannels) const;
 
     virtual Layer* clone() const override;
 

@@ -1,4 +1,4 @@
-//this sample launch in parallel multiple runs of same net optimization 
+//this sample launch in parallel multiple runs of the same net optimization 
 //and save the current best solution on disk
 
 #include <iostream>
@@ -19,8 +19,8 @@ void better_solution_callback(NetTrain& train)
 
 	// save solution to disk using a string buffer
 	string s;
-	NetUtil::write(train,s); //save train
-	NetUtil::write(train.net(),s); // save net
+	NetUtil::write(train,s); //save train parameters
+	NetUtil::write(train.net(),s); // save network
 	std::ofstream f("solution_accuracy" + to_string(train.get_current_test_accuracy()) + ".txt");
 	f << s;
 }

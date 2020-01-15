@@ -1,4 +1,4 @@
-// sample  classification CIFAR10, low accuracy for now (50%), but simple
+// sample classification CIFAR10, low accuracy for now (50%), but simple
 
 #include <iostream>
 #include <chrono>

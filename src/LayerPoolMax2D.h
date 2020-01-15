@@ -18,7 +18,7 @@ public:
 	explicit LayerPoolMax2D(int iInRows, int iInCols,int iInChannels, int iRowFactor = 2, int iColFactor = 2);
     virtual ~LayerPoolMax2D() override;
 
-	void get_params(int& iInRows, int& iInCols,int& iInChannels, int& iRowFactor, int& iColFactor);
+	void get_params(int& iInRows, int& iInCols,int& iInChannels, int& iRowFactor, int& iColFactor) const;
 
     virtual Layer* clone() const override;
 

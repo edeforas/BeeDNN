@@ -306,9 +306,11 @@ public:
         //beta1_prod*=beta1;
         //beta2_prod*=beta2;
 
+		float invBeta2 = 1.f / (1.f - beta2_prod);
+
         _m=_m*beta1+dw*(1.f-beta1);
         _v=_v*beta2+dw.cwiseAbs2()*(1.f-beta2);
-        w += _m.cwiseQuotient((_v/(1.f-beta2_prod)).cwiseSqrt().cwiseMax(1.e-8f))*(-_fLearningRate/(1.f-beta1_prod));
+        w += _m.cwiseQuotient((_v*invBeta2).cwiseSqrt().cwiseMax(1.e-8f))*(-_fLearningRate/(1.f-beta1_prod));
         beta1_prod*=beta1;
         beta2_prod*=beta2;
     }

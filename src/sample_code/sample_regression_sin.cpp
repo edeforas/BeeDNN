@@ -60,7 +60,7 @@ int main()
 		test(is_near(mTruth(i, 0), mPredict(i, 0), 0.01));
 	}
     //compute and print loss
-    float fLoss=netfit.compute_loss(mSamples,mTruth);
+    float fLoss=netfit.compute_loss_accuracy(mSamples,mTruth);
     cout << "Loss=" << fLoss << endl;
 
 	cout << "Test succeded." << endl;

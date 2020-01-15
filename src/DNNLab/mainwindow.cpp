@@ -138,12 +138,12 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
         _qsAccuracy->clear();
     }
 
-    float fLoss=_pEngine->netTrain().compute_loss(_pDataSource->train_data(),_pDataSource->train_truth()); //final loss
+    float fLoss=_pEngine->netTrain().compute_loss_accuracy(_pDataSource->train_data(),_pDataSource->train_truth()); //final loss
     ui->leTrainLoss->setText(QString::number((double)fLoss));
 
 	if (_pDataSource->has_test_data())
 	{
-        fLoss = _pEngine->netTrain().compute_loss(_pDataSource->test_data(), _pDataSource->test_truth()); //final loss
+        fLoss = _pEngine->netTrain().compute_loss_accuracy(_pDataSource->test_data(), _pDataSource->test_truth()); //final loss
 		ui->leTestLoss->setText(QString::number((double)fLoss));
 	}
 	else
@@ -419,7 +419,6 @@ void MainWindow::update_classification_tab()
     }
 
     //ref computation
-    float fAccuracy=0.f;
     if(_pDataSource->has_train_data())
     {
 		MatrixFloat mTest;
@@ -428,7 +427,7 @@ void MainWindow::update_classification_tab()
 		ClassificationResult result = cm.compute(_pDataSource->train_truth(), mTest);
 
 		_mConfusionMatrixTrain = result.mConfMat;
-		fAccuracy = (float)result.accuracy;
+		float fAccuracy = result.accuracy;
 		ui->leTrainAccuracy->setText(QString::number((double)fAccuracy,'f',2));
     }
     else
@@ -442,7 +441,7 @@ void MainWindow::update_classification_tab()
 		ClassificationResult result = cm.compute(_pDataSource->test_truth(), mTest);
 
 		_mConfusionMatrixTest = result.mConfMat;
-		fAccuracy = (float)result.accuracy;
+		float fAccuracy = result.accuracy;
         ui->leTestAccuracy->setText(QString::number((double)fAccuracy,'f',2));
     }
     else

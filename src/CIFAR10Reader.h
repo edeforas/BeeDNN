@@ -20,7 +20,7 @@ public:
     bool read_from_folder(const string& sFolder,MatrixFloat& mRefImages,MatrixFloat& mRefLabels,MatrixFloat& mTestImages,MatrixFloat& mTestLabels);
 
 private:
-	bool read_batch(string sName,MatrixFloat& mData,MatrixFloat& mTruth);
+    bool read_batch(string sName,MatrixFloat& mData,MatrixFloat& mTruth);
 };
 
 #endif

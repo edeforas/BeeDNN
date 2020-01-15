@@ -1,5 +1,5 @@
 // sample MNIST classification with a conv2d and poolmax2D
-// accuracy> 96% after 10 epochs, 4s/epochs (data reduced by factor 10)
+// accuracy> 96% after 10 epochs, 4s/epochs (data size reduced by factor 10)
 
 #include <iostream>
 #include <chrono>
@@ -10,7 +10,6 @@ using namespace std;
 #include "MNISTReader.h"
 #include "ConfusionMatrix.h"
 
-Net net;
 NetTrain netTrain;
 MatrixFloat mRefImages, mRefLabels, mTestImages, mTestLabels;
 int iEpoch;
@@ -62,13 +61,14 @@ int main()
 	net.add_bias_layer();
 	net.add_activation_layer("Relu");
 	net.add_dense_layer(13 * 13 * 16, 128);
+	//net.add_bias_layer();
 	net.add_activation_layer("Relu");
 	net.add_dense_layer(128, 10);
 	net.add_softmax_layer();
 
 	//setup train options
 	netTrain.set_net(net);
-	netTrain.set_epochs(10);
+	netTrain.set_epochs(20);
 	netTrain.set_batchsize(32);
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_epoch_callback(epoch_callback); //optional, show progress

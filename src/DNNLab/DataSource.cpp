@@ -211,10 +211,10 @@ void DataSource::load_function()
     _mTrainData.resize(iNbPointsLearn,1);
     _mTrainTruth.resize(iNbPointsLearn,1);
     float dStep=(fMax-fMin)/(iNbPointsLearn-1.f);
-    float fVal=fMin,fOut=0.f;
+    float fVal=fMin;
     for( int i=0;i<iNbPointsLearn;i++)
     {
-        fOut = get_function_val(fVal);
+        float fOut = get_function_val(fVal);
         _mTrainData(i)=fVal;
         _mTrainTruth(i)=fOut;
         fVal+=dStep;
@@ -225,10 +225,9 @@ void DataSource::load_function()
     _mTestTruth.resize(iNbPointsTest, 1);
     dStep = (fMax - fMin) / (iNbPointsTest - 1.f);
     fVal = fMin;
-    fOut = 0.f;
     for (int i = 0; i < iNbPointsTest; i++)
     {
-        fOut = get_function_val(fVal);
+        float fOut = get_function_val(fVal);
         _mTestData(i) = fVal;
         _mTestTruth(i) = fOut;
         fVal += dStep;

@@ -43,7 +43,7 @@ void LayerConvolution2D::init()
 	_gradientWeight.setZero();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerConvolution2D::get_params(int& iInRows, int& iInCols,int& iInChannels, int& iKernelRows, int& iKernelCols,int& iOutChannels)
+void LayerConvolution2D::get_params(int& iInRows, int& iInCols,int& iInChannels, int& iKernelRows, int& iKernelCols,int& iOutChannels) const
 {
 	iInRows = _iInRows;
 	iInCols = _iInCols;

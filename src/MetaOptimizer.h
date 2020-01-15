@@ -15,7 +15,7 @@ public:
 	void set_train(NetTrain& train);
 	void set_nb_thread(int iNbThread); // default: use max available or if iNbThread is zero
 	
-	void set_repeat_all(int iNRepeatAll);
+	void set_repeat_all(int iNbRepeatAll);
 	
 	void run();
 	void set_better_solution_callback(std::function<void(NetTrain& train)> betterSolutionCallBack);
