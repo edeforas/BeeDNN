@@ -11,15 +11,19 @@
 #include "LayerConvolution2D.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerConvolution2D::LayerConvolution2D(int iInRows, int iInCols, int iInChannels, int iKernelRows, int iKernelCols, int iOutChannels) :
+LayerConvolution2D::LayerConvolution2D(int iInRows, int iInCols, int iInChannels, int iKernelRows, int iKernelCols, int iOutChannels, int iRowStride, int iColStride) :
     Layer(iInRows*iInCols*iInChannels, 0 , "Convolution2D")
 {
 	_iInRows = iInRows;
 	_iInCols = iInCols;
 	_iInChannels = iInChannels;
 	_iSamples = 0;// set in forward()
+
 	_iKernelRows = iKernelRows;
 	_iKernelCols = iKernelCols;
+	_iRowStride = iRowStride;
+	_iColStride = iColStride; 
+
 	_iOutChannels = iOutChannels;
 	
 	_iBorderRows=iKernelRows>>1;
@@ -27,6 +31,10 @@ LayerConvolution2D::LayerConvolution2D(int iInRows, int iInCols, int iInChannels
 
 	_iOutRows=_iInRows-2* _iBorderRows;
 	_iOutCols=_iInCols-2* _iBorderCols;
+
+	//manage strides
+//	_iOutRows = _iOutRows - (_iRowStride-1) * (_iOutRows - 1)/2;
+//	_iOutCols = _iOutCols - (_iColStride-1) * (_iOutCols - 1)/2;
 
 	LayerConvolution2D::init();
 }
@@ -43,19 +51,21 @@ void LayerConvolution2D::init()
 	_gradientWeight.setZero();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerConvolution2D::get_params(int& iInRows, int& iInCols,int& iInChannels, int& iKernelRows, int& iKernelCols,int& iOutChannels) const
+void LayerConvolution2D::get_params(int& iInRows, int& iInCols,int& iInChannels, int& iKernelRows, int& iKernelCols,int& iOutChannels, int& iRowStride, int& iColStride) const
 {
 	iInRows = _iInRows;
 	iInCols = _iInCols;
 	iInChannels = _iInChannels;
 	iKernelRows = _iKernelRows;
 	iKernelCols = _iKernelCols;
+	iRowStride = _iRowStride;
+	iColStride = _iColStride;
 	iOutChannels = _iOutChannels;
 }
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerConvolution2D::clone() const
 {
-	LayerConvolution2D* pLayer = new LayerConvolution2D(_iInRows, _iInCols, _iInChannels,_iKernelRows,_iKernelCols,_iOutChannels);
+	LayerConvolution2D* pLayer = new LayerConvolution2D(_iInRows, _iInCols, _iInChannels,_iKernelRows,_iKernelCols,_iOutChannels,_iRowStride,_iColStride);
 	pLayer->weights() = _weight;
 	pLayer->gradient_weights() = _gradientWeight;
 	return pLayer;
@@ -111,8 +121,8 @@ void LayerConvolution2D::im2col(const MatrixFloat & mIn, MatrixFloat & mCol)
 					{
 						for (int iOutCol = 0; iOutCol < _iOutCols; iOutCol++)
 						{
-							int iRowInPlane = iOutRow+iKRow;
-							int iColInPlane = iOutCol+iKCol;
+							int iRowInPlane = iOutRow/**_iRowStride*/+iKRow;
+							int iColInPlane = iOutCol/**_iColStride*/+iKCol;
 
 							float f = mIn(iSample, iInChannel*_iInRows*_iInCols + iRowInPlane*_iInCols+ iColInPlane);
 							mCol(iInChannel*_iKernelRows * _iKernelCols + iKRow * _iKernelCols + iKCol, iSample*_iOutCols*_iOutRows + iOutRow*_iOutCols + iOutCol) = f;
@@ -140,8 +150,8 @@ void LayerConvolution2D::col2im(const MatrixFloat & mCol, MatrixFloat & mIm)
 					{
 						for (int iOutCol = 0; iOutCol < _iOutCols; iOutCol++)
 						{
-							int iRowInPlane = iOutRow + iKRow;
-							int iColInPlane = iOutCol + iKCol;
+							int iRowInPlane = iOutRow/**_iRowStride*/ + iKRow;
+							int iColInPlane = iOutCol/**_iColStride*/ + iKCol;
 
 							float f=mCol(iInChannel*_iKernelRows * _iKernelCols + iKRow * _iKernelCols + iKCol, iSample*_iOutCols*_iOutRows + iOutRow * _iOutCols + iOutCol);
 							mIm(iSample, iInChannel*_iInRows*_iInCols + iRowInPlane * _iInCols + iColInPlane) += f;

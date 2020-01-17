@@ -127,14 +127,16 @@ void write(const Net& net,string & s)
 			ss << "Layer" << i + 1 << ".weight=" << endl;
 			ss << toString(l->weights()) << endl;
 
-			int inRows, inCols, inChannels, kernelRows, kernelCols, outChannels;
-			l->get_params(inRows, inCols, inChannels, kernelRows, kernelCols, outChannels);
+			int inRows, inCols, inChannels, kernelRows, kernelCols, outChannels, rowStride, colStride;
+			l->get_params(inRows, inCols, inChannels, kernelRows, kernelCols, outChannels,rowStride,colStride);
 
 			ss << "Layer" << i + 1 << ".inRows=" << inRows << endl;
 			ss << "Layer" << i + 1 << ".inCols=" << inCols << endl;
 			ss << "Layer" << i + 1 << ".inChannels=" << inChannels << endl;
 			ss << "Layer" << i + 1 << ".kernelRows=" << kernelRows << endl;
 			ss << "Layer" << i + 1 << ".kernelCols=" << kernelCols << endl;
+			ss << "Layer" << i + 1 << ".rowStride=" << rowStride << endl;
+			ss << "Layer" << i + 1 << ".colStride=" << colStride << endl;
 			ss << "Layer" << i + 1 << ".outChannels=" << outChannels << endl;
 		}
 	}
@@ -261,8 +263,10 @@ void read(const string& s,Net& net)
 			int inChannels = stoi(find_key(s, sLayer + ".inChannels"));
 			int kernelRows = stoi(find_key(s, sLayer + ".kernelRows"));
 			int kernelCols = stoi(find_key(s, sLayer + ".kernelCols"));
+			int rowStride = stoi(find_key(s, sLayer + ".rowStride"));
+			int colStride = stoi(find_key(s, sLayer + ".colStride"));
 			int outChannels = stoi(find_key(s, sLayer + ".outChannels"));
-			net.add_convolution2D_layer(inSizeX, inSizeY, inChannels, kernelRows, kernelCols, outChannels);
+			net.add_convolution2D_layer(inSizeX, inSizeY, inChannels, kernelRows, kernelCols, outChannels, rowStride,colStride);
 
 			string sWeight = find_key(s, sLayer + ".weight");
 			MatrixFloat mf = fromString(sWeight);

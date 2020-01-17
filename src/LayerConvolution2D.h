@@ -15,7 +15,7 @@
 class LayerConvolution2D : public Layer
 {
 public:
-	LayerConvolution2D(int iInRows, int iInCols,int iInChannels, int iKernelRows, int iKernelCols,int iOutChannels);
+	LayerConvolution2D(int iInRows, int iInCols,int iInChannels, int iKernelRows, int iKernelCols,int iOutChannels,int iRowsStride=1, int iColStride=1);
     virtual ~LayerConvolution2D() override;
 
 	void get_params(int& iInRows, int& iInCols,int& iInChannels, int& iKernelRows, int& iKernelCols,int& iOutChannels) const;
@@ -23,6 +23,8 @@ public:
     virtual Layer* clone() const override;
 
 	virtual void init() override;
+
+	void get_params(int & iInRows, int & iInCols, int & iInChannels, int & iKernelRows, int & iKernelCols, int & iOutChannels, int & iRowStride, int & iColStride) const;
 
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
@@ -40,6 +42,8 @@ private:
 	int _iInChannels;
 	int _iKernelRows;
 	int _iKernelCols;
+	int _iRowStride;
+	int _iColStride;
 	int _iOutChannels;
 	int _iBorderRows;
 	int _iBorderCols;
