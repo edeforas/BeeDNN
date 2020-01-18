@@ -33,8 +33,8 @@ LayerConvolution2D::LayerConvolution2D(int iInRows, int iInCols, int iInChannels
 	_iOutCols=_iInCols-2* _iBorderCols;
 
 	//manage strides
-//	_iOutRows = _iOutRows - (_iRowStride-1) * (_iOutRows - 1)/2;
-//	_iOutCols = _iOutCols - (_iColStride-1) * (_iOutCols - 1)/2;
+	_iOutRows = _iOutRows - (_iRowStride-1) * (_iOutRows - 1)/2;
+	_iOutCols = _iOutCols - (_iColStride-1) * (_iOutCols - 1)/2;
 
 	LayerConvolution2D::init();
 }
@@ -121,8 +121,8 @@ void LayerConvolution2D::im2col(const MatrixFloat & mIn, MatrixFloat & mCol)
 					{
 						for (int iOutCol = 0; iOutCol < _iOutCols; iOutCol++)
 						{
-							int iRowInPlane = iOutRow/**_iRowStride*/+iKRow;
-							int iColInPlane = iOutCol/**_iColStride*/+iKCol;
+							int iRowInPlane = iOutRow*_iRowStride+iKRow;
+							int iColInPlane = iOutCol*_iColStride+iKCol;
 
 							float f = mIn(iSample, iInChannel*_iInRows*_iInCols + iRowInPlane*_iInCols+ iColInPlane);
 							mCol(iInChannel*_iKernelRows * _iKernelCols + iKRow * _iKernelCols + iKCol, iSample*_iOutCols*_iOutRows + iOutRow*_iOutCols + iOutCol) = f;
@@ -150,8 +150,8 @@ void LayerConvolution2D::col2im(const MatrixFloat & mCol, MatrixFloat & mIm)
 					{
 						for (int iOutCol = 0; iOutCol < _iOutCols; iOutCol++)
 						{
-							int iRowInPlane = iOutRow/**_iRowStride*/ + iKRow;
-							int iColInPlane = iOutCol/**_iColStride*/ + iKCol;
+							int iRowInPlane = iOutRow*_iRowStride + iKRow;
+							int iColInPlane = iOutCol*_iColStride + iKCol;
 
 							float f=mCol(iInChannel*_iKernelRows * _iKernelCols + iKRow * _iKernelCols + iKCol, iSample*_iOutCols*_iOutRows + iOutRow * _iOutCols + iOutCol);
 							mIm(iSample, iInChannel*_iInRows*_iInCols + iRowInPlane * _iInCols + iColInPlane) += f;

@@ -232,7 +232,7 @@ void forward_conv2d_stride2_backprop_sgd()
 
 	//backpropagation
 	mGradientOut = mOut * 0.1f;
-	mGradientOut(3 + 1) = -1.f;
+	mGradientOut(2 + 1) = -1.f;
 	conv2d.backpropagation(mIn, mGradientOut, mGradientIn);
 
 	//disp forward
@@ -241,7 +241,7 @@ void forward_conv2d_stride2_backprop_sgd()
 	cout << toString(mOut) << endl << endl;
 
 	//disp backpropagation
-	conv2d.gradient_weights().resize(2, 2);
+	conv2d.gradient_weights().resize(3, 3);
 	cout << "Backprop Weight gradient :" << endl;
 	cout << toString(conv2d.gradient_weights()) << endl << endl;
 
