@@ -1,6 +1,6 @@
 // all convolutional MNIST classification with a conv2d
-// accuracy TBD > % after 10 epochs, TBDs/epochs
-// conv2d speed not optimized yet, this test takes time!
+// accuracy 99 > % after 20 epochs, 40/epochs
+// conv2d speed not optimized yet, this test is long!
 
 #include <iostream>
 #include <chrono>
@@ -60,19 +60,22 @@ int main()
 	net.add_convolution2D_layer(26, 26, 8, 3, 3, 8, 2, 2);
 	net.add_bias_layer();
 	net.add_activation_layer("Relu");
-	
+	net.add_dropout_layer(0.3f);
+
 	net.add_convolution2D_layer(12, 12, 8, 3, 3, 8);
 	net.add_bias_layer();
 	net.add_activation_layer("Relu");
-	
+	net.add_dropout_layer(0.3f);
+
 	net.add_dense_layer(10 * 10 * 8, 128);
+
 	net.add_activation_layer("Relu");
 	net.add_dense_layer(128, 10);
 	net.add_softmax_layer();
 
-	//setup train options
+	//set train options
 	netTrain.set_net(net);
-	netTrain.set_epochs(20);
+	netTrain.set_epochs(25);
 	netTrain.set_batchsize(32);
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_epoch_callback(epoch_callback); //optional, show progress
@@ -99,7 +102,7 @@ int main()
 	cout << "Test confusion matrix:" << endl << crTest.mConfMat << endl;
 	
 	//testu function
-	if (crTest.accuracy < 95.f)
+	if (crTest.accuracy < 99.f)
 	{
 		cout << "Test failed! accuracy=" << crTest.accuracy << endl;
 		return -1;
