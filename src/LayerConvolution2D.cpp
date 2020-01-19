@@ -29,12 +29,16 @@ LayerConvolution2D::LayerConvolution2D(int iInRows, int iInCols, int iInChannels
 	_iBorderRows=iKernelRows>>1;
 	_iBorderCols=iKernelCols>>1;
 
+	// out without strides
 	_iOutRows=_iInRows-2* _iBorderRows;
 	_iOutCols=_iInCols-2* _iBorderCols;
 
 	//manage strides
-	_iOutRows = _iOutRows - (_iRowStride-1) * (_iOutRows - 1)/2;
-	_iOutCols = _iOutCols - (_iColStride-1) * (_iOutCols - 1)/2;
+	if(_iRowStride>1)
+		_iOutRows = (_iOutRows + 1) / _iRowStride;// -(_iRowStride - 1) * (_iOutRows - 1) / 2;
+	
+	if (_iColStride > 1)
+		_iOutCols = (_iOutCols + 1) / _iColStride; //-(_iColStride - 1) * (_iOutCols - 1) / 2;
 
 	LayerConvolution2D::init();
 }
@@ -124,6 +128,11 @@ void LayerConvolution2D::im2col(const MatrixFloat & mIn, MatrixFloat & mCol)
 							int iRowInPlane = iOutRow*_iRowStride+iKRow;
 							int iColInPlane = iOutCol*_iColStride+iKCol;
 
+							assert(iRowInPlane >=0);
+							assert(iColInPlane >=0);
+							assert(iRowInPlane < _iInRows);
+							assert(iColInPlane < _iInCols);
+
 							float f = mIn(iSample, iInChannel*_iInRows*_iInCols + iRowInPlane*_iInCols+ iColInPlane);
 							mCol(iInChannel*_iKernelRows * _iKernelCols + iKRow * _iKernelCols + iKCol, iSample*_iOutCols*_iOutRows + iOutRow*_iOutCols + iOutCol) = f;
 						}
@@ -152,6 +161,11 @@ void LayerConvolution2D::col2im(const MatrixFloat & mCol, MatrixFloat & mIm)
 						{
 							int iRowInPlane = iOutRow*_iRowStride + iKRow;
 							int iColInPlane = iOutCol*_iColStride + iKCol;
+
+							assert(iRowInPlane >= 0);
+							assert(iColInPlane >= 0);
+							assert(iRowInPlane < _iInRows);
+							assert(iColInPlane < _iInCols);
 
 							float f=mCol(iInChannel*_iKernelRows * _iKernelCols + iKRow * _iKernelCols + iKCol, iSample*_iOutCols*_iOutRows + iOutRow * _iOutCols + iOutCol);
 							mIm(iSample, iInChannel*_iInRows*_iInCols + iRowInPlane * _iInCols + iColInPlane) += f;
