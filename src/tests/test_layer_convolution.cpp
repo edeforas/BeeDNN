@@ -135,6 +135,39 @@ void image_2_output_channels_conv2d()
 	cout << toString(mOut) << endl << endl;
 }
 //////////////////////////////////////////////////////////////////////////////
+void simple_image_conv2d_stride2()
+{
+	cout << "Simple convolution test stride2:" << endl;
+
+	MatrixFloat mIn, mOut, mKernel;
+	mIn.setZero(5, 5);
+	mIn(2, 2) = 1;
+	mIn.resize(1, 5 * 5);
+
+	mKernel.setZero(3, 3);
+	mKernel(0, 0) = 1;
+	mKernel(0, 1) = 2;
+	mKernel(0, 2) = 1;
+
+	mKernel(1, 0) = 2;
+	mKernel(1, 1) = 4;
+	mKernel(1, 2) = 2;
+
+	mKernel(2, 0) = 1;
+	mKernel(2, 1) = 2;
+	mKernel(2, 2) = 1;
+
+	mKernel.resize(1, 3 * 3);
+
+	LayerConvolution2D conv2d(5, 5, 1, 3, 3, 1,2,2);
+	conv2d.weights() = mKernel;
+	conv2d.forward(mIn, mOut);
+
+	mOut.resize(2, 2);
+	cout << "Image convoluted stride2:" << endl;
+	cout << toString(mOut) << endl << endl;
+}
+//////////////////////////////////////////////////////////////////////////////
 void forward_conv2d_backprop_sgd()
 {
 	cout << "Forward Conv2D and Backpropagation test:" << endl << endl;
@@ -176,6 +209,47 @@ void forward_conv2d_backprop_sgd()
 	cout << toString(mGradientIn) << endl << endl;
 }
 /////////////////////////////////////////////////////////////////
+void forward_conv2d_stride2_backprop_sgd()
+{
+	cout << "Forward Conv2D and Backpropagation test:" << endl << endl;
+
+	MatrixFloat mIn, mOut, mKernel, mGradientOut, mGradientIn;
+	mIn.setZero(5, 5);
+	mIn(2, 2) = 1;
+	mIn.resize(1, 5 * 5);
+
+	mKernel.setZero(3, 3);
+	mKernel(1, 0) = 1;
+	mKernel(1, 1) = 2;
+	mKernel(1, 2) = 1;
+	mKernel.resize(1, 3 * 3);
+
+	LayerConvolution2D conv2d(5, 5, 1, 3, 3, 1, 2, 2);
+
+	//forward
+	conv2d.weights() = mKernel;
+	conv2d.forward(mIn, mOut);
+
+	//backpropagation
+	mGradientOut = mOut * 0.1f;
+	mGradientOut(2 + 1) = -1.f;
+	conv2d.backpropagation(mIn, mGradientOut, mGradientIn);
+
+	//disp forward
+	mOut.resize(2, 2);
+	cout << "Forward :" << endl;
+	cout << toString(mOut) << endl << endl;
+
+	//disp backpropagation
+	conv2d.gradient_weights().resize(3, 3);
+	cout << "Backprop Weight gradient :" << endl;
+	cout << toString(conv2d.gradient_weights()) << endl << endl;
+
+	mGradientIn.resize(5, 5);
+	cout << "Backprop Input gradient :" << endl;
+	cout << toString(mGradientIn) << endl << endl;
+}
+/////////////////////////////////////////////////////////////////
 int main()
 {
 	im2col_col2im();
@@ -183,6 +257,9 @@ int main()
 	batch_conv2d();
 	image_2_input_channels_conv2d();
 	image_2_output_channels_conv2d();
+	simple_image_conv2d_stride2();
 	forward_conv2d_backprop_sgd();
+	simple_image_conv2d_stride2();
+	forward_conv2d_stride2_backprop_sgd();
 }
 /////////////////////////////////////////////////////////////////

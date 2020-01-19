@@ -131,9 +131,9 @@ void Net::add_poolmax2D_layer(int iInRow, int iInCols, int iInChannels, int iRow
 	_layers.push_back(new LayerPoolMax2D(iInRow, iInCols, iInChannels, iRowFactor, iColFactor));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_convolution2D_layer(int iInRows, int iInCols, int iInChannels, int iKernelRows, int iKernelCols, int  iOutChannels)
+void Net::add_convolution2D_layer(int iInRows, int iInCols, int iInChannels, int iKernelRows, int iKernelCols, int  iOutChannels,int iRowStride,int iColStride)
 {
-	_layers.push_back(new LayerConvolution2D(iInRows, iInCols, iInChannels, iKernelRows, iKernelCols, iOutChannels));
+	_layers.push_back(new LayerConvolution2D(iInRows, iInCols, iInChannels, iKernelRows, iKernelCols, iOutChannels, iRowStride, iColStride));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
