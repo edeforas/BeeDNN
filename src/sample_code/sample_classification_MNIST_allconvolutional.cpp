@@ -50,11 +50,6 @@ int main()
     }
 	mTestImages/= 256.f;
 	mRefImages/= 256.f;
-  
-	mRefImages = decimate(mRefImages, 10);
-	mRefLabels = decimate(mRefLabels, 10);
-	mTestImages = decimate(mTestImages, 10);
-	mTestLabels = decimate(mTestLabels, 10);
 
 	//create a all convolutional net:
 	Net net;
