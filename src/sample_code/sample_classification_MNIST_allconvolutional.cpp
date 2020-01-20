@@ -53,17 +53,21 @@ int main()
 
 	//create a all convolutional net:
 	Net net;
-	net.add_convolution2D_layer(28, 28, 1, 3, 3, 4);
-	net.add_bias_layer();
-	net.add_activation_layer("Relu");
-	net.add_convolution2D_layer(26, 26, 4, 3, 3, 5,2,2);
-	net.add_bias_layer();
-	net.add_activation_layer("Relu");
-	net.add_convolution2D_layer(12, 12, 5, 3, 3, 3);
+	net.add_convolution2D_layer(28, 28, 1, 3, 3, 8);
 	net.add_bias_layer();
 	net.add_activation_layer("Relu");
 
-	net.add_dense_layer(10 * 10 * 3, 128);
+	net.add_convolution2D_layer(26, 26, 8, 3, 3, 8, 2, 2);
+	net.add_bias_layer();
+	net.add_activation_layer("Relu");
+	net.add_dropout_layer(0.3f);
+
+	net.add_convolution2D_layer(12, 12, 8, 3, 3, 8);
+	net.add_bias_layer();
+	net.add_activation_layer("Relu");
+	net.add_dropout_layer(0.3f);
+
+	net.add_dense_layer(10 * 10 * 8, 128);
 
 	net.add_activation_layer("Relu");
 	net.add_dense_layer(128, 10);
