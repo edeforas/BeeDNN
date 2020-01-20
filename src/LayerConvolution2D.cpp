@@ -6,7 +6,7 @@
     in the LICENSE.txt file.
 */
 
-//for now: stride=1, no bias (add LayerBias just after this one gives same results), mode ='valid'
+//for now: no bias (add LayerBias just after this one gives same results), mode ='valid'
 
 #include "LayerConvolution2D.h"
 
@@ -35,10 +35,9 @@ LayerConvolution2D::LayerConvolution2D(int iInRows, int iInCols, int iInChannels
 
 	//manage strides
 	if(_iRowStride>1)
-		_iOutRows = (_iOutRows + 1) / _iRowStride;// -(_iRowStride - 1) * (_iOutRows - 1) / 2;
-	
+		_iOutRows = (_iOutRows + 1) / _iRowStride;
 	if (_iColStride > 1)
-		_iOutCols = (_iOutCols + 1) / _iColStride; //-(_iColStride - 1) * (_iOutCols - 1) / 2;
+		_iOutCols = (_iOutCols + 1) / _iColStride;
 
 	LayerConvolution2D::init();
 }

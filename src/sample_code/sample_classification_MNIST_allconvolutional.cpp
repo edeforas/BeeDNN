@@ -1,6 +1,6 @@
 // all convolutional MNIST classification with a conv2d
 // accuracy 99 > % after 20 epochs, 40/epochs
-// conv2d speed not optimized yet, this test is long!
+// conv2d speed is not optimized yet, this test is slow.
 
 #include <iostream>
 #include <chrono>
@@ -37,8 +37,8 @@ int main()
     iEpoch = 0;
 
 	cout << "all convolutional MNIST classification with a conv2d" << endl;
-	cout << "accuracy TBD > % after 10 epochs, TBDs/epochs" << endl;
-	cout << "conv2d speed not optimized yet, this test takes time! " << endl;
+	cout << "accuracy 99 > % after 20 epochs, 40s/epochs" << endl;
+	cout << "conv2d speed is not optimized yet, this test is slow. " << endl;
 
 	//load and normalize MNIST data
     cout << "Loading MNIST database..." << endl;
@@ -51,23 +51,24 @@ int main()
 	mTestImages/= 256.f;
 	mRefImages/= 256.f;
   
+	mRefImages = decimate(mRefImages, 10);
+	mRefLabels = decimate(mRefLabels, 10);
+	mTestImages = decimate(mTestImages, 10);
+	mTestLabels = decimate(mTestLabels, 10);
+
 	//create a all convolutional net:
 	Net net;
-	net.add_convolution2D_layer(28, 28, 1, 3, 3, 8);
+	net.add_convolution2D_layer(28, 28, 1, 3, 3, 4);
+	net.add_bias_layer();
+	net.add_activation_layer("Relu");
+	net.add_convolution2D_layer(26, 26, 4, 3, 3, 5,2,2);
+	net.add_bias_layer();
+	net.add_activation_layer("Relu");
+	net.add_convolution2D_layer(12, 12, 5, 3, 3, 3);
 	net.add_bias_layer();
 	net.add_activation_layer("Relu");
 
-	net.add_convolution2D_layer(26, 26, 8, 3, 3, 8, 2, 2);
-	net.add_bias_layer();
-	net.add_activation_layer("Relu");
-	net.add_dropout_layer(0.3f);
-
-	net.add_convolution2D_layer(12, 12, 8, 3, 3, 8);
-	net.add_bias_layer();
-	net.add_activation_layer("Relu");
-	net.add_dropout_layer(0.3f);
-
-	net.add_dense_layer(10 * 10 * 8, 128);
+	net.add_dense_layer(10 * 10 * 3, 128);
 
 	net.add_activation_layer("Relu");
 	net.add_dense_layer(128, 10);

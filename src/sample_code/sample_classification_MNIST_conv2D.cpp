@@ -57,13 +57,16 @@ int main()
 	Net net;
 	net.add_convolution2D_layer(28, 28, 1, 3, 3, 16);
 	net.add_bias_layer();
+	net.add_activation_layer("Relu");
+
 	net.add_poolmax2D_layer(26, 26, 16, 2, 2);
 	net.add_bias_layer();
 	net.add_activation_layer("Relu");
+	
 	net.add_dense_layer(13 * 13 * 16, 128);
-	//net.add_bias_layer();
 	net.add_activation_layer("Relu");
 	net.add_dense_layer(128, 10);
+
 	net.add_softmax_layer();
 
 	//setup train options
@@ -95,7 +98,7 @@ int main()
 	cout << "Test confusion matrix:" << endl << crTest.mConfMat << endl;
 	
 	//testu function
-	if (crTest.accuracy < 95.f)
+	if (crTest.accuracy < 96.f)
 	{
 		cout << "Test failed! accuracy=" << crTest.accuracy << endl;
 		return -1;
