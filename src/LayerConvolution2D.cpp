@@ -77,7 +77,7 @@ Layer* LayerConvolution2D::clone() const
 void LayerConvolution2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	im2col(mIn, _im2col);
-	mOut = _weight * _im2col;
+	mOut = _weight * (_im2col.transpose());
 	reshape_to_out(mOut);
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -90,7 +90,7 @@ void LayerConvolution2D::backpropagation(const MatrixFloat &mIn,const MatrixFloa
 	MatrixFloat mGradientUnflat = mGradientOut;
 	reshape_from_out(mGradientUnflat);
 
-	_gradientWeight = mGradientUnflat *_im2col.transpose();
+	_gradientWeight = mGradientUnflat *_im2col/*.transpose()*/;
 
 	assert(_gradientWeight.rows() == _weight.rows());
 	assert(_gradientWeight.cols() == _weight.cols());
@@ -110,30 +110,34 @@ void LayerConvolution2D::im2col(const MatrixFloat & mIn, MatrixFloat & mCol)
 {
 	//for now, no optimisations
 	_iSamples = (int)mIn.rows();
-	mCol.resize(_iKernelRows * _iKernelCols*_iInChannels, _iOutRows * _iOutCols* _iSamples);
-
-	for (int iSample = 0; iSample < _iSamples; iSample++)
+	mCol.resize(_iOutRows * _iOutCols* _iSamples,_iKernelRows * _iKernelCols*_iInChannels );
+	
+	for (Index iSample = 0; iSample < _iSamples; iSample++)
 	{
-		for (int iInChannel = 0; iInChannel < _iInChannels; iInChannel++)
+		for (Index iInChannel = 0; iInChannel < _iInChannels; iInChannel++)
 		{
-			for (int iKRow = 0; iKRow < _iKernelRows; iKRow++)
+			for (Index iKRow = 0; iKRow < _iKernelRows; iKRow++)
 			{
-				for (int iKCol = 0; iKCol < _iKernelCols; iKCol++)
+				for (Index iKCol = 0; iKCol < _iKernelCols; iKCol++)
 				{
-					for (int iOutRow = 0; iOutRow < _iOutRows; iOutRow++)
+					for (Index iOutRow = 0; iOutRow < _iOutRows; iOutRow++)
 					{
-						for (int iOutCol = 0; iOutCol < _iOutCols; iOutCol++)
+						for (Index iOutCol = 0; iOutCol < _iOutCols; iOutCol++)
 						{
-							int iRowInPlane = iOutRow*_iRowStride+iKRow;
-							int iColInPlane = iOutCol*_iColStride+iKCol;
-
+							Index iRowInPlane = iOutRow*_iRowStride+iKRow;
+							Index iColInPlane = iOutCol*_iColStride+iKCol;
+							
 							assert(iRowInPlane >=0);
 							assert(iColInPlane >=0);
 							assert(iRowInPlane < _iInRows);
 							assert(iColInPlane < _iInCols);
-
+							
 							float f = mIn(iSample, iInChannel*_iInRows*_iInCols + iRowInPlane*_iInCols+ iColInPlane);
-							mCol(iInChannel*_iKernelRows * _iKernelCols + iKRow * _iKernelCols + iKCol, iSample*_iOutCols*_iOutRows + iOutRow*_iOutCols + iOutCol) = f;
+							mCol(
+								iSample*_iOutCols*_iOutRows + iOutRow * _iOutCols + iOutCol
+								,
+								iInChannel*_iKernelRows * _iKernelCols + iKRow * _iKernelCols + iKCol
+							) = f;
 						}
 					}
 				}
@@ -146,20 +150,20 @@ void LayerConvolution2D::col2im(const MatrixFloat & mCol, MatrixFloat & mIm)
 {
 	//for now, no optimizations
 	mIm.setZero(_iSamples, _iInChannels* _iInRows * _iInCols);
-	for (int iSample = 0; iSample < _iSamples; iSample++)
+	for (Index iSample = 0; iSample < _iSamples; iSample++)
 	{
-		for (int iInChannel = 0; iInChannel < _iInChannels; iInChannel++)
+		for (Index iInChannel = 0; iInChannel < _iInChannels; iInChannel++)
 		{
-			for (int iKRow = 0; iKRow < _iKernelRows; iKRow++)
+			for (Index iKRow = 0; iKRow < _iKernelRows; iKRow++)
 			{
-				for (int iKCol = 0; iKCol < _iKernelCols; iKCol++)
+				for (Index iKCol = 0; iKCol < _iKernelCols; iKCol++)
 				{
-					for (int iOutRow = 0; iOutRow < _iOutRows; iOutRow++)
+					for (Index iOutRow = 0; iOutRow < _iOutRows; iOutRow++)
 					{
-						for (int iOutCol = 0; iOutCol < _iOutCols; iOutCol++)
+						for (Index iOutCol = 0; iOutCol < _iOutCols; iOutCol++)
 						{
-							int iRowInPlane = iOutRow*_iRowStride + iKRow;
-							int iColInPlane = iOutCol*_iColStride + iKCol;
+							Index iRowInPlane = iOutRow*_iRowStride + iKRow;
+							Index iColInPlane = iOutCol*_iColStride + iKCol;
 
 							assert(iRowInPlane >= 0);
 							assert(iColInPlane >= 0);
@@ -188,12 +192,12 @@ void LayerConvolution2D::reshape_to_out(MatrixFloat & mOut)
 	mOut.resize(_iSamples * _iOutChannels, _iOutRows * _iOutCols );
 	_tempImg = mOut; //for now, use a copy
 
-	for (int iOutChannel = 0; iOutChannel < _iOutChannels; iOutChannel++)
+	for (Index iOutChannel = 0; iOutChannel < _iOutChannels; iOutChannel++)
 	{
-		for (int iSample = 0; iSample < _iSamples; iSample++)
+		for (Index iSample = 0; iSample < _iSamples; iSample++)
 		{
-			int iOrigRow = iSample+ iOutChannel* _iSamples;
-			int iDestRow = iOutChannel+ iSample* _iOutChannels;
+			Index iOrigRow = iSample+ iOutChannel* _iSamples;
+			Index iDestRow = iOutChannel+ iSample* _iOutChannels;
 
 			mOut.row(iDestRow) = _tempImg.row(iOrigRow);
 		}
@@ -210,12 +214,12 @@ void LayerConvolution2D::reshape_from_out(MatrixFloat & mOut)
 
 	_tempImg = mOut; //for now, use a copy
 
-	for (int iOutChannel = 0; iOutChannel < _iOutChannels; iOutChannel++)
+	for (Index iOutChannel = 0; iOutChannel < _iOutChannels; iOutChannel++)
 	{
-		for (int iSample = 0; iSample < _iSamples; iSample++)
+		for (Index iSample = 0; iSample < _iSamples; iSample++)
 		{
-			int iOrigRow = iSample + iOutChannel * _iSamples;
-			int iDestRow = iOutChannel + iSample * _iOutChannels;
+			Index iOrigRow = iSample + iOutChannel * _iSamples;
+			Index iDestRow = iOutChannel + iSample * _iOutChannels;
 
 			mOut.row(iOrigRow) = _tempImg.row(iDestRow);
 		}
