@@ -1,4 +1,5 @@
 #include <iostream>
+#include <chrono>
 using namespace std;
 
 #include "LayerConvolution2D.h"
@@ -249,9 +250,43 @@ void forward_conv2d_stride2_backprop_sgd()
 	cout << "Backprop Input gradient :" << endl;
 	cout << toString(mGradientIn) << endl << endl;
 }
+
+/////////////////////////////////////////////////////////////////
+void forward_time()
+{
+	cout << "Forward conv2d time estimation" << endl;
+
+	int iNbSamples = 32;
+	int iInRows = 64;
+	int iInCols = 64;
+	int iInChannels = 16;
+
+	int iKernelRows = 3;
+	int iKernelCols = 3;
+	int iOutChannels = 32;
+	int iNbConv = 10;
+
+	MatrixFloat mIn;
+	mIn.setRandom(iNbSamples, iInRows*iInCols*iInChannels);
+
+	MatrixFloat mOut;
+
+	LayerConvolution2D conv2d(iInRows, iInCols, iInChannels, iKernelRows, iKernelCols, iOutChannels);
+
+	chrono::steady_clock::time_point start = chrono::steady_clock::now();
+	for(int i=0;i< iNbConv;i++)
+		conv2d.forward(mIn, mOut);
+	chrono::steady_clock::time_point end = chrono::steady_clock::now();
+
+	auto delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+	
+	cout << "Time elapsed: " << delta << " ms" << endl;
+}
+
 /////////////////////////////////////////////////////////////////
 int main()
 {
+	/*
 	im2col_col2im();
 	simple_image_conv2d();
 	batch_conv2d();
@@ -261,5 +296,8 @@ int main()
 	forward_conv2d_backprop_sgd();
 	simple_image_conv2d_stride2();
 	forward_conv2d_stride2_backprop_sgd();
+	*/
+	forward_time();
+
 }
 /////////////////////////////////////////////////////////////////
