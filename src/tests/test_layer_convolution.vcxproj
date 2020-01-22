@@ -173,12 +173,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Layer.cpp" />
+    <ClCompile Include="..\LayerChannelBias.cpp" />
     <ClCompile Include="..\LayerConvolution2D.cpp" />
     <ClCompile Include="..\Matrix.cpp" />
     <ClCompile Include="test_layer_convolution.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Layer.h" />
+    <ClInclude Include="..\LayerChannelBias.h" />
     <ClInclude Include="..\LayerConvolution2D.h" />
     <ClInclude Include="..\Matrix.h" />
   </ItemGroup>

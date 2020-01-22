@@ -44,7 +44,8 @@ public:
 	
 	void add_poolmax2D_layer(int iInRow, int iInCols, int iInChannels, int iRowFactor = 2, int iColFactor = 2);
 	void add_convolution2D_layer(int iInRows, int iInCols, int iInChannels, int iKernelRows, int iKernelCols, int iOutChannels, int iRowStride=1, int iColStride=1);
-	
+	void add_channel_bias(int iInRows, int iInCols, int iInChannels);
+
     void set_input_size(int iInputSize);
     int input_size() const;
 
