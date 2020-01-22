@@ -137,7 +137,7 @@ void Net::add_convolution2D_layer(int iInRows, int iInCols, int iInChannels, int
 	_layers.push_back(new LayerConvolution2D(iInRows, iInCols, iInChannels, iKernelRows, iKernelCols, iOutChannels, iRowStride, iColStride));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_channel_bias(int iInRows, int iInCols, int iInChannels)
+void Net::add_channel_bias_layer(int iInRows, int iInCols, int iInChannels)
 {
 	_layers.push_back(new LayerChannelBias(iInRows, iInCols, iInChannels));
 }
