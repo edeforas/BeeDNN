@@ -32,7 +32,7 @@ void LayerGaussianDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 	{
 		_mask.resize(1, mIn.size());
 
-		for (int i = 0; i < _mask.size(); i++)
+		for (Index i = 0; i < _mask.size(); i++)
 			_mask(0, i) = _distNormal(randomEngine());
 		
 		mOut = mIn * _mask.asDiagonal();

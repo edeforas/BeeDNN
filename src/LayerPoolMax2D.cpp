@@ -51,24 +51,24 @@ void LayerPoolMax2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 		_mMaxIndex.resizeLike(mOut); //index to selected input max data
 
 	//not optimized yet
-	for (int channel = 0; channel < _iInChannels; channel++)
+	for (Index channel = 0; channel < _iInChannels; channel++)
 	{
-		for (int l = 0; l < mIn.rows(); l++)
+		for (Index l = 0; l < mIn.rows(); l++)
 		{
 			const float* lIn = mIn.row(l).data()+ channel * _iInPlaneSize;
 			float* lOut = mOut.row(l).data()+channel* _iOutPlaneSize;
-			for (int r = 0; r < _iOutRows; r++)
+			for (Index r = 0; r < _iOutRows; r++)
 			{
-				for (int c = 0; c < _iOutCols; c++)
+				for (Index c = 0; c < _iOutCols; c++)
 				{
 					float fMax = -1.e38f;
-					int iPosIn = -1;
+					Index iPosIn = -1;
 					
-					for (int ri = r * _iRowFactor; ri < r*_iRowFactor + _iRowFactor; ri++)
+					for (Index ri = r * _iRowFactor; ri < r*_iRowFactor + _iRowFactor; ri++)
 					{
-						for (int ci = c * _iColFactor; ci < c*_iColFactor + _iColFactor; ci++)
+						for (Index ci = c * _iColFactor; ci < c*_iColFactor + _iColFactor; ci++)
 						{
-							int iIndex = ri * _iInCols + ci; //flat index in plane
+							Index iIndex = ri * _iInCols + ci; //flat index in plane
 							float fSample = lIn[iIndex];
 
 							if (fSample > fMax)
@@ -79,7 +79,7 @@ void LayerPoolMax2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 						}
 					}
 
-					int iIndexOut = r * _iOutCols + c;
+					Index iIndexOut = r * _iOutCols + c;
 					lOut[iIndexOut] = fMax;
 					if (_bTrainMode)
 						_mMaxIndex(l, channel*_iOutPlaneSize +iIndexOut) = (float)iPosIn;

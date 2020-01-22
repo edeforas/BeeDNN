@@ -12,23 +12,23 @@
 #include <cassert>
 
 ///////////////////////////////////////////////////////////////////////////////
-ClassificationResult ConfusionMatrix::compute(const MatrixFloat& mRef,const MatrixFloat& mTest,int iNbClass)
+ClassificationResult ConfusionMatrix::compute(const MatrixFloat& mRef,const MatrixFloat& mTest, Index iNbClass)
 {
 	assert(mRef.rows() == mTest.rows());
 
     if(iNbClass==0)
-        iNbClass=(int)mRef.maxCoeff()+1; //guess the number of class
+        iNbClass=(Index)mRef.maxCoeff()+1; //guess the number of class
 
     ClassificationResult cr;
     cr.mConfMat.setZero(iNbClass, iNbClass);
 
-    for(unsigned int i=0;i<(unsigned int)mRef.rows();i++)
+    for(Index i=0;i<mRef.rows();i++)
     {
         //threshold label
-        int iLabelPredicted=(int)(std::roundf(mTest(i)));
-		iLabelPredicted =std::min(iLabelPredicted,iNbClass-1);
-		iLabelPredicted =std::max(iLabelPredicted,0);
-        cr.mConfMat((unsigned int)mRef(i), iLabelPredicted)++;
+		Index iLabelPredicted=(Index)(std::roundf(mTest(i)));
+		iLabelPredicted =std::min<Index>(iLabelPredicted,iNbClass-1);
+		iLabelPredicted =std::max<Index>(iLabelPredicted,0);
+        cr.mConfMat((Index)mRef(i), iLabelPredicted)++;
     }
 
     //compute accuracy in percent
