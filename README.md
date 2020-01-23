@@ -6,14 +6,14 @@ The API is clear and simple, the goal is that everybody can contribute, test, an
 It can run on small devices. It is even possible to learn or do knowledge transfer directly on the device.
 Please see at: https://github.com/edeforas/BeeDNN/issues for contributing ideas.
 No dependencies needed, every algorithm rewritten in C++ from scratch.
-To increase speed, ones can use the Eigen library (http://eigen.tuxfamily.org) instead of the internal matrix library.
+To increase speed, ones can choose the Eigen library (http://eigen.tuxfamily.org), instead of the internal matrix library.
 There is also a GUI application (in Qt) for live tests.
 
 Layers:
 - Dense, with or without bias
 - Dropout, GaussianNoise, GaussianDropout, UniformNoise
 - Gain, GlobalGain, Bias, GlobalBias
-- Convolution2D, PoolMax2D
+- Convolution2D, PoolMax2D, ChannelBias
 - Softmax
 - PRelu
 - Layers and activations are decoupled and can be in any orders

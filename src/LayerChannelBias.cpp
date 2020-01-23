@@ -40,6 +40,8 @@ void LayerChannelBias::init()
 void LayerChannelBias::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
     mOut = mIn.array() + _weight(0);
+	Index iNbSamples = mIn.rows();
+	//mOut=channelWiseAdd(mIn,iNbSamples,_iNbChannels,_iNbRows,_iNbCols,_weight); ??
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerChannelBias::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
@@ -47,6 +49,8 @@ void LayerChannelBias::backpropagation(const MatrixFloat &mIn,const MatrixFloat 
 	(void)mIn;
 
 	_gradientWeight(0) = mGradientOut.mean();
+	Index iNbSamples = mGradientOut.rows();
+	//_gradientWeight=channelMean(mGradientOut,iNbSamples,_iNbChannels,_iNbRows,_iNbCols); ??
 	
 	if (_bFirstLayer)
 		return;
