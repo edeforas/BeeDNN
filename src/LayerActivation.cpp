@@ -12,7 +12,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerActivation::LayerActivation(const string& sActivation):
-    Layer(0,0,sActivation)
+    Layer(sActivation)
 {
     _pActivation=get_activation(sActivation);
 

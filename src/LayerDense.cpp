@@ -11,10 +11,12 @@
 #include <cmath> // for sqrt
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerDense::LayerDense(int iInSize, int iOutSize, bool bHasBias) :
-    Layer(iInSize , iOutSize, "Dense"),
+LayerDense::LayerDense(Index iInputSize, Index iOutputSize, bool bHasBias) :
+    Layer( "Dense"),
     _bHasBias(bHasBias)
 {
+	_iInputSize = iInputSize;
+	_iOutputSize = iOutputSize;
     LayerDense::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -23,25 +25,25 @@ LayerDense::~LayerDense()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerDense::clone() const
 {
-    LayerDense* pLayer=new LayerDense(_iInSize,_iOutSize,_bHasBias);
+    LayerDense* pLayer=new LayerDense(_iInputSize, _iOutputSize,_bHasBias);
     pLayer->_weight=_weight;
     return pLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDense::init()
 {
-	assert(_iInSize > 0);
-	assert(_iOutSize > 0);
+	assert(_iInputSize > 0);
+	assert(_iOutputSize > 0);
 	
-	_weight.resize(_iInSize+(_bHasBias?1:0),_iOutSize);
+	_weight.resize(_iInputSize +(_bHasBias?1:0), _iOutputSize);
 
     //Xavier uniform initialization
-    float a =sqrtf(6.f/(_iInSize+_iOutSize));
+    float a =sqrtf(6.f/(_iInputSize + _iOutputSize));
     _weight.setRandom();
     _weight*=a;
 
     if (_bHasBias)
-        _weight.row(_iInSize).setZero();
+        _weight.row(_iInputSize).setZero();
 
     Layer::init();
 }
@@ -49,7 +51,7 @@ void LayerDense::init()
 void LayerDense::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
     if (_bHasBias)
-        mOut = rowWiseAdd(mIn *_weight.topRows(_iInSize) , _weight.row(_iInSize)); //split _weight in [weightnobias, bias] in computation
+        mOut = rowWiseAdd(mIn *_weight.topRows(_iInputSize) , _weight.row(_iInputSize)); //split _weight in [weightnobias, bias] in computation
     else
         mOut = mIn * _weight; //todo use W*x instead of x*W ?
 }
@@ -64,7 +66,7 @@ void LayerDense::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGrad
 		if (_bFirstLayer)
 			return;
 
-		mGradientIn = mGradientOut * _weight.topRows(_iInSize).transpose();
+		mGradientIn = mGradientOut * _weight.topRows(_iInputSize).transpose();
     }
     else
     {
@@ -82,5 +84,15 @@ void LayerDense::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGrad
 bool LayerDense::has_bias() const
 {
     return _bHasBias;
+}
+///////////////////////////////////////////////////////////////
+Index LayerDense::input_size() const
+{
+	return _iInputSize;
+}
+///////////////////////////////////////////////////////////////
+Index LayerDense::output_size() const
+{
+	return _iOutputSize;
 }
 ///////////////////////////////////////////////////////////////

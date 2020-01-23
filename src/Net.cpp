@@ -102,7 +102,7 @@ void Net::add_softmax_layer()
     _layers.push_back(new LayerSoftmax());
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_dense_layer(int inSize,int outSize,bool bHasBias)
+void Net::add_dense_layer(Index inSize,Index outSize,bool bHasBias)
 {
     _layers.push_back(new LayerDense(inSize,outSize, bHasBias));
 }

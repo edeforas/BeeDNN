@@ -15,8 +15,11 @@
 class LayerDense : public Layer
 {
 public:
-    LayerDense(int iInSize,int iOutSize,bool bHasBias);
+    LayerDense(Index iInputSize,Index iOutputSize,bool bHasBias);
     virtual ~LayerDense() override;
+
+	Index input_size() const;
+	Index output_size() const;
 
     virtual Layer* clone() const override;
 
@@ -29,6 +32,7 @@ public:
 
 private:
     bool _bHasBias;
+	Index _iInputSize, _iOutputSize;
 };
 
 #endif

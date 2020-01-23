@@ -9,9 +9,7 @@
 #include "Layer.h"
 
 ////////////////////////////////////////////////////////////////
-Layer::Layer(int iInSize, int iOutSize,const string& sType):
-_iInSize(iInSize),
-_iOutSize(iOutSize),
+Layer::Layer(const string& sType):
 _sType(sType)
 { 
 	_bTrainMode = false;
@@ -28,16 +26,7 @@ string Layer::type() const
 {
     return _sType;
 }
-///////////////////////////////////////////////////////////////
-int Layer::in_size() const
-{
-    return _iInSize;
-}
-///////////////////////////////////////////////////////////////
-int Layer::out_size() const
-{
-    return _iOutSize;
-}
+
 ///////////////////////////////////////////////////////////////
 void Layer::set_first_layer(bool bFirstLayer)
 {

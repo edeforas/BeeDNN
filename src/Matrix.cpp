@@ -319,3 +319,37 @@ void setRandomUniform(MatrixFloat& m, float fMin, float fMax)
 		m(i) = dis(randomEngine());
 }
 ///////////////////////////////////////////////////////////////////////////
+void channelWiseAdd(MatrixFloat& mIn, Index iNbSamples, Index iNbChannels, Index iNbRows, Index iNbCols, const MatrixFloat& weight)
+{
+	assert(weight.size() == iNbChannels);
+	assert(mIn.rows() == iNbSamples);
+	assert(mIn.size() == iNbSamples * iNbChannels*iNbRows*iNbCols);
+
+	//todo optimize a lot
+	for (Index iS = 0; iS < iNbSamples; iS++)
+		for (Index iH = 0; iH < iNbChannels; iH++)
+			for (Index iR = 0; iR < iNbRows; iR++)
+				for (Index iC = 0; iC < iNbCols; iC++)
+					mIn(iS, iH*iNbRows*iNbCols + iR * iNbCols + iC) += weight(iH);
+}
+///////////////////////////////////////////////////////////////////////////
+MatrixFloat channelWiseMean(const MatrixFloat& m, Index iNbSamples, Index iNbChannels, Index iNbRows, Index iNbCols)
+{
+	assert(m.rows() == iNbSamples);
+	assert(m.size() == iNbSamples * iNbChannels*iNbRows*iNbCols);
+
+	MatrixFloat mMean;
+	mMean.setZero(1, iNbChannels);
+
+	//todo optimize a lot
+	for (Index iS = 0; iS < iNbSamples; iS++)
+		for (Index iH = 0; iH < iNbChannels; iH++)
+			for (Index iR = 0; iR < iNbRows; iR++)
+				for (Index iC = 0; iC < iNbCols; iC++)
+					mMean(0, iH) += m(iS, iH*iNbRows*iNbCols + iR * iNbCols + iC);
+					
+	mMean *= (1.f / iNbSamples * iNbRows*iNbCols);
+
+	return mMean;
+}
+///////////////////////////////////////////////////////////////////////////

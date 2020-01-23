@@ -10,14 +10,14 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerChannelBias::LayerChannelBias(Index iNbRows,Index iNbCols,Index iNbChannels) :
-    Layer(0, 0, "ChannelBias")
+    Layer("ChannelBias")
 {
 	_iNbRows=iNbRows;
 	_iNbCols=iNbCols;
 	_iNbChannels=iNbChannels;
 	
-    _weight.resize(1,_iNbChannels);
-	_gradientWeight.resize(1,_iNbChannels);
+    _weight.setZero(1,_iNbChannels);
+	_gradientWeight.setZero(1,_iNbChannels);
     LayerChannelBias::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -39,19 +39,18 @@ void LayerChannelBias::init()
 ///////////////////////////////////////////////////////////////////////////////
 void LayerChannelBias::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
-    mOut = mIn.array() + _weight(0);
+	mOut = mIn;
 	Index iNbSamples = mIn.rows();
-	//mOut=channelWiseAdd(mIn,iNbSamples,_iNbChannels,_iNbRows,_iNbCols,_weight); ??
+	channelWiseAdd(mOut,iNbSamples,_iNbChannels,_iNbRows,_iNbCols, _weight);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerChannelBias::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
 	(void)mIn;
 
-	_gradientWeight(0) = mGradientOut.mean();
 	Index iNbSamples = mGradientOut.rows();
-	//_gradientWeight=channelMean(mGradientOut,iNbSamples,_iNbChannels,_iNbRows,_iNbCols); ??
-	
+	_gradientWeight=channelWiseMean(mGradientOut,iNbSamples,_iNbChannels,_iNbRows,_iNbCols);
+
 	if (_bFirstLayer)
 		return;
 

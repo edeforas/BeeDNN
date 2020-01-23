@@ -12,7 +12,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerGaussianDropout::LayerGaussianDropout(float fProba):
-    Layer(0,0,"GaussianDropout"),
+    Layer("GaussianDropout"),
     _fProba(fProba),
 	_fStdev( sqrtf(_fProba / (1.f - _fProba))),
 	_distNormal(1.f, _fStdev)

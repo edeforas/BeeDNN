@@ -10,7 +10,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerGlobalBias::LayerGlobalBias() :
-    Layer(0, 0, "GlobalBias")
+    Layer("GlobalBias")
 {
     _weight.resize(1,1);
 	_gradientWeight.resize(1, 1);

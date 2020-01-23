@@ -12,7 +12,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerConvolution2D::LayerConvolution2D(int iInRows, int iInCols, int iInChannels, int iKernelRows, int iKernelCols, int iOutChannels, int iRowStride, int iColStride) :
-    Layer(iInRows*iInCols*iInChannels, 0 , "Convolution2D")
+    Layer("Convolution2D")
 {
 	_iInRows = iInRows;
 	_iInCols = iInCols;

@@ -131,6 +131,10 @@ void FrameNetwork::set_net(Net* pNet)
         string sType=l->type();
         if(sType=="Dense")
         {
+			LayerDense* ld = (LayerDense*)l;
+			ui->twNetwork->setItem(i, 1, new QTableWidgetItem(to_string(ld->input_size()).c_str()));
+			ui->twNetwork->setItem(i, 2, new QTableWidgetItem(to_string(ld->output_size()).c_str()));
+
             if(((LayerDense*)l)->has_bias())
                 sType="DenseAndBias";
             else
@@ -162,13 +166,7 @@ void FrameNetwork::set_net(Net* pNet)
             float fRate=((LayerDropout*)l)->get_rate();
             ui->twNetwork->setItem(i,3,new QTableWidgetItem(to_string(fRate).c_str()));
         }
-
-		if (l->in_size())
-			ui->twNetwork->setItem(i, 1, new QTableWidgetItem(to_string(l->in_size()).c_str()));
-
-		if (l->out_size())
-			ui->twNetwork->setItem(i, 2, new QTableWidgetItem(to_string(l->out_size()).c_str()));
-
+	
 		// overwrite cells in case of 2d
 		if (sType == "PoolMax2D")
 		{

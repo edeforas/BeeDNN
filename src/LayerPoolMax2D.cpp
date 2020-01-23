@@ -10,7 +10,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerPoolMax2D::LayerPoolMax2D(int iInRows, int iInCols, int iInChannels, int iRowFactor, int iColFactor) :
-    Layer(iInChannels*iInRows*iInCols, iInChannels*iInRows*iInCols/(iRowFactor*iColFactor), "PoolMax2D")
+    Layer("PoolMax2D")
 {
 	_iInRows = iInRows;
 	_iInCols = iInCols;

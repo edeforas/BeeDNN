@@ -635,6 +635,10 @@ Index argmax(const MatrixFloat& m);
 void rowsArgmax(const MatrixFloat& m, MatrixFloat& argM); //compute the argmax row by row
 const MatrixFloat addColumnOfOne(const MatrixFloat& m);
 
+//4D tensor functions, access order in memory is: sample, channel, row , column
+void channelWiseAdd(MatrixFloat& mIn,Index iNbSamples,Index iNbChannels,Index iNbRows,Index iNbCols,const MatrixFloat & weight);
+MatrixFloat channelWiseMean(const MatrixFloat& m, Index iNbSamples, Index iNbChannels, Index iNbRows, Index iNbCols);
+
 string toString(const MatrixFloat& m);
 const MatrixFloat fromFile(const string& sFile);
 const MatrixFloat fromString(const string& s);

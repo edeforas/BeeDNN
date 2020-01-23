@@ -10,7 +10,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerPRelu::LayerPRelu() :
-    Layer(0 , 0, "PRelu")
+    Layer("PRelu")
 {
     LayerPRelu::init();
 }

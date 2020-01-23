@@ -26,7 +26,7 @@ public:
 	void clear();
 	void init();
 
-    void add_dense_layer(int inSize, int outSize, bool bHasBias=true);
+    void add_dense_layer(Index inSize, Index outSize, bool bHasBias=true);
 	void add_activation_layer(string sType);
 	void add_prelu_layer();
 	void add_softmax_layer();

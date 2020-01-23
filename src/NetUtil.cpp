@@ -50,15 +50,12 @@ void write(const Net& net,string & s)
 
         ss << endl;
         ss << "Layer" << i+1 << ".type=" << layer->type() << endl;
-        if(layer->in_size())
-            ss << "Layer" << i+1 << ".inSize=" << layer->in_size() << endl;
-        if(layer->out_size())
-            ss << "Layer" << i+1 << ".outSize=" << layer->out_size() << endl;
-
         if(layer->type()=="Dense")
         {
             LayerDense* l=static_cast<LayerDense*>(layer);
             ss << "Layer" << i+1 << ".hasBias=" << (l->has_bias()?1:0) << endl;
+			ss << "Layer" << i + 1 << ".inputSize=" << l->input_size() << endl;
+			ss << "Layer" << i + 1 << ".outputSize=" << l->output_size() << endl;
             ss << "Layer" << i+1 << ".weight=" << endl;
             ss << toString(layer->weights()) << endl;
         }
@@ -168,27 +165,20 @@ void read(const string& s,Net& net)
 
         string sType=find_key(s,sLayer+".type");
 
-        string sInSize=find_key(s,sLayer+".inSize");
-        string sOutSize=find_key(s,sLayer+".outSize");
-
-        int iInSize=0;
-        int iOutSize=0;
-
-        if(!sInSize.empty())
-            iInSize=stoi(sInSize);
-
-        if(!sOutSize.empty())
-            iOutSize=stoi(sOutSize);
-
         if(sType=="Dense")
-        {
-            string sHasBias=find_key(s,sLayer+".hasBias");
+        {        
+			string sInputSize=find_key(s,sLayer+".inputSize");
+			string sOutputSize=find_key(s,sLayer+".outputSize");
+            Index iInputSize=stoi(sInputSize); 
+			Index iOutputSize=stoi(sOutputSize);
+			
+			string sHasBias=find_key(s,sLayer+".hasBias");
             bool bHasBias=sHasBias!="0";
-            net.add_dense_layer(iInSize,iOutSize,bHasBias);
+            net.add_dense_layer(iInputSize,iOutputSize,bHasBias);
 
             string sWeight=find_key(s,sLayer+".weight");
             MatrixFloat mf=fromString(sWeight);
-            mf.resize(iInSize+(bHasBias?1:0),iOutSize);
+            mf.resize(iInputSize+(bHasBias?1:0),iOutputSize);
             net.layer(net.size()-1).weights()=mf;
         }
 
@@ -245,7 +235,7 @@ void read(const string& s,Net& net)
 			net.add_prelu_layer();
 			string sWeight = find_key(s, sLayer + ".weight");
 			MatrixFloat mf = fromString(sWeight);
-			mf.resize(1,iInSize);
+			mf.resize(1, mf.size());
 			net.layer(net.size() - 1).weights() = mf;
 		}
 

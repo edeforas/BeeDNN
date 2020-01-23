@@ -12,7 +12,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerGaussianNoise::LayerGaussianNoise(float fStd):
-    Layer(0,0,"GaussianNoise"),
+    Layer("GaussianNoise"),
     _fStd(fStd),
 	_distNormal(0.f, fStd)
 { }

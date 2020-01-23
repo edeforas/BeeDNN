@@ -10,7 +10,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerUniformNoise::LayerUniformNoise(float fNoise):
-    Layer(0,0,"UniformNoise"),
+    Layer("UniformNoise"),
     _fNoise(fNoise),
 	_distUniform(-fNoise, fNoise)
 { }
