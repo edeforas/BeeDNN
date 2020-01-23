@@ -18,6 +18,7 @@
 #include "LayerGain.h"
 #include "LayerGlobalBias.h"
 #include "LayerBias.h"
+#include "LayerChannelBias.h"
 #include "LayerSoftmax.h"
 #include "LayerUniformNoise.h"
 #include "LayerGaussianNoise.h"
@@ -78,6 +79,12 @@ void write(const Net& net,string & s)
         {
             LayerGlobalBias* l=static_cast<LayerGlobalBias*>(layer);
             ss << "Layer" << i+1 << ".globalBias=" << l->weights()(0) << endl;
+        }
+
+		else if(layer->type()=="ChannelBias")
+        {
+            LayerChannelBias* l=static_cast<LayerChannelBias*>(layer);
+            ss << "Layer" << i+1 << ".channelBias=" << toString(l->weights()) << endl;
         }
 
 		else if (layer->type() == "Bias")
@@ -211,6 +218,14 @@ void read(const string& s,Net& net)
             net.layer(net.size() - 1).weights() = mf;
         }
 
+		else if (sType == "ChannelBias")
+		{
+			string sWeight = find_key(s, sLayer + ".channelBias");
+			MatrixFloat mf = fromString(sWeight);
+			net.add_bias_layer();
+			net.layer(net.size() - 1).weights() = mf;
+		}
+		
 		else if (sType == "Bias")
 		{
 			string sWeight = find_key(s, sLayer + ".bias");

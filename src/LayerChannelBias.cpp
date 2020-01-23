@@ -16,8 +16,8 @@ LayerChannelBias::LayerChannelBias(Index iNbRows,Index iNbCols,Index iNbChannels
 	_iNbCols=iNbCols;
 	_iNbChannels=iNbChannels;
 	
-    _weight.resize(_iNbChannels,1);
-	_gradientWeight.resize(_iNbChannels, 1);
+    _weight.resize(1,_iNbChannels);
+	_gradientWeight.resize(1,_iNbChannels);
     LayerChannelBias::init();
 }
 ///////////////////////////////////////////////////////////////////////////////

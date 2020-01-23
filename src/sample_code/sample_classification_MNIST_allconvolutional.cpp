@@ -54,16 +54,16 @@ int main()
 	//create a all convolutional net:
 	Net net;
 	net.add_convolution2D_layer(28, 28, 1, 3, 3, 8);
-	net.add_bias_layer();
+	net.add_channel_bias_layer(26,26,8);
 	net.add_activation_layer("Relu");
 
 	net.add_convolution2D_layer(26, 26, 8, 3, 3, 8, 2, 2);
-	net.add_bias_layer();
+	net.add_channel_bias_layer(12,12,8);
 	net.add_activation_layer("Relu");
 	net.add_dropout_layer(0.3f);
 
 	net.add_convolution2D_layer(12, 12, 8, 3, 3, 8);
-	net.add_bias_layer();
+	net.add_channel_bias_layer(10,10,8);
 	net.add_activation_layer("Relu");
 	net.add_dropout_layer(0.3f);
 

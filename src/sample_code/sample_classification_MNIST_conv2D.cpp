@@ -56,11 +56,11 @@ int main()
 	//create simple toy convolution net:
 	Net net;
 	net.add_convolution2D_layer(28, 28, 1, 3, 3, 16);
-	net.add_bias_layer();
+	net.add_channel_bias_layer(26,26,16);
 	net.add_activation_layer("Relu");
 
 	net.add_poolmax2D_layer(26, 26, 16, 2, 2);
-	net.add_bias_layer();
+	net.add_channel_bias_layer(13,13,16);
 	net.add_activation_layer("Relu");
 	
 	net.add_dense_layer(13 * 13 * 16, 128);
