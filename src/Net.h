@@ -26,7 +26,7 @@ public:
 	void clear();
 	void init();
 
-    void add_dense_layer(int inSize, int outSize, bool bHasBias=true);
+    void add_dense_layer(Index inSize, Index outSize, bool bHasBias=true);
 	void add_activation_layer(string sType);
 	void add_prelu_layer();
 	void add_softmax_layer();
@@ -44,7 +44,8 @@ public:
 	
 	void add_poolmax2D_layer(int iInRow, int iInCols, int iInChannels, int iRowFactor = 2, int iColFactor = 2);
 	void add_convolution2D_layer(int iInRows, int iInCols, int iInChannels, int iKernelRows, int iKernelCols, int iOutChannels, int iRowStride=1, int iColStride=1);
-	
+	void add_channel_bias_layer(int iInRows, int iInCols, int iInChannels);
+
     void set_input_size(int iInputSize);
     int input_size() const;
 

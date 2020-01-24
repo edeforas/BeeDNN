@@ -10,7 +10,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerUniformNoise::LayerUniformNoise(float fNoise):
-    Layer(0,0,"UniformNoise"),
+    Layer("UniformNoise"),
     _fNoise(fNoise),
 	_distUniform(-fNoise, fNoise)
 { }
@@ -29,7 +29,7 @@ void LayerUniformNoise::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 	{
 		mOut.resize(mIn.rows(), mIn.cols());
 
-		for (int i = 0; i < mOut.size(); i++)
+		for (Index i = 0; i < mOut.size(); i++)
 			mOut(i) = mIn(i) + _distUniform(randomEngine());
 	}
 	else

@@ -15,7 +15,7 @@
 class LayerConvolution2D : public Layer
 {
 public:
-	LayerConvolution2D(int iInRows, int iInCols,int iInChannels, int iKernelRows, int iKernelCols,int iOutChannels,int iRowsStride=1, int iColStride=1);
+	LayerConvolution2D(int iInRows, int iInCols,int iInChannels, int iKernelRows, int iKernelCols,int iOutChannels,int iRowStride=1, int iColStride=1);
     virtual ~LayerConvolution2D() override;
 
 	void get_params(int& iInRows, int& iInCols,int& iInChannels, int& iKernelRows, int& iKernelCols,int& iOutChannels) const;

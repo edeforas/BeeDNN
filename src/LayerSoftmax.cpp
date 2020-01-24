@@ -12,7 +12,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerSoftmax::LayerSoftmax():
-    Layer(0,0,"Softmax")
+    Layer("Softmax")
 { }
 ///////////////////////////////////////////////////////////////////////////////
 LayerSoftmax::~LayerSoftmax()
@@ -28,7 +28,7 @@ void LayerSoftmax::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 	MatrixFloat S;
 	mOut=mIn;
 
-	for (int r = 0; r < mOut.rows(); r++)// todo simplify and optimize
+	for (Index r = 0; r < mOut.rows(); r++)// todo simplify and optimize
 	{
 		S = mOut.row(r); 
 		S.array() -= S.maxCoeff(); //remove max
@@ -46,14 +46,14 @@ void LayerSoftmax::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGr
     MatrixFloat S;
 	mGradientIn.resizeLike(mGradientOut);
 
-	for (int r = 0; r < mIn.rows(); r++) // todo simplify and optimize
+	for (Index r = 0; r < mIn.rows(); r++) // todo simplify and optimize
 	{
 		S = mIn.row(r);
 		S.array() -= S.maxCoeff(); //remove max
 		S = S.array().exp();
 
 		float s = S.sum();
-		for (int c = 0; c < S.cols(); c++)
+		for (Index c = 0; c < S.cols(); c++)
 		{
 			float expx = S(c);
 			mGradientIn(r, c) = mGradientOut(r, c)*(expx*(s-expx)) / (s*s);

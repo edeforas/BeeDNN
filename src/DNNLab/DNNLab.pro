@@ -17,8 +17,6 @@ CONFIG( debug, debug|release ) {
 }
 
 
-
-
 #eigen (optional)
 DEFINES+= "USE_EIGEN"
 INCLUDEPATH += $$(EIGEN_PATH)
@@ -49,6 +47,7 @@ SOURCES += \
     ../LayerGlobalGain.cpp \
     ../LayerGain.cpp \
     ../LayerGlobalBias.cpp \
+    ../LayerChannelBias.cpp \
     ../LayerPRelu.cpp \
     ../LayerPoolMax2D.cpp
 
@@ -76,6 +75,7 @@ HEADERS += \
     ../LayerGlobalGain.h \
     ../LayerGain.h \
     ../LayerGlobalBias.h \
+    ../LayerChannelBias.h \
     ../LayerPRelu.h \
     ../LayerPoolMax2D.h
 

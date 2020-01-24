@@ -6,33 +6,25 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerDense_
-#define LayerDense_
+#ifndef LayerChannelBias_
+#define LayerChannelBias_
 
 #include "Layer.h"
 #include "Matrix.h"
 
-class LayerDense : public Layer
+class LayerChannelBias : public Layer
 {
 public:
-    LayerDense(Index iInputSize,Index iOutputSize,bool bHasBias);
-    virtual ~LayerDense() override;
-
-	Index input_size() const;
-	Index output_size() const;
+    explicit LayerChannelBias(Index iNbRows,Index iNbCols,Index iNbChannels);
+    virtual ~LayerChannelBias();
 
     virtual Layer* clone() const override;
+    virtual void init() override;
 
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
-
-    virtual void init() override;
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
-
-    bool has_bias() const;
-
 private:
-    bool _bHasBias;
-	Index _iInputSize, _iOutputSize;
+	Index _iNbRows,_iNbCols,_iNbChannels;
 };
 
 #endif

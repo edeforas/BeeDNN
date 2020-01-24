@@ -12,7 +12,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerGaussianDropout::LayerGaussianDropout(float fProba):
-    Layer(0,0,"GaussianDropout"),
+    Layer("GaussianDropout"),
     _fProba(fProba),
 	_fStdev( sqrtf(_fProba / (1.f - _fProba))),
 	_distNormal(1.f, _fStdev)
@@ -32,7 +32,7 @@ void LayerGaussianDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 	{
 		_mask.resize(1, mIn.size());
 
-		for (int i = 0; i < _mask.size(); i++)
+		for (Index i = 0; i < _mask.size(); i++)
 			_mask(0, i) = _distNormal(randomEngine());
 		
 		mOut = mIn * _mask.asDiagonal();

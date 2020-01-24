@@ -10,7 +10,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerGlobalGain::LayerGlobalGain():
-    Layer(0, 0, "GlobalGain")
+    Layer( "GlobalGain")
 {
     _weight.resize(1,1);
 	_gradientWeight.resize(1, 1);

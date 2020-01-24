@@ -12,7 +12,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerDropout::LayerDropout(float fRate):
-    Layer(0,0,"Dropout"),
+    Layer("Dropout"),
     _fRate(fRate),
 	_distBernoulli(fRate)
 { }

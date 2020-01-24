@@ -26,6 +26,7 @@
 
 #include "LayerPoolMax2D.h"
 #include "LayerConvolution2D.h"
+#include "LayerChannelBias.h"
 
 #include <cmath>
 using namespace std;
@@ -101,7 +102,7 @@ void Net::add_softmax_layer()
     _layers.push_back(new LayerSoftmax());
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_dense_layer(int inSize,int outSize,bool bHasBias)
+void Net::add_dense_layer(Index inSize,Index outSize,bool bHasBias)
 {
     _layers.push_back(new LayerDense(inSize,outSize, bHasBias));
 }
@@ -134,6 +135,11 @@ void Net::add_poolmax2D_layer(int iInRow, int iInCols, int iInChannels, int iRow
 void Net::add_convolution2D_layer(int iInRows, int iInCols, int iInChannels, int iKernelRows, int iKernelCols, int  iOutChannels,int iRowStride,int iColStride)
 {
 	_layers.push_back(new LayerConvolution2D(iInRows, iInCols, iInChannels, iKernelRows, iKernelCols, iOutChannels, iRowStride, iColStride));
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void Net::add_channel_bias_layer(int iInRows, int iInCols, int iInChannels)
+{
+	_layers.push_back(new LayerChannelBias(iInRows, iInCols, iInChannels));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const

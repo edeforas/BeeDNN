@@ -12,7 +12,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerGaussianNoise::LayerGaussianNoise(float fStd):
-    Layer(0,0,"GaussianNoise"),
+    Layer("GaussianNoise"),
     _fStd(fStd),
 	_distNormal(0.f, fStd)
 { }
@@ -31,7 +31,7 @@ void LayerGaussianNoise::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 	{
 		mOut.resize(mIn.rows(), mIn.cols());
 
-		for (int i = 0; i < mOut.size(); i++)
+		for (Index i = 0; i < mOut.size(); i++)
 			mOut(i) = mIn(i) + _distNormal(randomEngine());
 	}
 	else

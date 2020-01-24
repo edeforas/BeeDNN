@@ -17,15 +17,13 @@ using namespace std;
 class Layer
 {
 public:
-    Layer(int iInSize, int iOutSize,const string& sType);
+    Layer(const string& sType);
     virtual ~Layer();
 
     virtual Layer* clone() const =0;
 
     string type() const;
 
-    int in_size() const;
-    int out_size() const;
 	void set_first_layer(bool bFirstLayer);
 
     virtual void forward(const MatrixFloat& mIn,MatrixFloat& mOut) =0;
@@ -35,13 +33,12 @@ public:
 	
 	void set_train_mode(bool bTrainMode); //set to true to train, to false to test
 
-    virtual bool has_weight() const;
-    virtual MatrixFloat& weights();
-    virtual MatrixFloat& gradient_weights();
+    bool has_weight() const;
+    MatrixFloat& weights();
+    MatrixFloat& gradient_weights();
 
 protected:
     MatrixFloat _weight,_gradientWeight;
-    int _iInSize, _iOutSize;
 	bool _bTrainMode;
 	bool _bFirstLayer;
 

@@ -41,17 +41,31 @@ int main()
 	mTestImages /= 256.f;
 	mRefImages /= 256.f;
 
-	//create simple net
+	//create conv net
 	Net net;
-    net.add_dense_layer(784, 256);
+	net.add_convolution2D_layer(28, 28, 1, 3, 3, 8);
+	net.add_channel_bias_layer(26,26,8);
 	net.add_activation_layer("Relu");
-	net.add_dropout_layer(0.2f);
-	net.add_dense_layer(256, 10);
+
+	net.add_convolution2D_layer(26, 26, 8, 3, 3, 8, 2, 2);
+	net.add_channel_bias_layer(12,12,8);
+	net.add_activation_layer("Relu");
+	net.add_dropout_layer(0.3f);
+
+	net.add_convolution2D_layer(12, 12, 8, 3, 3, 8);
+	net.add_channel_bias_layer(10,10,8);
+	net.add_activation_layer("Relu");
+	net.add_dropout_layer(0.3f);
+
+	net.add_dense_layer(10 * 10 * 8, 128);
+
+	net.add_activation_layer("Relu");
+	net.add_dense_layer(128, 10);
 	net.add_softmax_layer();
 
 	//set train settings
 	NetTrain netTrain;
-	netTrain.set_epochs(30);
+	netTrain.set_epochs(50);
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_train_data(mRefImages, mRefLabels);
 	netTrain.set_test_data(mTestImages, mTestLabels);
@@ -59,7 +73,7 @@ int main()
 
 	//create meta optimizer and run in parallel (for now, only weights variations)
 	cout << "Training with all cores ..." << endl;
-	MetaOptimizer optim;
+	MetaOptimizer optim; 
 	optim.set_train(netTrain);
 	optim.set_better_solution_callback(better_solution_callback);
 	optim.run(); // will use 100% CPU

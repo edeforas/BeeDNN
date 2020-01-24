@@ -26,6 +26,8 @@ typedef Eigen::Map<MatrixFloat> MatrixFloatView;
 
 #else
 
+typedef ptrdiff_t Index;
+
 template <class T>
 class Matrix
 {
@@ -39,7 +41,7 @@ public:
         _bDelete=false;
     }
 
-    Matrix<T>(int iRows,int iColumns)
+    Matrix<T>(Index iRows, Index iColumns)
     {
         _iRows=iRows;
         _iColumns=iColumns;
@@ -48,7 +50,7 @@ public:
         _bDelete=true;
     }
     
-    Matrix<T>(T* pData,int iRows,int iColumns)
+    Matrix<T>(T* pData,Index iRows,Index iColumns)
     {
         _iRows=iRows;
         _iColumns=iColumns;
@@ -57,7 +59,7 @@ public:
         _bDelete=false;
     }
     
-    static const Matrix<T> from_raw_buffer(const T* pData,int iRows,int iColumns)
+    static const Matrix<T> from_raw_buffer(const T* pData,Index iRows,Index iColumns)
     {
         Matrix<T> m;
 
@@ -78,7 +80,7 @@ public:
         _data=new T[_iSize];
         _bDelete=true;
 
-        for( int i=0;i<size();i++)
+        for( Index i=0;i<size();i++)
             _data[i]=a(i);
         //todo use or merge with operator=()(a); ??
     }
@@ -91,8 +93,8 @@ public:
 
     void assign(T* first,T* last)
     {
-        resize(1,(unsigned int)(last-first));
-        for(unsigned int i=0;i<size();i++)
+        resize(1,(Index)(last-first));
+        for(Index i=0;i<size();i++)
             operator()(i)=*first++;
 
         //todo  check and optimize
@@ -102,7 +104,7 @@ public:
     {
         resize(b.rows(),b.cols());
         
-        for(int i=0;i<size();i++)
+        for(Index i=0;i<size();i++)
             operator()(i)=b(i);
         
         return *this;
@@ -119,28 +121,28 @@ public:
 
 	Matrix<T>& operator-()
 	{
-		for (int i = 0; i < size(); i++)
+		for (Index i = 0; i < size(); i++)
 			_data[i] = -_data[i];
 
 		return *this;
 	}
 	
-	int rows() const
+	Index rows() const
     {
         return _iRows;
     }
 
-    int cols() const
+	Index cols() const
     {
         return _iColumns;
     }
     
-    int size() const
+	Index size() const
     {
         return _iSize;
     }
 
-    void resize(int iRows,int iColumns) // slow function!
+    void resize(Index iRows, Index iColumns) // slow function!
     {
         if((iColumns==_iColumns) && ( iRows==_iRows))
             return;
@@ -179,7 +181,7 @@ public:
         std::fill(_data,_data+_iSize,b);
     }
 
-	void setConstant(int iRows, int iColumns, T b)
+	void setConstant(Index iRows, Index iColumns, T b)
 	{
 		resize(iRows, iColumns);
 		setConstant(b);
@@ -189,7 +191,7 @@ public:
 	{
 		setConstant(0.);
 	}
-    void setZero(int iRows,int iColumns)
+    void setZero(Index iRows, Index iColumns)
     {
         resize(iRows,iColumns);
         setZero();
@@ -199,7 +201,7 @@ public:
 	{
 		setConstant(1.);
 	}
-	void setOnes(int iRows, int iColumns)
+	void setOnes(Index iRows, Index iColumns)
 	{
 		resize(iRows, iColumns);
 		setOnes();
@@ -210,7 +212,7 @@ public:
 		setRandomUniform(*this, -1.f, 1.f);
 	}
 
-	void setRandom(int iRows, int iColumns)
+	void setRandom(Index iRows, Index iColumns)
 	{
 		resize(iRows, iColumns);
 		setRandom();
@@ -221,33 +223,33 @@ public:
 		Matrix<T> out;
 		out.setZero(_iSize, _iSize);
 		
-		for (int i = 0; i < _iSize; i++)
+		for (Index i = 0; i < _iSize; i++)
 			out(i, i) = _data[i];
 
 		return out;
 	}
 
-    T& operator()(int iR,int iC)
+    T& operator()(Index iR, Index iC)
     {
         assert(iR<_iRows);
         assert(iC<_iColumns);
         return *(_data+iR*_iColumns+iC);
     }
     
-    const T& operator()(int iR,int iC) const
+    const T& operator()(Index iR, Index iC) const
     {
         assert(iR<_iRows);
         assert(iC<_iColumns);
         return *(_data+iR*_iColumns+iC);
     }
     
-    T& operator()(int iX)
+    T& operator()(Index iX)
     {
         assert(iX<_iSize);
         return *(_data+iX);
     }
     
-    const T& operator()(int iX) const
+    const T& operator()(Index iX) const
     {
         assert(iX<_iSize);
         return *(_data+iX);
@@ -258,7 +260,7 @@ public:
         assert(_iRows==a.rows());
         assert(_iColumns==a.cols());
 
-        for(int i=0;i<_iSize;i++)
+        for(Index i=0;i<_iSize;i++)
             _data[i]+=a(i);
         return *this;
     }
@@ -273,7 +275,7 @@ public:
 
     Matrix<T>& operator+=(T d)
     {
-        for(int i=0;i<_iSize;i++)
+        for(Index i=0;i<_iSize;i++)
             _data[i]+=d;
         return *this;
     }
@@ -287,7 +289,7 @@ public:
         assert(_iRows==a.rows());
         assert(_iColumns==a.cols());
 
-        for(int i=0;i<_iSize;i++)
+        for(Index i=0;i<_iSize;i++)
             _data[i]-=a(i);
         return *this;
     }
@@ -302,7 +304,7 @@ public:
 
     Matrix<T>& operator-=(T d)
     {
-        for(int i=0;i<_iSize;i++)
+        for(Index i=0;i<_iSize;i++)
             _data[i]-=d;
         return *this;
     }
@@ -314,7 +316,7 @@ public:
     
     Matrix<T>& operator*=(T b)
     {
-        for(int i=0;i<_iSize;i++)
+        for(Index i=0;i<_iSize;i++)
             _data[i]*=b;
 
         return *this;
@@ -322,7 +324,7 @@ public:
 
     Matrix<T>& operator/=(T b)
     {
-        for(int i=0;i<_iSize;i++)
+        for(Index i=0;i<_iSize;i++)
             _data[i]/=b;
 
         return *this;
@@ -345,13 +347,13 @@ public:
         Matrix<T> a(*this);
         resize(a._iRows,b._iColumns);
 
-        for(int r=0;r<_iRows;r++)
+        for(Index r=0;r<_iRows;r++)
         {
-            for(int c=0;c<_iColumns;c++)
+            for(Index c=0;c<_iColumns;c++)
             {
                 T temp=0.;
 
-                for(int k=0;k<a._iColumns;k++)
+                for(Index k=0;k<a._iColumns;k++)
                     temp+=a(r,k)*b(k,c);
 
                 operator()(r,c)=temp;
@@ -368,7 +370,7 @@ public:
 
         Matrix<T> out(*this);
 
-        for(int i=0;i<_iSize;i++)
+        for(Index i=0;i<_iSize;i++)
             out(i)*=m(i);
 
         return out;
@@ -381,7 +383,7 @@ public:
 
         Matrix<T> out(*this);
 
-        for(int i=0;i<_iSize;i++)
+        for(Index i=0;i<_iSize;i++)
             out(i)/=m(i);
 
         return out;
@@ -391,7 +393,7 @@ public:
     {
         Matrix<T> out(*this);
 
-        for(int i=0;i<_iSize;i++)
+        for(Index i=0;i<_iSize;i++)
             out(i)=fabs(_data[i]);
 
         return out;
@@ -401,7 +403,7 @@ public:
 	{
 		Matrix<T> out(*this);
 
-		for (int i = 0; i < _iSize; i++)
+		for (Index i = 0; i < _iSize; i++)
 			out(i) = std::copysignf(1.f,_data[i]);
 
 		return out;
@@ -411,7 +413,7 @@ public:
     {
         Matrix<T> out(*this);
 
-        for(int i=0;i<_iSize;i++)
+        for(Index i=0;i<_iSize;i++)
             out(i)=_data[i]*_data[i]; //todo optimize
 
         return out;
@@ -421,7 +423,7 @@ public:
 	{
 		Matrix<T> out(*this);
 
-		for (int i = 0; i < _iSize; i++)
+		for (Index i = 0; i < _iSize; i++)
 			out(i) = logf(_data[i]);
 
 		return out;
@@ -431,7 +433,7 @@ public:
 	{
 		Matrix<T> out(*this);
 
-		for (int i = 0; i < _iSize; i++)
+		for (Index i = 0; i < _iSize; i++)
 			out(i) = coshf(_data[i]);
 
 		return out;
@@ -441,7 +443,7 @@ public:
 	{
 		Matrix<T> out(*this);
 
-		for (int i = 0; i < _iSize; i++)
+		for (Index i = 0; i < _iSize; i++)
 			out(i) = tanhf(_data[i]);
 
 		return out;
@@ -451,7 +453,7 @@ public:
 	{
 		Matrix<T> out(*this);
 
-		for (int i = 0; i < _iSize; i++)
+		for (Index i = 0; i < _iSize; i++)
 			out(i) = expf(_data[i]);
 
 		return out;
@@ -461,7 +463,7 @@ public:
     {
         Matrix<T> out(*this);
 
-        for(int i=0;i<_iSize;i++)
+        for(Index i=0;i<_iSize;i++)
             out(i)=sqrtf(_data[i]);
 
         return out;
@@ -471,7 +473,7 @@ public:
 	{
 		Matrix<T> out(*this);
 
-		for (int i = 0; i < _iSize; i++)
+		for (Index i = 0; i < _iSize; i++)
 			out(i) = std::min<T>(_data[i], f);
 
 		return out;
@@ -484,7 +486,7 @@ public:
 
 		Matrix<T> out(*this);
 
-		for (int i = 0; i < _iSize; i++)
+		for (Index i = 0; i < _iSize; i++)
 			out(i) = std::min<T>(_data[i], m._data[i]);
 
 		return out;
@@ -494,7 +496,7 @@ public:
     {
         Matrix<T> out(*this);
 
-        for(int i=0;i<_iSize;i++)
+        for(Index i=0;i<_iSize;i++)
             out(i)=std::max<T>(_data[i],f);
 
         return out;
@@ -507,7 +509,7 @@ public:
 
         Matrix<T> out(*this);
 
-        for(int i=0;i<_iSize;i++)
+        for(Index i=0;i<_iSize;i++)
             out(i)=std::max<T>(_data[i],m._data[i]);
 
         return out;
@@ -516,7 +518,7 @@ public:
     T sum() const
     {
         T dSum=0.;
-        for(int i=0;i<_iSize;i++)
+        for(Index i=0;i<_iSize;i++)
             dSum+=_data[i];
 
         return dSum;
@@ -533,7 +535,7 @@ public:
             return 0.; //not clean
 
         T dMax=_data[0];
-        for(int i=1;i<_iSize;i++)
+        for(Index i=1;i<_iSize;i++)
             if(_data[i]>dMax)
                 dMax=_data[i];
 
@@ -544,8 +546,8 @@ public:
     {
         Matrix<T> out(_iColumns,_iRows);
 
-        for(int r=0;r<_iRows;r++)
-            for(int c=0;c<_iColumns;c++)
+        for(Index r=0;r<_iRows;r++)
+            for(Index c=0;c<_iColumns;c++)
                 out(c,r)=operator()(r,c);
 
         return out;
@@ -556,21 +558,21 @@ public:
         return Matrix<T>(*this).operator*=(a);
     }
 
-    Matrix<T> row(int iRow)
+    Matrix<T> row(Index iRow)
     {
         assert(iRow<_iRows);
 
         return Matrix<T>(_data+iRow*_iColumns,1,_iColumns);
     }
 
-    const Matrix<T> row(int iRow) const
+    const Matrix<T> row(Index iRow) const
     {
         assert(iRow<_iRows);
 
         return Matrix<T>(_data+iRow*_iColumns,1,_iColumns);
     }
 
-    Matrix<T> topRows(int iNbRow)
+    Matrix<T> topRows(Index iNbRow)
     {
         assert(iNbRow>=0);
         assert(iNbRow<_iRows);
@@ -578,7 +580,7 @@ public:
         return Matrix<T>(_data,iNbRow,_iColumns);
     }
 
-    const Matrix<T> topRows(int iNbRow) const
+    const Matrix<T> topRows(Index iNbRow) const
     {
         assert(iNbRow>=0);
         assert(iNbRow<_iRows);
@@ -590,7 +592,7 @@ public:
     {
         Matrix<T> r(_iRows,1);
 
-        for(int i=0;i<_iRows;i++)
+        for(Index i=0;i<_iRows;i++)
             r(i)=operator()(i,i);
 
         return r;
@@ -600,14 +602,14 @@ public:
     {
         T trace=0;
 
-        for(int i=0;i<_iRows;i++) //todo test square
+        for(Index i=0;i<_iRows;i++) //todo test square
             trace+=operator()(i,i);
 
         return trace;
     }
 
 private:
-    int _iRows,_iColumns,_iSize;
+    Index _iRows,_iColumns,_iSize;
     T* _data;
     bool _bDelete;
 };
@@ -617,21 +619,25 @@ typedef Matrix<float> MatrixFloatView;
 
 #endif
 
-MatrixFloatView fromRawBuffer(float *pBuffer, int iRows, int iCols);
-const MatrixFloatView fromRawBuffer(const float *pBuffer, int iRows, int iCols);
-void copyInto(const MatrixFloat& mToCopy, MatrixFloat& m, int iStartRow);
+MatrixFloatView fromRawBuffer(float *pBuffer, Index iRows, Index iCols);
+const MatrixFloatView fromRawBuffer(const float *pBuffer, Index iRows, Index iCols);
+void copyInto(const MatrixFloat& mToCopy, MatrixFloat& m, Index iStartRow);
 MatrixFloat rowWiseSum(const MatrixFloat& m);
 MatrixFloat colWiseMean(const MatrixFloat& m);
 MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat rowWiseMult(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d);
-vector<int> randPerm(int iSize); //create a vector of index shuffled
-void applyRowPermutation(const vector<int>& vPermutation, const MatrixFloat & mIn, MatrixFloat & mPermuted);
-const MatrixFloat rowRange(const MatrixFloat& m, int iStartRow, int iEndRow); //create a row view starting at iStartRow to (not included) iEndRow
-MatrixFloat decimate(const MatrixFloat& m, int iRatio);
-int argmax(const MatrixFloat& m);
+vector<Index> randPerm(Index iSize); //create a vector of index shuffled
+void applyRowPermutation(const vector<Index>& vPermutation, const MatrixFloat & mIn, MatrixFloat & mPermuted);
+const MatrixFloat rowRange(const MatrixFloat& m, Index iStartRow, Index iEndRow); //create a row view starting at iStartRow to (not included) iEndRow
+MatrixFloat decimate(const MatrixFloat& m, Index iRatio);
+Index argmax(const MatrixFloat& m);
 void rowsArgmax(const MatrixFloat& m, MatrixFloat& argM); //compute the argmax row by row
 const MatrixFloat addColumnOfOne(const MatrixFloat& m);
+
+//4D tensor functions, access order in memory is: sample, channel, row , column
+void channelWiseAdd(MatrixFloat& mIn,Index iNbSamples,Index iNbChannels,Index iNbRows,Index iNbCols,const MatrixFloat & weight);
+MatrixFloat channelWiseMean(const MatrixFloat& m, Index iNbSamples, Index iNbChannels, Index iNbRows, Index iNbCols);
 
 string toString(const MatrixFloat& m);
 const MatrixFloat fromFile(const string& sFile);

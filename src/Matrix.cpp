@@ -17,7 +17,7 @@
 #include "Matrix.h"
 ///////////////////////////////////////////////////////////////////////////
 //matrix view on another matrix, without malloc and copy
-const MatrixFloatView fromRawBuffer(const float *pBuffer,int iRows,int iCols)
+const MatrixFloatView fromRawBuffer(const float *pBuffer,Index iRows,Index iCols)
 {
 #ifdef USE_EIGEN
     return Eigen::Map<MatrixFloat>((float*)pBuffer,static_cast<Eigen::Index>(iRows),static_cast<Eigen::Index>(iCols));
@@ -26,7 +26,7 @@ const MatrixFloatView fromRawBuffer(const float *pBuffer,int iRows,int iCols)
 #endif
 }
 ///////////////////////////////////////////////////////////////////////////
-MatrixFloatView fromRawBuffer(float *pBuffer,int iRows,int iCols)
+MatrixFloatView fromRawBuffer(float *pBuffer,Index iRows,Index iCols)
 {
 #ifdef USE_EIGEN
     return Eigen::Map<MatrixFloat>(pBuffer,static_cast<Eigen::Index>(iRows),static_cast<Eigen::Index>(iCols));
@@ -35,7 +35,7 @@ MatrixFloatView fromRawBuffer(float *pBuffer,int iRows,int iCols)
 #endif
 }
 ///////////////////////////////////////////////////////////////////////////
-void copyInto(const MatrixFloat& mToCopy, MatrixFloat& m, int iStartRow)
+void copyInto(const MatrixFloat& mToCopy, MatrixFloat& m, Index iStartRow)
 {
 #ifdef USE_EIGEN
 	m.block(iStartRow, 0, mToCopy.rows(), mToCopy.cols()) = mToCopy;
@@ -49,10 +49,10 @@ MatrixFloat rowWiseSum(const MatrixFloat& m)
 #ifdef USE_EIGEN
     return m.rowwise().sum();
 #else
-    int r=m.rows();
+    Index r=m.rows();
     MatrixFloat result(r,1);
 
-    for(int i=0;i<r;i++)
+    for(Index i=0;i<r;i++)
         result(i,0)=(m.row(i)).sum();
 
     return result;
@@ -64,14 +64,14 @@ MatrixFloat colWiseMean(const MatrixFloat& m)
 #ifdef USE_EIGEN
 	return m.colwise().mean();
 #else
-	int r = m.rows();
-	int c = m.cols();
+	Index r = m.rows();
+	Index c = m.cols();
 	MatrixFloat result(1,c);
 
-	for (int j = 0; j < c; j++)
+	for (Index j = 0; j < c; j++)
 	{
 		float f = 0.;
-		for (int i = 0; i < r; i++)
+		for (Index i = 0; i < r; i++)
 		{
 			f += m(i, j);
 		}
@@ -89,7 +89,7 @@ MatrixFloat rowWiseMult(const MatrixFloat& m, const MatrixFloat& d)
 
     MatrixFloat r=m;
 
-    for(int l=0;l<r.rows();l++)
+    for(Index l=0;l<r.rows();l++)
         r.row(l)*=d(l);
 
     return r;
@@ -102,7 +102,7 @@ MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d)
 
     MatrixFloat r=m;
 
-    for(int l=0;l<r.rows();l++)
+    for(Index l=0;l<r.rows();l++)
         r.row(l)/=d(l);
 
     return r;
@@ -120,16 +120,16 @@ MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d)
 #else
 */
     MatrixFloat r = m;
-    for (int l = 0; l < r.rows(); l++)
+    for (Index l = 0; l < r.rows(); l++)
         r.row(l) += d;
     return r;
 //#endif
 }
 ///////////////////////////////////////////////////////////////////////////
-vector<int> randPerm(int iSize) //create a vector of index shuffled
+vector<Index> randPerm(Index iSize) //create a vector of index shuffled
 {
-	vector<int> v(iSize);
-	for (int i = 0; i < iSize; i++)
+	vector<Index> v(iSize);
+	for (Index i = 0; i < iSize; i++)
 		v[i] = i;
 
 	std::shuffle(v.begin(), v.end(), randomEngine());
@@ -137,15 +137,15 @@ vector<int> randPerm(int iSize) //create a vector of index shuffled
     return v;
 }
 ///////////////////////////////////////////////////////////////////////////
-void applyRowPermutation(const vector<int>& vPermutation, const MatrixFloat & mIn, MatrixFloat & mPermuted)
+void applyRowPermutation(const vector<Index>& vPermutation, const MatrixFloat & mIn, MatrixFloat & mPermuted)
 {
-    assert((int)vPermutation.size() == mIn.rows());
+    assert((Index)vPermutation.size() == mIn.rows());
 
     mPermuted.resizeLike(mIn);
 
-	for (int i = 0; i < (int)(vPermutation.size()); i++)
+	for (Index i = 0; i < (Index)(vPermutation.size()); i++)
 	{
-		int iPerm= vPermutation[i];
+		Index iPerm= vPermutation[i];
 
 		assert(iPerm >=0);
 		assert(iPerm < mIn.rows());
@@ -154,7 +154,7 @@ void applyRowPermutation(const vector<int>& vPermutation, const MatrixFloat & mI
 	}
 }
 ///////////////////////////////////////////////////////////////////////////
-int argmax(const MatrixFloat& m)
+Index argmax(const MatrixFloat& m)
 {
     assert(m.rows()==1); //for now, vector raw only
 
@@ -162,9 +162,9 @@ int argmax(const MatrixFloat& m)
         return 0; //todo error not a vector
 
     float d=m(0);
-    int iIndex=0;
+    Index iIndex=0;
 
-    for(int i=1;i<m.cols();i++)
+    for(Index i=1;i<m.cols();i++)
     {
         if(m(i)>d)
         {
@@ -178,20 +178,20 @@ int argmax(const MatrixFloat& m)
 ///////////////////////////////////////////////////////////////////////////
 void rowsArgmax(const MatrixFloat& m, MatrixFloat& argM)
 {
-    int iRows = (int)m.rows();
+    Index iRows = (Index)m.rows();
     argM.resize(iRows, 1);
 
-    for (int i = 0; i < iRows; i++)
+    for (Index i = 0; i < iRows; i++)
         argM(i) = (float)argmax(m.row(i));
 }
 ///////////////////////////////////////////////////////////////////////////
-MatrixFloat decimate(const MatrixFloat& m, int iRatio)
+MatrixFloat decimate(const MatrixFloat& m, Index iRatio)
 {
-    int iNewSize=(int)(m.rows()/iRatio);
+    Index iNewSize=(Index)(m.rows()/iRatio);
 
     MatrixFloat mDecimated(iNewSize,m.cols());
 
-    for(int i=0;i<iNewSize;i++)
+    for(Index i=0;i<iNewSize;i++)
         mDecimated.row(i)=m.row(i*iRatio);
 
     return mDecimated;
@@ -200,9 +200,9 @@ MatrixFloat decimate(const MatrixFloat& m, int iRatio)
 string toString(const MatrixFloat& m)
 {
     stringstream ss; ss << setprecision(4);
-    for(int iL=0;iL<m.rows();iL++)
+    for(Index iL=0;iL<m.rows();iL++)
     {
-        for(int iR=0;iR<m.cols();iR++)
+        for(Index iR=0;iR<m.cols();iR++)
             ss  << m(iL,iR) << " ";
         if(iL+1<m.rows())
             ss << endl;
@@ -216,9 +216,9 @@ const MatrixFloat addColumnOfOne(const MatrixFloat& m)
     // todo : slow
     MatrixFloat r(m.rows(), m.cols() + 1);
 
-    for (int iL = 0; iL < m.rows(); iL++)
+    for (Index iL = 0; iL < m.rows(); iL++)
     {
-        for (int iR = 0; iR < m.cols(); iR++)
+        for (Index iR = 0; iR < m.cols(); iR++)
             r(iL,iR)= m(iL, iR);
         r(iL, m.cols()) = 1.f;
     }
@@ -230,7 +230,7 @@ const MatrixFloat fromFile(const string& sFile)
 {    
     vector<float> vf;
     fstream f(sFile,ios::in);
-    int iNbLine=0;
+    Index iNbLine=0;
     while(!f.eof() && (!f.bad()) && (!f.fail()) )
     {
         string s;
@@ -256,7 +256,7 @@ const MatrixFloat fromFile(const string& sFile)
     if(iNbLine==0)
         return MatrixFloat();
 
-    MatrixFloat r(iNbLine,(int)vf.size()/iNbLine); // todo check size
+    MatrixFloat r(iNbLine,(Index)vf.size()/iNbLine); // todo check size
     std::copy(vf.begin(),vf.end(),r.data());
     return r;
 }
@@ -266,7 +266,7 @@ const MatrixFloat fromString(const string& s)
     MatrixFloat r;
     vector<float> vf;
     stringstream ss(s);
-    int iNbCols=0,iNbLine=0;
+    Index iNbCols=0,iNbLine=0;
 
     while( !ss.eof() )
     {
@@ -275,8 +275,8 @@ const MatrixFloat fromString(const string& s)
         vf.push_back(sF);
     }
 
-    iNbCols=(int)std::count(s.begin(),s.end(),'\n')+1;
-    iNbLine=(int)vf.size()/iNbCols;
+    iNbCols=(Index)std::count(s.begin(),s.end(),'\n')+1;
+    iNbLine=(Index)vf.size()/iNbCols;
 
     r.resize(iNbLine,iNbCols);
     std::copy(vf.begin(),vf.end(),r.data());
@@ -286,9 +286,9 @@ const MatrixFloat fromString(const string& s)
 bool toFile(const string& sFile, const MatrixFloat & m)
 {
     fstream f(sFile, ios::out);
-    for (int iL = 0; iL < m.rows(); iL++)
+    for (Index iL = 0; iL < m.rows(); iL++)
     {
-        for (int iR = 0; iR < m.cols(); iR++)
+        for (Index iR = 0; iR < m.cols(); iR++)
             f << m(iL, iR);
         f << endl;
     }
@@ -297,12 +297,12 @@ bool toFile(const string& sFile, const MatrixFloat & m)
 }
 ///////////////////////////////////////////////////////////////////////////
 //create a row view starting at iStartRow ending at iEndRow (not included)
-const MatrixFloat rowRange(const MatrixFloat& m, int iStartRow, int iEndRow)
+const MatrixFloat rowRange(const MatrixFloat& m, Index iStartRow, Index iEndRow)
 {
     assert(iStartRow < iEndRow); //iEndRow not included
     assert(m.rows() >= iEndRow);
 
-    return fromRawBuffer(m.data() + iStartRow * m.cols(), iEndRow- iStartRow, (int)m.cols());
+    return fromRawBuffer(m.data() + iStartRow * m.cols(), iEndRow- iStartRow, (Index)m.cols());
 }
 ///////////////////////////////////////////////////////////////////////////
 default_random_engine& randomEngine()
@@ -315,7 +315,41 @@ void setRandomUniform(MatrixFloat& m, float fMin, float fMax)
 {
 	uniform_real_distribution<float> dis(fMin, fMax);
 
-	for (int i = 0; i < m.size(); i++)
+	for (Index i = 0; i < m.size(); i++)
 		m(i) = dis(randomEngine());
+}
+///////////////////////////////////////////////////////////////////////////
+void channelWiseAdd(MatrixFloat& mIn, Index iNbSamples, Index iNbChannels, Index iNbRows, Index iNbCols, const MatrixFloat& weight)
+{
+	assert(weight.size() == iNbChannels);
+	assert(mIn.rows() == iNbSamples);
+	assert(mIn.size() == iNbSamples * iNbChannels*iNbRows*iNbCols);
+
+	//todo optimize a lot
+	for (Index iS = 0; iS < iNbSamples; iS++)
+		for (Index iH = 0; iH < iNbChannels; iH++)
+			for (Index iR = 0; iR < iNbRows; iR++)
+				for (Index iC = 0; iC < iNbCols; iC++)
+					mIn(iS, iH*iNbRows*iNbCols + iR * iNbCols + iC) += weight(iH);
+}
+///////////////////////////////////////////////////////////////////////////
+MatrixFloat channelWiseMean(const MatrixFloat& m, Index iNbSamples, Index iNbChannels, Index iNbRows, Index iNbCols)
+{
+	assert(m.rows() == iNbSamples);
+	assert(m.size() == iNbSamples * iNbChannels*iNbRows*iNbCols);
+
+	MatrixFloat mMean;
+	mMean.setZero(1, iNbChannels);
+
+	//todo optimize a lot
+	for (Index iS = 0; iS < iNbSamples; iS++)
+		for (Index iH = 0; iH < iNbChannels; iH++)
+			for (Index iR = 0; iR < iNbRows; iR++)
+				for (Index iC = 0; iC < iNbCols; iC++)
+					mMean(0, iH) += m(iS, iH*iNbRows*iNbCols + iR * iNbCols + iC);
+					
+	mMean *= (1.f / iNbSamples * iNbRows*iNbCols);
+
+	return mMean;
 }
 ///////////////////////////////////////////////////////////////////////////
