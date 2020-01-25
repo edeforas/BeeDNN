@@ -9,7 +9,7 @@
 #include "LayerPoolMax2D.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerPoolMax2D::LayerPoolMax2D(int iInRows, int iInCols, int iInChannels, int iRowFactor, int iColFactor) :
+LayerPoolMax2D::LayerPoolMax2D(Index iInRows, Index iInCols, Index iInChannels, Index iRowFactor, Index iColFactor) :
     Layer("PoolMax2D")
 {
 	_iInRows = iInRows;
@@ -28,7 +28,7 @@ LayerPoolMax2D::LayerPoolMax2D(int iInRows, int iInCols, int iInChannels, int iR
 LayerPoolMax2D::~LayerPoolMax2D()
 { }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPoolMax2D::get_params(int& iInRows, int& iInCols, int & iInChannels, int& iRowFactor, int& iColFactor) const
+void LayerPoolMax2D::get_params(Index& iInRows, Index& iInCols, Index & iInChannels, Index& iRowFactor, Index& iColFactor) const
 {
 	iInRows = _iInRows;
 	iInCols = _iInCols;
@@ -98,14 +98,14 @@ void LayerPoolMax2D::backpropagation(const MatrixFloat &mIn,const MatrixFloat &m
 
 	mGradientIn.setZero(mGradientOut.rows(), _iInPlaneSize*_iInChannels);
 
-	for (int l = 0; l < mGradientOut.rows(); l++)
+	for (Index l = 0; l < mGradientOut.rows(); l++)
 	{
-		for (int channel = 0; channel < _iInChannels; channel++)
+		for (Index channel = 0; channel < _iInChannels; channel++)
 		{
 			const float* lOut = mGradientOut.row(l).data() +channel * _iOutPlaneSize;
 			float* lIn = mGradientIn.row(l).data() +channel * _iInPlaneSize;
 
-			for (int i = 0; i < _iOutPlaneSize; i++)
+			for (Index i = 0; i < _iOutPlaneSize; i++)
 			{
 				lIn[(int)_mMaxIndex(i)] = lOut[i];
 			}

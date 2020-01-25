@@ -127,17 +127,17 @@ void Net::add_bias_layer()
 	_layers.push_back(new LayerBias());
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_poolmax2D_layer(int iInRow, int iInCols, int iInChannels, int iRowFactor, int iColFactor)
+void Net::add_poolmax2D_layer(Index iInRow, Index iInCols, Index iInChannels, Index iRowFactor, Index iColFactor)
 {
 	_layers.push_back(new LayerPoolMax2D(iInRow, iInCols, iInChannels, iRowFactor, iColFactor));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_convolution2D_layer(int iInRows, int iInCols, int iInChannels, int iKernelRows, int iKernelCols, int  iOutChannels,int iRowStride,int iColStride)
+void Net::add_convolution2D_layer(Index iInRows, Index iInCols, Index iInChannels, Index iKernelRows, Index iKernelCols, Index  iOutChannels, Index iRowStride, Index iColStride)
 {
 	_layers.push_back(new LayerConvolution2D(iInRows, iInCols, iInChannels, iKernelRows, iKernelCols, iOutChannels, iRowStride, iColStride));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::add_channel_bias_layer(int iInRows, int iInCols, int iInChannels)
+void Net::add_channel_bias_layer(Index iInRows, Index iInCols, Index iInChannels)
 {
 	_layers.push_back(new LayerChannelBias(iInRows, iInCols, iInChannels));
 }

@@ -15,16 +15,16 @@
 class LayerConvolution2D : public Layer
 {
 public:
-	LayerConvolution2D(int iInRows, int iInCols,int iInChannels, int iKernelRows, int iKernelCols,int iOutChannels,int iRowStride=1, int iColStride=1);
+	LayerConvolution2D(Index iInRows, Index iInCols,Index iInChannels, Index iKernelRows, Index iKernelCols,Index iOutChannels,Index iRowStride=1, Index iColStride=1);
     virtual ~LayerConvolution2D() override;
 
-	void get_params(int& iInRows, int& iInCols,int& iInChannels, int& iKernelRows, int& iKernelCols,int& iOutChannels) const;
+	void get_params(Index& iInRows, Index& iInCols,Index& iInChannels, Index& iKernelRows, Index& iKernelCols,Index& iOutChannels) const;
 
     virtual Layer* clone() const override;
 
 	virtual void init() override;
 
-	void get_params(int & iInRows, int & iInCols, int & iInChannels, int & iKernelRows, int & iKernelCols, int & iOutChannels, int & iRowStride, int & iColStride) const;
+	void get_params(Index & iInRows, Index & iInCols, Index & iInChannels, Index & iKernelRows, Index & iKernelCols, Index & iOutChannels, Index & iRowStride, Index & iColStride) const;
 
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
@@ -36,19 +36,19 @@ private:
 	void reshape_to_out(MatrixFloat & mOut);
 	void reshape_from_out(MatrixFloat & mOut);
 
-	int _iInRows;
-	int _iInCols;
-	int _iSamples;
-	int _iInChannels;
-	int _iKernelRows;
-	int _iKernelCols;
-	int _iRowStride;
-	int _iColStride;
-	int _iOutChannels;
-	int _iBorderRows;
-	int _iBorderCols;
-	int _iOutRows;
-	int _iOutCols;
+	Index _iInRows;
+	Index _iInCols;
+	Index _iSamples;
+	Index _iInChannels;
+	Index _iKernelRows;
+	Index _iKernelCols;
+	Index _iRowStride;
+	Index _iColStride;
+	Index _iOutChannels;
+	Index _iBorderRows;
+	Index _iBorderCols;
+	Index _iOutRows;
+	Index _iOutCols;
 
 	MatrixFloat _im2col; // input image, im2col format
 	MatrixFloat _tempImg; // temporary image, to avoid malloc

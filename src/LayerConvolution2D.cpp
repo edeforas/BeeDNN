@@ -11,7 +11,7 @@
 #include "LayerConvolution2D.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerConvolution2D::LayerConvolution2D(int iInRows, int iInCols, int iInChannels, int iKernelRows, int iKernelCols, int iOutChannels, int iRowStride, int iColStride) :
+LayerConvolution2D::LayerConvolution2D(Index iInRows, Index iInCols, Index iInChannels, Index iKernelRows, Index iKernelCols, Index iOutChannels, Index iRowStride, Index iColStride) :
     Layer("Convolution2D")
 {
 	_iInRows = iInRows;
@@ -54,7 +54,7 @@ void LayerConvolution2D::init()
 	_gradientWeight.setZero();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerConvolution2D::get_params(int& iInRows, int& iInCols,int& iInChannels, int& iKernelRows, int& iKernelCols,int& iOutChannels, int& iRowStride, int& iColStride) const
+void LayerConvolution2D::get_params(Index& iInRows, Index& iInCols, Index& iInChannels, Index& iKernelRows, Index& iKernelCols, Index& iOutChannels, Index& iRowStride, Index& iColStride) const
 {
 	iInRows = _iInRows;
 	iInCols = _iInCols;

@@ -15,10 +15,10 @@
 class LayerPoolMax2D : public Layer
 {
 public:
-	explicit LayerPoolMax2D(int iInRows, int iInCols,int iInChannels, int iRowFactor = 2, int iColFactor = 2);
+	explicit LayerPoolMax2D(Index iInRows, Index iInCols, Index iInChannels, Index iRowFactor = 2, Index iColFactor = 2);
     virtual ~LayerPoolMax2D() override;
 
-	void get_params(int& iInRows, int& iInCols,int& iInChannels, int& iRowFactor, int& iColFactor) const;
+	void get_params(Index& iInRows, Index& iInCols, Index& iInChannels, Index& iRowFactor, Index& iColFactor) const;
 
     virtual Layer* clone() const override;
 
@@ -26,16 +26,16 @@ public:
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 
 private:
-	int _iInRows;
-	int _iInCols;
-	int _iInChannels;
-	int _iRowFactor;
-	int _iColFactor;
-	int _iOutRows;
-	int _iOutCols;
+	Index _iInRows;
+	Index _iInCols;
+	Index _iInChannels;
+	Index _iRowFactor;
+	Index _iColFactor;
+	Index _iOutRows;
+	Index _iOutCols;
 
-	int _iInPlaneSize;
-	int _iOutPlaneSize;
+	Index _iInPlaneSize;
+	Index _iOutPlaneSize;
 
 	MatrixFloat _mMaxIndex;
 };
