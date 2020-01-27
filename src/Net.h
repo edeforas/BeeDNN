@@ -33,7 +33,7 @@ public:
     void add_dropout_layer(float fRatio);
     void add_gaussian_dropout_layer(float fProba);
 	
-	void add_uniform_noise_layer(float fNoise);
+	void add_uniform_noise_layer(float fNoise); 
 	void add_gaussian_noise_layer(float fStd);
     
 	void add_globalgain_layer();

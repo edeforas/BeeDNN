@@ -171,7 +171,7 @@ void FrameNetwork::set_net(Net* pNet)
 		if (sType == "PoolMax2D")
 		{
 			LayerPoolMax2D* lpm=((LayerPoolMax2D*)l);
-			int iInRows, iInCols, iPlanes, iRowFactor, iColFactor;
+			Index iInRows, iInCols, iPlanes, iRowFactor, iColFactor;
 			lpm->get_params(iInRows,iInCols,iPlanes, iRowFactor,iColFactor);
 			string cell1 = to_string(iInRows) + "," + to_string(iInCols) + "," + to_string(iPlanes);
 			string cell3 = to_string(iRowFactor) + "," + to_string(iColFactor);

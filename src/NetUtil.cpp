@@ -116,7 +116,7 @@ void write(const Net& net,string & s)
 		{
 			LayerPoolMax2D* l = static_cast<LayerPoolMax2D*>(layer);
 
-			int inRows, inCols, iChannels, rowFactor, colFactor;
+			Index inRows, inCols, iChannels, rowFactor, colFactor;
 			l->get_params(inRows, inCols, iChannels, rowFactor, colFactor);
 			ss << "Layer" << i + 1 << ".inRows=" << inRows << endl;
 			ss << "Layer" << i + 1 << ".inCols=" << inCols << endl;
@@ -131,7 +131,7 @@ void write(const Net& net,string & s)
 			ss << "Layer" << i + 1 << ".weight=" << endl;
 			ss << toString(l->weights()) << endl;
 
-			int inRows, inCols, inChannels, kernelRows, kernelCols, outChannels, rowStride, colStride;
+			Index inRows, inCols, inChannels, kernelRows, kernelCols, outChannels, rowStride, colStride;
 			l->get_params(inRows, inCols, inChannels, kernelRows, kernelCols, outChannels,rowStride,colStride);
 
 			ss << "Layer" << i + 1 << ".inRows=" << inRows << endl;
@@ -253,24 +253,24 @@ void read(const string& s,Net& net)
 
 		else if (sType == "PoolMax2D")
 		{
-			int inSizeX = stoi(find_key(s, sLayer + ".inRows"));
-			int inSizeY = stoi(find_key(s, sLayer + ".inCols"));
-			int inChannels = stoi(find_key(s, sLayer + ".inChannels"));
-			int factorX = stoi(find_key(s, sLayer + ".rowFactor"));
-			int factorY = stoi(find_key(s, sLayer + ".colFactor"));
+			Index inSizeX = stoi(find_key(s, sLayer + ".inRows"));
+			Index inSizeY = stoi(find_key(s, sLayer + ".inCols"));
+			Index inChannels = stoi(find_key(s, sLayer + ".inChannels"));
+			Index factorX = stoi(find_key(s, sLayer + ".rowFactor"));
+			Index factorY = stoi(find_key(s, sLayer + ".colFactor"));
 			net.add_poolmax2D_layer(inSizeX, inSizeY, inChannels, factorX, factorY);
 		}
 
 		else if (sType == "Convolution2D")
 		{
-			int inSizeX = stoi(find_key(s, sLayer + ".inRows"));
-			int inSizeY = stoi(find_key(s, sLayer + ".inCols"));
-			int inChannels = stoi(find_key(s, sLayer + ".inChannels"));
-			int kernelRows = stoi(find_key(s, sLayer + ".kernelRows"));
-			int kernelCols = stoi(find_key(s, sLayer + ".kernelCols"));
-			int rowStride = stoi(find_key(s, sLayer + ".rowStride"));
-			int colStride = stoi(find_key(s, sLayer + ".colStride"));
-			int outChannels = stoi(find_key(s, sLayer + ".outChannels"));
+			Index inSizeX = stoi(find_key(s, sLayer + ".inRows"));
+			Index inSizeY = stoi(find_key(s, sLayer + ".inCols"));
+			Index inChannels = stoi(find_key(s, sLayer + ".inChannels"));
+			Index kernelRows = stoi(find_key(s, sLayer + ".kernelRows"));
+			Index kernelCols = stoi(find_key(s, sLayer + ".kernelCols"));
+			Index rowStride = stoi(find_key(s, sLayer + ".rowStride"));
+			Index colStride = stoi(find_key(s, sLayer + ".colStride"));
+			Index outChannels = stoi(find_key(s, sLayer + ".outChannels"));
 			net.add_convolution2D_layer(inSizeX, inSizeY, inChannels, kernelRows, kernelCols, outChannels, rowStride,colStride);
 
 			string sWeight = find_key(s, sLayer + ".weight");
