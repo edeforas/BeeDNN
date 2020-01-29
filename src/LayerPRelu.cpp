@@ -43,8 +43,8 @@ void LayerPRelu::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 
     mOut = mIn;
 
-	for (int i = 0; i < mOut.rows(); i++)
-		for (int j = 0; j < mOut.cols(); j++)
+	for (Index i = 0; i < mOut.rows(); i++)
+		for (Index j = 0; j < mOut.cols(); j++)
 		{
 			if (mOut(i,j) < 0.f)
 				mOut(i,j) *= _weight(j);
@@ -53,24 +53,18 @@ void LayerPRelu::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 ///////////////////////////////////////////////////////////////////////////////
 void LayerPRelu::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
-	//todo manage _bFirstLayer
+    _gradientWeight = colWiseMean((mIn.transpose())*mGradientOut);
 
-	// compute gradient in and gradient weight
+	if (_bFirstLayer)
+		return;
+
+	// compute gradientin
 	mGradientIn = mGradientOut;
-	for (int i = 0; i < mGradientIn.rows(); i++)
-		for (int j = 0; j < mGradientIn.cols(); j++)
+	for (Index i = 0; i < mGradientIn.rows(); i++)
+		for (Index j = 0; j < mGradientIn.cols(); j++)
 		{
 			if (mIn(i, j) < 0.f)
-			{
 				mGradientIn(i, j) *= _weight(j);
-				_gradientWeight(j) += _weight(j);
-			}
-			else
-			{
-				_gradientWeight(j) = 0.f;
-			}
 		}
-
-	_gradientWeight *= (1.f / mIn.rows());
 }
 ///////////////////////////////////////////////////////////////
