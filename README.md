@@ -2,7 +2,7 @@
 
 BeeDNN is a deep learning library.
 
-The API is clear and simple, the goal is that everybody can contribute, test, and use DNN.
+The API is clear and simple, the goal is that everybody can contribute, test, and use DNN in C++.
 It can run on small devices. It is even possible to learn or do knowledge transfer directly on the device.
 Please see at: https://github.com/edeforas/BeeDNN/issues for contributing ideas.
 No dependencies needed, every algorithm rewritten in C++ from scratch.
