@@ -1,5 +1,6 @@
 //this sample launch in parallel multiple runs of the same net optimization 
 //and save the current best solution on disk
+//this is a heavy test, but expect val_accuracy>99.30% after 30min
 
 #include <iostream>
 #include <fstream>
@@ -9,6 +10,13 @@ using namespace std;
 #include "NetTrain.h"
 #include "MNISTReader.h"
 #include "MetaOptimizer.h"
+
+#include "LayerActivation.h"
+#include "LayerConvolution2D.h"
+#include "LayerChannelBias.h"
+#include "LayerDense.h"
+#include "LayerDropout.h"
+#include "LayerSoftmax.h"
 
 #include "NetUtil.h" //for net saving
 
@@ -43,25 +51,25 @@ int main()
 
 	//create conv net
 	Net net;
-	net.add_convolution2D_layer(28, 28, 1, 3, 3, 8);
-	net.add_channel_bias_layer(26,26,8);
-	net.add_activation_layer("Relu");
+	net.add(new LayerConvolution2D(28, 28, 1, 3, 3, 8));
+	net.add(new LayerChannelBias(26,26,8));
+	net.add(new LayerActivation("Relu"));
 
-	net.add_convolution2D_layer(26, 26, 8, 3, 3, 8, 2, 2);
-	net.add_channel_bias_layer(12,12,8);
-	net.add_activation_layer("Relu");
-	net.add_dropout_layer(0.3f);
+	net.add(new LayerConvolution2D(26, 26, 8, 3, 3, 8, 2, 2));
+	net.add(new LayerChannelBias(12,12,8));
+	net.add(new LayerActivation("Relu"));
+	net.add(new LayerDropout(0.3f));
 
-	net.add_convolution2D_layer(12, 12, 8, 3, 3, 8);
-	net.add_channel_bias_layer(10,10,8);
-	net.add_activation_layer("Relu");
-	net.add_dropout_layer(0.3f);
+	net.add(new LayerConvolution2D(12, 12, 8, 3, 3, 8));
+	net.add(new LayerChannelBias(10,10,8));
+	net.add(new LayerActivation("Relu"));
+	net.add(new LayerDropout(0.3f));
 
-	net.add_dense_layer(10 * 10 * 8, 128);
+	net.add(new LayerDense(10 * 10 * 8, 128));
 
-	net.add_activation_layer("Relu");
-	net.add_dense_layer(128, 10);
-	net.add_softmax_layer();
+	net.add(new LayerActivation("Relu"));
+	net.add(new LayerDense(128, 10));
+	net.add(new LayerSoftmax());
 
 	//set train settings
 	NetTrain netTrain;

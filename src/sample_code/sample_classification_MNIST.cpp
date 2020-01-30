@@ -12,6 +12,11 @@ using namespace std;
 #include "MNISTReader.h"
 #include "ConfusionMatrix.h"
 
+#include "LayerActivation.h"
+#include "LayerDense.h"
+#include "LayerDropout.h"
+#include "LayerSoftmax.h"
+
 Net net;
 NetTrain netTrain;
 MatrixFloat mRefImages, mRefLabels, mTestImages, mTestLabels;
@@ -50,11 +55,11 @@ int main()
 	mRefImages/= 256.f;
   
 	//create simple net:
-	net.add_dense_layer(784, 128);
-	net.add_activation_layer("Relu");
-	net.add_dropout_layer(0.2f); //reduce overfitting
-	net.add_dense_layer(128, 10);
-	net.add_softmax_layer();
+	net.add(new LayerDense(784, 128));
+	net.add(new LayerActivation("Relu"));
+	net.add(new LayerDropout(0.2f)); //reduce overfitting
+	net.add(new LayerDense(128, 10));
+	net.add(new LayerSoftmax());
 
 	//setup train options
 	netTrain.set_net(net);

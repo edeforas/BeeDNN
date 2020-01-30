@@ -9,6 +9,9 @@ using namespace std;
 #include "Net.h"
 #include "NetTrain.h"
 
+#include "LayerDense.h"
+#include "LayerActivation.h"
+
 /////////////////////////////////////////////////////////////////////
 // for testU only
 inline bool is_near(double a, double b, double tolerancis = 1.e-10)
@@ -28,9 +31,10 @@ int main()
 {
     //build net
     Net net;
-    net.add_dense_layer(1,10);
-	net.add_activation_layer("Tanh");
-	net.add_dense_layer(10, 1);
+	net.add(new LayerDense(1,10));
+	net.add(new LayerActivation("Tanh"));
+	net.add(new LayerDense(10,1));
+
 	net.set_classification_mode(false); //set regression mode
 
     //set train data
