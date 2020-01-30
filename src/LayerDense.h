@@ -15,7 +15,7 @@
 class LayerDense : public Layer
 {
 public:
-    LayerDense(Index iInputSize,Index iOutputSize,bool bHasBias);
+    LayerDense(Index iInputSize,Index iOutputSize,bool bHasBias=true);
     virtual ~LayerDense() override;
 
 	Index input_size() const;

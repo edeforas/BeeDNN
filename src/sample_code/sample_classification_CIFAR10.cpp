@@ -9,6 +9,14 @@ using namespace std;
 #include "CIFAR10Reader.h"
 #include "ConfusionMatrix.h"
 
+#include "LayerActivation.h"
+#include "LayerConvolution2D.h"
+#include "LayerChannelBias.h"
+#include "LayerDense.h"
+#include "LayerDropout.h"
+#include "LayerSoftmax.h"
+#include "LayerPoolMax2D.h"
+
 Net net;
 NetTrain netTrain;
 MatrixFloat mRefImages, mRefLabels, mTestImages, mTestLabels;
@@ -47,11 +55,11 @@ int main()
 	mRefImages/= 256.f;
   
 	//create simple net:
-	net.add_poolmax2D_layer(32, 32, 3, 2, 2);
-	net.add_dense_layer(16 * 16 * 3, 256);
-	net.add_activation_layer("Relu");
-	net.add_dense_layer(256, 10);
-	net.add_softmax_layer();
+	net.add(new LayerPoolMax2D(32, 32, 3, 2, 2));
+	net.add(new LayerDense(16 * 16 * 3, 256));
+	net.add(new LayerActivation("Relu"));
+	net.add(new LayerDense(256, 10));
+	net.add(new LayerSoftmax());
 
 	//setup train options
 	netTrain.set_net(net);

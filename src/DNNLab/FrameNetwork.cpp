@@ -8,6 +8,9 @@
 #include "Net.h"
 #include "Layer.h"
 
+#include "LayerActivation.h"
+#include "LayerChannelBias.h"
+#include "LayerConvolution2D.h"
 #include "LayerDense.h"
 #include "LayerDropout.h"
 #include "LayerGaussianDropout.h"
@@ -19,6 +22,7 @@
 #include "LayerGaussianNoise.h"
 #include "LayerPRelu.h"
 #include "LayerPoolMax2D.h"
+#include "LayerSoftmax.h"
 
 #include <QObject>
 
@@ -178,7 +182,21 @@ void FrameNetwork::set_net(Net* pNet)
 			ui->twNetwork->setItem(i, 1, new QTableWidgetItem(cell1.c_str()));
 			ui->twNetwork->setItem(i, 3, new QTableWidgetItem(cell3.c_str()));
 		}
-    }
+		// overwrite cells in case of 2d
+		if (sType == "Convolution2D")
+		{
+			LayerConvolution2D* lpm = ((LayerConvolution2D*)l);
+            Index iInRows, iInCols, iInChannels, iKernelRows, iKernelCols, iOutChannels, iRowStride,iColStride;
+            lpm->get_params(iInRows, iInCols, iInChannels, iKernelRows, iKernelCols, iOutChannels,iRowStride,iColStride);
+
+            ///TODO use iRowStride, iColStride
+
+            string cell1 = to_string(iInRows) + "," + to_string(iInCols) + "," + to_string(iInChannels);
+			string cell3 = to_string(iKernelRows) + "," + to_string(iKernelCols) + "," + to_string(iOutChannels);
+			ui->twNetwork->setItem(i, 1, new QTableWidgetItem(cell1.c_str()));
+			ui->twNetwork->setItem(i, 3, new QTableWidgetItem(cell3.c_str()));
+		}
+	}
 	_bLock = false;
 }
 //////////////////////////////////////////////////////////////
@@ -253,7 +271,7 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
                 float fRatio=0.2f; //by default
                 if(bOk)
                     fRatio=fArg1;
-                _pNet->add_dropout_layer(fRatio);
+                _pNet->add(new LayerDropout(fRatio));
             }
 
 			else if (sType == "UniformNoise")
@@ -261,7 +279,7 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
 				float fNoise = 0.1f; //by default
 				if (bOk)
 					fNoise = fArg1;
-				_pNet->add_uniform_noise_layer(fNoise);
+				_pNet->add(new LayerUniformNoise(fNoise));
 			}
 
             else if(sType=="GaussianNoise")
@@ -269,7 +287,7 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
                 float fStd=1.f; //by default
                 if(bOk)
                     fStd=fArg1;
-                _pNet->add_gaussian_noise_layer(fStd);
+                _pNet->add(new LayerGaussianNoise(fStd));
             }
 
             else if(sType=="GaussianDropout")
@@ -277,37 +295,43 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
                 float fProba=1.f; //by default
                 if(bOk)
                     fProba=fArg1;
-                _pNet->add_gaussian_dropout_layer(fProba);
+                _pNet->add(new LayerGaussianDropout(fProba));
             }
 
             else if(sType=="GlobalGain")
-                _pNet->add_globalgain_layer();
+                _pNet->add(new LayerGlobalGain());
 			
 			else if (sType == "GlobalBias")
-				_pNet->add_globalbias_layer();
+				_pNet->add(new LayerGlobalBias());
 			
             else if (sType == "Bias")
-                _pNet->add_bias_layer();
+                _pNet->add(new LayerBias());
+
+			else if (sType == "ChannelBias")
+				_pNet->add(new LayerChannelBias(iInSize, iInSize2, max(iInSize3, 1)));
 
 			else if (sType == "Gain")
-				_pNet->add_gain_layer();
+				_pNet->add(new LayerGain());
 
 			else if (sType == "PoolMax2D")
-				_pNet->add_poolmax2D_layer(iInSize, iInSize2, max(iInSize3,1), max((int)fArg1,1), max((int)fArg2,1));
+				_pNet->add(new LayerPoolMax2D(iInSize, iInSize2, max(iInSize3,1), max((int)fArg1,1), max((int)fArg2,1)));
 			
+			else if (sType == "Convolution2D")
+				_pNet->add(new LayerConvolution2D(iInSize, iInSize2, max(iInSize3, 1), max((int)fArg1, 1), max((int)fArg2, 1), max((int)fArg3, 1)));
+
 			else if (sType == "PRelu")
-				_pNet->add_prelu_layer();
+				_pNet->add(new LayerPRelu());
 
 			else if (sType == "Softmax")
-				_pNet->add_softmax_layer();
+				_pNet->add(new LayerSoftmax());
 
             else if(sType=="DenseAndBias")
-                _pNet->add_dense_layer(iInSize,iOutSize,true);
+                _pNet->add(new LayerDense(iInSize,iOutSize,true));
 
             else if(sType=="DenseNoBias")
-                _pNet->add_dense_layer(iInSize,iOutSize,false);
+                _pNet->add(new LayerDense(iInSize,iOutSize,false));
             else
-                _pNet->add_activation_layer(sType);
+                _pNet->add(new LayerActivation(sType));
         }
     }
 
@@ -359,11 +383,13 @@ void FrameNetwork::add_new_row(int iRow)
 	qcbType->addItem("Gain");
 	qcbType->addItem("GlobalBias");
     qcbType->addItem("Bias");
-	qcbType->addItem("PoolMax2D");
 	qcbType->addItem("PRelu");
 	qcbType->addItem("Softmax");
-
-    qcbType->insertSeparator(qcbType->count());
+	qcbType->insertSeparator(qcbType->count());
+	qcbType->addItem("ChannelBias");
+	qcbType->addItem("Convolution2D");
+	qcbType->addItem("PoolMax2D");
+	qcbType->insertSeparator(qcbType->count());
 
 	for (unsigned int a = 0; a < _vsActivations.size(); a++)
 		qcbType->addItem(_vsActivations[a].c_str());

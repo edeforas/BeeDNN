@@ -10,6 +10,11 @@ using namespace std;
 #include "MNISTReader.h"
 #include "ConfusionMatrix.h"
 
+#include "LayerActivation.h"
+#include "LayerDense.h"
+#include "LayerPoolMax2D.h"
+#include "LayerSoftmax.h"
+
 Net net;
 NetTrain netTrain;
 MatrixFloat mRefImages, mRefLabels, mTestImages, mTestLabels;
@@ -48,11 +53,11 @@ int main()
 	mRefImages/= 256.f;
   
 	//create simple net:
-	net.add_poolmax2D_layer(28,28,1, 2, 2); //input rows, input cols,input channels, factor rows, factor cols
-	net.add_dense_layer(784/4, 64); // new size is 4x smaller
-	net.add_activation_layer("Relu");
-	net.add_dense_layer(64, 10);
-	net.add_softmax_layer();
+	net.add(new LayerPoolMax2D(28,28,1, 2, 2)); //input rows, input cols,input channels, factor rows, factor cols
+	net.add(new LayerDense(784/4, 64)); // new size is 4x smaller
+	net.add(new LayerActivation("Relu"));
+	net.add(new LayerDense(64, 10));
+	net.add(new LayerSoftmax());
 
 	//setup train options
 	netTrain.set_net(net);

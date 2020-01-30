@@ -10,6 +10,13 @@ using namespace std;
 #include "MNISTReader.h"
 #include "ConfusionMatrix.h"
 
+#include "LayerActivation.h"
+#include "LayerConvolution2D.h"
+#include "LayerChannelBias.h"
+#include "LayerDense.h"
+#include "LayerPoolMax2D.h"
+#include "LayerSoftmax.h"
+
 NetTrain netTrain;
 MatrixFloat mRefImages, mRefLabels, mTestImages, mTestLabels;
 int iEpoch;
@@ -55,19 +62,19 @@ int main()
 	
 	//create simple toy convolution net:
 	Net net;
-	net.add_convolution2D_layer(28, 28, 1, 3, 3, 16);
-	net.add_channel_bias_layer(26,26,16);
-	net.add_activation_layer("Relu");
+	net.add(new LayerConvolution2D(28, 28, 1, 3, 3, 16));
+	net.add(new LayerChannelBias(26,26,16));
+	net.add(new LayerActivation("Relu"));
 
-	net.add_poolmax2D_layer(26, 26, 16, 2, 2);
-	net.add_channel_bias_layer(13,13,16);
-	net.add_activation_layer("Relu");
+	net.add(new LayerPoolMax2D(26, 26, 16, 2, 2));
+	net.add(new LayerChannelBias(13,13,16));
+	net.add(new LayerActivation("Relu"));
 	
-	net.add_dense_layer(13 * 13 * 16, 128);
-	net.add_activation_layer("Relu");
-	net.add_dense_layer(128, 10);
+	net.add(new LayerDense(13 * 13 * 16, 128));
+	net.add(new LayerActivation("Relu"));
+	net.add(new LayerDense(128, 10));
 
-	net.add_softmax_layer();
+	net.add(new LayerSoftmax());
 
 	//setup train options
 	netTrain.set_net(net);

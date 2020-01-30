@@ -24,7 +24,7 @@ public:
 
 	virtual void init() override;
 
-	void get_params(Index & iInRows, Index & iInCols, Index & iInChannels, Index & iKernelRows, Index & iKernelCols, Index & iOutChannels, Index & iRowStride, Index & iColStride) const;
+    void get_params(Index & iInRows, Index & iInCols, Index & iInChannels, Index & iKernelRows, Index & iKernelCols, Index & iOutChannels, Index & iRowStride, Index & iColStride) const;
 
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;

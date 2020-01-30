@@ -26,25 +26,8 @@ public:
 	void clear();
 	void init();
 
-    void add_dense_layer(Index inSize, Index outSize, bool bHasBias=true);
-	void add_activation_layer(string sType);
-	void add_prelu_layer();
-	void add_softmax_layer();
-    void add_dropout_layer(float fRatio);
-    void add_gaussian_dropout_layer(float fProba);
-	
-	void add_uniform_noise_layer(float fNoise); 
-	void add_gaussian_noise_layer(float fStd);
-    
-	void add_globalgain_layer();
-	void add_gain_layer();
-
-	void add_globalbias_layer();
-	void add_bias_layer();
-	
-	void add_poolmax2D_layer(Index iInRow, Index iInCols, Index iInChannels, Index iRowFactor = 2, Index iColFactor = 2);
-	void add_convolution2D_layer(Index iInRows, Index iInCols, Index iInChannels, Index iKernelRows, Index iKernelCols, Index iOutChannels, Index iRowStride=1, Index iColStride=1);
-	void add_channel_bias_layer(Index iInRows, Index iInCols, Index iInChannels);
+	// take the ownership of the layer l
+	void add(Layer* l);
 
     void set_input_size(int iInputSize);
     int input_size() const;
