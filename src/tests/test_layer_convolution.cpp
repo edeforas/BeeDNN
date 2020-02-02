@@ -286,7 +286,7 @@ void forward_time()
 /////////////////////////////////////////////////////////////////
 int main()
 {
-	/*
+	
 	im2col_col2im();
 	simple_image_conv2d();
 	batch_conv2d();
@@ -296,7 +296,6 @@ int main()
 	forward_conv2d_backprop_sgd();
 	simple_image_conv2d_stride2();
 	forward_conv2d_stride2_backprop_sgd();
-	*/
 	forward_time();
 
 }

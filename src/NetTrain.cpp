@@ -300,10 +300,13 @@ float NetTrain::compute_loss_accuracy(const MatrixFloat &mSamples, const MatrixF
 						iGood += roundf(mOut(i)) == mTruthBatch(i);
 				}
 			}
-		}
 
+		}
 	}
-	*pfAccuracy = 100.f*iGood / iNbSamples;
+
+	if(pfAccuracy)
+		*pfAccuracy = 100.f*iGood / iNbSamples;
+
 	return fLoss;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
