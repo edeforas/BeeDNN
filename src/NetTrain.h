@@ -34,8 +34,6 @@ public:
     void set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth);
 	void set_validation_data(const MatrixFloat& mSamplesValidation, const MatrixFloat& mTruthValidation);
 
-	void train();
-
 	void set_epochs(int iEpochs); //100 by default
 	int get_epochs() const;
 
@@ -57,8 +55,8 @@ public:
     void set_momentum( float fMomentum = -1.f); //" -1.f is for default settings
     float get_momentum() const;
 
-	void set_batchsize(int iBatchSize); //32 by default
-	int get_batchsize() const;
+	void set_batchsize(Index iBatchSize); //32 by default
+	Index get_batchsize() const;
 
 	void set_classbalancing(bool bBalancing); //true by default //use weight loss algorithm
 	bool get_classbalancing() const;
@@ -68,6 +66,11 @@ public:
 
 	void set_loss(const string&  sLoss); // "MeanSquareError" by default, ex "MeanSquareError" "CategoricalCrossEntropy"
 	string get_loss() const;
+
+	void set_validation_batchsize(Index iValBatchSize);
+	Index get_validation_batchsize() const;
+
+	void train();
 
 	float compute_loss_accuracy(const MatrixFloat & mSamples, const MatrixFloat& mTruth,float* pfAccuracy = nullptr) const;
 
@@ -91,7 +94,8 @@ private:
 	float _fOnlineLoss;
 
 	bool _bKeepBest;
-	int _iBatchSize;
+	Index _iBatchSize;
+	Index _iValidationBatchSize;
 	int _iEpochs;
 	bool _bClassBalancingWeightLoss;
 	int _iNbLayers;

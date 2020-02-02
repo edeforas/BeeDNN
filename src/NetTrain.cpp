@@ -31,7 +31,8 @@ NetTrain::NetTrain():
 
     _pLoss = create_loss("MeanSquaredError");
     _iBatchSize = 32;
-    _bKeepBest = true;
+	_iValidationBatchSize = 128;
+	_bKeepBest = true;
     _iEpochs = 100;
     _iReboostEveryEpochs = -1; // -1 mean no reboost
 	_iOnlineAccuracyGood= 0;
@@ -79,7 +80,8 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
     set_keepbest(other._bKeepBest);
 	set_classbalancing(other._bClassBalancingWeightLoss);
     set_batchsize(other._iBatchSize);
-    set_epochs(other._iEpochs);
+	set_validation_batchsize(_iValidationBatchSize);
+	set_epochs(other._iEpochs);
 	set_reboost_every_epochs(other._iReboostEveryEpochs);
 	set_loss(other._pLoss->name());
 
@@ -208,14 +210,24 @@ string NetTrain::get_loss() const
     return _pLoss->name();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_batchsize(int iBatchSize) //16 by default
+void NetTrain::set_batchsize(Index iBatchSize) //16 by default
 {
     _iBatchSize = iBatchSize;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-int NetTrain::get_batchsize() const
+Index NetTrain::get_batchsize() const
 {
     return _iBatchSize;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void NetTrain::set_validation_batchsize(Index iValBatchSize) //128 by default
+{
+	_iValidationBatchSize = iValBatchSize;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+Index NetTrain::get_validation_batchsize() const
+{
+	return _iValidationBatchSize;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::set_classbalancing(bool bBalancing) //true by default
@@ -240,7 +252,9 @@ bool NetTrain::get_keepbest() const
 /////////////////////////////////////////////////////////////////////////////////////////////////
 float NetTrain::compute_loss_accuracy(const MatrixFloat &mSamples, const MatrixFloat &mTruth,float * pfAccuracy) const
 {
-    int iNbSamples = (int)mSamples.rows();
+    Index iNbSamples = mSamples.rows();
+	float fLoss = 0.f;
+	MatrixFloat mOut,mTruthBatch;
 
 	if ((_pNet->layers().size() == 0) || (iNbSamples == 0))
 	{
@@ -249,46 +263,48 @@ float NetTrain::compute_loss_accuracy(const MatrixFloat &mSamples, const MatrixF
 		return 0.f;
 	}
 
-    MatrixFloat mOut;
-	_pNet->forward(mSamples, mOut);
-
-	if (pfAccuracy)
+	//cut in parts of size _iValidationBatchSize for a lower memory usage
+	Index iGood = 0;
+	for (Index iStart = 0; iStart < iNbSamples; iStart+=_iValidationBatchSize)
 	{
-		if (mTruth.cols() != 1)
+		Index iEnd = iStart + _iValidationBatchSize;
+		if (iEnd > iNbSamples)
+			iEnd = iNbSamples;
+		Index iBatchSize = iEnd - iStart;
+
+		const MatrixFloat mSamplesBatch = rowRange(mSamples, iStart, iEnd); // todo check no copy
+		const MatrixFloat mTruthBatch = rowRange(mTruth, iStart, iEnd); // todo check no copy
+		
+		_pNet->forward(mSamplesBatch, mOut);
+		fLoss+= _pLoss->compute(mOut, mTruthBatch);
+
+		if (pfAccuracy)
 		{
-			if (mOut.cols() == mTruth.cols())
+			if (mTruthBatch.cols() != 1)
 			{
+				assert(mOut.cols() == mTruthBatch.cols());
 				//one hot everywhere
-				int iGood = 0;
-				for (int i = 0; i < iNbSamples; i++)
+				for (Index i = 0; i < iBatchSize; i++)
+					iGood += (argmax(mOut.row(i)) == argmax(mTruthBatch.row(i)));
+			}
+			else
+			{
+				if (mOut.cols() != 1)
 				{
-					iGood += (argmax(mOut.row(i)) == argmax(mTruth.row(i)));
+					for (Index i = 0; i < iBatchSize; i++)
+						iGood += (argmax(mOut.row(i)) == mTruthBatch(i));
 				}
-
-				*pfAccuracy= 100.f*iGood / iNbSamples;
+				else
+				{
+					for (int i = 0; i < iBatchSize; i++)
+						iGood += roundf(mOut(i)) == mTruthBatch(i);
+				}
 			}
-			else
-				*pfAccuracy= 0.f;   //todo
 		}
-		else
-		{
-			int iGood = 0;
-			if (mOut.cols() != 1)
-			{
-				for (int i = 0; i < iNbSamples; i++)
-					iGood += (argmax(mOut.row(i)) == mTruth(i));
-			}
-			else
-			{
-				for (int i = 0; i < iNbSamples; i++)
-					iGood += roundf(mOut(i)) == mTruth(i);
-			}
 
-			*pfAccuracy= 100.f*iGood / iNbSamples;
-		}
 	}
-
-    return _pLoss->compute(mOut,mTruth);
+	*pfAccuracy = 100.f*iGood / iNbSamples;
+	return fLoss;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth)
@@ -337,7 +353,7 @@ void NetTrain::train()
     Net bestNet;
 
     //accept batch size == 0 or greater than nb samples  -> full size
-    int iBatchSizeLocal=_iBatchSize;
+    Index iBatchSizeLocal=_iBatchSize;
     if( (iBatchSizeLocal >iNbSamples) || (iBatchSizeLocal ==0) )
         iBatchSizeLocal =iNbSamples;
 
@@ -393,11 +409,11 @@ void NetTrain::train()
 
 		_pNet->set_train_mode(true);
 
-        int iBatchStart=0;
+        Index iBatchStart=0;
 
         while(iBatchStart<iNbSamples)
         {
-            int iBatchEnd=iBatchStart+iBatchSizeLocal;
+            Index iBatchEnd=iBatchStart+iBatchSizeLocal;
             if(iBatchEnd>iNbSamples)
                 iBatchEnd=iNbSamples;
 

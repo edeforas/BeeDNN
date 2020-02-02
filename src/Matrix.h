@@ -649,4 +649,3 @@ void setRandomUniform(MatrixFloat& m, float fMin=-1.f, float fMax=1.f);
 default_random_engine& randomEngine();
 
 #endif
-
