@@ -124,8 +124,8 @@ void FrameNetwork::set_net(Net* pNet)
 	_bLock = true;
 
     // write input size, TODO 2D size
-    if(_pNet->layers().empty())
-        ui->twNetwork->setItem(0,1,new QTableWidgetItem(to_string(_pNet->input_size()).data()));
+//    if(_pNet->layers().empty())
+//        ui->twNetwork->setItem(0,1,new QTableWidgetItem(to_string(_pNet->input_size()).data()));
 
     //todo redraw all
     auto layers= _pNet->layers();
@@ -209,7 +209,7 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
         return;
 
     //rescan all (for now)
-    int iLastOut=_pNet->input_size();
+	int iLastOut = 0; // _pNet->input_size();
     _pNet->clear();
 
     for(int iRow=0;iRow<10;iRow++) //todo dynamic size

@@ -10,7 +10,6 @@
 #define Net_
 
 #include <vector>
-#include <string>
 using namespace std;
 
 class Layer;
@@ -26,13 +25,10 @@ public:
 	void clear();
 	void init();
 
-	// take the ownership of the layer l
+	// add a layer, take the ownership of the layer l
 	void add(Layer* l);
 
-    void set_input_size(int iInputSize);
-    int input_size() const;
-
-    const vector<Layer*> layers() const;
+	const vector<Layer*> layers() const;
     Layer& layer(size_t iLayer);
 	const Layer& layer(size_t iLayer) const;
 	size_t size() const;
@@ -48,7 +44,6 @@ public:
 private:
 	bool _bTrainMode;
 	vector<Layer*> _layers;
-    int _iInputSize;
 	bool _bClassificationMode;
 };
 

@@ -71,7 +71,7 @@ private:
     void train_and_test(bool bReset, bool bLearn);
     void update_details();
     void net_to_ui();
-    void set_input_size(int iSize);
+//    void set_input_size(int iSize);
 
     bool save();
     bool load();

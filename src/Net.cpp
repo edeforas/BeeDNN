@@ -18,7 +18,6 @@ using namespace std;
 Net::Net()
 { 
     _bTrainMode = false;
-    _iInputSize = 0;
 	_bClassificationMode = true;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,7 +33,6 @@ void Net::clear()
 
     _layers.clear();
     _bTrainMode=false;
-    _iInputSize=0;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 Net& Net::operator=(const Net& other)
@@ -44,7 +42,6 @@ Net& Net::operator=(const Net& other)
     for(unsigned int i=0;i<other._layers.size();i++)
         _layers.push_back(other._layers[i]->clone());
 
-    _iInputSize= other._iInputSize;
 	_bClassificationMode = other._bClassificationMode;
 
 	return *this;
@@ -126,17 +123,5 @@ void Net::init()
 
     for(unsigned int i=0;i<_layers.size();i++)
         _layers[i]->init();
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-void Net::set_input_size(int iInputSize)
-{
-    _iInputSize=iInputSize;
-	init();
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-int Net::input_size() const
-{
-    return _iInputSize;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////

@@ -74,7 +74,7 @@ void MainWindow::init_all()
     delete _pDataSource;
     _pDataSource=new DataSource;
 	_pDataSource->load("Sin");
-	_pEngine->net().set_input_size(_pDataSource->data_size());
+//	_pEngine->net().set_input_size(_pDataSource->data_size());
 
     ui->frameLearning->init();
     ui->frameGlobal->init();
@@ -402,11 +402,12 @@ void MainWindow::on_pushButton_2_clicked() //clear
     _qsAccuracy->clear();
 }
 //////////////////////////////////////////////////////////////////////////////
-void MainWindow::set_input_size(int iSize)
+/*void MainWindow::set_input_size(int iSize)
 {
     _iInputSize=iSize;
     _pEngine->net().set_input_size(_iInputSize);
 }
+*/
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::update_classification_tab()
 {
@@ -712,7 +713,7 @@ void MainWindow::model_changed(void * pSender)
     {
         _pDataSource->load(ui->frameGlobal->data_name());
         _pEngine->net().set_classification_mode(ui->frameGlobal->is_classification_problem());
-        set_input_size(_pDataSource->data_size());
+//        set_input_size(_pDataSource->data_size());
         _bMustSave=true;
     }
 
