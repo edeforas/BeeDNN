@@ -17,7 +17,7 @@ using namespace std;
 
 Net net;
 NetTrain netTrain;
-MatrixFloat mRefImages, mRefLabels, mTestImages, mTestLabels;
+MatrixFloat mRefImages, mRefLabels, mValImages, mValLabels;
 int iEpoch;
 chrono::steady_clock::time_point start;
 
@@ -32,7 +32,7 @@ void epoch_callback()
     iEpoch++;
     cout << "Epoch: " << iEpoch << " duration: " << delta << " ms" << endl;
 	cout << "TrainLoss: " << netTrain.get_current_train_loss() << " TrainAccuracy: " << netTrain.get_current_train_accuracy() << " %" ;
-	cout << " TestAccuracy: " << netTrain.get_current_validation_accuracy() << " %" << endl;
+	cout << " ValidationAccuracy: " << netTrain.get_current_validation_accuracy() << " %" << endl;
 
 	cout << endl;
 }
@@ -44,12 +44,12 @@ int main()
 	//load and normalize MNIST data
     cout << "Loading MNIST database..." << endl;
     MNISTReader mr;
-    if(!mr.read_from_folder(".",mRefImages,mRefLabels, mTestImages,mTestLabels))
+    if(!mr.read_from_folder(".",mRefImages,mRefLabels, mValImages,mValLabels))
     {
         cout << "MNIST samples not found, please check the *.ubyte files are in the executable folder" << endl;
         return -1;
     }
-	mTestImages/= 256.f;
+	mValImages/= 256.f;
 	mRefImages/= 256.f;
   
 	//create simple net:
@@ -66,7 +66,7 @@ int main()
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_epoch_callback(epoch_callback); //optional, show progress
 	netTrain.set_train_data(mRefImages, mRefLabels);
-	netTrain.set_validation_data(mTestImages, mTestLabels); //optional, not used for training, helps to keep the final best model
+	netTrain.set_validation_data(mValImages, mValLabels); //optional, not used for training, helps to keep the final best model
 
 	// train net
 	cout << "Training..." << endl << endl;
@@ -81,11 +81,11 @@ int main()
 	cout << "Ref accuracy: " << crRef.accuracy << " %" << endl;
 
 	MatrixFloat mClassTest;
-	net.classify(mTestImages, mClassTest);
+	net.classify(mValImages, mClassTest);
 	ConfusionMatrix cmTest;
-	ClassificationResult crTest = cmTest.compute(mTestLabels, mClassTest);
-	cout << "Test accuracy: " << crTest.accuracy << " %" << endl;
-	cout << "Test confusion matrix:" << endl << crTest.mConfMat << endl;
+	ClassificationResult crTest = cmTest.compute(mValLabels, mClassTest);
+	cout << "Val accuracy: " << crTest.accuracy << " %" << endl;
+	cout << "Val confusion matrix:" << endl << crTest.mConfMat << endl;
 	
 	//testu function
 	if (crTest.accuracy < 96.f)
