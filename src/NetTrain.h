@@ -32,7 +32,7 @@ public:
 	void set_net(Net& net);
 	Net& net();
     void set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth);
-	void set_test_data(const MatrixFloat& mSamplesTest, const MatrixFloat& mTruthTest);
+	void set_validation_data(const MatrixFloat& mSamplesValidation, const MatrixFloat& mTruthValidation);
 
 	void train();
 
@@ -72,14 +72,14 @@ public:
 	float compute_loss_accuracy(const MatrixFloat & mSamples, const MatrixFloat& mTruth,float* pfAccuracy = nullptr) const;
 
 	const vector<float>& get_train_loss() const;
-	const vector<float>& get_test_loss() const;
+	const vector<float>& get_validation_loss() const;
 	const vector<float>& get_train_accuracy() const;
-	const vector<float>& get_test_accuracy() const;
+	const vector<float>& get_validation_accuracy() const;
 
 	float get_current_train_loss() const;
 	float get_current_train_accuracy() const;
-	float get_current_test_loss() const;
-	float get_current_test_accuracy() const;
+	float get_current_validation_loss() const;
+	float get_current_validation_accuracy() const;
 
 private:
 	void train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth); //all the backprop is here	
@@ -112,20 +112,22 @@ private:
     const MatrixFloat* _pmSamplesTrain;
     const MatrixFloat* _pmTruthTrain;
 
-	const MatrixFloat* _pmSamplesTest;
-	const MatrixFloat* _pmTruthTest;
+	const MatrixFloat* _pmSamplesValidation;
+	const MatrixFloat* _pmTruthValidation;
 
 	std::function<void()> _epochCallBack;
 
     vector<float> _trainLoss;
-    vector<float> _testLoss;
     vector<float> _trainAccuracy;
-    vector<float> _testAccuracy;
+	
+	vector<float> _validationLoss;
+	vector<float> _validationAccuracy;
 
 	float _fTrainLoss;
 	float _fTrainAccuracy;
-	float _fTestLoss;
-	float _fTestAccuracy;
+
+	float _fValidationLoss;
+	float _fValidationAccuracy;
 };
 
 #endif

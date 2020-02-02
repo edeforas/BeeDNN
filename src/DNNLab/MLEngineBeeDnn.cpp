@@ -73,10 +73,10 @@ DNNTrainResult MLEngineBeeDnn::learn(const MatrixFloat& mSamples,const MatrixFlo
 	_vfTrainLoss.insert(_vfTrainLoss.end(), _pTrain->get_train_loss().begin(), _pTrain->get_train_loss().end());
 	_vfTrainAccuracy.insert(_vfTrainAccuracy.end(), _pTrain->get_train_accuracy().begin(), _pTrain->get_train_accuracy().end());
 
-	if (!_pTrain->get_test_accuracy().empty())
+	if (!_pTrain->get_validation_accuracy().empty())
 	{
-		_vfTestAccuracy.insert(_vfTestAccuracy.end(), _pTrain->get_test_accuracy().begin(), _pTrain->get_test_accuracy().end());
-		_vfTestLoss.insert(_vfTestLoss.end(), _pTrain->get_test_loss().begin(), _pTrain->get_test_loss().end());
+		_vfTestAccuracy.insert(_vfTestAccuracy.end(), _pTrain->get_validation_accuracy().begin(), _pTrain->get_validation_accuracy().end());
+		_vfTestLoss.insert(_vfTestLoss.end(), _pTrain->get_validation_loss().begin(), _pTrain->get_validation_loss().end());
 	}
 
     auto endDuration = std::chrono::steady_clock::now();

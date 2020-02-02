@@ -26,8 +26,8 @@ NetTrain::NetTrain():
 	_fTrainLoss=0.f;
 	_fTrainAccuracy=0.f;
 
-	_fTestLoss=0.f;
-	_fTestAccuracy=0.f;
+	_fValidationLoss=0.f;
+	_fValidationAccuracy=0.f;
 
     _pLoss = create_loss("MeanSquaredError");
     _iBatchSize = 32;
@@ -49,8 +49,8 @@ NetTrain::NetTrain():
     _pmSamplesTrain = nullptr;
     _pmTruthTrain = nullptr;
 
-	_pmSamplesTest = nullptr;
-	_pmTruthTest = nullptr;
+	_pmSamplesValidation = nullptr;
+	_pmTruthValidation = nullptr;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 NetTrain::~NetTrain()
@@ -88,8 +88,8 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
 
 	_fTrainLoss = other._fTrainLoss;
 	_fTrainAccuracy = other._fTrainAccuracy;
-	_fTestLoss = other._fTestLoss;
-	_fTestAccuracy = other._fTestAccuracy;
+	_fValidationLoss = other._fValidationLoss;
+	_fValidationAccuracy = other._fValidationAccuracy;
 	_iNbLayers=other._iNbLayers;
 
 	set_optimizer(other._sOptimizer);
@@ -103,16 +103,16 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
 	_trainLoss = other._trainLoss;
 	_trainAccuracy = other._trainAccuracy;
 
-	_testLoss = other._testLoss;
-	_testAccuracy = other._testAccuracy;
+	_validationLoss = other._validationLoss;
+	_validationAccuracy = other._validationAccuracy;
 
 	_epochCallBack = other._epochCallBack;
 
     _pmSamplesTrain = other._pmSamplesTrain;
     _pmTruthTrain = other._pmTruthTrain;
 
-	_pmSamplesTest = other._pmSamplesTest;
-	_pmTruthTest = other._pmTruthTest;
+	_pmSamplesValidation = other._pmSamplesValidation;
+	_pmTruthValidation = other._pmTruthValidation;
 
 	set_net(*(other._pNet));
 
@@ -297,10 +297,10 @@ void NetTrain::set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mT
     _pmTruthTrain = &mTruth;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_test_data(const MatrixFloat& mSamplesTest, const MatrixFloat& mTruthTest)
+void NetTrain::set_validation_data(const MatrixFloat& mSamplesTest, const MatrixFloat& mTruthTest)
 {
-	_pmSamplesTest = &mSamplesTest;
-	_pmTruthTest = &mTruthTest;
+	_pmSamplesValidation = &mSamplesTest;
+	_pmTruthValidation = &mTruthTest;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::train()
@@ -323,13 +323,13 @@ void NetTrain::train()
 		return ;
 		*/
     _trainLoss.clear();
-    _testLoss.clear();
+    _validationLoss.clear();
     _trainAccuracy.clear();
-    _testAccuracy.clear();
+    _validationAccuracy.clear();
 	_fTrainLoss = 1.e10f;
 	_fTrainAccuracy = 0;
-	_fTestLoss = 1.e10f;
-	_fTestAccuracy = 0;
+	_fValidationLoss = 1.e10f;
+	_fValidationAccuracy = 0;
 
     int iNbSamples=(int)mSamples.rows();
     int iReboost = 0;
@@ -360,13 +360,13 @@ void NetTrain::train()
 	float fMinLoss = 1.e10f;
 	if(_bKeepBest)
     {
-        if (_pmSamplesTest == nullptr)
+        if (_pmSamplesValidation == nullptr)
         {
             fMinLoss=compute_loss_accuracy(*_pmSamplesTrain, *_pmTruthTrain,&fMaxAccuracy);
         }
         else
         {
-            fMinLoss=compute_loss_accuracy( *_pmSamplesTest, *_pmTruthTest,&fMaxAccuracy);
+            fMinLoss=compute_loss_accuracy( *_pmSamplesValidation, *_pmTruthValidation,&fMaxAccuracy);
         }
         bestNet= *_pNet;
     }
@@ -423,15 +423,15 @@ void NetTrain::train()
 		float fSelectedAccuracy = _fTrainAccuracy;
 
 		// if having test data, compute stats with it
-        if (_pmSamplesTest != nullptr)
+        if (_pmSamplesValidation != nullptr)
         { 	
 			//use the test_db to keep the best model
-			_fTestLoss =compute_loss_accuracy( *_pmSamplesTest, *_pmTruthTest,&_fTestAccuracy);
-            _testLoss.push_back(_fTestLoss);
-            _testAccuracy.push_back(_fTestAccuracy);
+			_fValidationLoss =compute_loss_accuracy( *_pmSamplesValidation, *_pmTruthValidation,&_fValidationAccuracy);
+            _validationLoss.push_back(_fValidationLoss);
+            _validationAccuracy.push_back(_fValidationAccuracy);
 
-			fSelectedLoss = _fTestLoss;
-			fSelectedAccuracy = _fTestAccuracy;
+			fSelectedLoss = _fValidationLoss;
+			fSelectedAccuracy = _fValidationAccuracy;
 		}
 
         if (_epochCallBack)
@@ -544,14 +544,14 @@ const vector<float>& NetTrain::get_train_loss() const
     return _trainLoss;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-float NetTrain::get_current_test_loss() const
+float NetTrain::get_current_validation_loss() const
 {
-	return _fTestLoss;
+	return _fValidationLoss;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-const vector<float>& NetTrain::get_test_loss() const
+const vector<float>& NetTrain::get_validation_loss() const
 {
-    return _testLoss;
+    return _validationLoss;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 const vector<float>& NetTrain::get_train_accuracy() const
@@ -559,14 +559,14 @@ const vector<float>& NetTrain::get_train_accuracy() const
     return _trainAccuracy;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-float NetTrain::get_current_test_accuracy() const
+float NetTrain::get_current_validation_accuracy() const
 {
-	return _fTestAccuracy;
+	return _fValidationAccuracy;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-const vector<float>& NetTrain::get_test_accuracy() const
+const vector<float>& NetTrain::get_validation_accuracy() const
 {
-    return _testAccuracy;
+    return _validationAccuracy;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 float NetTrain::get_current_train_loss() const

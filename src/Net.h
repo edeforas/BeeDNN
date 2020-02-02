@@ -25,7 +25,7 @@ public:
 	void clear();
 	void init();
 
-	// add a layer, take the ownership of the layer l
+	// add a layer, take the ownership of the layer
 	void add(Layer* l);
 
 	const vector<Layer*> layers() const;

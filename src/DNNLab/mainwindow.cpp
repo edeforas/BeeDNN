@@ -121,7 +121,7 @@ void MainWindow::train_and_test(bool bReset,bool bLearn)
     if(bLearn)
     {
 		if(_pDataSource->has_test_data())
-			_pEngine->netTrain().set_test_data(_pDataSource->test_data(), _pDataSource->test_truth());
+			_pEngine->netTrain().set_validation_data(_pDataSource->test_data(), _pDataSource->test_truth());
 
         DNNTrainResult dtr =_pEngine->learn(_pDataSource->train_data(),_pDataSource->train_truth());
 

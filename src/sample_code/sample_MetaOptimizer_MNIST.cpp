@@ -23,13 +23,13 @@ using namespace std;
 //////////////////////////////////////////////////////////////////////////////
 void better_solution_callback(NetTrain& train)
 {
-	cout << "Better solution found: Accuracy= " << train.get_current_test_accuracy() << endl;
+	cout << "Better solution found: Accuracy= " << train.get_current_validation_accuracy() << endl;
 
 	// save solution to disk using a string buffer
 	string s;
 	NetUtil::write(train,s); //save train parameters
 	NetUtil::write(train.net(),s); // save network
-	std::ofstream f("solution_accuracy" + to_string(train.get_current_test_accuracy()) + ".txt");
+	std::ofstream f("solution_accuracy" + to_string(train.get_current_validation_accuracy()) + ".txt");
 	f << s;
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -76,7 +76,7 @@ int main()
 	netTrain.set_epochs(50);
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_train_data(mRefImages, mRefLabels);
-	netTrain.set_test_data(mTestImages, mTestLabels);
+	netTrain.set_validation_data(mTestImages, mTestLabels);
 	netTrain.set_net(net);
 
 	//create meta optimizer and run in parallel (for now, only weights variations)

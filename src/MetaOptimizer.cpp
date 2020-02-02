@@ -59,9 +59,9 @@ void MetaOptimizer::new_epoch(NetTrain& trainT)
 {
 	//todo add locks
 
-	if (trainT.get_current_test_accuracy() > _fBestAccuracy)
+	if (trainT.get_current_validation_accuracy() > _fBestAccuracy)
 	{
-		_fBestAccuracy = trainT.get_current_test_accuracy();
+		_fBestAccuracy = trainT.get_current_validation_accuracy();
 
 		_betterSolutionCallBack(trainT);
 	}

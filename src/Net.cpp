@@ -47,7 +47,7 @@ Net& Net::operator=(const Net& other)
 	return *this;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-// take the ownership of the layer 
+// add the layer, take the ownership of the layer 
 void Net::add(Layer* l)
 {
 	_layers.push_back(l);
@@ -118,9 +118,6 @@ size_t Net::size() const
 /////////////////////////////////////////////////////////////////////////////////////////////
 void Net::init()
 {
-    if(_layers.empty())
-        return;
-
     for(unsigned int i=0;i<_layers.size();i++)
         _layers[i]->init();
 }

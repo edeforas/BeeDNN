@@ -33,7 +33,7 @@ void epoch_callback()
     iEpoch++;
     cout << "Epoch: " << iEpoch << " duration: " << delta << " ms" << endl;
 	cout << "TrainLoss: " << netTrain.get_current_train_loss() << " TrainAccuracy: " << netTrain.get_current_train_accuracy() << " %" ;
-	cout << " TestAccuracy: " << netTrain.get_current_test_accuracy() << " %" << endl;
+	cout << " TestAccuracy: " << netTrain.get_current_validation_accuracy() << " %" << endl;
 
 	cout << endl;
 }
@@ -83,7 +83,7 @@ int main()
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_epoch_callback(epoch_callback); //optional, show progress
 	netTrain.set_train_data(mRefImages, mRefLabels);
-	netTrain.set_test_data(mTestImages, mTestLabels); //optional, not used for training, helps to keep the final best model
+	netTrain.set_validation_data(mTestImages, mTestLabels); //optional, not used for training, helps to keep the final best model
 
 	// train net
 	cout << "Training..." << endl << endl;
