@@ -206,6 +206,7 @@
     <ClCompile Include="..\CIFAR10Reader.cpp" />
     <ClCompile Include="..\ConfusionMatrix.cpp" />
     <ClCompile Include="..\LayerChannelBias.cpp" />
+    <ClCompile Include="..\LayerRRelu.cpp" />
     <ClCompile Include="DataSource.cpp" />
     <ClCompile Include="FrameGlobal.cpp" />
     <ClCompile Include="FrameLearning.cpp" />
@@ -243,6 +244,7 @@
     <ClInclude Include="..\CIFAR10Reader.h" />
     <ClInclude Include="..\ConfusionMatrix.h" />
     <ClInclude Include="..\LayerChannelBias.h" />
+    <ClInclude Include="..\LayerRRelu.h" />
     <ClInclude Include="DataSource.h" />
     <QtMoc Include="FrameGlobal.h">
     </QtMoc>

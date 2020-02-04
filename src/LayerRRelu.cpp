@@ -36,20 +36,21 @@ void LayerRRelu::init()
 ///////////////////////////////////////////////////////////////////////////////
 void LayerRRelu::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
-	if(!_bTrainMode)
+	mOut = mIn;
+	if(_bTrainMode)
+	{
+		_slopes.resize(mIn.rows(), mIn.cols());
+		setRandomUniform(_slopes, _invAlpha1, _invAlpha2);
+
+		for (Index i = 0; i < mOut.size(); i++)
+			if (mOut(i) < 0.f)
+				mOut(i) *= _slopes(i);
+	}
+	else
 	{
 		for (Index i = 0; i < mOut.size(); i++)
 			if (mOut(i) < 0.f)
 				mOut(i) *= _invAlphaMean;
-	}
-	else
-	{
-		_slopes.resize(mIn.rows(),mIn.cols());
-		setRandomUniform(_slopes,_invAlpha1,_invAlpha2);
-		
-		for (Index i = 0; i < mOut.size(); i++)
-			if (mOut(i) < 0.f)
-				mOut(i) *= _slopes(i);
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -65,5 +66,11 @@ void LayerRRelu::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGrad
 		if (mIn(i) < 0.f)
 			mGradientIn(i) *= _slopes(i);
 	}
+}
+///////////////////////////////////////////////////////////////
+void LayerRRelu::get_params(float& alpha1, float& alpha2)
+{
+	alpha1 = _alpha1;
+	alpha2 = _alpha2;
 }
 ///////////////////////////////////////////////////////////////

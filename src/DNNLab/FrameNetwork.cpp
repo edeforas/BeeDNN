@@ -21,6 +21,7 @@
 #include "LayerUniformNoise.h"
 #include "LayerGaussianNoise.h"
 #include "LayerPRelu.h"
+#include "LayerRRelu.h"
 #include "LayerPoolMax2D.h"
 #include "LayerSoftmax.h"
 
@@ -56,17 +57,15 @@ FrameNetwork::FrameNetwork(QWidget *parent) :
 
     QStringList qsl;
     qsl+="LayerType";
-    qsl+="InSize";
-    qsl+="OutSize";
-    qsl+="Arg1";
+    qsl+="Arguments";
 
     ui->twNetwork->setHorizontalHeaderLabels(qsl);
 
     for(int i=0;i<10;i++)
 		add_new_row();
 
-    ui->twNetwork->setItem(0,1,new QTableWidgetItem("1")); //first input size is 1
-    ui->twNetwork->adjustSize();
+//    ui->twNetwork->setItem(0,1,new QTableWidgetItem("1")); //first input size is 1
+//    ui->twNetwork->adjustSize();
 
     _bLock=false;
 }
@@ -99,6 +98,7 @@ void FrameNetwork::parse_cell(string sCell, float& fVal1, float& fVal2, float& f
 	fVal1 = 0.f;
 	fVal2 = 0.f;
 	fVal3 = 0.f;
+
 	vector<string> vsItems;
 	split(sCell, vsItems);
 
@@ -123,10 +123,6 @@ void FrameNetwork::set_net(Net* pNet)
     _pNet=pNet;
 	_bLock = true;
 
-    // write input size, TODO 2D size
-//    if(_pNet->layers().empty())
-//        ui->twNetwork->setItem(0,1,new QTableWidgetItem(to_string(_pNet->input_size()).data()));
-
     //todo redraw all
     auto layers= _pNet->layers();
     for(unsigned int i=0;i<layers.size();i++)
@@ -136,9 +132,10 @@ void FrameNetwork::set_net(Net* pNet)
         if(sType=="Dense")
         {
 			LayerDense* ld = (LayerDense*)l;
-			ui->twNetwork->setItem(i, 1, new QTableWidgetItem(to_string(ld->input_size()).c_str()));
-			ui->twNetwork->setItem(i, 2, new QTableWidgetItem(to_string(ld->output_size()).c_str()));
-
+			ui->twNetwork->setItem(i, 1, new QTableWidgetItem((
+				to_string(ld->input_size())+","+ to_string(ld->output_size())
+				).c_str()));
+	
             if(((LayerDense*)l)->has_bias())
                 sType="DenseAndBias";
             else
@@ -209,92 +206,47 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
         return;
 
     //rescan all (for now)
-	int iLastOut = 0; // _pNet->input_size();
     _pNet->clear();
 
     for(int iRow=0;iRow<10;iRow++) //todo dynamic size
     {
-		bool bOk=false;
 		QComboBox* pCombo=(QComboBox*)(ui->twNetwork->cellWidget(iRow,0));
         if(!pCombo)
             continue;
         string sType=pCombo->currentText().toStdString();
+		QTableWidgetItem* pwiArguments=ui->twNetwork->item(iRow,1);
 
-		//scan input size TODO 2D
-		QTableWidgetItem* pwiInSize=ui->twNetwork->item(iRow,1); //todo not used in activation
-        int iInSize=0, iInSize2=0, iInSize3 = 0;
-		if (!pwiInSize)
-		{
-			iInSize = iLastOut; //use last out
-		}
-		else
-        {
-			float f1, f2,f3;
-			parse_cell(pwiInSize->text().toStdString(), f1, f2,f3);
-			if (f1 != 0.f)
-			{
-				iInSize = (int)f1;
-				iInSize2 = (int)f2;
-				iInSize3 = (int)f3;
-			}
-			else
-				iInSize = iLastOut;
-		}
-
-		//scan output size TODO 2D
-        QTableWidgetItem* pwiOutSize=ui->twNetwork->item(iRow,2); //todo not used in activation
-        int iOutSize;
-        if(!pwiOutSize)
-            iOutSize=iInSize; //same size (i.e. activation case)
-        else
-        {
-            int iOut=pwiOutSize->text().toInt(&bOk);
-            if(bOk)
-                iOutSize=iOut;
-            else
-                iOutSize=iInSize;
-        }
-        iLastOut=iOutSize;
-
-		//scan arguments TODO 2D
-        float fArg1=0.f, fArg2=0.f, fArg3 = 0.f;
-		QTableWidgetItem* pwArg1=ui->twNetwork->item(iRow,3);
-        if(pwArg1)
-			parse_cell(pwArg1->text().toStdString(), fArg1, fArg2, fArg3);
-		else
-			bOk=false;
+		float f1=0.f, f2=0.f,f3=0.f;
+		parse_cell(pwiArguments->text().toStdString(), f1, f2,f3);
 
         if(!sType.empty())
         {
             if(sType=="Dropout")
             {
                 float fRatio=0.2f; //by default
-                if(bOk)
-                    fRatio=fArg1;
+                if(f1!=0.f)
+                    fRatio=f1;
                 _pNet->add(new LayerDropout(fRatio));
             }
 
 			else if (sType == "UniformNoise")
 			{
 				float fNoise = 0.1f; //by default
-				if (bOk)
-					fNoise = fArg1;
+				fNoise = f1;
 				_pNet->add(new LayerUniformNoise(fNoise));
 			}
 
             else if(sType=="GaussianNoise")
             {
                 float fStd=1.f; //by default
-                if(bOk)
-                    fStd=fArg1;
+                fStd=f1;
                 _pNet->add(new LayerGaussianNoise(fStd));
             }
 
             else if(sType=="GaussianDropout")
             {
                 float fProba=1.f; //by default
-                if(bOk)
-                    fProba=fArg1;
+                fProba=f1;
                 _pNet->add(new LayerGaussianDropout(fProba));
             }
 
@@ -308,28 +260,31 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
                 _pNet->add(new LayerBias());
 
 			else if (sType == "ChannelBias")
-				_pNet->add(new LayerChannelBias(iInSize, iInSize2, max(iInSize3, 1)));
+				_pNet->add(new LayerChannelBias(f1, f2, f3));
 
 			else if (sType == "Gain")
 				_pNet->add(new LayerGain());
 
 			else if (sType == "PoolMax2D")
-				_pNet->add(new LayerPoolMax2D(iInSize, iInSize2, max(iInSize3,1), max((int)fArg1,1), max((int)fArg2,1)));
+				_pNet->add(new LayerPoolMax2D(f1, f2, f3, 0,0)); //todo
 			
 			else if (sType == "Convolution2D")
-				_pNet->add(new LayerConvolution2D(iInSize, iInSize2, max(iInSize3, 1), max((int)fArg1, 1), max((int)fArg2, 1), max((int)fArg3, 1)));
+				_pNet->add(new LayerConvolution2D(f1, f2, f3, 0, 0, 0,0,0));
 
 			else if (sType == "PRelu")
 				_pNet->add(new LayerPRelu());
+
+			else if (sType == "RRelu")
+				_pNet->add(new LayerRRelu());
 
 			else if (sType == "Softmax")
 				_pNet->add(new LayerSoftmax());
 
             else if(sType=="DenseAndBias")
-                _pNet->add(new LayerDense(iInSize,iOutSize,true));
+                _pNet->add(new LayerDense(f1,f2,true));
 
             else if(sType=="DenseNoBias")
-                _pNet->add(new LayerDense(iInSize,iOutSize,false));
+                _pNet->add(new LayerDense(f1,f2,false));
             else
                 _pNet->add(new LayerActivation(sType));
         }
@@ -384,6 +339,7 @@ void FrameNetwork::add_new_row(int iRow)
 	qcbType->addItem("GlobalBias");
     qcbType->addItem("Bias");
 	qcbType->addItem("PRelu");
+	qcbType->addItem("RRelu");
 	qcbType->addItem("Softmax");
 	qcbType->insertSeparator(qcbType->count());
 	qcbType->addItem("ChannelBias");

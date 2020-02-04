@@ -24,6 +24,7 @@
 #include "LayerGlobalGain.h"
 #include "LayerPoolMax2D.h"
 #include "LayerPRelu.h"
+#include "LayerRRelu.h"
 #include "LayerSoftmax.h"
 #include "LayerUniformNoise.h"
 
@@ -103,7 +104,17 @@ void write(const Net& net,string & s)
 			ss << toString(layer->weights()) << endl;
 		}
 
-        else if (layer->type() == "GaussianNoise")
+		else if (layer->type() == "RRelu")
+		{
+			LayerRRelu* l = static_cast<LayerRRelu*>(layer);
+			float alpha1, alpha2;
+			l->get_params(alpha1, alpha2);
+
+			ss << "Layer" << i + 1 << ".alpha1=" << alpha1 << endl;
+			ss << "Layer" << i + 1 << ".alpha2=" << alpha2 << endl;
+		}
+		
+		else if (layer->type() == "GaussianNoise")
         {
             LayerGaussianNoise* l = static_cast<LayerGaussianNoise*>(layer);
             ss << "Layer" << i+1 << ".stdNoise=" << l->get_std() << endl;
@@ -238,6 +249,13 @@ void read(const string& s,Net& net)
 			MatrixFloat mf = fromString(sWeight);
 			mf.resize(1, mf.size());
 			net.layer(net.size() - 1).weights() = mf;
+		}
+
+		else if (sType == "RRelu")
+		{
+			string sAlpha1 = find_key(s, sLayer + ".alpha1");
+			string sAlpha2 = find_key(s, sLayer + ".alpha2");
+			net.add(new LayerRRelu(stof(sAlpha1), stof(sAlpha2)));
 		}
 
         else if (sType == "GaussianNoise")
