@@ -32,6 +32,12 @@ Layer* LayerDense::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDense::init()
 {
+	if (_iInputSize == 0)
+		return;
+
+	if (_iOutputSize == 0)
+		return;
+
 	assert(_iInputSize > 0);
 	assert(_iOutputSize > 0);
 	

@@ -87,19 +87,17 @@
       <number>0</number>
      </property>
      <property name="columnCount">
-      <number>4</number>
+      <number>2</number>
      </property>
-     <attribute name="horizontalHeaderDefaultSectionSize">
-      <number>150</number>
-     </attribute>
      <attribute name="horizontalHeaderMinimumSectionSize">
       <number>130</number>
+     </attribute>
+     <attribute name="horizontalHeaderDefaultSectionSize">
+      <number>150</number>
      </attribute>
      <attribute name="horizontalHeaderStretchLastSection">
       <bool>false</bool>
      </attribute>
-     <column/>
-     <column/>
      <column/>
      <column/>
     </widget>

@@ -64,9 +64,6 @@ FrameNetwork::FrameNetwork(QWidget *parent) :
     for(int i=0;i<10;i++)
 		add_new_row();
 
-//    ui->twNetwork->setItem(0,1,new QTableWidgetItem("1")); //first input size is 1
-//    ui->twNetwork->adjustSize();
-
     _bLock=false;
 }
 //////////////////////////////////////////////////////////////
@@ -82,8 +79,6 @@ void FrameNetwork::init()
     {
         ((QComboBox*)(ui->twNetwork->cellWidget(i,0)))->setCurrentIndex(0);
         ui->twNetwork->setItem(i,1,new QTableWidgetItem(""));
-        ui->twNetwork->setItem(i,2,new QTableWidgetItem(""));
-        ui->twNetwork->setItem(i,3,new QTableWidgetItem(""));
     }
     _bLock=false;
 }
@@ -147,25 +142,25 @@ void FrameNetwork::set_net(Net* pNet)
 		if (sType == "UniformNoise")
 		{
 			float fNoise = ((LayerUniformNoise*)l)->get_noise();
-			ui->twNetwork->setItem(i, 3, new QTableWidgetItem(to_string(fNoise).c_str()));
+			ui->twNetwork->setItem(i, 1, new QTableWidgetItem(to_string(fNoise).c_str()));
 		}
 
         if(sType=="GaussianNoise")
         {
             float fStd=((LayerGaussianNoise*)l)->get_std();
-            ui->twNetwork->setItem(i,3,new QTableWidgetItem(to_string(fStd).c_str()));
+            ui->twNetwork->setItem(i,1,new QTableWidgetItem(to_string(fStd).c_str()));
         }
 
         if(sType=="GaussianDropout")
         {
             float fProba=((LayerGaussianDropout*)l)->get_proba();
-            ui->twNetwork->setItem(i,3,new QTableWidgetItem(to_string(fProba).c_str()));
+            ui->twNetwork->setItem(i,1,new QTableWidgetItem(to_string(fProba).c_str()));
         }
 
         if(sType=="Dropout")
         {
             float fRate=((LayerDropout*)l)->get_rate();
-            ui->twNetwork->setItem(i,3,new QTableWidgetItem(to_string(fRate).c_str()));
+            ui->twNetwork->setItem(i,1,new QTableWidgetItem(to_string(fRate).c_str()));
         }
 	
 		// overwrite cells in case of 2d
@@ -269,13 +264,13 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
 				_pNet->add(new LayerPoolMax2D(f1, f2, f3, 0,0)); //todo
 			
 			else if (sType == "Convolution2D")
-				_pNet->add(new LayerConvolution2D(f1, f2, f3, 0, 0, 0,0,0));
+				_pNet->add(new LayerConvolution2D(f1, f2, f3, 0, 0, 0,0,0));//todo
 
 			else if (sType == "PRelu")
 				_pNet->add(new LayerPRelu());
 
 			else if (sType == "RRelu")
-				_pNet->add(new LayerRRelu());
+				_pNet->add(new LayerRRelu());//todo
 
 			else if (sType == "Softmax")
 				_pNet->add(new LayerSoftmax());

@@ -49,6 +49,7 @@ SOURCES += \
     ../LayerGlobalBias.cpp \
     ../LayerChannelBias.cpp \
     ../LayerPRelu.cpp \
+    ../LayerRRelu.cpp \
     ../LayerPoolMax2D.cpp
 
 HEADERS += \
@@ -77,6 +78,7 @@ HEADERS += \
     ../LayerGlobalBias.h \
     ../LayerChannelBias.h \
     ../LayerPRelu.h \
+    ../LayerRRelu.h \
     ../LayerPoolMax2D.h
 
 #GUI
