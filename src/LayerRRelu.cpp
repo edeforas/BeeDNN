@@ -8,6 +8,8 @@
 
 #include "LayerRRelu.h"
 
+// as in : https://arxiv.org/pdf/1505.00853.pdf
+
 ///////////////////////////////////////////////////////////////////////////////
 LayerRRelu::LayerRRelu(float alpha1, float alpha2) :
     Layer("RRelu")
