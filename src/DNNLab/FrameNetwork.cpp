@@ -212,7 +212,8 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
 		QTableWidgetItem* pwiArguments=ui->twNetwork->item(iRow,1);
 
 		float f1=0.f, f2=0.f,f3=0.f;
-		parse_cell(pwiArguments->text().toStdString(), f1, f2,f3);
+		if(pwiArguments)
+			parse_cell(pwiArguments->text().toStdString(), f1, f2,f3);
 
         if(!sType.empty())
         {
