@@ -1,11 +1,12 @@
 DataSource=Sin
-Epochs=1000
-BatchSize=0
+
+Epochs=2000
+BatchSize=32
 Loss=MeanSquaredError
 KeepBest=1
 ReboostEveryEpochs=-1
-ClassBalancingWeightLoss=1
-Optimizer=iRPROP-
+ClassBalancingWeightLoss=0
+Optimizer=Adam
 LearningRate=-1
 Decay=-1
 Momentum=-1
@@ -15,24 +16,26 @@ NbLayers=3
 Problem=Regression
 
 Layer1.type=Dense
-Layer1.inSize=1
-Layer1.outSize=3
 Layer1.hasBias=1
+Layer1.inputSize=1
+Layer1.outputSize=5
 Layer1.weight=
-0.5735 -0.5948 0.4979 
-1.641 1.712 0.01686 
+-0.1706 -1.211 -0.0957 -1.02 0.8442 
+1.345 2.104 0.9658 -1.317 0.3613 
 
-Layer2.type=Tanh
+Layer2.type=ELiSH
 
 Layer3.type=Dense
-Layer3.inSize=3
-Layer3.outSize=1
 Layer3.hasBias=1
+Layer3.inputSize=5
+Layer3.outputSize=1
 Layer3.weight=
--2.154 
-2.055 
-2.653 
-0.02863 
+1.387 
+-1.165 
+1.396 
+1.828 
+-0.5802 
+0.1474 
 
 Notes=
-   
+  

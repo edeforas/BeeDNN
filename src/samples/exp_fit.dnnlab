@@ -1,4 +1,5 @@
 DataSource=Exp
+
 Epochs=100
 BatchSize=0
 Loss=MeanSquaredError
@@ -15,9 +16,9 @@ NbLayers=3
 Problem=Regression
 
 Layer1.type=Dense
-Layer1.inSize=1
-Layer1.outSize=5
 Layer1.hasBias=1
+Layer1.inputSize=1
+Layer1.outputSize=5
 Layer1.weight=
 1.445 1.265 -0.5192 -0.09324 1.347 
 -3.278 -4.12 1.671 0.8187 -0.9587 
@@ -25,9 +26,9 @@ Layer1.weight=
 Layer2.type=Relu
 
 Layer3.type=Dense
-Layer3.inSize=5
-Layer3.outSize=1
 Layer3.hasBias=1
+Layer3.inputSize=5
+Layer3.outputSize=1
 Layer3.weight=
 7.764 
 18.08 
@@ -37,9 +38,4 @@ Layer3.weight=
 2.353 
 
 Notes=
-Toy fitting sample:
-- first level is 1 -> 5 dense
-- 5 activation function
-- last level is 5 ->1 dense
-
-Goals is to play with optimizers/activations
+ Toy fitting sample: - first level is 1 -> 5 dense - 5 activation function - last level is 5 ->1 dense  Goals is to play with optimizers/activations
