@@ -234,6 +234,58 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+// E2RU as in https://arxiv.org/pdf/1804.11237.pdf
+class ActivationE2RU : public Activation
+{
+public:
+	string name() const override
+	{
+		return "E2RU";
+	}
+
+	float apply(float x) const override
+	{
+		if (x >= 0.f)
+			return sqrtf(2.f*2.f*x+1.f)-0.5f;
+		else
+			return expf(x*2.f)-0.5f;
+	}
+
+	float derivation(float x) const override
+	{
+		if (x >= 0.f)
+			return 2.f/sqrtf(2.f*2.f*x+1.f);
+		else
+			return 2.f*expf(2.f*x);
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
+// E3RU as in https://arxiv.org/pdf/1804.11237.pdf
+class ActivationE3RU : public Activation
+{
+public:
+	string name() const override
+	{
+		return "E3RU";
+	}
+
+	float apply(float x) const override
+	{
+		if (x >= 0.f)
+			return powf(3.f*3.f*x + 1.f,1./3.f) - 1./3.f;
+		else
+			return expf(x*3.f) - 1./3.f;
+	}
+
+	float derivation(float x) const override
+	{
+		if (x >= 0.f)
+			return 3.f*powf(3.f*3.f*x + 1.f,-2.f/3.f);
+		else
+			return 3.f*expf(3.f*x);
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
 class ActivationBent: public Activation
 {
 public:
@@ -736,7 +788,65 @@ public:
     {
         return x>0.f ? 1.f/(1.f+x) : 0.f;
     }
-};//////////////////////////////////////////////////////////////////////////////
+};
+//////////////////////////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////////////////////////
+// O2RU as in https://arxiv.org/pdf/1804.11237.pdf
+class ActivationO2RU : public Activation
+{
+public:
+	string name() const override
+	{
+		return "O2RU";
+	}
+
+	float apply(float x) const override
+	{
+		if (x >= 0.f)
+			return sqrtf(2.f*2.f*x + 1.f) - 1.f;
+		else
+			return -sqrtf(-2.f*2.f*x + 1.f) + 1.f;
+	}
+
+	float derivation(float x) const override
+	{
+		if (x >= 0.f)
+			return 2.f / sqrtf(2.f*2.f*x + 1.f);
+		else
+			return 2.f / sqrtf(-2.f*2.f*x + 1.f);
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
+// O3RU as in https://arxiv.org/pdf/1804.11237.pdf
+class ActivationO3RU : public Activation
+{
+public:
+	string name() const override
+	{
+		return "O3RU";
+	}
+
+	float apply(float x) const override
+	{
+		if (x >= 0.f)
+			return powf(3.f*3.f*x + 1.f, 1. / 3.f) - 1.f;
+		else
+			return -powf(-3.f*3.f*x + 1.f, 1. / 3.f) + 1.f;
+	}
+
+	float derivation(float x) const override
+	{
+		if (x >= 0.f)
+			return 3.f*powf(3.f*3.f*x + 1.f, -2.f / 3.f);
+		else
+			return 3.f*powf(-3.f*3.f*x + 1.f, -2.f / 3.f);
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
+
+
 class ActivationELU: public Activation
 {
 public:
@@ -1193,7 +1303,13 @@ Activation* get_activation(const string& sActivation)
     else if(sActivation=="Exponential")
         return new ActivationExponential;
 
-    else if(sActivation=="Gauss")
+	else if (sActivation == "E2RU")
+		return new ActivationE2RU;
+	
+	else if (sActivation == "E3RU")
+		return new ActivationE3RU;
+
+	else if(sActivation=="Gauss")
         return new ActivationGauss;
 	
     else if(sActivation=="GELU")
@@ -1240,6 +1356,12 @@ Activation* get_activation(const string& sActivation)
 	
 	else if(sActivation=="NLRelu")
         return new ActivationNLRelu;
+
+	else if (sActivation == "O2RU")
+		return new ActivationO2RU;
+
+	else if (sActivation == "O3RU")
+		return new ActivationO3RU;
 
     else if(sActivation=="Parablu")
         return new ActivationParablu;
@@ -1312,7 +1434,9 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("ELiSH");
     vsActivations.push_back("Elliot");
     vsActivations.push_back("ELU");
-    vsActivations.push_back("Exponential");
+	vsActivations.push_back("Exponential");
+	vsActivations.push_back("E2RU");
+	vsActivations.push_back("E3RU");
     vsActivations.push_back("Gauss");
     vsActivations.push_back("GELU");
     vsActivations.push_back("HardELU");
@@ -1329,6 +1453,8 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("LogSigmoid");
     vsActivations.push_back("Mish");	
     vsActivations.push_back("NLRelu");
+	vsActivations.push_back("O2RU");
+	vsActivations.push_back("O3RU");
     vsActivations.push_back("Parablu");
     vsActivations.push_back("Relu");
     vsActivations.push_back("Relu6");
