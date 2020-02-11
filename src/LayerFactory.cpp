@@ -17,8 +17,6 @@
 #include "LayerPoolMax2D.h"
 #include "LayerSoftmax.h"
 
-#include <string>
-using namespace std;
 //////////////////////////////////////////////////////////////////////////////
 Layer* LayerFactory::create(string sLayer,float fArg1,float fArg2,float fArg3,float fArg4,float fArg5)
 {
@@ -28,8 +26,17 @@ Layer* LayerFactory::create(string sLayer,float fArg1,float fArg2,float fArg3,fl
 	if (sLayer == "RRelu")
 		return new LayerRRelu();
 
+	if (sLayer == "PRelu")
+		return new LayerPRelu();
+
 	if (sLayer == "GlobalBias")
 		return new LayerGlobalBias();
+
+	if (sLayer == "Gain")
+		return new LayerGain();
+
+	if (sLayer == "Bias")
+		return new LayerBias();
 
 	if (sLayer == "GlobalGain")
 		return new LayerGlobalGain();
