@@ -272,9 +272,9 @@ public:
 	float apply(float x) const override
 	{
 		if (x >= 0.f)
-			return powf(3.f*3.f*x + 1.f,1./3.f) - 1./3.f;
+			return powf(3.f*3.f*x + 1.f,1.f/3.f) - 1.f/3.f;
 		else
-			return expf(x*3.f) - 1./3.f;
+			return expf(x*3.f) - 1.f/3.f;
 	}
 
 	float derivation(float x) const override
@@ -831,9 +831,9 @@ public:
 	float apply(float x) const override
 	{
 		if (x >= 0.f)
-			return powf(3.f*3.f*x + 1.f, 1. / 3.f) - 1.f;
+			return powf(3.f*3.f*x + 1.f, 1.f / 3.f) - 1.f;
 		else
-			return -powf(-3.f*3.f*x + 1.f, 1. / 3.f) + 1.f;
+			return -powf(-3.f*3.f*x + 1.f, 1.f / 3.f) + 1.f;
 	}
 
 	float derivation(float x) const override

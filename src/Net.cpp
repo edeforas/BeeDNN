@@ -53,6 +53,15 @@ void Net::add(Layer* l)
 	_layers.push_back(l);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
+// replace a layer, take the ownership of the layer
+void Net::replace(size_t iLayer, Layer* l)
+{
+	assert(iLayer < _layers.size());
+
+	delete _layers[iLayer];
+	_layers[iLayer] = l;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 {
     MatrixFloat mTemp=mIn;

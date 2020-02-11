@@ -2,6 +2,8 @@
 
 #include "Net.h"
 
+#include "LayerFactory.h"
+
 #include <ctime>
 #include <thread>
 
@@ -69,18 +71,18 @@ void MetaOptimizer::new_epoch(NetTrain& trainT)
 ////////////////////////////////////////////////////////////////
 int MetaOptimizer::run_thread(int iThread, MetaOptimizer* self)
 {
-	//hard copy ref net and train
-	Net netT;
-	NetTrain trainT;
-	
 	//change rand seed for each threads
 	for (int i = 0; i < iThread; i++)
 		randomEngine()();
 
+	//hard copy ref net and train
+	Net netT;
+	NetTrain trainT;
 	netT = self->_pTrain->net();
 	trainT = *(self->_pTrain);
-	
 	trainT.set_net(netT);
+
+	self->apply_variations(netT);
 
 	// lambda epoch callback:
 	trainT.set_epoch_callback([&]()
@@ -100,3 +102,43 @@ void MetaOptimizer::set_better_solution_callback(std::function<void(NetTrain& tr
 	_betterSolutionCallBack = betterSolutionCallBack;
 }
 ////////////////////////////////////////////////////////////////
+void MetaOptimizer::add_variation(Index iLayer, string sType, float fArg1, float fArg2, float fArg3, float fArg4, float fArg5)
+{
+	MetaOptimizerVariation v;
+	v.iLayer = iLayer;
+	v.sType = sType;
+	v.fArg1 = fArg1;
+	v.fArg2 = fArg2;
+	v.fArg3 = fArg3;
+	v.fArg4 = fArg4;
+	v.fArg5 = fArg5;
+
+	_variations.push_back(v);
+}
+////////////////////////////////////////////////////////////////
+void MetaOptimizer::apply_variations(Net& net)
+{
+	// set optional variation
+	for (size_t iL = 0; iL < net.size(); iL++)
+	{
+		//collect all variations for a layer, not optimized, but ok
+		vector<MetaOptimizerVariation> vl;
+		for (size_t iv = 0; iv < _variations.size(); iv++)
+		{
+			if (_variations[iv].iLayer == iL)
+				vl.push_back(_variations[iv]);
+		}
+
+		int iVariation = randomEngine()() % (vl.size()+1);
+
+		if (iVariation > 0) //original variation accepted
+		{
+			const MetaOptimizerVariation & v = vl[iVariation-1];
+
+			net.replace(iL, LayerFactory::create(v.sType,v.fArg1, v.fArg2, v.fArg3, v.fArg4, v.fArg5));
+		}
+	}
+}
+////////////////////////////////////////////////////////////////
+
+

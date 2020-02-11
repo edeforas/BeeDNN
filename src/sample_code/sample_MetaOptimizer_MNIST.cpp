@@ -1,6 +1,6 @@
 //this sample launch in parallel multiple runs of the same net optimization 
 //and save the current best solution on disk
-//this is a heavy test, but expect val_accuracy>99.30% after 30min
+//this is a heavy test, but expect val_accuracy>99.30% after 40min (got max 99.41%)
 
 #include <iostream>
 #include <fstream>
@@ -36,17 +36,17 @@ void better_solution_callback(NetTrain& train)
 int main()
 {
 	//load MNIST data
-	MatrixFloat mRefImages, mRefLabels, mTestImages, mTestLabels; 
+	MatrixFloat mRefImages, mRefLabels, mValImages, mValLabels;
 	cout << "Loading MNIST database..." << endl;
     MNISTReader mr;
-    if(!mr.read_from_folder(".",mRefImages,mRefLabels, mTestImages,mTestLabels))
+    if(!mr.read_from_folder(".",mRefImages,mRefLabels, mValImages, mValLabels))
     {
         cout << "MNIST samples not found, please check the *-ubyte files are in the executable folder" << endl;
         return -1;
     }
-  
+
 	//normalize pixels data
-	mTestImages /= 256.f;
+	mValImages /= 256.f;
 	mRefImages /= 256.f;
 
 	//create conv net
@@ -76,13 +76,20 @@ int main()
 	netTrain.set_epochs(50);
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_train_data(mRefImages, mRefLabels);
-	netTrain.set_validation_data(mTestImages, mTestLabels);
+	netTrain.set_validation_data(mValImages, mValLabels);
 	netTrain.set_net(net);
 
 	//create meta optimizer and run in parallel (for now, only weights variations)
 	cout << "Training with all cores ..." << endl;
 	MetaOptimizer optim; 
 	optim.set_train(netTrain);
+	optim.add_variation(2, "RRelu");
+	optim.add_variation(2, "E2RU");
+	optim.add_variation(2, "Swish");
+	optim.add_variation(2, "Mish");
+	optim.add_variation(2, "LeakyRelu");
+
+
 	optim.set_better_solution_callback(better_solution_callback);
 	optim.run(); // will use 100% CPU
 

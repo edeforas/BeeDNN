@@ -28,6 +28,9 @@ public:
 	// add a layer, take the ownership of the layer
 	void add(Layer* l);
 
+	// replace a layer, take the ownership of the layer
+	void replace(size_t iLayer,Layer* l);
+
 	const vector<Layer*> layers() const;
     Layer& layer(size_t iLayer);
 	const Layer& layer(size_t iLayer) const;
