@@ -319,6 +319,14 @@ void setRandomUniform(MatrixFloat& m, float fMin, float fMax)
 		m(i) = dis(randomEngine());
 }
 ///////////////////////////////////////////////////////////////////////////
+void setBernoulli(MatrixFloat& m, float fProba)
+{
+	bernoulli_distribution dis(fProba);
+
+	for (Index i = 0; i < m.size(); i++)
+		m(i) = (float)(!dis(randomEngine()));
+}
+///////////////////////////////////////////////////////////////////////////
 void channelWiseAdd(MatrixFloat& mIn, Index iNbSamples, Index iNbChannels, Index iNbRows, Index iNbCols, const MatrixFloat& weight)
 {
 	assert(weight.size() == iNbChannels);

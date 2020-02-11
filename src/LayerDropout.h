@@ -12,11 +12,6 @@
 #include "Layer.h"
 #include "Matrix.h"
 
-#include <random>
-using namespace std;
-
-class Activation;
-
 class LayerDropout : public Layer
 {
 public:
@@ -33,8 +28,6 @@ public:
 private:
 	float _fRate;
 	MatrixFloat _mask;
-
-	bernoulli_distribution _distBernoulli;
 };
 
 #endif

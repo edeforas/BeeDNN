@@ -13,8 +13,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 LayerDropout::LayerDropout(float fRate):
     Layer("Dropout"),
-    _fRate(fRate),
-	_distBernoulli(fRate)
+    _fRate(fRate)
 { }
 ///////////////////////////////////////////////////////////////////////////////
 LayerDropout::~LayerDropout()
@@ -29,12 +28,9 @@ void LayerDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	if (_bTrainMode && (_fRate != 0.f))
 	{
-		_mask.setConstant(mIn.rows(), mIn.cols(), 1.f / (1.f - _fRate));
-		
-		for(int i=0;i< _mask.size();i++)
-			if (_distBernoulli(randomEngine()))
-				_mask(i) = 0.f;
-
+		_mask.resizeLike(mIn);
+		setBernoulli(_mask, _fRate);
+		_mask *= 1.f / (1.f - _fRate);
 		mOut = mIn.cwiseProduct(_mask);
 	}
 	else
