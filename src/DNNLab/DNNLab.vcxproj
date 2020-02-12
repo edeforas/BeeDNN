@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{CBB59BB4-DB10-33D5-ACBB-01DEC4FB50ED}</ProjectGuid>
     <RootNamespace>DNNLab</RootNamespace>
-    <Keyword>QtVS_v301</Keyword>
+    <Keyword>QtVS_v302</Keyword>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformMinVersion>10.0.17763.0</WindowsTargetPlatformMinVersion>
   </PropertyGroup>
@@ -67,12 +67,12 @@
   </ImportGroup>
   <PropertyGroup>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">DNNLab</TargetName>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">DNNLab_debug</TargetName>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
   </PropertyGroup>
@@ -86,12 +86,11 @@
       <DisableSpecificWarnings>4577;4467;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ExceptionHandling>Sync</ExceptionHandling>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <ObjectFileName>release\</ObjectFileName>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
       <Optimization>MaxSpeed</Optimization>
       <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;USE_QWT;QWT_DLL;USE_EIGEN;QT_NO_DEBUG;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
-      <ProgramDataBaseFileName>
-      </ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
@@ -150,7 +149,7 @@
       <DisableSpecificWarnings>4577;4467;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ExceptionHandling>Sync</ExceptionHandling>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <ObjectFileName>debug\</ObjectFileName>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;USE_QWT;QWT_DLL;USE_EIGEN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
@@ -159,6 +158,7 @@
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <WarningLevel>Level3</WarningLevel>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
       <AdditionalDependencies>C:\dev\Qwt_6.1.4\lib\qwtd.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -205,8 +205,6 @@
     <ClCompile Include="..\Activation.cpp" />
     <ClCompile Include="..\CIFAR10Reader.cpp" />
     <ClCompile Include="..\ConfusionMatrix.cpp" />
-    <ClCompile Include="..\LayerChannelBias.cpp" />
-    <ClCompile Include="..\LayerRRelu.cpp" />
     <ClCompile Include="DataSource.cpp" />
     <ClCompile Include="FrameGlobal.cpp" />
     <ClCompile Include="FrameLearning.cpp" />
@@ -215,9 +213,11 @@
     <ClCompile Include="..\Layer.cpp" />
     <ClCompile Include="..\LayerActivation.cpp" />
     <ClCompile Include="..\LayerBias.cpp" />
+    <ClCompile Include="..\LayerChannelBias.cpp" />
     <ClCompile Include="..\LayerConvolution2D.cpp" />
     <ClCompile Include="..\LayerDense.cpp" />
     <ClCompile Include="..\LayerDropout.cpp" />
+    <ClCompile Include="..\LayerFactory.cpp" />
     <ClCompile Include="..\LayerGain.cpp" />
     <ClCompile Include="..\LayerGaussianDropout.cpp" />
     <ClCompile Include="..\LayerGaussianNoise.cpp" />
@@ -225,6 +225,7 @@
     <ClCompile Include="..\LayerGlobalGain.cpp" />
     <ClCompile Include="..\LayerPRelu.cpp" />
     <ClCompile Include="..\LayerPoolMax2D.cpp" />
+    <ClCompile Include="..\LayerRRelu.cpp" />
     <ClCompile Include="..\LayerSoftmax.cpp" />
     <ClCompile Include="..\LayerUniformNoise.cpp" />
     <ClCompile Include="..\Loss.cpp" />
@@ -243,8 +244,6 @@
     <ClInclude Include="..\Activation.h" />
     <ClInclude Include="..\CIFAR10Reader.h" />
     <ClInclude Include="..\ConfusionMatrix.h" />
-    <ClInclude Include="..\LayerChannelBias.h" />
-    <ClInclude Include="..\LayerRRelu.h" />
     <ClInclude Include="DataSource.h" />
     <QtMoc Include="FrameGlobal.h">
     </QtMoc>
@@ -257,9 +256,11 @@
     <ClInclude Include="..\Layer.h" />
     <ClInclude Include="..\LayerActivation.h" />
     <ClInclude Include="..\LayerBias.h" />
+    <ClInclude Include="..\LayerChannelBias.h" />
     <ClInclude Include="..\LayerConvolution2D.h" />
     <ClInclude Include="..\LayerDense.h" />
     <ClInclude Include="..\LayerDropout.h" />
+    <ClInclude Include="..\LayerFactory.h" />
     <ClInclude Include="..\LayerGain.h" />
     <ClInclude Include="..\LayerGaussianDropout.h" />
     <ClInclude Include="..\LayerGaussianNoise.h" />
@@ -267,6 +268,7 @@
     <ClInclude Include="..\LayerGlobalGain.h" />
     <ClInclude Include="..\LayerPRelu.h" />
     <ClInclude Include="..\LayerPoolMax2D.h" />
+    <ClInclude Include="..\LayerRRelu.h" />
     <ClInclude Include="..\LayerSoftmax.h" />
     <ClInclude Include="..\LayerUniformNoise.h" />
     <ClInclude Include="..\Loss.h" />

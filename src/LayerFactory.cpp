@@ -20,6 +20,12 @@
 //////////////////////////////////////////////////////////////////////////////
 Layer* LayerFactory::create(string sLayer,float fArg1,float fArg2,float fArg3,float fArg4,float fArg5)
 {
+    (void)fArg1;
+    (void)fArg2;
+    (void)fArg3;
+    (void)fArg4;
+    (void)fArg5;
+
 	if(sLayer=="Dense")
 		return new LayerDense((Index)fArg1,(Index)fArg2);
 

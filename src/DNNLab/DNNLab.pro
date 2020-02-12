@@ -27,6 +27,7 @@ SOURCES += \
     ../CIFAR10Reader.cpp \
     ../LayerBias.cpp \
     ../LayerConvolution2D.cpp \
+    ../LayerFactory.cpp \
     ../LayerUniformNoise.cpp \
     ../Net.cpp \
     ../NetUtil.cpp \
@@ -58,6 +59,7 @@ HEADERS += \
     ../Layer.h \
     ../LayerBias.h \
     ../LayerConvolution2D.h \
+    ../LayerFactory.h \
     ../LayerUniformNoise.h \
     ../Matrix.h \
     ../ConfusionMatrix.h \
