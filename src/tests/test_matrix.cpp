@@ -61,11 +61,11 @@ void test_bernoulli()
 	MatrixFloat m(1000, 1000);
 	chrono::steady_clock::time_point start = chrono::steady_clock::now();
 	for(int i=1;i<10;i++)
-		setBernoulli(m, 0.5f);
+		setQuickBernoulli(m, 0.3f);
 
 	chrono::steady_clock::time_point end = chrono::steady_clock::now();
 	auto delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-	cout << "Bernoulli Time elapsed: " << delta << " ms" << endl;
+	cout << "Bernoulli Time elapsed: " << delta << " ms. Mean= " << m.mean() << endl;
 }
 ////////////////////////////////////////////////////////
 int main()

@@ -29,7 +29,7 @@ void LayerDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 	if (_bTrainMode && (_fRate != 0.f))
 	{
 		_mask.resizeLike(mIn);
-		setBernoulli(_mask, _fRate);
+		setQuickBernoulli(_mask, 1.f-_fRate);
 		_mask *= 1.f / (1.f - _fRate);
 		mOut = mIn.cwiseProduct(_mask);
 	}

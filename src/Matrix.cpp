@@ -319,12 +319,19 @@ void setRandomUniform(MatrixFloat& m, float fMin, float fMax)
 		m(i) = dis(randomEngine());
 }
 ///////////////////////////////////////////////////////////////////////////
-void setBernoulli(MatrixFloat& m, float fProba)
+void setQuickBernoulli(MatrixFloat& m, float fProba)
 {
-	bernoulli_distribution dis(fProba);
-
+	// quick bernoulli ; resolution proba = 1/65536.
+	// speed is 6x faster than bernoulli_distribution !
+	unsigned int uiLimit = int(fProba*65536.);
 	for (Index i = 0; i < m.size(); i++)
-		m(i) = (float)(!dis(randomEngine()));
+		m(i) = (randomEngine()() & 0xffff) < uiLimit;
+
+/*
+	bernoulli_distribution dis(fProba);
+	for (Index i = 0; i < m.size(); i++)
+		m(i) = (float)(dis(randomEngine()));
+*/
 }
 ///////////////////////////////////////////////////////////////////////////
 void channelWiseAdd(MatrixFloat& mIn, Index iNbSamples, Index iNbChannels, Index iNbRows, Index iNbCols, const MatrixFloat& weight)

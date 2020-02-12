@@ -80,7 +80,7 @@ int main()
 	netTrain.set_net(net);
 
 	//create meta optimizer and run in parallel (for now, only weights variations)
-	cout << "Training with all cores ..." << endl;
+	cout << "Training with all CPU cores ..." << endl;
 	MetaOptimizer optim; 
 	optim.set_train(netTrain);
 	optim.add_variation(2, "RRelu");
