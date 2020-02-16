@@ -9,6 +9,9 @@
 #ifndef LayerConvolution2D_
 #define LayerConvolution2D_
 
+#include <vector>
+using namespace std;
+
 #include "Layer.h"
 #include "Matrix.h"
 
@@ -30,11 +33,16 @@ public:
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 
 	void im2col(const MatrixFloat & mIn, MatrixFloat & mCol);
+	void im2col_LUT(const MatrixFloat & mIn, MatrixFloat & mCol);
 	void col2im(const MatrixFloat & mCol, MatrixFloat & mIm);
 
 private:
 	void reshape_to_out(MatrixFloat & mOut);
 	void reshape_from_out(MatrixFloat & mOut);
+	
+	// LUT algo
+	void create_im2col_LUT();
+	vector<Index> _im2ColLUT;
 
 	Index _iInRows;
 	Index _iInCols;
@@ -50,6 +58,7 @@ private:
 	Index _iOutRows;
 	Index _iOutCols;
 
+public:
 	MatrixFloat _im2col; // input image, im2col format
 	MatrixFloat _tempImg; // temporary image, to avoid malloc
 };

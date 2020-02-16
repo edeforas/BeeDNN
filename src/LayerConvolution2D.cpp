@@ -39,6 +39,7 @@ LayerConvolution2D::LayerConvolution2D(Index iInRows, Index iInCols, Index iInCh
 	if (_iColStride > 1)
 		_iOutCols = (_iOutCols + 1) / _iColStride;
 
+	create_im2col_LUT();
 	LayerConvolution2D::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -77,6 +78,7 @@ Layer* LayerConvolution2D::clone() const
 void LayerConvolution2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	im2col(mIn, _im2col);
+//	im2col_LUT(mIn, _im2col);
 	mOut = _weight * (_im2col.transpose());
 	reshape_to_out(mOut);
 }
@@ -225,5 +227,48 @@ void LayerConvolution2D::reshape_from_out(MatrixFloat & mOut)
 		}
 	}
 	mOut.resize(_iOutChannels, _iOutRows*_iOutCols*_iSamples);
+}
+///////////////////////////////////////////////////////////////////////////////
+void LayerConvolution2D::im2col_LUT(const MatrixFloat & mIn, MatrixFloat & mCol)
+{
+	_iSamples = (int)mIn.rows();
+	mCol.resize(_iOutRows * _iOutCols* _iSamples, _iKernelRows * _iKernelCols*_iInChannels);
+
+	Index iLUTRows = _im2ColLUT.size();
+
+	for (Index iSample = 0; iSample < _iSamples; iSample++)
+	{
+		for (Index iOutRow = 0; iOutRow < _iOutRows; iOutRow++)
+		{
+			for (Index iOutCol = 0; iOutCol < _iOutCols; iOutCol++)
+			{
+				Index iDecal = iSample * _iInRows*_iInCols + iOutRow * _iInCols + iOutCol;
+				const float *pIn = mIn.data() + iDecal;
+				Index iRowDest = iOutCol + iOutRow * _iOutCols;
+				float * pOut = mCol.data() + iRowDest * mCol.cols()+iSample*_iOutCols*_iOutRows*iLUTRows;
+				for (Index iLUT = 0; iLUT < iLUTRows; iLUT++)
+				{
+					//mCol(iRowDest,iLUT) = *(pIn+_im2ColLUT[iLUT]);
+					*(pOut+iLUT)= *(pIn+_im2ColLUT[iLUT]);
+				}
+			}
+		}
+	}
+}
+///////////////////////////////////////////////////////////////////////////////
+void LayerConvolution2D::create_im2col_LUT()
+{
+	_im2ColLUT.resize(_iKernelRows * _iKernelCols*_iInChannels);
+	for (Index iInChannel = 0; iInChannel < _iInChannels; iInChannel++)
+	{
+		for (Index iKRow = 0; iKRow < _iKernelRows; iKRow++)
+		{
+			for (Index iKCol = 0; iKCol < _iKernelCols; iKCol++)
+			{
+				_im2ColLUT[iKCol + iKRow * _iKernelCols+iInChannel* _iKernelRows*_iKernelCols] = 
+					(iInChannel*_iInRows*_iInCols+iKRow*_iInCols+iKCol);
+			}
+		}
+	}
 }
 ///////////////////////////////////////////////////////////////////////////////
