@@ -77,8 +77,8 @@ Layer* LayerConvolution2D::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
-	im2col(mIn, _im2col);
-//	im2col_LUT(mIn, _im2col);
+//	im2col(mIn, _im2col);
+	im2col_LUT(mIn, _im2col);
 	mOut = _weight * (_im2col.transpose());
 	reshape_to_out(mOut);
 }
@@ -242,13 +242,12 @@ void LayerConvolution2D::im2col_LUT(const MatrixFloat & mIn, MatrixFloat & mCol)
 		{
 			for (Index iOutCol = 0; iOutCol < _iOutCols; iOutCol++)
 			{
-				Index iDecal = iSample * _iInRows*_iInCols + iOutRow * _iInCols + iOutCol;
+				Index iDecal = iSample * _iInRows*_iInCols*_iInChannels + iOutRow * _iInCols + iOutCol;
 				const float *pIn = mIn.data() + iDecal;
 				Index iRowDest = iOutCol + iOutRow * _iOutCols;
 				float * pOut = mCol.data() + iRowDest * mCol.cols()+iSample*_iOutCols*_iOutRows*iLUTRows;
 				for (Index iLUT = 0; iLUT < iLUTRows; iLUT++)
 				{
-					//mCol(iRowDest,iLUT) = *(pIn+_im2ColLUT[iLUT]);
 					*(pOut+iLUT)= *(pIn+_im2ColLUT[iLUT]);
 				}
 			}
