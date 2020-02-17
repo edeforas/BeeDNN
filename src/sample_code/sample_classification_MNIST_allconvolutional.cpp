@@ -1,6 +1,6 @@
-// all convolutional MNIST classification with a conv2d
-// accuracy 99 > % after 20 epochs, 40/epochs
-// conv2d speed is not optimized yet, this test is slow.
+// all convolutional MNIST classification with a conv2d (no poolmax layers)
+// accuracy > 99% after 20 epochs, 25s/epochs
+// conv2d speed is not optimized yet.
 
 #include <iostream>
 #include <chrono>
@@ -43,9 +43,9 @@ int main()
 {
     iEpoch = 0;
 
-	cout << "all convolutional MNIST classification with a conv2d" << endl;
-	cout << "accuracy 99 > % after 20 epochs, 40s/epochs" << endl;
-	cout << "conv2d speed is not optimized yet, this test is slow. " << endl;
+	cout << "all convolutional MNIST classification with a conv2d (no poolmax layers)" << endl;
+	cout << "accuracy> 99% after 20 epochs, 25s/epochs" << endl;
+	cout << "conv2d speed is not optimized yet" << endl;
 
 	//load and normalize MNIST data
     cout << "Loading MNIST database..." << endl;
@@ -82,7 +82,7 @@ int main()
 
 	//set train options
 	netTrain.set_net(net);
-	netTrain.set_epochs(25);
+	netTrain.set_epochs(20);
 	netTrain.set_batchsize(32);
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_epoch_callback(epoch_callback); //optional, show progress

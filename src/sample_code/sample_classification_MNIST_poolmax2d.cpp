@@ -1,5 +1,6 @@
-// sample MNIST classification with a poolmax2D
-// 96% accuracy after 20 epochs, 1s/epochs
+// Sample MNIST classification with a poolmax2D
+// 97% accuracy after 20 epochs, 1s/epochs
+// image is "undersampled" at first layer with a poolmax2d
 
 #include <iostream>
 #include <chrono>
@@ -39,6 +40,10 @@ void epoch_callback()
 //////////////////////////////////////////////////////////////////////////////
 int main()
 {
+	cout << "Sample MNIST classification with a poolmax2D" << endl;
+	cout << "97% accuracy after 20 epochs, 1s/epochs" << endl;
+	cout << "image is undersampled at first layer with a poolmax2d" << endl;
+
     iEpoch = 0;
 
 	//load and normalize MNIST data
@@ -93,7 +98,6 @@ int main()
 		cout << "Test failed! accuracy=" << crTest.accuracy << endl;
 		return -1;
 	}
-
 
 	cout << "Test succeded." << endl;
     return 0;

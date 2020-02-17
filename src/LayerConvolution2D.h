@@ -32,6 +32,7 @@ public:
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 
+	//public for tests
 	void im2col(const MatrixFloat & mIn, MatrixFloat & mCol);
 	void im2col_LUT(const MatrixFloat & mIn, MatrixFloat & mCol);
 	void col2im(const MatrixFloat & mCol, MatrixFloat & mIm);

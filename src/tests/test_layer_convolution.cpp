@@ -21,7 +21,6 @@ void im2col_col2im()
 	LayerConvolution2D conv2d(5, 5, 1, 3, 3, 1);
 	conv2d.im2col(mIn, mCol);
 	conv2d.im2col_LUT(mIn, mColLUT);
-
 	conv2d.col2im(mCol,mIm);
 
 	mIn.resize(5, 5);
@@ -76,8 +75,6 @@ void batch_conv2d()
 	conv2d.weights() = mKernel;
 	conv2d.forward(mIn, mOut);
 
-	cout << toString(conv2d._im2col) << endl;
-
 	mOut.resize(6, 3);
 	cout << "Batch convoluted, 2 samples:" << endl;
 	cout << toString(mOut) << endl << endl;
@@ -108,8 +105,6 @@ void image_2_input_channels_conv2d()
 	conv2d.weights() = mKernel;
 	conv2d.forward(mIn, mOut);
 
-
-	cout << toString(conv2d._im2col) << endl;
 	mOut.resize(3, 3);
 	cout << "Image 2 input channels convoluted:" << endl;
 	cout << toString(mOut) << endl << endl;
@@ -138,7 +133,6 @@ void image_2_output_channels_conv2d()
 	LayerConvolution2D conv2d(5, 5, 1, 3, 3, 2);
 	conv2d.weights() = mKernel;
 	conv2d.forward(mIn, mOut);
-	cout << toString(conv2d._im2col) << endl;
 
 	mOut.resize(6, 3);
 	cout << "Image 2 output channels convoluted:" << endl;
@@ -151,7 +145,9 @@ void simple_image_conv2d_stride2()
 
 	MatrixFloat mIn, mOut, mKernel;
 	mIn.setZero(5, 5);
-	mIn(2, 2) = 1;
+	mIn(0, 0) = 100;
+	mIn(2, 2) = 122;
+	mIn(3, 4) = 134;
 	mIn.resize(1, 5 * 5);
 
 	mKernel.setZero(3, 3);
@@ -259,7 +255,6 @@ void forward_conv2d_stride2_backprop_sgd()
 	cout << "Backprop Input gradient :" << endl;
 	cout << toString(mGradientIn) << endl << endl;
 }
-
 /////////////////////////////////////////////////////////////////
 void forward_time()
 {
@@ -291,24 +286,18 @@ void forward_time()
 	
 	cout << "Time elapsed: " << delta << " ms" << endl;
 }
-
 /////////////////////////////////////////////////////////////////
 int main()
-{	/*
+{	
 	im2col_col2im();
 	simple_image_conv2d();
-
 	batch_conv2d();
-
 	image_2_input_channels_conv2d();
-*/
 	image_2_output_channels_conv2d();
-	/*
 	simple_image_conv2d_stride2();
 	forward_conv2d_backprop_sgd();
 	simple_image_conv2d_stride2();
 	forward_conv2d_stride2_backprop_sgd();
-
 	forward_time();	
-*/}
+}
 /////////////////////////////////////////////////////////////////

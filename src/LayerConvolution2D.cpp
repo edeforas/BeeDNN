@@ -77,8 +77,8 @@ Layer* LayerConvolution2D::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
-//	im2col(mIn, _im2col);
-	im2col_LUT(mIn, _im2col);
+//	im2col(mIn, _im2col); //slow 
+	im2col_LUT(mIn, _im2col); //optimized
 	mOut = _weight * (_im2col.transpose());
 	reshape_to_out(mOut);
 }
@@ -100,7 +100,6 @@ void LayerConvolution2D::backpropagation(const MatrixFloat &mIn,const MatrixFloa
 	if (_bFirstLayer)
 		return;
 
-	//assert(_weight.cols() == mGradientUnflat.rows());
 	MatrixFloat mGradientCol= _weight.transpose()*mGradientUnflat;
 	col2im(mGradientCol, mGradientIn);
 
@@ -242,7 +241,8 @@ void LayerConvolution2D::im2col_LUT(const MatrixFloat & mIn, MatrixFloat & mCol)
 		{
 			for (Index iOutCol = 0; iOutCol < _iOutCols; iOutCol++)
 			{
-				Index iDecal = iSample * _iInRows*_iInCols*_iInChannels + iOutRow * _iInCols + iOutCol;
+				Index iDecal = iSample * _iInRows*_iInCols*_iInChannels + iOutRow * _iInCols *_iRowStride + iOutCol* _iColStride;
+
 				const float *pIn = mIn.data() + iDecal;
 				Index iRowDest = iOutCol + iOutRow * _iOutCols;
 				float * pOut = mCol.data() + iRowDest * mCol.cols()+iSample*_iOutCols*_iOutRows*iLUTRows;
