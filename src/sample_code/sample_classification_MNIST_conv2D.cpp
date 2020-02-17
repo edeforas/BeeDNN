@@ -1,5 +1,5 @@
-// sample MNIST classification with a conv2d and poolmax2D
-// accuracy> 96% after 10 epochs, 4s/epochs (data size reduced by factor 10)
+// simple MNIST classification with a conv2d and poolmax2D
+// accuracy> 96% after 15 epochs, 4s/epochs (data size reduced by factor 10)
 
 #include <iostream>
 #include <chrono>
@@ -40,6 +40,9 @@ void epoch_callback()
 //////////////////////////////////////////////////////////////////////////////
 int main()
 {
+	cout << "Simple MNIST classification with a conv2d and poolmax2D" << endl;
+	cout << "Validation accuracy> 96% after 15 epochs, 4s/epochs (data size reduced by factor 10)" << endl;
+
     iEpoch = 0;
 
 	//load and normalize MNIST data

@@ -1,4 +1,5 @@
-// sample classification CIFAR10, low accuracy for now (50%), but simple
+// simple toy classification CIFAR10, with a dense Layer, low accuracy for now (50%), but simple
+// 6s /epoch
 
 #include <iostream>
 #include <chrono>
@@ -41,7 +42,9 @@ void epoch_callback()
 //////////////////////////////////////////////////////////////////////////////
 int main()
 {
-    iEpoch = 0;
+	cout << "Simple toy classification CIFAR10, with a dense Layer, low accuracy for now (50%), but simple" << endl;
+	cout << "6s /epoch" << endl;
+	iEpoch = 0;
 
 	//load and normalize CIFAR10 data
     cout << "Loading CIFAR10 database..." << endl;
@@ -66,7 +69,7 @@ int main()
 	netTrain.set_epochs(30);
 	netTrain.set_batchsize(256);
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
-	netTrain.set_epoch_callback(epoch_callback); //optional , to show the progress
+	netTrain.set_epoch_callback(epoch_callback); //optional, show the progress
 	netTrain.set_train_data(mRefImages, mRefLabels);
 	netTrain.set_validation_data(mValImages, mValLabels); //optional, not used for training, helps to keep the final best model
 
@@ -82,12 +85,12 @@ int main()
 	ClassificationResult crRef = cmRef.compute(mRefLabels, mClassPredicted);
 	cout << "Ref accuracy: " << crRef.accuracy << " %" << endl;
 
-	MatrixFloat mClassTest;
-	net.classify(mValImages, mClassTest);
-	ConfusionMatrix cmTest;
-	ClassificationResult crTest = cmTest.compute(mValLabels, mClassTest);
-	cout << "Test accuracy: " << crTest.accuracy << " %" << endl;
-	cout << "Test confusion matrix:" << endl << crTest.mConfMat << endl;
+	MatrixFloat mValClass;
+	net.classify(mValImages, mValClass);
+	ConfusionMatrix cmValidation;
+	ClassificationResult crValidation = cmValidation.compute(mValLabels, mValClass);
+	cout << "Validation accuracy: " << crValidation.accuracy << " %" << endl;
+	cout << "Test confusion matrix:" << endl << crValidation.mConfMat << endl;
 
     return 0;
 }

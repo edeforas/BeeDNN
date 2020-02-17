@@ -9,9 +9,10 @@ void im2col_col2im()
 {
 	cout << "Simple im2col_col2im test:" << endl;
 
-	MatrixFloat mIn, mCol, mIm;
+	MatrixFloat mIn, mCol, mColLUT, mIm;
 	mIn.setZero(5, 5);
 	mIn(0, 0) = 100;
+	mIn(0, 4) = 104;
 
 	mIn(4, 4) = 144;
 	mIn(2, 2) = 122;
@@ -19,12 +20,14 @@ void im2col_col2im()
 
 	LayerConvolution2D conv2d(5, 5, 1, 3, 3, 1);
 	conv2d.im2col(mIn, mCol);
+	conv2d.im2col_LUT(mIn, mColLUT);
 	conv2d.col2im(mCol,mIm);
 
 	mIn.resize(5, 5);
 	mIm.resize(5, 5);
 	cout << "Image:" << endl << toString(mIn) << endl << endl;
 	cout << "Im2Col:" << endl << toString(mCol) << endl << endl;
+	cout << "Im2ColLUT:" << endl << toString(mColLUT) << endl << endl;
 	cout << "Col2Im:" << endl << toString(mIm) << endl << endl;
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -142,7 +145,9 @@ void simple_image_conv2d_stride2()
 
 	MatrixFloat mIn, mOut, mKernel;
 	mIn.setZero(5, 5);
-	mIn(2, 2) = 1;
+	mIn(0, 0) = 100;
+	mIn(2, 2) = 122;
+	mIn(3, 4) = 134;
 	mIn.resize(1, 5 * 5);
 
 	mKernel.setZero(3, 3);
@@ -250,7 +255,6 @@ void forward_conv2d_stride2_backprop_sgd()
 	cout << "Backprop Input gradient :" << endl;
 	cout << toString(mGradientIn) << endl << endl;
 }
-
 /////////////////////////////////////////////////////////////////
 void forward_time()
 {
@@ -282,11 +286,9 @@ void forward_time()
 	
 	cout << "Time elapsed: " << delta << " ms" << endl;
 }
-
 /////////////////////////////////////////////////////////////////
 int main()
-{
-	
+{	
 	im2col_col2im();
 	simple_image_conv2d();
 	batch_conv2d();
@@ -296,7 +298,6 @@ int main()
 	forward_conv2d_backprop_sgd();
 	simple_image_conv2d_stride2();
 	forward_conv2d_stride2_backprop_sgd();
-	forward_time();
-
+	forward_time();	
 }
 /////////////////////////////////////////////////////////////////
