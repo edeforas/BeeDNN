@@ -37,13 +37,13 @@ void MetaOptimizer::set_repeat_all(int iNbRepeatAll)
 //////////////////////////////////////////////////////////////////////////////
 void MetaOptimizer::run()
 {
+	int iNbThread = _iNbThread;
+	if (iNbThread == 0) //auto case
+		iNbThread = (int)(thread::hardware_concurrency());
+
 	for (int iRepeat = 0; iRepeat < _iNRepeatAll; iRepeat++)
 	{
 		_fBestAccuracy = -1.;
-
-		int iNbThread = _iNbThread;
-		if (iNbThread == 0) //auto case
-			iNbThread = (int)(thread::hardware_concurrency());
 
 		vector<thread> vt(iNbThread);
 

@@ -109,7 +109,7 @@ void LayerConvolution2D::backpropagation(const MatrixFloat &mIn,const MatrixFloa
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::im2col(const MatrixFloat & mIn, MatrixFloat & mCol)
 {
-	//for now, no optimisations
+	//slow reference version
 	_iSamples = (int)mIn.rows();
 	mCol.resize(_iOutRows * _iOutCols* _iSamples,_iKernelRows * _iKernelCols*_iInChannels );
 	
@@ -149,7 +149,7 @@ void LayerConvolution2D::im2col(const MatrixFloat & mIn, MatrixFloat & mCol)
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::col2im(const MatrixFloat & mCol, MatrixFloat & mIm)
 {
-	//for now, no optimizations
+	//slow reference version
 	mIm.setZero(_iSamples, _iInChannels* _iInRows * _iInCols);
 	for (Index iSample = 0; iSample < _iSamples; iSample++)
 	{
@@ -180,7 +180,7 @@ void LayerConvolution2D::col2im(const MatrixFloat & mCol, MatrixFloat & mIm)
 		}
 	}
 
-	//rescale data to compute mean instead of sum. ?Todo correct divide on borders?
+	//rescale data to compute mean instead of sum
 	mIm *= (1.f / (_iKernelRows* _iKernelCols* _iOutChannels));
 	mIm.resize(_iSamples, _iInChannels* _iInRows * _iInCols);
 }
