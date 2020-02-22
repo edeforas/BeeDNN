@@ -1,6 +1,6 @@
 //This sample launch in parallel multiple runs of the same net optimization 
 //This sample also test for many different Relu activations flavors" << endl;
-//It save the current best solution on disk
+//It shows and save the current best solution on disk
 //This is a heavy test, but expect val_accuracy>99.30% after 40min (got max 99.41%)
 //To stop by anytime, type CTRL+C
 
@@ -39,9 +39,9 @@ int main()
 {
 	cout << "This sample launch in parallel multiple runs of the same net optimization" << endl;
 	cout << "This sample also test for many different Relu activations flavors" << endl;
-	cout << "It save the current best solution on disk" << endl;
+	cout << "It shows and save the current best solution on disk" << endl;
 	cout << "This is a heavy test, but expect val_accuracy>99.30% after 40min (got max 99.41%)" << endl;
-	cout << "To stop by anytime, type CTRL+C" << endl;
+	cout << "To stop by anytime, type CTRL+C" << endl << endl;
 
 	//load MNIST data
 	MatrixFloat mRefImages, mRefLabels, mValImages, mValLabels;
@@ -57,10 +57,10 @@ int main()
 	mValImages /= 256.f;
 	mRefImages /= 256.f;
 
-	//create conv net
+	//create convolutional net
 	Net net;
 	net.add(new LayerConvolution2D(28, 28, 1, 3, 3, 8));
-	net.add(new LayerChannelBias(26,26,8)); //for now conv bias is separated
+	net.add(new LayerChannelBias(26,26,8)); //for now, conv bias is separated
 	net.add(new LayerActivation("Relu"));
 
 	net.add(new LayerConvolution2D(26, 26, 8, 3, 3, 8, 2, 2));
