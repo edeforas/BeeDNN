@@ -36,6 +36,7 @@ public:
 	void im2col(const MatrixFloat & mIn, MatrixFloat & mCol);
 	void im2col_LUT(const MatrixFloat & mIn, MatrixFloat & mCol);
 	void col2im(const MatrixFloat & mCol, MatrixFloat & mIm);
+	void col2im_LUT(const MatrixFloat & mCol, MatrixFloat & mIm);
 
 private:
 	void reshape_to_out(MatrixFloat & mOut);

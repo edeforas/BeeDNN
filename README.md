@@ -60,4 +60,5 @@ Learning and optimization:
 I/O:
 - MNIST reader
 - CIFAR10 reader
+- csv file reader
 - Network, weights and training parameters are saved in a simple .txt file
