@@ -327,7 +327,7 @@ void backward_time()
 int main()
 {	
 	im2col_col2im();
-/*	simple_image_conv2d();
+	simple_image_conv2d();
 	batch_conv2d();
 	image_2_input_channels_conv2d();
 	image_2_output_channels_conv2d();
@@ -337,5 +337,5 @@ int main()
 	forward_conv2d_stride2_backprop_sgd();
 	forward_time();	
 	backward_time();
-*/}
+}
 /////////////////////////////////////////////////////////////////
