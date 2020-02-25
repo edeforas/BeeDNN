@@ -9,29 +9,32 @@ void im2col_col2im()
 {
 	cout << "Simple im2col_col2im test:" << endl;
 
+	Index inRows = 3, inCols = 3;
 	MatrixFloat mIn, mCol, mColLUT, mIm, mImLUT;
-	mIn.setZero(5, 5);
-	mIn(0, 0) = 100;
-	mIn(0, 4) = 104;
 
-	mIn(4, 4) = 144;
-	mIn(2, 2) = 122;
-	mIn.resize(1, 5 * 5);
+	//fill with simple data
+	mIn.resize(1, inRows * inCols);
+	for (int i =0;i< mIn.size(); i++)
+		mIn.data()[i] = i;
 
-	LayerConvolution2D conv2d(5, 5, 1, 3, 3, 1);
+	//compare legacy and optimized computation
+	LayerConvolution2D conv2d(inRows, inCols, 1, 3, 3, 1);
+
+	//forward
 	conv2d.im2col(mIn, mCol);
 	conv2d.im2col_LUT(mIn, mColLUT);
-	conv2d.col2im(mCol,mIm);
-	conv2d.col2im_LUT(mCol, mImLUT);
-
-	mIn.resize(5, 5);
-	mIm.resize(5, 5);
-	mImLUT.resize(5, 5);
+	mIn.resize(inRows, inCols);
 	cout << "Image:" << endl << toString(mIn) << endl << endl;
 	cout << "Im2Col:" << endl << toString(mCol) << endl << endl;
 	cout << "Im2ColLUT:" << endl << toString(mColLUT) << endl << endl;
+
+	//backward
+	conv2d.col2im(mCol,mIm);
+	conv2d.col2im_LUT(mColLUT, mImLUT);
+	mIm.resize(inRows, inCols);
+	mImLUT.resize(inRows, inCols);
 	cout << "Col2Im:" << endl << toString(mIm) << endl << endl;
-	cout << "Col2ImLUTT:" << endl << toString(mImLUT) << endl << endl;
+	cout << "Col2ImLUT:" << endl << toString(mImLUT) << endl << endl;
 }
 //////////////////////////////////////////////////////////////////////////////
 void simple_image_conv2d()
@@ -327,7 +330,7 @@ void backward_time()
 int main()
 {	
 	im2col_col2im();
-	simple_image_conv2d();
+/*	simple_image_conv2d();
 	batch_conv2d();
 	image_2_input_channels_conv2d();
 	image_2_output_channels_conv2d();
@@ -337,5 +340,5 @@ int main()
 	forward_conv2d_stride2_backprop_sgd();
 	forward_time();	
 	backward_time();
-}
+*/}
 /////////////////////////////////////////////////////////////////
