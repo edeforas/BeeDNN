@@ -5,36 +5,69 @@ using namespace std;
 #include "LayerConvolution2D.h"
 
 //////////////////////////////////////////////////////////////////////////////
+void compare_im2col()
+{
+	cout << "Comparing im2col() and im2col_LUT():" << endl;
+
+	Index iNbSamples=7, inRows = 51, inCols = 23, inChannels = 13, outChannels = 17;
+	MatrixFloat mIn, mCol, mColLUT, mIm, mImLUT;
+
+	//fill with random data
+	mIn.resize(iNbSamples, inRows * inCols*inChannels);
+	mIn.setRandom();
+
+	//compare legacy and optimized forward computation
+	LayerConvolution2D conv2d(inRows, inCols, inChannels, 5, 3, outChannels);
+	conv2d.im2col(mIn, mCol);
+	conv2d.im2col_LUT(mIn, mColLUT);
+	float fMaxDiff = (mCol - mColLUT).cwiseAbs().maxCoeff();
+
+	//mIn.resize(iNbSamples*inRows*inChannels, inCols);
+	//cout << "Image:" << endl << toString(mIn) << endl << endl;
+	//cout << "Im2Col:" << endl << toString(mCol) << endl << endl;
+	//cout << "Im2ColLUT:" << endl << toString(mColLUT) << endl << endl;
+
+	//testu function
+	if (fMaxDiff > 1.e-10)
+	{
+		cout << "Test failed! MaxDifference = " << fMaxDiff << endl;
+		exit(-1);
+	}
+	else
+		cout << "Test Succeded. MaxDifference = " << fMaxDiff << endl;
+}
+//////////////////////////////////////////////////////////////////////////////
 void im2col_col2im()
 {
-	cout << "Simple im2col_col2im test:" << endl;
+	cout << "Simple im2col() then col2im() test:" << endl;
 
-	Index inRows = 3, inCols = 3;
+	Index inRows = 5, inCols = 5, inChannels=3, outChannels=4;
 	MatrixFloat mIn, mCol, mColLUT, mIm, mImLUT;
 
 	//fill with simple data
-	mIn.resize(1, inRows * inCols);
-	for (int i =0;i< mIn.size(); i++)
-		mIn.data()[i] = i;
+	mIn.resize(1, inRows * inCols*inChannels);
+	for (Index i =0;i< mIn.size(); i++)
+		mIn.data()[i] = (float)i;
 
 	//compare legacy and optimized computation
-	LayerConvolution2D conv2d(inRows, inCols, 1, 3, 3, 1);
+	LayerConvolution2D conv2d(inRows, inCols, inChannels, 3, 3, outChannels);
 
 	//forward
 	conv2d.im2col(mIn, mCol);
 	conv2d.im2col_LUT(mIn, mColLUT);
-	mIn.resize(inRows, inCols);
+
+	mIn.resize(inRows*inChannels, inCols);
 	cout << "Image:" << endl << toString(mIn) << endl << endl;
 	cout << "Im2Col:" << endl << toString(mCol) << endl << endl;
 	cout << "Im2ColLUT:" << endl << toString(mColLUT) << endl << endl;
 
 	//backward
 	conv2d.col2im(mCol,mIm);
-	conv2d.col2im_LUT(mColLUT, mImLUT);
-	mIm.resize(inRows, inCols);
-	mImLUT.resize(inRows, inCols);
+	//conv2d.col2im_LUT(mColLUT, mImLUT);
+	mIm.resize(inRows*inChannels, inCols);
+	//mImLUT.resize(inRows*inChannels, inCols);
 	cout << "Col2Im:" << endl << toString(mIm) << endl << endl;
-	cout << "Col2ImLUT:" << endl << toString(mImLUT) << endl << endl;
+	//cout << "Col2ImLUT:" << endl << toString(mImLUT) << endl << endl;
 }
 //////////////////////////////////////////////////////////////////////////////
 void simple_image_conv2d()
@@ -264,7 +297,7 @@ void forward_conv2d_stride2_backprop_sgd()
 /////////////////////////////////////////////////////////////////
 void forward_time()
 {
-	cout << "Forward conv2d time estimation" << endl;
+	cout << "Forward conv2d time estimation:" << endl;
 
 	int iNbSamples = 32;
 	int iInRows = 64;
@@ -289,13 +322,12 @@ void forward_time()
 		conv2d.forward(mIn, mOut);
 	chrono::steady_clock::time_point end = chrono::steady_clock::now();
 	auto delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-	
 	cout << "Time elapsed: " << delta << " ms" << endl;
 }
 /////////////////////////////////////////////////////////////////
 void backward_time()
 {
-	cout << "Backward conv2d time estimation" << endl;
+	cout << "Backward conv2d time estimation:" << endl;
 
 	int iNbSamples = 32;
 	int iInRows = 64;
@@ -323,14 +355,14 @@ void backward_time()
 		conv2d.backpropagation(mIn, mOut, mOutGradient);
 	chrono::steady_clock::time_point end = chrono::steady_clock::now();
 	auto delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-
 	cout << "Time elapsed: " << delta << " ms" << endl;
 }
 /////////////////////////////////////////////////////////////////
 int main()
 {	
+	compare_im2col(); 
 	im2col_col2im();
-/*	simple_image_conv2d();
+	simple_image_conv2d();
 	batch_conv2d();
 	image_2_input_channels_conv2d();
 	image_2_output_channels_conv2d();
@@ -340,5 +372,5 @@ int main()
 	forward_conv2d_stride2_backprop_sgd();
 	forward_time();	
 	backward_time();
-*/}
+}
 /////////////////////////////////////////////////////////////////

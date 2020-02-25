@@ -101,8 +101,8 @@ void LayerConvolution2D::backpropagation(const MatrixFloat &mIn,const MatrixFloa
 		return;
 
 	MatrixFloat mGradientCol= _weight.transpose()*mGradientUnflat;
-//	col2im(mGradientCol, mGradientIn); //slow
-	col2im_LUT(mGradientCol, mGradientIn); //quick
+	col2im(mGradientCol, mGradientIn); //slow
+//	col2im_LUT(mGradientCol, mGradientIn); //fast
 
 	assert(mGradientIn.rows() == mIn.rows());
 	assert(mGradientIn.cols() == mIn.cols());

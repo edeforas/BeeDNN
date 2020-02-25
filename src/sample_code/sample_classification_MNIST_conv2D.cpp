@@ -81,7 +81,7 @@ int main()
 
 	//setup train options
 	netTrain.set_net(net);
-	netTrain.set_epochs(20);
+	netTrain.set_epochs(15);
 	netTrain.set_batchsize(32);
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_epoch_callback(epoch_callback); //optional, show progress
@@ -98,7 +98,7 @@ int main()
 	net.classify(mRefImages, mClassPredicted);
 	ConfusionMatrix cmRef;
 	ClassificationResult crRef = cmRef.compute(mRefLabels, mClassPredicted);
-	cout << "Ref accuracy: " << crRef.accuracy << " %" << endl;
+	cout << "Train accuracy: " << crRef.accuracy << " %" << endl;
 
 	MatrixFloat mClassTest;
 	net.classify(mValImages, mClassTest);
@@ -110,7 +110,7 @@ int main()
 	//testu function
 	if (crTest.accuracy < 96.f)
 	{
-		cout << "Test failed! accuracy=" << crTest.accuracy << endl;
+		cout << "Test failed! Val accuracy=" << crTest.accuracy << endl;
 		return -1;
 	}
 

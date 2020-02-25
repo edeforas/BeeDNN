@@ -1,5 +1,5 @@
 // Sample MNIST classification with a poolmax2D
-// 97% accuracy after 20 epochs, 1s/epochs
+// 97% accuracy after 25 epochs, 1s/epochs
 // image is "undersampled" at first layer with a poolmax2d
 
 #include <iostream>
@@ -83,7 +83,7 @@ int main()
 	net.classify(mRefImages, mClassPredicted);
 	ConfusionMatrix cmRef;
 	ClassificationResult crRef = cmRef.compute(mRefLabels, mClassPredicted);
-	cout << "Ref accuracy: " << crRef.accuracy << " %" << endl;
+	cout << "Train accuracy: " << crRef.accuracy << " %" << endl;
 
 	MatrixFloat mClassTest;
 	net.classify(mValImages, mClassTest);

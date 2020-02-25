@@ -27,7 +27,10 @@ void test(bool bTest,string sMessage="")
 
 int main()
 {
-    //construct network, 2 input, 1 output
+	cout << "This sample shows how to do a simple classification" << endl;
+	cout << "The use case is to learn a XOR gate" << endl;
+
+	//construct network, 2 input, 1 output
     Net net;
     net.add(new LayerDense(2,10));
 	net.add(new LayerActivation("Relu"));
