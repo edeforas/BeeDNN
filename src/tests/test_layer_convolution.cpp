@@ -5,30 +5,69 @@ using namespace std;
 #include "LayerConvolution2D.h"
 
 //////////////////////////////////////////////////////////////////////////////
-void im2col_col2im()
+void compare_im2col()
 {
-	cout << "Simple im2col_col2im test:" << endl;
+	cout << "Comparing im2col() and im2col_LUT():" << endl;
 
-	MatrixFloat mIn, mCol, mColLUT, mIm;
-	mIn.setZero(5, 5);
-	mIn(0, 0) = 100;
-	mIn(0, 4) = 104;
+	Index iNbSamples=7, inRows = 51, inCols = 23, inChannels = 13, outChannels = 17;
+	MatrixFloat mIn, mCol, mColLUT, mIm, mImLUT;
 
-	mIn(4, 4) = 144;
-	mIn(2, 2) = 122;
-	mIn.resize(1, 5 * 5);
+	//fill with random data
+	mIn.resize(iNbSamples, inRows * inCols*inChannels);
+	mIn.setRandom();
 
-	LayerConvolution2D conv2d(5, 5, 1, 3, 3, 1);
+	//compare legacy and optimized forward computation
+	LayerConvolution2D conv2d(inRows, inCols, inChannels, 5, 3, outChannels);
 	conv2d.im2col(mIn, mCol);
 	conv2d.im2col_LUT(mIn, mColLUT);
-	conv2d.col2im(mCol,mIm);
+	float fMaxDiff = (mCol - mColLUT).cwiseAbs().maxCoeff();
 
-	mIn.resize(5, 5);
-	mIm.resize(5, 5);
+	//mIn.resize(iNbSamples*inRows*inChannels, inCols);
+	//cout << "Image:" << endl << toString(mIn) << endl << endl;
+	//cout << "Im2Col:" << endl << toString(mCol) << endl << endl;
+	//cout << "Im2ColLUT:" << endl << toString(mColLUT) << endl << endl;
+
+	//testu function
+	if (fMaxDiff > 1.e-10)
+	{
+		cout << "Test failed! MaxDifference = " << fMaxDiff << endl;
+		exit(-1);
+	}
+	else
+		cout << "Test Succeded. MaxDifference = " << fMaxDiff << endl;
+}
+//////////////////////////////////////////////////////////////////////////////
+void im2col_col2im()
+{
+	cout << "Simple im2col() then col2im() test:" << endl;
+
+	Index inRows = 5, inCols = 5, inChannels=3, outChannels=4;
+	MatrixFloat mIn, mCol, mColLUT, mIm, mImLUT;
+
+	//fill with simple data
+	mIn.resize(1, inRows * inCols*inChannels);
+	for (Index i =0;i< mIn.size(); i++)
+		mIn.data()[i] = (float)i;
+
+	//compare legacy and optimized computation
+	LayerConvolution2D conv2d(inRows, inCols, inChannels, 3, 3, outChannels);
+
+	//forward
+	conv2d.im2col(mIn, mCol);
+	conv2d.im2col_LUT(mIn, mColLUT);
+
+	mIn.resize(inRows*inChannels, inCols);
 	cout << "Image:" << endl << toString(mIn) << endl << endl;
 	cout << "Im2Col:" << endl << toString(mCol) << endl << endl;
 	cout << "Im2ColLUT:" << endl << toString(mColLUT) << endl << endl;
+
+	//backward
+	conv2d.col2im(mCol,mIm);
+	//conv2d.col2im_LUT(mColLUT, mImLUT);
+	mIm.resize(inRows*inChannels, inCols);
+	//mImLUT.resize(inRows*inChannels, inCols);
 	cout << "Col2Im:" << endl << toString(mIm) << endl << endl;
+	//cout << "Col2ImLUT:" << endl << toString(mImLUT) << endl << endl;
 }
 //////////////////////////////////////////////////////////////////////////////
 void simple_image_conv2d()
@@ -258,7 +297,7 @@ void forward_conv2d_stride2_backprop_sgd()
 /////////////////////////////////////////////////////////////////
 void forward_time()
 {
-	cout << "Forward conv2d time estimation" << endl;
+	cout << "Forward conv2d time estimation:" << endl;
 
 	int iNbSamples = 32;
 	int iInRows = 64;
@@ -277,18 +316,51 @@ void forward_time()
 
 	LayerConvolution2D conv2d(iInRows, iInCols, iInChannels, iKernelRows, iKernelCols, iOutChannels);
 
+	//measure forward time
 	chrono::steady_clock::time_point start = chrono::steady_clock::now();
 	for(int i=0;i< iNbConv;i++)
 		conv2d.forward(mIn, mOut);
 	chrono::steady_clock::time_point end = chrono::steady_clock::now();
-
 	auto delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+	cout << "Time elapsed: " << delta << " ms" << endl;
+}
+/////////////////////////////////////////////////////////////////
+void backward_time()
+{
+	cout << "Backward conv2d time estimation:" << endl;
+
+	int iNbSamples = 32;
+	int iInRows = 64;
+	int iInCols = 64;
+	int iInChannels = 16;
+
+	int iKernelRows = 3;
+	int iKernelCols = 3;
+	int iOutChannels = 32;
+	int iNbConv = 10;
+
+	MatrixFloat mIn,mOut, mOutGradient;
+	mIn.setRandom(iNbSamples, iInRows*iInCols*iInChannels);
+
+	LayerConvolution2D conv2d(iInRows, iInCols, iInChannels, iKernelRows, iKernelCols, iOutChannels);
+	conv2d.forward(mIn, mOut); // init backward internal state
 	
+	 //create random gradient
+	mOutGradient = mOut;
+	mOutGradient.setRandom();
+	
+	//measure backward time
+	chrono::steady_clock::time_point start = chrono::steady_clock::now();
+	for (int i = 0; i < iNbConv; i++)
+		conv2d.backpropagation(mIn, mOut, mOutGradient);
+	chrono::steady_clock::time_point end = chrono::steady_clock::now();
+	auto delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 	cout << "Time elapsed: " << delta << " ms" << endl;
 }
 /////////////////////////////////////////////////////////////////
 int main()
 {	
+	compare_im2col(); 
 	im2col_col2im();
 	simple_image_conv2d();
 	batch_conv2d();
@@ -299,5 +371,6 @@ int main()
 	simple_image_conv2d_stride2();
 	forward_conv2d_stride2_backprop_sgd();
 	forward_time();	
+	backward_time();
 }
 /////////////////////////////////////////////////////////////////

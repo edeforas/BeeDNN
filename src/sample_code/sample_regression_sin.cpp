@@ -1,5 +1,5 @@
-//this sample is a basic toy regression task.
-//the problem here is to approximate a sinus function and to evaluate the model error
+//This sample is a basic toy regression task.
+//The problem here is to approximate a sinus function and to evaluate the model error
 
 #include <iostream>
 #include <iomanip>
@@ -29,7 +29,10 @@ void test(bool bTest, string sMessage = "")
 
 int main()
 {
-    //build net
+	cout << "This sample is a basic toy regression task." << endl;
+	cout << "The problem here is to approximate a sinus function and to evaluate the model error" << endl;
+
+	//build net
     Net net;
 	net.add(new LayerDense(1,10));
 	net.add(new LayerActivation("Tanh"));
