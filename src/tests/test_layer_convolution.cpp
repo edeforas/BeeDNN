@@ -37,25 +37,6 @@ void compare_im2col()
 		cout << "Test Succeded. MaxDifference = " << fMaxDiff << endl;
 }
 //////////////////////////////////////////////////////////////////////////////
-void im2col_col2im()
-{
-	cout << "Simple im2col() then col2im() test:" << endl;
-
-	Index iNbSamples = 7, inRows = 31, inCols = 23, inChannels = 13, outChannels = 17; // all primes numbers
-	MatrixFloat mIn, mCol, mColLUT, mIm, mImLUT;
-
-	//fill with random data
-	mIn.resize(iNbSamples, inRows * inCols*inChannels);
-	mIn.setRandom();
-
-	//forward and backward
-	LayerConvolution2D conv2d(inRows, inCols, inChannels, 5, 3, outChannels);
-	conv2d.im2col(mIn, mCol);
-	conv2d.col2im(mCol.transpose(), mIm);
-	
-	cout << "Col2Im:" << endl << toString(mIm) << endl << endl;
-}
-//////////////////////////////////////////////////////////////////////////////
 void simple_image_conv2d()
 {
 	cout << "Simple convolution test:" << endl;
@@ -164,6 +145,26 @@ void image_2_output_channels_conv2d()
 	cout << toString(mOut) << endl << endl;
 }
 //////////////////////////////////////////////////////////////////////////////
+void forward_backward()
+{
+	cout << "Forward then backward test:" << endl;
+
+	Index iNbSamples = 5, inRows = 7, inCols = 11, inChannels = 13, outChannels = 17; // all primes numbers
+	MatrixFloat mIn, mCol, mColLUT, mIm, mImLUT;
+
+	//fill with incremented data
+	mIn.resize(iNbSamples, inRows * inCols * inChannels);
+	for (Index i = 0; i < mIn.size(); i++)
+		mIn.data()[i] = (float)i;
+	
+	//forward and backward
+	LayerConvolution2D conv2d(inRows, inCols, inChannels, 2, 3, outChannels);
+	conv2d.forward(mIn, mCol);
+	conv2d.backpropagation(mIn, mCol, mIm);
+
+	cout << "mIm:" << endl << toString(mIm) << endl << endl;
+}
+//////////////////////////////////////////////////////////////////////////////
 void simple_image_conv2d_stride2()
 {
 	cout << "Simple convolution test stride2:" << endl;
@@ -240,7 +241,7 @@ void forward_conv2d_backprop_sgd()
 	cout << toString(mGradientIn) << endl << endl;
 }
 /////////////////////////////////////////////////////////////////
-void forward_conv2d_stride2_backprop_sgd()
+void forward_stride2_backward()
 {
 	cout << "Forward Conv2D and Backpropagation test:" << endl << endl;
 
@@ -347,7 +348,6 @@ void backward_time()
 int main()
 {	
 	compare_im2col(); 
-	im2col_col2im();
 	simple_image_conv2d();
 	batch_conv2d();
 	image_2_input_channels_conv2d();
@@ -355,8 +355,10 @@ int main()
 	simple_image_conv2d_stride2();
 	forward_conv2d_backprop_sgd();
 	simple_image_conv2d_stride2();
-	forward_conv2d_stride2_backprop_sgd();
-//	forward_time();	
+	
+	forward_backward();
+	forward_stride2_backward();
+	forward_time();	
 	backward_time();
 }
 /////////////////////////////////////////////////////////////////
