@@ -9,7 +9,7 @@ void compare_im2col()
 {
 	cout << "Comparing im2col() and im2col_LUT():" << endl;
 
-	Index iNbSamples=7, inRows = 51, inCols = 23, inChannels = 13, outChannels = 17;
+	Index iNbSamples=7, inRows = 31, inCols = 23, inChannels = 13, outChannels = 17; // all primes numbers
 	MatrixFloat mIn, mCol, mColLUT, mIm, mImLUT;
 
 	//fill with random data
@@ -54,13 +54,13 @@ void im2col_col2im()
 
 	//forward
 	conv2d.im2col(mIn, mCol);
-	conv2d.im2col_LUT(mIn, mColLUT);
+///	conv2d.im2col_LUT(mIn, mColLUT);
 
 	mIn.resize(inRows*inChannels, inCols);
 	cout << "Image:" << endl << toString(mIn) << endl << endl;
 	cout << "Im2Col:" << endl << toString(mCol) << endl << endl;
 	cout << "Im2ColLUT:" << endl << toString(mColLUT) << endl << endl;
-
+	
 	//backward
 	conv2d.col2im(mCol,mIm);
 	//conv2d.col2im_LUT(mColLUT, mImLUT);
@@ -361,7 +361,7 @@ void backward_time()
 int main()
 {	
 	compare_im2col(); 
-	im2col_col2im();
+//	im2col_col2im();
 	simple_image_conv2d();
 	batch_conv2d();
 	image_2_input_channels_conv2d();
@@ -371,6 +371,6 @@ int main()
 	simple_image_conv2d_stride2();
 	forward_conv2d_stride2_backprop_sgd();
 	forward_time();	
-	backward_time();
+//	backward_time();
 }
 /////////////////////////////////////////////////////////////////
