@@ -61,7 +61,7 @@ private:
 	Index _iOutCols;
 
 public:
-	MatrixFloat _im2col; // input image, im2col format
+	MatrixFloat _im2colT; // input image, im2col format
 	MatrixFloat _tempImg; // temporary image, to avoid malloc
 };
 

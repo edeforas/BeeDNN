@@ -77,9 +77,8 @@ Layer* LayerConvolution2D::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
-//	im2col(mIn, _im2col); //slow 
-	im2col_LUT(mIn, _im2col); //optimized
-	mOut = _weight * (_im2col.transpose());
+	im2col_LUT(mIn, _im2colT); //optimized
+	mOut = _weight * (_im2colT.transpose());// optimized GEMM product with transposed
 	reshape_to_out(mOut);
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -92,7 +91,7 @@ void LayerConvolution2D::backpropagation(const MatrixFloat &mIn,const MatrixFloa
 	MatrixFloat mGradientUnflat = mGradientOut;
 	reshape_from_out(mGradientUnflat);
 
-	_gradientWeight = mGradientUnflat *_im2col/*.transpose()*/;
+	_gradientWeight = mGradientUnflat *_im2colT;
 
 	assert(_gradientWeight.rows() == _weight.rows());
 	assert(_gradientWeight.cols() == _weight.cols());
@@ -152,6 +151,9 @@ void LayerConvolution2D::im2col(const MatrixFloat & mIn, MatrixFloat & mCol)
 ///////////////////////////////////////////////////////////////////////////////
 void LayerConvolution2D::col2im(const MatrixFloat & mCol, MatrixFloat & mIm)
 {
+//	assert(mCol.rows() == _iKernelRows * _iKernelCols*_iInChannels);
+//	assert(mCol.cols() == _iOutRows * _iOutCols* _iSamples);
+
 	//slow reference version
 	mIm.setZero(_iSamples, _iInChannels* _iInRows * _iInCols);
 	for (Index iSample = 0; iSample < _iSamples; iSample++)
@@ -174,8 +176,14 @@ void LayerConvolution2D::col2im(const MatrixFloat & mCol, MatrixFloat & mIm)
 							assert(iRowInPlane < _iInRows);
 							assert(iColInPlane < _iInCols);
 
-							float f = mCol(iInChannel*_iKernelRows * _iKernelCols + iKRow * _iKernelCols + iKCol, iSample*_iOutCols*_iOutRows + iOutRow * _iOutCols + iOutCol);
-							mIm(iSample, iInChannel*_iInRows*_iInCols + iRowInPlane * _iInCols + iColInPlane) += f;
+							float f = mCol(
+								iInChannel*_iKernelRows * _iKernelCols + iKRow * _iKernelCols + iKCol,
+								iSample*_iOutCols*_iOutRows + iOutRow * _iOutCols + iOutCol
+								);
+							mIm(
+								iSample,
+								iInChannel*_iInRows*_iInCols + iRowInPlane * _iInCols + iColInPlane)
+								+= f;
 						}
 					}
 				}

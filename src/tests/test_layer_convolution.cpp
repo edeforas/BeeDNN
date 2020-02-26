@@ -41,33 +41,19 @@ void im2col_col2im()
 {
 	cout << "Simple im2col() then col2im() test:" << endl;
 
-	Index inRows = 5, inCols = 5, inChannels=3, outChannels=4;
+	Index iNbSamples = 7, inRows = 31, inCols = 23, inChannels = 13, outChannels = 17; // all primes numbers
 	MatrixFloat mIn, mCol, mColLUT, mIm, mImLUT;
 
-	//fill with simple data
-	mIn.resize(1, inRows * inCols*inChannels);
-	for (Index i =0;i< mIn.size(); i++)
-		mIn.data()[i] = (float)i;
+	//fill with random data
+	mIn.resize(iNbSamples, inRows * inCols*inChannels);
+	mIn.setRandom();
 
-	//compare legacy and optimized computation
-	LayerConvolution2D conv2d(inRows, inCols, inChannels, 3, 3, outChannels);
-
-	//forward
+	//forward and backward
+	LayerConvolution2D conv2d(inRows, inCols, inChannels, 5, 3, outChannels);
 	conv2d.im2col(mIn, mCol);
-///	conv2d.im2col_LUT(mIn, mColLUT);
-
-	mIn.resize(inRows*inChannels, inCols);
-	cout << "Image:" << endl << toString(mIn) << endl << endl;
-	cout << "Im2Col:" << endl << toString(mCol) << endl << endl;
-	cout << "Im2ColLUT:" << endl << toString(mColLUT) << endl << endl;
+	conv2d.col2im(mCol.transpose(), mIm);
 	
-	//backward
-	conv2d.col2im(mCol,mIm);
-	//conv2d.col2im_LUT(mColLUT, mImLUT);
-	mIm.resize(inRows*inChannels, inCols);
-	//mImLUT.resize(inRows*inChannels, inCols);
 	cout << "Col2Im:" << endl << toString(mIm) << endl << endl;
-	//cout << "Col2ImLUT:" << endl << toString(mImLUT) << endl << endl;
 }
 //////////////////////////////////////////////////////////////////////////////
 void simple_image_conv2d()
@@ -361,7 +347,7 @@ void backward_time()
 int main()
 {	
 	compare_im2col(); 
-//	im2col_col2im();
+	im2col_col2im();
 	simple_image_conv2d();
 	batch_conv2d();
 	image_2_input_channels_conv2d();
@@ -370,7 +356,7 @@ int main()
 	forward_conv2d_backprop_sgd();
 	simple_image_conv2d_stride2();
 	forward_conv2d_stride2_backprop_sgd();
-	forward_time();	
-//	backward_time();
+//	forward_time();	
+	backward_time();
 }
 /////////////////////////////////////////////////////////////////
