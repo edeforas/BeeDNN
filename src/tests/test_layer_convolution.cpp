@@ -326,7 +326,7 @@ void backward_time()
 	int iOutChannels = 32;
 	int iNbConv = 10;
 
-	MatrixFloat mIn,mOut, mOutGradient;
+	MatrixFloat mIn,mOut, mOutGradient, mInGradient;
 	mIn.setRandom(iNbSamples, iInRows*iInCols*iInChannels);
 
 	LayerConvolution2D conv2d(iInRows, iInCols, iInChannels, iKernelRows, iKernelCols, iOutChannels);
@@ -339,7 +339,7 @@ void backward_time()
 	//measure backward time
 	chrono::steady_clock::time_point start = chrono::steady_clock::now();
 	for (int i = 0; i < iNbConv; i++)
-		conv2d.backpropagation(mIn, mOut, mOutGradient);
+		conv2d.backpropagation(mIn, mOutGradient, mInGradient);
 	chrono::steady_clock::time_point end = chrono::steady_clock::now();
 	auto delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 	cout << "Time elapsed: " << delta << " ms" << endl;
