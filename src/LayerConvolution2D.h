@@ -38,6 +38,8 @@ public:
 	void col2im(const MatrixFloat & mCol, MatrixFloat & mIm);
 	void col2im_LUT(const MatrixFloat & mCol, MatrixFloat & mIm);
 
+	bool fastLUT; //temporary
+
 private:
 	void reshape_to_out(MatrixFloat & mOut);
 	void reshape_from_out(MatrixFloat & mOut);

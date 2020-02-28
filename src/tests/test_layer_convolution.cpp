@@ -36,6 +36,52 @@ void compare_im2col()
 	else
 		cout << "Test Succeded. MaxDifference = " << fMaxDiff << endl;
 }
+
+//////////////////////////////////////////////////////////////////////////////
+void compare_fastlut_slow_computation()
+{
+	cout << "Comparing fastlut and slow computation mode:" << endl;
+
+	Index iNbSamples = 7, inRows = 31, inCols = 23, inChannels = 13, outChannels = 17; // all primes numbers
+	MatrixFloat mIn, mOut, mOutFast, mIm, mImFast;
+
+	//fill with random data
+	mIn.resize(iNbSamples, inRows * inCols*inChannels);
+	mIn.setRandom();
+
+	LayerConvolution2D conv2d(inRows, inCols, inChannels, 5, 3, outChannels);
+	conv2d.fastLUT = false;
+	conv2d.forward(mIn, mOut);
+	conv2d.fastLUT = true;
+	conv2d.forward(mIn, mOutFast);
+
+	conv2d.fastLUT = false;
+	conv2d.backpropagation(mIn, mOut, mIm);
+	conv2d.fastLUT = true;
+	conv2d.backpropagation(mIn, mOutFast, mImFast);
+	
+	float fMaxDiffOut = (mOut - mOutFast).cwiseAbs().maxCoeff();
+	float fMaxDiffIm = (mIm - mImFast).cwiseAbs().maxCoeff();
+
+	//testu function
+	if (fMaxDiffOut > 1.e-10)
+	{
+		cout << "Test failed! MaxDifferenceOut = " << fMaxDiffOut << endl;
+		exit(-1);
+	}
+	else
+		cout << "Test Succeded. MaxDifferenceOut = " << fMaxDiffOut << endl;
+
+	//testu function
+	if (fMaxDiffIm > 1.e-10)
+	{
+		cout << "Test failed! MaxDifferenceIm = " << fMaxDiffIm << endl;
+		exit(-1);
+	}
+	else
+		cout << "Test Succeded. MaxDifferenceIm = " << fMaxDiffIm << endl;
+}
+
 //////////////////////////////////////////////////////////////////////////////
 void simple_image_conv2d()
 {
@@ -303,13 +349,23 @@ void forward_time()
 
 	LayerConvolution2D conv2d(iInRows, iInCols, iInChannels, iKernelRows, iKernelCols, iOutChannels);
 
-	//measure forward time
-	chrono::steady_clock::time_point start = chrono::steady_clock::now();
+	//measure forward time slow
+	conv2d.fastLUT = false;
+	auto start = chrono::steady_clock::now();
 	for(int i=0;i< iNbConv;i++)
 		conv2d.forward(mIn, mOut);
-	chrono::steady_clock::time_point end = chrono::steady_clock::now();
+	auto end = chrono::steady_clock::now();
 	auto delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-	cout << "Time elapsed: " << delta << " ms" << endl;
+	cout << "Time elapsed slow: " << delta << " ms" << endl;
+
+	//measure forward time fastlut
+	conv2d.fastLUT = true;
+	start = chrono::steady_clock::now();
+	for (int i = 0; i < iNbConv; i++)
+		conv2d.forward(mIn, mOut);
+	end = chrono::steady_clock::now();
+	delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+	cout << "Time elapsed fastlut: " << delta << " ms" << endl;
 }
 /////////////////////////////////////////////////////////////////
 void backward_time()
@@ -336,19 +392,30 @@ void backward_time()
 	mOutGradient = mOut;
 	mOutGradient.setRandom();
 	
-	//measure backward time
-	chrono::steady_clock::time_point start = chrono::steady_clock::now();
+	//measure backward time slow
+	conv2d.fastLUT = false;
+	auto start = chrono::steady_clock::now();
 	for (int i = 0; i < iNbConv; i++)
 		conv2d.backpropagation(mIn, mOutGradient, mInGradient);
-	chrono::steady_clock::time_point end = chrono::steady_clock::now();
+	auto end = chrono::steady_clock::now();
 	auto delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-	cout << "Time elapsed: " << delta << " ms" << endl;
+	cout << "Time elapsed slow: " << delta << " ms" << endl;
+
+	conv2d.fastLUT = true;
+	 start = chrono::steady_clock::now();
+	for (int i = 0; i < iNbConv; i++)
+		conv2d.backpropagation(mIn, mOutGradient, mInGradient);
+	 end = chrono::steady_clock::now();
+	delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+	cout << "Time elapsed fast: " << delta << " ms" << endl;
+
 }
 /////////////////////////////////////////////////////////////////
 int main()
 {	
 	compare_im2col(); 
-	simple_image_conv2d();
+	compare_fastlut_slow_computation();
+/*	simple_image_conv2d();
 	batch_conv2d();
 	image_2_input_channels_conv2d();
 	image_2_output_channels_conv2d();
@@ -358,7 +425,7 @@ int main()
 	
 	forward_backward();
 	forward_stride2_backward();
-	forward_time();	
+*/	forward_time();	
 	backward_time();
 }
 /////////////////////////////////////////////////////////////////
