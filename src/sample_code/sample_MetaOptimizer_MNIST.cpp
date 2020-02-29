@@ -1,5 +1,5 @@
 //This sample launch in parallel multiple runs of the same net optimization 
-//This sample also test for many different Relu activations flavors" << endl;
+//This sample can also test for many different Relu activations flavors
 //It shows and save the current best solution on disk
 //This is a heavy test, but expect val_accuracy>99.30% after 40min (got max 99.41%)
 //To stop by anytime, type CTRL+C
@@ -92,6 +92,7 @@ int main()
 	optim.set_train(netTrain);
 
 	//add Relu variations
+	/* //uncomment to test for other Relu flavors
 	optim.add_variation(2, "RRelu");
 	optim.add_variation(2, "PRelu");
 	optim.add_variation(2, "LeakyTwiceRelu6");
@@ -115,6 +116,7 @@ int main()
 	optim.add_variation(12, "LeakyTwiceRelu6");
 	optim.add_variation(12, "Relu6");
 	optim.add_variation(12, "LeakyRelu");
+	*/
 
 	optim.set_repeat_all(10); //re-do everything 10 times
 	optim.set_better_solution_callback(better_solution_callback); //called on better solution found

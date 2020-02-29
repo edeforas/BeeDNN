@@ -9,7 +9,7 @@ void compare_im2col()
 {
 	cout << "Comparing im2col() and im2col_LUT():" << endl;
 
-	Index iNbSamples=7, inRows = 51, inCols = 23, inChannels = 13, outChannels = 17;
+	Index iNbSamples=7, inRows = 31, inCols = 23, inChannels = 13, outChannels = 17; // all primes numbers
 	MatrixFloat mIn, mCol, mColLUT, mIm, mImLUT;
 
 	//fill with random data
@@ -36,39 +36,52 @@ void compare_im2col()
 	else
 		cout << "Test Succeded. MaxDifference = " << fMaxDiff << endl;
 }
+
 //////////////////////////////////////////////////////////////////////////////
-void im2col_col2im()
+void compare_fastlut_slow_computation()
 {
-	cout << "Simple im2col() then col2im() test:" << endl;
+	cout << "Comparing fastlut and slow computation mode:" << endl;
 
-	Index inRows = 5, inCols = 5, inChannels=3, outChannels=4;
-	MatrixFloat mIn, mCol, mColLUT, mIm, mImLUT;
+	Index iNbSamples = 7, inRows = 31, inCols = 23, inChannels = 13, outChannels = 17; // all primes numbers
+	MatrixFloat mIn, mOut, mOutFast, mIm, mImFast;
 
-	//fill with simple data
-	mIn.resize(1, inRows * inCols*inChannels);
-	for (Index i =0;i< mIn.size(); i++)
-		mIn.data()[i] = (float)i;
+	//fill with random data
+	mIn.resize(iNbSamples, inRows * inCols*inChannels);
+	mIn.setRandom();
 
-	//compare legacy and optimized computation
-	LayerConvolution2D conv2d(inRows, inCols, inChannels, 3, 3, outChannels);
+	LayerConvolution2D conv2d(inRows, inCols, inChannels, 5, 3, outChannels);
+	conv2d.fastLUT = false;
+	conv2d.forward(mIn, mOut);
+	conv2d.fastLUT = true;
+	conv2d.forward(mIn, mOutFast);
 
-	//forward
-	conv2d.im2col(mIn, mCol);
-	conv2d.im2col_LUT(mIn, mColLUT);
+	conv2d.fastLUT = false;
+	conv2d.backpropagation(mIn, mOut, mIm);
+	conv2d.fastLUT = true;
+	conv2d.backpropagation(mIn, mOutFast, mImFast);
+	
+	float fMaxDiffOut = (mOut - mOutFast).cwiseAbs().maxCoeff();
+	float fMaxDiffIm = (mIm - mImFast).cwiseAbs().maxCoeff();
 
-	mIn.resize(inRows*inChannels, inCols);
-	cout << "Image:" << endl << toString(mIn) << endl << endl;
-	cout << "Im2Col:" << endl << toString(mCol) << endl << endl;
-	cout << "Im2ColLUT:" << endl << toString(mColLUT) << endl << endl;
+	//testu function
+	if (fMaxDiffOut > 1.e-10)
+	{
+		cout << "Test failed! MaxDifferenceOut = " << fMaxDiffOut << endl;
+		exit(-1);
+	}
+	else
+		cout << "Test Succeded. MaxDifferenceOut = " << fMaxDiffOut << endl;
 
-	//backward
-	conv2d.col2im(mCol,mIm);
-	//conv2d.col2im_LUT(mColLUT, mImLUT);
-	mIm.resize(inRows*inChannels, inCols);
-	//mImLUT.resize(inRows*inChannels, inCols);
-	cout << "Col2Im:" << endl << toString(mIm) << endl << endl;
-	//cout << "Col2ImLUT:" << endl << toString(mImLUT) << endl << endl;
+	//testu function
+	if (fMaxDiffIm > 1.e-6)
+	{
+		cout << "Test failed! MaxDifferenceIm = " << fMaxDiffIm << endl;
+		exit(-1);
+	}
+	else
+		cout << "Test Succeded. MaxDifferenceIm = " << fMaxDiffIm << endl;
 }
+
 //////////////////////////////////////////////////////////////////////////////
 void simple_image_conv2d()
 {
@@ -178,6 +191,26 @@ void image_2_output_channels_conv2d()
 	cout << toString(mOut) << endl << endl;
 }
 //////////////////////////////////////////////////////////////////////////////
+void forward_backward()
+{
+	cout << "Forward then backward test:" << endl;
+
+	Index iNbSamples = 5, inRows = 7, inCols = 11, inChannels = 13, outChannels = 17; // all primes numbers
+	MatrixFloat mIn, mCol, mColLUT, mIm, mImLUT;
+
+	//fill with incremented data
+	mIn.resize(iNbSamples, inRows * inCols * inChannels);
+	for (Index i = 0; i < mIn.size(); i++)
+		mIn.data()[i] = (float)i;
+	
+	//forward and backward
+	LayerConvolution2D conv2d(inRows, inCols, inChannels, 2, 3, outChannels);
+	conv2d.forward(mIn, mCol);
+	conv2d.backpropagation(mIn, mCol, mIm);
+
+	cout << "mIm:" << endl << toString(mIm) << endl << endl;
+}
+//////////////////////////////////////////////////////////////////////////////
 void simple_image_conv2d_stride2()
 {
 	cout << "Simple convolution test stride2:" << endl;
@@ -254,7 +287,7 @@ void forward_conv2d_backprop_sgd()
 	cout << toString(mGradientIn) << endl << endl;
 }
 /////////////////////////////////////////////////////////////////
-void forward_conv2d_stride2_backprop_sgd()
+void forward_stride2_backward()
 {
 	cout << "Forward Conv2D and Backpropagation test:" << endl << endl;
 
@@ -316,13 +349,23 @@ void forward_time()
 
 	LayerConvolution2D conv2d(iInRows, iInCols, iInChannels, iKernelRows, iKernelCols, iOutChannels);
 
-	//measure forward time
-	chrono::steady_clock::time_point start = chrono::steady_clock::now();
+	//measure forward time slow
+	conv2d.fastLUT = false;
+	auto start = chrono::steady_clock::now();
 	for(int i=0;i< iNbConv;i++)
 		conv2d.forward(mIn, mOut);
-	chrono::steady_clock::time_point end = chrono::steady_clock::now();
+	auto end = chrono::steady_clock::now();
 	auto delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-	cout << "Time elapsed: " << delta << " ms" << endl;
+	cout << "Time elapsed slow: " << delta << " ms" << endl;
+
+	//measure forward time fastlut
+	conv2d.fastLUT = true;
+	start = chrono::steady_clock::now();
+	for (int i = 0; i < iNbConv; i++)
+		conv2d.forward(mIn, mOut);
+	end = chrono::steady_clock::now();
+	delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+	cout << "Time elapsed fastlut: " << delta << " ms" << endl << endl;
 }
 /////////////////////////////////////////////////////////////////
 void backward_time()
@@ -339,7 +382,7 @@ void backward_time()
 	int iOutChannels = 32;
 	int iNbConv = 10;
 
-	MatrixFloat mIn,mOut, mOutGradient;
+	MatrixFloat mIn,mOut, mOutGradient, mInGradient;
 	mIn.setRandom(iNbSamples, iInRows*iInCols*iInChannels);
 
 	LayerConvolution2D conv2d(iInRows, iInCols, iInChannels, iKernelRows, iKernelCols, iOutChannels);
@@ -349,19 +392,29 @@ void backward_time()
 	mOutGradient = mOut;
 	mOutGradient.setRandom();
 	
-	//measure backward time
-	chrono::steady_clock::time_point start = chrono::steady_clock::now();
+	//measure backward time slow
+	conv2d.fastLUT = false;
+	auto start = chrono::steady_clock::now();
 	for (int i = 0; i < iNbConv; i++)
-		conv2d.backpropagation(mIn, mOut, mOutGradient);
-	chrono::steady_clock::time_point end = chrono::steady_clock::now();
+		conv2d.backpropagation(mIn, mOutGradient, mInGradient);
+	auto end = chrono::steady_clock::now();
 	auto delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-	cout << "Time elapsed: " << delta << " ms" << endl;
+	cout << "Time elapsed slow: " << delta << " ms" << endl;
+
+	conv2d.fastLUT = true;
+	 start = chrono::steady_clock::now();
+	for (int i = 0; i < iNbConv; i++)
+		conv2d.backpropagation(mIn, mOutGradient, mInGradient);
+	 end = chrono::steady_clock::now();
+	delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+	cout << "Time elapsed fast: " << delta << " ms" << endl << endl;
+
 }
 /////////////////////////////////////////////////////////////////
 int main()
 {	
 	compare_im2col(); 
-	im2col_col2im();
+	compare_fastlut_slow_computation();
 	simple_image_conv2d();
 	batch_conv2d();
 	image_2_input_channels_conv2d();
@@ -369,7 +422,9 @@ int main()
 	simple_image_conv2d_stride2();
 	forward_conv2d_backprop_sgd();
 	simple_image_conv2d_stride2();
-	forward_conv2d_stride2_backprop_sgd();
+	
+	forward_backward();
+	forward_stride2_backward();
 	forward_time();	
 	backward_time();
 }
