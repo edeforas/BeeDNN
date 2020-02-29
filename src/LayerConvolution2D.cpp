@@ -215,8 +215,7 @@ void LayerConvolution2D::col2im_LUT(const MatrixFloat & mCol, MatrixFloat & mIm)
 	{
 		for (Index iOutRow = 0; iOutRow < _iOutRows; iOutRow++)
 		{
-			for (Index iOutCol = 0; iOutCol < _iOutCols; iOutCol++)
-			{
+
 
 				/*
 				Index iDecal = iSample * _iInRows*_iInCols*_iInChannels + iOutRow * _iInCols *_iRowStride + iOutCol * _iColStride;
@@ -227,8 +226,8 @@ void LayerConvolution2D::col2im_LUT(const MatrixFloat & mCol, MatrixFloat & mIm)
 					*(pOut + iLUT) = *(pIn + _im2ColLUT[iLUT]);
 				*/
 
-				Index iFromCol=iSample*_iOutCols*_iOutRows + iOutRow * _iOutCols + iOutCol;
-				Index iDecal = iSample * _iInRows*_iInCols*_iInChannels+ iOutCol * _iColStride+ iOutRow * _iRowStride*_iInCols;
+				Index iFromCol=iSample*_iOutCols*_iOutRows + iOutRow * _iOutCols ;
+				Index iDecal = iSample * _iInRows*_iInCols*_iInChannels+ + iOutRow * _iRowStride*_iInCols;
 				float *pfIm = mIm.data() + iDecal;
 
 				for (Index iInChannel = 0; iInChannel < _iInChannels; iInChannel++)
@@ -239,12 +238,17 @@ void LayerConvolution2D::col2im_LUT(const MatrixFloat & mCol, MatrixFloat & mIm)
 
 						for (Index iKCol = 0; iKCol < _iKernelCols; iKCol++)
 						{
+
+							for (Index iOutCol = 0; iOutCol < _iOutCols; iOutCol++)
+							{
+
+
 							float f = mCol(
 								iInChannel*_iKernelRows * _iKernelCols + iKRow * _iKernelCols + iKCol,
-								iFromCol
+								iFromCol + iOutCol
 							);
 
-							*(pfIm + iRowInPlane + iKCol) += f;
+							*(pfIm + iRowInPlane + iKCol+ iOutCol * _iColStride) += f;
 						}
 					}
 				}
@@ -308,6 +312,7 @@ void LayerConvolution2D::im2col_LUT(const MatrixFloat & mIn, MatrixFloat & mCol)
 
 	Index iLUTRows = _im2ColLUT.size();
 
+//#pragma omp parallel for
 	for (Index iSample = 0; iSample < _iSamples; iSample++)
 	{
 		for (Index iOutRow = 0; iOutRow < _iOutRows; iOutRow++)

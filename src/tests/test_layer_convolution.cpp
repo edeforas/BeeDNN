@@ -73,7 +73,7 @@ void compare_fastlut_slow_computation()
 		cout << "Test Succeded. MaxDifferenceOut = " << fMaxDiffOut << endl;
 
 	//testu function
-	if (fMaxDiffIm > 1.e-10)
+	if (fMaxDiffIm > 1.e-6)
 	{
 		cout << "Test failed! MaxDifferenceIm = " << fMaxDiffIm << endl;
 		exit(-1);
@@ -365,7 +365,7 @@ void forward_time()
 		conv2d.forward(mIn, mOut);
 	end = chrono::steady_clock::now();
 	delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-	cout << "Time elapsed fastlut: " << delta << " ms" << endl;
+	cout << "Time elapsed fastlut: " << delta << " ms" << endl << endl;
 }
 /////////////////////////////////////////////////////////////////
 void backward_time()
@@ -407,7 +407,7 @@ void backward_time()
 		conv2d.backpropagation(mIn, mOutGradient, mInGradient);
 	 end = chrono::steady_clock::now();
 	delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-	cout << "Time elapsed fast: " << delta << " ms" << endl;
+	cout << "Time elapsed fast: " << delta << " ms" << endl << endl;
 
 }
 /////////////////////////////////////////////////////////////////
@@ -415,7 +415,7 @@ int main()
 {	
 	compare_im2col(); 
 	compare_fastlut_slow_computation();
-/*	simple_image_conv2d();
+	simple_image_conv2d();
 	batch_conv2d();
 	image_2_input_channels_conv2d();
 	image_2_output_channels_conv2d();
@@ -425,7 +425,7 @@ int main()
 	
 	forward_backward();
 	forward_stride2_backward();
-*/	forward_time();	
+	forward_time();	
 	backward_time();
 }
 /////////////////////////////////////////////////////////////////
