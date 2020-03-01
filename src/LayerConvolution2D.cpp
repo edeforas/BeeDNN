@@ -10,6 +10,8 @@
 
 #include "LayerConvolution2D.h"
 
+#include <cmath> // for sqrt
+
 ///////////////////////////////////////////////////////////////////////////////
 LayerConvolution2D::LayerConvolution2D(Index iInRows, Index iInCols, Index iInChannels, Index iKernelRows, Index iKernelCols, Index iOutChannels, Index iRowStride, Index iColStride) :
     Layer("Convolution2D")
@@ -51,7 +53,11 @@ LayerConvolution2D::~LayerConvolution2D()
 void LayerConvolution2D::init()
 {
 	_weight.resize(_iOutChannels, _iKernelRows * _iKernelCols * _iInChannels);
+
+	//Xavier uniform initialization
+	float a = sqrtf(6.f / (_iInRows*_iInCols*_iInChannels + _iOutCols*_iOutRows*_iOutChannels));
 	setRandomUniform(_weight);
+	_weight *= a;
 
 	_gradientWeight.resizeLike(_weight);
 	_gradientWeight.setZero();

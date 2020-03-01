@@ -17,8 +17,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_classification_MNIST
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_classification_CIFAR10", "sample_code\sample_classification_CIFAR10.vcxproj", "{39345D70-FA19-483B-97C6-334F817A5F62}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_classification_MNIST_conv2D", "sample_code\sample_classification_MNIST_conv2D.vcxproj", "{65B2045F-1A31-4FF7-B25F-5EF87551F03E}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_layer_convolution", "tests\test_layer_convolution.vcxproj", "{F1B17300-0846-4456-9B79-9B30ACADA3F6}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_classification_MNIST_allconvolutional", "sample_code\sample_classification_MNIST_allconvolutional.vcxproj", "{C810BFE4-BB10-41B6-9EA9-B6210DF9B504}"
@@ -87,14 +85,6 @@ Global
 		{39345D70-FA19-483B-97C6-334F817A5F62}.Release|x64.Build.0 = Release|x64
 		{39345D70-FA19-483B-97C6-334F817A5F62}.Release|x86.ActiveCfg = Release|Win32
 		{39345D70-FA19-483B-97C6-334F817A5F62}.Release|x86.Build.0 = Release|Win32
-		{65B2045F-1A31-4FF7-B25F-5EF87551F03E}.Debug|x64.ActiveCfg = Debug|x64
-		{65B2045F-1A31-4FF7-B25F-5EF87551F03E}.Debug|x64.Build.0 = Debug|x64
-		{65B2045F-1A31-4FF7-B25F-5EF87551F03E}.Debug|x86.ActiveCfg = Debug|Win32
-		{65B2045F-1A31-4FF7-B25F-5EF87551F03E}.Debug|x86.Build.0 = Debug|Win32
-		{65B2045F-1A31-4FF7-B25F-5EF87551F03E}.Release|x64.ActiveCfg = Release|x64
-		{65B2045F-1A31-4FF7-B25F-5EF87551F03E}.Release|x64.Build.0 = Release|x64
-		{65B2045F-1A31-4FF7-B25F-5EF87551F03E}.Release|x86.ActiveCfg = Release|Win32
-		{65B2045F-1A31-4FF7-B25F-5EF87551F03E}.Release|x86.Build.0 = Release|Win32
 		{F1B17300-0846-4456-9B79-9B30ACADA3F6}.Debug|x64.ActiveCfg = Debug|x64
 		{F1B17300-0846-4456-9B79-9B30ACADA3F6}.Debug|x64.Build.0 = Debug|x64
 		{F1B17300-0846-4456-9B79-9B30ACADA3F6}.Debug|x86.ActiveCfg = Debug|Win32
