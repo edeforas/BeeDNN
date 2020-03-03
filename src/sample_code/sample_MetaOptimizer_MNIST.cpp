@@ -5,6 +5,8 @@
 //To stop by anytime, type CTRL+C
 
 #include <iostream>
+#include <iostream>
+#include <iomanip>
 #include <fstream>
 using namespace std;
 
@@ -31,7 +33,10 @@ void better_solution_callback(NetTrain& train)
 	string s;
 	NetUtil::write(train,s); //save train parameters
 	NetUtil::write(train.net(),s); // save network
-	std::ofstream f("solution_accuracy" + to_string(train.get_current_validation_accuracy()) + ".txt");
+
+	ostringstream sFile;
+	sFile << "solution_accuracy" << fixed << setprecision(2) << train.get_current_validation_accuracy() << ".txt";
+	std::ofstream f(sFile.str());
 	f << s;
 }
 //////////////////////////////////////////////////////////////////////////////
