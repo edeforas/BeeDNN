@@ -102,7 +102,7 @@ void MetaOptimizer::set_better_solution_callback(std::function<void(NetTrain& tr
 	_betterSolutionCallBack = betterSolutionCallBack;
 }
 ////////////////////////////////////////////////////////////////
-void MetaOptimizer::add_variation(Index iLayer, string sType, float fArg1, float fArg2, float fArg3, float fArg4, float fArg5)
+void MetaOptimizer::add_variation(Index iLayer,const string & sType, float fArg1, float fArg2, float fArg3, float fArg4, float fArg5)
 {
 	MetaOptimizerVariation v;
 	v.iLayer = iLayer;

@@ -14,7 +14,7 @@ public:
 
     void clear();
 
-    void write(string& s);
+    void write(string& s) const;
     void read(const string& s);
 
     const string name() const;
@@ -44,7 +44,7 @@ private:
     void load_and();
     void load_xor();
 
-    float get_function_val(float x);
+    float get_function_val(float x) const;
 
     MatrixFloat _mTrainData;
     MatrixFloat _mTrainTruth;

@@ -29,7 +29,7 @@ public:
 	void set_train(NetTrain& train);
 	void set_nb_thread(int iNbThread); // default: use max available or if iNbThread is zero
 	
-	void add_variation(Index iLayer, string sType, float fArg1 = 0.f, float fArg2 = 0.f, float fArg3 = 0.f, float fArg4 = 0.f, float fArg5 = 0.f);
+	void add_variation(Index iLayer,const string&  sType, float fArg1 = 0.f, float fArg2 = 0.f, float fArg3 = 0.f, float fArg4 = 0.f, float fArg5 = 0.f);
 
 	void set_repeat_all(int iNbRepeatAll);
 	

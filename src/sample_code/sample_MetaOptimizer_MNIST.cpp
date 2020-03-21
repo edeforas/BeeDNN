@@ -1,7 +1,7 @@
 //This sample launch in parallel multiple runs of the same net optimization 
 //This sample can also test for many different Relu activations flavors
 //It shows and save the current best solution on disk
-//This is a heavy test, but expect val_accuracy>99.30% after 40min (got max 99.41%)
+//This is a heavy test, but expect val_accuracy>99.20% after 40min
 //To stop by anytime, type CTRL+C
 
 #include <iostream>
@@ -45,7 +45,7 @@ int main()
 	cout << "This sample launch in parallel multiple runs of the same net optimization" << endl;
 	cout << "This sample also test for many different Relu activations flavors" << endl;
 	cout << "It save the current best solution on disk" << endl;
-	cout << "This is a heavy test, but expect val_accuracy>99.30% after 40min (got max 99.41%)" << endl;
+	cout << "This is a heavy test, but expect val_accuracy>99.20% after 40min" << endl;
 	cout << "To stop by anytime, type CTRL+C" << endl;
 
 	//load MNIST data
@@ -71,7 +71,6 @@ int main()
 	net.add(new LayerConvolution2D(26, 26, 8, 3, 3, 8, 2, 2));
 	net.add(new LayerChannelBias(12,12,8));
 	net.add(new LayerActivation("Relu"));
-	net.add(new LayerDropout(0.3f)); //avoid overfitting
 
 	net.add(new LayerConvolution2D(12, 12, 8, 3, 3, 8));
 	net.add(new LayerChannelBias(10,10,8));
