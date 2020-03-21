@@ -70,7 +70,7 @@ void LayerRRelu::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGrad
 	}
 }
 ///////////////////////////////////////////////////////////////
-void LayerRRelu::get_params(float& alpha1, float& alpha2)
+void LayerRRelu::get_params(float& alpha1, float& alpha2) const
 {
 	alpha1 = _alpha1;
 	alpha2 = _alpha2;

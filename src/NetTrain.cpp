@@ -254,7 +254,7 @@ float NetTrain::compute_loss_accuracy(const MatrixFloat &mSamples, const MatrixF
 {
     Index iNbSamples = mSamples.rows();
 	float fLoss = 0.f;
-	MatrixFloat mOut,mTruthBatch;
+	MatrixFloat mOut,mTruthBatch, mSamplesBatch;
 
 	if ((_pNet->layers().size() == 0) || (iNbSamples == 0))
 	{
@@ -272,8 +272,8 @@ float NetTrain::compute_loss_accuracy(const MatrixFloat &mSamples, const MatrixF
 			iEnd = iNbSamples;
 		Index iBatchSize = iEnd - iStart;
 
-		const MatrixFloat mSamplesBatch = rowRange(mSamples, iStart, iEnd); // todo check no copy
-		const MatrixFloat mTruthBatch = rowRange(mTruth, iStart, iEnd); // todo check no copy
+		/*const MatrixFloat*/ mSamplesBatch = rowRange(mSamples, iStart, iEnd); // todo check no copy
+		/*const MatrixFloat*/ mTruthBatch = rowRange(mTruth, iStart, iEnd); // todo check no copy
 		
 		_pNet->forward(mSamplesBatch, mOut);
 		fLoss+= _pLoss->compute(mOut, mTruthBatch);
@@ -316,10 +316,10 @@ void NetTrain::set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mT
     _pmTruthTrain = &mTruth;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_validation_data(const MatrixFloat& mSamplesTest, const MatrixFloat& mTruthTest)
+void NetTrain::set_validation_data(const MatrixFloat& mSamplesValidation, const MatrixFloat& mTruthValidation)
 {
-	_pmSamplesValidation = &mSamplesTest;
-	_pmTruthValidation = &mTruthTest;
+	_pmSamplesValidation = &mSamplesValidation;
+	_pmTruthValidation = &mTruthValidation;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::train()

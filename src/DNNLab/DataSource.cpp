@@ -21,7 +21,7 @@ DataSource::DataSource()
 DataSource::~DataSource()
 {}
 ////////////////////////////////////////////////////////////////////////
-void DataSource::write(string& s)
+void DataSource::write(string& s) const
 {
     s+=string("DataSource=")+_sName+string("\n");
 }
@@ -237,7 +237,7 @@ void DataSource::load_function()
     _bHasTestData= true;
 }
 ////////////////////////////////////////////////////////////////////////
-float DataSource::get_function_val(float x)
+float DataSource::get_function_val(float x) const
 {
     if (_sName == "Identity")
         return x;
