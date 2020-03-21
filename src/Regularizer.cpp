@@ -81,7 +81,7 @@ public:
 
 	virtual void apply(MatrixFloat& dw) override
 	{
-		dw = _fVal * tanh(dw.array()* (1.f / _fVal));
+		dw =  ((dw* (1.f / _fVal)).array().tanh())*_fVal;
 	}
 };
 //////////////////////////////////////////////////////////

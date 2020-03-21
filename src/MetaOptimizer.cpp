@@ -125,7 +125,7 @@ void MetaOptimizer::apply_variations(Net& net)
 		vector<MetaOptimizerVariation> vl;
 		for (size_t iv = 0; iv < _variations.size(); iv++)
 		{
-			if (_variations[iv].iLayer == iL)
+			if (_variations[iv].iLayer == (Index)iL)
 				vl.push_back(_variations[iv]);
 		}
 

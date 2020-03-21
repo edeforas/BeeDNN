@@ -39,12 +39,12 @@ Net& Net::operator=(const Net& other)
 {
     clear();
 
-    for(unsigned int i=0;i<other._layers.size();i++)
+    for(size_t i=0;i<other._layers.size();i++)
         _layers.push_back(other._layers[i]->clone());
 
-	_bClassificationMode = other._bClassificationMode;
+    _bClassificationMode = other._bClassificationMode;
 
-	return *this;
+    return *this;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // add the layer, take the ownership of the layer 
