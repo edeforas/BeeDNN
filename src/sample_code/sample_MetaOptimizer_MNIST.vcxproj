@@ -199,6 +199,7 @@
     <ClCompile Include="..\NetTrain.cpp" />
     <ClCompile Include="..\NetUtil.cpp" />
     <ClCompile Include="..\Optimizer.cpp" />
+    <ClCompile Include="..\Regularizer.cpp" />
     <ClCompile Include="sample_MetaOptimizer_MNIST.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -229,6 +230,7 @@
     <ClInclude Include="..\NetTrain.h" />
     <ClInclude Include="..\NetUtil.h" />
     <ClInclude Include="..\Optimizer.h" />
+    <ClInclude Include="..\Regularizer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

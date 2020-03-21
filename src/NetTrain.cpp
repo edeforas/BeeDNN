@@ -13,6 +13,7 @@
 #include "Matrix.h"
 
 #include "Optimizer.h"
+#include "Regularizer.h"
 #include "Loss.h"
 
 #include <cmath>
@@ -28,6 +29,8 @@ NetTrain::NetTrain():
 
 	_fValidationLoss=0.f;
 	_fValidationAccuracy=0.f;
+
+	_pRegularizer = nullptr;
 
     _pLoss = create_loss("MeanSquaredError");
     _iBatchSize = 32;
@@ -144,6 +147,25 @@ void NetTrain::set_optimizer(const string& sOptimizer) //"Adam by default, ex "S
 string NetTrain::get_optimizer() const
 {
     return _sOptimizer;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void NetTrain::set_regularizer(const string& sRegularizer,float fVal) // "" by default, can be also "Identity", "Clamp" ...
+{
+	delete _pRegularizer;
+	if (sRegularizer != "")
+	{
+		_pRegularizer = create_regularizer(sRegularizer);
+		_pRegularizer->set_params(fVal);
+	}
+	else
+		_pRegularizer = nullptr;
+}
+string NetTrain::get_regularizer() const
+{
+	if (_pRegularizer != nullptr)
+		return _pRegularizer->name();
+	else
+		return "";
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::set_learningrate(float fLearningRate) //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov"
@@ -335,12 +357,6 @@ void NetTrain::train()
     const MatrixFloat& mSamples = *_pmSamplesTrain;
     const MatrixFloat& mTruth = *_pmTruthTrain;
 
-//	if (_pNet->input_size() != (int)mSamples.cols())
-//		_pNet->set_input_size((int)mSamples.cols());
-
-/*	if (!_pNet->is_valid((int)mSamples.cols(),(int) mTruth.cols()))
-		return ;
-		*/
     _trainLoss.clear();
     _validationLoss.clear();
     _trainAccuracy.clear();
@@ -515,6 +531,9 @@ void NetTrain::train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth
 
 		if (l.has_weight())
 		{
+			if (_pRegularizer)
+				_pRegularizer->apply(l.gradient_weights());
+			
 			_optimizers[i]->optimize(l.weights(), l.gradient_weights());
 		}
 	}

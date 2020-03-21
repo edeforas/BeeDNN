@@ -19,6 +19,7 @@ using namespace std;
 class Optimizer;
 class Loss;
 class Net;
+class Regularizer;
 
 class NetTrain
 {
@@ -46,7 +47,10 @@ public:
     void set_optimizer(const string& sOptimizer); //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov" "iRPROP-" ...
     string get_optimizer() const;
 
-    void set_learningrate(float fLearningRate=-1.f ); // -1.f is for default settings
+	void set_regularizer(const string& sRegularizer, float fVal); //"Identity" by default, can be also "Clamp" ...
+	string get_regularizer() const;
+	
+	void set_learningrate(float fLearningRate=-1.f ); // -1.f is for default settings
     float get_learningrate() const;
 
     void set_decay( float fDecay = -1.f); // -1.s is for default settings
@@ -108,6 +112,7 @@ private:
 
 	Net* _pNet;
 	Loss* _pLoss;
+	Regularizer* _pRegularizer;
 
 	vector<Optimizer*> _optimizers;
 	vector<MatrixFloat> _inOut;

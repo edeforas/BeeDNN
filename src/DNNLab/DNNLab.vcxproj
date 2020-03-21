@@ -205,6 +205,7 @@
     <ClCompile Include="..\Activation.cpp" />
     <ClCompile Include="..\CIFAR10Reader.cpp" />
     <ClCompile Include="..\ConfusionMatrix.cpp" />
+    <ClCompile Include="..\Regularizer.cpp" />
     <ClCompile Include="DataSource.cpp" />
     <ClCompile Include="FrameGlobal.cpp" />
     <ClCompile Include="FrameLearning.cpp" />
@@ -244,6 +245,7 @@
     <ClInclude Include="..\Activation.h" />
     <ClInclude Include="..\CIFAR10Reader.h" />
     <ClInclude Include="..\ConfusionMatrix.h" />
+    <ClInclude Include="..\Regularizer.h" />
     <ClInclude Include="DataSource.h" />
     <QtMoc Include="FrameGlobal.h">
     </QtMoc>

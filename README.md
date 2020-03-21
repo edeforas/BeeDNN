@@ -43,6 +43,10 @@ Loss functions:
 - LogCosh
 - SparseCategoricalCrossEntropy, CategoricalCrossEntropy, BinaryCrossEntropy
 
+Regularizer:
+- Clamp
+- Tanh
+
 Learning and optimization:
 - Classification or regression, test and/or learn
 - SGD, Momentum, Nesterov

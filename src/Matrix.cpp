@@ -154,6 +154,17 @@ void applyRowPermutation(const vector<Index>& vPermutation, const MatrixFloat & 
 	}
 }
 ///////////////////////////////////////////////////////////////////////////
+void clamp(MatrixFloat& m, float fClampMin, float fClampMax)
+{
+	for (Index i = 0; i < m.size(); i++)
+	{
+		if (m(i) > fClampMax)
+			m(i) = fClampMax;
+		else if (m(i) < fClampMin)
+			m(i) = fClampMin;
+	}
+}
+///////////////////////////////////////////////////////////////////////////
 Index argmax(const MatrixFloat& m)
 {
     assert(m.rows()==1); //for now, vector raw only

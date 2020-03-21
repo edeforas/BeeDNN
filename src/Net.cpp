@@ -64,6 +64,7 @@ void Net::replace(size_t iLayer, Layer* l)
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Net::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 {
+	//todo cut in mini batches so save memory
     MatrixFloat mTemp=mIn;
     for(unsigned int i=0;i<_layers.size();i++)
     {
