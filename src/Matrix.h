@@ -633,7 +633,6 @@ const MatrixFloat rowRange(const MatrixFloat& m, Index iStartRow, Index iEndRow)
 MatrixFloat decimate(const MatrixFloat& m, Index iRatio);
 Index argmax(const MatrixFloat& m);
 void rowsArgmax(const MatrixFloat& m, MatrixFloat& argM); //compute the argmax row by row
-const MatrixFloat addColumnOfOne(const MatrixFloat& m);
 
 void clamp(MatrixFloat& m,float fClampMin,float fClampMax);
 

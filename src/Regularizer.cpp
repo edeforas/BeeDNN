@@ -29,7 +29,7 @@ class RegularizerIdentity : public Regularizer
 {
 public:
 	RegularizerIdentity():Regularizer()
-	{ }
+	{}
 
 	~RegularizerIdentity() override
 	{}
@@ -39,8 +39,9 @@ public:
 		return "Identity";
 	}
 
-	virtual void apply(MatrixFloat& dw) override
+	virtual void apply(MatrixFloat& w,MatrixFloat& dw) override
 	{
+		(void)w;
 		(void)dw;
 	}
 };
@@ -49,7 +50,7 @@ class RegularizerClamp : public Regularizer
 {
 public:	
     RegularizerClamp() :Regularizer()
-    { }
+    {}
 
     ~RegularizerClamp() override
     {}
@@ -59,8 +60,9 @@ public:
 		return "Clamp";
 	}
 
-    virtual void apply(MatrixFloat& dw) override
+    virtual void apply(MatrixFloat& w,MatrixFloat& dw) override
     {
+		(void)w;
 		clamp(dw, -_fVal, _fVal);
     }
 };
@@ -69,7 +71,7 @@ class RegularizerTanh : public Regularizer
 {
 public:
 	RegularizerTanh() :Regularizer()
-	{ }
+	{}
 
 	~RegularizerTanh() override
 	{}
@@ -79,8 +81,9 @@ public:
 		return "Tanh";
 	}
 
-	virtual void apply(MatrixFloat& dw) override
+	virtual void apply(MatrixFloat& w,MatrixFloat& dw) override
 	{
+		(void)w;
 		dw =  ((dw* (1.f / _fVal)).array().tanh())*_fVal;
 	}
 };

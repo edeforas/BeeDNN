@@ -37,8 +37,13 @@ public:
     MatrixFloat& weights();
     MatrixFloat& gradient_weights();
 
+	bool has_bias() const;
+	MatrixFloat& bias();
+	MatrixFloat& gradient_bias();
+
 protected:
     MatrixFloat _weight,_gradientWeight;
+	MatrixFloat _bias, _gradientBias;
 	bool _bTrainMode;
 	bool _bFirstLayer;
 
