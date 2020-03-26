@@ -131,7 +131,7 @@ void FrameNetwork::set_net(Net* pNet)
 				to_string(ld->input_size())+","+ to_string(ld->output_size())
 				).c_str()));
 	
-            if(((LayerDense*)l)->has_bias())
+            if(l->has_bias())
                 sType="DenseAndBias";
             else
                 sType="DenseNoBias";
