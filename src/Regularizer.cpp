@@ -90,16 +90,16 @@ public:
 //////////////////////////////////////////////////////////
 Regularizer* create_regularizer(const string& sRegularizer)
 {
-    if (sRegularizer == "Identiy")
-        return new RegularizerIdentity;
+	if (sRegularizer == "Identiy")
+		return new RegularizerIdentity;
 
-    if (sRegularizer == "Clamp")
-        return new RegularizerClamp;
+	if (sRegularizer == "Clamp")
+		return new RegularizerClamp;
 
 	if (sRegularizer == "Tanh")
 		return new RegularizerTanh;
 
-    return nullptr;
+	return nullptr;
 }
 //////////////////////////////////////////////////////////////////////////////
 void list_regularizer_available(vector<string>& vsRegularizers)

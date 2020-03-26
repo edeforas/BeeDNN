@@ -502,7 +502,7 @@ void NetTrain::train()
             else
             {
                 iReboost = 0;
-                for (int i = 0; i < _optimizers.size(); i++)
+                for (size_t i = 0; i < _optimizers.size(); i++)
                     _optimizers[i]->init();
             }
         }
