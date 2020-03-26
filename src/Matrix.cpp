@@ -222,21 +222,6 @@ string toString(const MatrixFloat& m)
     return ss.str();
 }
 ///////////////////////////////////////////////////////////////////////////
-const MatrixFloat addColumnOfOne(const MatrixFloat& m)
-{
-    // todo : slow
-    MatrixFloat r(m.rows(), m.cols() + 1);
-
-    for (Index iL = 0; iL < m.rows(); iL++)
-    {
-        for (Index iR = 0; iR < m.cols(); iR++)
-            r(iL,iR)= m(iL, iR);
-        r(iL, m.cols()) = 1.f;
-    }
-
-    return r;
-}
-///////////////////////////////////////////////////////////////////////////
 const MatrixFloat fromFile(const string& sFile)
 {    
     vector<float> vf;

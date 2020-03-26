@@ -58,8 +58,10 @@ void write(const Net& net,string & s)
             ss << "Layer" << i+1 << ".hasBias=" << (l->has_bias()?1:0) << endl;
 			ss << "Layer" << i + 1 << ".inputSize=" << l->input_size() << endl;
 			ss << "Layer" << i + 1 << ".outputSize=" << l->output_size() << endl;
-            ss << "Layer" << i+1 << ".weight=" << endl;
-            ss << toString(layer->weights()) << endl;
+            ss << "Layer" << i+1 << ".weight=" << endl << toString(layer->weights()) << endl;
+
+			if (l->has_bias())
+				ss << "Layer" << i + 1 << ".bias=" << endl << toString(layer->bias()) << endl;
         }
 
         else if(layer->type()=="GlobalGain")
@@ -70,26 +72,30 @@ void write(const Net& net,string & s)
 
 		else if (layer->type() == "Gain")
 		{
-			LayerGain* l = static_cast<LayerGain*>(layer);
-			ss << "Layer" << i + 1 << ".gain=" << toString(l->weights()) << endl;
+			ss << "Layer" << i+1 << ".gain=" << toString(layer->weights()) << endl;
 		}
 		
 		else if(layer->type()=="GlobalBias")
         {
-            LayerGlobalBias* l=static_cast<LayerGlobalBias*>(layer);
-            ss << "Layer" << i+1 << ".globalBias=" << l->weights()(0) << endl;
+            ss << "Layer" << i+1 << ".globalBias=" << layer->bias()(0) << endl;
         }
 
 		else if(layer->type()=="ChannelBias")
         {
-            LayerChannelBias* l=static_cast<LayerChannelBias*>(layer);
-            ss << "Layer" << i+1 << ".channelBias=" << toString(l->weights()) << endl;
+			LayerChannelBias* l = static_cast<LayerChannelBias*>(layer);
+
+			Index iRows, iCols, iChannels;
+			l->get_params(iRows, iCols, iChannels);
+
+			ss << "Layer" << i + 1 << ".rows=" << iRows << endl;
+			ss << "Layer" << i + 1 << ".cols=" << iCols << endl;
+			ss << "Layer" << i + 1 << ".channels=" << iChannels << endl;
+            ss << "Layer" << i+1 << ".bias=" << endl << toString(layer->bias()) << endl;
         }
 
 		else if (layer->type() == "Bias")
 		{
-			LayerBias* l = static_cast<LayerBias*>(layer);
-			ss << "Layer" << i + 1 << ".bias=" << toString(l->weights()) << endl;
+			ss << "Layer" << i + 1 << ".bias=" << toString(layer->bias()) << endl;
 		}
 
         else if(layer->type()=="Dropout")
@@ -100,8 +106,7 @@ void write(const Net& net,string & s)
 
 		else if (layer->type() == "PRelu")
 		{
-			ss << "Layer" << i + 1 << ".weight=" << endl;
-			ss << toString(layer->weights()) << endl;
+			ss << "Layer" << i + 1 << ".weight=" << endl << toString(layer->weights()) << endl;
 		}
 
 		else if (layer->type() == "RRelu")
@@ -140,8 +145,7 @@ void write(const Net& net,string & s)
 		{
 			LayerConvolution2D* l = static_cast<LayerConvolution2D*>(layer);
 
-			ss << "Layer" << i + 1 << ".weight=" << endl;
-			ss << toString(l->weights()) << endl;
+			ss << "Layer" << i + 1 << ".weight=" << endl << toString(l->weights()) << endl;
 
 			Index inRows, inCols, inChannels, kernelRows, kernelCols, outChannels, rowStride, colStride;
 			l->get_params(inRows, inCols, inChannels, kernelRows, kernelCols, outChannels,rowStride,colStride);
@@ -183,15 +187,19 @@ void read(const string& s,Net& net)
 			string sOutputSize=find_key(s,sLayer+".outputSize");
             Index iInputSize=stoi(sInputSize); 
 			Index iOutputSize=stoi(sOutputSize);
-			
 			string sHasBias=find_key(s,sLayer+".hasBias");
             bool bHasBias=sHasBias!="0";
+
             net.add(new LayerDense(iInputSize,iOutputSize,bHasBias));
 
             string sWeight=find_key(s,sLayer+".weight");
-            MatrixFloat mf=fromString(sWeight);
-            mf.resize(iInputSize+(bHasBias?1:0),iOutputSize);
-            net.layer(net.size()-1).weights()=mf;
+            net.layer(net.size()-1).weights()= fromString(sWeight);
+
+			if (bHasBias)
+			{
+				string sBias = find_key(s, sLayer + ".bias");
+				net.layer(net.size() - 1).bias() = fromString(sBias);
+			}
         }
 
         else if(sType=="GlobalGain")
@@ -217,23 +225,28 @@ void read(const string& s,Net& net)
             net.add(new LayerGlobalBias());
             MatrixFloat mf(1, 1);
             mf(0) = fBias;
-            net.layer(net.size() - 1).weights() = mf;
+            net.layer(net.size() - 1).bias() = mf;
         }
 
 		else if (sType == "ChannelBias")
 		{
-			string sWeight = find_key(s, sLayer + ".channelBias");
-			MatrixFloat mf = fromString(sWeight);
-			net.add(new LayerBias());
-			net.layer(net.size() - 1).weights() = mf;
+			string sBias = find_key(s, sLayer + ".bias");
+			MatrixFloat mf = fromString(sBias);
+
+			Index iRows = stoi(find_key(s, sLayer + ".rows"));
+			Index iCols = stoi(find_key(s, sLayer + ".cols"));
+			Index iChannels = stoi(find_key(s, sLayer + ".channels"));
+
+			net.add(new LayerChannelBias(iRows, iCols, iChannels));
+			net.layer(net.size() - 1).bias() = mf;
 		}
 		
 		else if (sType == "Bias")
 		{
-			string sWeight = find_key(s, sLayer + ".bias");
-			MatrixFloat mf = fromString(sWeight);
+			string sBias = find_key(s, sLayer + ".bias");
+			MatrixFloat mf = fromString(sBias);
 			net.add(new LayerBias());
-			net.layer(net.size() - 1).weights() = mf;
+			net.layer(net.size() - 1).bias() = mf;
 		}
 
         else if(sType=="Dropout")

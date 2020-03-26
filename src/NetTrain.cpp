@@ -383,8 +383,9 @@ void NetTrain::train()
 	if (_optimizers.empty())
 	{
 		//init all optimizers
-		for (int i = 0; i < _iNbLayers; i++)
+		for (int i = 0; i < _iNbLayers*2; i++)
 		{
+			// one optimizer for weight, one for bias
 			_optimizers.push_back(create_optimizer(_sOptimizer));
 			_optimizers[i]->set_params(_fLearningRate, _fDecay, _fMomentum);
 		}
@@ -501,7 +502,7 @@ void NetTrain::train()
             else
             {
                 iReboost = 0;
-                for (int i = 0; i < _iNbLayers; i++)
+                for (size_t i = 0; i < _optimizers.size(); i++)
                     _optimizers[i]->init();
             }
         }
@@ -532,9 +533,15 @@ void NetTrain::train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth
 		if (l.has_weight())
 		{
 			if (_pRegularizer)
-				_pRegularizer->apply(l.gradient_weights());
+				_pRegularizer->apply(l.weights(),l.gradient_weights());
 			
-			_optimizers[i]->optimize(l.weights(), l.gradient_weights());
+			_optimizers[2*i]->optimize(l.weights(), l.gradient_weights());
+		}
+
+		if (l.has_bias())
+		{
+			//bias does not need regularization 
+			_optimizers[2 * i+1]->optimize(l.bias(), l.gradient_bias());
 		}
 	}
 

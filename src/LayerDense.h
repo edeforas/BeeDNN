@@ -28,8 +28,6 @@ public:
     virtual void init() override;
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 
-    bool has_bias() const;
-
 private:
     bool _bHasBias;
 	Index _iInputSize, _iOutputSize;

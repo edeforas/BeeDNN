@@ -23,7 +23,7 @@ LayerGlobalGain::~LayerGlobalGain()
 Layer* LayerGlobalGain::clone() const
 {
     LayerGlobalGain* pLayer=new LayerGlobalGain();
-	pLayer->weights() = _weight;
+	pLayer->_weight = _weight;
 
     return pLayer;
 }

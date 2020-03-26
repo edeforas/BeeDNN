@@ -27,7 +27,7 @@ public:
 
 	virtual string name() const = 0;
 
-    virtual void apply(MatrixFloat& dw) = 0;
+    virtual void apply(MatrixFloat& w,MatrixFloat& dw) = 0;
 
 protected:
 	float _fVal;

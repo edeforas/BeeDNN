@@ -21,30 +21,30 @@ LayerBias::~LayerBias()
 Layer* LayerBias::clone() const
 {
     LayerBias* pLayer=new LayerBias();
-	pLayer->weights() = _weight;
+	pLayer->_bias = _bias;
 
     return pLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerBias::init()
 {
-    _weight.resize(0,0);
+	_bias.resize(0,0);
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerBias::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
-	if(_weight.size()==0)
-		_weight.setZero(1, mIn.cols());
+	if(_bias.size()==0)
+		_bias.setZero(1, mIn.cols());
 
-    mOut = rowWiseAdd( mIn , _weight);
+    mOut = rowWiseAdd( mIn , _bias);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerBias::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
 	(void)mIn;
 	
-	_gradientWeight = colWiseMean(mGradientOut);
+	_gradientBias = colWiseMean(mGradientOut);
 
 	if (_bFirstLayer)
 		return;

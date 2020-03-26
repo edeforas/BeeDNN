@@ -29,7 +29,7 @@ class RegularizerIdentity : public Regularizer
 {
 public:
 	RegularizerIdentity():Regularizer()
-	{ }
+	{}
 
 	~RegularizerIdentity() override
 	{}
@@ -39,64 +39,67 @@ public:
 		return "Identity";
 	}
 
-	virtual void apply(MatrixFloat& dw) override
+	virtual void apply(MatrixFloat& w,MatrixFloat& dw) override
 	{
+		(void)w;
 		(void)dw;
 	}
 };
 //////////////////////////////////////////////////////////
-class RegularizerClamp : public Regularizer
+class RegularizerGradientClip : public Regularizer
 {
 public:	
-    RegularizerClamp() :Regularizer()
-    { }
+    RegularizerGradientClip() :Regularizer()
+    {}
 
-    ~RegularizerClamp() override
+    ~RegularizerGradientClip() override
     {}
 	
 	string name() const override
 	{
-		return "Clamp";
+		return "GradientClip";
 	}
 
-    virtual void apply(MatrixFloat& dw) override
+    virtual void apply(MatrixFloat& w,MatrixFloat& dw) override
     {
+		(void)w;
 		clamp(dw, -_fVal, _fVal);
     }
 };
 //////////////////////////////////////////////////////////
-class RegularizerTanh : public Regularizer
+class RegularizerGradientClipTanh : public Regularizer
 {
 public:
-	RegularizerTanh() :Regularizer()
-	{ }
+	RegularizerGradientClipTanh() :Regularizer()
+	{}
 
-	~RegularizerTanh() override
+	~RegularizerGradientClipTanh() override
 	{}
 
 	string name() const override
 	{
-		return "Tanh";
+		return "GradientClipTanh";
 	}
 
-	virtual void apply(MatrixFloat& dw) override
+	virtual void apply(MatrixFloat& w,MatrixFloat& dw) override
 	{
+		(void)w;
 		dw =  ((dw* (1.f / _fVal)).array().tanh())*_fVal;
 	}
 };
 //////////////////////////////////////////////////////////
 Regularizer* create_regularizer(const string& sRegularizer)
 {
-    if (sRegularizer == "Identiy")
-        return new RegularizerIdentity;
+	if (sRegularizer == "Identiy")
+		return new RegularizerIdentity;
 
-    if (sRegularizer == "Clamp")
-        return new RegularizerClamp;
+	if (sRegularizer == "GradientClip")
+		return new RegularizerGradientClip;
 
-	if (sRegularizer == "Tanh")
-		return new RegularizerTanh;
+	if (sRegularizer == "GradientClipTanh")
+		return new RegularizerGradientClipTanh;
 
-    return nullptr;
+	return nullptr;
 }
 //////////////////////////////////////////////////////////////////////////////
 void list_regularizer_available(vector<string>& vsRegularizers)
@@ -104,7 +107,7 @@ void list_regularizer_available(vector<string>& vsRegularizers)
     vsRegularizers.clear();
 
 	vsRegularizers.push_back("Identity");
-	vsRegularizers.push_back("Clamp");
-	vsRegularizers.push_back("Tanh");
+	vsRegularizers.push_back("GradientClip");
+	vsRegularizers.push_back("GradientClipTanh");
 }
 //////////////////////////////////////////////////////////////////////////////

@@ -21,6 +21,8 @@ public:
     virtual Layer* clone() const override;
     virtual void init() override;
 
+	void get_params(Index & iRows, Index & iCols, Index & iChannels) const;
+
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 private:
