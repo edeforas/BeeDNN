@@ -46,18 +46,18 @@ public:
 	}
 };
 //////////////////////////////////////////////////////////
-class RegularizerClamp : public Regularizer
+class RegularizerGradientClip : public Regularizer
 {
 public:	
-    RegularizerClamp() :Regularizer()
+    RegularizerGradientClip() :Regularizer()
     {}
 
-    ~RegularizerClamp() override
+    ~RegularizerGradientClip() override
     {}
 	
 	string name() const override
 	{
-		return "Clamp";
+		return "GradientClip";
 	}
 
     virtual void apply(MatrixFloat& w,MatrixFloat& dw) override
@@ -67,18 +67,18 @@ public:
     }
 };
 //////////////////////////////////////////////////////////
-class RegularizerTanh : public Regularizer
+class RegularizerGradientClipTanh : public Regularizer
 {
 public:
-	RegularizerTanh() :Regularizer()
+	RegularizerGradientClipTanh() :Regularizer()
 	{}
 
-	~RegularizerTanh() override
+	~RegularizerGradientClipTanh() override
 	{}
 
 	string name() const override
 	{
-		return "Tanh";
+		return "GradientClipTanh";
 	}
 
 	virtual void apply(MatrixFloat& w,MatrixFloat& dw) override
@@ -93,11 +93,11 @@ Regularizer* create_regularizer(const string& sRegularizer)
 	if (sRegularizer == "Identiy")
 		return new RegularizerIdentity;
 
-	if (sRegularizer == "Clamp")
-		return new RegularizerClamp;
+	if (sRegularizer == "GradientClip")
+		return new RegularizerGradientClip;
 
-	if (sRegularizer == "Tanh")
-		return new RegularizerTanh;
+	if (sRegularizer == "GradientClipTanh")
+		return new RegularizerGradientClipTanh;
 
 	return nullptr;
 }
@@ -107,7 +107,7 @@ void list_regularizer_available(vector<string>& vsRegularizers)
     vsRegularizers.clear();
 
 	vsRegularizers.push_back("Identity");
-	vsRegularizers.push_back("Clamp");
-	vsRegularizers.push_back("Tanh");
+	vsRegularizers.push_back("GradientClip");
+	vsRegularizers.push_back("GradientClipTanh");
 }
 //////////////////////////////////////////////////////////////////////////////
