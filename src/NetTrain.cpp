@@ -149,13 +149,13 @@ string NetTrain::get_optimizer() const
     return _sOptimizer;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_regularizer(const string& sRegularizer,float fVal) // "" by default, can be also "Identity", "Clamp" ...
+void NetTrain::set_regularizer(const string& sRegularizer,float fParameter) // "" by default, can be also "Identity", "Clamp" ...
 {
 	delete _pRegularizer;
 	if (sRegularizer != "")
 	{
 		_pRegularizer = create_regularizer(sRegularizer);
-		_pRegularizer->set_params(fVal);
+		_pRegularizer->set_parameter(fParameter);
 	}
 	else
 		_pRegularizer = nullptr;
@@ -166,6 +166,12 @@ string NetTrain::get_regularizer() const
 		return _pRegularizer->name();
 	else
 		return "";
+}
+float NetTrain::get_regularizer_parameter() const
+{
+	if (_pRegularizer != nullptr)
+		return _pRegularizer->get_parameter();
+	return 0.f;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::set_learningrate(float fLearningRate) //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov"

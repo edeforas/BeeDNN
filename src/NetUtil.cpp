@@ -339,7 +339,13 @@ void write(const NetTrain& train,string & s)
     ss << "Decay=" << train.get_decay() << endl;
     ss << "Momentum=" << train.get_momentum() << endl;
 
-    s += ss.str();
+	if (!train.get_regularizer().empty())
+	{
+		ss << "Regularizer=" << train.get_regularizer();
+		ss << "RegularizerParameter=" << train.get_regularizer_parameter();
+	}
+
+		s += ss.str();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void read(const string& s,NetTrain& train)
@@ -366,6 +372,14 @@ void read(const string& s,NetTrain& train)
     train.set_learningrate(fLearningRate);
     train.set_decay(fDecay);
     train.set_momentum(fMomentum);
+
+	if (!find_key(s, "Regularizer").empty())
+	{
+		float fParameter = stof(find_key(s, "RegularizerParameter"));
+		train.set_regularizer(find_key(s, "Regularizer"),fParameter);
+	}
+	else
+		train.set_regularizer("",0.f);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////
 string find_key(string s,string sKey)

@@ -23,14 +23,15 @@ public:
 	Regularizer();
 	virtual ~Regularizer();
 	
-	void set_params(float fVal = 1.f);
+	void set_parameter(float fParameter);
+	float get_parameter() const;
 
 	virtual string name() const = 0;
 
     virtual void apply(MatrixFloat& w,MatrixFloat& dw) = 0;
 
 protected:
-	float _fVal;
+	float _fParameter;
 };
 
 Regularizer* create_regularizer(const string & sRegularizer);

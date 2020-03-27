@@ -1,6 +1,6 @@
 // simple  classification MNIST with a dense layer, similar as :
 // https://colab.research.google.com/github/tensorflow/docs/blob/master/site/en/tutorials/_index.ipynb
-// validation accuracy > 98%, after 15 epochs (2s by epochs)
+// validation accuracy > 98.1%, after 15 epochs (2s by epochs)
 
 #include <iostream>
 #include <chrono>
@@ -41,7 +41,7 @@ void epoch_callback()
 int main()
 {
 	cout << "simple  classification MNIST with a dense layer" << endl;
-	cout << "validation accuracy > 98%, after 15 epochs (2s by epochs)" << endl;
+	cout << "validation accuracy > 98.1%, after 15 epochs (2s by epochs)" << endl;
 
     iEpoch = 0;
 
@@ -59,7 +59,7 @@ int main()
 	//create simple net:
 	net.add(new LayerDense(784, 128));
 	net.add(new LayerActivation("Relu"));
-	net.add(new LayerDropout(0.3f)); //reduce overfitting
+	net.add(new LayerDropout(0.2f)); //reduce overfitting
 	net.add(new LayerDense(128, 10));
 	net.add(new LayerSoftmax());
 
@@ -92,7 +92,7 @@ int main()
 	cout << "Validation confusion matrix:" << endl << crTest.mConfMat << endl;
 
 	//testu function
-	if (crTest.accuracy < 98.f)
+	if (crTest.accuracy < 98.1f)
 	{
 		cout << "Test failed! accuracy=" << crTest.accuracy << endl;
 		return -1;

@@ -11,7 +11,6 @@ There is also a GUI application (in Qt) for live tests.
 
 Layers:
 - Dense, with or without bias
-- Dropout, GaussianNoise, GaussianDropout, UniformNoise
 - Gain, GlobalGain, Bias, GlobalBias
 - Convolution2D, PoolMax2D, ChannelBias
 - Softmax
@@ -43,9 +42,9 @@ Loss functions:
 - LogCosh
 - SparseCategoricalCrossEntropy, CategoricalCrossEntropy, BinaryCrossEntropy
 
-Regularizer:
-- Clamp
-- Tanh
+Overfitting:
+- Layers: Dropout, GaussianNoise, GaussianDropout, UniformNoise
+- Regularizer: GradientClip, GradientClipTanh, L1, L2
 
 Learning and optimization:
 - Classification or regression, test and/or learn

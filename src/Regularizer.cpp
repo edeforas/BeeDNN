@@ -14,15 +14,19 @@
 //////////////////////////////////////////////////////////
 Regularizer::Regularizer()
 {
-	_fVal= 1.f;
+	_fParameter = 0.f;
 }
 //////////////////////////////////////////////////////////
 Regularizer::~Regularizer()
 {}
 //////////////////////////////////////////////////////////
-void Regularizer::set_params(float fVal)
+void Regularizer::set_parameter(float fParameter)
 {
-	_fVal = fVal;
+	_fParameter = fParameter;
+}
+float Regularizer::get_parameter() const
+{
+	return _fParameter;
 }
 //////////////////////////////////////////////////////////
 class RegularizerIdentity : public Regularizer
@@ -46,6 +50,46 @@ public:
 	}
 };
 //////////////////////////////////////////////////////////
+class RegularizerL1 : public Regularizer
+{
+public:
+	RegularizerL1() :Regularizer()
+	{}
+
+	~RegularizerL1() override
+	{}
+
+	string name() const override
+	{
+		return "L1";
+	}
+
+	virtual void apply(MatrixFloat& w, MatrixFloat& dw) override
+	{
+		dw = dw + w.cwiseSign()*_fParameter;
+	}
+};
+//////////////////////////////////////////////////////////
+class RegularizerL2 : public Regularizer
+{
+public:
+	RegularizerL2() :Regularizer()
+	{}
+
+	~RegularizerL2() override
+	{}
+
+	string name() const override
+	{
+		return "L2";
+	}
+
+	virtual void apply(MatrixFloat& w, MatrixFloat& dw) override
+	{
+		dw = dw + w * _fParameter;
+	}
+};
+//////////////////////////////////////////////////////////
 class RegularizerGradientClip : public Regularizer
 {
 public:	
@@ -63,7 +107,7 @@ public:
     virtual void apply(MatrixFloat& w,MatrixFloat& dw) override
     {
 		(void)w;
-		clamp(dw, -_fVal, _fVal);
+		clamp(dw, -_fParameter, _fParameter);
     }
 };
 //////////////////////////////////////////////////////////
@@ -84,7 +128,7 @@ public:
 	virtual void apply(MatrixFloat& w,MatrixFloat& dw) override
 	{
 		(void)w;
-		dw =  ((dw* (1.f / _fVal)).array().tanh())*_fVal;
+		dw =  ((dw* (1.f / _fParameter)).array().tanh())*_fParameter;
 	}
 };
 //////////////////////////////////////////////////////////
@@ -92,6 +136,12 @@ Regularizer* create_regularizer(const string& sRegularizer)
 {
 	if (sRegularizer == "Identiy")
 		return new RegularizerIdentity;
+
+	if (sRegularizer == "L1")
+		return new RegularizerL1;
+
+	if (sRegularizer == "L2")
+		return new RegularizerL2;
 
 	if (sRegularizer == "GradientClip")
 		return new RegularizerGradientClip;
@@ -107,6 +157,8 @@ void list_regularizer_available(vector<string>& vsRegularizers)
     vsRegularizers.clear();
 
 	vsRegularizers.push_back("Identity");
+	vsRegularizers.push_back("L1");
+	vsRegularizers.push_back("L2");
 	vsRegularizers.push_back("GradientClip");
 	vsRegularizers.push_back("GradientClipTanh");
 }

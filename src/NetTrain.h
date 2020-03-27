@@ -47,9 +47,10 @@ public:
     void set_optimizer(const string& sOptimizer); //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov" "iRPROP-" ...
     string get_optimizer() const;
 
-	void set_regularizer(const string& sRegularizer, float fVal); //"Identity" by default, can be also "Clamp" ...
+	void set_regularizer(const string& sRegularizer, float fParameter=0.f); //"Identity" by default, can be also "L2" ...
 	string get_regularizer() const;
-	
+	float get_regularizer_parameter() const;
+
 	void set_learningrate(float fLearningRate=-1.f ); // -1.f is for default settings
     float get_learningrate() const;
 
