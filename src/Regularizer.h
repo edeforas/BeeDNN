@@ -23,7 +23,7 @@ public:
 	Regularizer();
 	virtual ~Regularizer();
 	
-	void set_parameter(float fParameter);
+	virtual void set_parameter(float fParameter);
 	float get_parameter() const;
 
 	virtual string name() const = 0;

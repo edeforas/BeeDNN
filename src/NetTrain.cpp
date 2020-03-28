@@ -87,7 +87,8 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
 	set_epochs(other._iEpochs);
 	set_reboost_every_epochs(other._iReboostEveryEpochs);
 	set_loss(other._pLoss->name());
-
+	set_regularizer(other.get_regularizer(),other.get_regularizer_parameter());
+	
 	_iOnlineAccuracyGood = other._iOnlineAccuracyGood;
 	_fOnlineLoss = other._fOnlineLoss;
 
@@ -171,7 +172,7 @@ float NetTrain::get_regularizer_parameter() const
 {
 	if (_pRegularizer != nullptr)
 		return _pRegularizer->get_parameter();
-	return 0.f;
+	return -1.f;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::set_learningrate(float fLearningRate) //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov"

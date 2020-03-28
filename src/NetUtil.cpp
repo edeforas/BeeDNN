@@ -341,11 +341,11 @@ void write(const NetTrain& train,string & s)
 
 	if (!train.get_regularizer().empty())
 	{
-		ss << "Regularizer=" << train.get_regularizer();
-		ss << "RegularizerParameter=" << train.get_regularizer_parameter();
+		ss << "Regularizer=" << train.get_regularizer() << endl;
+		ss << "RegularizerParameter=" << train.get_regularizer_parameter() << endl;
 	}
 
-		s += ss.str();
+	s += ss.str();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void read(const string& s,NetTrain& train)

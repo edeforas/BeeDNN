@@ -33,6 +33,7 @@ SOURCES += \
     ../NetUtil.cpp \
     ../NetTrain.cpp \
     ../Loss.cpp \
+    ../Regularizer.cpp \
     ../Optimizer.cpp \
     ../Layer.cpp \
     ../Matrix.cpp \
@@ -68,6 +69,7 @@ HEADERS += \
     ../NetUtil.h \
     ../NetTrain.h \
     ../Loss.h \
+    ../Regularizer.h \
     ../Optimizer.h \
     ../LayerActivation.h \
     ../LayerSoftmax.h \

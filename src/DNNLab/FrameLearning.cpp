@@ -4,6 +4,7 @@
 #include "mainwindow.h"
 #include "NetTrain.h"
 #include "Loss.h"
+#include "Regularizer.h"
 #include "Optimizer.h"
 
 //////////////////////////////////////////////////////////////
@@ -22,7 +23,14 @@ FrameLearning::FrameLearning(QWidget *parent) :
     for(unsigned int i=0;i<vsloss.size();i++)
         ui->cbLossFunction->addItem(vsloss[i].data());
 
-    //setup optimizer
+	//setup regularizer
+	ui->leRegularizerParameter->setText("-1"); // default
+	vector<string> vsRegularizer;
+	list_regularizer_available(vsRegularizer);
+	for (unsigned int i = 0; i < vsRegularizer.size(); i++)
+		ui->comboRegularizer->addItem(vsRegularizer[i].data());
+	
+	//setup optimizer
     vector<string> vsOptimizers;
     list_optimizers_available( vsOptimizers);
     for(unsigned int i=0;i<vsOptimizers.size();i++)
@@ -47,9 +55,7 @@ FrameLearning::~FrameLearning()
 }
 //////////////////////////////////////////////////////////////
 void FrameLearning::init()
-{
-
-}
+{ }
 //////////////////////////////////////////////////////////////
 void FrameLearning::on_cbKeepBest_stateChanged(int arg1)
 {
@@ -99,14 +105,16 @@ void FrameLearning::set_nettrain(NetTrain* pTrain)
     ui->cbKeepBest->setChecked(_pTrain->get_keepbest());
 
     ui->cbOptimizer->setCurrentText(_pTrain->get_optimizer().c_str());
-    ui->leLearningRate->setText(to_string(_pTrain->get_learningrate()).c_str());
+	ui->comboRegularizer->setCurrentText(_pTrain->get_regularizer().c_str());
+	ui->leRegularizerParameter->setText(to_string(_pTrain->get_regularizer_parameter()).c_str());
+
+	ui->leLearningRate->setText(to_string(_pTrain->get_learningrate()).c_str());
     ui->leDecay->setText(to_string(_pTrain->get_decay()).c_str());
     ui->leMomentum->setText(to_string(_pTrain->get_momentum()).c_str());
 
     _bLock=false;
 }
 //////////////////////////////////////////////////////////////
-
 void FrameLearning::on_leLearningRate_editingFinished()
 {
     if(_bLock)
@@ -115,7 +123,7 @@ void FrameLearning::on_leLearningRate_editingFinished()
     _pTrain->set_learningrate(ui->leLearningRate->text().toFloat());
     _pMainWindow->model_changed(this);
 }
-
+//////////////////////////////////////////////////////////////
 void FrameLearning::on_leReboost_editingFinished()
 {
     if(_bLock)
@@ -124,7 +132,7 @@ void FrameLearning::on_leReboost_editingFinished()
     _pTrain->set_reboost_every_epochs(ui->leReboost->text().toInt());
     _pMainWindow->model_changed(this);
 }
-
+//////////////////////////////////////////////////////////////
 void FrameLearning::on_leBatchSize_editingFinished()
 {
     if(_bLock)
@@ -133,7 +141,7 @@ void FrameLearning::on_leBatchSize_editingFinished()
     _pTrain->set_batchsize(ui->leBatchSize->text().toInt());
     _pMainWindow->model_changed(this);
 }
-
+//////////////////////////////////////////////////////////////
 void FrameLearning::on_leEpochs_editingFinished()
 {
     if(_bLock)
@@ -142,7 +150,7 @@ void FrameLearning::on_leEpochs_editingFinished()
     _pTrain->set_epochs(ui->leEpochs->text().toInt());
     _pMainWindow->model_changed(this);
 }
-
+//////////////////////////////////////////////////////////////
 void FrameLearning::on_leMomentum_editingFinished()
 {
     if(_bLock)
@@ -151,7 +159,7 @@ void FrameLearning::on_leMomentum_editingFinished()
     _pTrain->set_momentum(ui->leMomentum->text().toFloat());
     _pMainWindow->model_changed(this);
 }
-
+//////////////////////////////////////////////////////////////
 void FrameLearning::on_leDecay_editingFinished()
 {
     if(_bLock)
@@ -160,3 +168,23 @@ void FrameLearning::on_leDecay_editingFinished()
     _pTrain->set_decay(ui->leDecay->text().toFloat());
     _pMainWindow->model_changed(this);
 }
+//////////////////////////////////////////////////////////////
+void FrameLearning::on_comboRegularizer_currentTextChanged(const QString &arg1)
+{
+    (void)arg1;
+    if(_bLock)
+        return;
+
+    _pTrain->set_regularizer(ui->comboRegularizer->currentText().toStdString(),ui->leRegularizerParameter->text().toFloat());
+    _pMainWindow->model_changed(this);
+}
+//////////////////////////////////////////////////////////////
+void FrameLearning::on_leRegularizerParameter_editingFinished()
+{
+    if(_bLock)
+        return;
+
+	_pTrain->set_regularizer(ui->comboRegularizer->currentText().toStdString(), ui->leRegularizerParameter->text().toFloat());
+	_pMainWindow->model_changed(this);
+}
+//////////////////////////////////////////////////////////////

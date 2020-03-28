@@ -14,7 +14,7 @@
 //////////////////////////////////////////////////////////
 Regularizer::Regularizer()
 {
-	_fParameter = 0.f;
+	_fParameter = -1.f; // by default
 }
 //////////////////////////////////////////////////////////
 Regularizer::~Regularizer()
@@ -29,18 +29,19 @@ float Regularizer::get_parameter() const
 	return _fParameter;
 }
 //////////////////////////////////////////////////////////
-class RegularizerIdentity : public Regularizer
+// this regularizer does nothing
+class RegularizerNone : public Regularizer
 {
 public:
-	RegularizerIdentity():Regularizer()
+	RegularizerNone():Regularizer()
 	{}
 
-	~RegularizerIdentity() override
+	~RegularizerNone() override
 	{}
 
 	string name() const override
 	{
-		return "Identity";
+		return "None";
 	}
 
 	virtual void apply(MatrixFloat& w,MatrixFloat& dw) override
@@ -64,6 +65,14 @@ public:
 		return "L1";
 	}
 
+	virtual void set_parameter(float fParameter) override
+	{
+		if (fParameter != -1.f)
+			_fParameter = fParameter;
+		else
+			_fParameter = 0.001f; // best value
+	}
+
 	virtual void apply(MatrixFloat& w, MatrixFloat& dw) override
 	{
 		dw = dw + w.cwiseSign()*_fParameter;
@@ -84,6 +93,14 @@ public:
 		return "L2";
 	}
 
+	virtual void set_parameter(float fParameter) override
+	{
+		if (fParameter != -1.f)
+			_fParameter = fParameter;
+		else
+			_fParameter = 0.001f; // best value
+	}
+
 	virtual void apply(MatrixFloat& w, MatrixFloat& dw) override
 	{
 		dw = dw + w * _fParameter;
@@ -102,6 +119,14 @@ public:
 	string name() const override
 	{
 		return "GradientClip";
+	}
+
+	virtual void set_parameter(float fParameter) override
+	{
+		if (fParameter != -1.f)
+			_fParameter = fParameter;
+		else
+			_fParameter = 0.001f; // best value
 	}
 
     virtual void apply(MatrixFloat& w,MatrixFloat& dw) override
@@ -125,6 +150,14 @@ public:
 		return "GradientClipTanh";
 	}
 
+	virtual void set_parameter(float fParameter) override
+	{
+		if (fParameter != -1.f)
+			_fParameter = fParameter;
+		else
+			_fParameter = 0.001f; // best value
+	}
+
 	virtual void apply(MatrixFloat& w,MatrixFloat& dw) override
 	{
 		(void)w;
@@ -134,8 +167,8 @@ public:
 //////////////////////////////////////////////////////////
 Regularizer* create_regularizer(const string& sRegularizer)
 {
-	if (sRegularizer == "Identiy")
-		return new RegularizerIdentity;
+	if (sRegularizer == "None")
+		return new RegularizerNone;
 
 	if (sRegularizer == "L1")
 		return new RegularizerL1;
@@ -156,7 +189,7 @@ void list_regularizer_available(vector<string>& vsRegularizers)
 {
     vsRegularizers.clear();
 
-	vsRegularizers.push_back("Identity");
+	vsRegularizers.push_back("None");
 	vsRegularizers.push_back("L1");
 	vsRegularizers.push_back("L2");
 	vsRegularizers.push_back("GradientClip");

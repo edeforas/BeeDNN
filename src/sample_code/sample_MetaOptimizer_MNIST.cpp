@@ -1,6 +1,6 @@
 //This sample launch in parallel multiple runs of the same net optimization 
 //This sample can also test for many different Relu activations flavors
-//It shows and save the current best solution on disk
+//It also disp and save the current best solution on disk
 //This is a heavy test, but expect val_accuracy>99.20% after 40min
 //To stop by anytime, type CTRL+C
 
@@ -43,9 +43,8 @@ void better_solution_callback(NetTrain& train)
 int main()
 {
 	cout << "This sample launch in parallel multiple runs of the same net optimization" << endl;
-	cout << "This sample also test for many different Relu activations flavors" << endl;
-
-	cout << "It save the current best solution on disk" << endl;
+	cout << "This sample can also test for many different Relu activations flavors" << endl;
+	cout << "It also disp and save the current best solution on disk" << endl;
 	cout << "This is a heavy test, but expect val_accuracy>99.20% after 40min" << endl;
 	cout << "To stop by anytime, type CTRL+C" << endl;
 

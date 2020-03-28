@@ -36,6 +36,10 @@ private slots:
     void on_leMomentum_editingFinished();
     void on_leDecay_editingFinished();
 
+    void on_comboRegularizer_currentTextChanged(const QString &arg1);
+
+    void on_leRegularizerParameter_editingFinished();
+
 private:
     void update_optimizer();
 
