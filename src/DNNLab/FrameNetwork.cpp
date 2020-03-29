@@ -25,22 +25,14 @@
 #include "LayerPoolMax2D.h"
 #include "LayerSoftmax.h"
 
+#include "NetUtil.h"
+
 #include <QObject>
 
 
 #include <sstream>
 #include <vector>
 using namespace std;
-
-void split(string s,vector<string>& vsItems)
-{
-	vsItems.clear();
-	
-    istringstream f(s);
-    string sitem;    
-    while (getline(f, sitem, ','))
-        vsItems.push_back(sitem);
-}
 
 FrameNetwork::FrameNetwork(QWidget *parent) :
     QFrame(parent),
@@ -95,7 +87,7 @@ void FrameNetwork::parse_cell(string sCell, float& fVal1, float& fVal2, float& f
 	fVal3 = 0.f;
 
 	vector<string> vsItems;
-	split(sCell, vsItems);
+	NetUtil::split(sCell, vsItems);
 
 	if (vsItems.size() == 0)
 		return;
@@ -227,22 +219,19 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
 
 			else if (sType == "UniformNoise")
 			{
-				float fNoise = 0.1f; //by default
-				fNoise = f1;
+				float fNoise = f1;
 				_pNet->add(new LayerUniformNoise(fNoise));
 			}
 
             else if(sType=="GaussianNoise")
             {
-                float fStd=1.f; //by default
-                fStd=f1;
+                float fStd=f1;
                 _pNet->add(new LayerGaussianNoise(fStd));
             }
 
             else if(sType=="GaussianDropout")
             {
-                float fProba=1.f; //by default
-                fProba=f1;
+                float fProba=f1;
                 _pNet->add(new LayerGaussianDropout(fProba));
             }
 
