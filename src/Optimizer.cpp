@@ -34,6 +34,31 @@ void Optimizer::set_params(float fLearningRate, float fDecay, float fMomentum)  
 	init();
 }
 //////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+class OptimizerNone : public Optimizer // placeholder for no optimizer
+{
+public:
+	OptimizerNone()
+	{}
+
+	~OptimizerNone() override
+	{}
+
+	string name() const override
+	{
+		return "None";
+	}
+
+	virtual void init() override
+	{ }
+
+	virtual void optimize(MatrixFloat& w, const MatrixFloat& dw) override
+	{
+		(void)w;
+		(void)dw;
+	}
+};
+//////////////////////////////////////////////////////////
 class OptimizerStep : public Optimizer
 {
 public:	
@@ -570,7 +595,10 @@ private:
 //////////////////////////////////////////////////////////
 Optimizer* create_optimizer(const string& sOptimizer)
 {
-    if (sOptimizer == "Adagrad")
+	if (sOptimizer == "None")
+		return new OptimizerNone;
+	
+	if (sOptimizer == "Adagrad")
         return new OptimizerAdagrad;
 
     if (sOptimizer == "Adam")
@@ -610,7 +638,8 @@ void list_optimizers_available(vector<string>& vsOptimizers)
 {
     vsOptimizers.clear();
 
-    vsOptimizers.push_back("Adagrad");
+	vsOptimizers.push_back("None");
+	vsOptimizers.push_back("Adagrad");
     vsOptimizers.push_back("Adam");
     vsOptimizers.push_back("Nadam");
     vsOptimizers.push_back("Adamax");

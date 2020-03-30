@@ -14,7 +14,7 @@ void cmd_parser(int argc, char *argv[],vector<string>& vsArgs)
 		vsArgs.push_back(argv[i]);
 
 #ifdef _WIN64
-	vsArgs.erase(vsArgs.begin()); //remove exe name
+	vsArgs.erase(vsArgs.begin()); //remove exe name under win32/64
 #endif
 }
 /////////////////////////////////////////////////////////////////

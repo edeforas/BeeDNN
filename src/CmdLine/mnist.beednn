@@ -1,2 +1,8 @@
-print Hello,world!
+add Dense 768 128
+add Relu
+add Dense 128 10
+add Relu
+add Softmax
+
+print Hello world!
 pause

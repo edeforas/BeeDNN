@@ -2,8 +2,10 @@
 
 #include <fstream>
 #include <iostream>
+#include <stdlib.h> // for strtof
 
 #include "NetUtil.h"
+#include "LayerFactory.h"
 
 ///////////////////////////////////////////////////////////////
 Script::Script()
@@ -42,8 +44,15 @@ vector<string> Script::cleanup(const string &s)
 void Script::run(string sCmd)
 {
 	vector<string>vs = cleanup(sCmd);
+	size_t iSize = vs.size();
 	if (vs.size() == 0)
 		return;
+
+	//convert to float
+	vector<float> vf(5,0.f);
+	for(int i=0;i<5;i++)
+		if (iSize > i+1)
+			vf[i]=strtof(vs[i+1].c_str(),0);
 
 	if (vs[0] == "pause")
 		cin.get();
@@ -51,10 +60,19 @@ void Script::run(string sCmd)
 	if (vs[0] == "quit")
 		exit(0);
 
-	if ((vs[0] == "print") && vs.size() > 1)
+	if ((vs[0] == "print") && iSize > 1)
 	{
-		cout << vs[1] << endl;
+		for(int i=1;i<iSize;i++)
+			cout << vs[i] << " ";
+		cout << endl;
 	}
+
+	if ((vs[0] == "add") && iSize > 1)
+	{
+		_net.add(LayerFactory::create(vs[1], vf[0], vf[1], vf[2], vf[3], vf[4]));
+	}
+
+
 
 }
 ///////////////////////////////////////////////////////////////
