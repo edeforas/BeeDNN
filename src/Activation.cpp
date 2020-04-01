@@ -771,6 +771,26 @@ public:
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
+// LiSHT as in https://arxiv.org/pdf/1901.05894.pdf
+class ActivationLiSHT : public Activation
+{
+public:
+	string name() const override
+	{
+		return "LiSHT";
+	}
+
+	float apply(float x) const override
+	{
+		return x*tanhf(x);
+	}
+	float derivation(float x) const override
+	{
+		float t = tanhf(x);
+		return x+t*(1.f-x*t);
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
 class ActivationNLRelu: public Activation
 {
 public:
@@ -1345,6 +1365,9 @@ Activation* get_activation(const string& sActivation)
 	else if (sActivation == "LecunTanh")
 		return new ActivationLecunTanh;
 	
+	else if (sActivation == "LiSHT")
+		return new ActivationLiSHT;
+
 	else if(sActivation == "Logit")
         return new ActivationLogit;
 
@@ -1449,7 +1472,8 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("LeakyRelu256");
     vsActivations.push_back("LeakyTwiceRelu6");
 	vsActivations.push_back("LecunTanh");
-    vsActivations.push_back("Logit");
+	vsActivations.push_back("LiSHT");
+	vsActivations.push_back("Logit");
     vsActivations.push_back("LogSigmoid");
     vsActivations.push_back("Mish");	
     vsActivations.push_back("NLRelu");

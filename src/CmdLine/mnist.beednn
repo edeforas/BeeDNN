@@ -1,8 +1,14 @@
-add Dense 768 128
+add Dense 784 128
 add Relu
 add Dense 128 10
 add Relu
 add Softmax
 
-print Hello world!
+load MNIST
+
+epochs 15
+loss SparseCategoricalCrossEntropy
+train
+
+print Finished!
 pause

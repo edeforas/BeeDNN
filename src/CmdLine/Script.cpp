@@ -9,7 +9,9 @@
 
 ///////////////////////////////////////////////////////////////
 Script::Script()
-{}
+{
+	_train.set_net(_net);
+}
 ///////////////////////////////////////////////////////////////
 void Script::run_file(string sFile)
 {
@@ -51,8 +53,8 @@ void Script::run(string sCmd)
 	//convert to float
 	vector<float> vf(5,0.f);
 	for(int i=0;i<5;i++)
-		if (iSize > i+1)
-			vf[i]=strtof(vs[i+1].c_str(),0);
+		if (iSize > i+2)
+			vf[i]=strtof(vs[i+2].c_str(),0);
 
 	if (vs[0] == "pause")
 		cin.get();
@@ -72,7 +74,29 @@ void Script::run(string sCmd)
 		_net.add(LayerFactory::create(vs[1], vf[0], vf[1], vf[2], vf[3], vf[4]));
 	}
 
+	if ((vs[0] == "epochs") && iSize > 1)
+	{
+		_train.set_epochs((int)(vf[0]));
+	}
 
+	if ((vs[0] == "batch_size") && iSize > 1)
+	{
+		_train.set_batchsize((int)(vf[0]));
+	}
 
+	if ((vs[0] == "loss") && iSize > 1)
+	{
+		_train.set_loss(vs[1]);
+	}
+
+	if ((vs[0] == "load") && iSize > 1)
+	{
+		_data.load(vs[1]);
+		_train.set_train_data(_data.train_data(), _data.train_truth());
+		_train.set_validation_data(_data.test_data(), _data.test_truth());
+	}
+
+	if (vs[0] == "train")
+		_train.train();
 }
 ///////////////////////////////////////////////////////////////

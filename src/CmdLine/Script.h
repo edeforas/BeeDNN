@@ -7,6 +7,7 @@ using namespace std;
 
 #include "Net.h"
 #include "NetTrain.h"
+#include "DataSource.h"
 
 class Script
 {
@@ -21,7 +22,7 @@ private:
 
 	Net _net;
 	NetTrain _train;
-
+	DataSource _data;
 };
 
 

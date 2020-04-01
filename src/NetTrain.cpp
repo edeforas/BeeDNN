@@ -356,7 +356,8 @@ void NetTrain::train()
 	if (_pNet == nullptr)
 		return;
 
-	if (_pNet->layers().size() == 0)
+	_iNbLayers = _pNet->layers().size();
+	if (_iNbLayers == 0)
 		return; //nothing to do
 
 	update_class_weight();
@@ -390,7 +391,7 @@ void NetTrain::train()
 	if (_optimizers.empty())
 	{
 		//init all optimizers
-		for (int i = 0; i < _iNbLayers*2; i++)
+		for (size_t i = 0; i < _iNbLayers*2; i++)
 		{
 			// one optimizer for weight, one for bias
 			_optimizers.push_back(create_optimizer(_sOptimizer));
@@ -532,7 +533,7 @@ void NetTrain::train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth
 	_pLoss->compute_gradient(_inOut[_iNbLayers], mTruth, _gradient[_iNbLayers]);
 
 	//backward pass with optimizer
-	for (int i = _iNbLayers - 1; i >= 0; i--)
+	for (int i = (int)_iNbLayers - 1; i >= 0; i--)
 	{
 		Layer& l = _pNet->layer(i);
 		l.backpropagation(_inOut[i], _gradient[i + 1], _gradient[i]);

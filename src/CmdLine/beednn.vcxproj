@@ -175,6 +175,7 @@
     <ClCompile Include="..\Activation.cpp" />
     <ClCompile Include="..\CIFAR10Reader.cpp" />
     <ClCompile Include="..\ConfusionMatrix.cpp" />
+    <ClCompile Include="..\DataSource.cpp" />
     <ClCompile Include="..\Layer.cpp" />
     <ClCompile Include="..\LayerActivation.cpp" />
     <ClCompile Include="..\LayerBias.cpp" />
@@ -209,6 +210,7 @@
     <ClInclude Include="..\Activation.h" />
     <ClInclude Include="..\CIFAR10Reader.h" />
     <ClInclude Include="..\ConfusionMatrix.h" />
+    <ClInclude Include="..\DataSource.h" />
     <ClInclude Include="..\Layer.h" />
     <ClInclude Include="..\LayerActivation.h" />
     <ClInclude Include="..\LayerBias.h" />

@@ -26,7 +26,7 @@ Activations (in alphabetical order):
 - Gauss, GELU
 - HardELU, HardSigmoid, HardShrink, HardTanh
 - ISRELU
-- Linear, LeakyRelu, LeakyRelu256, LecunTanh, Logit, LogSigmoid
+- Linear, LeakyRelu, LeakyRelu256, LecunTanh, LiSHT, Logit, LogSigmoid
 - TwiceLeakyRelu6
 - Mish
 - NLRelu
