@@ -406,13 +406,13 @@ string find_key(string s,string sKey)
         return s2;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void split(string s, vector<string>& vsItems)
+void split(string s, vector<string>& vsItems, char cDelimiter)
 {
 	vsItems.clear();
 
 	istringstream f(s);
 	string sitem;
-	while (getline(f, sitem, ' '))
+	while (getline(f, sitem, cDelimiter))
 		vsItems.push_back(sitem);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////

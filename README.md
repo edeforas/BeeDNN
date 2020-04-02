@@ -23,6 +23,7 @@ Activations (in alphabetical order):
 - ComplementaryLogLog
 - dSiLU
 - ELiSH, Elliot, ELU, Exponential, E2RU, E3RU
+- FTS, FTS+
 - Gauss, GELU
 - HardELU, HardSigmoid, HardShrink, HardTanh
 - ISRELU

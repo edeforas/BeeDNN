@@ -286,6 +286,58 @@ public:
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
+// FTS as in the paper: https://arxiv.org/ftp/arxiv/papers/1812/1812.06247.pdf
+// with best constant T=-0.2
+class ActivationFTS : public Activation
+{
+public:
+	string name() const override
+	{
+		return "FTS";
+	}
+
+	float apply(float x) const override
+	{
+		if (x < 0.f)
+			return -0.2f;
+		else return x / (1.f + expf(-x))-0.2f;
+	}
+	float derivation(float x) const override
+	{
+		if (x < 0.f)
+			return 0.f;
+
+		float s = 1.f / (1.f + expf(-x));
+		return s * (x + 1.f - x * s);
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
+// FTS+ as in the website: https://medium.com/@lessw/comparison-of-activation-functions-for-deep-learning-initial-winner-ftswish-f13e2621847
+// with best constant T=-0.25
+class ActivationFTSPlus : public Activation
+{
+public:
+	string name() const override
+	{
+		return "FTS+";
+	}
+
+	float apply(float x) const override
+	{
+		if (x < 0.f)
+			return -0.25f;
+		else return x / (1.f + expf(-x)) - 0.25f;
+	}
+	float derivation(float x) const override
+	{
+		if (x < 0.f)
+			return 0.f;
+
+		float s = 1.f / (1.f + expf(-x));
+		return s * (x + 1.f - x * s);
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
 class ActivationBent: public Activation
 {
 public:
@@ -1104,7 +1156,7 @@ public:
     float derivation(float x) const override
     {
         float s=1.f/(1.f+expf(-x));
-        return s*(x+1.f-x*s); //todo optimize
+        return s*(x+1.f-x*s);
     }
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -1329,6 +1381,12 @@ Activation* get_activation(const string& sActivation)
 	else if (sActivation == "E3RU")
 		return new ActivationE3RU;
 
+	else if (sActivation == "FTS")
+		return new ActivationFTS;
+
+	else if (sActivation == "FTS+")
+		return new ActivationFTSPlus;
+
 	else if(sActivation=="Gauss")
         return new ActivationGauss;
 	
@@ -1460,7 +1518,9 @@ void list_activations_available(vector<string>& vsActivations)
 	vsActivations.push_back("Exponential");
 	vsActivations.push_back("E2RU");
 	vsActivations.push_back("E3RU");
-    vsActivations.push_back("Gauss");
+	vsActivations.push_back("FTS");
+	vsActivations.push_back("FTS+");
+	vsActivations.push_back("Gauss");
     vsActivations.push_back("GELU");
     vsActivations.push_back("HardELU");
     vsActivations.push_back("HardSigmoid");

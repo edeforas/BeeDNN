@@ -87,7 +87,7 @@ void FrameNetwork::parse_cell(string sCell, float& fVal1, float& fVal2, float& f
 	fVal3 = 0.f;
 
 	vector<string> vsItems;
-	NetUtil::split(sCell, vsItems);
+	NetUtil::split(sCell, vsItems,',');
 
 	if (vsItems.size() == 0)
 		return;
@@ -201,6 +201,8 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
         if(!pCombo)
             continue;
         string sType=pCombo->currentText().toStdString();
+		if (sType.empty())
+			continue;
 		QTableWidgetItem* pwiArguments=ui->twNetwork->item(iRow,1);
 
 		float f1=0.f, f2=0.f,f3=0.f;

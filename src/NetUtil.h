@@ -26,7 +26,7 @@ void read(const string& s,NetTrain& train);
 
 string find_key(string s,string sKey);
 
-void split(string s, vector<string>& vsItems);
+void split(string s, vector<string>& vsItems, char cDelimiter=' ');
 
 };
 

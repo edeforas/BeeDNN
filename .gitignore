@@ -68,3 +68,4 @@ ui_*.h
 *.pyc
 *.bin
 *.dll
+/src/output/
