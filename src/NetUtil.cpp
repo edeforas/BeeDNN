@@ -193,12 +193,16 @@ void read(const string& s,Net& net)
             net.add(new LayerDense(iInputSize,iOutputSize,bHasBias));
 
             string sWeight=find_key(s,sLayer+".weight");
-            net.layer(net.size()-1).weights()= fromString(sWeight);
+			MatrixFloat mf = fromString(sWeight);
+			mf.resize(iInputSize, iOutputSize);
+            net.layer(net.size()-1).weights()= mf;
 
 			if (bHasBias)
 			{
 				string sBias = find_key(s, sLayer + ".bias");
-				net.layer(net.size() - 1).bias() = fromString(sBias);
+				mf = fromString(sBias);
+				mf.resize(1, iOutputSize);
+				net.layer(net.size() - 1).bias() = mf;
 			}
         }
 

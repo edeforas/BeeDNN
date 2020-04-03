@@ -27,7 +27,8 @@ public:
 
     void model_changed(void * pSender);
 	void load_file(string sFile);
-	
+	void update_problem_selected_tab();
+
 protected:
     virtual void resizeEvent( QResizeEvent *e ) override;
     virtual void closeEvent(QCloseEvent *event) override;

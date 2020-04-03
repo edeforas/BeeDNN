@@ -618,13 +618,18 @@ bool MainWindow::load()
 
     QApplication::restoreOverrideCursor();
 
-    //show intersting results from net
-    if(_pEngine->net().is_classification_mode())
-        ui->tabWidget->setCurrentIndex(2);
-    else
-        ui->tabWidget->setCurrentIndex(1);
+	update_problem_selected_tab();
 
     return true; //for now
+}
+//////////////////////////////////////////////////////////////////////////////
+void MainWindow::update_problem_selected_tab() 
+{
+	//show good tab from net problem
+	if (_pEngine->net().is_classification_mode())
+		ui->tabWidget->setCurrentIndex(2);
+	else
+		ui->tabWidget->setCurrentIndex(1);
 }
 //////////////////////////////////////////////////////////////////////////////
 void MainWindow::load_file(string sFile)
@@ -712,8 +717,11 @@ void MainWindow::model_changed(void * pSender)
     else
     {
         _pDataSource->load(ui->frameGlobal->data_name());
-        _pEngine->net().set_classification_mode(ui->frameGlobal->is_classification_problem());
-//        set_input_size(_pDataSource->data_size());
+		bool bOldProblem = _pEngine->net().is_classification_mode();
+		_pEngine->net().set_classification_mode(ui->frameGlobal->is_classification_problem());
+
+		if(bOldProblem!= _pEngine->net().is_classification_mode())
+			update_problem_selected_tab();
         _bMustSave=true;
     }
 
