@@ -20,10 +20,11 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{FFA09C74-BACD-4E79-9A61-96296AA38C51}</ProjectGuid>
+    <ProjectGuid>{94572B2E-CCE0-438A-8BCD-9F1A20A5399C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>testclassificationMNIST</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <ProjectName>beednn</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -74,13 +75,13 @@
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Configuration)\build_sample_classification_mnist\</IntDir>
+    <IntDir>$(Configuration)\build_beednn\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Platform)\$(Configuration)\build_sample_classification_mnist\</IntDir>
+    <IntDir>$(Platform)\$(Configuration)\build_beednn\</IntDir>
     <OutDir>$(SolutionDir)\output\</OutDir>
     <TargetName>$(ProjectName)_debug</TargetName>
   </PropertyGroup>
@@ -88,13 +89,13 @@
     <LinkIncremental>false</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Configuration)\build_sample_classification_mnist\</IntDir>
+    <IntDir>$(Configuration)\build_beednn\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Platform)\$(Configuration)\build_sample_classification_mnist\</IntDir>
+    <IntDir>$(Platform)\$(Configuration)\build_beednn\</IntDir>
     <OutDir>$(SolutionDir)\output\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -103,7 +104,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>USE_EIGEN</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_EIGEN;NDEBUG</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <EnablePREfast>false</EnablePREfast>
@@ -138,7 +139,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>USE_EIGEN</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_EIGEN;NDEBUG</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <EnablePREfast>false</EnablePREfast>
@@ -175,36 +176,74 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Activation.cpp" />
+    <ClCompile Include="..\CIFAR10Reader.cpp" />
     <ClCompile Include="..\ConfusionMatrix.cpp" />
+    <ClCompile Include="..\DataSource.cpp" />
     <ClCompile Include="..\Layer.cpp" />
     <ClCompile Include="..\LayerActivation.cpp" />
+    <ClCompile Include="..\LayerBias.cpp" />
+    <ClCompile Include="..\LayerChannelBias.cpp" />
+    <ClCompile Include="..\LayerConvolution2D.cpp" />
     <ClCompile Include="..\LayerDense.cpp" />
     <ClCompile Include="..\LayerDropout.cpp" />
+    <ClCompile Include="..\LayerFactory.cpp" />
+    <ClCompile Include="..\LayerGain.cpp" />
+    <ClCompile Include="..\LayerGaussianDropout.cpp" />
+    <ClCompile Include="..\LayerGaussianNoise.cpp" />
+    <ClCompile Include="..\LayerGlobalBias.cpp" />
+    <ClCompile Include="..\LayerGlobalGain.cpp" />
+    <ClCompile Include="..\LayerPoolMax2D.cpp" />
+    <ClCompile Include="..\LayerPRelu.cpp" />
+    <ClCompile Include="..\LayerRRelu.cpp" />
     <ClCompile Include="..\LayerSoftmax.cpp" />
+    <ClCompile Include="..\LayerSoftmin.cpp" />
+    <ClCompile Include="..\LayerUniformNoise.cpp" />
     <ClCompile Include="..\Loss.cpp" />
     <ClCompile Include="..\Matrix.cpp" />
+    <ClCompile Include="..\MetaOptimizer.cpp" />
     <ClCompile Include="..\MNISTReader.cpp" />
     <ClCompile Include="..\Net.cpp" />
     <ClCompile Include="..\NetTrain.cpp" />
+    <ClCompile Include="..\NetUtil.cpp" />
     <ClCompile Include="..\Optimizer.cpp" />
     <ClCompile Include="..\Regularizer.cpp" />
-    <ClCompile Include="sample_classification_MNIST.cpp" />
+    <ClCompile Include="bednn.cpp" />
+    <ClCompile Include="NetScript.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Activation.h" />
+    <ClInclude Include="..\CIFAR10Reader.h" />
     <ClInclude Include="..\ConfusionMatrix.h" />
+    <ClInclude Include="..\DataSource.h" />
     <ClInclude Include="..\Layer.h" />
     <ClInclude Include="..\LayerActivation.h" />
+    <ClInclude Include="..\LayerBias.h" />
+    <ClInclude Include="..\LayerChannelBias.h" />
+    <ClInclude Include="..\LayerConvolution2D.h" />
     <ClInclude Include="..\LayerDense.h" />
     <ClInclude Include="..\LayerDropout.h" />
+    <ClInclude Include="..\LayerFactory.h" />
+    <ClInclude Include="..\LayerGain.h" />
+    <ClInclude Include="..\LayerGaussianDropout.h" />
+    <ClInclude Include="..\LayerGaussianNoise.h" />
+    <ClInclude Include="..\LayerGlobalBias.h" />
+    <ClInclude Include="..\LayerGlobalGain.h" />
+    <ClInclude Include="..\LayerPoolMax2D.h" />
+    <ClInclude Include="..\LayerPRelu.h" />
+    <ClInclude Include="..\LayerRRelu.h" />
     <ClInclude Include="..\LayerSoftmax.h" />
+    <ClInclude Include="..\LayerSoftmin.h" />
+    <ClInclude Include="..\LayerUniformNoise.h" />
     <ClInclude Include="..\Loss.h" />
     <ClInclude Include="..\Matrix.h" />
+    <ClInclude Include="..\MetaOptimizer.h" />
     <ClInclude Include="..\MNISTReader.h" />
     <ClInclude Include="..\Net.h" />
     <ClInclude Include="..\NetTrain.h" />
+    <ClInclude Include="..\NetUtil.h" />
     <ClInclude Include="..\Optimizer.h" />
     <ClInclude Include="..\Regularizer.h" />
+    <ClInclude Include="NetScript.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

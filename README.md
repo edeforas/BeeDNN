@@ -13,7 +13,7 @@ Layers:
 - Dense, with or without bias
 - Gain, GlobalGain, Bias, GlobalBias
 - Convolution2D, PoolMax2D, ChannelBias
-- Softmax
+- Softmax, Softmin
 - PRelu, RRelu
 - Layers and activations are decoupled and can be in any order
 
@@ -23,10 +23,11 @@ Activations (in alphabetical order):
 - ComplementaryLogLog
 - dSiLU
 - ELiSH, Elliot, ELU, Exponential, E2RU, E3RU
+- FTS, FTS+
 - Gauss, GELU
 - HardELU, HardSigmoid, HardShrink, HardTanh
 - ISRELU
-- Linear, LeakyRelu, LeakyRelu256, LecunTanh, Logit, LogSigmoid
+- Linear, LeakyRelu, LeakyRelu256, LecunTanh, LiSHT, Logit, LogSigmoid
 - TwiceLeakyRelu6
 - Mish
 - NLRelu

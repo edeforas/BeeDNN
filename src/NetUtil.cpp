@@ -26,6 +26,7 @@
 #include "LayerPRelu.h"
 #include "LayerRRelu.h"
 #include "LayerSoftmax.h"
+#include "LayerSoftmin.h"
 #include "LayerUniformNoise.h"
 
 #include <sstream>
@@ -193,12 +194,16 @@ void read(const string& s,Net& net)
             net.add(new LayerDense(iInputSize,iOutputSize,bHasBias));
 
             string sWeight=find_key(s,sLayer+".weight");
-            net.layer(net.size()-1).weights()= fromString(sWeight);
+			MatrixFloat mf = fromString(sWeight);
+			mf.resize(iInputSize, iOutputSize);
+            net.layer(net.size()-1).weights()= mf;
 
 			if (bHasBias)
 			{
 				string sBias = find_key(s, sLayer + ".bias");
-				net.layer(net.size() - 1).bias() = fromString(sBias);
+				mf = fromString(sBias);
+				mf.resize(1, iOutputSize);
+				net.layer(net.size() - 1).bias() = mf;
 			}
         }
 
@@ -315,7 +320,12 @@ void read(const string& s,Net& net)
 			net.add(new LayerSoftmax());
 		}
 
-        else
+		else if (sType == "Softmin")
+		{
+			net.add(new LayerSoftmin());
+		}
+		
+		else
         {
             //activation layer
             net.add(new LayerActivation(sType));
@@ -404,6 +414,16 @@ string find_key(string s,string sKey)
         return s2.substr(0,i3+1);
     else
         return s2;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////
+void split(string s, vector<string>& vsItems, char cDelimiter)
+{
+	vsItems.clear();
+
+	istringstream f(s);
+	string sitem;
+	while (getline(f, sitem, cDelimiter))
+		vsItems.push_back(sitem);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////
 }

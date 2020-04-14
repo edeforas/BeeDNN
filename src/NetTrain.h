@@ -103,7 +103,7 @@ private:
 	Index _iValidationBatchSize;
 	int _iEpochs;
 	bool _bClassBalancingWeightLoss;
-	int _iNbLayers;
+	size_t _iNbLayers;
 	int _iReboostEveryEpochs;
 
     string _sOptimizer;

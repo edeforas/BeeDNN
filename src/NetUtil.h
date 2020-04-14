@@ -13,6 +13,7 @@ class Net;
 class NetTrain;
 
 #include <string>
+#include <vector>
 using namespace std;
 
 namespace NetUtil {
@@ -24,6 +25,8 @@ void write(const NetTrain& train,string& s);
 void read(const string& s,NetTrain& train);
 
 string find_key(string s,string sKey);
+
+void split(string s, vector<string>& vsItems, char cDelimiter=' ');
 
 };
 
