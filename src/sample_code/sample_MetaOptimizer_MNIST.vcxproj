@@ -193,6 +193,7 @@
     <ClCompile Include="..\LayerPRelu.cpp" />
     <ClCompile Include="..\LayerRRelu.cpp" />
     <ClCompile Include="..\LayerSoftmax.cpp" />
+    <ClCompile Include="..\LayerSoftmin.cpp" />
     <ClCompile Include="..\LayerUniformNoise.cpp" />
     <ClCompile Include="..\Loss.cpp" />
     <ClCompile Include="..\Matrix.cpp" />
@@ -224,6 +225,7 @@
     <ClInclude Include="..\LayerPRelu.h" />
     <ClInclude Include="..\LayerRRelu.h" />
     <ClInclude Include="..\LayerSoftmax.h" />
+    <ClInclude Include="..\LayerSoftmin.h" />
     <ClInclude Include="..\LayerUniformNoise.h" />
     <ClInclude Include="..\Loss.h" />
     <ClInclude Include="..\Matrix.h" />

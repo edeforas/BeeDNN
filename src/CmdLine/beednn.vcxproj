@@ -196,6 +196,7 @@
     <ClCompile Include="..\LayerPRelu.cpp" />
     <ClCompile Include="..\LayerRRelu.cpp" />
     <ClCompile Include="..\LayerSoftmax.cpp" />
+    <ClCompile Include="..\LayerSoftmin.cpp" />
     <ClCompile Include="..\LayerUniformNoise.cpp" />
     <ClCompile Include="..\Loss.cpp" />
     <ClCompile Include="..\Matrix.cpp" />
@@ -207,7 +208,7 @@
     <ClCompile Include="..\Optimizer.cpp" />
     <ClCompile Include="..\Regularizer.cpp" />
     <ClCompile Include="bednn.cpp" />
-    <ClCompile Include="Script.cpp" />
+    <ClCompile Include="NetScript.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Activation.h" />
@@ -231,6 +232,7 @@
     <ClInclude Include="..\LayerPRelu.h" />
     <ClInclude Include="..\LayerRRelu.h" />
     <ClInclude Include="..\LayerSoftmax.h" />
+    <ClInclude Include="..\LayerSoftmin.h" />
     <ClInclude Include="..\LayerUniformNoise.h" />
     <ClInclude Include="..\Loss.h" />
     <ClInclude Include="..\Matrix.h" />
@@ -241,7 +243,7 @@
     <ClInclude Include="..\NetUtil.h" />
     <ClInclude Include="..\Optimizer.h" />
     <ClInclude Include="..\Regularizer.h" />
-    <ClInclude Include="Script.h" />
+    <ClInclude Include="NetScript.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

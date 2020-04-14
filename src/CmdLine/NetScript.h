@@ -1,5 +1,5 @@
-#ifndef _Script_
-#define _Script_
+#ifndef NetScript_
+#define NetScript_
 
 #include <string>
 #include <vector>
@@ -9,10 +9,10 @@ using namespace std;
 #include "NetTrain.h"
 #include "DataSource.h"
 
-class Script
+class NetScript
 {
 public:
-	Script();
+	NetScript();
 
 	void run_file(string sFile);
 	void run(string sCmd);

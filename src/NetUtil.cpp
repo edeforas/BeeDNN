@@ -26,6 +26,7 @@
 #include "LayerPRelu.h"
 #include "LayerRRelu.h"
 #include "LayerSoftmax.h"
+#include "LayerSoftmin.h"
 #include "LayerUniformNoise.h"
 
 #include <sstream>
@@ -319,7 +320,12 @@ void read(const string& s,Net& net)
 			net.add(new LayerSoftmax());
 		}
 
-        else
+		else if (sType == "Softmin")
+		{
+			net.add(new LayerSoftmin());
+		}
+		
+		else
         {
             //activation layer
             net.add(new LayerActivation(sType));

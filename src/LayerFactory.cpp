@@ -16,6 +16,7 @@
 #include "LayerRRelu.h"
 #include "LayerPoolMax2D.h"
 #include "LayerSoftmax.h"
+#include "LayerSoftmin.h"
 
 //////////////////////////////////////////////////////////////////////////////
 Layer* LayerFactory::create(const string& sLayer,float fArg1,float fArg2,float fArg3,float fArg4,float fArg5)
@@ -49,6 +50,9 @@ Layer* LayerFactory::create(const string& sLayer,float fArg1,float fArg2,float f
 
 	if (sLayer == "Softmax")
 		return new LayerSoftmax();
+
+	if (sLayer == "Softmin")
+		return new LayerSoftmin();
 
 	return new LayerActivation(sLayer);
 }

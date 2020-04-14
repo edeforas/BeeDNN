@@ -1,4 +1,4 @@
-#include "Script.h"
+#include "NetScript.h"
 
 #include <fstream>
 #include <iostream>
@@ -8,12 +8,12 @@
 #include "LayerFactory.h"
 
 ///////////////////////////////////////////////////////////////
-Script::Script()
+NetScript::NetScript()
 {
 	_train.set_net(_net);
 }
 ///////////////////////////////////////////////////////////////
-void Script::run_file(string sFile)
+void NetScript::run_file(string sFile)
 {
 	// 2 passes to free the file asap
 	vector<string> vs;
@@ -31,7 +31,7 @@ void Script::run_file(string sFile)
 		run(vs[i]);
 }
 ///////////////////////////////////////////////////////////////
-vector<string> Script::cleanup(const string &s)
+vector<string> NetScript::cleanup(const string &s)
 {
 	vector<string> vs;
 
@@ -43,7 +43,7 @@ vector<string> Script::cleanup(const string &s)
 	return vs;
 }
 ///////////////////////////////////////////////////////////////
-void Script::run(string sCmd)
+void NetScript::run(string sCmd)
 {
 	vector<string>vs = cleanup(sCmd);
 	size_t iSize = vs.size();

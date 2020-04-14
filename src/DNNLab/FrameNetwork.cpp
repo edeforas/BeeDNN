@@ -24,6 +24,7 @@
 #include "LayerRRelu.h"
 #include "LayerPoolMax2D.h"
 #include "LayerSoftmax.h"
+#include "LayerSoftmin.h"
 
 #include "NetUtil.h"
 
@@ -267,7 +268,10 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
 			else if (sType == "Softmax")
 				_pNet->add(new LayerSoftmax());
 
-            else if(sType=="DenseAndBias")
+			else if (sType == "Softmin")
+				_pNet->add(new LayerSoftmin());
+			
+			else if(sType=="DenseAndBias")
                 _pNet->add(new LayerDense(f1,f2,true));
 
             else if(sType=="DenseNoBias")
@@ -328,6 +332,7 @@ void FrameNetwork::add_new_row(int iRow)
 	qcbType->addItem("PRelu");
 	qcbType->addItem("RRelu");
 	qcbType->addItem("Softmax");
+	qcbType->addItem("Softmin");
 	qcbType->insertSeparator(qcbType->count());
 	qcbType->addItem("ChannelBias");
 	qcbType->addItem("Convolution2D");

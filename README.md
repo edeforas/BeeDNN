@@ -13,7 +13,7 @@ Layers:
 - Dense, with or without bias
 - Gain, GlobalGain, Bias, GlobalBias
 - Convolution2D, PoolMax2D, ChannelBias
-- Softmax
+- Softmax, Softmin
 - PRelu, RRelu
 - Layers and activations are decoupled and can be in any order
 

@@ -4,7 +4,7 @@
 #include <string>
 using namespace std;
 
-#include "Script.h"
+#include "NetScript.h"
 
 /////////////////////////////////////////////////////////////////
 void cmd_parser(int argc, char *argv[],vector<string>& vsArgs)
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 
 	if (vsArgs.size() == 1)
 	{
-		Script cmd;
+		NetScript cmd;
 		cmd.run_file(vsArgs[0]);
 	}
 
