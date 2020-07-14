@@ -13,7 +13,7 @@ using namespace std;
 
 #include "MLEngineBeeDnn.h"
 
-#include "DataSource.h"
+#include "DataSourceFunctions.h"
 
 #include "ConfusionMatrix.h"
 #include "NetUtil.h"
@@ -72,9 +72,8 @@ void MainWindow::init_all()
     _pEngine=new MLEngineBeeDnn;
 
     delete _pDataSource;
-    _pDataSource=new DataSource;
+    _pDataSource=new DataSourceFunctions;
 	_pDataSource->load("Sin");
-//	_pEngine->net().set_input_size(_pDataSource->data_size());
 
     ui->frameLearning->init();
     ui->frameGlobal->init();

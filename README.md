@@ -2,8 +2,11 @@
 
 BeeDNN is a deep learning library.
 
-The API is clear and simple, the goal is that everybody can contribute, test, and use DNN in C++.
-BeeDNN can run on small devices. It is even possible to learn or do knowledge transfer directly on the device.
+The git repository is https://github.com/edeforas/BeeDNN
+
+The API is clear and simple, the goal is that every C++ coder can contribute, test, and use Deep Neural Network.
+BeeDNN can run on small devices. It is even possible to learn directly on the device.
+
 Please see at: https://github.com/edeforas/BeeDNN/issues for contributing ideas.
 No dependencies needed, every algorithm rewritten in C++ from scratch.
 To increase speed, ones can choose the Eigen library (http://eigen.tuxfamily.org), instead of the internal matrix library.
@@ -11,7 +14,7 @@ There is also a GUI application (in Qt) for live tests.
 
 Layers:
 - Dense, with or without bias
-- Gain, GlobalGain, Bias, GlobalBias
+- GlobalGain, GlobalBias GlobalAffine, Gain, Bias, Affine
 - Convolution2D, PoolMax2D, ChannelBias
 - Softmax, Softmin
 - PRelu, RRelu
@@ -46,6 +49,9 @@ Loss functions:
 Overfitting:
 - Layers: Dropout, GaussianNoise, GaussianDropout, UniformNoise
 - Regularizer: GradientClip, GradientClipTanh, L1, L2
+
+Data augmentation
+- WIP
 
 Learning and optimization:
 - Classification or regression, test and/or learn

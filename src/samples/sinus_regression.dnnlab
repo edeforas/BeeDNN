@@ -1,7 +1,7 @@
 DataSource=Sin
 
 Epochs=2000
-BatchSize=32
+BatchSize=0
 Loss=MeanSquaredError
 KeepBest=1
 ReboostEveryEpochs=-1
@@ -18,24 +18,23 @@ Problem=Regression
 Layer1.type=Dense
 Layer1.hasBias=1
 Layer1.inputSize=1
-Layer1.outputSize=5
+Layer1.outputSize=2
 Layer1.weight=
--0.1706 -1.211 -0.0957 -1.02 0.8442 
-1.345 2.104 0.9658 -1.317 0.3613 
+0.3463 0.773 
+Layer1.bias=
+-1.098 -1.453 
 
-Layer2.type=ELiSH
+Layer2.type=Swish
 
 Layer3.type=Dense
 Layer3.hasBias=1
-Layer3.inputSize=5
+Layer3.inputSize=2
 Layer3.outputSize=1
 Layer3.weight=
-1.387 
--1.165 
-1.396 
-1.828 
--0.5802 
-0.1474 
+43.64 
+-11.95 
+Layer3.bias=
+8.627 
 
 Notes=
-  
+toy sample, 2 hidden neurons

@@ -90,7 +90,7 @@ int main()
 	ConfusionMatrix cmTest;
 	ClassificationResult crTest = cmTest.compute(mValLabels, mClassTest);
 	cout << "Val accuracy: " << crTest.accuracy << " %" << endl;
-	cout << "Val confusion matrix:" << endl << crTest.mConfMat << endl;
+	cout << "Val confusion matrix:" << endl << toString(crTest.mConfMat) << endl;
 	
 	//testu function
 	if (crTest.accuracy < 96.f)

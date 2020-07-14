@@ -16,8 +16,10 @@
 #include "LayerGaussianDropout.h"
 #include "LayerGlobalGain.h"
 #include "LayerGlobalBias.h"
+#include "LayerGlobalAffine.h"
 #include "LayerBias.h"
 #include "LayerGain.h"
+#include "LayerAffine.h"
 #include "LayerUniformNoise.h"
 #include "LayerGaussianNoise.h"
 #include "LayerPRelu.h"
@@ -29,7 +31,6 @@
 #include "NetUtil.h"
 
 #include <QObject>
-
 
 #include <sstream>
 #include <vector>
@@ -244,14 +245,20 @@ void FrameNetwork::on_twNetwork_cellChanged(int row, int column)
 			else if (sType == "GlobalBias")
 				_pNet->add(new LayerGlobalBias());
 			
-            else if (sType == "Bias")
+			else if (sType == "GlobalAffine")
+				_pNet->add(new LayerGlobalAffine());
+			
+			else if (sType == "Bias")
                 _pNet->add(new LayerBias());
-
-			else if (sType == "ChannelBias")
-				_pNet->add(new LayerChannelBias(f1, f2, f3));
 
 			else if (sType == "Gain")
 				_pNet->add(new LayerGain());
+
+			else if (sType == "Affine")
+				_pNet->add(new LayerAffine());
+
+			else if (sType == "ChannelBias")
+				_pNet->add(new LayerChannelBias(f1, f2, f3));
 
 			else if (sType == "PoolMax2D")
 				_pNet->add(new LayerPoolMax2D(f1, f2, f3, 0,0)); //todo
@@ -326,9 +333,11 @@ void FrameNetwork::add_new_row(int iRow)
 	qcbType->addItem("GaussianNoise");
 	qcbType->addItem("GaussianDropout");
 	qcbType->addItem("GlobalGain");
-	qcbType->addItem("Gain");
 	qcbType->addItem("GlobalBias");
+	qcbType->addItem("GlobalAffine");
+	qcbType->addItem("Gain");
     qcbType->addItem("Bias");
+	qcbType->addItem("Affine");
 	qcbType->addItem("PRelu");
 	qcbType->addItem("RRelu");
 	qcbType->addItem("Softmax");

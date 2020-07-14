@@ -124,6 +124,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(EIGEN_PATH);..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <EnablePREfast>false</EnablePREfast>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -165,6 +166,7 @@
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
       <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
       <EnablePREfast>false</EnablePREfast>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -177,18 +179,34 @@
     <ClCompile Include="..\Activation.cpp" />
     <ClCompile Include="..\CIFAR10Reader.cpp" />
     <ClCompile Include="..\ConfusionMatrix.cpp" />
+    <ClCompile Include="..\DataSource.cpp" />
     <ClCompile Include="..\Layer.cpp" />
     <ClCompile Include="..\LayerActivation.cpp" />
+    <ClCompile Include="..\LayerAffine.cpp" />
+    <ClCompile Include="..\LayerBias.cpp" />
     <ClCompile Include="..\LayerChannelBias.cpp" />
     <ClCompile Include="..\LayerConvolution2D.cpp" />
     <ClCompile Include="..\LayerDense.cpp" />
     <ClCompile Include="..\LayerDropout.cpp" />
+    <ClCompile Include="..\LayerFactory.cpp" />
+    <ClCompile Include="..\LayerGain.cpp" />
+    <ClCompile Include="..\LayerGaussianDropout.cpp" />
+    <ClCompile Include="..\LayerGaussianNoise.cpp" />
+    <ClCompile Include="..\LayerGlobalAffine.cpp" />
+    <ClCompile Include="..\LayerGlobalBias.cpp" />
+    <ClCompile Include="..\LayerGlobalGain.cpp" />
     <ClCompile Include="..\LayerPoolMax2D.cpp" />
+    <ClCompile Include="..\LayerPRelu.cpp" />
+    <ClCompile Include="..\LayerRRelu.cpp" />
     <ClCompile Include="..\LayerSoftmax.cpp" />
+    <ClCompile Include="..\LayerSoftmin.cpp" />
+    <ClCompile Include="..\LayerUniformNoise.cpp" />
     <ClCompile Include="..\Loss.cpp" />
     <ClCompile Include="..\Matrix.cpp" />
+    <ClCompile Include="..\MNISTReader.cpp" />
     <ClCompile Include="..\Net.cpp" />
     <ClCompile Include="..\NetTrain.cpp" />
+    <ClCompile Include="..\NetUtil.cpp" />
     <ClCompile Include="..\Optimizer.cpp" />
     <ClCompile Include="..\Regularizer.cpp" />
     <ClCompile Include="sample_classification_CIFAR10.cpp" />
@@ -197,18 +215,34 @@
     <ClInclude Include="..\Activation.h" />
     <ClInclude Include="..\CIFAR10Reader.h" />
     <ClInclude Include="..\ConfusionMatrix.h" />
+    <ClInclude Include="..\DataSource.h" />
     <ClInclude Include="..\Layer.h" />
     <ClInclude Include="..\LayerActivation.h" />
+    <ClInclude Include="..\LayerAffine.h" />
+    <ClInclude Include="..\LayerBias.h" />
     <ClInclude Include="..\LayerChannelBias.h" />
     <ClInclude Include="..\LayerConvolution2D.h" />
     <ClInclude Include="..\LayerDense.h" />
     <ClInclude Include="..\LayerDropout.h" />
+    <ClInclude Include="..\LayerFactory.h" />
+    <ClInclude Include="..\LayerGain.h" />
+    <ClInclude Include="..\LayerGaussianDropout.h" />
+    <ClInclude Include="..\LayerGaussianNoise.h" />
+    <ClInclude Include="..\LayerGlobalAffine.h" />
+    <ClInclude Include="..\LayerGlobalBias.h" />
+    <ClInclude Include="..\LayerGlobalGain.h" />
     <ClInclude Include="..\LayerPoolMax2D.h" />
+    <ClInclude Include="..\LayerPRelu.h" />
+    <ClInclude Include="..\LayerRRelu.h" />
     <ClInclude Include="..\LayerSoftmax.h" />
+    <ClInclude Include="..\LayerSoftmin.h" />
+    <ClInclude Include="..\LayerUniformNoise.h" />
     <ClInclude Include="..\Loss.h" />
     <ClInclude Include="..\Matrix.h" />
+    <ClInclude Include="..\MNISTReader.h" />
     <ClInclude Include="..\Net.h" />
     <ClInclude Include="..\NetTrain.h" />
+    <ClInclude Include="..\NetUtil.h" />
     <ClInclude Include="..\Optimizer.h" />
     <ClInclude Include="..\Regularizer.h" />
   </ItemGroup>

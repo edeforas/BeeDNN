@@ -1,11 +1,9 @@
-CXXFLAGS = -g -Wall -Wfatal-errors -std=c++17
-
 ALL = samples
 
 all: $(ALL)
 
 clean:
-	$(RM) $(ALL) *.o
+	cd ./src/sample_code && make clean
 
 samples:
 	cd ./src/sample_code && make

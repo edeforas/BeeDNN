@@ -1,4 +1,4 @@
-DataSource=Fisher_data.txt
+DataSource=C:/Etienne/src/github/BeeDNN/src/output/Fisher_data.txt
 
 Epochs=100
 BatchSize=16
@@ -20,11 +20,12 @@ Layer1.hasBias=1
 Layer1.inputSize=4
 Layer1.outputSize=1
 Layer1.weight=
--0.0748 
--0.1114 
-0.3578 
-0.2469 
-0.1255 
+-0.2044 
+0.04868 
+0.3333 
+0.4757 
+Layer1.bias=
+0.2412 
 
 Notes=
-  99.33% with one perceptron !
+Fisher Iris toy classification problem using one perceptron

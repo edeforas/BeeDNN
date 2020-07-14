@@ -181,6 +181,7 @@
     <ClCompile Include="..\DataSource.cpp" />
     <ClCompile Include="..\Layer.cpp" />
     <ClCompile Include="..\LayerActivation.cpp" />
+    <ClCompile Include="..\LayerAffine.cpp" />
     <ClCompile Include="..\LayerBias.cpp" />
     <ClCompile Include="..\LayerChannelBias.cpp" />
     <ClCompile Include="..\LayerConvolution2D.cpp" />
@@ -190,6 +191,7 @@
     <ClCompile Include="..\LayerGain.cpp" />
     <ClCompile Include="..\LayerGaussianDropout.cpp" />
     <ClCompile Include="..\LayerGaussianNoise.cpp" />
+    <ClCompile Include="..\LayerGlobalAffine.cpp" />
     <ClCompile Include="..\LayerGlobalBias.cpp" />
     <ClCompile Include="..\LayerGlobalGain.cpp" />
     <ClCompile Include="..\LayerPoolMax2D.cpp" />
@@ -217,6 +219,7 @@
     <ClInclude Include="..\DataSource.h" />
     <ClInclude Include="..\Layer.h" />
     <ClInclude Include="..\LayerActivation.h" />
+    <ClInclude Include="..\LayerAffine.h" />
     <ClInclude Include="..\LayerBias.h" />
     <ClInclude Include="..\LayerChannelBias.h" />
     <ClInclude Include="..\LayerConvolution2D.h" />
@@ -226,6 +229,7 @@
     <ClInclude Include="..\LayerGain.h" />
     <ClInclude Include="..\LayerGaussianDropout.h" />
     <ClInclude Include="..\LayerGaussianNoise.h" />
+    <ClInclude Include="..\LayerGlobalAffine.h" />
     <ClInclude Include="..\LayerGlobalBias.h" />
     <ClInclude Include="..\LayerGlobalGain.h" />
     <ClInclude Include="..\LayerPoolMax2D.h" />

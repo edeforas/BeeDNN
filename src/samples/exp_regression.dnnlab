@@ -6,7 +6,7 @@ Loss=MeanSquaredError
 KeepBest=1
 ReboostEveryEpochs=-1
 ClassBalancingWeightLoss=0
-Optimizer=iRPROP-
+Optimizer=Adam
 LearningRate=-1
 Decay=-1
 Momentum=-1
@@ -20,8 +20,9 @@ Layer1.hasBias=1
 Layer1.inputSize=1
 Layer1.outputSize=5
 Layer1.weight=
-1.445 1.265 -0.5192 -0.09324 1.347 
--3.278 -4.12 1.671 0.8187 -0.9587 
+3.754 3.333 -1.016 -0.514 0.008106 
+Layer1.bias=
+-4.923 -9.985 3.074 1.807 -0.1489 
 
 Layer2.type=Relu
 
@@ -30,12 +31,13 @@ Layer3.hasBias=1
 Layer3.inputSize=5
 Layer3.outputSize=1
 Layer3.weight=
-7.764 
-18.08 
--0.5061 
--0.6588 
-3.274 
-2.353 
+2.305 
+7.989 
+-1.951 
+2.912 
+-0.04054 
+Layer3.bias=
+2.081 
 
 Notes=
- Toy fitting sample: - first level is 1 -> 5 dense - 5 activation function - last level is 5 ->1 dense  Goals is to play with optimizers/activations
+ Toy fitting sample:  - first level is 1 -> 5 dense - 5 activation function  - last level is 5 ->1 dense .  Goals is to play with optimizers/activations

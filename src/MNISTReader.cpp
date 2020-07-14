@@ -16,10 +16,10 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////////
 bool MNISTReader::read_from_folder(const string& sFolder,MatrixFloat& mRefImages,MatrixFloat& mRefLabels,MatrixFloat& mTestImages,MatrixFloat& mTestLabels)
 {
-    string sRefImages=sFolder+"\\train-images.idx3-ubyte";
-    string sRefLabels=sFolder+"\\train-labels.idx1-ubyte";
-    string sTestImages=sFolder+"\\t10k-images.idx3-ubyte";
-    string sTestLabels=sFolder+"\\t10k-labels.idx1-ubyte";
+    string sRefImages="train-images.idx3-ubyte";
+    string sRefLabels="train-labels.idx1-ubyte";
+    string sTestImages="t10k-images.idx3-ubyte";
+    string sTestLabels="t10k-labels.idx1-ubyte";
 
     if(!read_Matrix(sRefImages, mRefImages))
         return false;

@@ -1,10 +1,9 @@
-import math
 import numpy as np
 import matplotlib.pyplot as plt
-
 import BeeDNN as nn
 
-# Simple Sinus regression ( fit) using small network
+# Simple Sinus regression (fit) using small network
+# network is very small so we can see the fitting error
 
 # create train data
 sample = np.arange(-4.,4.,0.01)[:,np.newaxis]
@@ -12,31 +11,33 @@ truth = np.sin(sample)
 
 # construct net
 n = nn.Net()
-n.classification_mode=False
-n.append(nn.LayerDense(1,20))
+n.set_classification_mode(False) #because we do regression here
+n.append(nn.LayerDense(1,10))
 n.append(nn.LayerRELU())
-n.append(nn.LayerDense(20,1))
+n.append(nn.LayerDense(10,1))
 
-# optimize net
+# train net
 train = nn.NetTrain()
 train.epochs = 100
 train.batch_size=32
-train.set_optimizer(nn.OptimizerMomentum())
+train.set_optimizer(nn.OptimizerNadam())
 train.set_loss(nn.LossMSE()) # simple Mean Square Error
 train.train(n,sample,truth)
 
 # plot loss
 plt.plot(train.epoch_loss)
+plt.yscale("log")
 plt.grid()
-plt.title('MSE Loss vs. epochs')
+plt.title('MSE Loss vs. epochs (logarithmic)')
 plt.show(block=False)
 
 # plot truth curve and predicted
 x = sample
 y = n.forward(x)
 plt.figure()
-plt.plot(sample,truth)
-plt.plot(sample,y)
+plt.plot(sample,truth,label='Truth')
+plt.plot(sample,y,label='Predicted')
 plt.grid()
 plt.title('Truth vs. Predicted')
+plt.legend()
 plt.show()

@@ -14,7 +14,7 @@ class MainWindow;
 }
 
 class Net;
-class DataSource;
+class DataSourceFunctions;
 class MLEngineBeeDnn;
 
 class MainWindow : public QMainWindow
@@ -93,7 +93,7 @@ private:
     //state data, need to be saved
     MLEngineBeeDnn* _pEngine;
     MatrixFloat _mConfusionMatrixTrain,_mConfusionMatrixTest;
-    DataSource* _pDataSource;
+    DataSourceFunctions* _pDataSource;
     string _sNotes;
 };
 

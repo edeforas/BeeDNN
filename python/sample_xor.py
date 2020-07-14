@@ -1,7 +1,5 @@
-import math
 import numpy as np
 import matplotlib.pyplot as plt
-
 import BeeDNN as nn
 
 #simple xor classification

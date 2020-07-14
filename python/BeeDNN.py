@@ -6,16 +6,13 @@
     in the LICENSE.txt file.
 """
 
-import math
 import numpy as np
 import copy
 
-############################## layers
+################################################################################################### Layers
 class Layer:
   def __init__(self):
-    self.w = 0. 
     self.dydx = 1.
-    self.dydw = 0.
     self.learnable = False # set to False to freeze layer or if not learnable
     self.training = False # set to False in testing mode or True in training mode
 
@@ -81,7 +78,7 @@ class LayerComplementaryLogLog(Layer):
       self.dydx = np.exp(x - np.exp(x))
     return 1. - np.exp(-np.exp(x))
 
-class LayerDivideBy256(Layer): # usefull for byte conversion
+class LayerDivideBy256(Layer): # usefull for fixpt code conversion
   def forward(self,x):
     if self.training:
       self.dydx = 0.00390625 # 0.00390625 == 1./256.
@@ -94,7 +91,6 @@ class LayerdSiLU(Layer):
     exinv=1./(1.+ex)
     if self.training:
       self.dydx = ex*exinv*exinv*(2.+x*(2.*ex*exinv-1.))
-
     return exinv*(1+x*ex*exinv)
 
 class LayerExponential(Layer):
@@ -418,7 +414,7 @@ class LossCrossEntropy(LayerLoss):
       self.dydx = -t/p_max+(1.-t)/ump_max
     return  np.atleast_2d(np.mean(-t*np.log(p_max),axis=1))
 
-############################## optimizers
+################################################################################################### optimizers
 class Optimizer:
   def optimize(self,w,dw):
     pass
@@ -467,11 +463,125 @@ class OptimizerRPROPm(Optimizer):
     self.olddw = dw
     return w
 
-######################################### net
+#from https://towardsdatascience.com/adam-latest-trends-in-deep-learning-optimization-6be9a291375c
+class OptimizerAdam(Optimizer): #Adam, with first step bias correction
+  beta1=0.9;
+  beta2=0.999;
+  lr = 0.001
+  epsilon=1.e-8
+  init = False
+
+  def optimize(self,w,dw):
+    if not self.init:
+      self.v = 0. * dw
+      self.m=self.v
+      self.beta1_prod=self.beta1
+      self.beta2_prod=self.beta2
+      self.init = True
+
+    self.m = self.m*self.beta1+(1.-self.beta1)*dw
+    self.v = self.v*self.beta2+(1.-self.beta2)*(dw**2)
+    w -= self.lr/(1.-self.beta1_prod) * self.m / (np.sqrt(self.v/(1.-self.beta2_prod)) + self.epsilon);
+    self.beta1_prod=self.beta1_prod*self.beta1
+    self.beta2_prod=self.beta2_prod*self.beta2
+    return w
+
+class OptimizerAdamW(Optimizer):
+  beta1=0.9;
+  beta2=0.999;
+  lr = 0.01
+  epsilon=1.e-8
+  init = False
+  lambda_regul=0.000001
+
+  def optimize(self,w,dw):
+    if not self.init:
+      self.v = 0. * dw
+      self.m=self.v
+      self.beta1_prod=self.beta1
+      self.beta2_prod=self.beta2
+      self.init = True
+
+    self.m = self.m*self.beta1+(1.-self.beta1)*dw
+    self.v = self.v*self.beta2+(1.-self.beta2)*(dw**2)
+    w -= self.lr/(1.-self.beta1_prod) * self.m / (np.sqrt(self.v/(1.-self.beta2_prod)) + self.epsilon)+self.lambda_regul*w;
+    self.beta1_prod=self.beta1_prod*self.beta1
+    self.beta2_prod=self.beta2_prod*self.beta2
+    return w
+
+class OptimizerAdamax(Optimizer):
+  beta1=0.9;
+  beta2=0.999;
+  lr = 0.01
+  epsilon=1.e-8
+  init = False
+
+  def optimize(self,w,dw):
+    if not self.init:
+      self.v = 0. * dw
+      self.m=self.v
+      self.beta1_prod=self.beta1
+      self.init = True
+
+    self.m = self.m*self.beta1+(1.-self.beta1)*dw
+    self.v = np.maximum(self.beta2 * self.v, np.abs(dw))+self.epsilon
+    w -= self.lr/(1.-self.beta1_prod) * self.m / self.v
+    self.beta1_prod=self.beta1_prod*self.beta1
+    return w
+
+class OptimizerNadam(Optimizer):
+  beta1=0.9;
+  beta2=0.999;
+  lr = 0.01
+  epsilon=1.e-8
+  init = False
+
+  def optimize(self,w,dw):
+    if not self.init:
+      self.v = 0. * dw
+      self.m=self.v
+      self.beta1_prod=self.beta1
+      self.beta2_prod=self.beta2
+      self.init = True
+
+    self.m = self.m*self.beta1+(1.-self.beta1)*dw
+    self.v = self.v*self.beta2+(1.-self.beta2)*(dw**2)
+
+    m_hat = self.m / (1 - self.beta1_prod) + (1 - self.beta1) * dw / (1 - self.beta1_prod)
+    w -=  self.lr * m_hat / (np.sqrt(self.v / (1 - self.beta2_prod)) + self.epsilon)
+
+    self.beta1_prod=self.beta1_prod*self.beta1
+    self.beta2_prod=self.beta2_prod*self.beta2
+    return w
+
+class OptimizerAmsgrad(Optimizer):
+  beta1=0.9;
+  beta2=0.999;
+  lr = 0.01
+  epsilon=1.e-8
+  init = False
+
+  def optimize(self,w,dw):
+    if not self.init:
+      self.v = 0. * dw
+      self.v_hat=self.v
+      self.m=self.v
+      self.init = True
+
+    self.m = self.m*self.beta1+(1.-self.beta1)*dw
+    self.v = self.v*self.beta2+(1.-self.beta2)*(dw**2)
+    self.v_hat = np.maximum(self.v, self.v_hat)
+    w -= self.lr * self.m / (np.sqrt(self.v_hat) + self.epsilon)
+    return w
+
+###################################################################################################
 class Net:
   classification_mode=True
   def __init__(self):
     self.layers = list()
+
+  def set_classification_mode(self,bClassification):
+    self.classification_mode=bClassification;
 
   def append(self,layer):
     self.layers.append(layer)
@@ -479,27 +589,43 @@ class Net:
   def forward(self,x):
     out = x
     for l in self.layers:
+      s=np.sum(out)
       out = l.forward(out)
 
     if self.classification_mode:
       if out.shape[1]>1:
-        out=np.argmax(out,axis=0)
+        out=np.argmax(out,axis=1)
       else:
         out=np.around(out)
+        out=out.astype(int)
     return out
-
+###################################################################################################
 class NetTrain:
   optim = OptimizerMomentum()
   loss_layer = None
   epochs = 100
   batch_size = 32
   n = None
+  test_data=None
+  test_truth=None
+
+  #keep best parameters
+  keep_best=True
+  best_net=None
+  best_accuracy=0;
 
   def set_loss(self,layerloss):
     self.loss_layer = layerloss
 
   def set_optimizer(self, optim):
     self.optim = optim
+
+  def set_test_data(self,test_data,test_truth):
+    self.test_data=test_data
+    self.test_truth=test_truth
+
+  def set_keep_best(self,keep_best):
+    self.keep_best=keep_best
 
   def forward_and_backward(self,x,t):
     #forward pass
@@ -521,9 +647,15 @@ class NetTrain:
 
   def train(self,n,sample,truth):
     self.n = n
+    self.best_net= copy.deepcopy(n)
     nblayer = len(n.layers)
     nbsamples = len(sample)
     self.epoch_loss = np.zeros((0,0),dtype=np.float32)
+
+    if(truth.shape[1]>1):
+        truth_categorical=np.argmax(truth,axis=1)
+    else:
+        truth_categorical=truth
 
     #init optimizer
     optiml = list()
@@ -535,6 +667,7 @@ class NetTrain:
 
     #train!
     for epoch in range(self.epochs):
+      print("Epoch: ",epoch+1,"/",self.epochs,sep='', end='')
 
       #shuffle data
       perm = np.random.permutation(nbsamples)
@@ -574,3 +707,27 @@ class NetTrain:
         l.training=False
 
       self.epoch_loss = np.append(self.epoch_loss,sumloss / nbsamples)
+
+      #compute train accuracy (for now: classification only)
+      predicted = n.forward(sample)
+
+      #case of BinaryCrossEntropy
+      if(n.classification_mode==True):
+        accuracy=100.*np.mean(predicted==truth_categorical)
+        print(" Train Accuracy: "  +format(accuracy, ".2f")  + "%", end='')
+
+        #compute test accuracy (for now: classification only)
+        if self.test_data is not None:
+          predicted = n.forward(self.test_data)
+          accuracy=100.*np.mean(predicted==self.test_truth)
+          print(" Test Accuracy: "+format(accuracy, ".2f")+"%", end='')
+        
+        if(self.best_accuracy<accuracy):
+          self.best_net=copy.deepcopy(n)
+          self.best_accuracy=accuracy
+          print(" (new best accuracy)",end='')
+
+      print("")
+
+    # if self.keep_best and (self.best_accuracy!=0):
+    #   n=copy.deepcopy(self.best_net)

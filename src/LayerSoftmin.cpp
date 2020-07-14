@@ -1,10 +1,13 @@
 /*
-    Copyright (c) 2019, Etienne de Foras and the respective contributors
+    Copyright (c) 2020, Etienne de Foras and the respective contributors
     All rights reserved.
 
     Use of this source code is governed by a MIT-style license that can be found
     in the LICENSE.txt file.
 */
+
+// Softmin as in https://pytorch.org/docs/stable/nn.html#torch.nn.Softmin
+// use Softmax code with data negation
 
 #include "LayerSoftmin.h"
 

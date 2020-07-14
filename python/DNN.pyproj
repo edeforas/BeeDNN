@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{ec031762-a457-47aa-9b02-244ff2720633}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>sample_xor_softmax.py</StartupFile>
+    <StartupFile>sample_MNIST.py</StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -20,6 +20,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BeeDNN.py" />
+    <Compile Include="ConfusionMatrix.py" />
+    <Compile Include="MNIST_import.py" />
+    <Compile Include="sample_MNIST.py" />
     <Compile Include="sample_sinus_fit.py" />
     <Compile Include="sample_xor.py" />
     <Compile Include="sample_xor_softmax.py" />

@@ -34,6 +34,7 @@ NetTrain::NetTrain():
 
     _pLoss = create_loss("MeanSquaredError");
     _iBatchSize = 32;
+	_iBatchSizeAdjusted=-1; //invalid
 	_iValidationBatchSize = 128;
 	_bKeepBest = true;
     _iEpochs = 100;
@@ -98,7 +99,11 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
 	_fValidationAccuracy = other._fValidationAccuracy;
 	_iNbLayers=other._iNbLayers;
 
-	set_optimizer(other._sOptimizer);
+	clear_optimizers();
+	_sOptimizer = other._sOptimizer;
+	for (size_t i = 0; i < other._optimizers.size(); i++)
+		_optimizers.push_back(other._optimizers[i]->clone());
+
     _fLearningRate=other._fLearningRate;
     _fDecay=other._fDecay;
     _fMomentum=other._fMomentum;
@@ -132,7 +137,7 @@ void NetTrain::set_net(Net& net)
 	if (_iNbLayers != 0)
 		_pNet->layers()[0]->set_first_layer(true);
 	
-	clear_optimizers();
+//	clear_optimizers(); todo keep ?
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 Net& NetTrain::net()
@@ -294,6 +299,7 @@ float NetTrain::compute_loss_accuracy(const MatrixFloat &mSamples, const MatrixF
 
 	//cut in parts of size _iValidationBatchSize for a lower memory usage
 	Index iGood = 0;
+
 	for (Index iStart = 0; iStart < iNbSamples; iStart+=_iValidationBatchSize)
 	{
 		Index iEnd = iStart + _iValidationBatchSize;
@@ -301,8 +307,8 @@ float NetTrain::compute_loss_accuracy(const MatrixFloat &mSamples, const MatrixF
 			iEnd = iNbSamples;
 		Index iBatchSize = iEnd - iStart;
 
-		/*const MatrixFloat*/ mSamplesBatch = rowRange(mSamples, iStart, iEnd); // todo check no copy
-		/*const MatrixFloat*/ mTruthBatch = rowRange(mTruth, iStart, iEnd); // todo check no copy
+		mSamplesBatch = rowView(mSamples, iStart, iEnd);
+		mTruthBatch = rowView(mTruth, iStart, iEnd);
 		
 		_pNet->forward(mSamplesBatch, mOut);
 		fLoss+= _pLoss->compute(mOut, mTruthBatch);
@@ -380,9 +386,9 @@ void NetTrain::train()
     Net bestNet;
 
     //accept batch size == 0 or greater than nb samples  -> full size
-    Index iBatchSizeLocal=_iBatchSize;
-    if( (iBatchSizeLocal >iNbSamples) || (iBatchSizeLocal ==0) )
-        iBatchSizeLocal =iNbSamples;
+    _iBatchSizeAdjusted=_iBatchSize;
+    if( (_iBatchSizeAdjusted >iNbSamples) || (_iBatchSizeAdjusted ==0) )
+        _iBatchSizeAdjusted =iNbSamples;
 
     _inOut.resize(_iNbLayers + 1);
 
@@ -423,7 +429,7 @@ void NetTrain::train()
         MatrixFloat mSampleShuffled;
         MatrixFloat mTruthShuffled;
 
-        if (iBatchSizeLocal < iNbSamples)
+        if (_iBatchSizeAdjusted < iNbSamples)
         {
             auto vShuffle = randPerm(iNbSamples);
             applyRowPermutation(vShuffle, mSamples, mSampleShuffled);
@@ -431,27 +437,14 @@ void NetTrain::train()
         }
         else
         {
+			// no need to shuffle
             mSampleShuffled = mSamples; //todo remove copy
             mTruthShuffled = mTruth;
         }
 
 		_pNet->set_train_mode(true);
 
-        Index iBatchStart=0;
-
-        while(iBatchStart<iNbSamples)
-        {
-            Index iBatchEnd=iBatchStart+iBatchSizeLocal;
-            if(iBatchEnd>iNbSamples)
-                iBatchEnd=iNbSamples;
-
-            const MatrixFloat mSample = rowRange(mSampleShuffled, iBatchStart, iBatchEnd);
-            const MatrixFloat mTarget = rowRange(mTruthShuffled, iBatchStart, iBatchEnd);
-
-			train_batch(mSample, mTarget);
-		
-            iBatchStart=iBatchEnd;
-        }
+		train_one_epoch(mSampleShuffled, mTruthShuffled);
 
 		_pNet->set_train_mode(false);
 
@@ -524,9 +517,12 @@ void NetTrain::train()
 /////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth)
 {
+	assert(_pNet);
+	assert(_optimizers.size() == _iNbLayers * 2);
+
 	//forward pass with store
 	_inOut[0] = mSample;
-	for (int i = 0; i < _iNbLayers; i++)
+	for (size_t i = 0; i < _iNbLayers; i++)
 		_pNet->layer(i).forward(_inOut[i], _inOut[i + 1]);
 
 	//compute error gradient
@@ -672,5 +668,25 @@ void NetTrain::update_class_weight()
 	}
 
 	_pLoss->set_class_balancing(mClassWeight);
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
+void NetTrain::train_one_epoch(const MatrixFloat& mSampleShuffled, const MatrixFloat& mTruthShuffled)
+{
+	Index iNbSamples = mSampleShuffled.rows();
+	Index iBatchStart = 0;
+
+	while (iBatchStart < iNbSamples)
+	{
+		Index iBatchEnd = iBatchStart + _iBatchSizeAdjusted;
+		if (iBatchEnd > iNbSamples)
+			iBatchEnd = iNbSamples;
+
+		const MatrixFloat mSample = rowView(mSampleShuffled, iBatchStart, iBatchEnd);
+		const MatrixFloat mTarget = rowView(mTruthShuffled, iBatchStart, iBatchEnd);
+
+		train_batch(mSample, mTarget);
+
+		iBatchStart = iBatchEnd;
+	}
 }
 /////////////////////////////////////////////////////////////////////////////////////////////

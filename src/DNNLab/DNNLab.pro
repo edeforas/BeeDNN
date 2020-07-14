@@ -48,6 +48,7 @@ SOURCES += \
     ../LayerGaussianNoise.cpp \
     ../LayerGlobalGain.cpp \
     ../LayerGain.cpp \
+    ../LayerAffine.cpp \
     ../LayerGlobalBias.cpp \
     ../LayerChannelBias.cpp \
     ../LayerPRelu.cpp \
@@ -79,6 +80,7 @@ HEADERS += \
     ../LayerGaussianNoise.h \
     ../LayerGlobalGain.h \
     ../LayerGain.h \
+    ../LayerAffine.h \
     ../LayerGlobalBias.h \
     ../LayerChannelBias.h \
     ../LayerPRelu.h \
@@ -90,7 +92,7 @@ SOURCES += \
     main.cpp\
     mainwindow.cpp \
     SimpleCurveWidget.cpp \
-    DataSource.cpp \
+    DataSourceFunctions.cpp \
     MLEngineBeeDnn.cpp \
     FrameNetwork.cpp \
     FrameNotes.cpp \
@@ -100,7 +102,7 @@ SOURCES += \
 HEADERS  += \
     mainwindow.h \
     SimpleCurveWidget.h \
-    DataSource.h \
+    DataSourceFunctions.h \
     MLEngineBeeDnn.h \
     FrameNetwork.h \
     FrameNotes.h \

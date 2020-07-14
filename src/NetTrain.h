@@ -89,35 +89,37 @@ public:
 	float get_current_validation_loss() const;
 	float get_current_validation_accuracy() const;
 
-private:
-	void train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth); //all the backprop is here	
-    void update_class_weight(); // compute balanced class weight loss (if asked) and update loss
+	virtual void train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth); //all the backprop is here	
+
+protected:
+	virtual void train_one_epoch(const MatrixFloat& mSampleShuffled, const MatrixFloat& mTruthShuffled);
 	void add_online_statistics(const MatrixFloat&mPredicted, const MatrixFloat&mTruth);	//online statistics, i.e. loss, accuracy ..
+	Index _iBatchSize,_iBatchSizeAdjusted;
+	Loss* _pLoss;
+	Regularizer* _pRegularizer;
+	vector<Optimizer*> _optimizers;
+	vector<MatrixFloat> _inOut;
+	vector<MatrixFloat> _gradient;
+	size_t _iNbLayers;
+	Net* _pNet;
+
+private:
+	void update_class_weight(); // compute balanced class weight loss (if asked) and update loss
 	void clear_optimizers();
 
 	int _iOnlineAccuracyGood;
 	float _fOnlineLoss;
 
 	bool _bKeepBest;
-	Index _iBatchSize;
 	Index _iValidationBatchSize;
 	int _iEpochs;
 	bool _bClassBalancingWeightLoss;
-	size_t _iNbLayers;
 	int _iReboostEveryEpochs;
 
     string _sOptimizer;
     float _fLearningRate;
 	float _fDecay;
 	float _fMomentum;
-
-	Net* _pNet;
-	Loss* _pLoss;
-	Regularizer* _pRegularizer;
-
-	vector<Optimizer*> _optimizers;
-	vector<MatrixFloat> _inOut;
-	vector<MatrixFloat> _gradient;
 
     const MatrixFloat* _pmSamplesTrain;
     const MatrixFloat* _pmTruthTrain;

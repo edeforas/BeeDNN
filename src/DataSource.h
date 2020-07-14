@@ -10,7 +10,7 @@ class DataSource
 {
 public:
     DataSource();
-    ~DataSource();
+    virtual ~DataSource();
 
     void clear();
 
@@ -19,7 +19,7 @@ public:
 
     const string name() const;
 
-    void load(const string & sName);
+    virtual bool load(const string & sName);
 
     const MatrixFloat& train_data() const;
     const MatrixFloat& train_truth() const;
@@ -34,18 +34,7 @@ public:
     int data_size() const;
     int annotation_cols() const;
 
-private:
-    bool load_mnist();
-    bool load_mini_mnist();
-    bool load_cifar10();
-    bool load_textfile();
-
-    void load_function();
-    void load_and();
-    void load_xor();
-
-    float get_function_val(float x) const;
-
+protected:
     MatrixFloat _mTrainData;
     MatrixFloat _mTrainTruth;
     MatrixFloat _mTestData;
@@ -53,8 +42,13 @@ private:
 
     bool _bHasTestData;
     bool _bHasTrainData;
+	string _sName;
 
-    string _sName;
+private:
+	bool load_mnist();
+	bool load_mini_mnist();
+	bool load_cifar10();
+	bool load_textfile();	
 };
 
 #endif

@@ -1,7 +1,5 @@
-import math
 import numpy as np
 import matplotlib.pyplot as plt
-
 import BeeDNN as nn
 
 # Simple XOR classification using softmax (see simple_xor.py for a xor classification without softmax)
@@ -23,7 +21,7 @@ n.append(nn.LayerSoftmax())
 
 # optimize net
 train = nn.NetTrain()
-train.epochs = 500
+train.epochs = 100
 train.batch_size=0 # set to 0 for full batch
 train.set_optimizer(nn.OptimizerRPROPm()) # work best with full batch size
 train.set_loss(nn.LossCrossEntropy()) # use this loss for the softmax

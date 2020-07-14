@@ -19,6 +19,8 @@ using namespace std;
 
 #ifdef USE_EIGEN
 
+#define EIGEN_DONT_PARALLELIZE // keep the cpu core for upper algorithms
+
 #include "Eigen/Core"
 using namespace Eigen;
 typedef Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> MatrixFloat;
@@ -38,7 +40,7 @@ public:
         _iColumns=0;
         _iSize=_iRows*_iColumns;
         _data=0;
-        _bDelete=false;
+        _bIsView=false;
     }
 
     Matrix<T>(Index iRows, Index iColumns)
@@ -47,7 +49,7 @@ public:
         _iColumns=iColumns;
         _iSize=_iRows*_iColumns;
         _data=new T[_iSize];
-        _bDelete=true;
+        _bIsView=false;
     }
     
     Matrix<T>(T* pData,Index iRows,Index iColumns)
@@ -56,7 +58,7 @@ public:
         _iColumns=iColumns;
         _iSize=_iRows*_iColumns;
         _data=pData;
-        _bDelete=false;
+        _bIsView=true;
     }
     
     static const Matrix<T> from_raw_buffer(const T* pData,Index iRows,Index iColumns)
@@ -67,7 +69,7 @@ public:
         m._iColumns=iColumns;
         m._iSize=iRows*iColumns;
         m._data=(T*)pData;
-        m._bDelete=false;
+        m._bIsView=true;
 
         return m;
     }
@@ -78,7 +80,7 @@ public:
         _iColumns=a._iColumns;
         _iSize=_iRows*_iColumns;
         _data=new T[_iSize];
-        _bDelete=true;
+        _bIsView=false;
 
         for( Index i=0;i<size();i++)
             _data[i]=a(i);
@@ -87,7 +89,7 @@ public:
 
     ~Matrix<T>()
     {
-        if(_bDelete)
+        if(!_bIsView)
             delete [] _data;
     }
 
@@ -118,15 +120,16 @@ public:
 	{
 		return *this;
 	}
-
-	Matrix<T>& operator-()
-	{
-		for (Index i = 0; i < size(); i++)
-			_data[i] = -_data[i];
-
-		return *this;
-	}
 	
+	Matrix<T> operator-() const
+	{
+		Matrix<T> m(_iRows,_iColumns);
+		for (Index i = 0; i < size(); i++)
+			m._data[i] = -_data[i];
+
+		return m;
+	}
+
 	Index rows() const
     {
         return _iRows;
@@ -149,14 +152,16 @@ public:
 
         _iRows=iRows;
         _iColumns=iColumns;
-        _iSize=_iRows*_iColumns;
-        
-        if(_bDelete)
-        {
+        Index iSize=_iRows*_iColumns;
+		if (iSize == _iSize)
+			return;
+
+		_iSize = iSize;
+
+        if(!_bIsView)
             delete[] _data;
-        }
         else
-            _bDelete=true;
+            _bIsView=false;
 
         _data=new T[_iSize];
     }
@@ -419,7 +424,7 @@ public:
         return out;
     }
 
-	Matrix<T> log() const //todo check applies on an array only
+	Matrix<T> log() const //todo check applies on array only
 	{
 		Matrix<T> out(*this);
 
@@ -429,7 +434,7 @@ public:
 		return out;
 	}
 
-	Matrix<T> cosh() const //todo check applies on an array only
+	Matrix<T> cosh() const //todo check applies on array only
 	{
 		Matrix<T> out(*this);
 
@@ -439,7 +444,7 @@ public:
 		return out;
 	}
 
-	Matrix<T> tanh() const //todo check applies on an array only
+	Matrix<T> tanh() const //todo check applies on array only
 	{
 		Matrix<T> out(*this);
 
@@ -449,7 +454,7 @@ public:
 		return out;
 	}
 
-	Matrix<T> exp() const //todo check applies on an array only
+	Matrix<T> exp() const //todo check applies on array only
 	{
 		Matrix<T> out(*this);
 
@@ -611,7 +616,7 @@ public:
 private:
     Index _iRows,_iColumns,_iSize;
     T* _data;
-    bool _bDelete;
+    bool _bIsView;
 };
 
 typedef Matrix<float> MatrixFloat;
@@ -621,6 +626,7 @@ typedef Matrix<float> MatrixFloatView;
 
 MatrixFloatView fromRawBuffer(float *pBuffer, Index iRows, Index iCols);
 const MatrixFloatView fromRawBuffer(const float *pBuffer, Index iRows, Index iCols);
+MatrixFloatView createView(MatrixFloat & mRef);
 void copyInto(const MatrixFloat& mToCopy, MatrixFloat& m, Index iStartRow);
 MatrixFloat rowWiseSum(const MatrixFloat& m);
 MatrixFloat colWiseMean(const MatrixFloat& m);
@@ -629,7 +635,7 @@ MatrixFloat rowWiseMult(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d);
 vector<Index> randPerm(Index iSize); //create a vector of index shuffled
 void applyRowPermutation(const vector<Index>& vPermutation, const MatrixFloat & mIn, MatrixFloat & mPermuted);
-const MatrixFloat rowRange(const MatrixFloat& m, Index iStartRow, Index iEndRow); //create a row view starting at iStartRow to (not included) iEndRow
+const MatrixFloat rowView(const MatrixFloat& m, Index iStartRow, Index iEndRow); //create a row view starting at iStartRow to (not included) iEndRow
 MatrixFloat decimate(const MatrixFloat& m, Index iRatio);
 Index argmax(const MatrixFloat& m);
 void rowsArgmax(const MatrixFloat& m, MatrixFloat& argM); //compute the argmax row by row

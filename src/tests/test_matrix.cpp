@@ -5,6 +5,19 @@ using namespace std;
 
 #include "Matrix.h"
 
+/////////////////////////////////////////////////////////////////////
+// for testU only
+inline bool is_near(double a, double b, double tolerancis = 1.e-10)
+{
+	return fabs(a - b) < tolerancis;
+}
+void test(bool bTest, string sMessage = "")
+{
+	if (bTest) return;
+
+	cout << "Test failed: " << sMessage << endl;
+	exit(-1);
+}
 ////////////////////////////////////////////////////////
 void disp(const MatrixFloat& m)
 {
@@ -42,8 +55,10 @@ void elementary_tests()
 	disp(mS);
 }
 ////////////////////////////////////////////////////////////
-void check_fromRawBuffer()
+void check_matrixView()
 {
+	cout << "check_matrixView:" << endl;
+
     //check fromRawBuffer() is not copying the data, i.e. is a real view
     float c[5]={ 0, 1 , 2 , 3 , 4 };
     MatrixFloatView mC=fromRawBuffer(c,5,1);
@@ -54,10 +69,26 @@ void check_fromRawBuffer()
     const float d[5]={ 0, 1 , 2 , 3 , 4 };
     const MatrixFloatView mD=fromRawBuffer(d,5,1);
     (void)mD;
+
+	//check matrix view is not copying the data, i.e. is a real view
+	MatrixFloat mf(2, 2);
+	mf(0,0) = 0; mf(1) = 1; mf(2) = 2; mf(3) = 3;
+	MatrixFloatView mV= createView(mf);
+	MatrixFloat mV2 = createView(mf);
+	MatrixFloat mV3 = createView(mV2); //view on view
+
+	mf(2) = 333;
+	test(is_near(mV(2), 333), "mV fromRawBuffer() must not copy the data");
+	test(is_near(mV2(2),333),"mV2 fromRawBuffer() must not copy the data");
+	test(is_near(mV3(2), 333), "mV3 fromRawBuffer() must not copy the data");
+
+	cout << "check_matrixView finished" << endl;
 }
 ////////////////////////////////////////////////////////
 void test_bernoulli()
 {
+	cout << "test_bernoulli:" << endl;
+
 	MatrixFloat m(1000, 1000);
 	chrono::steady_clock::time_point start = chrono::steady_clock::now();
 	for(int i=1;i<10;i++)
@@ -71,7 +102,7 @@ void test_bernoulli()
 int main()
 {
 	elementary_tests();
-    check_fromRawBuffer();
+	check_matrixView();
 	test_bernoulli();
 
     cout << "Tests finished." << endl;

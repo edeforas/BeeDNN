@@ -35,6 +35,11 @@ MatrixFloatView fromRawBuffer(float *pBuffer,Index iRows,Index iCols)
 #endif
 }
 ///////////////////////////////////////////////////////////////////////////
+MatrixFloatView createView(MatrixFloat & mRef)
+{
+	return fromRawBuffer(mRef.data(), mRef.rows(), mRef.cols());
+}
+///////////////////////////////////////////////////////////////////////////
 void copyInto(const MatrixFloat& mToCopy, MatrixFloat& m, Index iStartRow)
 {
 #ifdef USE_EIGEN
@@ -293,7 +298,7 @@ bool toFile(const string& sFile, const MatrixFloat & m)
 }
 ///////////////////////////////////////////////////////////////////////////
 //create a row view starting at iStartRow ending at iEndRow (not included)
-const MatrixFloat rowRange(const MatrixFloat& m, Index iStartRow, Index iEndRow)
+const MatrixFloat rowView(const MatrixFloat& m, Index iStartRow, Index iEndRow)
 {
     assert(iStartRow < iEndRow); //iEndRow not included
     assert(m.rows() >= iEndRow);
@@ -321,12 +326,12 @@ void setQuickBernoulli(MatrixFloat& m, float fProba)
 	// speed is 6x faster than bernoulli_distribution !
 	unsigned int uiLimit = int(fProba*65536.);
 	for (Index i = 0; i < m.size(); i++)
-		m(i) = (randomEngine()() & 0xffff) < uiLimit;
+		m(i) = (randomEngine()() & 0xffff) < uiLimit; //quick, precise enough
 
 /*
 	bernoulli_distribution dis(fProba);
 	for (Index i = 0; i < m.size(); i++)
-		m(i) = (float)(dis(randomEngine()));
+		m(i) = (float)(dis(randomEngine())); //slow 
 */
 }
 ///////////////////////////////////////////////////////////////////////////

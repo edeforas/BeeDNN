@@ -378,7 +378,7 @@
        <item>
         <widget class="QPushButton" name="btnTrainAndTest">
          <property name="text">
-          <string>Train &amp; Validation</string>
+          <string>Train+Validation</string>
          </property>
         </widget>
        </item>

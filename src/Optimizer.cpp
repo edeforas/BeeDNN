@@ -44,6 +44,11 @@ public:
 	~OptimizerNone() override
 	{}
 
+	Optimizer* clone() override
+	{
+		return new OptimizerNone;
+	}
+
 	string name() const override
 	{
 		return "None";
@@ -68,6 +73,13 @@ public:
     ~OptimizerStep() override
     {}
 	
+	Optimizer* clone() override
+	{
+		auto pOpt=new OptimizerStep;
+		pOpt->_fLearningRate = _fLearningRate;
+		return pOpt;
+	}
+
 	string name() const override
 	{
 		return "Step";
@@ -98,6 +110,13 @@ public:
     ~OptimizerSGD() override
     {}
 	
+	Optimizer* clone() override
+	{
+		auto pOpt = new OptimizerSGD;
+		pOpt->_fLearningRate = _fLearningRate;
+		return pOpt;
+	}
+
 	string name() const override
 	{
 		return "SGD";
@@ -127,6 +146,14 @@ public:
 
     ~OptimizerMomentum() override
     {}
+
+	Optimizer* clone() override
+	{
+		auto pOpt = new OptimizerMomentum;
+		pOpt->_fLearningRate = _fLearningRate;
+		pOpt->_fMomentum = _fMomentum;
+		return pOpt;
+	}
 
 	string name() const override
 	{
@@ -168,6 +195,14 @@ public:
 
     ~OptimizerNesterov() override
     {}
+
+	Optimizer* clone() override
+	{
+		auto pOpt = new OptimizerNesterov;
+		pOpt->_fLearningRate = _fLearningRate;
+		pOpt->_fMomentum = _fMomentum;
+		return pOpt;
+	}
 
 	string name() const override
 	{
@@ -211,6 +246,13 @@ public:
     ~OptimizerAdagrad() override
     {}
 
+	Optimizer* clone() override
+	{
+		auto pOpt = new OptimizerAdagrad;
+		pOpt->_fLearningRate = _fLearningRate;
+		return pOpt;
+	}
+
 	string name() const override
 	{
 		return "Adagrad";
@@ -250,6 +292,14 @@ public:
 
     ~OptimizerRMSProp() override
     {}
+
+	Optimizer* clone() override
+	{
+		auto pOpt = new OptimizerRMSProp;
+		pOpt->_fLearningRate = _fLearningRate;
+		pOpt->_fDecay = _fDecay;
+		return pOpt;
+	}
 
 	string name() const override
 	{
@@ -295,6 +345,13 @@ public:
 
     ~OptimizerAdam() override
     {}
+
+	Optimizer* clone() override
+	{
+		auto pOpt = new OptimizerAdam;
+		pOpt->_fLearningRate = _fLearningRate;
+		return pOpt;
+	}
 
 	string name() const override
 	{
@@ -359,6 +416,13 @@ public:
     ~OptimizerNadam() override
     {}
 
+	Optimizer* clone() override
+	{
+		auto pOpt = new OptimizerNadam;
+		pOpt->_fLearningRate = _fLearningRate;
+		return pOpt;
+	}
+
 	string name() const override
 	{
 		return "Nadam";
@@ -419,6 +483,13 @@ public:
     ~OptimizerAdamax() override
     {}
 
+	Optimizer* clone() override
+	{
+		auto pOpt = new OptimizerAdamax;
+		pOpt->_fLearningRate = _fLearningRate;
+		return pOpt;
+	}
+
 	string name() const override
 	{
 		return "Adamax";
@@ -469,6 +540,11 @@ public:
 
     ~OptimizerRPROPm() override
     {}
+
+	Optimizer* clone() override
+	{
+		return new OptimizerRPROPm;
+	}
 
 	string name() const override
 	{
@@ -534,6 +610,11 @@ public:
 
 	~OptimizeriRPROPm() override
 	{}
+
+	Optimizer* clone() override
+	{
+		return new OptimizerRPROPm;
+	}
 
 	string name() const override
 	{
