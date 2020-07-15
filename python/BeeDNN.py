@@ -15,6 +15,7 @@ class Layer:
     self.dydx = 1.
     self.learnable = False # set to False to freeze layer or if not learnable
     self.training = False # set to False in testing mode or True in training mode
+    self.learnBias= False;
 
   def forward(self,x):
     pass
@@ -258,13 +259,27 @@ class LayerTanhShrink(Layer):
 class LayerGlobalBias(Layer):
   def __init__(self):
     super().__init__()
-    self.learnable = True
-    self.w = np.zeros(1,dtype=np.float32)
+    self.learnBias= True;
+    self.b = np.zeros(1,dtype=np.float32)
 
   def forward(self,x):
-    return x + self.w[0]
+    return x + self.b[0]
+
   def backpropagation(self,dldy):
-    self.dldw = np.atleast_1d(dldy.mean())
+    self.dldb = np.atleast_1d(dldy.mean())
+    return dldy
+
+class LayerBias(Layer):
+  def __init__(self,outSize):
+    super().__init__()
+    self.learnBias= True;
+    self.b = np.zeros((1,outSize),dtype=np.float32)
+
+  def forward(self,x):
+    return x + self.b
+
+  def backpropagation(self,dldy):
+    self.dldb = np.atleast_2d(np.mean(dldy,axis=0))
     return dldy
 
 class LayerGlobalGain(Layer):
@@ -319,6 +334,26 @@ class LayerDenseNoBias(Layer):
   def backpropagation(self,dldy):
     self.dldw = self.dydw.transpose() @ dldy
     self.dldw *= (1./(self.dydw.shape[0]))
+    return dldy @ (self.w.transpose())
+
+class LayerDenseWithBias(Layer): # with bias
+  def __init__(self,inSize,outSize):
+    super().__init__()
+    self.learnable = True
+    self.learnBias = True
+    a=np.sqrt(6./(inSize+outSize)) # Xavier uniform initialization
+    self.w = a*(np.random.rand(inSize,outSize) * 2. - 1.)
+    self.b = np.zeros((1,outSize),dtype=np.float32);
+ 
+  def forward(self,x):
+    if self.training:
+      self.dydw = x
+    return (x @ self.w) + self.b
+
+  def backpropagation(self,dldy):
+    self.dldw = self.dydw.transpose() @ dldy
+    self.dldw *= (1./(self.dydw.shape[0]))
+    self.dldb = np.atleast_2d(np.mean(dldy,axis=0))
     return dldy @ (self.w.transpose())
 
 class LayerDense(Layer): # with bias
@@ -429,6 +464,7 @@ class OptimizerSGD(Optimizer):
   def optimize(self,w,dw):
     return w - dw * self.lr
     
+# Momentum from https://cs231n.github.io/neural-networks-3/#sgd
 class OptimizerMomentum(Optimizer):
   lr = 0.01
   momentum = 0.9
@@ -438,10 +474,24 @@ class OptimizerMomentum(Optimizer):
       self.v = 0. * w
       self.init = True
 
-    self.v = self.v * self.momentum - dw * self.lr
-    w = w + self.v
-    return w
+    self.v = self.v * self.momentum + dw * self.lr
+    return w - self.v
 
+# Nesterov from https://cs231n.github.io/neural-networks-3/#sgd
+class OptimizerNesterov(Optimizer):
+  lr = 0.01
+  momentum = 0.9
+  init = False
+  def optimize(self,w,dw):
+    if not self.init:
+      self.v = 0. * w
+      self.init = True
+
+    v_prev = self.v # back this up
+    self.v = self.momentum * self.v - self.lr * dw # velocity update stays the same
+    w += -self.momentum * v_prev + (1. + self.momentum) * self.v # position update changes form
+    return w
+	
 # RPROP-  as in : https://pdfs.semanticscholar.org/df9c/6a3843d54a28138a596acc85a96367a064c2.pdf
 # or in paper : Improving the Rprop Learning Algorithm (Christian Igel and Michael Husken)
 class OptimizerRPROPm(Optimizer):
@@ -659,8 +709,9 @@ class NetTrain:
 
     #init optimizer
     optiml = list()
-    for i in range(nblayer):
-      optiml.append(copy.copy(self.optim))
+    for i in range(nblayer*2):
+      optiml.append(copy.copy(self.optim)) #potential weight optimizer
+      optiml.append(copy.copy(self.optim)) #potential bias optimizer
 
     if self.batch_size == 0:
       self.batch_size = nbsamples
@@ -696,7 +747,10 @@ class NetTrain:
         for i in range(len(n.layers)):
           l = n.layers[i]
           if l.learnable:
-            l.w = optiml[i].optimize(l.w,l.dldw)
+            l.w = optiml[2*i].optimize(l.w,l.dldw)
+
+          if l.learnBias:
+            l.b = optiml[2*i+1].optimize(l.b,l.dldb)
 
         #save stats
         sumloss+=online_loss.sum()
