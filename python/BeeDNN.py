@@ -336,7 +336,7 @@ class LayerDenseNoBias(Layer):
     self.dldw *= (1./(self.dydw.shape[0]))
     return dldy @ (self.w.transpose())
 
-class LayerDenseWithBias(Layer): # with bias
+class LayerDense(Layer): # with bias
   def __init__(self,inSize,outSize):
     super().__init__()
     self.learnable = True
@@ -356,24 +356,6 @@ class LayerDenseWithBias(Layer): # with bias
     self.dldb = np.atleast_2d(np.mean(dldy,axis=0))
     return dldy @ (self.w.transpose())
 
-class LayerDense(Layer): # with bias
-  def __init__(self,inSize,outSize):
-    super().__init__()
-    self.learnable = True
-    a=np.sqrt(6./(inSize+outSize)) # Xavier uniform initialization
-    self.w = a*(np.random.rand(inSize+1,outSize) * 2. - 1.)
- 
-  def forward(self,x):
-    xplusone=np.concatenate((x,np.ones((x.shape[0],1),dtype=np.float32)),axis=1)
-    if self.training:
-      self.dydw = xplusone
-    return xplusone @ self.w
-
-  def backpropagation(self,dldy):
-    self.dldw = self.dydw.transpose() @ dldy
-    self.dldw *= (1./(self.dydw.shape[0]))
-    return dldy @ (self.w[:-1,:].transpose())
-
 class LayerSoftmax(Layer):
   def __init__(self):
     super().__init__()
@@ -385,6 +367,17 @@ class LayerSoftmax(Layer):
     if self.training:
       self.dydx=-ex*(ex-sum_row)/(sum_row*sum_row)
     return ex/sum_row
+
+class LayerDropout(Layer):
+  def __init__(self,rate=0.3):
+    super().__init__()
+    self.rate=rate
+ 
+  def forward(self,x):
+    if self.training:
+      z = np.random.binomial(size=(1,x.shape[1]), n=1, p= 1-self.rate)*(1./(1.-self.rate))
+      x=x*z
+    return x
 
 ############################ losses
 class LayerLoss(Layer):
