@@ -400,59 +400,7 @@ private:
     MatrixFloat _m, _v;
     float beta1, beta2, beta1_prod, beta2_prod;
 };
-//////////////////////////////////////////////////////////
-class OptimizerAmsgrad : public Optimizer
-{
-public:
-	OptimizerAmsgrad()
-	{
-		_beta1 = 0.9f;
-		_beta2 = 0.999f;
-		_fLearningRate = 0.01f;
-	}
 
-	~OptimizerAmsgrad() override
-	{}
-
-	Optimizer* clone() override
-	{
-		auto pOpt = new OptimizerAmsgrad;
-		pOpt->_fLearningRate = _fLearningRate;
-		return pOpt;
-	}
-
-	string name() const override
-	{
-		return "Amsgrad";
-	}
-
-	virtual void init() override
-	{
-		_v.resize(0, 0);
-	}
-
-	virtual void optimize(MatrixFloat& w, const MatrixFloat& dw) override
-	{
-		assert(w.rows() == dw.rows());
-		assert(w.cols() == dw.cols());
-
-		// init if needed
-		if (_v.size() == 0)
-		{
-			_v = dw * 0.f;
-			_v_hat = _v;
-			_m = _v;
-		}
-
-		_m = _m * _beta1 + (1.f - _beta1)*dw;
-		_v = (_v.array() * _beta2) + ((1.f - _beta2)*dw.array().square());
-		_v_hat = _v.cwiseMax(_v_hat);
-		w -= (_m.cwiseQuotient(_v_hat.cwiseSqrt().cwiseMax(1.e-8f)))*_fLearningRate;
-	}
-private:
-	MatrixFloat _m, _v, _v_hat;
-	float _beta1, _beta2;
-}; 
 /////////////////////////////////////////////////////////////////////////////////////
 class OptimizerNadam : public Optimizer
 {
@@ -738,9 +686,6 @@ Optimizer* create_optimizer(const string& sOptimizer)
     if (sOptimizer == "Adam")
         return new OptimizerAdam;
 
-	if (sOptimizer == "Amsgrad")
-		return new OptimizerAmsgrad;
-	
 	if (sOptimizer == "Adamax")
         return new OptimizerAdamax;
 
@@ -778,7 +723,6 @@ void list_optimizers_available(vector<string>& vsOptimizers)
 	vsOptimizers.push_back("None");
 	vsOptimizers.push_back("Adagrad");
     vsOptimizers.push_back("Adam");
-	vsOptimizers.push_back("Amsgrad");
 	vsOptimizers.push_back("Nadam");
     vsOptimizers.push_back("Adamax");
     vsOptimizers.push_back("Momentum");

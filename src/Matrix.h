@@ -474,6 +474,16 @@ public:
         return out;
     }
 
+	Matrix<T> square() const
+	{
+		Matrix<T> out(*this);
+
+		for (Index i = 0; i < _iSize; i++)
+			out(i) =_data[i]* _data[i];
+
+		return out;
+	}
+
 	Matrix<T> cwiseMin(T f) const
 	{
 		Matrix<T> out(*this);
