@@ -27,7 +27,7 @@ train = nn.NetTrain()
 train.epochs = 20
 train.batch_size=32
 train.set_test_data(test_sample , test_truth)
-train.set_optimizer(nn.OptimizerMomentum())
+train.set_optimizer(nn.opt.OptimizerMomentum())
 train.set_loss(nn.LossCrossEntropy()) # simple Mean Square Error
 train.train(n,sample,truth)
 n=train.best_net #todo remove do this in the end of train()

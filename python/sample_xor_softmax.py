@@ -23,7 +23,7 @@ n.append(nn.LayerSoftmax())
 train = nn.NetTrain()
 train.epochs = 100
 train.batch_size=0 # set to 0 for full batch
-train.set_optimizer(nn.OptimizerRPROPm()) # work best with full batch size
+train.set_optimizer(nn.opt.OptimizerRPROPm()) # work best with full batch size
 train.set_loss(nn.LossCrossEntropy()) # use this loss for the softmax
 train.train(n,sample,truth)
 

@@ -20,7 +20,7 @@ n.append(nn.LayerDense(10,1))
 train = nn.NetTrain()
 train.epochs = 100
 train.batch_size=32
-train.set_optimizer(nn.OptimizerNadam())
+train.set_optimizer(nn.opt.OptimizerNadam())
 train.set_loss(nn.LossMSE()) # simple Mean Square Error
 train.train(n,sample,truth)
 
