@@ -17,9 +17,9 @@ truth=MNIST_import.to_one_hot(truth_categorical);
 # construct net
 n = nn.Net()
 n.append(nn.LayerDense(28*28,128))
+n.append(nn.LayerDropout(0.2))
 n.append(nn.LayerRELU())
 n.append(nn.LayerDense(128,10))
-n.append(nn.LayerRELU())
 n.append(nn.LayerSoftmax())
 
 # train net
