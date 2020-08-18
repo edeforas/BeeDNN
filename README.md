@@ -23,12 +23,12 @@ Layers:
 Activations (in alphabetical order):
 - Absolute, Asinh, Atan
 - Bent, BinaryStep, Bipolar, BipolarSigmoid
-- ComplementaryLogLog
+- ComplementaryLogLog, CELU
 - dSiLU
 - ELiSH, Elliot, ELU, Exponential, E2RU, E3RU
 - FTS, FTS+
 - Gauss, GELU
-- HardELU, HardSigmoid, HardShrink, HardTanh
+- HardELU, HardSigmoid, HardShrink, HardTanh, HardSwish
 - ISRELU
 - Linear, LeakyRelu, LeakyRelu256, LecunTanh, LiSHT, Logit, LogSigmoid
 - TwiceLeakyRelu6

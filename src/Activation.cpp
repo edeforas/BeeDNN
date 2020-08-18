@@ -459,6 +459,7 @@ public:
 };
 //////////////////////////////////////////////////////////////////////////////
 //HardShrink from https://nn.readthedocs.io/en/rtd/transfer/
+// or https://pytorch.org/docs/stable/generated/torch.nn.Hardshrink.html#torch.nn.Hardshrink
 // default lambda is 0.5
 class ActivationHardShrink: public Activation
 {
@@ -488,6 +489,37 @@ public:
 
         return 0.f;
     }
+};
+//////////////////////////////////////////////////////////////////////////////
+//HardSwish from https://pytorch.org/docs/stable/generated/torch.nn.Hardswish.html
+class ActivationHardSwish : public Activation
+{
+public:
+	string name() const override
+	{
+		return "HardSwish";
+	}
+
+	float apply(float x) const override
+	{
+		if (x >= 3.f)
+			return x;
+
+		if (x < -3.f)
+			return 0.f;
+
+		return x*(x+3.f)*(1.f/6.f);
+	}
+	float derivation(float x) const override
+	{
+		if (x >= 3.f)
+			return 1.f;
+
+		if (x < -3.f)
+			return 0.f;
+
+		return  x*(1.f / 3.f) + 0.5f;
+	}
 };
 //////////////////////////////////////////////////////////////////////////////
 //HardTanh from https://cs224d.stanford.edu/lecture_notes/LectureNotes3.pdf
@@ -946,6 +978,31 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+#define CELU_ALPHA (1.f)
+class ActivationCELU : public Activation
+{
+public:
+	string name() const override
+	{
+		return "CELU";
+	}
+
+	float apply(float x) const override
+	{
+		if (x >= 0.f)
+			return x;
+		else
+			return CELU_ALPHA * expm1f(x/ CELU_ALPHA);
+	}
+
+	float derivation(float x) const override
+	{
+		if (x >= 0.f)
+			return 1.f;
+		else
+			return expf(x / CELU_ALPHA);
+	}
+};//////////////////////////////////////////////////////////////////////////////
 #define SELU_LAMBDA (1.05070f)
 #define SELU_ALPHA (1.67326f)
 class ActivationSelu: public Activation
@@ -1354,6 +1411,9 @@ Activation* get_activation(const string& sActivation)
 	else if(sActivation == "BipolarSigmoid")
 		return new ActivationBipolarSigmoid;
 
+	else if (sActivation == "CELU")
+		return new ActivationCELU;
+
 	else if (sActivation == "ComplementaryLogLog")
 		return new ActivationComplementaryLogLog;
 
@@ -1401,6 +1461,9 @@ Activation* get_activation(const string& sActivation)
 
     else if(sActivation=="HardShrink")
         return new ActivationHardShrink;
+
+	else if (sActivation == "HardSwish")
+		return new ActivationHardSwish;
 
     else if(sActivation=="HardTanh")
         return new ActivationHardTanh;
@@ -1509,6 +1572,7 @@ void list_activations_available(vector<string>& vsActivations)
 	vsActivations.push_back("BinaryStep");
 	vsActivations.push_back("Bipolar");
 	vsActivations.push_back("BipolarSigmoid");
+	vsActivations.push_back("CELU");
 	vsActivations.push_back("ComplementaryLogLog");
 	vsActivations.push_back("DivideBy256");
 	vsActivations.push_back("dSiLU");
@@ -1525,6 +1589,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("HardELU");
     vsActivations.push_back("HardSigmoid");
     vsActivations.push_back("HardShrink");
+	vsActivations.push_back("HardSwish");
     vsActivations.push_back("HardTanh");
     vsActivations.push_back("Identity");
 	vsActivations.push_back("ISRLU");
