@@ -1,5 +1,9 @@
-#include "DataSource.h"
-/*
+#include "DataSourceSelector.h"
+
+#include "NetUtil.h"
+#include "MNISTReader.h"
+#include "CIFAR10Reader.h"
+
 ////////////////////////////////////////////////////////////////////////
 void replace_last(string& s, string sOld,string sNew)
 {
@@ -7,19 +11,72 @@ void replace_last(string& s, string sOld,string sNew)
 	if(found != std::string::npos)
 		s.replace(found, sOld.length(), sNew);
 }
-*/
 ////////////////////////////////////////////////////////////////////////
-DataSource::DataSource()
+DataSourceSelector::DataSourceSelector()
 {
 	_bHasTrainData=false;
 	_bHasTestData=false;
 }
 ////////////////////////////////////////////////////////////////////////
-DataSource::~DataSource()
-{ }
+DataSourceSelector::~DataSourceSelector()
+{}
 ////////////////////////////////////////////////////////////////////////
+void DataSourceSelector::write(string& s) const
+{
+	s+=string("DataSource=")+_sName+string("\n");
+}
+////////////////////////////////////////////////////////////////////////
+void DataSourceSelector::read(const string& s)
+{
+	string sVal=NetUtil::find_key(s,"DataSource");
 
-/*bool DataSource::load_mini_mnist() //MNIST decimated 10x for quick tests
+	load(sVal);
+}
+////////////////////////////////////////////////////////////////////////
+bool DataSourceSelector::load(const string& sName)
+{
+	if(sName == _sName)
+		return true; //already loaded
+
+	clear();
+	_sName=sName;
+
+	if (_sName == "")
+		return true;
+	
+	// if has an extension -> custom data text file
+	if(_sName.find('.')!=string::npos)
+		return load_textfile();
+
+	else if(_sName=="MNIST")
+		return load_mnist();
+
+	else if (_sName == "MiniMNIST")
+		return load_mini_mnist();
+
+	else if(_sName=="CIFAR10")
+		return load_cifar10();
+	
+	clear();
+	return false;
+}
+////////////////////////////////////////////////////////////////////////
+bool DataSourceSelector::load_mnist()
+{
+	MNISTReader r;
+	if(!r.read_from_folder(".",_mTrainData,_mTrainTruth,_mTestData,_mTestTruth))
+		return false;
+
+	_mTrainData/=256.f;
+	_mTestData/=256.f;
+
+	_bHasTrainData=true;
+	_bHasTestData=true;
+
+	return true;
+}
+////////////////////////////////////////////////////////////////////////
+bool DataSourceSelector::load_mini_mnist() //MNIST decimated 10x for quick tests
 {
 	if(!load_mnist())
 		return false;
@@ -33,7 +90,7 @@ DataSource::~DataSource()
 	return true;
 }
 ////////////////////////////////////////////////////////////////////////
-/*bool DataSource::load_cifar10()
+bool DataSourceSelector::load_cifar10()
 {
 	CIFAR10Reader r;
 	if(!r.read_from_folder(".",_mTrainData,_mTrainTruth,_mTestData,_mTestTruth))
@@ -47,9 +104,8 @@ DataSource::~DataSource()
 
 	return true;
 }
-/*
 ////////////////////////////////////////////////////////////////////////
-bool DataSource::load_textfile()
+bool DataSourceSelector::load_textfile()
 {
 	//create 4 file names (may not exist)
 	string sTrainData=_sName;
@@ -93,50 +149,67 @@ bool DataSource::load_textfile()
 
 	return has_data();
 }
-*/
 ////////////////////////////////////////////////////////////////////////
-const MatrixFloat& DataSource::train_data() const
+const MatrixFloat& DataSourceSelector::train_data() const
 {
 	return _mTrainData;
 }
 ////////////////////////////////////////////////////////////////////////
-const MatrixFloat& DataSource::train_truth() const
+const MatrixFloat& DataSourceSelector::train_truth() const
 {
 	return _mTrainTruth;
 }
 ////////////////////////////////////////////////////////////////////////
-const MatrixFloat& DataSource::test_data() const
+const MatrixFloat& DataSourceSelector::test_data() const
 {
 	return _mTestData;
 }
 ////////////////////////////////////////////////////////////////////////
-const MatrixFloat& DataSource::test_truth() const
+const MatrixFloat& DataSourceSelector::test_truth() const
 {
 	return _mTestTruth;
 }
 ////////////////////////////////////////////////////////////////////////
-bool DataSource::has_data() const
+bool DataSourceSelector::has_data() const
 {
 	return _bHasTrainData || _bHasTestData;
 }
 ////////////////////////////////////////////////////////////////////////
-bool DataSource::has_train_data() const
+bool DataSourceSelector::has_train_data() const
 {
 	return _bHasTrainData;
 }
 ////////////////////////////////////////////////////////////////////////
-bool DataSource::has_test_data() const
+bool DataSourceSelector::has_test_data() const
 {
 	return _bHasTestData;
 }
 ////////////////////////////////////////////////////////////////////////
-int DataSource::data_size() const
+int DataSourceSelector::data_size() const
 {
 	return (int)_mTrainData.cols();
 }
 ////////////////////////////////////////////////////////////////////////
-int DataSource::annotation_cols() const
+int DataSourceSelector::annotation_cols() const
 {
 	return (int)_mTrainTruth.cols();
+}
+////////////////////////////////////////////////////////////////////////
+void DataSourceSelector::clear()
+{
+	_mTrainData.resize(0,0);
+	_mTrainTruth.resize(0,0);
+	_mTestData.resize(0,0);
+	_mTestTruth.resize(0,0);
+
+	_bHasTestData=false;
+	_bHasTrainData=false;
+
+	_sName="";
+}
+////////////////////////////////////////////////////////////////////////
+const string DataSourceSelector::name() const
+{
+	return _sName;
 }
 ////////////////////////////////////////////////////////////////////////

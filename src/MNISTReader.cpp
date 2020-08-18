@@ -11,29 +11,33 @@
 #include <fstream>
 using namespace std;
 
-//TODO clean everything , fix warnings (at least it works)
-
 ////////////////////////////////////////////////////////////////////////////////////
-bool MNISTReader::read_from_folder(const string& sFolder,MatrixFloat& mRefImages,MatrixFloat& mRefLabels,MatrixFloat& mTestImages,MatrixFloat& mTestLabels)
+bool MNISTReader::load(const string& sName)
 {
-    string sRefImages="train-images.idx3-ubyte";
-    string sRefLabels="train-labels.idx1-ubyte";
-    string sTestImages="t10k-images.idx3-ubyte";
-    string sTestLabels="t10k-labels.idx1-ubyte";
+	string sRefImages = "train-images.idx3-ubyte";
+	string sRefLabels = "train-labels.idx1-ubyte";
+	string sTestImages = "t10k-images.idx3-ubyte";
+	string sTestLabels = "t10k-labels.idx1-ubyte";
 
-    if(!read_Matrix(sRefImages, mRefImages))
-        return false;
+	if (!read_Matrix(sRefImages, _mTrainData))
+		return false;
 
-    if(!read_Matrix(sRefLabels, mRefLabels))
-        return false;
+	if (!read_Matrix(sRefLabels, _mTrainTruth))
+		return false;
 
-    if(!read_Matrix(sTestImages, mTestImages))
-        return false;
+	if (!read_Matrix(sTestImages, _mTestData))
+		return false;
 
-    if(!read_Matrix(sTestLabels, mTestLabels))
-        return false;
+	if (!read_Matrix(sTestLabels, _mTestTruth))
+		return false;
 
-    return true;
+	_mTrainData /= 256.f;
+	_mTestData /= 256.f;
+
+	_bHasTrainData = true;
+	_bHasTestData = true;
+
+	return true;
 }
 ////////////////////////////////////////////////////////////////////////////////////
 bool MNISTReader::read_Matrix(string sName,MatrixFloat& m)

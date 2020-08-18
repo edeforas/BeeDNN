@@ -1,18 +1,25 @@
-#ifndef DataSource_
-#define DataSource_
+#ifndef DataSourceSelector_
+#define DataSourceSelector_
 
 #include <string>
 using namespace std;
 
 #include "Matrix.h"
 
-class DataSource
+class DataSourceSelector
 {
 public:
-    DataSource();
-    virtual ~DataSource();
+    DataSourceSelector();
+    virtual ~DataSourceSelector();
 
-	virtual bool load(const string & sName) = 0;
+    void clear();
+
+    void write(string& s) const;
+    void read(const string& s);
+
+    const string name() const;
+
+    virtual bool load(const string & sName);
 
     const MatrixFloat& train_data() const;
     const MatrixFloat& train_truth() const;
@@ -35,6 +42,13 @@ protected:
 
     bool _bHasTestData;
     bool _bHasTrainData;
+	string _sName;
+
+private:
+	bool load_mnist();
+	bool load_mini_mnist();
+	bool load_cifar10();
+	bool load_textfile();	
 };
 
 #endif
