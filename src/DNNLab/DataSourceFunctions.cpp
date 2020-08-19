@@ -1,7 +1,7 @@
 #include "DataSourceFunctions.h"
 
 ////////////////////////////////////////////////////////////////////////
-DataSourceFunctions::DataSourceFunctions() : DataSource()
+DataSourceFunctions::DataSourceFunctions() : DataSourceSelector()
 { }
 ////////////////////////////////////////////////////////////////////////
 DataSourceFunctions::~DataSourceFunctions()
@@ -9,7 +9,7 @@ DataSourceFunctions::~DataSourceFunctions()
 ////////////////////////////////////////////////////////////////////////
 bool DataSourceFunctions::load(const string& sName)
 {
-	if (DataSource::load(sName))
+	if (DataSourceSelector::load(sName))
 		return true;
 
 	_sName = sName;

@@ -13,7 +13,7 @@ using namespace std;
 #include "Net.h"
 #include "NetTrain.h"
 #include "NetUtil.h"
-#include "DataSource.h"
+#include "CIFAR10Reader.h"
 #include "ConfusionMatrix.h"
 
 #include "LayerActivation.h"
@@ -27,7 +27,7 @@ using namespace std;
 
 Net net;
 NetTrain netTrain;
-DataSource ds;
+CIFAR10Reader ds;
 int iEpoch;
 chrono::steady_clock::time_point start;
 
@@ -67,7 +67,7 @@ int main()
 	//load and normalize CIFAR10 data
     cout << "Loading CIFAR10 database..." << endl;
     
-    if(!ds.load("CIFAR10")) // also divide images by 256
+    if(!ds.load(".")) // also divide images by 256
 	{
 		cout << "CIFAR10 samples not found, please check the CIFAR10 *.bin files are in the executable folder" << endl;
 		return -1;

@@ -5,9 +5,9 @@
 using namespace std;
 
 #include "Matrix.h"
-#include "DataSource.h"
+#include "DataSourceSelector.h"
 
-class DataSourceFunctions : public DataSource
+class DataSourceFunctions : public DataSourceSelector
 {
 public:
 	DataSourceFunctions();

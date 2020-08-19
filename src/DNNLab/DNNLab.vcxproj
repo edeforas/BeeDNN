@@ -212,6 +212,7 @@
     <ClCompile Include="..\LayerGlobalAffine.cpp" />
     <ClCompile Include="..\LayerSoftmin.cpp" />
     <ClCompile Include="DataSourceFunctions.cpp" />
+    <ClCompile Include="DataSourceSelector.cpp" />
     <ClCompile Include="FrameGlobal.cpp" />
     <ClCompile Include="FrameLearning.cpp" />
     <ClCompile Include="FrameNetwork.cpp" />
@@ -283,6 +284,7 @@
     <ClInclude Include="..\LayerUniformNoise.h" />
     <ClInclude Include="..\Loss.h" />
     <ClInclude Include="DataSourceFunctions.h" />
+    <ClInclude Include="DataSourceSelector.h" />
     <ClInclude Include="MLEngineBeeDnn.h" />
     <ClInclude Include="..\MNISTReader.h" />
     <ClInclude Include="..\Matrix.h" />

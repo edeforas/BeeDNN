@@ -14,6 +14,11 @@ using namespace std;
 // file format and data at: https://www.cs.toronto.edu/~kriz/cifar.html
 
 ////////////////////////////////////////////////////////////////////////////////////
+bool CIFAR10Reader::load(const string& sFolder)
+{
+	return read_from_folder(sFolder, _mTrainData, _mTrainTruth, _mTestData, _mTestTruth);
+}
+////////////////////////////////////////////////////////////////////////////////////
 bool CIFAR10Reader::read_from_folder(const string& sFolder,MatrixFloat& mRefImages,MatrixFloat& mRefLabels,MatrixFloat& mTestImages,MatrixFloat& mTestLabels)
 {
 	string sRefImages1=sFolder+"\\data_batch_1.bin";
@@ -63,6 +68,9 @@ bool CIFAR10Reader::read_from_folder(const string& sFolder,MatrixFloat& mRefImag
 	//for test, we can write directly into the matrix
 	if(!read_batch(sTestImages,mTestImages, mTestLabels))
 		return false;
+
+	_mTrainData /= 255.f;
+	_mTestData /= 255.f;
 
 	return true;
 }

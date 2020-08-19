@@ -49,13 +49,11 @@ int main()
 	//load and normalize MNIST data
     cout << "Loading MNIST database..." << endl;
     MNISTReader mr;
-    if(!mr.read_from_folder(".",mRefImages,mRefLabels, mValImages,mValLabels))
+    if(!mr.load("."))
     {
         cout << "MNIST samples not found, please check the *.ubyte files are in the executable folder" << endl;
         return -1;
     }
-	mValImages/= 256.f;
-	mRefImages/= 256.f;
   
 	//create simple net:
 	net.add(new LayerPoolMax2D(28,28,1, 2, 2)); //input rows, input cols,input channels, factor rows, factor cols
@@ -70,8 +68,8 @@ int main()
 	netTrain.set_batchsize(64);
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_epoch_callback(epoch_callback); //optional, show progress
-	netTrain.set_train_data(mRefImages, mRefLabels);
-	netTrain.set_validation_data(mValImages, mValLabels); //optional, not used for training, helps to keep the final best model
+	netTrain.set_train_data(mr.train_data(), mr.train_truth());
+	netTrain.set_validation_data(mr.test_data(),mr.test_truth()); //optional, not used for training, helps to keep the final best model
 
 	// train net
 	cout << "Training..." << endl << endl;
@@ -82,13 +80,13 @@ int main()
 	MatrixFloat mClassPredicted;
 	net.classify(mRefImages, mClassPredicted);
 	ConfusionMatrix cmRef;
-	ClassificationResult crRef = cmRef.compute(mRefLabels, mClassPredicted);
+	ClassificationResult crRef = cmRef.compute(mr.train_truth(), mClassPredicted);
 	cout << "Train accuracy: " << crRef.accuracy << " %" << endl;
 
 	MatrixFloat mClassTest;
 	net.classify(mValImages, mClassTest);
 	ConfusionMatrix cmTest;
-	ClassificationResult crTest = cmTest.compute(mValLabels, mClassTest);
+	ClassificationResult crTest = cmTest.compute(mr.test_truth(), mClassTest);
 	cout << "Val accuracy: " << crTest.accuracy << " %" << endl;
 	cout << "Val confusion matrix:" << endl << toString(crTest.mConfMat) << endl;
 	

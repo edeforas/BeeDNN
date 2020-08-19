@@ -14,12 +14,15 @@
 #include <string>
 using namespace std;
 
-class CIFAR10Reader
+#include "DataSource.h"
+
+class CIFAR10Reader : public DataSource
 {
 public:
-    bool read_from_folder(const string& sFolder,MatrixFloat& mRefImages,MatrixFloat& mRefLabels,MatrixFloat& mTestImages,MatrixFloat& mTestLabels);
+    virtual bool load(const string& sFolder) override;
 
 private:
+    bool read_from_folder(const string& sFolder,MatrixFloat& mRefImages,MatrixFloat& mRefLabels,MatrixFloat& mTestImages,MatrixFloat& mTestLabels);
     bool read_batch(string sName,MatrixFloat& mData,MatrixFloat& mTruth);
 };
 

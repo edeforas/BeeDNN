@@ -64,11 +64,13 @@ bool DataSourceSelector::load(const string& sName)
 bool DataSourceSelector::load_mnist()
 {
 	MNISTReader r;
-	if(!r.read_from_folder(".",_mTrainData,_mTrainTruth,_mTestData,_mTestTruth))
+	if(!r.load("."))
 		return false;
 
-	_mTrainData/=256.f;
-	_mTestData/=256.f;
+	_mTrainData = r.train_data();
+	_mTrainTruth = r.train_truth();
+	_mTestData = r.test_data();
+	_mTestTruth = r.test_truth();
 
 	_bHasTrainData=true;
 	_bHasTestData=true;

@@ -52,15 +52,11 @@ int main()
 	MatrixFloat mRefImages, mRefLabels, mValImages, mValLabels;
 	cout << "Loading MNIST database..." << endl;
     MNISTReader mr;
-    if(!mr.read_from_folder(".",mRefImages,mRefLabels, mValImages, mValLabels))
+    if(!mr.load("."))
     {
         cout << "MNIST samples not found, please check the *-ubyte files are in the executable folder" << endl;
         return -1;
     }
-
-	//normalize pixels data
-	mValImages /= 256.f;
-	mRefImages /= 256.f;
 
 	//create convolutional net
 	Net net;
@@ -87,8 +83,8 @@ int main()
 	NetTrain netTrain;
 	netTrain.set_epochs(50);
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
-	netTrain.set_train_data(mRefImages, mRefLabels);
-	netTrain.set_validation_data(mValImages, mValLabels);
+	netTrain.set_train_data(mr.train_data(), mr.train_truth());
+	netTrain.set_validation_data(mr.test_data(),mr.test_truth());
 	netTrain.set_net(net);
 
 	//create meta optimizer to run in parallel

@@ -178,6 +178,7 @@
   <ItemGroup>
     <ClCompile Include="..\Activation.cpp" />
     <ClCompile Include="..\ConfusionMatrix.cpp" />
+    <ClCompile Include="..\DataSource.cpp" />
     <ClCompile Include="..\Layer.cpp" />
     <ClCompile Include="..\LayerActivation.cpp" />
     <ClCompile Include="..\LayerBias.cpp" />
@@ -206,6 +207,7 @@
   <ItemGroup>
     <ClInclude Include="..\Activation.h" />
     <ClInclude Include="..\ConfusionMatrix.h" />
+    <ClInclude Include="..\DataSource.h" />
     <ClInclude Include="..\Layer.h" />
     <ClInclude Include="..\LayerActivation.h" />
     <ClInclude Include="..\LayerBias.h" />
