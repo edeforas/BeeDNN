@@ -207,6 +207,7 @@
     <ClCompile Include="..\Activation.cpp" />
     <ClCompile Include="..\CIFAR10Reader.cpp" />
     <ClCompile Include="..\ConfusionMatrix.cpp" />
+    <ClCompile Include="..\CsvFileReader.cpp" />
     <ClCompile Include="..\DataSource.cpp" />
     <ClCompile Include="..\LayerAffine.cpp" />
     <ClCompile Include="..\LayerGlobalAffine.cpp" />
@@ -252,6 +253,7 @@
     <ClInclude Include="..\Activation.h" />
     <ClInclude Include="..\CIFAR10Reader.h" />
     <ClInclude Include="..\ConfusionMatrix.h" />
+    <ClInclude Include="..\CsvFileReader.h" />
     <ClInclude Include="..\DataSource.h" />
     <ClInclude Include="..\LayerAffine.h" />
     <ClInclude Include="..\LayerGlobalAffine.h" />

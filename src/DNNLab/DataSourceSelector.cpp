@@ -3,14 +3,8 @@
 #include "NetUtil.h"
 #include "MNISTReader.h"
 #include "CIFAR10Reader.h"
+#include "CsvFileReader.h"
 
-////////////////////////////////////////////////////////////////////////
-void replace_last(string& s, string sOld,string sNew)
-{
-	auto found = s.rfind(sOld);
-	if(found != std::string::npos)
-		s.replace(found, sOld.length(), sNew);
-}
 ////////////////////////////////////////////////////////////////////////
 DataSourceSelector::DataSourceSelector()
 {
@@ -95,61 +89,35 @@ bool DataSourceSelector::load_mini_mnist() //MNIST decimated 10x for quick tests
 bool DataSourceSelector::load_cifar10()
 {
 	CIFAR10Reader r;
-	if(!r.read_from_folder(".",_mTrainData,_mTrainTruth,_mTestData,_mTestTruth))
+	if (!r.load("."))
 		return false;
 
-	_mTrainData/=256.f;
-	_mTestData/=256.f;
+	_mTrainData = r.train_data();
+	_mTrainTruth = r.train_truth();
+	_mTestData = r.test_data();
+	_mTestTruth = r.test_truth();
 
-	_bHasTrainData=true;
-	_bHasTestData=true;
+	_bHasTrainData = true;
+	_bHasTestData = true;
 
 	return true;
 }
 ////////////////////////////////////////////////////////////////////////
 bool DataSourceSelector::load_textfile()
 {
-	//create 4 file names (may not exist)
-	string sTrainData=_sName;
-	string sTrainTruth=_sName;
-	string sTestData=_sName;
-	string sTestTruth=_sName;
+	CsvFileReader r;
+	if (!r.load(_sName))
+		return false;
 
-	//create sTrainData
-	replace_last(sTrainData,"test","train");
-	replace_last(sTrainData,"truth","data");
+	_mTrainData = r.train_data();
+	_mTrainTruth = r.train_truth();
+	_mTestData = r.test_data();
+	_mTestTruth = r.test_truth();
 
-	//create sTrainTruth
-	replace_last(sTrainTruth,"test","train");
-	replace_last(sTrainTruth,"data","truth");
+	_bHasTrainData = r.has_train_data();
+	_bHasTestData = r.has_test_data();
 
-	//create sTestData
-	replace_last(sTestData,"train","test");
-	replace_last(sTestData,"truth","data");
-
-	//create sTestTruth
-	replace_last(sTestTruth,"train","test");
-	replace_last(sTestTruth,"data","truth");
-
-	//try to load every file
-	_mTrainData=fromFile(sTrainData);
-	_mTrainTruth=fromFile(sTrainTruth);
-
-	if((sTrainData!=sTestData) && (sTrainTruth!=sTestTruth))
-	{
-		_mTestData=fromFile(sTestData);
-		_mTestTruth=fromFile(sTestTruth);
-	}
-	else
-	{
-		_mTestData.resize(0,0);
-		_mTestTruth.resize(0,0);
-	}
-
-	_bHasTrainData=(_mTrainData.size()!=0) && (_mTrainTruth.size()!=0) ;
-	_bHasTestData=(_mTestData.size()!=0) && (_mTestTruth.size()!=0) ;
-
-	return has_data();
+	return true;
 }
 ////////////////////////////////////////////////////////////////////////
 const MatrixFloat& DataSourceSelector::train_data() const
