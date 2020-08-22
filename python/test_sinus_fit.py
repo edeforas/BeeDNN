@@ -29,4 +29,4 @@ def test_fit():
 	x = sample
 	y = n.forward(x)
 	dist=np.abs(y-truth);
-	assert np.max(dist)<0.1
+	assert np.max(dist)<0.15
