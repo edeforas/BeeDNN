@@ -79,8 +79,8 @@ void check_matrixView()
 
 	mf(2) = 333;
 	test(is_near(mV(2), 333), "mV fromRawBuffer() must not copy the data");
-	test(is_near(mV2(2),333),"mV2 fromRawBuffer() must not copy the data");
-	test(is_near(mV3(2), 333), "mV3 fromRawBuffer() must not copy the data");
+	test(is_near(mV2(2),2),"mV2 fromRawBuffer() must copy the data");
+	test(is_near(mV3(2), 2), "mV3 fromRawBuffer() must copy the data");
 
 	cout << "check_matrixView finished" << endl;
 }
@@ -99,11 +99,104 @@ void test_bernoulli()
 	cout << "Bernoulli Time elapsed: " << delta << " ms. Mean= " << m.mean() << endl;
 }
 ////////////////////////////////////////////////////////
+void GEMM_naive(const MatrixFloat& a, const MatrixFloat& b, MatrixFloat& ab)
+{
+	ab.resize(a.rows(), b.cols());
+
+	Index rows = ab.rows();
+	Index cols = ab.cols();
+	Index inCols = a.cols();
+	
+	for (Index r = 0; r < rows; r++)
+	{
+		for (Index c = 0; c < cols; c++)
+		{
+			float temp = 0.f;
+
+			for (Index k = 0; k < inCols; k++)
+				temp += a(r, k)*b(k, c);
+
+			ab(r, c) = temp;
+		}
+	}
+}
+////////////////////////////////////////////////////////
+void GEMM_naive2(const MatrixFloat& a, const MatrixFloat& b, MatrixFloat& ab)
+{
+	ab.resize(a.rows(), b.cols());
+
+	Index rows = ab.rows();
+	Index cols = ab.cols();
+	Index inDepth = a.cols();
+
+	vector<float> oneCol(1000);
+
+	for (Index c = 0; c < cols; c++)
+	{
+		//unstripe data
+		for (Index r = 0; r < inDepth; r++)
+			oneCol[r] = b(r, c);
+
+	for (Index r = 0; r < rows; r++)
+	{
+			float temp = 0.f;
+
+			const float * pA = a.row(r).data();
+			const float * pB = oneCol.data();
+
+			for (Index k = 0; k < inDepth; k++)
+				temp += (*pA++)*(*pB++);
+
+			ab(r, c) = temp;
+		}
+	}
+}
+////////////////////////////////////////////////////////
+void test_GEMM()
+{
+	MatrixFloat m1(1000, 1000);
+	m1.setRandom();
+
+	MatrixFloat m2(1000, 1000);
+	m2.setRandom();
+
+	{
+		chrono::steady_clock::time_point start = chrono::steady_clock::now();
+		MatrixFloat m3 = m1 * m2;
+		chrono::steady_clock::time_point end = chrono::steady_clock::now();
+
+		auto delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+		cout << "Optim GEMM time elapsed: " << delta << " ms" << endl;
+	}
+
+	{
+		chrono::steady_clock::time_point start = chrono::steady_clock::now();
+		MatrixFloat m3;
+		GEMM_naive (m1, m2,m3);
+		chrono::steady_clock::time_point end = chrono::steady_clock::now();
+
+		auto delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+		cout << "Naive GEMM time elapsed: " << delta << " ms" << endl;
+	}
+
+	{
+		chrono::steady_clock::time_point start = chrono::steady_clock::now();
+		MatrixFloat m3;
+		GEMM_naive2(m1, m2, m3);
+		chrono::steady_clock::time_point end = chrono::steady_clock::now();
+
+		auto delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+		cout << "Naive2 GEMM time elapsed: " << delta << " ms" << endl;
+	}
+
+}
+////////////////////////////////////////////////////////
 int main()
 {
 	elementary_tests();
 	check_matrixView();
 	test_bernoulli();
+	test_GEMM();
 
     cout << "Tests finished." << endl;
     return 0;
