@@ -129,7 +129,7 @@ void GEMM_naive2(const MatrixFloat& a, const MatrixFloat& b, MatrixFloat& ab)
 	Index cols = ab.cols();
 	Index inDepth = a.cols();
 
-	vector<float> oneCol(1000);
+	vector<float> oneCol(inDepth);
 
 	for (Index c = 0; c < cols; c++)
 	{
@@ -154,41 +154,40 @@ void GEMM_naive2(const MatrixFloat& a, const MatrixFloat& b, MatrixFloat& ab)
 ////////////////////////////////////////////////////////
 void test_GEMM()
 {
-	MatrixFloat m1(1000, 1000);
-	m1.setRandom();
+	cout << endl << "GEMM test:" << endl;
 
-	MatrixFloat m2(1000, 1000);
-	m2.setRandom();
+	chrono::steady_clock::time_point start, end;
 
+	for (int sz = 1; sz <= 2048; sz*=2)
 	{
-		chrono::steady_clock::time_point start = chrono::steady_clock::now();
-		MatrixFloat m3 = m1 * m2;
-		chrono::steady_clock::time_point end = chrono::steady_clock::now();
+		MatrixFloat m1(sz, sz);
+		m1.setRandom();
 
-		auto delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-		cout << "Optim GEMM time elapsed: " << delta << " ms" << endl;
+		MatrixFloat m2(sz, sz);
+		m2.setRandom();
+
+		start = chrono::steady_clock::now();
+		MatrixFloat m3optim= m1 * m2;
+		end = chrono::steady_clock::now();
+		long long deltaOptim = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+
+		start = chrono::steady_clock::now();
+		MatrixFloat m3Naive;
+		GEMM_naive(m1, m2, m3Naive);
+		end = chrono::steady_clock::now();
+		long long deltaNaive = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+		
+		start = chrono::steady_clock::now();
+		MatrixFloat m3Naive2;
+		GEMM_naive2(m1, m2, m3Naive2);
+		end = chrono::steady_clock::now();
+		long long deltaNaive2 = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+
+		float fErrorNaive = (m3optim - m3Naive).cwiseAbs().maxCoeff();
+		float fErrorNaive2 = (m3optim - m3Naive2).cwiseAbs().maxCoeff();
+
+		cout << "Optim/Naive/Naive2 size:" << sz << " time: " << deltaOptim << "/" << deltaNaive << "/" << deltaNaive2 << " errNaive: " << fErrorNaive << " errNaive2: " << fErrorNaive2 << endl;
 	}
-
-	{
-		chrono::steady_clock::time_point start = chrono::steady_clock::now();
-		MatrixFloat m3;
-		GEMM_naive (m1, m2,m3);
-		chrono::steady_clock::time_point end = chrono::steady_clock::now();
-
-		auto delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-		cout << "Naive GEMM time elapsed: " << delta << " ms" << endl;
-	}
-
-	{
-		chrono::steady_clock::time_point start = chrono::steady_clock::now();
-		MatrixFloat m3;
-		GEMM_naive2(m1, m2, m3);
-		chrono::steady_clock::time_point end = chrono::steady_clock::now();
-
-		auto delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-		cout << "Naive2 GEMM time elapsed: " << delta << " ms" << endl;
-	}
-
 }
 ////////////////////////////////////////////////////////
 int main()
