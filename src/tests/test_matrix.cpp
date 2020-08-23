@@ -5,6 +5,53 @@ using namespace std;
 
 #include "Matrix.h"
 
+//from https://bulyaki.wordpress.com/2018/05/14/single-and-double-precision-4x4-and-8x8-block-matrix-products-using-sse2-avx-and-avx512-intrinsics/
+struct Mat44f
+{
+	float value[4][4];
+};
+void MultiplyAndAddMM4x4F(Mat44f & result, const Mat44f & MatrixA, const Mat44f & MatrixB)
+{
+	__m128 rightRow[4];
+	__m128 resultRow[4];
+	for (int i = 0; i < 4; ++i)
+	{
+		rightRow[i] = _mm_loadu_ps((const float *)MatrixB.value[i]);
+		resultRow[i] = _mm_loadu_ps((const float *)result.value[i]);
+	}
+	for (int i = 0; i < 4; ++i)
+	{
+		resultRow[i] = _mm_add_ps(resultRow[i], _mm_mul_ps(rightRow[0], _mm_set1_ps(MatrixA.value[i][0])));
+		resultRow[i] = _mm_add_ps(resultRow[i], _mm_mul_ps(rightRow[1], _mm_set1_ps(MatrixA.value[i][1])));
+		resultRow[i] = _mm_add_ps(resultRow[i], _mm_mul_ps(rightRow[2], _mm_set1_ps(MatrixA.value[i][2])));
+		resultRow[i] = _mm_add_ps(resultRow[i], _mm_mul_ps(rightRow[3], _mm_set1_ps(MatrixA.value[i][3])));
+
+		_mm_storeu_ps((float *)result.value[i], resultRow[i]);
+	}
+}
+////////////////////////////////////////////////////////
+// https://stackoverflow.com/questions/18499971/efficient-4x4-matrix-multiplication-c-vs-assembly
+void M4x4_SSE(const float *A,const float *B, float *C)
+{
+	__m128 row1 = _mm_load_ps(&B[0]);
+	__m128 row2 = _mm_load_ps(&B[4]);
+	__m128 row3 = _mm_load_ps(&B[8]);
+	__m128 row4 = _mm_load_ps(&B[12]);
+	for (int i = 0; i < 4; i++) {
+		__m128 brod1 = _mm_set1_ps(A[4 * i + 0]);
+		__m128 brod2 = _mm_set1_ps(A[4 * i + 1]);
+		__m128 brod3 = _mm_set1_ps(A[4 * i + 2]);
+		__m128 brod4 = _mm_set1_ps(A[4 * i + 3]);
+		__m128 row = _mm_add_ps(
+			_mm_add_ps(
+				_mm_mul_ps(brod1, row1),
+				_mm_mul_ps(brod2, row2)),
+			_mm_add_ps(
+				_mm_mul_ps(brod3, row3),
+				_mm_mul_ps(brod4, row4)));
+		_mm_store_ps(&C[4 * i], row);
+	}
+}
 /////////////////////////////////////////////////////////////////////
 // for testU only
 inline bool is_near(double a, double b, double tolerancis = 1.e-10)
@@ -189,13 +236,56 @@ void test_GEMM()
 		cout << "Optim/Naive/Naive2 size:" << sz << " time: " << deltaOptim << "/" << deltaNaive << "/" << deltaNaive2 << " errNaive: " << fErrorNaive << " errNaive2: " << fErrorNaive2 << endl;
 	}
 }
+
+////////////////////////////////////////////////////////
+void test_sse()
+{
+	Mat44f m1,m2,mr;
+	MatrixFloat mf1(4, 4), mf2(4, 4),mfr;
+	float mt1[16], mt2[16], mt3[16];
+	for(int i=0;i<4;i++)
+		for (int j = 0; j < 4; j++)
+		{
+			float a = (float)(i + j * 2 + 1);
+			float b = (float)(i - j);
+
+			m1.value[i][j] = a;
+			m2.value[i][j] = b;
+			mr.value[i][j] = 0;
+
+			mf1(i, j) = a;
+			mf2(i, j) = b;
+
+			mt1[i * 4 + j] = a;
+			mt2[i * 4 + j] = b;
+			mt3[i * 4 + j] = 0;
+		}
+
+	mfr = mf1 * mf2; //eigen mmult
+	for (int i = 0; i < 4; i++)
+		for (int j = 0; j < 4; j++)
+			cout << mfr(i, j) << " ";
+
+	cout << endl;
+
+	MultiplyAndAddMM4x4F(mr, m1, m2);
+	for (int i = 0; i < 4; i++)
+		for (int j = 0; j < 4; j++)
+			cout << mr.value[i][j] << " ";
+
+	cout << endl;
+	M4x4_SSE(mt1, mt2, mt3);
+	for (int i = 0; i < 16; i++)
+		cout << mt3[i] << " ";
+}
 ////////////////////////////////////////////////////////
 int main()
 {
-	elementary_tests();
-	check_matrixView();
-	test_bernoulli();
-	test_GEMM();
+//	elementary_tests();
+//	check_matrixView();
+//	test_bernoulli();
+//	test_GEMM();
+	test_sse();
 
     cout << "Tests finished." << endl;
     return 0;
