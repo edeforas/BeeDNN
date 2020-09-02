@@ -1,4 +1,4 @@
-// simple text prediction using a FC layer :
+// simple text prediction using a dense layer and windowed data:
 
 #include <iostream>
 #include <chrono>
@@ -6,9 +6,8 @@ using namespace std;
 
 #include "Net.h"
 #include "NetTrain.h"
-#include "MNISTReader.h"
-#include "ConfusionMatrix.h"
 
+#include "ConfusionMatrix.h"
 #include "LayerActivation.h"
 #include "LayerDense.h"
 #include "LayerDropout.h"
@@ -16,7 +15,6 @@ using namespace std;
 
 Net net;
 NetTrain netTrain;
-MatrixFloat mRefImages, mRefLabels, mValImages, mValLabels;
 int iEpoch;
 chrono::steady_clock::time_point start;
 
@@ -38,15 +36,16 @@ void epoch_callback()
 //////////////////////////////////////////////////////////////////////////////
 int main()
 {
-	cout << "simple  classification MNIST with a dense layer" << endl;
-	cout << "validation accuracy > 98.1%, after 15 epochs (2s by epochs)" << endl;
+#if 0
 
+	cout << "simple text prediction with dense layer" << endl;
+	
     iEpoch = 0;
 
 	//load and normalize MNIST data
     cout << "Loading MNIST database..." << endl;
-    MNISTReader mr;
-    if(!mr.load("."))
+   // MNISTReader mr;
+  //  if(!mr.load("."))
     {
         cout << "MNIST samples not found, please check the *.ubyte files are in the executable folder" << endl;
         return -1;
@@ -95,5 +94,6 @@ int main()
 	}
 
 	cout << "Test succeded." << endl;
-    return 0;
+	#endif
+	return 0;
 }

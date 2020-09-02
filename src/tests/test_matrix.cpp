@@ -135,15 +135,29 @@ void check_matrixView()
 void test_bernoulli()
 {
 	cout << "test_bernoulli:" << endl;
-
 	MatrixFloat m(1000, 1000);
+
 	chrono::steady_clock::time_point start = chrono::steady_clock::now();
-	for(int i=1;i<10;i++)
-		setQuickBernoulli(m, 0.3f);
+	for (int i = 1; i < 10; i++)
+	{
+		bernoulli_distribution dis(0.3f);
+		for (Index i = 0; i < m.size(); i++)
+			m(i) = (float)(dis(randomEngine())); //slow 
+	}
 
 	chrono::steady_clock::time_point end = chrono::steady_clock::now();
 	auto delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-	cout << "Bernoulli Time elapsed: " << delta << " ms. Mean= " << m.mean() << endl;
+	cout << "Slow Bernoulli Time elapsed: " << delta << " ms. Mean= " << m.mean() << endl;
+	test(is_near(m.mean(),0.3f, 0.001),"Mean must be near 0.3f");
+
+	start = chrono::steady_clock::now();
+	for(int i=1;i<10;i++)
+		setQuickBernoulli(m, 0.3f);
+
+	 end = chrono::steady_clock::now();
+	 delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+	cout << "Quick Bernoulli Time elapsed: " << delta << " ms. Mean= " << m.mean() << endl;
+	test(is_near(m.mean(), 0.3f, 0.001), "Mean must be near 0.3f");
 }
 ////////////////////////////////////////////////////////
 void GEMM_naive(const MatrixFloat& a, const MatrixFloat& b, MatrixFloat& ab)
@@ -184,10 +198,9 @@ void GEMM_naive2(const MatrixFloat& a, const MatrixFloat& b, MatrixFloat& ab)
 		for (Index r = 0; r < inDepth; r++)
 			oneCol[r] = b(r, c);
 
-	for (Index r = 0; r < rows; r++)
-	{
+		for (Index r = 0; r < rows; r++)
+		{
 			float temp = 0.f;
-
 			const float * pA = a.row(r).data();
 			const float * pB = oneCol.data();
 
@@ -236,7 +249,6 @@ void test_GEMM()
 		cout << "Optim/Naive/Naive2 size:" << sz << " time: " << deltaOptim << "/" << deltaNaive << "/" << deltaNaive2 << " errNaive: " << fErrorNaive << " errNaive2: " << fErrorNaive2 << endl;
 	}
 }
-
 ////////////////////////////////////////////////////////
 void test_sse()
 {
@@ -281,10 +293,10 @@ void test_sse()
 ////////////////////////////////////////////////////////
 int main()
 {
-//	elementary_tests();
-//	check_matrixView();
-//	test_bernoulli();
-//	test_GEMM();
+	elementary_tests();
+	check_matrixView();
+	test_bernoulli();
+	test_GEMM();
 	test_sse();
 
     cout << "Tests finished." << endl;

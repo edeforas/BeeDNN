@@ -18,7 +18,6 @@ using namespace std;
 
 Net net;
 NetTrain netTrain;
-MatrixFloat mRefImages, mRefLabels, mValImages, mValLabels;
 int iEpoch;
 chrono::steady_clock::time_point start;
 
@@ -77,15 +76,15 @@ int main()
 
 	// show train results
 	MatrixFloat mClassPredicted;
-	net.classify(mRefImages, mClassPredicted);
+	net.classify(mr.train_data(), mClassPredicted);
 	ConfusionMatrix cmRef;
 	ClassificationResult crRef = cmRef.compute(mr.train_truth(), mClassPredicted);
 	cout << "Train accuracy: " << crRef.accuracy << " %" << endl;
 
 	MatrixFloat mClassTest;
-	net.classify(mValImages, mClassTest);
+	net.classify(mr.test_data(), mClassTest);
 	ConfusionMatrix cmVal;
-	ClassificationResult crVal = cmVal.compute(mr.train_truth(), mClassTest);
+	ClassificationResult crVal = cmVal.compute(mr.test_truth(), mClassTest);
 	cout << "Validation accuracy: " << crVal.accuracy << " %" << endl;
 	cout << "Validation confusion matrix:" << endl << toString(crVal.mConfMat) << endl;
 

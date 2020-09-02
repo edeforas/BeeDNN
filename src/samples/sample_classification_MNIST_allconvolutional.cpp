@@ -19,7 +19,6 @@ using namespace std;
 #include "LayerSoftmax.h"
 
 NetTrain netTrain;
-MatrixFloat mRefImages, mRefLabels, mValImages, mValLabels;
 int iEpoch;
 chrono::steady_clock::time_point start;
 
@@ -94,13 +93,13 @@ int main()
 
 	// show train results
 	MatrixFloat mClassPredicted;
-	net.classify(mRefImages, mClassPredicted);
+	net.classify(mr.train_data(), mClassPredicted);
 	ConfusionMatrix cmRef;
 	ClassificationResult crRef = cmRef.compute(mr.train_truth(), mClassPredicted);
 	cout << "Ref accuracy: " << crRef.accuracy << " %" << endl;
 
 	MatrixFloat mClassTest;
-	net.classify(mValImages, mClassTest);
+	net.classify(mr.test_data(), mClassTest);
 	ConfusionMatrix cmTest;
 	ClassificationResult crTest = cmTest.compute(mr.test_truth(), mClassTest);
 	cout << "Val accuracy: " << crTest.accuracy << " %" << endl;
