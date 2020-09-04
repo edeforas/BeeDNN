@@ -290,7 +290,7 @@ bool toFile(const string& sFile, const MatrixFloat & m)
     for (Index iL = 0; iL < m.rows(); iL++)
     {
         for (Index iR = 0; iR < m.cols(); iR++)
-            f << m(iL, iR);
+            f << m(iL, iR) << " ";
         f << endl;
     }
 

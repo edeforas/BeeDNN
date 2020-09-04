@@ -48,37 +48,51 @@ int main()
 
     iEpoch = 0;
 
-	// convert time series to windowed datas (for simple dense net), not test data here
-	int iWindowSize = 20;
-	MatrixFloat mDataTrain, mTruthTrain;
-	TimeSeriesUtil::generate_windowed_data(mr.train_data(), iWindowSize, mDataTrain);
+	// convert time series to windowed datas (for simple dense net), not test data needed here
+	int iWindowSize = 10;
+	MatrixFloat mDataTrainWindowed, mTruthTrain;
+	TimeSeriesUtil::generate_windowed_data(mr.train_data(), iWindowSize, mDataTrainWindowed);
 	mTruthTrain = rowView(mr.train_data(), iWindowSize, mr.train_data().rows()); //the 10 samples in data gives 1 predicted sample in truth, this is why we start at 10
 
 	//create simple net, iWindowSize input, one output, 10 hidden neurons
-	net.add(new LayerDense(iWindowSize, 64));
+	net.add(new LayerDense(iWindowSize, 256));
 	net.add(new LayerActivation("Relu"));
 	net.add(new LayerDropout(0.3f)); //reduce overfitting
-	net.add(new LayerDense(64, 64));
+	net.add(new LayerDense(256, 64));
 	net.add(new LayerActivation("Relu"));
 	net.add(new LayerDropout(0.2f)); //reduce overfitting
 	net.add(new LayerDense(64, 1));
 
 	//setup train options
 	netTrain.set_net(net);
-	netTrain.set_epochs(200);
-	netTrain.set_batchsize(64);
+	netTrain.set_epochs(100);
+	netTrain.set_batchsize(256);
 	netTrain.set_loss("MeanSquaredError");
 	netTrain.set_epoch_callback(epoch_callback); //optional , to show the progress
-	netTrain.set_train_data(mDataTrain, mTruthTrain);
+	netTrain.set_train_data(mDataTrainWindowed, mTruthTrain);
 
 	// train net
 	cout << "Training..." << endl << endl;
 	start = chrono::steady_clock::now();
 	netTrain.train();
 
-	//now save truth and predicted in a csv file
+	//now save truth and predicted in file SunSpot_Prediction.csv, 1st column is truth, 2nd columne is predicted
+	// 10 first predicted samples are 0 since there is too feww data for inference
 
-	//TODO
+	MatrixFloat mResult(mr.train_data().rows(), 2);
+	for (int i = 0; i < mr.train_data().rows(); i++)
+	{
+		mResult(i, 0) = mr.train_data()(i, 0);
+		if (i < iWindowSize)
+			mResult(i, 1) = 0;
+		else
+		{
+			MatrixFloat mPredicted;
+			net.forward(mDataTrainWindowed.row(i- iWindowSize), mPredicted);
+			mResult(i, 1) = mPredicted(0);
+		}
+	}
+	toFile("SunSpot_Prediction.csv", mResult);
 
 	cout << "Test succeded." << endl;
 	cout << "Open the .csv file to see how the net predicted the sun spot number." << endl;
