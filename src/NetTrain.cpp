@@ -21,9 +21,9 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 NetTrain::NetTrain():
-    _sOptimizer("Adam")
+    _sOptimizer("Adam"),
+	_epochCallBack(nullptr)
 {
-	_epochCallBack = nullptr;
 	_fTrainLoss=0.f;
 	_fTrainAccuracy=0.f;
 
@@ -81,6 +81,8 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
 {
     clear();
 
+	_iBatchSizeAdjusted=-1; //invalid
+	
     set_keepbest(other._bKeepBest);
 	set_classbalancing(other._bClassBalancingWeightLoss);
     set_batchsize(other._iBatchSize);

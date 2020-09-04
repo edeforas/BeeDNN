@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{F418D54A-F4B9-4FBD-83EA-F7D29365A301}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>testtextprediction</RootNamespace>
+    <RootNamespace>samplesunspotprediction</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -74,13 +74,13 @@
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Configuration)\build_sample_text_prediction_fc\</IntDir>
+    <IntDir>$(Configuration)\build_sample_sunspot_prediction_fc\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Platform)\$(Configuration)\build_sample_text_prediction_fc\</IntDir>
+    <IntDir>$(Platform)\$(Configuration)\build_sample_sunspot_prediction_fc\</IntDir>
     <OutDir>$(SolutionDir)\output\</OutDir>
     <TargetName>$(ProjectName)_debug</TargetName>
   </PropertyGroup>
@@ -88,13 +88,13 @@
     <LinkIncremental>false</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Configuration)\build_sample_text_prediction_fc\</IntDir>
+    <IntDir>$(Configuration)\build_sample_sunspot_prediction_fc\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Platform)\$(Configuration)\build_sample_text_prediction_fc\</IntDir>
+    <IntDir>$(Platform)\$(Configuration)\build_sample_sunspot_prediction_fc\</IntDir>
     <OutDir>$(SolutionDir)\output\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -179,6 +179,7 @@
   <ItemGroup>
     <ClCompile Include="..\Activation.cpp" />
     <ClCompile Include="..\ConfusionMatrix.cpp" />
+    <ClCompile Include="..\CsvFileReader.cpp" />
     <ClCompile Include="..\DataSource.cpp" />
     <ClCompile Include="..\Layer.cpp" />
     <ClCompile Include="..\LayerActivation.cpp" />
@@ -191,11 +192,13 @@
     <ClCompile Include="..\NetTrain.cpp" />
     <ClCompile Include="..\Optimizer.cpp" />
     <ClCompile Include="..\Regularizer.cpp" />
-    <ClCompile Include="sample_text_prediction.cpp" />
+    <ClCompile Include="..\TimeSeriesUtil.cpp" />
+    <ClCompile Include="sample_sunspot_prediction.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Activation.h" />
     <ClInclude Include="..\ConfusionMatrix.h" />
+    <ClInclude Include="..\CsvFileReader.h" />
     <ClInclude Include="..\DataSource.h" />
     <ClInclude Include="..\Layer.h" />
     <ClInclude Include="..\LayerActivation.h" />
@@ -208,6 +211,7 @@
     <ClInclude Include="..\NetTrain.h" />
     <ClInclude Include="..\Optimizer.h" />
     <ClInclude Include="..\Regularizer.h" />
+    <ClInclude Include="..\TimeSeriesUtil.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

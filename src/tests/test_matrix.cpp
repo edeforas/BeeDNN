@@ -58,7 +58,7 @@ inline bool is_near(double a, double b, double tolerancis = 1.e-10)
 {
 	return fabs(a - b) < tolerancis;
 }
-void test(bool bTest, string sMessage = "")
+void test(bool bTest, const string& sMessage = "")
 {
 	if (bTest) return;
 
@@ -138,7 +138,7 @@ void test_bernoulli()
 	MatrixFloat m(1000, 1000);
 
 	chrono::steady_clock::time_point start = chrono::steady_clock::now();
-	for (int i = 1; i < 10; i++)
+	for (int itest = 1; itest < 10; itest++)
 	{
 		bernoulli_distribution dis(0.3f);
 		for (Index i = 0; i < m.size(); i++)

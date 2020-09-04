@@ -13,11 +13,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 LayerDense::LayerDense(Index iInputSize, Index iOutputSize, bool bHasBias) :
     Layer( "Dense"),
-    _bHasBias(bHasBias)
+    _bHasBias(bHasBias),
+	_iInputSize(iInputSize),
+	_iOutputSize(iOutputSize)
 {
-	_iInputSize = iInputSize;
-	_iOutputSize = iOutputSize;
-    LayerDense::init();
+	LayerDense::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
 LayerDense::~LayerDense()

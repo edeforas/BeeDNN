@@ -95,19 +95,6 @@ void write(const Net& net,string & s)
 			ss << "Layer" << i + 1 << ".bias=" << toString(layer->bias()) << endl;
 		}
 
-		else if(layer->type()=="ChannelBias")
-        {
-			LayerChannelBias* l = static_cast<LayerChannelBias*>(layer);
-
-			Index iRows, iCols, iChannels;
-			l->get_params(iRows, iCols, iChannels);
-
-			ss << "Layer" << i + 1 << ".rows=" << iRows << endl;
-			ss << "Layer" << i + 1 << ".cols=" << iCols << endl;
-			ss << "Layer" << i + 1 << ".channels=" << iChannels << endl;
-            ss << "Layer" << i+1 << ".bias=" << endl << toString(layer->bias()) << endl;
-        }
-
 		else if (layer->type() == "Bias")
 		{
 			ss << "Layer" << i + 1 << ".bias=" << toString(layer->bias()) << endl;

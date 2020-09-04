@@ -54,10 +54,10 @@ int main()
     }
   
 	//create simple net:
-	net.add(new LayerDense(784, 256));
+	net.add(new LayerDense(784, 128));
 	net.add(new LayerActivation("Relu"));
 	net.add(new LayerDropout(0.2f)); //reduce overfitting
-	net.add(new LayerDense(256, 10));
+	net.add(new LayerDense(128, 10));
 	net.add(new LayerSoftmax());
 
 	//setup train options

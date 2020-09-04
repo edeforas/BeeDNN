@@ -8,13 +8,13 @@
 #include <thread>
 
 //////////////////////////////////////////////////////////////////////////////
-MetaOptimizer::MetaOptimizer()
+MetaOptimizer::MetaOptimizer():
+	_betterSolutionCallBack(nullptr)
 {
 	_fBestAccuracy = -1.;
 	_pTrain = nullptr;
 	_iNbThread = 0;
 	_iNRepeatAll = 1;
-	_betterSolutionCallBack = nullptr;
 }
 //////////////////////////////////////////////////////////////////////////////
 MetaOptimizer::~MetaOptimizer()

@@ -23,7 +23,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_MetaOptimizer_MNIST"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_regression_sin", "samples\sample_regression_sin.vcxproj", "{E6ED7C3E-C046-41EF-82C9-FD3792C43363}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_text_prediction", "samples\sample_text_prediction.vcxproj", "{F418D54A-F4B9-4FBD-83EA-F7D29365A301}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_sunspot_prediction", "samples\sample_sunspot_prediction.vcxproj", "{F418D54A-F4B9-4FBD-83EA-F7D29365A301}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

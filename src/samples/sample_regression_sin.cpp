@@ -18,7 +18,7 @@ inline bool is_near(double a, double b, double tolerancis = 1.e-10)
 {
 	return fabs(a - b) < tolerancis;
 }
-void test(bool bTest, string sMessage = "")
+void test(bool bTest, const string & sMessage = "")
 {
 	if (bTest) return;
 
