@@ -11,9 +11,6 @@
 #include <cassert>
 #include <cmath>
 
-// Network optimizer as in:
-// http://cs231n.github.io/neural-networks-3/#update
-
 //////////////////////////////////////////////////////////
 Optimizer::Optimizer()
 {
@@ -138,6 +135,8 @@ public:
     }
 };
 //////////////////////////////////////////////////////////
+// Momentum from https://cs231n.github.io/neural-networks-3/#sgd
+// simplified version of momentum, (avoid one mult)
 class OptimizerMomentum : public Optimizer
 {
 public:
@@ -174,19 +173,67 @@ public:
 		assert(w.cols() == dw.cols());
 
         // init _V if needed
-        if (_v.size() == 0)
-            _v.setZero(w.rows(), w.cols());
+		if (_v.size() == 0)
+			_v.setZero(w.rows(),w.cols());
 
-        // v = mu * v - learning_rate * dx // integrate velocity
-        // x += v // integrate position
-        _v = _v*_fMomentum - dw*_fLearningRate;
-
-        w += _v;
+        _v = _v*_fMomentum + dw*_fLearningRate;
+        w -= _v;
     }
 private:
     MatrixFloat _v;
 };
+
 //////////////////////////////////////////////////////////
+// Momentum from https://cs231n.github.io/neural-networks-3/#sgd
+// Andrew Ng version
+class OptimizerMomentumNg : public Optimizer
+{
+public:
+    OptimizerMomentumNg()
+    {}
+
+    ~OptimizerMomentumNg() override
+    {}
+
+	Optimizer* clone() override
+	{
+		auto pOpt = new OptimizerMomentumNg;
+		pOpt->_fLearningRate = _fLearningRate;
+		pOpt->_fMomentum = _fMomentum;
+		return pOpt;
+	}
+
+	string name() const override
+	{
+		return "MomentumNg";
+	}
+
+    virtual void init() override
+    {
+		if (_fLearningRate == -1.f) _fLearningRate = 0.1f; // lr can be high here
+		if (_fMomentum == -1.f) _fMomentum = 0.9f;
+
+        _v.resize(0,0);
+    }
+
+    virtual void optimize(MatrixFloat& w, const MatrixFloat& dw) override
+    {
+		assert(w.rows() == dw.rows());
+		assert(w.cols() == dw.cols());
+
+        // init _V if needed
+        if (_v.size() == 0)
+            _v=dw;
+
+        _v = _v*_fMomentum + dw*(1.f-_fMomentum); // recursive averaging
+        w -= _v*_fLearningRate;
+    }
+private:
+    MatrixFloat _v;
+};
+
+//////////////////////////////////////////////////////////
+// Nesterov from https://cs231n.github.io/neural-networks-3/#sgd
 class OptimizerNesterov : public Optimizer
 {
 public:
@@ -226,12 +273,9 @@ public:
         if (_v.size() == 0)
             _v.setZero(w.rows(), w.cols());
 
-        // v_prev = v # back this up
-        // v = mu * v - learning_rate * dx # velocity update stays the same
-        // x += -mu * v_prev + (1 + mu) * v # position update changes form
         _v_prev = _v;
         _v = _v*_fMomentum - dw*_fLearningRate ;
-        w += _v_prev*(_fMomentum) + _v*(1.f + _fMomentum) ;
+        w += -_v_prev*(_fMomentum) + _v*(1.f + _fMomentum) ;
     }
 private:
     MatrixFloat _v, _v_prev;
@@ -260,7 +304,8 @@ public:
 
     virtual void init() override
     {
-		if (_fLearningRate == -1.f) _fLearningRate = 0.001f;
+		if (_fLearningRate == -1.f)
+			_fLearningRate = 0.001f;
 
         _cache.resize(0,0);
     }
@@ -692,7 +737,10 @@ Optimizer* create_optimizer(const string& sOptimizer)
     if (sOptimizer == "Momentum")
         return new OptimizerMomentum;
 
-    if (sOptimizer == "Nesterov")
+	if (sOptimizer == "MomentumNg")
+		return new OptimizerMomentumNg;
+	
+	if (sOptimizer == "Nesterov")
         return new OptimizerNesterov;
 
     if (sOptimizer == "Nadam")
@@ -726,7 +774,8 @@ void list_optimizers_available(vector<string>& vsOptimizers)
 	vsOptimizers.push_back("Nadam");
     vsOptimizers.push_back("Adamax");
     vsOptimizers.push_back("Momentum");
-    vsOptimizers.push_back("Nesterov");
+	vsOptimizers.push_back("MomentumNg");
+	vsOptimizers.push_back("Nesterov");
     vsOptimizers.push_back("RMSProp");
     vsOptimizers.push_back("RPROP-");
 	vsOptimizers.push_back("iRPROP-");

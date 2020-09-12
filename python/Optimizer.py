@@ -41,7 +41,7 @@ class OptimizerMomentum(Optimizer):
     return w - self.v
 
 # Andrew Ng definition of momentum
-class OptimizerMomentumANg(Optimizer):
+class OptimizerMomentumNg(Optimizer):
   lr = 0.1 # can be high since gradient is smoothed
   momentum = 0.9
   init = False

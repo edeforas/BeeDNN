@@ -17,6 +17,17 @@ public:
 	float fArg3;
 	float fArg4;
 	float fArg5;
+
+	MetaOptimizerVariation()
+	{
+		iLayer = 0;
+		sType = "";
+		fArg1=0.f;
+		fArg2 = 0.f;
+		fArg3 = 0.f;
+		fArg4 = 0.f;
+		fArg5 = 0.f;
+	}
 };
 
 

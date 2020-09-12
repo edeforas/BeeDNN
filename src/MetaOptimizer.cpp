@@ -129,7 +129,7 @@ void MetaOptimizer::apply_variations(Net& net)
 				vl.push_back(_variations[iv]);
 		}
 
-		int iVariation = randomEngine()() % (vl.size()+1);
+		auto iVariation = randomEngine()() % (vl.size()+1);
 
 		if (iVariation > 0) //original variation accepted
 		{
