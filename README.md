@@ -55,10 +55,11 @@ Data augmentation
 
 Learning and optimization:
 - Classification or regression, test and/or learn
-- SGD, Momentum, Nesterov
-- Adam, Nadam
+- SGD, Momentum, MomentumNg, Nesterov
+- Adam, AdamW, Nadam
 - Adagrad
 - Adamax
+- Amsgrad
 - RMSprop
 - RPROP-, iRPROP-
 - MetaOptimizer (V1)
@@ -72,3 +73,13 @@ I/O:
 - CIFAR10 reader
 - csv file reader
 - Network, weights and training parameters are saved in a simple .txt file
+
+Commented samples:
+- Simple XOR classification, with and w/o softmax
+- Simple sinus regression
+- MNIST with dense net
+- MNIST with poolmax2D
+- MNIST all convolutional
+- MNIST and Meta Optimizer: select best activation
+- CIFAR10 conv2D + poolmax2D
+- Time series forecasting, windowed sunspot data

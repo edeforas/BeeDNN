@@ -377,6 +377,7 @@ private:
     MatrixFloat _cache;
 };
 //////////////////////////////////////////////////////////
+//from https ://towardsdatascience.com/adam-latest-trends-in-deep-learning-optimization-6be9a291375c
 class OptimizerAdam : public Optimizer
 {
 public:
@@ -405,7 +406,8 @@ public:
 
     virtual void init() override
     {
-		if (_fLearningRate == -1.f) _fLearningRate = 0.001f;
+		if (_fLearningRate == -1.f)
+			_fLearningRate = 0.001f;
 
         _m.resize(0,0);
         _v.resize(0,0);
@@ -427,25 +429,140 @@ public:
         }
 
         // Adam, with first step bias correction
-        //m = beta1*m + (1-beta1)*dx
-        //v = beta2*v + (1-beta2)*(dx**2)
-        //x += - learning_rate/(1-beta1_prod) * m / (np.sqrt(v/(1-beta2_prod)) + eps)
-        //beta1_prod*=beta1;
-        //beta2_prod*=beta2;
-
 		float invBeta2 = 1.f / (1.f - beta2_prod);
 
         _m=_m*beta1+dw*(1.f-beta1);
         _v=_v*beta2+dw.cwiseAbs2()*(1.f-beta2);
-        w += _m.cwiseQuotient((_v*invBeta2).cwiseSqrt().cwiseMax(1.e-8f))*(-_fLearningRate/(1.f-beta1_prod));
-        beta1_prod*=beta1;
+        w -= _m.cwiseQuotient((_v*invBeta2).cwiseSqrt().cwiseMax(1.e-8f))*(_fLearningRate/(1.f-beta1_prod));
+
+		beta1_prod*=beta1;
         beta2_prod*=beta2;
     }
 private:
     MatrixFloat _m, _v;
     float beta1, beta2, beta1_prod, beta2_prod;
 };
+/////////////////////////////////////////////////////////////////////////////////////
+class OptimizerAdamW : public Optimizer
+{
+public:
+	OptimizerAdamW()
+	{
+		beta1 = 0.9f;
+		beta2 = 0.999f;
+		beta1_prod = 0.f;
+		beta2_prod = 0.f;
+		lambda_regul = 0.000001f;
+	}
 
+	~OptimizerAdamW() override
+	{}
+
+	Optimizer* clone() override
+	{
+		auto pOpt = new OptimizerAdamW;
+		pOpt->_fLearningRate = _fLearningRate;
+		return pOpt;
+	}
+
+	string name() const override
+	{
+		return "AdamW";
+	}
+
+	virtual void init() override
+	{
+		if (_fLearningRate == -1.f)
+			_fLearningRate = 0.001f;
+
+		_m.resize(0, 0);
+		_v.resize(0, 0);
+
+		beta1_prod = beta1;
+		beta2_prod = beta2;
+	}
+
+	virtual void optimize(MatrixFloat& w, const MatrixFloat& dw) override
+	{
+		assert(w.rows() == dw.rows());
+		assert(w.cols() == dw.cols());
+
+		// init _m and _v if needed
+		if (_v.size() == 0)
+		{
+			_m.setZero(dw.rows(), dw.cols());
+			_v.setZero(dw.rows(), dw.cols());
+		}
+
+		float invBeta2 = 1.f / (1.f - beta2_prod);
+
+		_m = _m * beta1 + dw * (1.f - beta1);
+		_v = _v * beta2 + dw.cwiseAbs2()*(1.f - beta2);
+		w -= _m.cwiseQuotient((_v*invBeta2).cwiseSqrt().cwiseMax(1.e-8f))*(_fLearningRate / (1.f - beta1_prod))+w*lambda_regul;
+
+		beta1_prod *= beta1;
+		beta2_prod *= beta2;
+	}
+private:
+	MatrixFloat _m, _v;
+	float beta1, beta2, beta1_prod, beta2_prod, lambda_regul;
+};
+//////////////////////////////////////////////////////////
+class OptimizerAmsgrad : public Optimizer
+{
+public:
+	OptimizerAmsgrad()
+	{
+		beta1 = 0.9f;
+		beta2 = 0.999f;
+	}
+
+	~OptimizerAmsgrad() override
+	{}
+
+	Optimizer* clone() override
+	{
+		auto pOpt = new OptimizerAmsgrad;
+		pOpt->_fLearningRate = _fLearningRate;
+		return pOpt;
+	}
+
+	string name() const override
+	{
+		return "Amsgrad";
+	}
+
+	virtual void init() override
+	{
+		if (_fLearningRate == -1.f)
+			_fLearningRate = 0.01f;
+
+		_v.resize(0, 0);
+	}
+
+	virtual void optimize(MatrixFloat& w, const MatrixFloat& dw) override
+	{
+		assert(w.rows() == dw.rows());
+		assert(w.cols() == dw.cols());
+
+		// init if needed
+		if (_v.size() == 0)
+		{
+			_v.setZero(dw.rows(), dw.cols());
+			_v_hat.setZero(dw.rows(), dw.cols());
+			_m.setZero(dw.rows(), dw.cols());
+		}
+
+		_m = _m * beta1 + dw * (1.f - beta1);
+		_v = _v * beta2 + dw.cwiseAbs2()*(1.f - beta2);
+		_v_hat = _v.cwiseMax(_v_hat);
+
+		w -= (_m.cwiseQuotient(_v_hat.cwiseSqrt().cwiseMax(1.e-8f)))*_fLearningRate;
+	}
+private:
+	MatrixFloat _m, _v,_v_hat;
+	float beta1, beta2;
+};
 /////////////////////////////////////////////////////////////////////////////////////
 class OptimizerNadam : public Optimizer
 {
@@ -731,6 +848,12 @@ Optimizer* create_optimizer(const string& sOptimizer)
     if (sOptimizer == "Adam")
         return new OptimizerAdam;
 
+	if (sOptimizer == "AdamW")
+		return new OptimizerAdamW;
+
+	if (sOptimizer == "Amsgrad")
+		return new OptimizerAmsgrad;
+
 	if (sOptimizer == "Adamax")
         return new OptimizerAdamax;
 
@@ -771,6 +894,8 @@ void list_optimizers_available(vector<string>& vsOptimizers)
 	vsOptimizers.push_back("None");
 	vsOptimizers.push_back("Adagrad");
     vsOptimizers.push_back("Adam");
+	vsOptimizers.push_back("AdamW");
+	vsOptimizers.push_back("Amsgrad");
 	vsOptimizers.push_back("Nadam");
     vsOptimizers.push_back("Adamax");
     vsOptimizers.push_back("Momentum");

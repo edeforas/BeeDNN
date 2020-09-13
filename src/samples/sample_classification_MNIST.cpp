@@ -65,7 +65,7 @@ int main()
 	netTrain.set_epochs(15);
 	netTrain.set_batchsize(64);
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
-	netTrain.set_epoch_callback(epoch_callback); //optional , to show the progress
+	netTrain.set_epoch_callback(epoch_callback); //optional, to show the progress
 	netTrain.set_train_data(mr.train_data(),mr.train_truth());
 	netTrain.set_validation_data(mr.test_data(), mr.test_truth()); //optional, not used for training, helps to keep the final best model
 
