@@ -22,6 +22,17 @@ Optimizer::Optimizer()
 Optimizer::~Optimizer()
 {}
 //////////////////////////////////////////////////////////
+void Optimizer::set_learningrate(float fLearningRate)  //-1.f is for default params
+{
+	_fLearningRate = fLearningRate;
+	init();
+}
+//////////////////////////////////////////////////////////
+float Optimizer::get_learningrate()  //-1.f is for default params
+{
+	return _fLearningRate;
+}
+//////////////////////////////////////////////////////////
 void Optimizer::set_params(float fLearningRate, float fDecay, float fMomentum)  //-1.f is for default params
 {
 	_fLearningRate = fLearningRate;
@@ -35,7 +46,7 @@ void Optimizer::set_params(float fLearningRate, float fDecay, float fMomentum)  
 class OptimizerNone : public Optimizer // placeholder for no optimizer
 {
 public:
-	OptimizerNone()
+	OptimizerNone() :Optimizer()
 	{}
 
 	~OptimizerNone() override
@@ -64,7 +75,7 @@ public:
 class OptimizerStep : public Optimizer
 {
 public:	
-    OptimizerStep()
+    OptimizerStep():Optimizer()
     {}
 
     ~OptimizerStep() override
@@ -84,7 +95,7 @@ public:
 
     virtual void init() override
     {
-		if (_fLearningRate == -1.f) _fLearningRate = 0.01f;
+		if (_fLearningRate == -1.f) _fLearningRate = 0.1f;
 	}
 
     virtual void optimize(MatrixFloat& w,const MatrixFloat& dw) override
@@ -101,7 +112,7 @@ public:
 class OptimizerSGD : public Optimizer
 {
 public:	
-    OptimizerSGD()
+    OptimizerSGD() :Optimizer()
     {}
 
     ~OptimizerSGD() override
@@ -140,7 +151,7 @@ public:
 class OptimizerMomentum : public Optimizer
 {
 public:
-    OptimizerMomentum()
+    OptimizerMomentum() :Optimizer()
     {}
 
     ~OptimizerMomentum() override
@@ -189,7 +200,7 @@ private:
 class OptimizerMomentumNg : public Optimizer
 {
 public:
-    OptimizerMomentumNg()
+    OptimizerMomentumNg() :Optimizer()
     {}
 
     ~OptimizerMomentumNg() override
@@ -237,7 +248,7 @@ private:
 class OptimizerNesterov : public Optimizer
 {
 public:
-    OptimizerNesterov()
+    OptimizerNesterov() :Optimizer()
     {}
 
     ~OptimizerNesterov() override
@@ -284,7 +295,7 @@ private:
 class OptimizerAdagrad : public Optimizer
 {
 public:
-    OptimizerAdagrad()
+    OptimizerAdagrad() :Optimizer()
     {}
 
     ~OptimizerAdagrad() override
@@ -332,7 +343,7 @@ private:
 class OptimizerRMSProp : public Optimizer
 {
 public:
-    OptimizerRMSProp()
+    OptimizerRMSProp() :Optimizer()
     {}
 
     ~OptimizerRMSProp() override
@@ -381,7 +392,7 @@ private:
 class OptimizerAdam : public Optimizer
 {
 public:
-    OptimizerAdam()
+    OptimizerAdam() :Optimizer()
     {
         beta1=0.9f;
         beta2=0.999f;
@@ -446,7 +457,7 @@ private:
 class OptimizerAdamW : public Optimizer
 {
 public:
-	OptimizerAdamW()
+	OptimizerAdamW() :Optimizer()
 	{
 		beta1 = 0.9f;
 		beta2 = 0.999f;
@@ -511,7 +522,7 @@ private:
 class OptimizerAmsgrad : public Optimizer
 {
 public:
-	OptimizerAmsgrad()
+	OptimizerAmsgrad() :Optimizer()
 	{
 		beta1 = 0.9f;
 		beta2 = 0.999f;
@@ -567,7 +578,7 @@ private:
 class OptimizerNadam : public Optimizer
 {
 public:
-    OptimizerNadam()
+    OptimizerNadam() :Optimizer()
     {
 		_fLearningRate =0.001f;
         beta1=0.9f;
@@ -635,7 +646,7 @@ private:
 class OptimizerAdamax : public Optimizer
 {
 public:
-    OptimizerAdamax()
+    OptimizerAdamax() :Optimizer()
     {
 		_fLearningRate =0.002f;
         beta1=0.9f;
@@ -698,7 +709,7 @@ private:
 class OptimizerRPROPm : public Optimizer
 {
 public:
-    OptimizerRPROPm()
+    OptimizerRPROPm() :Optimizer()
     {}
 
     ~OptimizerRPROPm() override
@@ -768,7 +779,7 @@ private:
 class OptimizeriRPROPm : public Optimizer
 {
 public:
-	OptimizeriRPROPm()
+	OptimizeriRPROPm() :Optimizer()
 	{}
 
 	~OptimizeriRPROPm() override

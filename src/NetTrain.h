@@ -54,7 +54,10 @@ public:
 	void set_learningrate(float fLearningRate=-1.f ); // -1.f is for default settings
     float get_learningrate() const;
 
-    void set_decay( float fDecay = -1.f); // -1.s is for default settings
+	void set_patience(int iPatience); //divide by two the learning rate if no progress during iPatience epochs , -1 is no patience
+	int get_patience() const;
+
+    void set_decay( float fDecay = -1.f); // -1.f is for default settings
     float get_decay() const;
 
     void set_momentum( float fMomentum = -1.f); //" -1.f is for default settings
@@ -120,6 +123,8 @@ private:
     float _fLearningRate;
 	float _fDecay;
 	float _fMomentum;
+	int _iPatience;
+	int _iCurrentPatience;
 
     const MatrixFloat* _pmSamplesTrain;
     const MatrixFloat* _pmTruthTrain;
