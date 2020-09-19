@@ -25,6 +25,9 @@ public:
 	
 	virtual Optimizer* clone() = 0;
 
+	void set_learningrate(float fLearningRate);  //-1.f is for default
+	float get_learningrate();  //-1.f is for default
+
 	void set_params(float fLearningRate = -1.f, float fDecay = -1.f, float fMomentum = -1.f);  //-1.f is for default params
 
 	virtual string name() const = 0;

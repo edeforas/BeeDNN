@@ -44,6 +44,8 @@ NetTrain::NetTrain():
     _fLearningRate = -1.f; //default
     _fDecay = -1.f; //default
     _fMomentum = -1.f; //default
+	_iPatience = -1; //-1 mean no limit 
+	_iCurrentPatience = 0; // nb of epochs without progress
 
 	_bClassBalancingWeightLoss = false;
 
@@ -109,6 +111,8 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
     _fLearningRate=other._fLearningRate;
     _fDecay=other._fDecay;
     _fMomentum=other._fMomentum;
+	_iPatience = other._iPatience;
+	_iCurrentPatience = other._iCurrentPatience;
 
     _inOut = other._inOut;
     _gradient = other._gradient;
@@ -185,10 +189,26 @@ float NetTrain::get_regularizer_parameter() const
 void NetTrain::set_learningrate(float fLearningRate) //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov"
 {
     _fLearningRate = fLearningRate;
+
+	for (size_t i = 0; i < _optimizers.size(); i++)
+		_optimizers[i]->set_learningrate(_fLearningRate);
 }
 float NetTrain::get_learningrate() const
 {
+	if (!_optimizers.empty())
+		return _optimizers[0]->get_learningrate(); // get real lr if initialized with -1.f ;
+
     return _fLearningRate;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void NetTrain::set_patience(int iPatience)
+{
+	_iPatience = iPatience;
+	_iCurrentPatience = 0;
+}
+int NetTrain::get_patience() const
+{
+	return _iPatience;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::set_decay(float fDecay) // -1.f is for default settings
@@ -381,6 +401,7 @@ void NetTrain::train()
 	_fTrainAccuracy = 0;
 	_fValidationLoss = 1.e10f;
 	_fValidationAccuracy = 0;
+	_iCurrentPatience = 0;
 
     int iNbSamples=(int)mSamples.rows();
     int iReboost = 0;
@@ -477,15 +498,18 @@ void NetTrain::train()
             _epochCallBack();
 
         //keep the best model if asked
-        if(_bKeepBest) // todo do it after n epochs
+        if(_bKeepBest || (_iPatience!=-1) )
         {
             if(_pNet->is_classification_mode())
             {   //use accuracy
-                if(fMaxAccuracy< fSelectedAccuracy)
-                {
-                    fMaxAccuracy= fSelectedAccuracy;
-                    bestNet= *_pNet;
-                }
+				if (fMaxAccuracy < fSelectedAccuracy)
+				{
+					fMaxAccuracy = fSelectedAccuracy;
+					bestNet = *_pNet;
+					_iCurrentPatience = 0;
+				}
+				else
+					_iCurrentPatience++;
             }
             else
             {   //use loss
@@ -493,9 +517,19 @@ void NetTrain::train()
                 {
                     fMinLoss= fSelectedLoss;
                     bestNet= *_pNet;
-                }
-            }
-        }
+					_iCurrentPatience = 0;
+				}
+				else
+					_iCurrentPatience++;
+			}
+        
+			if ( (_iCurrentPatience > _iPatience) && (_iPatience!=-1) )
+			{
+				_iCurrentPatience = 0;
+				set_learningrate(get_learningrate() / 2.f);
+				(*_pNet).operator=(bestNet);
+			}
+		}
 
         //reboost optimizers every epochs if asked
         if (_iReboostEveryEpochs != -1)
