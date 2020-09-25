@@ -6,22 +6,18 @@
     in the LICENSE.txt file.
 */
 
-#include "NetTrain.h"
+#include "KMeansTrain.h"
 
-#include "Net.h"
-#include "Layer.h"
+#include "KMeans.h"
 #include "Matrix.h"
 
-#include "Optimizer.h"
-#include "Regularizer.h"
 #include "Loss.h"
 
 #include <cmath>
 #include <cassert>
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
-NetTrain::NetTrain():
-    _sOptimizer("Adam"),
+KMeansTrain::KMeansTrain():
 	_epochCallBack(nullptr)
 {
 	_fTrainLoss=0.f;
@@ -30,28 +26,12 @@ NetTrain::NetTrain():
 	_fValidationLoss=0.f;
 	_fValidationAccuracy=0.f;
 
-	_pRegularizer = nullptr;
-
     _pLoss = create_loss("MeanSquaredError");
-    _iBatchSize = 32;
-	_iBatchSizeAdjusted=-1; //invalid
-	_iValidationBatchSize = 128;
-	_bKeepBest = true;
     _iEpochs = 100;
-    _iReboostEveryEpochs = -1; // -1 mean no reboost
 	_iOnlineAccuracyGood= 0;
 
-    _fLearningRate = -1.f; //default
-    _fDecay = -1.f; //default
-    _fMomentum = -1.f; //default
-	_iPatience = -1; //-1 mean no limit 
-	_iCurrentPatience = 0; // nb of epochs without progress
-
-	_bClassBalancingWeightLoss = false;
-
-	_iNbLayers=0;
 	_fOnlineLoss = 0.f;
-	_pNet = nullptr;
+	_pKm = nullptr;
 
     _pmSamplesTrain = nullptr;
     _pmTruthTrain = nullptr;
@@ -60,26 +40,16 @@ NetTrain::NetTrain():
 	_pmTruthValidation = nullptr;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-NetTrain::~NetTrain()
+KMeansTrain::~KMeansTrain()
 {
-	clear_optimizers();
     delete _pLoss;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::clear()
+void KMeansTrain::clear()
 { 
-	clear_optimizers();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::clear_optimizers()
-{ 
-	for (unsigned int i = 0; i < _optimizers.size(); i++)
-		delete _optimizers[i];
-
-	_optimizers.clear();
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
-NetTrain& NetTrain::operator=(const NetTrain& other)
+/*NetTrain& NetTrain::operator=(const NetTrain& other)
 {
     clear();
 
@@ -108,15 +78,6 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
 	for (size_t i = 0; i < other._optimizers.size(); i++)
 		_optimizers.push_back(other._optimizers[i]->clone());
 
-    _fLearningRate=other._fLearningRate;
-    _fDecay=other._fDecay;
-    _fMomentum=other._fMomentum;
-	_iPatience = other._iPatience;
-	_iCurrentPatience = other._iCurrentPatience;
-
-    _inOut = other._inOut;
-    _gradient = other._gradient;
-
 	_trainLoss = other._trainLoss;
 	_trainAccuracy = other._trainAccuracy;
 
@@ -135,178 +96,46 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
 
 	return *this;
 }
+*/
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_net(Net& net)
+void KMeansTrain::set_kmeans(KMeans& km)
 {
-	_pNet = &net;
-	_iNbLayers = (int)_pNet->layers().size();
-	if (_iNbLayers != 0)
-		_pNet->layers()[0]->set_first_layer(true);
-	
-//	clear_optimizers(); todo keep ?
+	_pKm = &km;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-Net& NetTrain::net()
+KMeans& KMeansTrain::kmeans()
 {
-	return *_pNet;
+	return *_pKm;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_optimizer(const string& sOptimizer) //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov"
-{
-    _sOptimizer = sOptimizer;
-	clear_optimizers();
-}
-string NetTrain::get_optimizer() const
-{
-    return _sOptimizer;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_regularizer(const string& sRegularizer,float fParameter) // "" by default, can be also "Identity", "Clamp" ...
-{
-	delete _pRegularizer;
-	if (sRegularizer != "")
-	{
-		_pRegularizer = create_regularizer(sRegularizer);
-		_pRegularizer->set_parameter(fParameter);
-	}
-	else
-		_pRegularizer = nullptr;
-}
-string NetTrain::get_regularizer() const
-{
-	if (_pRegularizer != nullptr)
-		return _pRegularizer->name();
-	else
-		return "";
-}
-float NetTrain::get_regularizer_parameter() const
-{
-	if (_pRegularizer != nullptr)
-		return _pRegularizer->get_parameter();
-	return -1.f;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_learningrate(float fLearningRate) //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov"
-{
-    _fLearningRate = fLearningRate;
-
-	for (size_t i = 0; i < _optimizers.size(); i++)
-		_optimizers[i]->set_learningrate(_fLearningRate);
-}
-float NetTrain::get_learningrate() const
-{
-	if (!_optimizers.empty())
-		return _optimizers[0]->get_learningrate(); // get real lr if initialized with -1.f ;
-
-    return _fLearningRate;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_patience(int iPatience)
-{
-	_iPatience = iPatience;
-	_iCurrentPatience = 0;
-}
-int NetTrain::get_patience() const
-{
-	return _iPatience;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_decay(float fDecay) // -1.f is for default settings
-{
-    _fDecay=fDecay;
-}
-float NetTrain::get_decay() const
-{
-    return _fDecay;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_momentum(float fMomentum) // -1.f is for default settings
-{
-    _fMomentum=fMomentum;
-}
-float NetTrain::get_momentum() const
-{
-    return _fMomentum;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_epochs(int iEpochs) //100 by default
+void KMeansTrain::set_epochs(int iEpochs) //100 by default
 {
     _iEpochs = iEpochs;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-int NetTrain::get_epochs() const
+int KMeansTrain::get_epochs() const
 {
     return _iEpochs;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_reboost_every_epochs(int iReboostEveryEpochs) //-1 by default -> disabled
-{
-    _iReboostEveryEpochs = iReboostEveryEpochs;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
-int NetTrain::get_reboost_every_epochs() const
-{
-    return _iReboostEveryEpochs;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_epoch_callback(std::function<void()> epochCallBack)
+void KMeansTrain::set_epoch_callback(std::function<void()> epochCallBack)
 {
     _epochCallBack = epochCallBack;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_loss(const string&  sLoss)
+void KMeansTrain::set_loss(const string&  sLoss)
 {
     delete _pLoss;
     _pLoss = create_loss(sLoss);
 	assert(_pLoss);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-string NetTrain::get_loss() const
+string KMeansTrain::get_loss() const
 {
     return _pLoss->name();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_batchsize(Index iBatchSize) //16 by default
-{
-    _iBatchSize = iBatchSize;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
-Index NetTrain::get_batchsize() const
-{
-    return _iBatchSize;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_validation_batchsize(Index iValBatchSize) //128 by default
-{
-	_iValidationBatchSize = iValBatchSize;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
-Index NetTrain::get_validation_batchsize() const
-{
-	return _iValidationBatchSize;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_classbalancing(bool bBalancing) //true by default
-{
-	_bClassBalancingWeightLoss = bBalancing;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
-bool NetTrain::get_classbalancing() const
-{
-	return _bClassBalancingWeightLoss;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_keepbest(bool bKeepBest) //true by default
-{
-    _bKeepBest = bKeepBest;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
-bool NetTrain::get_keepbest() const
-{
-    return _bKeepBest;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
-float NetTrain::compute_loss_accuracy(const MatrixFloat &mSamples, const MatrixFloat &mTruth,float * pfAccuracy) const
+/*float NetTrain::compute_loss_accuracy(const MatrixFloat &mSamples, const MatrixFloat &mTruth,float * pfAccuracy) const
 {
     Index iNbSamples = mSamples.rows();
 	float fLoss = 0.f;
@@ -366,32 +195,39 @@ float NetTrain::compute_loss_accuracy(const MatrixFloat &mSamples, const MatrixF
 
 	return fLoss;
 }
+*/
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth)
+void KMeansTrain::set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth)
 {
     _pmSamplesTrain = &mSamples;
     _pmTruthTrain = &mTruth;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_validation_data(const MatrixFloat& mSamplesValidation, const MatrixFloat& mTruthValidation)
+void KMeansTrain::set_validation_data(const MatrixFloat& mSamplesValidation, const MatrixFloat& mTruthValidation)
 {
 	_pmSamplesValidation = &mSamplesValidation;
 	_pmTruthValidation = &mTruthValidation;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::train()
+void KMeansTrain::train()
 {
-	if (_pNet == nullptr)
+	if (_pKm == nullptr)
 		return;
+	
+	//init ref vectors
 
-	_iNbLayers = _pNet->layers().size();
-	if (_iNbLayers == 0)
-		return; //nothing to do
+	//todo
 
-	update_class_weight();
+	const MatrixFloat& mSamples = *_pmSamplesTrain;
+	const MatrixFloat& mTruth = *_pmTruthTrain;
 
-    const MatrixFloat& mSamples = *_pmSamplesTrain;
-    const MatrixFloat& mTruth = *_pmTruthTrain;
+	for (int iEpoch = 0; iEpoch < _iEpochs; iEpoch++)
+	{
+		train_one_epoch(mSamples, mTruth);
+	}
+
+
+	/*
 
     _trainLoss.clear();
     _validationLoss.clear();
@@ -547,12 +383,15 @@ void NetTrain::train()
 
 	if(_bKeepBest)
 		(*_pNet).operator=(bestNet);
+*/
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth)
+void KMeansTrain::train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth)
 {
-	assert(_pNet);
-	assert(_optimizers.size() == _iNbLayers * 2);
+	assert(_pKm);
+
+	
+	/*	assert(_optimizers.size() == _iNbLayers * 2);
 
 	//forward pass with store
 	_inOut[0] = mSample;
@@ -585,9 +424,10 @@ void NetTrain::train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth
 
 	//compute and save statistics
 	add_online_statistics(_inOut[_iNbLayers], mTruth);
+*/
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::add_online_statistics(const MatrixFloat&mPredicted, const MatrixFloat&mTruth )
+/*void NetTrain::add_online_statistics(const MatrixFloat&mPredicted, const MatrixFloat&mTruth )
 {
     //update loss
     _fOnlineLoss += _pLoss->compute(mPredicted, mTruth);
@@ -661,8 +501,9 @@ float NetTrain::get_current_train_accuracy() const
 {
 	return _fTrainAccuracy;
 }
+*/
 /////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::update_class_weight()
+/*void NetTrain::update_class_weight()
 {
 	// do not recompute each time
 
@@ -703,24 +544,21 @@ void NetTrain::update_class_weight()
 
 	_pLoss->set_class_balancing(mClassWeight);
 }
+*/
 /////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::train_one_epoch(const MatrixFloat& mSampleShuffled, const MatrixFloat& mTruthShuffled)
+void KMeansTrain::train_one_epoch(const MatrixFloat& mSampleShuffled, const MatrixFloat& mTruthShuffled)
 {
 	Index iNbSamples = mSampleShuffled.rows();
-	Index iBatchStart = 0;
+	
+	MatrixFloat & mRefVectors = _pKm->_mRefVectors;
+	MatrixFloat & mRefClasses = _pKm->_mRefClasses;
 
-	while (iBatchStart < iNbSamples)
+	Index iNbRef = mRefVectors.rows();
+	for (int i = 0; i < iNbSamples; i++)
 	{
-		Index iBatchEnd = iBatchStart + _iBatchSizeAdjusted;
-		if (iBatchEnd > iNbSamples)
-			iBatchEnd = iNbSamples;
 
-		const MatrixFloat mSample = rowView(mSampleShuffled, iBatchStart, iBatchEnd);
-		const MatrixFloat mTarget = rowView(mTruthShuffled, iBatchStart, iBatchEnd);
 
-		train_batch(mSample, mTarget);
 
-		iBatchStart = iBatchEnd;
 	}
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
