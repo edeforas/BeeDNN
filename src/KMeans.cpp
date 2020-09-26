@@ -16,25 +16,13 @@ using namespace std;
 /////////////////////////////////////////////////////////////////////////////////////////////////
 KMeans::KMeans()
 { 
-    _bTrainMode = false;
+	_iNbRef = 0;
+	_iInputSize = 0;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 KMeans::~KMeans()
-{
-    clear();
-}
+{ }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void KMeans::clear()
-{
-    _bTrainMode=false;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
-void KMeans::set_train_mode(bool bTrainMode) // set to true if training, set to false if testing (default)
-{
-	_bTrainMode = bTrainMode;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
-
 /*Net& Net::operator=(const Net& other)
 {
     clear();
@@ -48,23 +36,63 @@ void KMeans::set_train_mode(bool bTrainMode) // set to true if training, set to 
 }
 */
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void KMeans::set_ref_by_classes(int iRefByClasses)
+void KMeans::set_sizes(int iInputSize, int iNbRef) //input size; total number of centroids, for now 
 {
-	_iRefByCLasses = iRefByClasses;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
+	_iInputSize = iInputSize;
+	_iNbRef = iNbRef;
 
+	_mRefVectors.resize(_iNbRef, _iInputSize);
+	_mRefClasses.resize(_iNbRef, 1);
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
+MatrixFloat & KMeans::ref_vectors()
+{
+	return _mRefVectors;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
+MatrixFloat & KMeans::ref_classes()
+{
+	return _mRefClasses;
+}
 /////////////////////////////////////////////////////////////////////////////////////////////
 void KMeans::classify(const MatrixFloat& mIn, MatrixFloat& mClass) const
 {
     MatrixFloat mOut;
 
-	for (int i = 0; i < mOut.rows(); i++)
-		mOut(i, 0) = std::roundf(mOut(i, 0)); //categorical case
+	mClass.resize(mIn.rows(), 1);
 
+	if (_mRefVectors.size() == 0)
+	{
+		mClass.setZero();
+		return;
+	}
+
+	for (int i = 0; i < mIn.rows(); i++)
+	{
+		float fDistBest = 1.e38f; //todo
+		int indexBest = -1;
+		for (int j = 0; j < _mRefVectors.rows(); j++)
+		{
+			float d = compute_dist(mIn.row(i), _mRefVectors.row(j));
+			if (d < fDistBest)
+			{
+				fDistBest = d;
+				indexBest = j;
+			}
+		}
+	
+		assert(indexBest != -1);
+		mClass(i) = _mRefClasses(indexBest);
+	}
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-void KMeans::init()
+// todo use loss instead
+float KMeans::compute_dist(const MatrixFloat& m1, const MatrixFloat& m2) const
 {
+	assert(m1.rows() == 1);
+	assert(m2.rows() == 1);
+
+	assert(m1.cols() == m2.cols());
+	return (m1 - m2).squaredNorm();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////

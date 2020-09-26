@@ -539,6 +539,15 @@ public:
         return dSum;
     }
 
+	T squaredNorm() const
+	{
+		T dSumSq = 0.;
+		for (Index i = 0; i < _iSize; i++)
+			dSumSq += _data[i]* _data[i];
+
+		return dSumSq;
+	}
+
 	T mean() const
 	{
 		return sum()/(float)_iSize;

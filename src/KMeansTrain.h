@@ -55,10 +55,8 @@ public:
 	float get_current_validation_loss() const;
 	float get_current_validation_accuracy() const;
 	*/
-	virtual void train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth); //all the backprop is here	
 
 protected:
-	virtual void train_one_epoch(const MatrixFloat& mSampleShuffled, const MatrixFloat& mTruthShuffled);
 //	void add_online_statistics(const MatrixFloat&mPredicted, const MatrixFloat&mTruth);	//online statistics, i.e. loss, accuracy ..
 	Loss* _pLoss;
 	KMeans* _pKm;

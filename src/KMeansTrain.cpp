@@ -214,18 +214,47 @@ void KMeansTrain::train()
 	if (_pKm == nullptr)
 		return;
 	
-	//init ref vectors
-
-	//todo
-
 	const MatrixFloat& mSamples = *_pmSamplesTrain;
 	const MatrixFloat& mTruth = *_pmTruthTrain;
+	Index iNbSamples = mSamples.rows();
+
+	MatrixFloat & mRefVectors = _pKm->ref_vectors();
+	MatrixFloat & mRefClasses = _pKm->ref_classes();
+	MatrixFloat mRefCentroid;
+	mRefCentroid.setZero(mRefVectors.rows(), mRefVectors.cols());
+	
+	MatrixFloat mRefCentroidCount(mRefVectors.rows(), 1); mRefCentroidCount.setZero();
+	Index iNbRef = mRefVectors.rows();
+
+	//init ref vectors, select randomly in full test base
+	for (int i = 0; i < iNbRef; i++)
+	{
+		int iPos = randomEngine()() % iNbSamples;
+
+		mRefVectors.row(i) = mSamples.row(iPos);
+		mRefClasses.row(i) = mTruth.row(iPos);
+	}
 
 	for (int iEpoch = 0; iEpoch < _iEpochs; iEpoch++)
 	{
-		train_one_epoch(mSamples, mTruth);
-	}
+		for (int iS = 0; iS < mSamples.rows(); iS++)
+		{
+			int iClass = (int)mTruth(iS);
 
+			for(int iR=0;iR< mRefClasses.rows();iR++)
+				if (mRefClasses(iR) == iClass)
+				{
+					// update centroid
+					mRefCentroid.row(iR) += mSamples.row(iS);
+					mRefCentroidCount(iR)++;
+				}
+		}
+
+		for (int iR = 0; iR < mRefClasses.rows(); iR++)
+			mRefClasses.row(iR) = mRefCentroid.row(iR) / mRefCentroidCount(iR);
+
+
+	}
 
 	/*
 
@@ -329,7 +358,7 @@ void KMeansTrain::train()
 			fSelectedLoss = _fValidationLoss;
 			fSelectedAccuracy = _fValidationAccuracy;
 		}
-
+		x
         if (_epochCallBack)
             _epochCallBack();
 
@@ -386,46 +415,6 @@ void KMeansTrain::train()
 */
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-void KMeansTrain::train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth)
-{
-	assert(_pKm);
-
-	
-	/*	assert(_optimizers.size() == _iNbLayers * 2);
-
-	//forward pass with store
-	_inOut[0] = mSample;
-	for (size_t i = 0; i < _iNbLayers; i++)
-		_pNet->layer(i).forward(_inOut[i], _inOut[i + 1]);
-
-	//compute error gradient
-	_pLoss->compute_gradient(_inOut[_iNbLayers], mTruth, _gradient[_iNbLayers]);
-
-	//backward pass with optimizer
-	for (int i = (int)_iNbLayers - 1; i >= 0; i--)
-	{
-		Layer& l = _pNet->layer(i);
-		l.backpropagation(_inOut[i], _gradient[i + 1], _gradient[i]);
-
-		if (l.has_weight())
-		{
-			if (_pRegularizer)
-				_pRegularizer->apply(l.weights(),l.gradient_weights());
-			
-			_optimizers[2*i]->optimize(l.weights(), l.gradient_weights());
-		}
-
-		if (l.has_bias())
-		{
-			//bias does not need regularization 
-			_optimizers[2 * i+1]->optimize(l.bias(), l.gradient_bias());
-		}
-	}
-
-	//compute and save statistics
-	add_online_statistics(_inOut[_iNbLayers], mTruth);
-*/
-}
 /////////////////////////////////////////////////////////////////////////////////////////////
 /*void NetTrain::add_online_statistics(const MatrixFloat&mPredicted, const MatrixFloat&mTruth )
 {
@@ -502,63 +491,3 @@ float NetTrain::get_current_train_accuracy() const
 	return _fTrainAccuracy;
 }
 */
-/////////////////////////////////////////////////////////////////////////////////////////////
-/*void NetTrain::update_class_weight()
-{
-	// do not recompute each time
-
-	MatrixFloat mClassWeight;
-	if ( (!_pNet->is_classification_mode()) || (!_bClassBalancingWeightLoss))
-	{
-		mClassWeight.resize(0,0);
-	}
-	else
-	{
-		//guess the nb of class and compute occurences
-		if (_pmTruthTrain->cols() != 1)
-		{
-			//convert ot categorical
-			int iNbClass = (int)_pmTruthTrain->cols();
-			mClassWeight.setZero(iNbClass, 1);
-			MatrixFloat mCategory;
-
-			rowsArgmax(*_pmTruthTrain, mCategory);
-
-			for (int i = 0; i < _pmTruthTrain->rows(); i++)
-				mClassWeight((int)(mCategory(i)), 0)++;
-		}
-		else
-		{
-			int iNbClass = (int)_pmTruthTrain->maxCoeff() + 1;
-			mClassWeight.setZero(iNbClass, 1);
-
-			for (int i = 0; i < _pmTruthTrain->rows(); i++)
-				mClassWeight((int)(_pmTruthTrain->operator()(i)), 0)++;
-		}
-
-		mClassWeight *= mClassWeight.rows() / mClassWeight.sum();
-
-		for (int i = 0; i < mClassWeight.size(); i++)
-			mClassWeight(i) = 1.f / mClassWeight(i);
-	}
-
-	_pLoss->set_class_balancing(mClassWeight);
-}
-*/
-/////////////////////////////////////////////////////////////////////////////////////////////
-void KMeansTrain::train_one_epoch(const MatrixFloat& mSampleShuffled, const MatrixFloat& mTruthShuffled)
-{
-	Index iNbSamples = mSampleShuffled.rows();
-	
-	MatrixFloat & mRefVectors = _pKm->_mRefVectors;
-	MatrixFloat & mRefClasses = _pKm->_mRefClasses;
-
-	Index iNbRef = mRefVectors.rows();
-	for (int i = 0; i < iNbSamples; i++)
-	{
-
-
-
-	}
-}
-/////////////////////////////////////////////////////////////////////////////////////////////

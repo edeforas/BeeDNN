@@ -9,10 +9,6 @@
 #ifndef KMeans_
 #define KMeans_
 
-#include <vector>
-using namespace std;
-
-class Layer;
 #include "Matrix.h"
 
 class KMeans
@@ -22,22 +18,21 @@ public:
     virtual ~KMeans();
     //Net& operator=(const Net& other);
 
-	void clear();
-	void init();
-
-	void set_ref_by_classes(int iRefByClasses);
+	void set_sizes(int iInputSize,int iNbRef); //input size; total number of centroids, for now 
 
 	void classify(const MatrixFloat& mIn, MatrixFloat& mClass) const;
 
-    void set_train_mode(bool bTrainMode); // set to true if training, set to false if testing (default)
+	MatrixFloat & ref_vectors();
+	MatrixFloat & ref_classes();
+
+private:
+	float compute_dist(const MatrixFloat& m1, const MatrixFloat& m2) const;
 
 	MatrixFloat _mRefVectors;
 	MatrixFloat _mRefClasses;
 
-private:
-	int _iRefByCLasses;
-	bool _bTrainMode;
-	bool _bClassificationMode;
+	int _iNbRef;
+	int _iInputSize;
 };
 
 #endif

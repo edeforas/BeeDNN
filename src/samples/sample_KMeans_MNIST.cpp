@@ -50,6 +50,8 @@ int main()
         return -1;
     }
   
+	km.set_sizes(784 , 10 * 10); // approximately 10 supports by classes (todo)
+
 	//setup train options
 	kmTrain.set_kmeans(km);
 	kmTrain.set_epochs(100);
