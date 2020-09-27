@@ -188,7 +188,6 @@ void KMeansTrain::train()
 	_fTrainAccuracy = 0;
 	_fValidationAccuracy = 0;
 
-
 	const MatrixFloat& mSamples = *_pmSamplesTrain;
 	const MatrixFloat& mTruth = *_pmTruthTrain;
 	Index iNbSamples = mSamples.rows();
@@ -222,7 +221,7 @@ void KMeansTrain::train()
 			{
 				if (mRefClasses(iR) == iClass)
 				{
-					float fDist = _pKm->compute_dist(mSamples.row(iS), mRefCentroid.row(iR));
+					float fDist = _pKm->compute_dist(mSamples.row(iS), mRefVectors.row(iR));
 					if (fDist < fDistBest)
 					{
 						fDistBest = fDist;

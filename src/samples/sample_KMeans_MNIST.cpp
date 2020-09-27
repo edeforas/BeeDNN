@@ -1,5 +1,5 @@
 // simple  classification MNIST with aKMeans algorithm
-
+// 90 % classification after 20 epochs, 100 centroids are used
 #include <iostream>
 #include <chrono>
 using namespace std;
@@ -50,7 +50,7 @@ int main()
 
 	//setup train options
 	kmTrain.set_kmeans(km);
-	kmTrain.set_epochs(10);
+	kmTrain.set_epochs(20);
 	kmTrain.set_epoch_callback(epoch_callback); //optional, to show the progress
 	kmTrain.set_train_data(mr.train_data(),mr.train_truth());
 	kmTrain.set_validation_data(mr.test_data(), mr.test_truth()); //optional
