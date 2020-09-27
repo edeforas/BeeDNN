@@ -26,7 +26,7 @@ KMeansTrain::KMeansTrain():
 	_fValidationLoss=0.f;
 	_fValidationAccuracy=0.f;
 
-    _pLoss = create_loss("MeanSquaredError");
+    _pLoss = create_loss("MeanSquaredError"); //todo use
     _iEpochs = 100;
 	_iOnlineAccuracyGood= 0;
 
@@ -38,6 +38,8 @@ KMeansTrain::KMeansTrain():
 
 	_pmSamplesValidation = nullptr;
 	_pmTruthValidation = nullptr;
+
+	_iValidationBatchSize = 1024;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 KMeansTrain::~KMeansTrain()
@@ -46,8 +48,7 @@ KMeansTrain::~KMeansTrain()
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void KMeansTrain::clear()
-{ 
-}
+{ }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /*NetTrain& NetTrain::operator=(const NetTrain& other)
 {
@@ -135,18 +136,11 @@ string KMeansTrain::get_loss() const
     return _pLoss->name();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-/*float NetTrain::compute_loss_accuracy(const MatrixFloat &mSamples, const MatrixFloat &mTruth,float * pfAccuracy) const
+float KMeansTrain::compute_accuracy(const MatrixFloat &mSamples, const MatrixFloat &mTruth) const
 {
     Index iNbSamples = mSamples.rows();
 	float fLoss = 0.f;
 	MatrixFloat mOut,mTruthBatch, mSamplesBatch;
-
-	if ((_pNet->layers().size() == 0) || (iNbSamples == 0))
-	{
-		if (pfAccuracy)
-			*pfAccuracy = 0.f;
-		return 0.f;
-	}
 
 	//cut in parts of size _iValidationBatchSize for a lower memory usage
 	Index iGood = 0;
@@ -161,41 +155,14 @@ string KMeansTrain::get_loss() const
 		mSamplesBatch = rowView(mSamples, iStart, iEnd);
 		mTruthBatch = rowView(mTruth, iStart, iEnd);
 		
-		_pNet->forward(mSamplesBatch, mOut);
-		fLoss+= _pLoss->compute(mOut, mTruthBatch);
-
-		if (pfAccuracy)
-		{
-			if (mTruthBatch.cols() != 1)
-			{
-				assert(mOut.cols() == mTruthBatch.cols());
-				//one hot everywhere
-				for (Index i = 0; i < iBatchSize; i++)
-					iGood += (argmax(mOut.row(i)) == argmax(mTruthBatch.row(i)));
-			}
-			else
-			{
-				if (mOut.cols() != 1)
-				{
-					for (Index i = 0; i < iBatchSize; i++)
-						iGood += (argmax(mOut.row(i)) == mTruthBatch(i));
-				}
-				else
-				{
-					for (int i = 0; i < iBatchSize; i++)
-						iGood += roundf(mOut(i)) == mTruthBatch(i);
-				}
-			}
-
-		}
+		_pKm->predict(mSamplesBatch, mOut);
+			
+		for (int i = 0; i < iBatchSize; i++)
+			iGood += roundf(mOut(i)) == mTruthBatch(i);
 	}
 
-	if(pfAccuracy)
-		*pfAccuracy = 100.f*iGood / iNbSamples;
-
-	return fLoss;
+	return 100.f*iGood / iNbSamples;
 }
-*/
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void KMeansTrain::set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth)
 {
@@ -214,6 +181,14 @@ void KMeansTrain::train()
 	if (_pKm == nullptr)
 		return;
 	
+	_trainLoss.clear();
+	_validationLoss.clear();
+	_trainAccuracy.clear();
+	_validationAccuracy.clear();
+	_fTrainAccuracy = 0;
+	_fValidationAccuracy = 0;
+
+
 	const MatrixFloat& mSamples = *_pmSamplesTrain;
 	const MatrixFloat& mTruth = *_pmTruthTrain;
 	Index iNbSamples = mSamples.rows();
@@ -227,9 +202,9 @@ void KMeansTrain::train()
 	Index iNbRef = mRefVectors.rows();
 
 	//init ref vectors, select randomly in full test base
-	for (int i = 0; i < iNbRef; i++)
+	for (Index i = 0; i < iNbRef; i++)
 	{
-		int iPos = randomEngine()() % iNbSamples;
+		Index iPos = randomEngine()() % iNbSamples;
 
 		mRefVectors.row(i) = mSamples.row(iPos);
 		mRefClasses.row(i) = mTruth.row(iPos);
@@ -237,41 +212,49 @@ void KMeansTrain::train()
 
 	for (int iEpoch = 0; iEpoch < _iEpochs; iEpoch++)
 	{
-		for (int iS = 0; iS < mSamples.rows(); iS++)
+		for (Index iS = 0; iS < mSamples.rows(); iS++)
 		{
 			int iClass = (int)mTruth(iS);
+			Index iPosBest = -1;
+			float fDistBest = 1.e38f;
 
-			for(int iR=0;iR< mRefClasses.rows();iR++)
+			for (Index iR = 0; iR < iNbRef; iR++)
+			{
 				if (mRefClasses(iR) == iClass)
 				{
-					// update centroid
-					mRefCentroid.row(iR) += mSamples.row(iS);
-					mRefCentroidCount(iR)++;
+					float fDist = _pKm->compute_dist(mSamples.row(iS), mRefCentroid.row(iR));
+					if (fDist < fDistBest)
+					{
+						fDistBest = fDist;
+						iPosBest = iR;
+					}
 				}
+			}
+
+			// update centroid
+			mRefCentroid.row(iPosBest) += mSamples.row(iS);
+			mRefCentroidCount(iPosBest)++;
 		}
 
-		for (int iR = 0; iR < mRefClasses.rows(); iR++)
-			mRefClasses.row(iR) = mRefCentroid.row(iR) / mRefCentroidCount(iR);
+		for (Index iR = 0; iR < iNbRef; iR++)
+		{
+			if(mRefCentroidCount(iR)!=0)
+				mRefVectors.row(iR) = mRefCentroid.row(iR) / mRefCentroidCount(iR);
+		}
 
+		_fTrainAccuracy = compute_accuracy(mSamples, mTruth);
 
+		if (_pmSamplesValidation != nullptr)
+			_fValidationAccuracy = compute_accuracy(*_pmSamplesValidation, *_pmTruthValidation);
+
+		if (_epochCallBack)
+			_epochCallBack();
 	}
 
 	/*
 
-    _trainLoss.clear();
-    _validationLoss.clear();
-    _trainAccuracy.clear();
-    _validationAccuracy.clear();
 	_fTrainLoss = 1.e10f;
-	_fTrainAccuracy = 0;
 	_fValidationLoss = 1.e10f;
-	_fValidationAccuracy = 0;
-	_iCurrentPatience = 0;
-
-    int iNbSamples=(int)mSamples.rows();
-    int iReboost = 0;
-
-    Net bestNet;
 
     //accept batch size == 0 or greater than nb samples  -> full size
     _iBatchSizeAdjusted=_iBatchSize;
@@ -469,14 +452,14 @@ const vector<float>& NetTrain::get_validation_loss() const
 const vector<float>& NetTrain::get_train_accuracy() const
 {
     return _trainAccuracy;
-}
+}*/
 /////////////////////////////////////////////////////////////////////////////////////////////
-float NetTrain::get_current_validation_accuracy() const
+float KMeansTrain::get_current_validation_accuracy() const
 {
 	return _fValidationAccuracy;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-const vector<float>& NetTrain::get_validation_accuracy() const
+/*const vector<float>& NetTrain::get_validation_accuracy() const
 {
     return _validationAccuracy;
 }
@@ -485,9 +468,10 @@ float NetTrain::get_current_train_loss() const
 {
 	return _fTrainLoss;
 }
+*/
 /////////////////////////////////////////////////////////////////////////////////////////////
-float NetTrain::get_current_train_accuracy() const
+float KMeansTrain::get_current_train_accuracy() const
 {
 	return _fTrainAccuracy;
 }
-*/
+/////////////////////////////////////////////////////////////////////////////////////////////

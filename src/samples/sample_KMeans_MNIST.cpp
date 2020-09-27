@@ -1,6 +1,4 @@
-// simple  classification MNIST with a dense layer, similar as :
-// https://colab.research.google.com/github/tensorflow/docs/blob/master/site/en/tutorials/_index.ipynb
-// validation accuracy > 98.1%, after 20 epochs (2s by epochs)
+// simple  classification MNIST with aKMeans algorithm
 
 #include <iostream>
 #include <chrono>
@@ -10,7 +8,6 @@ using namespace std;
 #include "KMeansTrain.h"
 #include "MNISTReader.h"
 #include "ConfusionMatrix.h"
-
 
 KMeans km;
 KMeansTrain kmTrain;
@@ -28,16 +25,15 @@ void epoch_callback()
 
     iEpoch++;
     cout << "Epoch: " << iEpoch << " duration: " << delta << " ms" << endl;
-/*	cout << "TrainLoss: " << netTrain.get_current_train_loss() << " TrainAccuracy: " << netTrain.get_current_train_accuracy() << " %" ;
-	cout << " ValidationAccuracy: " << netTrain.get_current_validation_accuracy() << " %" << endl;
-	*/
+	cout << " TrainAccuracy: " << kmTrain.get_current_train_accuracy() << " %" ;
+	cout << " ValidationAccuracy: " << kmTrain.get_current_validation_accuracy() << " %" << endl;
+	
 	cout << endl;
 }
 //////////////////////////////////////////////////////////////////////////////
 int main()
 {
-	cout << "simple  classification MNIST with a KMeans algorithm" << endl;
-//	cout << "validation accuracy > 98.1%, after 15 epochs (2s by epochs)" << endl;
+	cout << "simple classification MNIST with a KMeans algorithm" << endl;
 
     iEpoch = 0;
 
@@ -54,10 +50,10 @@ int main()
 
 	//setup train options
 	kmTrain.set_kmeans(km);
-	kmTrain.set_epochs(100);
+	kmTrain.set_epochs(10);
 	kmTrain.set_epoch_callback(epoch_callback); //optional, to show the progress
 	kmTrain.set_train_data(mr.train_data(),mr.train_truth());
-	kmTrain.set_validation_data(mr.test_data(), mr.test_truth()); //optional, not used for training, helps to keep the final best model
+	kmTrain.set_validation_data(mr.test_data(), mr.test_truth()); //optional
 
 	// train net
 	cout << "Training..." << endl << endl;
@@ -66,25 +62,17 @@ int main()
 
 	// show train results
 	MatrixFloat mClassPredicted;
-	km.classify(mr.train_data(), mClassPredicted);
+	km.predict(mr.train_data(), mClassPredicted);
 	ConfusionMatrix cmRef;
 	ClassificationResult crRef = cmRef.compute(mr.train_truth(), mClassPredicted);
 	cout << "Train accuracy: " << crRef.accuracy << " %" << endl;
 
 	MatrixFloat mClassTest;
-	km.classify(mr.test_data(), mClassTest);
+	km.predict(mr.test_data(), mClassTest);
 	ConfusionMatrix cmVal;
 	ClassificationResult crVal = cmVal.compute(mr.test_truth(), mClassTest);
 	cout << "Validation accuracy: " << crVal.accuracy << " %" << endl;
 	cout << "Validation confusion matrix:" << endl << toString(crVal.mConfMat) << endl;
-	/*
-	//testu function
-	if (crVal.accuracy < 98.1f)
-	{
-		cout << "Test failed! accuracy=" << crVal.accuracy << endl;
-		return -1;
-	}
-	*/
-	cout << "Test succeded." << endl;
+
     return 0;
 }

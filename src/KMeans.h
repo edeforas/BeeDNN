@@ -20,14 +20,13 @@ public:
 
 	void set_sizes(int iInputSize,int iNbRef); //input size; total number of centroids, for now 
 
-	void classify(const MatrixFloat& mIn, MatrixFloat& mClass) const;
+	void predict(const MatrixFloat& mIn, MatrixFloat& mClass) const;
+	float compute_dist(const MatrixFloat& m1, const MatrixFloat& m2) const;
 
 	MatrixFloat & ref_vectors();
 	MatrixFloat & ref_classes();
 
 private:
-	float compute_dist(const MatrixFloat& m1, const MatrixFloat& m2) const;
-
 	MatrixFloat _mRefVectors;
 	MatrixFloat _mRefClasses;
 

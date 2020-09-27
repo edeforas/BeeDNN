@@ -42,19 +42,21 @@ public:
 	string get_loss() const;
 
 	void train();
-	/*
-	float compute_loss_accuracy(const MatrixFloat & mSamples, const MatrixFloat& mTruth,float* pfAccuracy = nullptr) const;
+	
+	float compute_accuracy(const MatrixFloat & mSamples, const MatrixFloat& mTruth) const;
 
+	/*
 	const vector<float>& get_train_loss() const;
 	const vector<float>& get_validation_loss() const;
 	const vector<float>& get_train_accuracy() const;
 	const vector<float>& get_validation_accuracy() const;
 
 	float get_current_train_loss() const;
-	float get_current_train_accuracy() const;
 	float get_current_validation_loss() const;
-	float get_current_validation_accuracy() const;
 	*/
+
+	float get_current_validation_accuracy() const;
+	float get_current_train_accuracy() const;
 
 protected:
 //	void add_online_statistics(const MatrixFloat&mPredicted, const MatrixFloat&mTruth);	//online statistics, i.e. loss, accuracy ..
@@ -67,6 +69,7 @@ private:
 	float _fOnlineLoss;
 
 	int _iEpochs;
+	Index _iValidationBatchSize;
 
     const MatrixFloat* _pmSamplesTrain;
     const MatrixFloat* _pmTruthTrain;
