@@ -12,16 +12,20 @@
 
 #include <cmath>
 using namespace std;
+#include "Loss.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 KMeans::KMeans()
 { 
 	_iNbRef = 0;
 	_iInputSize = 0;
+	_pLoss = create_loss("MeanSquaredError");
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 KMeans::~KMeans()
-{ }
+{ 
+	delete _pLoss;
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /*Net& Net::operator=(const Net& other)
 {
@@ -43,6 +47,13 @@ void KMeans::set_sizes(int iInputSize, int iNbRef) //input size; total number of
 
 	_mRefVectors.resize(_iNbRef, _iInputSize);
 	_mRefClasses.resize(_iNbRef, 1);
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
+void KMeans::set_loss(const string&  sLoss)
+{
+	delete _pLoss;
+	_pLoss = create_loss(sLoss);
+	assert(_pLoss);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 MatrixFloat & KMeans::ref_vectors()
@@ -91,8 +102,10 @@ float KMeans::compute_dist(const MatrixFloat& m1, const MatrixFloat& m2) const
 {
 	assert(m1.rows() == 1);
 	assert(m2.rows() == 1);
-
 	assert(m1.cols() == m2.cols());
-	return (m1 - m2).squaredNorm();
+
+	return _pLoss->compute(m1, m2);
+
+//	return (m1 - m2).squaredNorm();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
