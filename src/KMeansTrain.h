@@ -40,10 +40,14 @@ public:
 
 	void set_loss(const string&  sLoss); // "MeanSquareError" by default, ex "MeanSquareError" "CategoricalCrossEntropy"
 	string get_loss() const;
+	const MatrixFloat& ref_count() const;
 
 	void train();
 	
 	float compute_accuracy(const MatrixFloat & mSamples, const MatrixFloat& mTruth) const;
+
+	void set_batchsize(Index iBatchSize); // 1024 by default
+	Index get_batchsize() const;
 
 	/*
 	const vector<float>& get_train_loss() const;
@@ -67,6 +71,7 @@ private:
 
 	int _iOnlineAccuracyGood;
 	float _fOnlineLoss;
+	Index _iBatchSize, _iBatchSizeAdjusted;
 
 	int _iEpochs;
 	Index _iValidationBatchSize;
@@ -78,6 +83,8 @@ private:
 	const MatrixFloat* _pmTruthValidation;
 
 	std::function<void()> _epochCallBack;
+
+	MatrixFloat _mRefCentroidCount;
 
     vector<float> _trainLoss;
     vector<float> _trainAccuracy;
