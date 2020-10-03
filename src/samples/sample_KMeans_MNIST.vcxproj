@@ -177,24 +177,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Activation.cpp" />
     <ClCompile Include="..\ConfusionMatrix.cpp" />
     <ClCompile Include="..\DataSource.cpp" />
     <ClCompile Include="..\KMeans.cpp" />
     <ClCompile Include="..\KMeansTrain.cpp" />
-    <ClCompile Include="..\Layer.cpp" />
     <ClCompile Include="..\Loss.cpp" />
     <ClCompile Include="..\Matrix.cpp" />
     <ClCompile Include="..\MNISTReader.cpp" />
     <ClCompile Include="sample_KMeans_MNIST.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Activation.h" />
     <ClInclude Include="..\ConfusionMatrix.h" />
     <ClInclude Include="..\DataSource.h" />
     <ClInclude Include="..\KMeans.h" />
     <ClInclude Include="..\KMeansTrain.h" />
-    <ClInclude Include="..\Layer.h" />
     <ClInclude Include="..\Loss.h" />
     <ClInclude Include="..\Matrix.h" />
     <ClInclude Include="..\MNISTReader.h" />

@@ -41,8 +41,8 @@ Activations (in alphabetical order):
 - Tanh, TanhShrink, ThresholdedRelu
 
 Loss functions: 
-- MeanSquareError, MeanAbsoluteError
-- L2, L1
+- MeanSquareError, MeanAbsoluteError, MeanCubicError
+- L2, L1, L3
 - LogCosh
 - SparseCategoricalCrossEntropy, CategoricalCrossEntropy, BinaryCrossEntropy
 
@@ -68,6 +68,10 @@ Learning and optimization:
 - LearnMore mode 
 - Reboost mode
 
+KMeans:
+- can use any loss
+- can use any optimizers
+
 I/O:
 - MNIST reader
 - CIFAR10 reader
@@ -83,3 +87,4 @@ Commented samples:
 - MNIST and Meta Optimizer: select best activation
 - CIFAR10 conv2D + poolmax2D
 - Time series forecasting, windowed sunspot data
+- MNIST with kmeans and custom loss

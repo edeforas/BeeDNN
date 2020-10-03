@@ -424,6 +424,16 @@ public:
         return out;
     }
 
+	Matrix<T> cube() const
+	{
+		Matrix<T> out(*this);
+
+		for (Index i = 0; i < _iSize; i++)
+			out(i) = _data[i] * _data[i] * _data[i]; //todo optimize
+
+		return out;
+	}
+
 	Matrix<T> log() const //todo check applies on array only
 	{
 		Matrix<T> out(*this);

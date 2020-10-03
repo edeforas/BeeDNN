@@ -1,5 +1,5 @@
 // simple  classification MNIST with aKMeans algorithm
-// 90 % classification after 20 epochs, 100 centroids are used
+// 91.7 % classification after 20 epochs, 100 centroids are used
 #include <iostream>
 #include <chrono>
 using namespace std;
@@ -19,7 +19,7 @@ chrono::steady_clock::time_point start;
 void epoch_callback()
 {
 	//compute epoch time
-	chrono::steady_clock::time_point next = chrono::steady_clock::now();
+	auto next = chrono::steady_clock::now();
 	auto delta = chrono::duration_cast<std::chrono::milliseconds>(next - start).count();
 	start = next;
 
@@ -48,6 +48,7 @@ int main()
     }
   
 	km.set_sizes(784 , 10 * 10); // approximately 10 supports by classes (todo)
+	km.set_loss("MeanCubicError"); // gives better accuracy with KMeans
 
 	//setup train options
 	kmTrain.set_kmeans(km);
