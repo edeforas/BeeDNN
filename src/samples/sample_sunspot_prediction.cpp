@@ -88,7 +88,7 @@ int main()
 		else
 		{
 			MatrixFloat mPredicted;
-			net.forward(mDataTrainWindowed.row(i- iWindowSize), mPredicted);
+			net.predict(mDataTrainWindowed.row(i- iWindowSize), mPredicted);
 			mResult(i, 1) = mPredicted(0);
 		}
 	}

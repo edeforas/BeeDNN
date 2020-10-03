@@ -34,7 +34,7 @@ void epoch_callback()
 //////////////////////////////////////////////////////////////////////////////
 int main()
 {
-	cout << "simple classification MNIST with a KMeans algorithm" << endl;
+	cout << "simple MNIST classification with a KMeans algorithm" << endl;
 
     iEpoch = 0;
 

@@ -60,7 +60,7 @@ int main()
 
     //print truth and prediction
 	MatrixFloat mPredict;
-	net.forward(mSamples, mPredict);
+	net.predict(mSamples, mPredict);
 	for (int i = 0; i < mSamples.size(); i += 8)
 	{
 		cout << setprecision(4) << "x=" << mSamples(i, 0) << "\ttruth=" << mTruth(i, 0) << "\tpredict=" << mPredict(i, 0) << endl;

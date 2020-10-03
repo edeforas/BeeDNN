@@ -399,7 +399,7 @@ public:
         Matrix<T> out(*this);
 
         for(Index i=0;i<_iSize;i++)
-            out(i)=fabs(_data[i]);
+            out(i)=::abs(_data[i]);
 
         return out;
     }
@@ -409,7 +409,7 @@ public:
 		Matrix<T> out(*this);
 
 		for (Index i = 0; i < _iSize; i++)
-			out(i) = std::copysignf(1.f,_data[i]);
+			out(i) = std::copysign(1.f,_data[i]);
 
 		return out;
 	}
@@ -439,7 +439,17 @@ public:
 		Matrix<T> out(*this);
 
 		for (Index i = 0; i < _iSize; i++)
-			out(i) = logf(_data[i]);
+			out(i) = ::log(_data[i]);
+
+		return out;
+	}
+
+	Matrix<T> round() const //todo check applies on array only
+	{
+		Matrix<T> out(*this);
+
+		for (Index i = 0; i < _iSize; i++)
+			out(i) = ::round(_data[i]);
 
 		return out;
 	}
@@ -449,7 +459,7 @@ public:
 		Matrix<T> out(*this);
 
 		for (Index i = 0; i < _iSize; i++)
-			out(i) = coshf(_data[i]);
+			out(i) = ::cosh(_data[i]);
 
 		return out;
 	}
@@ -459,7 +469,7 @@ public:
 		Matrix<T> out(*this);
 
 		for (Index i = 0; i < _iSize; i++)
-			out(i) = tanhf(_data[i]);
+			out(i) = ::tanh(_data[i]);
 
 		return out;
 	}
@@ -469,7 +479,7 @@ public:
 		Matrix<T> out(*this);
 
 		for (Index i = 0; i < _iSize; i++)
-			out(i) = expf(_data[i]);
+			out(i) = ::exp(_data[i]);
 
 		return out;
 	}
@@ -479,7 +489,7 @@ public:
         Matrix<T> out(*this);
 
         for(Index i=0;i<_iSize;i++)
-            out(i)=sqrtf(_data[i]);
+            out(i)=::sqrt(_data[i]);
 
         return out;
     }
@@ -560,7 +570,7 @@ public:
 
 	T mean() const
 	{
-		return sum()/(float)_iSize;
+		return sum()/(T)_iSize;
 	}
 	
 	T maxCoeff() const

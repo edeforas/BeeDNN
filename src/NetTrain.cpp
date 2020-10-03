@@ -332,7 +332,7 @@ float NetTrain::compute_loss_accuracy(const MatrixFloat &mSamples, const MatrixF
 		mSamplesBatch = rowView(mSamples, iStart, iEnd);
 		mTruthBatch = rowView(mTruth, iStart, iEnd);
 		
-		_pNet->forward(mSamplesBatch, mOut);
+		_pNet->predict(mSamplesBatch, mOut);
 		fLoss+= _pLoss->compute(mOut, mTruthBatch);
 
 		if (pfAccuracy)

@@ -39,8 +39,8 @@ public:
 	void set_classification_mode(bool bClassificationMode); //true by default
 	bool is_classification_mode() const;
 
-	void forward(const MatrixFloat& mIn, MatrixFloat& mOut) const;
-	void classify(const MatrixFloat& mIn, MatrixFloat& mClass) const;
+	void predict(const MatrixFloat& mIn, MatrixFloat& mOut) const;
+	void predict_class(const MatrixFloat& mIn, MatrixFloat& mClass) const;
 
     void set_train_mode(bool bTrainMode); // set to true if training, set to false if testing (default)
 
