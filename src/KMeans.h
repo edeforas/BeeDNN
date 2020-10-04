@@ -18,7 +18,7 @@ class KMeans
 public:
 	KMeans();
     virtual ~KMeans();
-    //Net& operator=(const Net& other);
+    KMeans& operator=(const KMeans& other);
 
 	void set_sizes(int iInputSize,int iNbRef); //input size; total number of centroids, for now 
 	void set_loss(const string&  sLoss);

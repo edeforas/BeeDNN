@@ -1,5 +1,5 @@
-// simple  classification MNIST with aKMeans algorithm
-// 91.7 % classification after 20 epochs, 100 centroids are used
+// simple MNIST classification with a KMeans algorithm
+// 92 % classification after 30 epochs, 100 centroids are used, 2s/epoch
 #include <iostream>
 #include <chrono>
 using namespace std;
@@ -27,7 +27,6 @@ void epoch_callback()
     cout << "Epoch: " << iEpoch << " duration: " << delta << " ms" << endl;
 	cout << " TrainAccuracy: " << kmTrain.get_current_train_accuracy() << " %" ;
 	cout << " ValidationAccuracy: " << kmTrain.get_current_validation_accuracy() << " %" << endl;
-	cout << " Ref count= " << toString(kmTrain.ref_count().transpose()) << endl;
 
 	cout << endl;
 }
@@ -52,8 +51,8 @@ int main()
 
 	//setup train options
 	kmTrain.set_kmeans(km);
-	kmTrain.set_epochs(20);
-	kmTrain.set_batchsize(1024);
+	kmTrain.set_epochs(30);
+	kmTrain.set_batchsize(10000);
 	kmTrain.set_epoch_callback(epoch_callback); //optional, to show the progress
 	kmTrain.set_train_data(mr.train_data(),mr.train_truth());
 	kmTrain.set_validation_data(mr.test_data(), mr.test_truth()); //optional

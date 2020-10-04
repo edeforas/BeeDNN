@@ -27,18 +27,18 @@ KMeans::~KMeans()
 	delete _pLoss;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-/*Net& Net::operator=(const Net& other)
+KMeans& KMeans::operator=(const KMeans& other)
 {
-    clear();
+	_mRefVectors=other._mRefVectors;
+	_mRefClasses=other._mRefClasses;
 
-    for(size_t i=0;i<other._layers.size();i++)
-        _layers.push_back(other._layers[i]->clone());
+	_pLoss=create_loss(other._pLoss->name());
 
-    _bClassificationMode = other._bClassificationMode;
+	_iNbRef=other._iNbRef;
+	_iInputSize = other._iInputSize;
 
     return *this;
 }
-*/
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void KMeans::set_sizes(int iInputSize, int iNbRef) //input size; total number of centroids, for now 
 {

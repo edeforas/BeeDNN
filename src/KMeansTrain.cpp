@@ -40,8 +40,8 @@ KMeansTrain::KMeansTrain():
 	_pmTruthValidation = nullptr;
 
 	_iValidationBatchSize = 1024;
-	_iBatchSize = 1024;
-	_iBatchSizeAdjusted=0;
+	_iBatchSize = 0;
+	_bKeepBest = true;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 KMeansTrain::~KMeansTrain()
@@ -138,7 +138,7 @@ string KMeansTrain::get_loss() const
     return _pLoss->name();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void KMeansTrain::set_batchsize(Index iBatchSize) //16 by default
+void KMeansTrain::set_batchsize(Index iBatchSize)
 {
 	_iBatchSize = iBatchSize;
 }
@@ -146,6 +146,16 @@ void KMeansTrain::set_batchsize(Index iBatchSize) //16 by default
 Index KMeansTrain::get_batchsize() const
 {
 	return _iBatchSize;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void KMeansTrain::set_keepbest(bool bKeepBest) //true by default
+{
+	_bKeepBest = bKeepBest;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+bool KMeansTrain::get_keepbest() const
+{
+	return _bKeepBest;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 float KMeansTrain::compute_accuracy(const MatrixFloat &mSamples, const MatrixFloat &mTruth) const
@@ -206,12 +216,32 @@ void KMeansTrain::train()
 
 	MatrixFloat & mRefVectors = _pKm->ref_vectors();
 	MatrixFloat & mRefClasses = _pKm->ref_classes();
-	MatrixFloat mRefCentroid;
-	mRefCentroid.resize(mRefVectors.rows(), mRefVectors.cols());
-	
-	_mRefCentroidCount.resize(mRefVectors.rows(), 1); 
+	MatrixFloat mRefCentroid, mRefCentroidCount;
+	mRefCentroid.setZero(mRefVectors.rows(), mRefVectors.cols());
+	mRefCentroidCount.setZero(mRefVectors.rows(), 1);
+
+	//accept batch size == 0 or greater than nb samples  -> full size
+	Index iBatchSizeAdjusted = _iBatchSize;
+	if ((iBatchSizeAdjusted > iNbSamples) || (iBatchSizeAdjusted == 0))
+		iBatchSizeAdjusted = iNbSamples;
 
 	Index iNbRef = mRefVectors.rows();
+
+	float fMaxAccuracy = 0.f;
+	KMeans bestKM;
+	if (_bKeepBest)
+	{
+		//need to compte the start accuracy
+		if (_pmSamplesValidation == nullptr)
+		{
+			fMaxAccuracy = compute_accuracy(*_pmSamplesTrain, *_pmTruthTrain);
+		}
+		else
+		{
+			fMaxAccuracy = compute_accuracy(*_pmSamplesValidation, *_pmTruthValidation);
+		}
+		bestKM = *_pKm;
+	}
 
 	//init ref vectors, select randomly in full test base
 	for (Index i = 0; i < iNbRef; i++)
@@ -224,12 +254,12 @@ void KMeansTrain::train()
 
 	for (int iEpoch = 0; iEpoch < _iEpochs; iEpoch++)
 	{
-		mRefCentroid.setZero();
-		_mRefCentroidCount.setZero();
-
+		vector<Index> viPermute = randPerm(iNbSamples);
+		Index iNextUpdate = iBatchSizeAdjusted;
 		for (Index iS = 0; iS < mSamples.rows(); iS++)
 		{
-			int iClass = (int)mTruth(iS);
+			Index iSample = viPermute[iS];
+			int iClass = (int)mTruth(iSample);
 			Index iPosBest = -1;
 			float fDistBest = 1.e38f;
 
@@ -237,7 +267,7 @@ void KMeansTrain::train()
 			{
 				if (mRefClasses(iR) == iClass)
 				{
-					float fDist = _pKm->compute_dist(mSamples.row(iS), mRefVectors.row(iR));
+					float fDist = _pKm->compute_dist(mSamples.row(iSample), mRefVectors.row(iR));
 					if (fDist < fDistBest)
 					{
 						fDistBest = fDist;
@@ -249,25 +279,51 @@ void KMeansTrain::train()
 			if (iPosBest != -1)
 			{
 				// update centroid
-				mRefCentroid.row(iPosBest) += mSamples.row(iS);
-				_mRefCentroidCount(iPosBest)++;
+				mRefCentroid.row(iPosBest) += mSamples.row(iSample);
+				mRefCentroidCount(iPosBest)++;
+			}
+		
+			if ((iS >= iNextUpdate) || (iS == mSamples.rows() - 1))
+			{
+				//time to update the model
+				for (Index iR = 0; iR < iNbRef; iR++)
+				{
+					if (mRefCentroidCount(iR) != 0)
+						mRefVectors.row(iR) = mRefCentroid.row(iR) / mRefCentroidCount(iR);
+				}
+
+				mRefCentroid.setZero();
+				mRefCentroidCount.setZero();
+
+				iNextUpdate += iBatchSizeAdjusted;
 			}
 		}
 
-		for (Index iR = 0; iR < iNbRef; iR++)
-		{
-			if(_mRefCentroidCount(iR)!=0)
-				mRefVectors.row(iR) = mRefCentroid.row(iR) / _mRefCentroidCount(iR);
-		}
-
 		_fTrainAccuracy = compute_accuracy(mSamples, mTruth);
+		float fSelectedAccuracy = _fTrainAccuracy;
 
 		if (_pmSamplesValidation != nullptr)
+		{
 			_fValidationAccuracy = compute_accuracy(*_pmSamplesValidation, *_pmTruthValidation);
+			fSelectedAccuracy = _fValidationAccuracy;
+		}
+
+		if (_bKeepBest)
+		{
+			if (fMaxAccuracy < fSelectedAccuracy)
+			{
+				fMaxAccuracy = fSelectedAccuracy;
+				bestKM = *_pKm;
+			}
+		}
 
 		if (_epochCallBack)
 			_epochCallBack();
 	}
+
+	if (_bKeepBest)
+		(*_pKm).operator=(bestKM);
+
 
 	/*
 
@@ -491,10 +547,5 @@ float NetTrain::get_current_train_loss() const
 float KMeansTrain::get_current_train_accuracy() const
 {
 	return _fTrainAccuracy;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-const MatrixFloat& KMeansTrain::ref_count() const
-{
-	return _mRefCentroidCount;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////

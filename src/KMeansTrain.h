@@ -33,6 +33,9 @@ public:
     void set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth);
 	void set_validation_data(const MatrixFloat& mSamplesValidation, const MatrixFloat& mTruthValidation);
 
+	void set_keepbest(bool bKeepBest); //true by default: keep the best model of all epochs (evaluated on the test database)
+	bool get_keepbest() const;
+
 	void set_epochs(int iEpochs); //100 by default
 	int get_epochs() const;
 
@@ -40,7 +43,6 @@ public:
 
 	void set_loss(const string&  sLoss); // "MeanSquareError" by default, ex "MeanSquareError" "CategoricalCrossEntropy"
 	string get_loss() const;
-	const MatrixFloat& ref_count() const;
 
 	void train();
 	
@@ -71,11 +73,12 @@ private:
 
 	int _iOnlineAccuracyGood;
 	float _fOnlineLoss;
-	Index _iBatchSize, _iBatchSizeAdjusted;
+	Index _iBatchSize;
 
 	int _iEpochs;
 	Index _iValidationBatchSize;
 
+	bool _bKeepBest;
     const MatrixFloat* _pmSamplesTrain;
     const MatrixFloat* _pmTruthTrain;
 
@@ -83,8 +86,6 @@ private:
 	const MatrixFloat* _pmTruthValidation;
 
 	std::function<void()> _epochCallBack;
-
-	MatrixFloat _mRefCentroidCount;
 
     vector<float> _trainLoss;
     vector<float> _trainAccuracy;
