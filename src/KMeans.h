@@ -23,7 +23,7 @@ public:
 	void set_sizes(int iInputSize,int iNbRef); //input size; total number of centroids, for now 
 	void set_loss(const string&  sLoss);
 
-	void predict(const MatrixFloat& mIn, MatrixFloat& mClass) const;
+	void predict_class(const MatrixFloat& mIn, MatrixFloat& mClass) const;
 	float compute_dist(const MatrixFloat& m1, const MatrixFloat& m2) const;
 
 	MatrixFloat & ref_vectors();

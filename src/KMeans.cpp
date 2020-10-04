@@ -66,7 +66,7 @@ MatrixFloat & KMeans::ref_classes()
 	return _mRefClasses;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-void KMeans::predict(const MatrixFloat& mIn, MatrixFloat& mClass) const
+void KMeans::predict_class(const MatrixFloat& mIn, MatrixFloat& mClass) const
 {
     MatrixFloat mOut;
 
@@ -78,26 +78,27 @@ void KMeans::predict(const MatrixFloat& mIn, MatrixFloat& mClass) const
 		return;
 	}
 
-	for (int i = 0; i < mIn.rows(); i++)
+	for (int iS = 0; iS < mIn.rows(); iS++)
 	{
 		float fDistBest = 1.e38f; //todo
 		int indexBest = -1;
-		for (int j = 0; j < _mRefVectors.rows(); j++)
+		MatrixFloat mS = mIn.row(iS);
+
+		for (int iR = 0; iR < _mRefVectors.rows(); iR++)
 		{
-			float d = compute_dist(mIn.row(i), _mRefVectors.row(j));
+			float d = compute_dist(mS, _mRefVectors.row(iR));
 			if (d < fDistBest)
 			{
 				fDistBest = d;
-				indexBest = j;
+				indexBest = iR;
 			}
 		}
 	
 		assert(indexBest != -1);
-		mClass(i) = _mRefClasses(indexBest);
+		mClass(iS) = _mRefClasses(indexBest);
 	}
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-// todo use loss instead
 float KMeans::compute_dist(const MatrixFloat& m1, const MatrixFloat& m2) const
 {
 	assert(m1.rows() == 1);
@@ -105,7 +106,5 @@ float KMeans::compute_dist(const MatrixFloat& m1, const MatrixFloat& m2) const
 	assert(m1.cols() == m2.cols());
 
 	return _pLoss->compute(m1, m2);
-
-//	return (m1 - m2).squaredNorm();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////

@@ -167,10 +167,10 @@ float KMeansTrain::compute_accuracy(const MatrixFloat &mSamples, const MatrixFlo
 		mSamplesBatch = rowView(mSamples, iStart, iEnd);
 		mTruthBatch = rowView(mTruth, iStart, iEnd);
 		
-		_pKm->predict(mSamplesBatch, mOut);
+		_pKm->predict_class(mSamplesBatch, mOut);
 			
 		for (int i = 0; i < iBatchSize; i++)
-			iGood += roundf(mOut(i)) == mTruthBatch(i);
+			iGood += mOut(i) == mTruthBatch(i);
 	}
 
 	return 100.f*iGood / iNbSamples;
