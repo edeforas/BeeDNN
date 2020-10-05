@@ -332,7 +332,7 @@ float NetTrain::compute_loss_accuracy(const MatrixFloat &mSamples, const MatrixF
 		mSamplesBatch = rowView(mSamples, iStart, iEnd);
 		mTruthBatch = rowView(mTruth, iStart, iEnd);
 		
-		_pNet->forward(mSamplesBatch, mOut);
+		_pNet->predict(mSamplesBatch, mOut);
 		fLoss+= _pLoss->compute(mOut, mTruthBatch);
 
 		if (pfAccuracy)
@@ -547,8 +547,6 @@ void NetTrain::train()
 
 	if(_bKeepBest)
 		(*_pNet).operator=(bestNet);
-
-    return ;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth)

@@ -160,6 +160,33 @@ void test_bernoulli()
 	test(is_near(m.mean(), 0.3f, 0.001), "Mean must be near 0.3f");
 }
 ////////////////////////////////////////////////////////
+void test_hyperbolic()
+{
+	cout << "test_tanh:" << endl;
+
+	MatrixXf m1(1000, 1000), m2(1000, 1000), m(1000, 1000);
+	m.setRandom();
+
+	{
+		auto start = chrono::steady_clock::now();
+		for (int i = 0; i < 100; i++)
+			m1 = m.array().tanh();
+		auto end = chrono::steady_clock::now();
+		auto delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+		cout << "Tanh Time elapsed: " << delta << " ms. Mean= " << m1.mean() << endl;
+	}
+	
+	{	
+		auto start = chrono::steady_clock::now();
+		for (int i = 0; i < 100; i++)
+			for (int j = 0; j < m.size(); j++)
+				m2(j) = tanh(m(j));
+		auto end = chrono::steady_clock::now();
+		auto delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+		cout << "Tanh Time elapsed: " << delta << " ms. Mean= " << m2.mean() << endl;
+	}
+}
+////////////////////////////////////////////////////////
 void GEMM_naive(const MatrixFloat& a, const MatrixFloat& b, MatrixFloat& ab)
 {
 	ab.resize(a.rows(), b.cols());
@@ -293,11 +320,12 @@ void test_sse()
 ////////////////////////////////////////////////////////
 int main()
 {
-	elementary_tests();
-	check_matrixView();
-	test_bernoulli();
-	test_GEMM();
-	test_sse();
+	//elementary_tests();
+	//check_matrixView();
+	//test_bernoulli();
+	test_hyperbolic();
+	//test_GEMM();
+	//test_sse();
 
     cout << "Tests finished." << endl;
     return 0;

@@ -76,6 +76,43 @@ public:
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
+class LossMeanCubicError : public Loss
+{
+public:
+	string name() const override
+	{
+		return "MeanCubicError";
+	}
+
+	float compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget) const override
+	{
+		assert(mTarget.cols() == mPredicted.cols());
+		assert(mTarget.rows() == mPredicted.rows());
+
+		if (mTarget.size() == 0)
+			return 0.f;
+		if (!_bClassBalancing)
+			return (mPredicted - mTarget).array().cube().cwiseAbs().mean();
+		else
+		{
+			MatrixFloat mError = (mPredicted - mTarget).array().cube().cwiseAbs();
+			balance_with_weight(mTarget, mError);
+			return mError.mean();
+		}
+	}
+
+	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
+	{
+		//TODO optimise
+		assert(mTarget.cols() == mPredicted.cols());
+		assert(mTarget.rows() == mPredicted.rows());
+
+		mGradientLoss = ((mPredicted - mTarget).cwiseSign())*((mPredicted - mTarget).cwiseAbs())*3.f;
+		if (_bClassBalancing)
+			balance_with_weight(mTarget, mGradientLoss);
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
 class LossMeanAbsoluteError : public Loss
 {
 public:
@@ -187,6 +224,46 @@ public:
 
 		mGradientLoss = (mPredicted - mTarget).cwiseSign();
         if(_bClassBalancing)
+			balance_with_weight(mTarget, mGradientLoss);
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
+// same as MeanCubicError but do not divide by nbSamples
+class LossL3 : public Loss
+{
+public:
+	string name() const override
+	{
+		return "L3";
+	}
+
+	float compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget) const override
+	{
+		assert(mTarget.cols() == mPredicted.cols());
+		assert(mTarget.rows() == mPredicted.rows());
+
+		if (mTarget.size() == 0)
+			return 0.f;
+
+		if (!_bClassBalancing)
+			return (mPredicted - mTarget).array().cube().cwiseAbs().sum();
+		else
+		{
+			MatrixFloat mError = (mPredicted - mTarget).array().cube().cwiseAbs();
+			balance_with_weight(mTarget, mError);
+			return mError.sum();
+		}
+	}
+
+	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
+	{
+		assert(mTarget.cols() == mPredicted.cols());
+		assert(mTarget.rows() == mPredicted.rows());
+
+		//todo optimize
+		mGradientLoss = ((mPredicted - mTarget).cwiseSign())*((mPredicted - mTarget).cwiseAbs())*3.f;
+
+		if (_bClassBalancing)
 			balance_with_weight(mTarget, mGradientLoss);
 	}
 };
@@ -392,11 +469,17 @@ Loss* create_loss(const string& sLoss)
     else if(sLoss =="MeanAbsoluteError")
         return new LossMeanAbsoluteError;
 
+	if (sLoss == "MeanCubicError")
+		return new LossMeanCubicError;
+
 	else if(sLoss == "L2")
 		return new LossL2;
 
 	else if(sLoss == "L1")
 		return new LossL1;
+
+	else if (sLoss == "L3")
+		return new LossL3;
 
 	else if(sLoss == "LogCosh")
 		return new LossLogCosh;
@@ -419,8 +502,10 @@ void list_loss_available(vector<string>& vsLoss)
 
     vsLoss.push_back("MeanSquaredError");
 	vsLoss.push_back("MeanAbsoluteError");
+	vsLoss.push_back("MeanCubicError");
 	vsLoss.push_back("L2");
 	vsLoss.push_back("L1");
+	vsLoss.push_back("L3");
 	vsLoss.push_back("LogCosh");
 	vsLoss.push_back("CategoricalCrossEntropy");
 	vsLoss.push_back("SparseCategoricalCrossEntropy");

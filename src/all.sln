@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DNNLab", "DNNLab\DNNLab.vcxproj", "{CBB59BB4-DB10-33D5-ACBB-01DEC4FB50ED}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_layer_convolution", "tests\test_layer_convolution.vcxproj", "{F1B17300-0846-4456-9B79-9B30ACADA3F6}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_matrix", "tests\test_matrix.vcxproj", "{3E64F758-BD1B-42F0-B6F4-F6D1A382C83C}"
@@ -25,6 +23,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_regression_sin", "sa
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_sunspot_prediction", "samples\sample_sunspot_prediction.vcxproj", "{F418D54A-F4B9-4FBD-83EA-F7D29365A301}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_KMeans_MNIST", "samples\sample_KMeans_MNIST.vcxproj", "{030416AC-F266-4EFF-9E9B-5B3718DFBE4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -33,12 +33,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CBB59BB4-DB10-33D5-ACBB-01DEC4FB50ED}.Debug|x64.ActiveCfg = Debug|x64
-		{CBB59BB4-DB10-33D5-ACBB-01DEC4FB50ED}.Debug|x64.Build.0 = Debug|x64
-		{CBB59BB4-DB10-33D5-ACBB-01DEC4FB50ED}.Debug|x86.ActiveCfg = Debug|x64
-		{CBB59BB4-DB10-33D5-ACBB-01DEC4FB50ED}.Release|x64.ActiveCfg = Release|x64
-		{CBB59BB4-DB10-33D5-ACBB-01DEC4FB50ED}.Release|x64.Build.0 = Release|x64
-		{CBB59BB4-DB10-33D5-ACBB-01DEC4FB50ED}.Release|x86.ActiveCfg = Release|x64
 		{F1B17300-0846-4456-9B79-9B30ACADA3F6}.Debug|x64.ActiveCfg = Debug|x64
 		{F1B17300-0846-4456-9B79-9B30ACADA3F6}.Debug|x64.Build.0 = Debug|x64
 		{F1B17300-0846-4456-9B79-9B30ACADA3F6}.Debug|x86.ActiveCfg = Debug|Win32
@@ -119,6 +113,14 @@ Global
 		{F418D54A-F4B9-4FBD-83EA-F7D29365A301}.Release|x64.Build.0 = Release|x64
 		{F418D54A-F4B9-4FBD-83EA-F7D29365A301}.Release|x86.ActiveCfg = Release|Win32
 		{F418D54A-F4B9-4FBD-83EA-F7D29365A301}.Release|x86.Build.0 = Release|Win32
+		{030416AC-F266-4EFF-9E9B-5B3718DFBE4A}.Debug|x64.ActiveCfg = Debug|x64
+		{030416AC-F266-4EFF-9E9B-5B3718DFBE4A}.Debug|x64.Build.0 = Debug|x64
+		{030416AC-F266-4EFF-9E9B-5B3718DFBE4A}.Debug|x86.ActiveCfg = Debug|Win32
+		{030416AC-F266-4EFF-9E9B-5B3718DFBE4A}.Debug|x86.Build.0 = Debug|Win32
+		{030416AC-F266-4EFF-9E9B-5B3718DFBE4A}.Release|x64.ActiveCfg = Release|x64
+		{030416AC-F266-4EFF-9E9B-5B3718DFBE4A}.Release|x64.Build.0 = Release|x64
+		{030416AC-F266-4EFF-9E9B-5B3718DFBE4A}.Release|x86.ActiveCfg = Release|Win32
+		{030416AC-F266-4EFF-9E9B-5B3718DFBE4A}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
