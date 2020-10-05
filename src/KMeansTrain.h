@@ -11,12 +11,10 @@
 
 #include "Matrix.h"
 
-#include <vector>
 #include <functional>
 #include <string>
 using namespace std;
 
-class Loss;
 class KMeans;
 
 class KMeansTrain
@@ -24,9 +22,6 @@ class KMeansTrain
 public:
 	KMeansTrain();
     virtual ~KMeansTrain();
-	//KMeansTrain& operator=(const KMeansTrain& other);
-
-    void clear();
 	
 	void set_kmeans(KMeans& km);
 	KMeans& kmeans();
@@ -41,9 +36,6 @@ public:
 
 	void set_epoch_callback(std::function<void()> epochCallBack);
 
-	void set_loss(const string&  sLoss); // "MeanSquareError" by default, ex "MeanSquareError" "CategoricalCrossEntropy"
-	string get_loss() const;
-
 	void train();
 	
 	float compute_accuracy(const MatrixFloat & mSamples, const MatrixFloat& mTruth) const;
@@ -51,28 +43,13 @@ public:
 	void set_batchsize(Index iBatchSize); // 1024 by default
 	Index get_batchsize() const;
 
-	/*
-	const vector<float>& get_train_loss() const;
-	const vector<float>& get_validation_loss() const;
-	const vector<float>& get_train_accuracy() const;
-	const vector<float>& get_validation_accuracy() const;
-
-	float get_current_train_loss() const;
-	float get_current_validation_loss() const;
-	*/
-
 	float get_current_validation_accuracy() const;
 	float get_current_train_accuracy() const;
 
 protected:
-//	void add_online_statistics(const MatrixFloat&mPredicted, const MatrixFloat&mTruth);	//online statistics, i.e. loss, accuracy ..
-	Loss* _pLoss;
 	KMeans* _pKm;
 
 private:
-
-	int _iOnlineAccuracyGood;
-	float _fOnlineLoss;
 	Index _iBatchSize;
 
 	int _iEpochs;
@@ -87,16 +64,7 @@ private:
 
 	std::function<void()> _epochCallBack;
 
-    vector<float> _trainLoss;
-    vector<float> _trainAccuracy;
-	
-	vector<float> _validationLoss;
-	vector<float> _validationAccuracy;
-
-	float _fTrainLoss;
 	float _fTrainAccuracy;
-
-	float _fValidationLoss;
 	float _fValidationAccuracy;
 };
 

@@ -7,9 +7,9 @@ import ConfusionMatrix;
 # Simple MNIST classification using small network
 
 # load data
-[sample,truth_categorical,test_sample,test_truth]=MNIST_import.load()
-sample/=256.;
-sample = sample.reshape(60000, 28*28)
+[train_sample,truth_categorical,test_sample,test_truth]=MNIST_import.load()
+train_sample/=256.;
+train_sample = train_sample.reshape(60000, 28*28)
 test_sample/=256.;
 test_sample = test_sample.reshape(10000, 28*28)
 truth=MNIST_import.to_one_hot(truth_categorical);
@@ -25,15 +25,15 @@ n.append(nn.LayerSoftmax())
 # train net
 train = nn.NetTrain()
 train.epochs = 20
-train.batch_size=32
+train.batch_size=64
 train.set_test_data(test_sample , test_truth)
-train.set_optimizer(nn.opt.OptimizerMomentum())
+train.set_optimizer(nn.opt.OptimizerAdam())
 train.set_loss(nn.LossCrossEntropy()) # simple Mean Square Error
-train.train(n,sample,truth)
+train.train(n,train_sample,truth)
 n=train.best_net #todo remove do this in the end of train()
 
 # compute and print confusion matrix
-predicted = n.forward(sample)
+predicted = n.forward(train_sample)
 confmat,accuracy=ConfusionMatrix.compute(truth_categorical,predicted,10);
 print("Train conf mat:\n",confmat);
 print("Final Train accuracy:",accuracy);

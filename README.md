@@ -70,7 +70,7 @@ Learning and optimization:
 
 KMeans:
 - can use any loss
-- can use any optimizers
+- batchmode learning
 
 I/O:
 - MNIST reader
