@@ -1,18 +1,17 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import BeeDNN as nn
-import MNIST_import;
-import ConfusionMatrix;
+import MNIST_import
 
 # Simple MNIST classification using small network
 
 # load data
 [train_sample,truth_categorical,test_sample,test_truth]=MNIST_import.load()
-train_sample/=256.;
+train_sample/=256.
 train_sample = train_sample.reshape(60000, 28*28)
-test_sample/=256.;
+test_sample/=256.
 test_sample = test_sample.reshape(10000, 28*28)
-truth=MNIST_import.to_one_hot(truth_categorical);
+truth=nn.to_one_hot(truth_categorical)
 
 # construct net
 n = nn.Net()
@@ -33,15 +32,15 @@ train.train(n,train_sample,truth)
 n=train.best_net #todo remove do this in the end of train()
 
 # compute and print confusion matrix
-predicted = n.forward(train_sample)
-confmat,accuracy=ConfusionMatrix.compute(truth_categorical,predicted,10);
-print("Train conf mat:\n",confmat);
-print("Final Train accuracy:",accuracy);
+predicted = n.predict(train_sample)
+confmat,accuracy=nn.compute_confusion_matrix(truth_categorical,predicted,10)
+print("Train conf mat:\n",confmat)
+print("Final Train accuracy:",accuracy)
 
-predicted = n.forward(test_sample)
-confmat,accuracy=ConfusionMatrix.compute(test_truth,predicted,10);
-print("\nTest conf mat:\n",confmat);
-print("Final Test accuracy:",accuracy);
+predicted = n.predict(test_sample)
+confmat,accuracy=nn.compute_confusion_matrix(test_truth,predicted,10)
+print("\nTest conf mat:\n",confmat)
+print("Final Test accuracy:",accuracy)
 
 # plot loss
 plt.plot(train.epoch_loss)

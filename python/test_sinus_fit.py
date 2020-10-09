@@ -27,6 +27,6 @@ def test_fit():
 
 	# test convergence
 	x = sample
-	y = n.forward(x)
-	dist=np.abs(y-truth);
+	y = n.predict(x)
+	dist=np.abs(y-truth)
 	assert np.max(dist)<0.15

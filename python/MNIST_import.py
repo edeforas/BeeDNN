@@ -1,6 +1,6 @@
 #from https://stackoverflow.com/questions/40427435/extract-images-from-idx3-ubyte-file-or-gzip-via-python
 
-import numpy as np;
+import numpy as np
 
 def load():
 

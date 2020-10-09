@@ -33,7 +33,7 @@ plt.show(block=False)
 
 # plot truth curve and predicted
 x = sample
-y = n.forward(x)
+y = n.predict(x)
 plt.figure()
 plt.plot(sample,truth,label='Truth')
 plt.plot(sample,y,label='Predicted')

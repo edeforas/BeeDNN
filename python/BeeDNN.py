@@ -8,8 +8,21 @@
 
 import numpy as np
 import copy
-
 import Optimizer as opt
+
+def compute_confusion_matrix(truth,predicted,nb_class=0):
+	if nb_class==0:
+		nb_class=np.max(truth)
+	confmat=np.zeros((nb_class,nb_class),dtype=int)
+	np.add.at(confmat, tuple([truth.ravel(),predicted.ravel()]), 1)
+	accuracy=100.*np.trace(confmat)/np.sum(confmat)
+	return confmat,accuracy
+
+def to_one_hot(label):
+  maxclass=np.max(label)+1
+  train_label_one_hot=np.eye(maxclass)[label]
+  train_label_one_hot = train_label_one_hot.reshape(label.shape[0], maxclass)
+  return train_label_one_hot
 
 ################################################################################################### Layers
 class Layer:
@@ -17,7 +30,7 @@ class Layer:
     self.dydx = 1.
     self.learnable = False # set to False to freeze layer or if not learnable
     self.training = False # set to False in testing mode or True in training mode
-    self.learnBias= False;
+    self.learnBias= False
 
   def forward(self,x):
     pass
@@ -261,7 +274,7 @@ class LayerTanhShrink(Layer):
 class LayerGlobalBias(Layer):
   def __init__(self):
     super().__init__()
-    self.learnBias= True;
+    self.learnBias= True
     self.b = np.zeros(1,dtype=np.float32)
 
   def forward(self,x):
@@ -274,7 +287,7 @@ class LayerGlobalBias(Layer):
 class LayerBias(Layer):
   def __init__(self,outSize):
     super().__init__()
-    self.learnBias= True;
+    self.learnBias= True
     self.b = np.zeros((1,outSize),dtype=np.float32)
 
   def forward(self,x):
@@ -345,7 +358,7 @@ class LayerDense(Layer): # with bias
     self.learnBias = True
     a=np.sqrt(6./(inSize+outSize)) # Xavier uniform initialization
     self.w = a*(np.random.rand(inSize,outSize) * 2. - 1.)
-    self.b = np.zeros((1,outSize),dtype=np.float32);
+    self.b = np.zeros((1,outSize),dtype=np.float32)
  
   def forward(self,x):
     if self.training:
@@ -451,15 +464,14 @@ class Net:
     self.layers = list()
 
   def set_classification_mode(self,bClassification):
-    self.classification_mode=bClassification;
+    self.classification_mode=bClassification
 
   def append(self,layer):
     self.layers.append(layer)
 
-  def forward(self,x):
+  def predict(self,x):
     out = x
     for l in self.layers:
-      s=np.sum(out)
       out = l.forward(out)
 
     if self.classification_mode:
@@ -482,7 +494,7 @@ class NetTrain:
   #keep best parameters
   keep_best=True
   best_net=None
-  best_accuracy=0;
+  best_accuracy=0
 
   def set_loss(self,layerloss):
     self.loss_layer = layerloss
@@ -583,7 +595,7 @@ class NetTrain:
       self.epoch_loss = np.append(self.epoch_loss,sumloss / nbsamples)
 
       #compute train accuracy (for now: classification only)
-      predicted = n.forward(sample)
+      predicted = n.predict(sample)
 
       #case of BinaryCrossEntropy
       if(n.classification_mode==True):
@@ -592,7 +604,7 @@ class NetTrain:
 
         #compute test accuracy (for now: classification only)
         if self.test_data is not None:
-          predicted = n.forward(self.test_data)
+          predicted = n.predict(self.test_data)
           accuracy=100.*np.mean(predicted==self.test_truth)
           print(" Test Accuracy: "+format(accuracy, ".2f")+"%", end='')
         

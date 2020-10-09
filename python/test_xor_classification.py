@@ -26,6 +26,6 @@ def test_xor_classification():
 
 	# test convergence
 	x = sample
-	y = n.forward(x)
-	dist=np.abs(y-truth);
+	y = n.predict(x)
+	dist=np.abs(y-truth)
 	assert np.max(dist)<0.001
