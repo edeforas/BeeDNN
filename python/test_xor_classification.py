@@ -22,7 +22,7 @@ def test_xor_classification():
 	train.batch_size=0 #if set to 0, use full batch
 	train.set_optimizer(nn.opt.OptimizerRPROPm())  # work best with full batch size
 	train.set_loss(nn.LossMSE()) # simple Mean Square Error
-	train.train(n,sample,truth)
+	train.fit(n,sample,truth)
 
 	# test convergence
 	x = sample

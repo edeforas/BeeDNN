@@ -490,6 +490,7 @@ class NetTrain:
   n = None
   test_data=None
   test_truth=None
+  log_console=False
 
   #keep best parameters
   keep_best=True
@@ -527,7 +528,7 @@ class NetTrain:
 
     return online_loss
 
-  def train(self,n,sample,truth):
+  def fit(self,n,sample,truth):
     self.n = n
     self.best_net= copy.deepcopy(n)
     nblayer = len(n.layers)
@@ -537,7 +538,7 @@ class NetTrain:
     if(truth.shape[1]>1):
         truth_categorical=np.argmax(truth,axis=1)
     else:
-        truth_categorical=truth
+      truth_categorical=truth
 
     #init optimizer
     optiml = list()
@@ -550,7 +551,8 @@ class NetTrain:
 
     #train!
     for epoch in range(self.epochs):
-      print("Epoch: ",epoch+1,"/",self.epochs,sep='', end='')
+      if self.log_console:
+        print("Epoch: ",epoch+1,"/",self.epochs,sep='', end='')
 
       #shuffle data
       perm = np.random.permutation(nbsamples)
@@ -600,20 +602,24 @@ class NetTrain:
       #case of BinaryCrossEntropy
       if(n.classification_mode==True):
         accuracy=100.*np.mean(predicted==truth_categorical)
-        print(" Train Accuracy: "  +format(accuracy, ".2f")  + "%", end='')
+        if self.log_console:
+          print(" Train Accuracy: "  +format(accuracy, ".2f")  + "%", end='')
 
         #compute test accuracy (for now: classification only)
         if self.test_data is not None:
           predicted = n.predict(self.test_data)
           accuracy=100.*np.mean(predicted==self.test_truth)
-          print(" Test Accuracy: "+format(accuracy, ".2f")+"%", end='')
+          if self.log_console:
+            print(" Test Accuracy: "+format(accuracy, ".2f")+"%", end='')
         
         if(self.best_accuracy<accuracy):
           self.best_net=copy.deepcopy(n)
           self.best_accuracy=accuracy
-          print(" (new best accuracy)",end='')
+          if self.log_console:
+            print(" (new best accuracy)",end='')
 
-      print("")
+        if self.log_console:
+          print("")
 
     # if self.keep_best and (self.best_accuracy!=0):
     #   n=copy.deepcopy(self.best_net)

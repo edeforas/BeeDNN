@@ -28,7 +28,7 @@ train.batch_size=64
 train.set_test_data(test_sample , test_truth)
 train.set_optimizer(nn.opt.OptimizerAdam())
 train.set_loss(nn.LossCrossEntropy()) # simple Mean Square Error
-train.train(n,train_sample,truth)
+train.fit(n,train_sample,truth)
 n=train.best_net #todo remove do this in the end of train()
 
 # compute and print confusion matrix

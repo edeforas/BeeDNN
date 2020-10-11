@@ -22,7 +22,7 @@ train.epochs = 100
 train.batch_size=32
 train.set_optimizer(nn.opt.OptimizerNadam())
 train.set_loss(nn.LossMSE()) # simple Mean Square Error
-train.train(n,sample,truth)
+train.fit(n,sample,truth)
 
 # plot loss
 plt.plot(train.epoch_loss)

@@ -23,7 +23,7 @@ def test_fit():
 	train.batch_size=32
 	train.set_optimizer(nn.opt.OptimizerNadam())
 	train.set_loss(nn.LossMSE()) # simple Mean Square Error
-	train.train(n,sample,truth)
+	train.fit(n,sample,truth)
 
 	# test convergence
 	x = sample
