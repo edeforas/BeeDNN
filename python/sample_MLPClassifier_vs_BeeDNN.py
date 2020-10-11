@@ -11,7 +11,7 @@ reg = DecisionTreeClassifier()
 reg.fit(sample, truth.ravel())
 print("Tree:"+str(reg.predict(sample)))
 
-reg = MLPClassifier(hidden_layer_sizes=(10,), max_iter=1000)
+reg = MLPClassifier(hidden_layer_sizes=(3,), max_iter=1000)
 reg.fit(sample, truth.ravel())
 print("MLP:"+str(reg.predict(sample)))
 
