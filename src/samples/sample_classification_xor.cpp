@@ -49,9 +49,9 @@ int main()
 	netFit.set_train_data(mSamples, mTruth);
 
 	//predict and show results
-	netFit.train();
+	netFit.fit();
 	MatrixFloat mOut;
-	net.predict_class(mSamples, mOut);
+	net.predict(mSamples, mOut);
 	cout << "0_xor_0=" << mOut(0) << endl << "0_xor_1=" << mOut(1) << endl << "1_xor_0=" << mOut(2) << endl << "1_xor_1=" << mOut(3) << endl;
 
 	//simple testU code

@@ -78,7 +78,7 @@ public:
 	void set_validation_batchsize(Index iValBatchSize);
 	Index get_validation_batchsize() const;
 
-	void train();
+	void fit();
 
 	float compute_loss_accuracy(const MatrixFloat & mSamples, const MatrixFloat& mTruth,float* pfAccuracy = nullptr) const;
 

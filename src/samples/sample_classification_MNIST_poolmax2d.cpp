@@ -73,17 +73,17 @@ int main()
 	// train net
 	cout << "Training..." << endl << endl;
 	start = chrono::steady_clock::now();
-	netTrain.train();
+	netTrain.fit();
 
 	// show train results
 	MatrixFloat mClassPredicted;
-	net.predict_class(mr.train_data(), mClassPredicted);
+	net.predict(mr.train_data(), mClassPredicted);
 	ConfusionMatrix cmRef;
 	ClassificationResult crRef = cmRef.compute(mr.train_truth(), mClassPredicted);
 	cout << "Train accuracy: " << crRef.accuracy << " %" << endl;
 
 	MatrixFloat mClassTest;
-	net.predict_class(mr.test_data(), mClassTest);
+	net.predict(mr.test_data(), mClassTest);
 	ConfusionMatrix cmTest;
 	ClassificationResult crTest = cmTest.compute(mr.test_truth(), mClassTest);
 	cout << "Val accuracy: " << crTest.accuracy << " %" << endl;

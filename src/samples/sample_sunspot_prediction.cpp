@@ -74,7 +74,7 @@ int main()
 	// train net
 	cout << "Training..." << endl << endl;
 	start = chrono::steady_clock::now();
-	netTrain.train();
+	netTrain.fit();
 
 	//now save truth and predicted in file SunSpot_Prediction.csv, 1st column is truth, 2nd columne is predicted
 	// 10 first predicted samples are 0 since there is too feww data for inference
@@ -88,7 +88,7 @@ int main()
 		else
 		{
 			MatrixFloat mPredicted;
-			net.predict(mDataTrainWindowed.row(i- iWindowSize), mPredicted);
+			net.forward(mDataTrainWindowed.row(i- iWindowSize), mPredicted);
 			mResult(i, 1) = mPredicted(0);
 		}
 	}

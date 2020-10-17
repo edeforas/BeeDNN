@@ -99,7 +99,7 @@ float KMeansTrain::compute_accuracy(const MatrixFloat &mSamples, const MatrixFlo
 		mSamplesBatch = rowView(mSamples, iStart, iEnd);
 		mTruthBatch = rowView(mTruth, iStart, iEnd);
 		
-		_pKm->predict_class(mSamplesBatch, mOut);
+		_pKm->predict(mSamplesBatch, mOut);
 			
 		for (Index i = 0; i < iBatchSize; i++)
 			iGood += mOut(i) == mTruthBatch(i);
@@ -120,7 +120,7 @@ void KMeansTrain::set_validation_data(const MatrixFloat& mSamplesValidation, con
 	_pmTruthValidation = &mTruthValidation;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void KMeansTrain::train()
+void KMeansTrain::fit()
 {
 	if (_pKm == nullptr)
 		return;

@@ -92,7 +92,7 @@ int MetaOptimizer::run_thread(int iThread, MetaOptimizer* self)
 		}
 	);
 
-	trainT.train();
+	trainT.fit();
 
 	return 0; 
 }

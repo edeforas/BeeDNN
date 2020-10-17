@@ -62,7 +62,7 @@ void Net::replace(size_t iLayer, Layer* l)
 	_layers[iLayer] = l;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Net::predict(const MatrixFloat& mIn,MatrixFloat& mOut) const
+void Net::forward(const MatrixFloat& mIn,MatrixFloat& mOut) const
 {
 	//todo cut in mini batches so save memory
     MatrixFloat mTemp=mIn;
@@ -83,10 +83,10 @@ bool Net::is_classification_mode() const
 	return _bClassificationMode;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-void Net::predict_class(const MatrixFloat& mIn, MatrixFloat& mClass) const
+void Net::predict(const MatrixFloat& mIn, MatrixFloat& mClass) const
 {
     MatrixFloat mOut;
-	predict(mIn, mOut);
+	forward(mIn, mOut);
 	
 	if (mOut.cols() != 1)
 		rowsArgmax(mOut, mClass); //one hot case

@@ -332,7 +332,7 @@ float NetTrain::compute_loss_accuracy(const MatrixFloat &mSamples, const MatrixF
 		mSamplesBatch = rowView(mSamples, iStart, iEnd);
 		mTruthBatch = rowView(mTruth, iStart, iEnd);
 		
-		_pNet->predict(mSamplesBatch, mOut);
+		_pNet->forward(mSamplesBatch, mOut);
 		fLoss+= _pLoss->compute(mOut, mTruthBatch);
 
 		if (pfAccuracy)
@@ -379,7 +379,7 @@ void NetTrain::set_validation_data(const MatrixFloat& mSamplesValidation, const 
 	_pmTruthValidation = &mTruthValidation;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::train()
+void NetTrain::fit()
 {
 	if (_pNet == nullptr)
 		return;

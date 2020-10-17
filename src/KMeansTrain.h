@@ -36,7 +36,7 @@ public:
 
 	void set_epoch_callback(std::function<void()> epochCallBack);
 
-	void train();
+	void fit();
 	
 	float compute_accuracy(const MatrixFloat & mSamples, const MatrixFloat& mTruth) const;
 

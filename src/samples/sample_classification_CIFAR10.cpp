@@ -99,18 +99,18 @@ int main()
 	// train net
 	cout << "Training..." << endl << endl;
 	start = chrono::steady_clock::now();
-	netTrain.train();
+	netTrain.fit();
 
 	// show train and val confusion matrix results
 	MatrixFloat mClassPredicted;
-	net.predict_class(ds.train_data(), mClassPredicted);
+	net.predict(ds.train_data(), mClassPredicted);
 	ConfusionMatrix cmRef;
 	ClassificationResult crRef = cmRef.compute(ds.train_truth(), mClassPredicted);
 	cout << "Train accuracy: " << crRef.accuracy << " %" << endl;
 	cout << "Train confusion matrix:" << endl << crRef.mConfMat << endl;
 
 	MatrixFloat mValClass;
-	net.predict_class(ds.test_data(), mValClass);
+	net.predict(ds.test_data(), mValClass);
 	ConfusionMatrix cmValidation;
 	ClassificationResult crValidation = cmValidation.compute(ds.test_truth(), mValClass);
 	cout << "Validation accuracy: " << crValidation.accuracy << " %" << endl;

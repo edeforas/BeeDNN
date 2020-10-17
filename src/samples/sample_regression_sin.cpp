@@ -56,11 +56,11 @@ int main()
 	netfit.set_epochs(2000);
 	netfit.set_net(net);
 	netfit.set_train_data(mSamples, mTruth);
-	netfit.train();
+	netfit.fit();
 
     //print truth and prediction
 	MatrixFloat mPredict;
-	net.predict(mSamples, mPredict);
+	net.forward(mSamples, mPredict);
 	for (int i = 0; i < mSamples.size(); i += 8)
 	{
 		cout << setprecision(4) << "x=" << mSamples(i, 0) << "\ttruth=" << mTruth(i, 0) << "\tpredict=" << mPredict(i, 0) << endl;

@@ -66,7 +66,7 @@ MatrixFloat & KMeans::ref_classes()
 	return _mRefClasses;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-void KMeans::predict_class(const MatrixFloat& mIn, MatrixFloat& mClass) const
+void KMeans::predict(const MatrixFloat& mIn, MatrixFloat& mClass) const
 {
     MatrixFloat mOut;
 
