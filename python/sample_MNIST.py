@@ -29,7 +29,7 @@ train.set_test_data(test_sample , test_truth)
 train.set_optimizer(nn.opt.OptimizerAdam())
 train.set_loss(nn.LossCrossEntropy()) # simple Mean Square Error
 train.fit(n,train_sample,truth)
-n=train.best_net #todo remove do this in the end of train()
+n=train.best_net
 
 # compute and print confusion matrix
 predicted = n.predict(train_sample)

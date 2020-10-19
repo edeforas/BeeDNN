@@ -301,8 +301,7 @@ class LayerGlobalGain(Layer):
   def __init__(self):
     super().__init__()
     self.learnable = True
-    self.w = np.zeros(1,dtype=np.float32)
-    self.w[0] = 1.
+    self.w = np.ones(1,dtype=np.float32)
  
   def forward(self,x):
     if self.training:
@@ -487,15 +486,19 @@ class NetTrain:
   loss_layer = None
   epochs = 100
   batch_size = 32
-  n = None
   test_data=None
   test_truth=None
-  log_console=False
+  log_console=True
+  epoch_callback=None
+  current_train_accuracy=-1
 
   #keep best parameters
   keep_best=True
   best_net=None
   best_accuracy=0
+
+  def get_current_train_accuracy(self):
+      return self.current_train_accuracy
 
   def set_loss(self,layerloss):
     self.loss_layer = layerloss
@@ -506,9 +509,12 @@ class NetTrain:
   def set_test_data(self,test_data,test_truth):
     self.test_data=test_data
     self.test_truth=test_truth
-
+ 
   def set_keep_best(self,keep_best):
     self.keep_best=keep_best
+
+  def set_epoch_callback(self,epoch_callback):
+    self.epoch_callback=epoch_callback
 
   def forward_and_backward(self,x,t):
     #forward pass
@@ -612,6 +618,8 @@ class NetTrain:
           if self.log_console:
             print(" Test Accuracy: "+format(accuracy, ".2f")+"%", end='')
         
+        self.current_train_accuracy=accuracy
+
         if(self.best_accuracy<accuracy):
           self.best_net=copy.deepcopy(n)
           self.best_accuracy=accuracy
@@ -620,6 +628,9 @@ class NetTrain:
 
         if self.log_console:
           print("")
+      
+      if self.epoch_callback!=None:
+        self.epoch_callback(self)
 
     # if self.keep_best and (self.best_accuracy!=0):
     #   n=copy.deepcopy(self.best_net)
