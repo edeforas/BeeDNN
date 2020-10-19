@@ -488,7 +488,7 @@ class NetTrain:
   batch_size = 32
   test_data=None
   test_truth=None
-  log_console=True
+  log_console=False
   epoch_callback=None
   current_train_accuracy=-1
 

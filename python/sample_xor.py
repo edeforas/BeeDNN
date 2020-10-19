@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import BeeDNN as nn
 
-#simple xor classification
+# simple xor classification
 
 # create train data
 sample=np.zeros((4,2))
@@ -39,7 +39,7 @@ X,Y=np.meshgrid(x,y)
 Xr=np.atleast_2d(np.ravel(X)).transpose()
 Yr=np.atleast_2d(np.ravel(Y)).transpose()
 XY=np.concatenate((Xr,Yr),axis=1)
-n.classification_mode=False # comment to show real decision surface (with stairs)
+n.classification_mode=False # to show real decision surface (without decision stairs)
 Z=n.predict(XY)
 Z=Z.reshape(X.shape)
 plt.pcolormesh(X,Y,Z)

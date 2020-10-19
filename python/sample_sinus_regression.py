@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import BeeDNN as nn
 
-# Simple Sinus regression (fit) using small network
-# network is very small so we can see the fitting error
+# Simple Sinus regression using small network
+# network is intentionally very small, so we can see the fitting error
 
 # create train data
 sample = np.arange(-4.,4.,0.01)[:,np.newaxis]
@@ -11,7 +11,7 @@ truth = np.sin(sample)
 
 # construct net
 n = nn.Net()
-n.set_classification_mode(False) #because we do regression here
+n.set_classification_mode(False) # set this flag for regression. Because we do regression here
 n.append(nn.LayerDense(1,10))
 n.append(nn.LayerRELU())
 n.append(nn.LayerDense(10,1))

@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import BeeDNN as nn
 
-# Simple XOR classification using softmax (see simple_xor.py for a xor classification without softmax)
+# simple XOR classification using softmax (see simple_xor.py for a xor classification without softmax)
 
 # create train data
 sample=np.zeros((4,2))
