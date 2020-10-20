@@ -32,6 +32,9 @@ class Layer:
     self.training = False # set to False in testing mode or True in training mode
     self.learnBias= False
 
+  def init(self):
+    pass
+
   def forward(self,x):
     pass
 
@@ -337,8 +340,13 @@ class LayerDenseNoBias(Layer):
   def __init__(self,inSize,outSize):
     super().__init__()
     self.learnable = True
-    a=np.sqrt(6./(inSize+outSize)) # Xavier uniform initialization
-    self.w = a*(np.random.rand(inSize,outSize) * 2. - 1.)
+    self.inSize=inSize
+    self.outSize=outSize
+    self.init()
+
+  def init(self):
+    a=np.sqrt(6./(self.inSize+self.outSize)) # Xavier uniform initialization
+    self.w = a*(np.random.rand(self.inSize,self.outSize) * 2. - 1.)
 
   def forward(self,x):
     if self.training:
@@ -353,11 +361,16 @@ class LayerDenseNoBias(Layer):
 class LayerDense(Layer): # with bias
   def __init__(self,inSize,outSize):
     super().__init__()
+    self.inSize=inSize
+    self.outSize=outSize
     self.learnable = True
     self.learnBias = True
-    a=np.sqrt(6./(inSize+outSize)) # Xavier uniform initialization
-    self.w = a*(np.random.rand(inSize,outSize) * 2. - 1.)
-    self.b = np.zeros((1,outSize),dtype=np.float32)
+    self.init()
+
+  def init(self):
+    a=np.sqrt(6./(self.inSize+self.outSize)) # Xavier uniform initialization
+    self.w = a*(np.random.rand(self.inSize,self.outSize) * 2. - 1.)
+    self.b = np.zeros((1,self.outSize),dtype=np.float32)
  
   def forward(self,x):
     if self.training:
@@ -551,6 +564,10 @@ class NetTrain:
     for i in range(nblayer*2):
       optiml.append(copy.copy(self.optim)) #potential weight optimizer
       optiml.append(copy.copy(self.optim)) #potential bias optimizer
+
+    #init layers
+    for l in n.layers:
+      l.init()
 
     if self.batch_size == 0:
       self.batch_size = nbsamples
