@@ -18,10 +18,9 @@ def compute_confusion_matrix(truth,predicted,nb_class=0):
 	accuracy=100.*np.trace(confmat)/np.sum(confmat)
 	return confmat,accuracy
 
-def to_one_hot(label):
-  maxclass=np.max(label)+1
-  train_label_one_hot=np.eye(maxclass)[label]
-  train_label_one_hot = train_label_one_hot.reshape(label.shape[0], maxclass)
+def to_one_hot(label,nb_class):
+  train_label_one_hot=np.eye(nb_class)[label]
+  train_label_one_hot = train_label_one_hot.reshape(label.shape[0], nb_class)
   return train_label_one_hot
 
 ################################################################################################### Layers
@@ -469,6 +468,18 @@ class LossCrossEntropy(LayerLoss):
       self.dydx = -t/p_max+(1.-t)/ump_max
     return  np.atleast_2d(np.mean(-t*np.log(p_max),axis=1))
 
+class LossCategoricalCrossEntropy(LayerLoss):
+  def __init__(self):
+    super().__init__()
+  
+  def forward(self,x):
+    p_max=np.maximum(x,1.e-8)
+    t=to_one_hot(self.truth,x.shape[1]) # todo optimize
+    if self.training:
+      ump_max=np.maximum(1.-x,1.e-8)
+      self.dydx = -t/p_max+(1.-t)/ump_max
+    return  np.atleast_2d(np.mean(-t*np.log(p_max),axis=1))
+
 ###################################################################################################
 class Net:
   classification_mode=True
@@ -547,23 +558,18 @@ class NetTrain:
 
     return online_loss
 
-  def fit(self,n,sample,truth):
+  def fit(self,n,train_data,train_truth):
     self.n = n
     self.best_net= copy.deepcopy(n)
     nblayer = len(n.layers)
-    nbsamples = len(sample)
+    nbsamples = len(train_data)
     self.epoch_loss = np.zeros((0,0),dtype=np.float32)
-
-    if(truth.shape[1]>1):
-        truth_categorical=np.argmax(truth,axis=1)
-    else:
-      truth_categorical=truth
 
     #init optimizer
     optiml = list()
     for i in range(nblayer*2):
-      optiml.append(copy.copy(self.optim)) #potential weight optimizer
-      optiml.append(copy.copy(self.optim)) #potential bias optimizer
+      optiml.append(copy.copy(self.optim)) # reserve weight optimizer
+      optiml.append(copy.copy(self.optim)) # reserve bias optimizer
 
     #init layers
     for l in n.layers:
@@ -579,8 +585,8 @@ class NetTrain:
 
       #shuffle data
       perm = np.random.permutation(nbsamples)
-      s2 = sample[perm,:]
-      t2 = truth[perm,:]
+      s2 = train_data[perm,:]
+      t2 = train_truth[perm]
       sumloss = 0.
 
       #set layers in train mode
@@ -594,13 +600,13 @@ class NetTrain:
         #prepare batch data
         batch_end = min(batch_start + self.batch_size,nbsamples)
         x1 = s2[batch_start:batch_end,:]
-        out = t2[batch_start:batch_end,:]
+        out = t2[batch_start:batch_end]
         batch_start += self.batch_size
 
         #forward pass and gradient computation
         online_loss = self.forward_and_backward(x1,out)
         
-        #optimization
+        # weights and bias optimization
         for i in range(len(n.layers)):
           l = n.layers[i]
           if l.learnable:
@@ -620,11 +626,11 @@ class NetTrain:
       self.epoch_loss = np.append(self.epoch_loss,sumloss / nbsamples)
 
       #compute train accuracy (for now: classification only)
-      predicted = n.predict(sample)
+      predicted = n.predict(train_data)
 
-      #case of BinaryCrossEntropy
+      #case of Classification CrossEntropy
       if(n.classification_mode==True):
-        accuracy=100.*np.mean(predicted==truth_categorical)
+        accuracy=100.*np.mean(predicted==train_truth)
         if self.log_console:
           print(" Train Accuracy: "  +format(accuracy, ".2f")  + "%", end='')
 

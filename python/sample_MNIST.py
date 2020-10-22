@@ -6,12 +6,11 @@ import MNIST_import
 # Simple MNIST classification using small network
 
 # load data
-[train_data,truth_categorical,test_data,test_truth]=MNIST_import.load()
+[train_data,train_truth,test_data,test_truth]=MNIST_import.load()
 train_data/=256.
 train_data = train_data.reshape(60000, 28*28)
 test_data/=256.
 test_data = test_data.reshape(10000, 28*28)
-train_truth=nn.to_one_hot(truth_categorical)
 
 # construct net
 n = nn.Net()
@@ -25,16 +24,16 @@ n.append(nn.LayerSoftmax())
 train = nn.NetTrain()
 train.epochs = 20
 train.batch_size=64
-train.log_console=True; # show progress
+train.log_console=True # show progress
 train.set_test_data(test_data , test_truth)
 train.set_optimizer(nn.opt.OptimizerAdam())
-train.set_loss(nn.LossCrossEntropy()) # simple Mean Square Error
+train.set_loss(nn.LossCategoricalCrossEntropy())
 train.fit(n,train_data,train_truth)
 n=train.best_net
 
 # compute and print confusion matrix
 predicted = n.predict(train_data)
-confmat,accuracy=nn.compute_confusion_matrix(truth_categorical,predicted,10)
+confmat,accuracy=nn.compute_confusion_matrix(train_truth,predicted,10)
 print("Train conf mat:\n",confmat)
 print("Final Train accuracy:",accuracy)
 

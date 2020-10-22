@@ -11,7 +11,7 @@ truth = np.sin(sample)
 
 # construct net
 n = nn.Net()
-n.set_classification_mode(False) # set this flag for regression. Because we do regression here
+n.set_classification_mode(False) # set this flag for regression.
 n.append(nn.LayerDense(1,10))
 n.append(nn.LayerRELU())
 n.append(nn.LayerDense(10,1))
