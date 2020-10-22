@@ -502,7 +502,8 @@ class Net:
         out=np.argmax(out,axis=1)
       else:
         out=np.around(out)
-        out=out.astype(int)
+      
+      out=out.astype(int)
     return out
 ###################################################################################################
 class NetTrain:
@@ -559,6 +560,11 @@ class NetTrain:
     return online_loss
 
   def fit(self,n,train_data,train_truth):
+    
+    #reshape truth to 2 ndim if 1D
+    if train_truth.ndim==1:
+      train_truth=np.expand_dims(train_truth, axis=1)
+
     self.n = n
     self.best_net= copy.deepcopy(n)
     nblayer = len(n.layers)
@@ -586,7 +592,7 @@ class NetTrain:
       #shuffle data
       perm = np.random.permutation(nbsamples)
       s2 = train_data[perm,:]
-      t2 = train_truth[perm]
+      t2 = train_truth[perm,:]
       sumloss = 0.
 
       #set layers in train mode
@@ -600,7 +606,7 @@ class NetTrain:
         #prepare batch data
         batch_end = min(batch_start + self.batch_size,nbsamples)
         x1 = s2[batch_start:batch_end,:]
-        out = t2[batch_start:batch_end]
+        out = t2[batch_start:batch_end,:]
         batch_start += self.batch_size
 
         #forward pass and gradient computation
@@ -628,16 +634,16 @@ class NetTrain:
       #compute train accuracy (for now: classification only)
       predicted = n.predict(train_data)
 
-      #case of Classification CrossEntropy
+      # classification case
       if(n.classification_mode==True):
-        accuracy=100.*np.mean(predicted==train_truth)
+        accuracy=100.*np.mean(predicted==train_truth.ravel())
         if self.log_console:
           print(" Train Accuracy: "  +format(accuracy, ".2f")  + "%", end='')
 
         #compute test accuracy (for now: classification only)
         if self.test_data is not None:
           predicted = n.predict(self.test_data)
-          accuracy=100.*np.mean(predicted==self.test_truth)
+          accuracy=100.*np.mean(predicted==self.test_truth.ravel())
           if self.log_console:
             print(" Test Accuracy: "+format(accuracy, ".2f")+"%", end='')
         

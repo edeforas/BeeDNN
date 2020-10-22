@@ -11,10 +11,10 @@ sample[1,0]=0 ; sample[1,1]=1
 sample[2,0]=1 ; sample[2,1]=0
 sample[3,0]=1 ; sample[3,1]=1
 
-truth=np.zeros(4,dtype=int)
+truth=np.zeros((4),dtype=int)
 truth[0]=0
-truth[1]=1  
-truth[2]=1 
+truth[1]=1
+truth[2]=1
 truth[3]=0
 
 # construct net
