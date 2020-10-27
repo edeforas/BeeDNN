@@ -11,6 +11,7 @@ import copy
 import multiprocessing
 import threading
 import BeeDNN as nn
+import pickle
 
 
 ###################################################################################################
@@ -19,12 +20,16 @@ class MetaOptimizer:
   nb_tries=1
   max_accuracy=-1
   best_net=None
+  save_name=None
 
   def set_nb_cpu(self,nb_cpu):
     self.nb_cpu=nb_cpu
 
   def set_nb_tries(self,nb_tries):
     self.nb_tries=nb_tries
+
+  def set_save_name(self,save_name):
+    self.save_name=save_name
 
   def run(self,net,netTrain,train_data,train_truth):
 
@@ -33,6 +38,9 @@ class MetaOptimizer:
         self.max_accuracy=netT.get_current_train_accuracy()
         self.best_net=copy.deepcopy(netT.n)
         print("better accuracy: "+str(self.max_accuracy))
+        if( self.save_name!=None):
+          file_save=open(self.save_name+str(self.max_accuracy)+".bin","wb")
+          pickle.dump(self.best_net,file_save)
 
     print("Using CPU number: "+str(self.nb_cpu)+" and trying: "+str(self.nb_tries)+" times")
     
