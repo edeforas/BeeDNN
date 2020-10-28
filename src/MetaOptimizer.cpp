@@ -4,6 +4,7 @@
 
 #include "LayerFactory.h"
 
+#include <iostream>
 #include <ctime>
 #include <thread>
 
@@ -43,6 +44,8 @@ void MetaOptimizer::run()
 
 	for (int iRepeat = 0; iRepeat < _iNRepeatAll; iRepeat++)
 	{
+		cout << "Restart " << iRepeat << "/" << _iNRepeatAll << endl;
+
 		_fBestAccuracy = -1.;
 
 		vector<thread> vt(iNbThread);

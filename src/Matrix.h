@@ -668,6 +668,11 @@ const MatrixFloatView fromRawBuffer(const float *pBuffer, Index iRows, Index iCo
 MatrixFloatView createView(MatrixFloat & mRef);
 void copyInto(const MatrixFloat& mToCopy, MatrixFloat& m, Index iStartRow);
 MatrixFloat rowWiseSum(const MatrixFloat& m);
+MatrixFloat rowWiseSumSq(const MatrixFloat& m);
+
+MatrixFloat colWiseSum(const MatrixFloat& m);
+MatrixFloat colWiseSumSq(const MatrixFloat& m);
+
 MatrixFloat colWiseMean(const MatrixFloat& m);
 MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat rowWiseMult(const MatrixFloat& m, const MatrixFloat& d);

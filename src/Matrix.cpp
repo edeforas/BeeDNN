@@ -64,6 +64,63 @@ MatrixFloat rowWiseSum(const MatrixFloat& m)
 #endif
 }
 ///////////////////////////////////////////////////////////////////////////
+MatrixFloat rowWiseSumSq(const MatrixFloat& m)
+{
+#ifdef USE_EIGEN
+	return (m.array().square()).rowwise().sum();
+#else
+	Index r = m.rows();
+	MatrixFloat result(r, 1);
+
+	for (Index i = 0; i < r; i++)
+		result(i, 0) = (m.row(i)).square().sum();
+
+	return result;
+#endif
+}
+///////////////////////////////////////////////////////////////////////////
+MatrixFloat colWiseSum(const MatrixFloat& m)
+{
+#ifdef USE_EIGEN
+	return m.colwise().sum();
+#else
+	Index r = m.cols();
+	Index c = m.cols();
+	MatrixFloat result(1,r);
+
+	for (Index i = 0; i < r; i++)
+	{
+		T sum = 0;
+		for (Index j = 0; j < c; i++)
+			sum += m(i, j);
+
+		result(i)=sum
+	}
+	return result;
+#endif
+}
+///////////////////////////////////////////////////////////////////////////
+MatrixFloat colWiseSumSq(const MatrixFloat& m)
+{
+#ifdef USE_EIGEN
+	return (m.array().square()).colwise().sum();
+#else
+	Index r = m.cols();
+	Index c = m.cols();
+	MatrixFloat result(1, r);
+
+	for (Index i = 0; i < r; i++)
+	{
+		T sumsq = 0;
+		for (Index j = 0; j < c; i++)
+			sumsq += m(i, j)*m(i, j);
+
+		result(i) = sumsq
+	}
+	return result;
+#endif
+}
+///////////////////////////////////////////////////////////////////////////
 MatrixFloat colWiseMean(const MatrixFloat& m)
 {
 #ifdef USE_EIGEN
