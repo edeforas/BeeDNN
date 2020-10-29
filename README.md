@@ -78,6 +78,9 @@ I/O:
 - csv file reader
 - Network, weights and training parameters are saved in a simple .txt file
 
+Precomputing:
+- StandardScaler
+	
 Commented samples:
 - Simple XOR classification, with and w/o softmax
 - Simple sinus regression

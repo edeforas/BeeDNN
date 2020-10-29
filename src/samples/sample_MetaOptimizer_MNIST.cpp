@@ -61,7 +61,7 @@ int main()
 	//create convolutional net
 	Net net;
 	net.add(new LayerConvolution2D(28, 28, 1, 3, 3, 8));
-	net.add(new LayerChannelBias(26,26,8)); //for now, conv bias is separated
+	net.add(new LayerChannelBias(26,26,8)); //for now, conv bias is split
 	net.add(new LayerActivation("Relu"));
 
 	net.add(new LayerConvolution2D(26, 26, 8, 3, 3, 8, 2, 2));
@@ -90,9 +90,9 @@ int main()
 	//create meta optimizer to run in parallel
 	MetaOptimizer optim;
 	optim.set_train(netTrain);
-
+	/*
 	//add Relu variations
-	/* //uncomment to test for other Relu flavors
+	//test for other Relu flavors in any layers
 	optim.add_variation(2, "RRelu");
 	optim.add_variation(2, "PRelu");
 	optim.add_variation(2, "LeakyTwiceRelu6");
@@ -117,7 +117,6 @@ int main()
 	optim.add_variation(12, "Relu6");
 	optim.add_variation(12, "LeakyRelu");
 	*/
-
 	optim.set_repeat_all(10); //re-do everything 10 times
 	optim.set_better_solution_callback(better_solution_callback); //called on better solution found
 

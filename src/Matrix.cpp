@@ -90,11 +90,11 @@ MatrixFloat colWiseSum(const MatrixFloat& m)
 
 	for (Index i = 0; i < r; i++)
 	{
-		T sum = 0;
+		float sum = 0.f;
 		for (Index j = 0; j < c; i++)
 			sum += m(i, j);
 
-		result(i)=sum
+		result(i) = sum;
 	}
 	return result;
 #endif
@@ -111,11 +111,11 @@ MatrixFloat colWiseSumSq(const MatrixFloat& m)
 
 	for (Index i = 0; i < r; i++)
 	{
-		T sumsq = 0;
+		float sumsq = 0.f;
 		for (Index j = 0; j < c; i++)
 			sumsq += m(i, j)*m(i, j);
 
-		result(i) = sumsq
+		result(i) = sumsq;
 	}
 	return result;
 #endif
