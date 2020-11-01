@@ -91,3 +91,5 @@ Commented samples:
 - CIFAR10 conv2D + poolmax2D
 - Time series forecasting, windowed sunspot data
 - MNIST with kmeans and custom loss
+
+To compile, run the samples, etc, please read the HOWTO.md file
