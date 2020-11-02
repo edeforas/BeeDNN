@@ -36,7 +36,7 @@ void MetaOptimizer::set_repeat_all(int iNbRepeatAll)
 	_iNRepeatAll = iNbRepeatAll;
 }
 //////////////////////////////////////////////////////////////////////////////
-void MetaOptimizer::run()
+void MetaOptimizer::fit()
 {
 	int iNbThread = _iNbThread;
 	if (iNbThread == 0) //auto case
@@ -105,9 +105,9 @@ void MetaOptimizer::set_better_solution_callback(std::function<void(NetTrain& tr
 	_betterSolutionCallBack = betterSolutionCallBack;
 }
 ////////////////////////////////////////////////////////////////
-void MetaOptimizer::add_variation(Index iLayer,const string & sType, float fArg1, float fArg2, float fArg3, float fArg4, float fArg5)
+void MetaOptimizer::add_layer_variation(Index iLayer,const string & sType, float fArg1, float fArg2, float fArg3, float fArg4, float fArg5)
 {
-	MetaOptimizerVariation v;
+	LayerVariation v;
 	v.iLayer = iLayer;
 	v.sType = sType;
 	v.fArg1 = fArg1;
@@ -116,7 +116,16 @@ void MetaOptimizer::add_variation(Index iLayer,const string & sType, float fArg1
 	v.fArg4 = fArg4;
 	v.fArg5 = fArg5;
 
-	_variations.push_back(v);
+	_layerVariations.push_back(v);
+}
+////////////////////////////////////////////////////////////////
+void MetaOptimizer::add_optimizer_variation(string sOptimizer, float fLearningRate)
+{
+	OptimizerVariation v;
+	v.sOptimizer = sOptimizer;
+	v.fLearningRate = fLearningRate;
+
+	_optimizerVariations.push_back(v);
 }
 ////////////////////////////////////////////////////////////////
 void MetaOptimizer::apply_variations(Net& net)
@@ -125,21 +134,29 @@ void MetaOptimizer::apply_variations(Net& net)
 	for (size_t iL = 0; iL < net.size(); iL++)
 	{
 		//collect all variations for a layer, not optimized, but ok
-		vector<MetaOptimizerVariation> vl;
-		for (size_t iv = 0; iv < _variations.size(); iv++)
+		vector<LayerVariation> vl;
+		for (size_t iv = 0; iv < _layerVariations.size(); iv++)
 		{
-			if (_variations[iv].iLayer == (Index)iL)
-				vl.push_back(_variations[iv]);
+			if (_layerVariations[iv].iLayer == (Index)iL)
+				vl.push_back(_layerVariations[iv]);
 		}
 
 		auto iVariation = randomEngine()() % (vl.size()+1);
 
 		if (iVariation > 0) //original variation accepted
 		{
-			const MetaOptimizerVariation & v = vl[iVariation-1];
+			const LayerVariation & v = vl[iVariation-1];
 
 			net.replace(iL, LayerFactory::create(v.sType,v.fArg1, v.fArg2, v.fArg3, v.fArg4, v.fArg5));
 		}
+	}
+
+	//apply optimizer variation
+	if (_optimizerVariations.size() != 0)
+	{
+		auto iOptimVariation = randomEngine()() % (_optimizerVariations.size() );
+		_pTrain->set_optimizer(_optimizerVariations[iOptimVariation].sOptimizer);
+		_pTrain->set_learningrate(_optimizerVariations[iOptimVariation].fLearningRate);
 	}
 }
 ////////////////////////////////////////////////////////////////

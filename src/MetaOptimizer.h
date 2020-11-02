@@ -7,7 +7,7 @@
 #include <vector>
 using namespace std;
 
-class MetaOptimizerVariation
+class LayerVariation
 {
 public:
 	Index iLayer;
@@ -18,7 +18,7 @@ public:
 	float fArg4;
 	float fArg5;
 
-	MetaOptimizerVariation()
+	LayerVariation()
 	{
 		iLayer = 0;
 		sType = "";
@@ -31,6 +31,19 @@ public:
 };
 
 
+class OptimizerVariation
+{
+public:
+	string sOptimizer;
+	float fLearningRate;
+
+	OptimizerVariation()
+	{
+		sOptimizer = "";
+		fLearningRate = 0.f;
+	}
+};
+
 class MetaOptimizer
 {
 public:
@@ -40,11 +53,12 @@ public:
 	void set_train(NetTrain& train);
 	void set_nb_thread(int iNbThread); // default: use max available or if iNbThread is zero
 	
-	void add_variation(Index iLayer,const string&  sType, float fArg1 = 0.f, float fArg2 = 0.f, float fArg3 = 0.f, float fArg4 = 0.f, float fArg5 = 0.f);
+	void add_layer_variation(Index iLayer,const string&  sType, float fArg1 = 0.f, float fArg2 = 0.f, float fArg3 = 0.f, float fArg4 = 0.f, float fArg5 = 0.f);
+	void add_optimizer_variation(string sOptimizer,float fLearningRate);
 
 	void set_repeat_all(int iNbRepeatAll);
 	
-	void run();
+	void fit();
 	void set_better_solution_callback(std::function<void(NetTrain& train)> betterSolutionCallBack);
 
 private:
@@ -58,7 +72,9 @@ private:
 	float _fBestAccuracy;
 
 	void apply_variations(Net& net);
-	vector< MetaOptimizerVariation> _variations;
+	vector< LayerVariation > _layerVariations;
+	vector< OptimizerVariation > _optimizerVariations;
+
 };
 
 #endif

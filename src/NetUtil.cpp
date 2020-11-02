@@ -389,6 +389,7 @@ void write(const NetTrain& train,string & s)
     ss << "LearningRate=" << train.get_learningrate() << endl;
     ss << "Decay=" << train.get_decay() << endl;
     ss << "Momentum=" << train.get_momentum() << endl;
+	ss << "Patience=" << train.get_patience() << endl;
 
 	if (!train.get_regularizer().empty())
 	{
@@ -419,10 +420,13 @@ void read(const string& s,NetTrain& train)
     float fDecay=stof(find_key(s,"Decay"));
     float fMomentum=stof(find_key(s,"Momentum"));
 
+	int iPatience= stoi(find_key(s, "Patience"));
+
     train.set_optimizer(sOptimizer);
     train.set_learningrate(fLearningRate);
     train.set_decay(fDecay);
     train.set_momentum(fMomentum);
+	train.set_patience(iPatience);
 
 	if (!find_key(s, "Regularizer").empty())
 	{

@@ -1,5 +1,5 @@
 //This sample launch in parallel multiple runs of the same net optimization 
-//This sample can also test for many different Relu activations flavors
+//This sample can also test for many different activations flavors or optimizers
 //It shows and save the current best solution on disk
 //This is a heavy test, but expect val_accuracy>99.20% after 40min
 //To stop by anytime, type CTRL+C
@@ -90,8 +90,9 @@ int main()
 	//create meta optimizer to run in parallel
 	MetaOptimizer optim;
 	optim.set_train(netTrain);
+
+	//add Relu variations ; uncomment to test
 	/*
-	//add Relu variations
 	//test for other Relu flavors in any layers
 	optim.add_variation(2, "RRelu");
 	optim.add_variation(2, "PRelu");
@@ -117,11 +118,19 @@ int main()
 	optim.add_variation(12, "Relu6");
 	optim.add_variation(12, "LeakyRelu");
 	*/
+
+	// add optimizer variations ; uncomment to test
+	/*
+	optim.add_optimizer_variation("SGD", 0.05f);
+	optim.add_optimizer_variation("Momentum", 0.02f);
+	optim.add_optimizer_variation("AdamW", 0.01f);
+	*/
+
 	optim.set_repeat_all(10); //re-do everything 10 times
 	optim.set_better_solution_callback(better_solution_callback); //called on better solution found
 
 	cout << "Training with all CPU cores ..." << endl;
-	optim.run(); // will use 100% CPU
+	optim.fit(); // will use 100% CPU
 
 	// the end
 	cout << "End of test." << endl;
