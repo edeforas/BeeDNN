@@ -215,6 +215,28 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//Swish as in the paper: https://arxiv.org/pdf/1801.07145.pdf
+#define BETA_ESWISH (1.75f)
+class ActivationEswish: public Activation
+{
+public:
+    string name() const override
+    {
+        return "Eswish";
+    }
+
+    float apply(float x) const override
+    {
+        return BETA_ESWISH*x/(1.f+expf(-x));
+    }
+    float derivation(float x) const override
+    {
+        float s=1.f/(1.f+expf(-x));
+        return BETA_ESWISH*s*(x+1.f-x*s);
+    }
+};
+//////////////////////////////////////////////////////////////////////////////
 class ActivationExponential: public Activation
 {
 public:
@@ -1432,6 +1454,9 @@ Activation* get_activation(const string& sActivation)
     else if(sActivation=="ELU")
         return new ActivationELU;
 
+    else if(sActivation=="Eswish")
+        return new ActivationEswish;
+
     else if(sActivation=="Exponential")
         return new ActivationExponential;
 
@@ -1579,6 +1604,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("ELiSH");
     vsActivations.push_back("Elliot");
     vsActivations.push_back("ELU");
+    vsActivations.push_back("Eswish");
 	vsActivations.push_back("Exponential");
 	vsActivations.push_back("E2RU");
 	vsActivations.push_back("E3RU");

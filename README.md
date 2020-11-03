@@ -25,7 +25,7 @@ Activations (in alphabetical order):
 - Bent, BinaryStep, Bipolar, BipolarSigmoid
 - ComplementaryLogLog, CELU
 - dSiLU
-- ELiSH, Elliot, ELU, Exponential, E2RU, E3RU
+- ELiSH, Elliot, ELU, Exponential, E2RU, E3RU, Eswish
 - FTS, FTS+
 - Gauss, GELU
 - HardELU, HardSigmoid, HardShrink, HardTanh, HardSwish
