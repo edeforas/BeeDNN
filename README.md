@@ -37,7 +37,7 @@ Activations (in alphabetical order):
 - O2RU, O3RU
 - Parablu
 - Relu, Relu6
-- Selu, SQNL, SQ-RBF, SoftPlus, Sin, SinC, Sigmoid, SiLU, Swish, SoftShrink, SoftSign
+- Selu, SQNL, SQ-RBF, SoftPlus, Sin, SinC, Sigmoid, SiLU, Swish, SoftShrink, SoftSign, SineReLU
 - Tanh, TanhShrink, ThresholdedRelu
 
 Loss functions: 

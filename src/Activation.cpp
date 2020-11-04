@@ -216,7 +216,7 @@ public:
 };
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
-//Swish as in the paper: https://arxiv.org/pdf/1801.07145.pdf
+//Eswish as in the paper: https://arxiv.org/pdf/1801.07145.pdf
 #define BETA_ESWISH (1.75f)
 class ActivationEswish: public Activation
 {
@@ -693,6 +693,33 @@ public:
 			return 0.f;
 
 		return cosf(x) / x - sinf(x) / (x*x);
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
+// from: https://echo-ai.readthedocs.io/en/latest/#torch-sine-relu
+#define EPSILON_SINERELU (0.01f)
+class ActivationSineReLU : public Activation
+{
+public:
+	string name() const override
+	{
+		return "SineReLU";
+	}
+
+	float apply(float x) const override
+	{
+		if (x > 0.f)
+			return x;
+		else
+			return EPSILON_SINERELU * (sinf(x) - cosf(x));
+	}
+
+	float derivation(float x) const override
+	{
+		if (x > 0.f)
+			return 1.f;
+		else
+			return EPSILON_SINERELU * (-cosf(x) +sinf(x));
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -1562,7 +1589,10 @@ Activation* get_activation(const string& sActivation)
     else if(sActivation=="Sin")
         return new ActivationSin;
 
-    else if(sActivation=="SinC")
+	else if (sActivation == "SineReLU")
+		return new ActivationSineReLU;
+	
+	else if(sActivation=="SinC")
         return new ActivationSinC;
 
     else if(sActivation=="Swish")
@@ -1643,7 +1673,8 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("SiLU");
     vsActivations.push_back("SinC");
     vsActivations.push_back("Sin");
-    vsActivations.push_back("Swish");
+	vsActivations.push_back("SineReLU");
+	vsActivations.push_back("Swish");
     vsActivations.push_back("Tanh");
 	vsActivations.push_back("TanhShrink");
 	vsActivations.push_back("ThresholdedRelu");
