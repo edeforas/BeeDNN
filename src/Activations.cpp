@@ -6,7 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#include "Activation.h"
+#include "Activations.h"
 #include <cmath>
 
 Activation::Activation()

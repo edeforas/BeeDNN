@@ -8,7 +8,7 @@
 
 #include "LayerActivation.h"
 
-#include "Activation.h"
+#include "Activations.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerActivation::LayerActivation(const string& sActivation):

@@ -169,7 +169,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Activation.cpp" />
+    <ClCompile Include="..\Activations.cpp" />
     <ClCompile Include="..\Layer.cpp" />
     <ClCompile Include="..\LayerActivation.cpp" />
     <ClCompile Include="..\LayerDense.cpp" />
@@ -182,7 +182,7 @@
     <ClCompile Include="sample_classification_xor.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Activation.h" />
+    <ClInclude Include="..\Activations.h" />
     <ClInclude Include="..\Layer.h" />
     <ClInclude Include="..\LayerActivation.h" />
     <ClInclude Include="..\LayerDense.h" />

@@ -6,8 +6,8 @@
     in the LICENSE.txt file.
 */
 
-#ifndef Activation_
-#define Activation_
+#ifndef Activations_
+#define Activations_
 
 #include <string>
 #include <vector>

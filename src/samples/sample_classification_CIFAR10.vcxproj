@@ -178,7 +178,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Activation.cpp" />
+    <ClCompile Include="..\Activations.cpp" />
     <ClCompile Include="..\CIFAR10Reader.cpp" />
     <ClCompile Include="..\ConfusionMatrix.cpp" />
     <ClCompile Include="..\DataSource.cpp" />
@@ -214,7 +214,7 @@
     <ClCompile Include="sample_classification_CIFAR10.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Activation.h" />
+    <ClInclude Include="..\Activations.h" />
     <ClInclude Include="..\CIFAR10Reader.h" />
     <ClInclude Include="..\ConfusionMatrix.h" />
     <ClInclude Include="..\DataSource.h" />
