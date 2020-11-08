@@ -4,12 +4,31 @@ using namespace std;
 #include "BeeDNNLib.h"
 
 #include "Activations.h"
+#include "Net.h"
+#include "NetTrain.h"
+#include "LayerFactory.h"
 
-void hello()
+
+class BeeDNN
 {
-	cout << "Hello" << endl;
+public:
+	BeeDNN()
+	{
+		pNet = new Net();
+		pTrain = new NetTrain();
+	}
 
-}
+	~BeeDNN()
+	{
+		delete pNet;
+		delete pTrain;
+	}
+
+	Net* pNet;
+	NetTrain* pTrain;
+
+};
+
 
 float activation(char * activ,float f)
 {
@@ -19,3 +38,25 @@ float activation(char * activ,float f)
 	return f2;
 }
 
+void *create()
+{
+	return new BeeDNN();
+
+}
+
+void add_layer(void* pNN, char *layer)
+{
+	Layer* pLayer = LayerFactory::create(layer);
+	((BeeDNN*)pNN)->pNet->add(pLayer);
+}
+
+void predict(void* pNN,const float *pIn, float *pOut)
+{
+	MatrixFloat mIn = fromRawBuffer(pIn, 1, 1);
+	MatrixFloat mOut = fromRawBuffer(pOut, 1, 1);
+	((BeeDNN*)pNN)->pNet->predict(mIn, mOut);
+
+	pOut[0] = mOut(0);
+
+	cout << mIn(0) << " " << mOut(0) << endl;
+}
