@@ -85,9 +85,15 @@ bool Net::is_classification_mode() const
 /////////////////////////////////////////////////////////////////////////////////////////////
 void Net::predict(const MatrixFloat& mIn, MatrixFloat& mClass) const
 {
-    MatrixFloat mOut;
+	MatrixFloat mOut;
 	forward(mIn, mOut);
-	
+
+	if (!_bClassificationMode)
+	{		
+		mClass = mOut;
+		return;
+	}
+
 	if (mOut.cols() != 1)
 		rowsArgmax(mOut, mClass); //one hot case
 	else

@@ -38,10 +38,15 @@ float activation(char * activ,float f)
 	return f2;
 }
 
-void *create()
+void* create()
 {
 	return new BeeDNN();
+}
 
+void set_classification_mode(void* pNN, int32_t _iClassificationMode)
+{
+	cout << _iClassificationMode << endl;
+	((BeeDNN*)pNN)->pNet->set_classification_mode(_iClassificationMode != 0);
 }
 
 void add_layer(void* pNN, char *layer)

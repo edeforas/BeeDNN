@@ -12,6 +12,7 @@
 BEEDNN_EXPORT float activation(char * activ, float f);
 
 BEEDNN_EXPORT void * create();
+BEEDNN_EXPORT void set_classification_mode(void* pNN, int32_t _iClassificationMode);
 BEEDNN_EXPORT void add_layer(void* pNN, char *layer);
 BEEDNN_EXPORT void predict(void* pNN, const float *pIn, float *pOut);
 
