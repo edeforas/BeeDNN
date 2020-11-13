@@ -29,15 +29,6 @@ public:
 
 };
 
-
-float activation(char * activ,float f)
-{
-	Activation * pactiv = get_activation(activ);
-	float f2=pactiv->apply(f);
-	delete pactiv;
-	return f2;
-}
-
 void* create()
 {
 	return new BeeDNN();
@@ -62,6 +53,4 @@ void predict(void* pNN,const float *pIn, float *pOut)
 	((BeeDNN*)pNN)->pNet->predict(mIn, mOut);
 
 	pOut[0] = mOut(0);
-
-	cout << mIn(0) << " " << mOut(0) << endl;
 }

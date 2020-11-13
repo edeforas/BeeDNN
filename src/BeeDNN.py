@@ -5,15 +5,15 @@ import numpy as np
 
 class BeeDNN:
     c_float_p = ct.POINTER(ct.c_float)
-    lib = ct.cdll.LoadLibrary("./BeeDNNLib.dll")
+    lib = ct.cdll.LoadLibrary("./BeeDNNLib") #.dll is added under windows, .so under linux
     lib.create.restype=ct.c_void_p
-
     lib.add_layer.argtypes = [ct.c_void_p,ct.c_char_p]
     lib.set_classification_mode.argtypes = [ct.c_void_p,ct.c_int32]
     lib.predict.argtypes=[ct.c_void_p,c_float_p,c_float_p]
-    lib.activation.argtypes = [ct.c_char_p , ct.c_float]
-    lib.activation.restype = ct.c_float
-    net = ct.c_void_p(lib.create())
+        
+    def __init__(self):
+
+        self.net = ct.c_void_p(self.lib.create())
 
     def add_layer(self,layer_name):
         cstr = ct.c_char_p(layer_name.encode('utf-8'))
@@ -21,47 +21,44 @@ class BeeDNN:
 
     def set_classification_mode(self,bClassificationMode):
         self.lib.set_classification_mode(self.net,ct.c_int32(bClassificationMode))
-
-    def activation(self,activ_name):
-        cstr = ct.c_char_p(activ_name.encode('utf-8'))
-        x=np.zeros(1000)
-        y=np.zeros(1000)
-        for i in range(0,1000):
-            x[i]=(i/100-5)
-            y[i]=self.lib.activation(cstr,i/100-5)
-
-        return x,y
  
     def predict(self,mIn,mOut):
         data_in = mIn.astype(np.float32)
-        data_out = mOut.astype(np.float32)
-
         data_p_in = data_in.ctypes.data_as(self.c_float_p)
-        data_p_out = data_out.ctypes.data_as(self.c_float_p)
+        data_p_out = mOut.ctypes.data_as(self.c_float_p)
         self.lib.predict(self.net,data_p_in,data_p_out)
-        pass
-
-
+ 
 
 nn=BeeDNN()
 nn.add_layer('Swish')
 nn.set_classification_mode(0)
 
-mIn=np.zeros((1,1),dtype=float)
-mIn[0]=1.234
-mOut=np.zeros((1,1),dtype=float)
-nn.predict(mIn,mOut)
-print(mOut[0])
+nnHard=BeeDNN()
+nnHard.add_layer('HardSwish')
+nnHard.set_classification_mode(0)
 
-x,y=nn.activation('Relu')
-plt.plot(x,y,label='Relu')
+mIn=np.zeros((1,1),dtype=np.float32)
+mOut=np.zeros((1,1),dtype=np.float32)
 
-x,y=nn.activation('Swish')
-plt.plot(x,y,label='Swish')
+xt=np.zeros(0)
+yt=np.zeros(0)
+yth=np.zeros(0)
 
-x,y=nn.activation('HardSwish')
-plt.plot(x,y,label='HardSwish')
+for x in np.arange(-5,5,0.1):
+    xt=np.append(xt,x)
+    mIn[0]=x
 
+    nn.predict(mIn,mOut)
+    y=mOut[0]
+    yt=np.append(yt,y)
+
+    nnHard.predict(mIn,mOut)
+    yh=mOut[0]
+    yth=np.append(yth,yh)
+
+plt.plot(xt,yt,label='Swish')
+plt.plot(xt,yth,label='HardSwish')
+plt.title("Swish vs. HardSwish")
 plt.legend()
 plt.grid()
 plt.show()
