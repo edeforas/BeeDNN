@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import BeeDNN as nn
+import BeeDNNProto as nn
 
 # simple XOR classification using softmax (see simple_xor.py for a xor classification without softmax)
 

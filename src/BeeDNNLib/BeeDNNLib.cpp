@@ -1,13 +1,9 @@
-#include <iostream>
-using namespace std;
-
 #include "BeeDNNLib.h"
 
 #include "Activations.h"
 #include "Net.h"
 #include "NetTrain.h"
 #include "LayerFactory.h"
-
 
 class BeeDNN
 {
@@ -36,7 +32,6 @@ void* create()
 
 void set_classification_mode(void* pNN, int32_t _iClassificationMode)
 {
-	cout << _iClassificationMode << endl;
 	((BeeDNN*)pNN)->pNet->set_classification_mode(_iClassificationMode != 0);
 }
 

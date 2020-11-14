@@ -1,5 +1,5 @@
 import numpy as np
-import BeeDNN as nn
+import BeeDNNProto as nn
 import MNIST_import
 import MetaOptimizer as meta
 

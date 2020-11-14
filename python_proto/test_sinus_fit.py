@@ -1,5 +1,5 @@
 import numpy as np
-import BeeDNN as nn
+import BeeDNNProto as nn
 
 # Simple Sinus regression (fit) using small network
 # network is very small so we can see the fitting error

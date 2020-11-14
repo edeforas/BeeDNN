@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import BeeDNN as nn
+import BeeDNNProto as nn
 
 # Simple Sinus regression using small network
 # network is intentionally very small, so we can see the fitting error

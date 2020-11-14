@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import BeeDNN as nn
+import BeeDNNProto as nn
 import MNIST_import
 
 # Simple MNIST classification using small network

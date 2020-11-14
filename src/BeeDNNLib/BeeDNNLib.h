@@ -1,6 +1,8 @@
 #ifndef _BeeDNNLib_
 #define _BeeDNNLib_
 
+#include <cstdint>
+
 #ifdef _WIN32
 	#ifdef BEEDNNLIB_BUILD
 		#define BEEDNN_EXPORT extern "C" __declspec(dllexport)

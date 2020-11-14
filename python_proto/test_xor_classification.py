@@ -1,5 +1,5 @@
 import numpy as np
-import BeeDNN as nn
+import BeeDNNProto as nn
 
 #simple xor classification
 def test_xor_classification():
