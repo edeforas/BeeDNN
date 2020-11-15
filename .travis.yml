@@ -20,5 +20,5 @@ python:
 
 install:
 script:
-  - cd python
+  - cd python_proto
   - pytest
