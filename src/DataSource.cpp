@@ -12,7 +12,7 @@ void replace_last(string& s, string sOld,string sNew)
 DataSource::DataSource()
 {
 	_bHasTrainData=false;
-	_bHasTestData=false;
+	_bHasValidationData=false;
 }
 ////////////////////////////////////////////////////////////////////////
 DataSource::~DataSource()
@@ -105,19 +105,19 @@ const MatrixFloat& DataSource::train_truth() const
 	return _mTrainTruth;
 }
 ////////////////////////////////////////////////////////////////////////
-const MatrixFloat& DataSource::test_data() const
+const MatrixFloat& DataSource::validation_data() const
 {
-	return _mTestData;
+	return _mValData;
 }
 ////////////////////////////////////////////////////////////////////////
-const MatrixFloat& DataSource::test_truth() const
+const MatrixFloat& DataSource::validation_truth() const
 {
-	return _mTestTruth;
+	return _mValTruth;
 }
 ////////////////////////////////////////////////////////////////////////
 bool DataSource::has_data() const
 {
-	return _bHasTrainData || _bHasTestData;
+	return _bHasTrainData || _bHasValidationData;
 }
 ////////////////////////////////////////////////////////////////////////
 bool DataSource::has_train_data() const
@@ -125,9 +125,9 @@ bool DataSource::has_train_data() const
 	return _bHasTrainData;
 }
 ////////////////////////////////////////////////////////////////////////
-bool DataSource::has_test_data() const
+bool DataSource::has_validation_data() const
 {
-	return _bHasTestData;
+	return _bHasValidationData;
 }
 ////////////////////////////////////////////////////////////////////////
 int DataSource::data_size() const

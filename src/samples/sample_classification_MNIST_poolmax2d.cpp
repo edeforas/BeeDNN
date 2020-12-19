@@ -68,7 +68,7 @@ int main()
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_epoch_callback(epoch_callback); //optional, show progress
 	netTrain.set_train_data(mr.train_data(), mr.train_truth());
-	netTrain.set_validation_data(mr.test_data(),mr.test_truth()); //optional, not used for training, helps to keep the final best model
+	netTrain.set_validation_data(mr.validation_data(),mr.validation_truth()); //optional, not used for training, helps to keep the final best model
 
 	// train net
 	cout << "Training..." << endl << endl;
@@ -82,17 +82,17 @@ int main()
 	ClassificationResult crRef = cmRef.compute(mr.train_truth(), mClassPredicted);
 	cout << "Train accuracy: " << crRef.accuracy << " %" << endl;
 
-	MatrixFloat mClassTest;
-	net.predict(mr.test_data(), mClassTest);
-	ConfusionMatrix cmTest;
-	ClassificationResult crTest = cmTest.compute(mr.test_truth(), mClassTest);
-	cout << "Val accuracy: " << crTest.accuracy << " %" << endl;
-	cout << "Val confusion matrix:" << endl << toString(crTest.mConfMat) << endl;
+	MatrixFloat mClassVal;
+	net.predict(mr.validation_data(), mClassVal);
+	ConfusionMatrix cmVal;
+	ClassificationResult crVal = cmVal.compute(mr.validation_truth(), mClassVal);
+	cout << "Val accuracy: " << crVal.accuracy << " %" << endl;
+	cout << "Val confusion matrix:" << endl << toString(crVal.mConfMat) << endl;
 	
 	//testu function
-	if (crTest.accuracy < 96.f)
+	if (crVal.accuracy < 96.f)
 	{
-		cout << "Test failed! accuracy=" << crTest.accuracy << endl;
+		cout << "Test failed! accuracy=" << crVal.accuracy << endl;
 		return -1;
 	}
 

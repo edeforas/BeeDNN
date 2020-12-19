@@ -49,17 +49,17 @@ bool CsvFileReader::load(const string& sFile)
 
 	if((sTrainData!=sTestData) && (sTrainTruth!=sTestTruth))
 	{
-		_mTestData=fromFile(sTestData);
-		_mTestTruth=fromFile(sTestTruth);
+		_mValData=fromFile(sTestData);
+		_mValTruth=fromFile(sTestTruth);
 	}
 	else
 	{
-		_mTestData.resize(0,0);
-		_mTestTruth.resize(0,0);
+		_mValData.resize(0,0);
+		_mValTruth.resize(0,0);
 	}
 
 	_bHasTrainData=(_mTrainData.size()!=0) && (_mTrainTruth.size()!=0) ;
-	_bHasTestData=(_mTestData.size()!=0) && (_mTestTruth.size()!=0) ;
+	_bHasValidationData=(_mValData.size()!=0) && (_mValTruth.size()!=0) ;
 
 	return has_data();
 }	

@@ -25,17 +25,17 @@ bool MNISTReader::load(const string& sName)
 	if (!read_Matrix(sRefLabels, _mTrainTruth))
 		return false;
 
-	if (!read_Matrix(sTestImages, _mTestData))
+	if (!read_Matrix(sTestImages, _mValData))
 		return false;
 
-	if (!read_Matrix(sTestLabels, _mTestTruth))
+	if (!read_Matrix(sTestLabels, _mValTruth))
 		return false;
 
 	_mTrainData /= 256.f;
-	_mTestData /= 256.f;
+	_mValData /= 256.f;
 
 	_bHasTrainData = true;
-	_bHasTestData = true;
+	_bHasValidationData = true;
 
 	return true;
 }

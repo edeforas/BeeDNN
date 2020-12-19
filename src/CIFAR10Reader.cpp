@@ -16,7 +16,7 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////////
 bool CIFAR10Reader::load(const string& sFolder)
 {
-	return read_from_folder(sFolder, _mTrainData, _mTrainTruth, _mTestData, _mTestTruth);
+	return read_from_folder(sFolder, _mTrainData, _mTrainTruth, _mValData, _mValTruth);
 }
 ////////////////////////////////////////////////////////////////////////////////////
 bool CIFAR10Reader::read_from_folder(const string& sFolder,MatrixFloat& mRefImages,MatrixFloat& mRefLabels,MatrixFloat& mTestImages,MatrixFloat& mTestLabels)
@@ -70,7 +70,7 @@ bool CIFAR10Reader::read_from_folder(const string& sFolder,MatrixFloat& mRefImag
 		return false;
 
 	_mTrainData /= 255.f;
-	_mTestData /= 255.f;
+	_mValData /= 255.f;
 
 	return true;
 }

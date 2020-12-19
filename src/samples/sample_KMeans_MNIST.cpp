@@ -55,7 +55,7 @@ int main()
 	kmTrain.set_batchsize(10000);
 	kmTrain.set_epoch_callback(epoch_callback); //optional, to show the progress
 	kmTrain.set_train_data(mr.train_data(),mr.train_truth());
-	kmTrain.set_validation_data(mr.test_data(), mr.test_truth()); //optional
+	kmTrain.set_validation_data(mr.validation_data(), mr.validation_truth()); //optional
 
 	// train net
 	cout << "Training..." << endl << endl;
@@ -70,9 +70,9 @@ int main()
 	cout << "Train accuracy: " << crRef.accuracy << " %" << endl;
 
 	MatrixFloat mClassTest;
-	km.predict(mr.test_data(), mClassTest);
+	km.predict(mr.validation_data(), mClassTest);
 	ConfusionMatrix cmVal;
-	ClassificationResult crVal = cmVal.compute(mr.test_truth(), mClassTest);
+	ClassificationResult crVal = cmVal.compute(mr.validation_truth(), mClassTest);
 	cout << "Validation accuracy: " << crVal.accuracy << " %" << endl;
 	cout << "Validation confusion matrix:" << endl << toString(crVal.mConfMat) << endl;
 

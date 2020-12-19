@@ -94,7 +94,7 @@ int main()
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_epoch_callback(epoch_callback); //optional, show the progress
 	netTrain.set_train_data(ds.train_data(),ds.train_truth());
-	netTrain.set_validation_data(ds.test_data(), ds.test_truth());
+	netTrain.set_validation_data(ds.validation_data(), ds.validation_truth());
 
 	// train net
 	cout << "Training..." << endl << endl;
@@ -110,9 +110,9 @@ int main()
 	cout << "Train confusion matrix:" << endl << crRef.mConfMat << endl;
 
 	MatrixFloat mValClass;
-	net.predict(ds.test_data(), mValClass);
+	net.predict(ds.validation_data(), mValClass);
 	ConfusionMatrix cmValidation;
-	ClassificationResult crValidation = cmValidation.compute(ds.test_truth(), mValClass);
+	ClassificationResult crValidation = cmValidation.compute(ds.validation_truth(), mValClass);
 	cout << "Validation accuracy: " << crValidation.accuracy << " %" << endl;
 	cout << "Validation confusion matrix:" << endl << toString(crValidation.mConfMat) << endl;
 
