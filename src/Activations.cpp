@@ -1150,26 +1150,26 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
-#define SOFTSTEP_2PI    (6.283185307f)
-#define SOFTSTEP_INV2PI (0.159154943f)
+#define SOFTSTEPS_2PI    (6.283185307f)
+#define SOFTSTEPS_INV2PI (0.159154943f)
 
-class ActivationSoftStep : public Activation
+class ActivationSoftSteps : public Activation
 {
 public:
 	string name() const override
 	{
-		return "SoftStep";
+		return "SoftSteps";
 	}
 
 	float apply(float x) const override
 	{
 
-		return x-sinf(x*SOFTSTEP_2PI)*SOFTSTEP_INV2PI;
+		return x-sinf(x*SOFTSTEPS_2PI)*SOFTSTEPS_INV2PI;
 	}
 
 	float derivation(float x) const override
 	{
-		return 1.f-cosf(x*SOFTSTEP_2PI);
+		return 1.f-cosf(x*SOFTSTEPS_2PI);
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -1627,8 +1627,8 @@ Activation* get_activation(const string& sActivation)
     else if(sActivation=="SoftSign")
         return new ActivationSoftSign;
 
-	else if (sActivation == "SoftStep")
-		return new ActivationSoftStep;
+	else if (sActivation == "SoftSteps")
+		return new ActivationSoftSteps;
 	
 	else if(sActivation=="Tanh")
         return new ActivationTanh;
@@ -1693,7 +1693,7 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("SoftPlus");
     vsActivations.push_back("SoftShrink");
     vsActivations.push_back("SoftSign");
-	vsActivations.push_back("SoftStep");
+	vsActivations.push_back("SoftSteps");
 	vsActivations.push_back("SQNL");
     vsActivations.push_back("SQ-RBF");
     vsActivations.push_back("Sigmoid");
