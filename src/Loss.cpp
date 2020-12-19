@@ -39,7 +39,6 @@ void Loss::balance_with_weight(const MatrixFloat& mTarget, MatrixFloat& mGradien
 	}
 }
 //////////////////////////////////////////////////////////////////////////////
-
 class LossMeanSquaredError : public Loss
 {
 public:
@@ -72,6 +71,62 @@ public:
 
 		mGradientLoss = mPredicted - mTarget;
         if(_bClassBalancing)
+			balance_with_weight(mTarget, mGradientLoss);
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
+//Huber Loss from https://en.wikipedia.org/wiki/Huber_loss
+#define HUBER_SIGMA (1.f)
+class LossHuber : public Loss
+{
+public:
+	string name() const override
+	{
+		return "Huber";
+	}
+
+	float compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget) const override
+	{
+		assert(mTarget.cols() == mPredicted.cols());
+		assert(mTarget.rows() == mPredicted.rows());
+
+		MatrixFloat m = (mPredicted - mTarget).cwiseAbs();
+
+		for (Index i = 0; i < m.size(); i++)
+		{
+			if (m(i) < HUBER_SIGMA)
+				m(i) = 0.5f*(m(i) * m(i));
+			else
+				m(i) = HUBER_SIGMA * m(i) - 0.5f*HUBER_SIGMA * HUBER_SIGMA;
+		}
+
+		if (mTarget.size() == 0)
+			return 0.f;
+		if (!_bClassBalancing)
+			return m.mean();
+		else
+		{
+			MatrixFloat mError = m;
+			balance_with_weight(m, mError);
+			return mError.mean();
+		}
+	}
+
+	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
+	{
+		assert(mTarget.cols() == mPredicted.cols());
+		assert(mTarget.rows() == mPredicted.rows());
+
+		mGradientLoss = mPredicted- mTarget;
+		for (Index i = 0; i < mGradientLoss.size(); i++)
+		{
+			if (mGradientLoss(i) > HUBER_SIGMA)
+				mGradientLoss(i) = HUBER_SIGMA;
+			else if (mGradientLoss(i) < -HUBER_SIGMA)
+				mGradientLoss(i) = -HUBER_SIGMA;
+		}
+
+		if (_bClassBalancing)
 			balance_with_weight(mTarget, mGradientLoss);
 	}
 };
@@ -463,6 +518,9 @@ public:
 //////////////////////////////////////////////////////////////////////////////
 Loss* create_loss(const string& sLoss)
 {
+	if (sLoss == "Huber")
+		return new LossHuber;
+
     if(sLoss =="MeanSquaredError")
         return new LossMeanSquaredError;
 
@@ -500,7 +558,8 @@ void list_loss_available(vector<string>& vsLoss)
 {
     vsLoss.clear();
 
-    vsLoss.push_back("MeanSquaredError");
+	vsLoss.push_back("Huber");
+	vsLoss.push_back("MeanSquaredError");
 	vsLoss.push_back("MeanAbsoluteError");
 	vsLoss.push_back("MeanCubicError");
 	vsLoss.push_back("L2");
