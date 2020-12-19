@@ -17,12 +17,12 @@ public:
     const MatrixFloat& train_data() const;
     const MatrixFloat& train_truth() const;
 
-    const MatrixFloat& test_data() const;
-    const MatrixFloat& test_truth() const;
+    const MatrixFloat& validation_data() const;
+    const MatrixFloat& validation_truth() const;
 
     bool has_data() const;
     bool has_train_data() const;
-    bool has_test_data() const;
+    bool has_validation_data() const;
 
     int data_size() const;
     int annotation_cols() const;
@@ -30,11 +30,11 @@ public:
 protected:
     MatrixFloat _mTrainData;
     MatrixFloat _mTrainTruth;
-    MatrixFloat _mTestData;
-    MatrixFloat _mTestTruth;
+    MatrixFloat _mValData;
+    MatrixFloat _mValTruth;
 
-    bool _bHasTestData;
     bool _bHasTrainData;
+	bool _bHasValidationData;
 };
 
 #endif

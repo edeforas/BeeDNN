@@ -84,7 +84,7 @@ int main()
 	netTrain.set_epochs(50);
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_train_data(mr.train_data(), mr.train_truth());
-	netTrain.set_validation_data(mr.test_data(),mr.test_truth());
+	netTrain.set_validation_data(mr.validation_data(),mr.validation_truth());
 	netTrain.set_net(net);
 
 	//create meta optimizer to run in parallel
