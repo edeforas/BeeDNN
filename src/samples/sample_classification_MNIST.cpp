@@ -1,6 +1,6 @@
 // simple  classification MNIST with a dense layer, similar as :
 // https://colab.research.google.com/github/tensorflow/docs/blob/master/site/en/tutorials/_index.ipynb
-// validation accuracy > 98.1%, after 20 epochs (2s by epochs)
+// validation accuracy > 98.1%, after 20 epochs (1s by epochs)
 
 #include <iostream>
 #include <chrono>
@@ -40,7 +40,7 @@ void epoch_callback()
 int main()
 {
 	cout << "simple  classification MNIST with a dense layer" << endl;
-	cout << "validation accuracy > 98.1%, after 15 epochs (2s by epochs)" << endl;
+	cout << "validation accuracy > 98.1%, after 15 epochs (1s by epochs)" << endl;
 
     iEpoch = 0;
 

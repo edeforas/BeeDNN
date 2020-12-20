@@ -644,7 +644,7 @@ public:
 
     T trace() const
     {
-        T trace=0;
+        T trace=(T)0;
 
         for(Index i=0;i<_iRows;i++) //todo test square
             trace+=operator()(i,i);
@@ -667,13 +667,14 @@ MatrixFloatView fromRawBuffer(float *pBuffer, Index iRows, Index iCols);
 const MatrixFloatView fromRawBuffer(const float *pBuffer, Index iRows, Index iCols);
 MatrixFloatView createView(MatrixFloat & mRef);
 void copyInto(const MatrixFloat& mToCopy, MatrixFloat& m, Index iStartRow);
+
 MatrixFloat rowWiseSum(const MatrixFloat& m);
 MatrixFloat rowWiseSumSq(const MatrixFloat& m);
 
 MatrixFloat colWiseSum(const MatrixFloat& m);
 MatrixFloat colWiseSumSq(const MatrixFloat& m);
-
 MatrixFloat colWiseMean(const MatrixFloat& m);
+
 MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat rowWiseMult(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d);

@@ -310,7 +310,7 @@ float NetTrain::compute_loss_accuracy(const MatrixFloat &mSamples, const MatrixF
 {
     Index iNbSamples = mSamples.rows();
 	float fLoss = 0.f;
-	MatrixFloat mOut,mTruthBatch, mSamplesBatch;
+	MatrixFloat mOut,mTruthBatch, mSamplesBatch,mLoss;
 
 	if ((_pNet->layers().size() == 0) || (iNbSamples == 0))
 	{
@@ -333,7 +333,8 @@ float NetTrain::compute_loss_accuracy(const MatrixFloat &mSamples, const MatrixF
 		mTruthBatch = rowView(mTruth, iStart, iEnd);
 		
 		_pNet->predict(mSamplesBatch, mOut);
-		fLoss+= _pLoss->compute(mOut, mTruthBatch);
+		_pLoss->compute(mOut, mTruthBatch,mLoss);
+		fLoss += mLoss.mean();
 
 		if (pfAccuracy)
 		{
@@ -590,7 +591,9 @@ void NetTrain::train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth
 void NetTrain::add_online_statistics(const MatrixFloat&mPredicted, const MatrixFloat&mTruth )
 {
     //update loss
-    _fOnlineLoss += _pLoss->compute(mPredicted, mTruth);
+	MatrixFloat mLoss;
+    _pLoss->compute(mPredicted, mTruth,mLoss);
+	_fOnlineLoss += mLoss.mean();
 
     if (!_pNet->is_classification_mode())
         return;

@@ -1,5 +1,5 @@
 // Sample MNIST classification with a poolmax2D
-// 97% accuracy after 25 epochs, 1s/epochs
+// 97.5% accuracy after 25 epochs, 0.5s/epochs
 // image is "undersampled" at first layer with a poolmax2d
 
 #include <iostream>
@@ -40,7 +40,7 @@ void epoch_callback()
 int main()
 {
 	cout << "Sample MNIST classification with a poolmax2D" << endl;
-	cout << "97% accuracy after 20 epochs, 1s/epochs" << endl;
+	cout << "97.5% accuracy after 20 epochs, 0.5s/epochs" << endl;
 	cout << "image is undersampled at first layer with a poolmax2d" << endl;
 
     iEpoch = 0;
@@ -56,14 +56,14 @@ int main()
   
 	//create simple net:
 	net.add(new LayerPoolMax2D(28,28,1, 2, 2)); //input rows, input cols,input channels, factor rows, factor cols
-	net.add(new LayerDense(784/4, 64)); // new size is 4x smaller
+	net.add(new LayerDense(784/4, 128)); // new size is 4x smaller
 	net.add(new LayerActivation("Relu"));
-	net.add(new LayerDense(64, 10));
+	net.add(new LayerDense(128, 10));
 	net.add(new LayerSoftmax());
 
 	//setup train options
 	netTrain.set_net(net);
-	netTrain.set_epochs(25);
+	netTrain.set_epochs(20);
 	netTrain.set_batchsize(64);
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_epoch_callback(epoch_callback); //optional, show progress
@@ -90,7 +90,7 @@ int main()
 	cout << "Val confusion matrix:" << endl << toString(crVal.mConfMat) << endl;
 	
 	//testu function
-	if (crVal.accuracy < 96.f)
+	if (crVal.accuracy < 97.5f)
 	{
 		cout << "Test failed! accuracy=" << crVal.accuracy << endl;
 		return -1;

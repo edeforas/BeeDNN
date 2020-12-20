@@ -105,6 +105,8 @@ float KMeans::compute_dist(const MatrixFloat& m1, const MatrixFloat& m2) const
 	assert(m2.rows() == 1);
 	assert(m1.cols() == m2.cols());
 
-	return _pLoss->compute(m1, m2);
+	MatrixFloat mLoss;
+	_pLoss->compute(m1, m2, mLoss);
+	return mLoss.mean();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
