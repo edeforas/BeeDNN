@@ -47,21 +47,26 @@ public:
 		return "MeanSquaredError";
 	}
 	
-	float compute(const MatrixFloat& mPredicted,const MatrixFloat& mTarget) const override
+	void compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mLoss) const override
 	{
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
-
+		/*
 		if (mTarget.size() == 0)
-			return 0.f;
-		if(!_bClassBalancing)
-		    return (mPredicted -mTarget).cwiseAbs2().mean();
-		else
+		{
+			mLoss.resize(0, 0);
+			return ;
+		}
+		*/
+		mLoss= colWiseMean( (mPredicted - mTarget).cwiseAbs2() );
+		/*
+		if (_bClassBalancing)
 		{
 			MatrixFloat mError = (mPredicted - mTarget).cwiseAbs2();
 			balance_with_weight(mTarget, mError);
 			return mError.mean();
 		}
+		*/
 	}
 	
 	void compute_gradient(const MatrixFloat& mPredicted,const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
@@ -69,11 +74,12 @@ public:
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
 
-		mGradientLoss = mPredicted - mTarget;
-        if(_bClassBalancing)
+		mGradientLoss = (mPredicted - mTarget)/ (float)mPredicted.cols();
+/*        if(_bClassBalancing)
 			balance_with_weight(mTarget, mGradientLoss);
-	}
+*/	}
 };
+
 //////////////////////////////////////////////////////////////////////////////
 //Huber Loss from https://en.wikipedia.org/wiki/Huber_loss
 #define HUBER_SIGMA (1.f)
@@ -85,7 +91,7 @@ public:
 		return "Huber";
 	}
 
-	float compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget) const override
+	void compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mLoss) const override
 	{
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
@@ -100,8 +106,8 @@ public:
 				m(i) = HUBER_SIGMA * m(i) - 0.5f*HUBER_SIGMA * HUBER_SIGMA;
 		}
 
-		if (mTarget.size() == 0)
-			return 0.f;
+		mLoss= colWiseMean(m);
+		/*
 		if (!_bClassBalancing)
 			return m.mean();
 		else
@@ -110,6 +116,7 @@ public:
 			balance_with_weight(m, mError);
 			return mError.mean();
 		}
+		*/
 	}
 
 	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
@@ -125,11 +132,13 @@ public:
 			else if (mGradientLoss(i) < -HUBER_SIGMA)
 				mGradientLoss(i) = -HUBER_SIGMA;
 		}
-
+		/*
 		if (_bClassBalancing)
 			balance_with_weight(mTarget, mGradientLoss);
+	*/
 	}
 };
+
 //////////////////////////////////////////////////////////////////////////////
 //PseudoHuber Loss from https://en.wikipedia.org/wiki/Huber_loss
 #define PSEUDOHUBER_SIGMA (1.f)
@@ -143,7 +152,7 @@ public:
 		return "PseudoHuber";
 	}
 
-	float compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget) const override
+	void compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mLoss) const override
 	{
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
@@ -151,13 +160,10 @@ public:
 		MatrixFloat m = (mPredicted - mTarget).cwiseAbs2();
 
 		for (Index i = 0; i < m.size(); i++)
-		{
-			float x = m(i);
-			m(i) = PSEUDOHUBER_SIGMA_2 * (sqrtf(x*PSEUDOHUBER_INV_SIGMA_2 + 1.f) - 1.f);
-		}
+			m(i) = PSEUDOHUBER_SIGMA_2 * (sqrtf(m(i)*PSEUDOHUBER_INV_SIGMA_2 + 1.f) - 1.f);
 
-		if (mTarget.size() == 0)
-			return 0.f;
+		mLoss = colWiseMean(m);
+		/*
 		if (!_bClassBalancing)
 			return m.mean();
 		else
@@ -166,6 +172,7 @@ public:
 			balance_with_weight(m, mError);
 			return mError.mean();
 		}
+		*/
 	}
 
 	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
@@ -180,9 +187,10 @@ public:
 			float x = mGradientLoss(i);
 			mGradientLoss(i) = x / sqrtf(x*x*PSEUDOHUBER_INV_SIGMA_2 + 1.f);
 		}
-
+		/*
 		if (_bClassBalancing)
 			balance_with_weight(mTarget, mGradientLoss);
+	*/
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -194,14 +202,13 @@ public:
 		return "MeanCubicError";
 	}
 
-	float compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget) const override
+	void compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mLoss) const override
 	{
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
 
-		if (mTarget.size() == 0)
-			return 0.f;
-
+		mLoss = colWiseMean((mPredicted - mTarget).array().cube().cwiseAbs());
+			/*
 		if (!_bClassBalancing)
 			return (mPredicted - mTarget).array().cube().cwiseAbs().mean();
 		else
@@ -210,6 +217,7 @@ public:
 			balance_with_weight(mTarget, mError);
 			return mError.mean();
 		}
+		*/
 	}
 
 	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
@@ -225,9 +233,10 @@ public:
 			float x = mGradientLoss(i);
 			mGradientLoss(i) = 3.f*x*x*(x > 0.f ? 1.f : -1.f);
 		}
-
+		/*
 		if (_bClassBalancing)
 			balance_with_weight(mTarget, mGradientLoss);
+	*/
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -239,14 +248,13 @@ public:
 		return "MeanAbsoluteError";
 	}
 	
-	float compute(const MatrixFloat& mPredicted,const MatrixFloat& mTarget) const override
+	void compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mLoss) const override
 	{
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
 
-		if (mTarget.size() == 0)
-			return 0.f;
-
+		mLoss = colWiseMean((mPredicted - mTarget).cwiseAbs());
+		/*
 		if(!_bClassBalancing)
 		    return (mPredicted -mTarget ).cwiseAbs().mean();
 		else
@@ -255,6 +263,7 @@ public:
 			balance_with_weight(mTarget, mError);
 			return mError.mean();
 		}
+		*/
 	}
 	
 	void compute_gradient(const MatrixFloat& mPredicted,const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
@@ -263,8 +272,9 @@ public:
 		assert(mTarget.rows() == mPredicted.rows());
 
         mGradientLoss=(mPredicted - mTarget).array().cwiseSign();
-        if(_bClassBalancing)
+    /*    if(_bClassBalancing)
 			balance_with_weight(mTarget, mGradientLoss);
+	*/
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -278,22 +288,26 @@ public:
 		return "L2";
 	}
 
-	float compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget) const override
+	void compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mLoss) const override
 	{
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
-
+		/*
 		if (mTarget.size() == 0)
-			return 0.f;
-
-		if(!_bClassBalancing)
-		    return (mPredicted -mTarget ).cwiseAbs2().sum();
-		else
+		{
+			mLoss.resize(0, 0);
+			return;
+		}
+		*/
+		mLoss = colWiseSum((mPredicted - mTarget).cwiseAbs2());
+		/*
+		if (_bClassBalancing)
 		{
 			MatrixFloat mError = (mPredicted - mTarget).cwiseAbs2();
 			balance_with_weight(mTarget, mError);
-			return mError.sum();
+			return mError.mean();
 		}
+		*/
 	}
 
 	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
@@ -301,9 +315,10 @@ public:
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
 
-		mGradientLoss = mPredicted - mTarget;
-        if(_bClassBalancing)
-			balance_with_weight(mTarget, mGradientLoss);
+		mGradientLoss = (mPredicted - mTarget);
+		/*        if(_bClassBalancing)
+					balance_with_weight(mTarget, mGradientLoss);
+		*/
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -317,14 +332,13 @@ public:
 		return "L1";
 	}
 
-	float compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget) const override
+	void compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mLoss) const override
 	{
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
 
-		if (mTarget.size() == 0)
-			return 0.f;
-
+		mLoss = colWiseSum((mPredicted - mTarget).cwiseAbs());
+		/*
 		if(!_bClassBalancing)
 		    return (mPredicted -mTarget ).cwiseAbs().sum();
 		else
@@ -333,6 +347,7 @@ public:
 			balance_with_weight(mTarget, mError);
 			return mError.sum();
 		}
+		*/
 	}
 
 	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
@@ -340,9 +355,12 @@ public:
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
 
-		mGradientLoss = (mPredicted - mTarget).cwiseSign();
+		mGradientLoss = (mPredicted - mTarget).cwiseSign() / (float)mPredicted.cols();
+
+		/*
         if(_bClassBalancing)
 			balance_with_weight(mTarget, mGradientLoss);
+	*/
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -355,14 +373,13 @@ public:
 		return "L3";
 	}
 
-	float compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget) const override
+	void compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mLoss) const override
 	{
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
 
-		if (mTarget.size() == 0)
-			return 0.f;
-
+		mLoss = colWiseSum((mPredicted - mTarget).array().cube().cwiseAbs());
+		/*
 		if (!_bClassBalancing)
 			return (mPredicted - mTarget).array().cube().cwiseAbs().sum();
 		else
@@ -371,6 +388,7 @@ public:
 			balance_with_weight(mTarget, mError);
 			return mError.sum();
 		}
+		*/
 	}
 
 	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
@@ -386,9 +404,10 @@ public:
 			float x = mGradientLoss(i);
 			mGradientLoss(i) = 3.f*x*x*(x > 0.f ? 1.f:-1.f);
 		}
-
+		/*
 		if (_bClassBalancing)
 			balance_with_weight(mTarget, mGradientLoss);
+	*/
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -400,14 +419,13 @@ public:
 		return "LogCosh";
 	}
 
-	float compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget) const override
+	void compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mLoss) const override
 	{
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
 
-		if (mTarget.size() == 0)
-			return 0.f;
-
+		mLoss = colWiseMean((mPredicted - mTarget).array().cosh().log());
+		/*
 		if(!_bClassBalancing)
 		    return (mPredicted - mTarget).array().cosh().log().sum();
 		else
@@ -415,7 +433,7 @@ public:
 			MatrixFloat mError = (mPredicted - mTarget).array().cosh().log();
 			balance_with_weight(mTarget, mError);
 			return mError.sum();
-		}
+		}*/
 	}
 
 	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
@@ -424,8 +442,10 @@ public:
 		assert(mTarget.rows() == mPredicted.rows());
 
 		mGradientLoss = (mPredicted - mTarget).array().tanh();
+		/*
         if(_bClassBalancing)
 			balance_with_weight(mTarget, mGradientLoss);
+	*/
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
@@ -440,30 +460,42 @@ public:
 		return "CategoricalCrossEntropy"; //truth is one hot encoded
 	}
 	
-	float compute(const MatrixFloat& mPredicted,const MatrixFloat& mTarget) const override
+	void compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mLoss) const override
 	{
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
 
-		float fLoss = 0.f;
-		for (int i = 0; i < mTarget.size(); i++)
+		Index r = mPredicted.rows();
+		Index c = mPredicted.cols();
+		mLoss.resize(r, 1);
+
+		for (Index j = 0; j < r; j++)
 		{
-            float t = mTarget(i);
-			
-			if(t==0.f)
-				continue;
+			float fLoss = 0.f;
+			for (int i = 0; i < c; i++)
+			{
+				float t = mTarget(j, i);
+				float p = mPredicted(j, i);
+				float lossTmp = -(t*logf(max(p, 1.e-8f)));
+				fLoss += lossTmp;
+			}
+			mLoss(j, 0) = fLoss;
+		}
+	}
 
-			float p = mPredicted(i);
-            float lossTmp=-(t*logf(max(p, 1.e-8f)));
-
+			/*
             if(_bClassBalancing)
                 lossTmp*=_mWeightBalancing((int)mTarget(i));
 
-            fLoss += lossTmp;
 		}
+
+
+
+		}
+	
 		return fLoss / mTarget.size();
 	}
-	
+	*/
 	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
 	{
 		assert(mTarget.cols() == mPredicted.cols());
@@ -476,10 +508,11 @@ public:
             float t = mTarget(i);
             mGradientLoss(i) = -(t / max(p, 1.e-8f))+ (1.f - t)/(max(1.e-8f, 1.f - p));
 		}
-
+		/*
         if(_bClassBalancing)
             balance_with_weight(mTarget, mGradientLoss);
-    }
+    */
+	}
 };
 //////////////////////////////////////////////////////////////////////////////
 // and https://www.tensorflow.org/api_docs/python/tf/keras/losses/SparseCategoricalCrossentropy
@@ -491,23 +524,47 @@ public:
 		return "SparseCategoricalCrossEntropy"; //truth is index encoded
 	}
 	
-	float compute(const MatrixFloat& mPredicted,const MatrixFloat& mTarget) const override
+	void compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mLoss) const override
 	{
 		assert(mTarget.cols() == 1);
 		assert(mTarget.rows() == mPredicted.rows());
+
+		Index r = mPredicted.rows();
+		Index c = mPredicted.cols();
+		mLoss.resize(r, 1);
+		/*
+		for (Index j = 0; j < r; j++)
+		{
+			float fLoss = 0.f;
+			for (int i = 0; i < c; i++)
+			{
+
+				float t = mTarget(j, i);
+				float p = mPredicted(j, i);
+				float lossTmp = -(t*logf(max(p, 1.e-8f)));
+				fLoss += lossTmp;
+			}
+			mLoss(j, 0) = fLoss;
+		}
+		*/
+
+		
 
 		float fLoss = 0.f;
 		for (int r = 0; r< mPredicted.rows(); r++)
 		{	
 			float lossTmp=-logf(max(mPredicted(r,(int)mTarget(r)), 1.e-8f)); //computing only when truth=1.
-			
+			/*
 			if(_bClassBalancing)
 				lossTmp*=_mWeightBalancing((int)mTarget(r));
+				*/
 
-			fLoss+=lossTmp;
+			mLoss(r, 1) = lossTmp;
+
+		//	fLoss+=lossTmp;
 		}
 
-		return fLoss / mTarget.size();
+	//	return fLoss / mTarget.size();
 	}
 		
 	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
@@ -529,10 +586,11 @@ public:
 					mGradientLoss(r,c) = 1.f/(max(1.e-8f, 1.f - p)); 
 			}
 		}
-		
+		/*
 		if(_bClassBalancing)
             balance_with_weight(mTarget, mGradientLoss);
-    }
+    */
+	}
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -546,25 +604,30 @@ public:
 		return "BinaryCrossEntropy";
 	}
 
-	float compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget) const override
+	void compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mLoss) const override
 	{
 		assert(mTarget.cols() == 1);
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
 		
-        float fLoss = 0.f;
-		for (int i = 0; i < mTarget.size(); i++)
+		Index  r= mPredicted.rows();
+		Index  c = mPredicted.cols();
+		mLoss.resize(r, 1);
+
+      //  float fLoss = 0.f;
+		for (int i = 0; i < r; i++)
 		{
 			float p = mPredicted(i);
             float t = mTarget(i);
             float lossTmp=-(t*log(max(p, 1.e-8f)) + (1.f - t)*log(max(1.e-8f, 1.f - p)));
 
-            if(_bClassBalancing)
-                lossTmp*=_mWeightBalancing((int)mTarget(i));
+        //    if(_bClassBalancing)
+         //       lossTmp*=_mWeightBalancing((int)mTarget(i));
+			mLoss(i, 0) = lossTmp;
 
-            fLoss += lossTmp;
+            //fLoss += lossTmp;
 		}
-		return fLoss / mTarget.size();
+		//return fLoss / mTarget.size();
 	}
 
 	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
@@ -579,26 +642,28 @@ public:
             float t = mTarget(i);
             mGradientLoss(i)= -(t / max(p,1.e-8f) - (1.f - t) / max((1.f - p),1.e-8f));
 		}
-
+		/*
         if(_bClassBalancing)
             balance_with_weight(mTarget, mGradientLoss);
+	*/
 	}
 };
+
 //////////////////////////////////////////////////////////////////////////////
 Loss* create_loss(const string& sLoss)
 {
     if(sLoss =="MeanSquaredError")
         return new LossMeanSquaredError;
-
+	
     else if(sLoss =="MeanAbsoluteError")
         return new LossMeanAbsoluteError;
-
+		
 	if (sLoss == "MeanCubicError")
 		return new LossMeanCubicError;
-
+		
 	else if(sLoss == "L2")
 		return new LossL2;
-
+	
 	else if(sLoss == "L1")
 		return new LossL1;
 
@@ -607,13 +672,13 @@ Loss* create_loss(const string& sLoss)
 
 	else if(sLoss == "LogCosh")
 		return new LossLogCosh;
-
+		
 	if (sLoss == "Huber")
 		return new LossHuber;
-
+	
 	if (sLoss == "PseudoHuber")
 		return new LossPseudoHuber;
-
+		
 	else if(sLoss =="CategoricalCrossEntropy")
         return new LossCategoricalCrossEntropy;
 
@@ -630,14 +695,14 @@ void list_loss_available(vector<string>& vsLoss)
 {
     vsLoss.clear();
 
-	vsLoss.push_back("Huber");
-	vsLoss.push_back("PseudoHuber");
 	vsLoss.push_back("MeanSquaredError");
 	vsLoss.push_back("MeanAbsoluteError");
 	vsLoss.push_back("MeanCubicError");
 	vsLoss.push_back("L2");
 	vsLoss.push_back("L1");
 	vsLoss.push_back("L3");
+	vsLoss.push_back("Huber");
+	vsLoss.push_back("PseudoHuber");
 	vsLoss.push_back("LogCosh");
 	vsLoss.push_back("CategoricalCrossEntropy");
 	vsLoss.push_back("SparseCategoricalCrossEntropy");

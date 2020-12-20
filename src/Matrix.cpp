@@ -52,29 +52,62 @@ void copyInto(const MatrixFloat& mToCopy, MatrixFloat& m, Index iStartRow)
 MatrixFloat rowWiseSum(const MatrixFloat& m)
 {
 #ifdef USE_EIGEN
-    return m.rowwise().sum();
+	return m.rowwise().sum();
 #else
-    Index r=m.rows();
-    MatrixFloat result(r,1);
+	Index r = m.rows();
+	Index c = m.cols();
+	MatrixFloat result(r,1);
 
-    for(Index i=0;i<r;i++)
-        result(i,0)=(m.row(i)).sum();
+	for (Index i = 0; i < r; i++)
+	{
+		float sum = 0.f;
+		for (Index j = 0; j < c; j++)
+			sum += m(i, j);
 
-    return result;
+		result(i) = sum;
+	}
+	return result;
+#endif
+}
+///////////////////////////////////////////////////////////////////////////
+MatrixFloat rowWiseMean(const MatrixFloat& m)
+{
+#ifdef USE_EIGEN
+	return m.rowwise().mean();
+#else
+	Index r = m.rows();
+	Index c = m.cols();
+	MatrixFloat result(r, 1);
+
+	for (Index i = 0; i < r; i++)
+	{
+		float sum = 0.f;
+		for (Index j = 0; j < c; j++)
+			sum += m(i, j);
+
+		result(i) = sum/c;
+	}
+	return result;
 #endif
 }
 ///////////////////////////////////////////////////////////////////////////
 MatrixFloat rowWiseSumSq(const MatrixFloat& m)
 {
 #ifdef USE_EIGEN
-	return (m.array().square()).rowwise().sum();
+	return m.rowwise().sum();
 #else
 	Index r = m.rows();
+	Index c = m.cols();
 	MatrixFloat result(r, 1);
 
 	for (Index i = 0; i < r; i++)
-		result(i, 0) = (m.row(i)).square().sum();
+	{
+		float sum = 0.f;
+		for (Index j = 0; j < c; j++)
+			sum += m(i, j)* m(i, j);
 
+		result(i) = sum;
+	}
 	return result;
 #endif
 }
@@ -84,17 +117,17 @@ MatrixFloat colWiseSum(const MatrixFloat& m)
 #ifdef USE_EIGEN
 	return m.colwise().sum();
 #else
-	Index r = m.cols();
+	Index r = m.rows();
 	Index c = m.cols();
-	MatrixFloat result(1,r);
+	MatrixFloat result(1,c);
 
-	for (Index i = 0; i < r; i++)
+	for (Index j = 0; j < c; j++)
 	{
 		float sum = 0.f;
-		for (Index j = 0; j < c; i++)
+		for (Index i = 0; i < r; i++)
 			sum += m(i, j);
 
-		result(i) = sum;
+		result(j) = sum;
 	}
 	return result;
 #endif
@@ -105,17 +138,17 @@ MatrixFloat colWiseSumSq(const MatrixFloat& m)
 #ifdef USE_EIGEN
 	return (m.array().square()).colwise().sum();
 #else
-	Index r = m.cols();
+	Index r = m.rows();
 	Index c = m.cols();
-	MatrixFloat result(1, r);
+	MatrixFloat result(1,c);
 
-	for (Index i = 0; i < r; i++)
+	for (Index j = 0; j < c; j++)
 	{
-		float sumsq = 0.f;
-		for (Index j = 0; j < c; i++)
-			sumsq += m(i, j)*m(i, j);
+		float sum = 0.f;
+		for (Index i = 0; i < r; i++)
+			sum += m(i, j) * m(i, j);
 
-		result(i) = sumsq;
+		result(j) = sum;
 	}
 	return result;
 #endif
@@ -132,14 +165,12 @@ MatrixFloat colWiseMean(const MatrixFloat& m)
 
 	for (Index j = 0; j < c; j++)
 	{
-		float f = 0.;
+		float sum = 0.f;
 		for (Index i = 0; i < r; i++)
-		{
-			f += m(i, j);
-		}
-		result(0, j) = f / (float)r;
-	}
+			sum += m(i, j);
 
+		result(j) = sum/r;
+	}
 	return result;
 #endif
 }

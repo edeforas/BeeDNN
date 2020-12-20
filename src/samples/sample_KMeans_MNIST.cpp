@@ -47,7 +47,7 @@ int main()
     }
   
 	km.set_sizes(784 , 10 * 10); // approximately 10 supports by classes (todo)
-	km.set_loss("MeanCubicError"); // gives better accuracy with KMeans
+	km.set_loss("L3"); // gives better accuracy with KMeans
 
 	//setup train options
 	kmTrain.set_kmeans(km);
