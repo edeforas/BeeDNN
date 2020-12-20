@@ -131,6 +131,61 @@ public:
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
+//PseudoHuber Loss from https://en.wikipedia.org/wiki/Huber_loss
+#define PSEUDOHUBER_SIGMA (1.f)
+#define PSEUDOHUBER_SIGMA_2 (PSEUDOHUBER_SIGMA*PSEUDOHUBER_SIGMA)
+#define PSEUDOHUBER_INV_SIGMA_2 (1.f/PSEUDOHUBER_SIGMA_2)
+class LossPseudoHuber : public Loss
+{
+public:
+	string name() const override
+	{
+		return "PseudoHuber";
+	}
+
+	float compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget) const override
+	{
+		assert(mTarget.cols() == mPredicted.cols());
+		assert(mTarget.rows() == mPredicted.rows());
+
+		MatrixFloat m = (mPredicted - mTarget).cwiseAbs2();
+
+		for (Index i = 0; i < m.size(); i++)
+		{
+			float x = m(i);
+			m(i) = PSEUDOHUBER_SIGMA_2 * (sqrtf(x*PSEUDOHUBER_INV_SIGMA_2 + 1.f) - 1.f);
+		}
+
+		if (mTarget.size() == 0)
+			return 0.f;
+		if (!_bClassBalancing)
+			return m.mean();
+		else
+		{
+			MatrixFloat mError = m;
+			balance_with_weight(m, mError);
+			return mError.mean();
+		}
+	}
+
+	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
+	{
+		assert(mTarget.cols() == mPredicted.cols());
+		assert(mTarget.rows() == mPredicted.rows());
+
+		mGradientLoss = mPredicted - mTarget;
+
+		for (Index i = 0; i < mGradientLoss.size(); i++)
+		{
+			float x = mGradientLoss(i);
+			mGradientLoss(i) = x / sqrtf(x*x*PSEUDOHUBER_INV_SIGMA_2 + 1.f);
+		}
+
+		if (_bClassBalancing)
+			balance_with_weight(mTarget, mGradientLoss);
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
 class LossMeanCubicError : public Loss
 {
 public:
@@ -146,6 +201,7 @@ public:
 
 		if (mTarget.size() == 0)
 			return 0.f;
+
 		if (!_bClassBalancing)
 			return (mPredicted - mTarget).array().cube().cwiseAbs().mean();
 		else
@@ -158,11 +214,18 @@ public:
 
 	void compute_gradient(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const override
 	{
-		//TODO optimise
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
 
-		mGradientLoss = ((mPredicted - mTarget).cwiseSign())*((mPredicted - mTarget).cwiseAbs())*3.f;
+		mGradientLoss = mPredicted - mTarget;
+
+		//todo vectorize
+		for (Index i = 0; i < mGradientLoss.size(); i++)
+		{
+			float x = mGradientLoss(i);
+			mGradientLoss(i) = 3.f*x*x*(x > 0.f ? 1.f : -1.f);
+		}
+
 		if (_bClassBalancing)
 			balance_with_weight(mTarget, mGradientLoss);
 	}
@@ -315,8 +378,14 @@ public:
 		assert(mTarget.cols() == mPredicted.cols());
 		assert(mTarget.rows() == mPredicted.rows());
 
-		//todo optimize
-		mGradientLoss = ((mPredicted - mTarget).cwiseSign())*((mPredicted - mTarget).cwiseAbs())*3.f;
+		mGradientLoss = mPredicted - mTarget;
+		
+		//todo vectorize
+		for (Index i = 0; i < mGradientLoss.size(); i++)
+		{
+			float x = mGradientLoss(i);
+			mGradientLoss(i) = 3.f*x*x*(x > 0.f ? 1.f:-1.f);
+		}
 
 		if (_bClassBalancing)
 			balance_with_weight(mTarget, mGradientLoss);
@@ -518,9 +587,6 @@ public:
 //////////////////////////////////////////////////////////////////////////////
 Loss* create_loss(const string& sLoss)
 {
-	if (sLoss == "Huber")
-		return new LossHuber;
-
     if(sLoss =="MeanSquaredError")
         return new LossMeanSquaredError;
 
@@ -542,6 +608,12 @@ Loss* create_loss(const string& sLoss)
 	else if(sLoss == "LogCosh")
 		return new LossLogCosh;
 
+	if (sLoss == "Huber")
+		return new LossHuber;
+
+	if (sLoss == "PseudoHuber")
+		return new LossPseudoHuber;
+
 	else if(sLoss =="CategoricalCrossEntropy")
         return new LossCategoricalCrossEntropy;
 
@@ -559,6 +631,7 @@ void list_loss_available(vector<string>& vsLoss)
     vsLoss.clear();
 
 	vsLoss.push_back("Huber");
+	vsLoss.push_back("PseudoHuber");
 	vsLoss.push_back("MeanSquaredError");
 	vsLoss.push_back("MeanAbsoluteError");
 	vsLoss.push_back("MeanCubicError");

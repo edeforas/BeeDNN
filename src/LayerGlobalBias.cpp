@@ -33,7 +33,7 @@ void LayerGlobalBias::init()
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerGlobalBias::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerGlobalBias::predict(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
     mOut = mIn.array() + _bias(0);
 }

@@ -36,7 +36,7 @@ void LayerRRelu::init()
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerRRelu::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerRRelu::predict(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	mOut = mIn;
 	if(_bTrainMode)

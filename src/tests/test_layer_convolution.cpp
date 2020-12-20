@@ -51,9 +51,9 @@ void compare_fastlut_slow_computation()
 
 	LayerConvolution2D conv2d(inRows, inCols, inChannels, 5, 3, outChannels);
 	conv2d.fastLUT = false;
-	conv2d.forward(mIn, mOut);
+	conv2d.predict(mIn, mOut);
 	conv2d.fastLUT = true;
-	conv2d.forward(mIn, mOutFast);
+	conv2d.predict(mIn, mOutFast);
 
 	conv2d.fastLUT = false;
 	conv2d.backpropagation(mIn, mOut, mIm);
@@ -100,7 +100,7 @@ void simple_image_conv2d()
 	
 	LayerConvolution2D conv2d(5,5,1,3,3,1);
 	conv2d.weights() = mKernel;
-	conv2d.forward(mIn, mOut);
+	conv2d.predict(mIn, mOut);
 
 	mOut.resize(3, 3);
 	cout << "Image convoluted:" << endl;
@@ -125,7 +125,7 @@ void batch_conv2d()
 
 	LayerConvolution2D conv2d(5, 5, 1, 3, 3, 1);
 	conv2d.weights() = mKernel;
-	conv2d.forward(mIn, mOut);
+	conv2d.predict(mIn, mOut);
 
 	mOut.resize(6, 3);
 	cout << "Batch convoluted, 2 samples:" << endl;
@@ -155,7 +155,7 @@ void image_2_input_channels_conv2d()
 
 	LayerConvolution2D conv2d(5, 5, 2, 3, 3, 1);
 	conv2d.weights() = mKernel;
-	conv2d.forward(mIn, mOut);
+	conv2d.predict(mIn, mOut);
 
 	mOut.resize(3, 3);
 	cout << "Image 2 input channels convoluted:" << endl;
@@ -184,7 +184,7 @@ void image_2_output_channels_conv2d()
 
 	LayerConvolution2D conv2d(5, 5, 1, 3, 3, 2);
 	conv2d.weights() = mKernel;
-	conv2d.forward(mIn, mOut);
+	conv2d.predict(mIn, mOut);
 
 	mOut.resize(6, 3);
 	cout << "Image 2 output channels convoluted:" << endl;
@@ -205,7 +205,7 @@ void forward_backward()
 	
 	//forward and backward
 	LayerConvolution2D conv2d(inRows, inCols, inChannels, 2, 3, outChannels);
-	conv2d.forward(mIn, mCol);
+	conv2d.predict(mIn, mCol);
 	conv2d.backpropagation(mIn, mCol, mIm);
 
 	cout << "mIm:" << endl << toString(mIm) << endl << endl;
@@ -239,7 +239,7 @@ void simple_image_conv2d_stride2()
 
 	LayerConvolution2D conv2d(5, 5, 1, 3, 3, 1,2,2);
 	conv2d.weights() = mKernel;
-	conv2d.forward(mIn, mOut);
+	conv2d.predict(mIn, mOut);
 
 	mOut.resize(2, 2);
 	cout << "Image convoluted stride2:" << endl;
@@ -265,7 +265,7 @@ void forward_conv2d_backprop_sgd()
 
 	//forward
 	conv2d.weights() = mKernel;
-	conv2d.forward(mIn, mOut);
+	conv2d.predict(mIn, mOut);
 
 	//backpropagation
 	mGradientOut = mOut* 0.1f;
@@ -306,7 +306,7 @@ void forward_stride2_backward()
 
 	//forward
 	conv2d.weights() = mKernel;
-	conv2d.forward(mIn, mOut);
+	conv2d.predict(mIn, mOut);
 
 	//backpropagation
 	mGradientOut = mOut * 0.1f;
@@ -353,7 +353,7 @@ void forward_time()
 	conv2d.fastLUT = false;
 	auto start = chrono::steady_clock::now();
 	for(int i=0;i< iNbConv;i++)
-		conv2d.forward(mIn, mOut);
+		conv2d.predict(mIn, mOut);
 	auto end = chrono::steady_clock::now();
 	auto delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 	cout << "Time elapsed slow: " << delta << " ms" << endl;
@@ -362,7 +362,7 @@ void forward_time()
 	conv2d.fastLUT = true;
 	start = chrono::steady_clock::now();
 	for (int i = 0; i < iNbConv; i++)
-		conv2d.forward(mIn, mOut);
+		conv2d.predict(mIn, mOut);
 	end = chrono::steady_clock::now();
 	delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 	cout << "Time elapsed fastlut: " << delta << " ms" << endl << endl;
@@ -386,7 +386,7 @@ void backward_time()
 	mIn.setRandom(iNbSamples, iInRows*iInCols*iInChannels);
 
 	LayerConvolution2D conv2d(iInRows, iInCols, iInChannels, iKernelRows, iKernelCols, iOutChannels);
-	conv2d.forward(mIn, mOut); // init backward internal state
+	conv2d.predict(mIn, mOut); // init backward internal state
 	
 	 //create random gradient
 	mOutGradient = mOut;

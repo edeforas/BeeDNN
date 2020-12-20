@@ -103,14 +103,14 @@ int main()
 
 	// show train and val confusion matrix results
 	MatrixFloat mClassPredicted;
-	net.predict(ds.train_data(), mClassPredicted);
+	net.predict_classes(ds.train_data(), mClassPredicted);
 	ConfusionMatrix cmRef;
 	ClassificationResult crRef = cmRef.compute(ds.train_truth(), mClassPredicted);
 	cout << "Train accuracy: " << crRef.accuracy << " %" << endl;
 	cout << "Train confusion matrix:" << endl << crRef.mConfMat << endl;
 
 	MatrixFloat mValClass;
-	net.predict(ds.validation_data(), mValClass);
+	net.predict_classes(ds.validation_data(), mValClass);
 	ConfusionMatrix cmValidation;
 	ClassificationResult crValidation = cmValidation.compute(ds.validation_truth(), mValClass);
 	cout << "Validation accuracy: " << crValidation.accuracy << " %" << endl;

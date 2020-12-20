@@ -44,7 +44,7 @@ void LayerChannelBias::get_params(Index & iRows, Index & iCols, Index & iChannel
 	iChannels = _iNbChannels;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerChannelBias::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerChannelBias::predict(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	mOut = mIn;
 	Index iNbSamples = mIn.rows();

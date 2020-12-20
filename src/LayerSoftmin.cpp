@@ -26,7 +26,7 @@ Layer* LayerSoftmin::clone() const
     return new LayerSoftmin();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerSoftmin::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerSoftmin::predict(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	MatrixFloat S;
 	mOut=-mIn;

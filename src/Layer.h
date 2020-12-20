@@ -26,7 +26,7 @@ public:
 
 	void set_first_layer(bool bFirstLayer);
 
-    virtual void forward(const MatrixFloat& mIn,MatrixFloat& mOut) =0;
+    virtual void predict(const MatrixFloat& mIn,MatrixFloat& mOut) =0;
 	
     virtual void init();
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)=0;

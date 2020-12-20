@@ -44,7 +44,7 @@ Loss functions:
 - MeanSquareError, MeanAbsoluteError, MeanCubicError
 - L2, L1, L3
 - LogCosh
-- Huber
+- Huber, PseudoHuber
 - SparseCategoricalCrossEntropy, CategoricalCrossEntropy, BinaryCrossEntropy
 
 Overfitting:
