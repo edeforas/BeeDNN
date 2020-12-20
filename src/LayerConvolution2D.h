@@ -29,7 +29,7 @@ public:
 
     void get_params(Index & iInRows, Index & iInCols, Index & iInChannels, Index & iKernelRows, Index & iKernelCols, Index & iOutChannels, Index & iRowStride, Index & iColStride) const;
 
-    virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
+    virtual void predict(const MatrixFloat& mIn, MatrixFloat &mOut) override;
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 
 	//public for tests

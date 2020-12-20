@@ -35,7 +35,7 @@ void LayerAffine::init()
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerAffine::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerAffine::predict(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	if(_bias.size()==0)
 	{

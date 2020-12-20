@@ -24,7 +24,7 @@ Layer* LayerDropout::clone() const
     return new LayerDropout(_fRate);
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerDropout::predict(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	if (_bTrainMode && (_fRate != 0.f))
 	{

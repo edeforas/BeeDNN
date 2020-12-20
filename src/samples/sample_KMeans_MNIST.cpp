@@ -64,13 +64,13 @@ int main()
 
 	// show train results
 	MatrixFloat mClassPredicted;
-	km.predict(mr.train_data(), mClassPredicted);
+	km.predict_classes(mr.train_data(), mClassPredicted);
 	ConfusionMatrix cmRef;
 	ClassificationResult crRef = cmRef.compute(mr.train_truth(), mClassPredicted);
 	cout << "Train accuracy: " << crRef.accuracy << " %" << endl;
 
 	MatrixFloat mClassTest;
-	km.predict(mr.validation_data(), mClassTest);
+	km.predict_classes(mr.validation_data(), mClassTest);
 	ConfusionMatrix cmVal;
 	ClassificationResult crVal = cmVal.compute(mr.validation_truth(), mClassTest);
 	cout << "Validation accuracy: " << crVal.accuracy << " %" << endl;

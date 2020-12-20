@@ -19,7 +19,7 @@ LayerConvolution2D::LayerConvolution2D(Index iInRows, Index iInCols, Index iInCh
 	_iInRows = iInRows;
 	_iInCols = iInCols;
 	_iInChannels = iInChannels;
-	_iSamples = 0;// set in forward()
+	_iSamples = 0;// set in predict()
 
 	_iKernelRows = iKernelRows;
 	_iKernelCols = iKernelCols;
@@ -83,7 +83,7 @@ Layer* LayerConvolution2D::clone() const
 	return pLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerConvolution2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerConvolution2D::predict(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	if(fastLUT)
 		im2col_LUT(mIn, _im2colT); //optimized
