@@ -32,7 +32,7 @@ public:
     void set_class_balancing(const MatrixFloat& mWeight);
 
 protected:
-    void balance_with_weight(const MatrixFloat& mTarget, MatrixFloat& mGradient) const;
+    void balance_with_weight(const MatrixFloat& mTruth, MatrixFloat& mGradient) const;
 
     MatrixFloat _mWeightBalancing;
 	bool _bClassBalancing;
