@@ -431,7 +431,6 @@ public:
 		assert(mTruth.rows() == mPredicted.rows());
 
 		Index r = mPredicted.rows();
-		Index c = mPredicted.cols();
 		mLoss.resize(r, 1);
 
 		for (int i = 0; i< mPredicted.rows(); i++)
@@ -478,7 +477,6 @@ public:
 		assert(mTruth.rows() == mPredicted.rows());
 		
 		Index  r= mPredicted.rows();
-		Index  c = mPredicted.cols();
 		mLoss.resize(r, 1);
 
 		for (int i = 0; i < r; i++)

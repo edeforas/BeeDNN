@@ -70,12 +70,12 @@ public:
 		if (fParameter != -1.f)
 			_fParameter = fParameter;
 		else
-			_fParameter = 0.001f; // best value
+			_fParameter = 0.01f; // best value
 	}
 
 	virtual void apply(MatrixFloat& w, MatrixFloat& dw) override
 	{
-		dw = dw + w.cwiseSign()*_fParameter;
+		dw = dw - w.cwiseSign()*_fParameter;
 	}
 };
 //////////////////////////////////////////////////////////
@@ -98,12 +98,42 @@ public:
 		if (fParameter != -1.f)
 			_fParameter = fParameter;
 		else
-			_fParameter = 0.001f; // best value
+			_fParameter = 0.01f; // best value
 	}
 
 	virtual void apply(MatrixFloat& w, MatrixFloat& dw) override
 	{
-		dw = dw + w * _fParameter;
+		dw = dw - w * _fParameter;
+	}
+};
+//////////////////////////////////////////////////////////
+// as in : https://www.tensorflow.org/api_docs/python/tf/keras/regularizers/L1L2
+
+class RegularizerL1L2 : public Regularizer
+{
+public:
+	RegularizerL1L2() :Regularizer()
+	{}
+
+	~RegularizerL1L2() override
+	{}
+
+	string name() const override
+	{
+		return "L1L2";
+	}
+
+	virtual void set_parameter(float fParameter) override
+	{
+		if (fParameter != -1.f)
+			_fParameter = fParameter;
+		else
+			_fParameter = 0.01f; // best value
+	}
+
+	virtual void apply(MatrixFloat& w, MatrixFloat& dw) override
+	{
+		dw = dw - w * _fParameter - w.cwiseSign()*_fParameter;
 	}
 };
 //////////////////////////////////////////////////////////
@@ -176,6 +206,9 @@ Regularizer* create_regularizer(const string& sRegularizer)
 	if (sRegularizer == "L2")
 		return new RegularizerL2;
 
+	if (sRegularizer == "L1L2")
+		return new RegularizerL1L2;
+
 	if (sRegularizer == "GradientClip")
 		return new RegularizerGradientClip;
 
@@ -192,6 +225,7 @@ void list_regularizer_available(vector<string>& vsRegularizers)
 	vsRegularizers.push_back("None");
 	vsRegularizers.push_back("L1");
 	vsRegularizers.push_back("L2");
+	vsRegularizers.push_back("L1L2");
 	vsRegularizers.push_back("GradientClip");
 	vsRegularizers.push_back("GradientClipTanh");
 }

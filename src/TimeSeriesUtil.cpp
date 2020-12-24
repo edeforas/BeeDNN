@@ -3,7 +3,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 void TimeSeriesUtil::generate_windowed_data(const MatrixFloat & mIn, int iWindowSize, MatrixFloat & mWindowed) //no strides for now
 {
-	Index iNbRowsIn = mIn.rows();
 	Index iNbColsIn = mIn.cols();
 
 	Index iNbRowsOut = mIn.rows()- iWindowSize;
