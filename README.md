@@ -49,7 +49,7 @@ Loss functions:
 
 Overfitting:
 - Layers: Dropout, GaussianNoise, GaussianDropout, UniformNoise
-- Regularizer: GradientClip, GradientClipTanh, L1, L2
+- Regularizer: GradientClip, GradientClipTanh, L1, L2, L1L2
 
 Data augmentation
 - WIP

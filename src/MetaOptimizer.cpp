@@ -119,7 +119,7 @@ void MetaOptimizer::add_layer_variation(Index iLayer,const string & sType, float
 	_layerVariations.push_back(v);
 }
 ////////////////////////////////////////////////////////////////
-void MetaOptimizer::add_optimizer_variation(string sOptimizer, float fLearningRate)
+void MetaOptimizer::add_optimizer_variation(const string &sOptimizer, float fLearningRate)
 {
 	OptimizerVariation v;
 	v.sOptimizer = sOptimizer;
