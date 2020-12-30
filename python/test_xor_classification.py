@@ -12,9 +12,9 @@ def test_xor_classification():
 
 	# construct net
 	n = nn.Net()
-	n.append(nn.LayerDense(2,3))
+	n.append(nn.LayerDense(2,5))
 	n.append(nn.LayerTanh())
-	n.append(nn.LayerDense(3,1))
+	n.append(nn.LayerDense(5,1))
 
 	# optimize net
 	train = nn.NetTrain()
@@ -29,3 +29,5 @@ def test_xor_classification():
 	y = n.predict(x)
 	dist=np.abs(y-truth)
 	assert np.max(dist)<0.001
+
+	print("test_xor_classification succeded.")
