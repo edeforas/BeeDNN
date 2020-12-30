@@ -48,7 +48,7 @@ int main()
 
     iEpoch = 0;
 
-	// convert time series to windowed datas (for simple dense net), not test data needed here
+	// convert time series to windowed datas (for simple dense net), no test data needed here
 	int iWindowSize = 10;
 	MatrixFloat mDataTrainWindowed, mTruthTrain;
 	TimeSeriesUtil::generate_windowed_data(mr.train_data(), iWindowSize, mDataTrainWindowed);
@@ -77,7 +77,7 @@ int main()
 	netTrain.fit();
 
 	//now save truth and predicted in file SunSpot_Prediction.csv, 1st column is truth, 2nd columne is predicted
-	// 10 first predicted samples are 0 since there is too feww data for inference
+	// 10 first predicted samples are 0 since there is too few data for inference
 
 	MatrixFloat mResult(mr.train_data().rows(), 2);
 	for (int i = 0; i < mr.train_data().rows(); i++)

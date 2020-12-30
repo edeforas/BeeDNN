@@ -4,7 +4,7 @@ BeeDNN is a deep learning library.
 
 The git repository is https://github.com/edeforas/BeeDNN
 
-The API is clear and simple, the goal is that every C++ developper can contribute, test, and use Deep Neural Network.
+The API is clear and simple, the goal is that every C++ developer can contribute, test, and use Deep Neural Network.
 BeeDNN can run on small devices. It is even possible to learn directly on the device.
 
 Please see at: https://github.com/edeforas/BeeDNN/issues for contributing ideas.
@@ -37,7 +37,7 @@ Activations (in alphabetical order):
 - O2RU, O3RU
 - Parablu
 - Relu, Relu6
-- Selu, SQNL, SQ-RBF, SoftPlus, Sin, SinC, Sigmoid, SiLU, Swish, SoftShrink, SoftSign, SoftStep, SineReLU
+- Selu, SQNL, SQ-RBF, SoftPlus, Sin, SinC, Sigmoid, SiLU, Swish, SoftShrink, SoftSign, SoftSteps, SineReLU
 - Tanh, TanhShrink, ThresholdedRelu
 
 Loss functions: 
