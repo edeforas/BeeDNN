@@ -28,6 +28,6 @@ def test_xor_classification():
 	x = sample
 	y = n.predict(x)
 	dist=np.abs(y-truth)
-	assert np.max(dist)<0.001
+	assert np.max(dist)<0.01
 
 	print("test_xor_classification succeded.")
