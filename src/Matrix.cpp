@@ -175,6 +175,48 @@ MatrixFloat colWiseMean(const MatrixFloat& m)
 #endif
 }
 ///////////////////////////////////////////////////////////////////////////
+MatrixFloat colWiseMin(const MatrixFloat& m)
+{
+#ifdef USE_EIGEN
+	return m.colwise().minCoeff();
+#else
+	Index r = m.rows();
+	Index c = m.cols();
+	MatrixFloat result(1, c);
+
+	for (Index j = 0; j < c; j++)
+	{
+		float fMin = m(0, j); // todo test empty matrix
+		for (Index i = 0; i < r; i++)
+			fMin =std::min(fMin, m(i, j));
+
+		result(j) = fMin;
+	}
+	return result;
+#endif
+}
+///////////////////////////////////////////////////////////////////////////
+MatrixFloat colWiseMax(const MatrixFloat& m)
+{
+#ifdef USE_EIGEN
+	return m.colwise().maxCoeff();
+#else
+	Index r = m.rows();
+	Index c = m.cols();
+	MatrixFloat result(1, c);
+
+	for (Index j = 0; j < c; j++)
+	{
+		float fMax = m(0, j); // todo test empty matrix
+		for (Index i = 0; i < r; i++)
+			fMax = std::max(fMax, m(i, j));
+
+		result(j) = fMax;
+	}
+	return result;
+#endif
+}
+///////////////////////////////////////////////////////////////////////////
 MatrixFloat rowWiseMult(const MatrixFloat& m, const MatrixFloat& d)
 {
     assert(d.rows() == m.rows());
