@@ -80,7 +80,7 @@ I/O:
 - Network, weights and training parameters are saved in a simple .txt file
 
 Precomputing:
-- StandardScaler
+- StandardScaler, MinMaxScaler
 	
 Commented samples:
 - Simple XOR classification, with and w/o softmax
