@@ -18,6 +18,7 @@ Layers:
 - Convolution2D, PoolMax2D, ChannelBias
 - Softmax, Softmin
 - PRelu, RRelu
+- Maxout
 - Layers and activations are decoupled and can be in any order
 
 Activations (in alphabetical order):
