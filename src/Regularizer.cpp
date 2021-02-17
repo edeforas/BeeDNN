@@ -166,6 +166,40 @@ public:
     }
 };
 //////////////////////////////////////////////////////////
+//  gradient norm clipping as in : https://towardsdatascience.com/what-is-gradient-clipping-b8e815cdfb48
+
+class RegularizerGradientNormClip : public Regularizer
+{
+public:
+	RegularizerGradientNormClip() :Regularizer()
+	{}
+
+	~RegularizerGradientNormClip() override
+	{}
+
+	string name() const override
+	{
+		return "GradientNormClip";
+	}
+
+	virtual void set_parameter(float fParameter) override
+	{
+		if (fParameter != -1.f)
+			_fParameter = fParameter;
+		else
+			_fParameter = 0.01f; // best value
+	}
+
+	virtual void apply(MatrixFloat& w, MatrixFloat& dw) override
+	{
+		(void)w;
+
+		float fNorm = dw.norm();
+		if(fNorm> _fParameter)
+			dw = (dw / fNorm)*_fParameter;
+	}
+};
+//////////////////////////////////////////////////////////
 class RegularizerGradientClipTanh : public Regularizer
 {
 public:
@@ -212,6 +246,9 @@ Regularizer* create_regularizer(const string& sRegularizer)
 	if (sRegularizer == "GradientClip")
 		return new RegularizerGradientClip;
 
+	if (sRegularizer == "GradientNormClip")
+		return new RegularizerGradientNormClip;
+
 	if (sRegularizer == "GradientClipTanh")
 		return new RegularizerGradientClipTanh;
 
@@ -227,6 +264,7 @@ void list_regularizer_available(vector<string>& vsRegularizers)
 	vsRegularizers.push_back("L2");
 	vsRegularizers.push_back("L1L2");
 	vsRegularizers.push_back("GradientClip");
+	vsRegularizers.push_back("GradientNormClip");
 	vsRegularizers.push_back("GradientClipTanh");
 }
 //////////////////////////////////////////////////////////////////////////////
