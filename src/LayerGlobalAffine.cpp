@@ -40,7 +40,7 @@ void LayerGlobalAffine::init()
 	Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerGlobalAffine::predict(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerGlobalAffine::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
     mOut = (mIn * _weight(0)).array()+_bias(0);
 }

@@ -29,7 +29,7 @@ Layer* LayerActivation::clone() const
     return new LayerActivation(_pActivation->name());
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerActivation::predict(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerActivation::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
     mOut.resizeLike(mIn);
 

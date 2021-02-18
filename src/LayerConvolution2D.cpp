@@ -83,7 +83,7 @@ Layer* LayerConvolution2D::clone() const
 	return pLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerConvolution2D::predict(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerConvolution2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	if(fastLUT)
 		im2col_LUT(mIn, _im2colT); //optimized

@@ -55,7 +55,7 @@ void LayerDense::init()
 	Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerDense::predict(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerDense::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	mOut = mIn * _weight;
 

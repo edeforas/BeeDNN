@@ -68,7 +68,7 @@ void Net::predict(const MatrixFloat& mIn,MatrixFloat& mOut) const
     MatrixFloat mTemp=mIn;
     for(unsigned int i=0;i<_layers.size();i++)
     {
-        _layers[i]->predict(mTemp,mOut);
+        _layers[i]->forward(mTemp,mOut);
         mTemp=mOut; //todo avoid resize
     }
 }

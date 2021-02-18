@@ -26,7 +26,7 @@ Layer* LayerGaussianDropout::clone() const
     return new LayerGaussianDropout(_fProba);
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerGaussianDropout::predict(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerGaussianDropout::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	if (_bTrainMode)
 	{

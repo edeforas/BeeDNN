@@ -23,7 +23,7 @@ Layer* LayerUniformNoise::clone() const
     return new LayerUniformNoise(_fNoise);
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerUniformNoise::predict(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerUniformNoise::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	if (_bTrainMode && (_fNoise > 0.f) )
 	{

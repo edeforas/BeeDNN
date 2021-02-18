@@ -32,7 +32,7 @@ void LayerGain::init()
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerGain::predict(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerGain::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	if(_weight.size()==0)
 		_weight.setOnes(1,mIn.cols());

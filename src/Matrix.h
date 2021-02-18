@@ -568,6 +568,11 @@ public:
 		return dSumSq;
 	}
 
+	T norm() const
+	{
+		return ::sqrtf(squaredNorm());
+	}
+
 	T mean() const
 	{
 		return sum()/(T)_iSize;

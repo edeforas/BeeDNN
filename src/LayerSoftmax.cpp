@@ -23,7 +23,7 @@ Layer* LayerSoftmax::clone() const
     return new LayerSoftmax();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerSoftmax::predict(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerSoftmax::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	MatrixFloat S;
 	mOut=mIn;

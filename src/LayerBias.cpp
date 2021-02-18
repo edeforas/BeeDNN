@@ -32,7 +32,7 @@ void LayerBias::init()
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerBias::predict(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerBias::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	if(_bias.size()==0)
 		_bias.setZero(1, mIn.cols());

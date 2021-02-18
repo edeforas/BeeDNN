@@ -32,7 +32,7 @@ void LayerPRelu::init()
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPRelu::predict(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerPRelu::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	if (_weight.size() == 0)
 	{

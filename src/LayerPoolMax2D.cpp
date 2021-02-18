@@ -42,7 +42,7 @@ Layer* LayerPoolMax2D::clone() const
     return new LayerPoolMax2D(_iInRows, _iInCols, _iInChannels, _iRowFactor, _iColFactor);
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPoolMax2D::predict(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerPoolMax2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	mOut = mIn;
 	
