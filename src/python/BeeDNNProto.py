@@ -468,7 +468,7 @@ class LossCrossEntropy(LayerLoss):
       self.dydx = -t/p_max+(1.-t)/ump_max
     return  np.atleast_2d(np.mean(-t*np.log(p_max),axis=1))
 
-class LossCategoricalCrossEntropy(LayerLoss):
+class LossSparseCategoricalCrossEntropy(LayerLoss):
   def __init__(self):
     super().__init__()
   

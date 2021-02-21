@@ -29,7 +29,7 @@ train = nn.NetTrain()
 train.epochs = 100
 train.batch_size=0 # set to 0 for full batch
 train.set_optimizer(nn.opt.OptimizerRPROPm()) # work best with full batch size
-train.set_loss(nn.LossCategoricalCrossEntropy()) # use this loss for the softmax and categorical truth
+train.set_loss(nn.LossSparseCategoricalCrossEntropy()) # use this loss for the softmax and categorical truth
 train.fit(n,sample,truth)
 
 # plot loss

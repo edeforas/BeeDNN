@@ -27,7 +27,7 @@ train.log_console=True # show progress
 train.batch_size=64
 train.set_test_data(test_data , test_truth)
 train.set_optimizer(nn.opt.OptimizerAdam())
-train.set_loss(nn.LossCategoricalCrossEntropy())
+train.set_loss(nn.LossSparseCategoricalCrossEntropy())
 
 # construct and run the meta optimizer, using the optimizer as input
 mta=meta.MetaOptimizer()
