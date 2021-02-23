@@ -32,14 +32,14 @@ Activations (in alphabetical order):
 - HardELU, HardSigmoid, HardShrink, HardTanh, HardSwish
 - ISRELU
 - Linear, LeakyRelu, LeakyRelu256, LecunTanh, LiSHT, Logit, LogSigmoid
-- TwiceLeakyRelu6
 - Mish
 - NLRelu
 - O2RU, O3RU
-- Parablu
+- SmoothSoftPlus
+- SmoothTanh
 - Relu, Relu6
 - Selu, SQNL, SQ-RBF, SoftPlus, Sin, SinC, Sigmoid, SiLU, Swish, SoftShrink, SoftSign, SoftSteps, SineReLU
-- Tanh, TanhShrink, ThresholdedRelu
+- Tanh, TanhShrink, ThresholdedRelu,TwiceLeakyRelu6
 
 Loss functions: 
 - MeanSquareError, MeanAbsoluteError, MeanCubicError

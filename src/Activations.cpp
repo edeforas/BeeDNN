@@ -1333,13 +1333,13 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
-// Parablu is a softplus approximation without slow elementary function, author is Etienne de Foras
-class ActivationParablu: public Activation
+// SmoothSoftPlus is a fixpt SoftPlus approximation without complex function, author is Etienne de Foras
+class ActivationSmoothSoftPlus : public Activation
 {
 public:
     string name() const override
     {
-        return "Parablu";
+        return "SmoothSoftPlus";
     }
 
     float apply(float x) const override
@@ -1362,6 +1362,51 @@ public:
 
         return x+x; //2.f*x
     }
+};
+//////////////////////////////////////////////////////////////////////////////
+// SmoothTanh is a fixpt Tanh approximation without complex function, author is Etienne de Foras
+class ActivationSmoothTanh : public Activation
+{
+public:
+	string name() const override
+	{
+		return "SmoothTanh";
+	}
+
+	float apply(float x) const override
+	{
+		if (x > 0.f)
+		{
+			if (x > 2.f)
+				return 2.f;
+			else
+				return x - x * x*0.25f; //*0.25 is same as >>2 using fixpt
+		}
+		else	
+		{
+			if (x < -2.f)
+				return -2.f;
+			else
+				return x + x * x*0.25f; //*0.25 is same as >>2 using fixpt
+		}
+	}
+	float derivation(float x) const override
+	{
+		if (x > 0.f)
+		{
+			if (x > 2.f)
+				return 0.f;
+			else
+				return 1.f - x *0.5f;
+		}
+		else
+		{
+			if (x < -2.f)
+				return -0.f;
+			else
+				return 1.f + x * 0.5f;
+		}
+	}
 };
 //////////////////////////////////////////////////////////////////////////////
 // SQ-RBF as in : Computationally Efficient Radial Basis Function ; Adedamola Wuraola, Nitish D. Patel
@@ -1582,10 +1627,13 @@ Activation* get_activation(const string& sActivation)
 	else if (sActivation == "O3RU")
 		return new ActivationO3RU;
 
-    else if(sActivation=="Parablu")
-        return new ActivationParablu;
+    else if(sActivation=="SmoothSoftPlus")
+        return new ActivationSmoothSoftPlus;
 
-    else if(sActivation=="Relu")
+	else if (sActivation == "SmoothTanh")
+		return new ActivationSmoothTanh;
+	
+	else if(sActivation=="Relu")
         return new ActivationRelu;
 
     else if(sActivation=="Relu6")
@@ -1686,8 +1734,9 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("NLRelu");
 	vsActivations.push_back("O2RU");
 	vsActivations.push_back("O3RU");
-    vsActivations.push_back("Parablu");
-    vsActivations.push_back("Relu");
+    vsActivations.push_back("SmoothSoftPlus");
+	vsActivations.push_back("SmoothTanh");
+	vsActivations.push_back("Relu");
     vsActivations.push_back("Relu6");
     vsActivations.push_back("Selu");
     vsActivations.push_back("SoftPlus");
