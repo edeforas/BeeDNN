@@ -1333,6 +1333,51 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+// SmoothSigmoid is a fixpt Sigmoid approximation without complex function, author is Etienne de Foras
+class ActivationSmoothSigmoid : public Activation
+{
+public:
+	string name() const override
+	{
+		return "SmoothSigmoid";
+	}
+
+	float apply(float x) const override
+	{
+		if (x > 0.f)
+		{
+			if (x > 4.f)
+				return 1.f;
+			else
+				return 0.5f + x*0.25f - x * x*(1.f / 32.f);
+		}
+		else
+		{
+			if (x < -4.f)
+				return 0.f;
+			else
+				return 0.5f+ x*0.25f + x * x*(1.f / 32.f);
+		}
+	}
+	float derivation(float x) const override
+	{
+		if (x > 0.f)
+		{
+			if (x > 4.f)
+				return 0.f;
+			else
+				return  0.25f - x*(1.f / 16.f);
+		}
+		else
+		{
+			if (x < -4.f)
+				return 0.f;
+			else
+				return 0.25f + x*(1.f / 16.f);
+		}
+	}
+};
+//////////////////////////////////////////////////////////////////////////////
 // SmoothSoftPlus is a fixpt SoftPlus approximation without complex function, author is Etienne de Foras
 class ActivationSmoothSoftPlus : public Activation
 {
@@ -1378,14 +1423,14 @@ public:
 		if (x > 0.f)
 		{
 			if (x > 2.f)
-				return 2.f;
+				return 1.f;
 			else
 				return x - x * x*0.25f; //*0.25 is same as >>2 using fixpt
 		}
 		else	
 		{
 			if (x < -2.f)
-				return -2.f;
+				return -1.f;
 			else
 				return x + x * x*0.25f; //*0.25 is same as >>2 using fixpt
 		}
@@ -1627,7 +1672,10 @@ Activation* get_activation(const string& sActivation)
 	else if (sActivation == "O3RU")
 		return new ActivationO3RU;
 
-    else if(sActivation=="SmoothSoftPlus")
+	else if (sActivation == "SmoothSigmoid")
+		return new ActivationSmoothSigmoid;
+	
+	else if(sActivation=="SmoothSoftPlus")
         return new ActivationSmoothSoftPlus;
 
 	else if (sActivation == "SmoothTanh")
@@ -1734,7 +1782,8 @@ void list_activations_available(vector<string>& vsActivations)
     vsActivations.push_back("NLRelu");
 	vsActivations.push_back("O2RU");
 	vsActivations.push_back("O3RU");
-    vsActivations.push_back("SmoothSoftPlus");
+	vsActivations.push_back("SmoothSigmoid");
+	vsActivations.push_back("SmoothSoftPlus");
 	vsActivations.push_back("SmoothTanh");
 	vsActivations.push_back("Relu");
     vsActivations.push_back("Relu6");
