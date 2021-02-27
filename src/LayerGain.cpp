@@ -53,7 +53,7 @@ void LayerGain::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradi
 	if (_bFirstLayer)
 		return;
 
-	mGradientIn = mGradientOut; //colWiseMult(mGradientOut ,_weight); //
+	mGradientIn = mGradientOut;
 	for (int i = 0; i < mGradientIn.rows(); i++)
 		for (int j = 0; j < mGradientIn.cols(); j++)
 		{
