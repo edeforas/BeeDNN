@@ -68,6 +68,9 @@ void LayerDense::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGrad
 	// average the gradient as in: https://stats.stackexchange.com/questions/183840/sum-or-average-of-gradients-in-mini-batch-gradient-decent
 	_gradientWeight = (mIn.transpose())*mGradientOut*(1.f / mIn.rows());
 
+	//TODO put in regularizer, this code force weights to be in [-1;1] using a tanh -> 1-t*t in backprop
+	//_gradientWeight= _gradientWeight- _gradientWeight.cwiseProduct(_weight.cwiseProduct(_weight));
+
 	if (_bHasBias)
 		_gradientBias = colWiseMean(mGradientOut);
 

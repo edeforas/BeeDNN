@@ -69,3 +69,5 @@ ui_*.h
 *.bin
 *.dll
 /src/output/
+*.iobj
+*.ipdb

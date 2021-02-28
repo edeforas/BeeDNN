@@ -6,40 +6,40 @@
     in the LICENSE.txt file.
 */
 
-// PRelu as in : https://arxiv.org/pdf/1502.01852.pdf
+// PELU as in : https://arxiv.org/pdf/1605.09332.pdf
 
-#include "LayerPRelu.h"
+#include "LayerPELU.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerPRelu::LayerPRelu() :
-    Layer("PRelu")
+LayerPELU::LayerPELU() :
+    Layer("PELU")
 {
-    LayerPRelu::init();
+    LayerPELU::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-LayerPRelu::~LayerPRelu()
+LayerPELU::~LayerPELU()
 { }
 ///////////////////////////////////////////////////////////////////////////////
-Layer* LayerPRelu::clone() const
+Layer* LayerPELU::clone() const
 {
-    LayerPRelu* pLayer=new LayerPRelu();
+    LayerPELU* pLayer=new LayerPELU();
     pLayer->_weight=_weight;
 	pLayer->_gradientWeight = _gradientWeight;
 	return pLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPRelu::init()
+void LayerPELU::init()
 {
 	_weight.resize(0,0);
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPRelu::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerPELU::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	if (_weight.size() == 0)
 	{
-		_weight.resize(1, mIn.cols());
-		_weight.setConstant(0.25f);
+		_weight.resize(2, mIn.cols()); // 2 parameters a and b
+		_weight.setConstant(1.f);
 		_gradientWeight.resizeLike(_weight);
 	}
 
@@ -48,13 +48,17 @@ void LayerPRelu::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 	for (Index i = 0; i < mOut.rows(); i++)
 		for (Index j = 0; j < mOut.cols(); j++)
 		{
-			if (mOut(i,j) < 0.f)
-				mOut(i,j) *= _weight(j);
+			if (mOut(i,j) > 0.f)
+				mOut(i,j) *= _weight(0,j)/_weight(1,j); f(h)=h*a/b
+			else
+				mOut(i,j) = _weight(0,j)*(expm1f(mOut(i,j)/_weight(1,j)); // f(h)=a*(exp(h/b)-1)
 		}
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPRelu::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
+void LayerPELU::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
+	TODODODODOD
+	
 	_gradientWeight.setZero();
 	
 	// compute weight gradient
