@@ -67,7 +67,6 @@ debug
 ui_*.h
 *.pyc
 *.bin
-*.dll
 /src/output/
 *.iobj
 *.ipdb
