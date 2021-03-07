@@ -49,24 +49,41 @@ void LayerPELU::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 		for (Index j = 0; j < mOut.cols(); j++)
 		{
 			if (mOut(i,j) > 0.f)
-				mOut(i,j) *= _weight(0,j)/_weight(1,j); f(h)=h*a/b
+				mOut(i,j) *= _weight(0,j)/_weight(1,j); //f(h)=h*a/b
 			else
-				mOut(i,j) = _weight(0,j)*(expm1f(mOut(i,j)/_weight(1,j)); // f(h)=a*(exp(h/b)-1)
+				mOut(i,j) = _weight(0,j)*(expm1f(mOut(i,j)/_weight(1,j))); // f(h)=a*(exp(h/b)-1)
 		}
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerPELU::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
-	TODODODODOD
-	
-	_gradientWeight.setZero();
-	
 	// compute weight gradient
+	_gradientWeight.setZero();
+
+	// positivity constraint above 0.1
+	for (Index j = 0; j < mIn.cols(); j++)
+	{
+		if (_weight(0, j) < 0.1f)
+			_weight(0, j) = 0.1f;
+		
+		if (_weight(1, j) < 0.1f)
+			_weight(1, j) = 0.1f;
+	}
+
+
 	for (Index i = 0; i < mIn.rows(); i++)
 		for (Index j = 0; j < mIn.cols(); j++)
 		{
-			if (mIn(i, j) < 0.f)
-				_gradientWeight(0,j) += mIn(i, j)*mGradientOut(0,j);
+			if (mIn(i, j) > 0.f)
+			{
+				_gradientWeight(0, j) += (mIn(i, j) / _weight(1, j)); // x/b
+				_gradientWeight(1, j) += -_weight(0, j)*(mIn(i, j) / (_weight(1, j)*_weight(1, j))); // -ax/(b*b)
+			}
+			else
+			{
+				_gradientWeight(0, j) += expf(mIn(i, j) / _weight(1, j)) - 1.f; // exp(x/b)-1
+				_gradientWeight(1, j) += -_weight(0, j)*(mIn(i, j) / (_weight(1, j)*_weight(1, j)))*expf(mIn(i, j) / _weight(1, j));
+			}
 		}
 
 	_gradientWeight/=(float)mIn.rows();
@@ -79,8 +96,10 @@ void LayerPELU::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradi
 	for (Index i = 0; i < mGradientIn.rows(); i++)
 		for (Index j = 0; j < mGradientIn.cols(); j++)
 		{
-			if (mIn(i, j) < 0.f)
-				mGradientIn(i, j) *= _weight(j);
+			if (mIn(i, j) > 0.f)
+				mGradientIn(i, j) *= _weight(0, j) / _weight(1, j); // a/b
+			else
+				mGradientIn(i, j) *= (_weight(0, j) / _weight(1, j))  * (expf(mIn(i, j) / _weight(1, j))); // a/b*exp(x/b)
 		}
 }
 ///////////////////////////////////////////////////////////////
