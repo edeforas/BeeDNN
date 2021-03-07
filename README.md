@@ -10,7 +10,6 @@ BeeDNN can run on small devices. It is even possible to learn directly on the de
 Please see at: https://github.com/edeforas/BeeDNN/issues for contributing ideas.
 No dependencies needed, every algorithm rewritten in C++ from scratch.
 To increase speed, ones can choose the Eigen library (http://eigen.tuxfamily.org), instead of the internal matrix library.
-There is also a GUI application (in Qt) for live tests.
 
 Layers:
 - Dense, with or without bias
