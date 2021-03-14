@@ -1,4 +1,4 @@
-// simple toy classification CIFAR10, with a convolutional Layers, low accuracy (60% after 20 epochs), 40s /epoch
+// simple toy classification CIFAR10, with a convolutional Layers, low accuracy (60% after 20 epochs), 25s /epoch
 // It shows and save the current best solution on disk
 // To stop by anytime, type CTRL+C"
 
@@ -58,7 +58,7 @@ void epoch_callback()
 //////////////////////////////////////////////////////////////////////////////
 int main()
 {
-	cout << "Simple toy classification CIFAR10, low accuracy (60% after 20 epochs), 40s /epoch" << endl;
+	cout << "Simple toy classification CIFAR10, low accuracy (60% after 20 epochs), 25s /epoch" << endl;
 	cout << "It shows and save the current best solution on disk" << endl;
 	cout << "To stop by anytime, type CTRL+C" << endl;
 
