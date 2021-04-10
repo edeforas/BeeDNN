@@ -70,3 +70,4 @@ ui_*.h
 /src/output/
 *.iobj
 *.ipdb
+*.json
