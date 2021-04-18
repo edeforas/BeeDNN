@@ -187,6 +187,8 @@
     <ClCompile Include="..\LayerActivation.cpp" />
     <ClCompile Include="..\LayerDense.cpp" />
     <ClCompile Include="..\LayerDropout.cpp" />
+    <ClCompile Include="..\LayerRNN.cpp" />
+    <ClCompile Include="..\LayerSimpleRNN.cpp" />
     <ClCompile Include="..\LayerSoftmax.cpp" />
     <ClCompile Include="..\Loss.cpp" />
     <ClCompile Include="..\Matrix.cpp" />
@@ -206,6 +208,8 @@
     <ClInclude Include="..\LayerActivation.h" />
     <ClInclude Include="..\LayerDense.h" />
     <ClInclude Include="..\LayerDropout.h" />
+    <ClInclude Include="..\LayerRNN.h" />
+    <ClInclude Include="..\LayerSimpleRNN.h" />
     <ClInclude Include="..\LayerSoftmax.h" />
     <ClInclude Include="..\Loss.h" />
     <ClInclude Include="..\Matrix.h" />

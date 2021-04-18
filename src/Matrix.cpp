@@ -509,3 +509,12 @@ const float * rowPtr(const MatrixFloat& m, Index iRow)
 	return m.data() + m.cols()*iRow;
 }
 ///////////////////////////////////////////////////////////////////////////
+MatrixFloat tanh(const MatrixFloat& m)
+{
+	MatrixFloat r = m;
+	for (Index i = 0; i < r.size(); i++)
+		r(i)=::tanh(m(i));
+
+	return r;
+}
+///////////////////////////////////////////////////////////////////////////

@@ -12,7 +12,7 @@ using namespace std;
 #include "ConfusionMatrix.h"
 #include "LayerActivation.h"
 #include "LayerDense.h"
-#include "LayerDropout.h"
+#include "LayerSimpleRNN.h"
 #include "LayerSoftmax.h"
 #include "TimeSeriesUtil.h"
 
@@ -49,18 +49,18 @@ int main()
     iEpoch = 0;
 
 	// convert time series to windowed datas (for simple dense net), no test data needed here
-	int iWindowSize = 10;
+	int iWindowSize = 20; // memory of 20 samples in the past
 	MatrixFloat mDataTrainWindowed, mTruthTrain;
 	TimeSeriesUtil::generate_windowed_data(mr.train_data(), iWindowSize, mDataTrainWindowed);
 	mTruthTrain = rowView(mr.train_data(), iWindowSize, mr.train_data().rows()); //the 10 samples in data gives 1 predicted sample in truth, this is why we start at 10
 
+	int iSampleSize = 1; // input is 1 scalar
+	int iUnits = 10; // 10 hidden units == 10 outputs
+
 	//create simple net, iWindowSize input, one output, 10 hidden neurons
-	net.add(new LayerDense(iWindowSize, 256));
+	net.add(new LayerSimpleRNN(iSampleSize, iUnits));
+	net.add(new LayerDense(iUnits, 64));
 	net.add(new LayerActivation("Relu"));
-	net.add(new LayerDropout(0.3f)); //reduce overfitting
-	net.add(new LayerDense(256, 64));
-	net.add(new LayerActivation("Relu"));
-	net.add(new LayerDropout(0.2f)); //reduce overfitting
 	net.add(new LayerDense(64, 1));
 
 	//setup train options

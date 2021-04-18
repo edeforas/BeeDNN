@@ -434,7 +434,7 @@ public:
 		return out;
 	}
 
-	Matrix<T> log() const //todo check applies on array only
+	Matrix<T> log() const // applies on array only
 	{
 		Matrix<T> out(*this);
 
@@ -444,7 +444,7 @@ public:
 		return out;
 	}
 
-	Matrix<T> round() const //todo check applies on array only
+	Matrix<T> round() const // applies on array only
 	{
 		Matrix<T> out(*this);
 
@@ -454,7 +454,7 @@ public:
 		return out;
 	}
 
-	Matrix<T> cosh() const //todo check applies on array only
+	Matrix<T> cosh() const // applies on array only
 	{
 		Matrix<T> out(*this);
 
@@ -464,7 +464,7 @@ public:
 		return out;
 	}
 
-	Matrix<T> tanh() const //todo check applies on array only
+	Matrix<T> tanh() const // applies on array only
 	{
 		Matrix<T> out(*this);
 
@@ -474,7 +474,7 @@ public:
 		return out;
 	}
 
-	Matrix<T> exp() const //todo check applies on array only
+	Matrix<T> exp() const // applies on array only
 	{
 		Matrix<T> out(*this);
 
@@ -683,7 +683,6 @@ MatrixFloat colWiseMean(const MatrixFloat& m);
 MatrixFloat colWiseMin(const MatrixFloat& m);
 MatrixFloat colWiseMax(const MatrixFloat& m);
 
-
 MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat rowWiseMult(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d);
@@ -712,5 +711,7 @@ void setRandomUniform(MatrixFloat& m, float fMin=-1.f, float fMax=1.f);
 void setQuickBernoulli(MatrixFloat& m, float fProba); //quick bernoulli is 6x faster than ref bernoulli, resolution proba is 1/65536 
 
 default_random_engine& randomEngine();
+
+MatrixFloat tanh(const MatrixFloat& m);
 
 #endif
