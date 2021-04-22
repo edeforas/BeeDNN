@@ -689,6 +689,7 @@ MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d);
 vector<Index> randPerm(Index iSize); //create a vector of index shuffled
 void applyRowPermutation(const vector<Index>& vPermutation, const MatrixFloat & mIn, MatrixFloat & mPermuted);
 const MatrixFloat rowView(const MatrixFloat& m, Index iStartRow, Index iEndRow); //create a row view starting at iStartRow to (not included) iEndRow
+const MatrixFloat colView(const MatrixFloat& m, Index iStartRow, Index iEndRow); //create a row view starting at iStartRow to (not included) iEndRow
 MatrixFloat decimate(const MatrixFloat& m, Index iRatio);
 Index argmax(const MatrixFloat& m);
 void rowsArgmax(const MatrixFloat& m, MatrixFloat& argM); //compute the argmax row by row

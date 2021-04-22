@@ -10,7 +10,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerSimpleRNN::LayerSimpleRNN(int iSampleSize, int iUnits) :
-    LayerRNN("SimpleRNN"),
+    Layer("SimpleRNN"),
     _iSampleSize(iSampleSize),
     _iUnits(iUnits)
 {
@@ -22,8 +22,8 @@ LayerSimpleRNN::~LayerSimpleRNN()
 ///////////////////////////////////////////////////////////////////////////////
 void LayerSimpleRNN::init()
 {
-    _whh.setRandom(_iUnits, _iUnits);
-    _wxh.setRandom(_iSampleSize, _iUnits);
+    _whh.setRandom(_iUnits, _iUnits); // Todo Xavier init ?
+    _wxh.setRandom(_iSampleSize, _iUnits); // Todo Xavier init ?
     _bh.setZero(1, _iUnits);
     _h.setZero(1, _iUnits);
 
@@ -41,11 +41,40 @@ Layer* LayerSimpleRNN::clone() const
     return pLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerSimpleRNN::step(const MatrixFloat& mIn, MatrixFloat& mOut)
+void LayerSimpleRNN::forward(const MatrixFloat& mIn, MatrixFloat& mOut)
 {
-    assert(mIn.cols() == _iSampleSize);
-    assert(mIn.rows() == 1);
+    assert( (mIn.cols() % _iSampleSize)==0); // all samples are concatened horizontaly
 
-    mOut = tanh(_whh*_h+_wxh*mIn+_bh);
+    Index iNbSamples = mIn.rows();
+
+    _h.resize(iNbSamples, _iUnits);
+    if (mIn.size() != _iSampleSize)
+    {
+        // not on-the-fly prediction, reset state on startup
+        _h.setZero();
+    }
+
+    Index iNbStep = mIn.cols() / _iSampleSize;
+
+    MatrixFloat mX;
+    for (Index i = 0; i < iNbStep; i++)
+    {
+        mX = colView(mIn, i * _iSampleSize, i * _iSampleSize + _iSampleSize);
+
+        MatrixFloat a = _h * _whh;
+        MatrixFloat b = mX * _wxh;
+        MatrixFloat c = _bh;
+
+        _h = _h * _whh + mX * _wxh;
+        rowWiseAdd(_h, _bh);
+        _h = tanh(_h);
+    }
+
+    mOut = _h;
+}
+///////////////////////////////////////////////////////////////////////////////
+void LayerSimpleRNN::backpropagation(const MatrixFloat& mIn, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn)
+{
+
 }
 /////////////////////////////////////////////////////////////////////////////////////////////

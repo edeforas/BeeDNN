@@ -436,6 +436,23 @@ const MatrixFloat rowView(const MatrixFloat& m, Index iStartRow, Index iEndRow)
     return fromRawBuffer(m.data() + iStartRow * m.cols(), iEndRow- iStartRow, (Index)m.cols());
 }
 ///////////////////////////////////////////////////////////////////////////
+//create a col view starting at iStartCol ending at iEndCol (not included)
+const MatrixFloat colView(const MatrixFloat& m, Index iStartCol, Index iEndCol)
+{
+#ifdef USE_EIGEN
+	return m.block(0, iStartCol, m.rows(), iEndCol - iStartCol);
+#else
+	MatrixFloat mOut(m.rows(), iEndCol - iStartCol);
+	for (Index iR = 0; iR < m.rows(); iR++)
+	{
+		for (Index iC = iStartCol; iC < iEndCol; iC++)
+			mOut(iR, iC - iStartCol) = m(iR, iC);
+	}
+
+	return mOut;
+#endif
+}
+///////////////////////////////////////////////////////////////////////////
 default_random_engine& randomEngine()
 {
 	static default_random_engine rng;

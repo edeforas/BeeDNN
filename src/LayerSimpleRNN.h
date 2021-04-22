@@ -11,21 +11,22 @@
 
 #include "Layer.h"
 #include "Matrix.h"
-#include "LayerRNN.h"
+#include "Layer.h"
 
-// RNN algorithm as in : https://arxiv.org/abs/1610.02583
+// Simple RNN algorithm as in : https://arxiv.org/abs/1610.02583
 
-class LayerSimpleRNN : public LayerRNN
+class LayerSimpleRNN : public Layer
 {
 public:
     explicit LayerSimpleRNN(int iSampleSize,int iUnits);
     virtual ~LayerSimpleRNN();
 
     virtual Layer* clone() const override;
-    
-    virtual void init() override;
+    virtual void forward(const MatrixFloat& mIn, MatrixFloat& mOut) override;
 
-    virtual void step(const MatrixFloat& mIn, MatrixFloat& mOut) override;
+    virtual void backpropagation(const MatrixFloat& mIn, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn) override;
+
+    virtual void init() override;
 
 private:
     int _iSampleSize;
