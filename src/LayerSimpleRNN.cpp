@@ -61,10 +61,6 @@ void LayerSimpleRNN::forward(const MatrixFloat& mIn, MatrixFloat& mOut)
     {
         mX = colView(mIn, i * _iSampleSize, i * _iSampleSize + _iSampleSize);
 
-        MatrixFloat a = _h * _whh;
-        MatrixFloat b = mX * _wxh;
-        MatrixFloat c = _bh;
-
         _h = _h * _whh + mX * _wxh;
         rowWiseAdd(_h, _bh);
         _h = tanh(_h);
@@ -75,6 +71,6 @@ void LayerSimpleRNN::forward(const MatrixFloat& mIn, MatrixFloat& mOut)
 ///////////////////////////////////////////////////////////////////////////////
 void LayerSimpleRNN::backpropagation(const MatrixFloat& mIn, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn)
 {
-
+    //Todo
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
