@@ -94,33 +94,31 @@ int main()
 	//add Relu variations ; uncomment to test
 	/*
 	//test for other Relu flavors in any layers
-	optim.add_variation(2, "RRelu");
-	optim.add_variation(2, "PRelu");
-	optim.add_variation(2, "LeakyTwiceRelu6");
-	optim.add_variation(2, "Relu6");
-	optim.add_variation(2, "LeakyRelu");
+	optim.add_layer_variation(2, "RRelu");
+	optim.add_layer_variation(2, "PRelu");
+	optim.add_layer_variation(2, "LeakyTwiceRelu6");
+	optim.add_layer_variation(2, "Relu6");
+	optim.add_layer_variation(2, "LeakyRelu");
 
-	optim.add_variation(5, "RRelu");
-	optim.add_variation(5, "PRelu");
-	optim.add_variation(5, "LeakyTwiceRelu6");
-	optim.add_variation(5, "Relu6");
-	optim.add_variation(5, "LeakyRelu");
+	optim.add_layer_variation(5, "RRelu");
+	optim.add_layer_variation(5, "PRelu");
+	optim.add_layer_variation(5, "LeakyTwiceRelu6");
+	optim.add_layer_variation(5, "Relu6");
+	optim.add_layer_variation(5, "LeakyRelu");
 
-	optim.add_variation(9, "RRelu");
-	optim.add_variation(9, "PRelu");
-	optim.add_variation(9, "LeakyTwiceRelu6");
-	optim.add_variation(9, "Relu6");
-	optim.add_variation(9, "LeakyRelu");
+	optim.add_layer_variation(9, "RRelu");
+	optim.add_layer_variation(9, "PRelu");
+	optim.add_layer_variation(9, "LeakyTwiceRelu6");
+	optim.add_layer_variation(9, "Relu6");
+	optim.add_layer_variation(9, "LeakyRelu");
 
-	optim.add_variation(12, "RRelu");
-	optim.add_variation(12, "PRelu");
-	optim.add_variation(12, "LeakyTwiceRelu6");
-	optim.add_variation(12, "Relu6");
-	optim.add_variation(12, "LeakyRelu");
-	*/
-
+	optim.add_layer_variation(12, "RRelu");
+	optim.add_layer_variation(12, "PRelu");
+	optim.add_layer_variation(12, "LeakyTwiceRelu6");
+	optim.add_layer_variation(12, "Relu6");
+	optim.add_layer_variation(12, "LeakyRelu");
+	
 	// add optimizer variations ; uncomment to test
-	/*
 	optim.add_optimizer_variation("SGD", 0.05f);
 	optim.add_optimizer_variation("Momentum", 0.02f);
 	optim.add_optimizer_variation("AdamW", 0.01f);
