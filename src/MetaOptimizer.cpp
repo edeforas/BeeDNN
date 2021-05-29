@@ -76,7 +76,7 @@ int MetaOptimizer::run_thread(int iThread, MetaOptimizer* self)
 {
 	//change rand seed for each threads
 	for (int i = 0; i < iThread; i++)
-		randomEngine()();
+		(void)randomEngine()(); // avoid no-discard warning
 
 	//hard copy ref net and train
 	Net netT;
