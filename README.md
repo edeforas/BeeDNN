@@ -16,7 +16,7 @@ Layers:
 - GlobalGain, GlobalBias GlobalAffine, Gain, Bias, Affine
 - Convolution2D, PoolMax2D, ChannelBias
 - Softmax, Softmin
-- PRelu, RRelu, PELU
+- PRelu, RRelu, PELU, TERELU
 - Maxout
 - Layers and activations are decoupled and can be in any order
 

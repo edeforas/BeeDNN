@@ -6,39 +6,42 @@
     in the LICENSE.txt file.
 */
 
-// PRelu as in : https://arxiv.org/pdf/1502.01852.pdf
+// TERELU as in : https://arxiv.org/ftp/arxiv/papers/2006/2006.02797.pdf
+// 
 
-#include "LayerPRelu.h"
+#include "LayerTERELU.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerPRelu::LayerPRelu() :
-    Layer("PRelu")
+LayerTERELU::LayerTERELU() :
+    Layer("TERELU")
 {
-    LayerPRelu::init();
+    LayerTERELU::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-LayerPRelu::~LayerPRelu()
+LayerTERELU::~LayerTERELU()
 { }
 ///////////////////////////////////////////////////////////////////////////////
-Layer* LayerPRelu::clone() const
+Layer* LayerTERELU::clone() const
 {
-    LayerPRelu* pLayer=new LayerPRelu();
+    LayerTERELU* pLayer=new LayerTERELU();
     pLayer->_weight=_weight;
 	pLayer->_gradientWeight = _gradientWeight;
 	return pLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPRelu::init()
+void LayerTERELU::init()
 {
 	_weight.resize(0,0);
+	_alpha = 1.f;
+	_mu = 1.f;
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPRelu::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerTERELU::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	if (_weight.size() == 0)
 	{
-		_weight.setConstant(1, mIn.cols(),0.25f);
+		_weight.setConstant(1, mIn.cols(), 1.f); // beta initialized as 1.f
 		_gradientWeight.resizeLike(_weight);
 	}
 
@@ -47,12 +50,14 @@ void LayerPRelu::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 	for (Index i = 0; i < mOut.rows(); i++)
 		for (Index j = 0; j < mOut.cols(); j++)
 		{
-			if (mOut(i,j) < 0.f)
-				mOut(i,j) *= _weight(j);
+			if (mIn(i,j) <= 0.f)
+				mOut(i,j) = _alpha*expm1f(mIn(i, j));
+			else if (mIn(i, j)>=_mu)
+				mOut(i, j) = _weight(j) * (_mu- expm1f(_mu-mIn(i, j)));
 		}
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPRelu::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
+void LayerTERELU::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
 	_gradientWeight.setZero();
 	
@@ -60,8 +65,8 @@ void LayerPRelu::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGrad
 	for (Index i = 0; i < mIn.rows(); i++)
 		for (Index j = 0; j < mIn.cols(); j++)
 		{
-			if (mIn(i, j) < 0.f)
-				_gradientWeight(0,j) += mIn(i, j)*mGradientOut(i,j);
+			if (mIn(i, j) >= _mu)
+				_gradientWeight(0,j) += (_mu - expm1f(_mu - mIn(i, j)));
 		}
 
 	_gradientWeight/=(float)mIn.rows();
@@ -74,8 +79,10 @@ void LayerPRelu::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGrad
 	for (Index i = 0; i < mGradientIn.rows(); i++)
 		for (Index j = 0; j < mGradientIn.cols(); j++)
 		{
-			if (mIn(i, j) < 0.f)
-				mGradientIn(i, j) *= _weight(j);
+			if (mIn(i, j) <= 0.f)
+				mGradientIn(i, j) *= _alpha * expf(mIn(i, j));
+			else if (mIn(i, j) >= _mu)
+				mGradientIn(i, j) *= _weight(j) * expf(_mu - mIn(i, j));
 		}
 }
 ///////////////////////////////////////////////////////////////
