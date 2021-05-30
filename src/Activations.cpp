@@ -474,6 +474,38 @@ public:
         return 0.5f*tanh(1.772454f*x*(0.044715f*x*x+1.f))+x*(0.118883f*x*x+0.886227f)*fSech*fSech+0.5f;
     }
 };
+//////////////////////////////////////////////////////////////////////////////
+// Hann function from: https://en.wikipedia.org/wiki/Hann_function
+// using L=2.
+class ActivationHann : public Activation
+{
+public:
+    string name() const override
+    {
+        return "Hann";
+    }
+
+    float apply(float x) const override
+    {
+        if (fabs(x) > 1.)
+            return 0;
+        else
+        {
+            float c = cosf((3.14159265359f * 0.5f) * x); // todo define PI
+            return c * c;
+        }
+    }
+
+    float derivation(float x) const override
+    {
+        if (fabs(x) > 1.)
+            return 0;
+        else
+        {
+            return -3.14159265359f*0.5f*sinf(3.14159265359f*x); // todo define PI
+        }
+    }
+};
 /////////////////////////////////////////////////////////////////////////////
 // HardELU, ELU approximation, quick and easy to convert in fixed point
 // Author is Minh Tri LE
@@ -1649,6 +1681,9 @@ Activation* get_activation(const string& sActivation)
     else if(sActivation=="GELU")
         return new ActivationGELU;
 
+    else if (sActivation == "Hann")
+        return new ActivationHann;
+
     else if(sActivation=="HardELU")
         return new ActivationHardELU;
 
@@ -1796,6 +1831,7 @@ void list_activations_available(vector<string>& vsActivations)
 	vsActivations.push_back("FTS+");
 	vsActivations.push_back("Gauss");
     vsActivations.push_back("GELU");
+    vsActivations.push_back("Hann");
     vsActivations.push_back("HardELU");
     vsActivations.push_back("HardSigmoid");
     vsActivations.push_back("HardShrink");

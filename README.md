@@ -28,7 +28,7 @@ Activations (in alphabetical order):
 - ELiSH, Elliot, ELU, Exponential, E2RU, E3RU, Eswish
 - FTS, FTS+
 - Gauss, GELU
-- HardELU, HardSigmoid, HardShrink, HardTanh, HardSwish
+- HardELU, HardSigmoid, HardShrink, HardTanh, HardSwish, Hann
 - ISRELU
 - Linear, LeakyRelu, LeakyRelu256, LecunTanh, LiSHT, Logit, LogSigmoid
 - Mish
