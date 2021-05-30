@@ -22,7 +22,7 @@ Layers:
 
 Activations (in alphabetical order):
 - Absolute, Asinh, Atan
-- Bent, BinaryStep, Bipolar, BipolarSigmoid
+- Bent, BinaryStep, Bipolar, BipolarSigmoid, Bump
 - ComplementaryLogLog, CELU
 - dSiLU
 - ELiSH, Elliot, ELU, Exponential, E2RU, E3RU, Eswish

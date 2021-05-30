@@ -120,6 +120,34 @@ public:
     }
 };
 //////////////////////////////////////////////////////////////////////////////
+// Bump function as in : https://en.wikipedia.org/wiki/Bump_function
+class ActivationBump : public Activation
+{
+public:
+    string name() const override
+    {
+        return "Bump";
+    }
+
+    float apply(float x) const override
+    {
+        if (fabs(x) < 1.f)
+            return expf(-1.f / (1.f - x * x));
+        else
+            return 0.f;
+    }
+    float derivation(float x) const override
+    {
+        if (fabs(x) < 1.f)
+        {
+            float x2m1 = x * x-1.f;
+            return -2.f * x * expf(1.f / x2m1) / (x2m1*x2m1);
+        }
+        else
+            return 0.f;
+    }
+};
+//////////////////////////////////////////////////////////////////////////////
 // ComplementaryLogLog as in: https://stats.stackexchange.com/questions/115258/comprehensive-list-of-activation-functions-in-neural-networks-with-pros-cons
 class ActivationComplementaryLogLog : public Activation
 {
@@ -1573,7 +1601,10 @@ Activation* get_activation(const string& sActivation)
 	else if(sActivation == "BipolarSigmoid")
 		return new ActivationBipolarSigmoid;
 
-	else if (sActivation == "CELU")
+    else if (sActivation == "Bump")
+        return new ActivationBump;
+    
+    else if (sActivation == "CELU")
 		return new ActivationCELU;
 
 	else if (sActivation == "ComplementaryLogLog")
@@ -1749,7 +1780,8 @@ void list_activations_available(vector<string>& vsActivations)
 	vsActivations.push_back("BinaryStep");
 	vsActivations.push_back("Bipolar");
 	vsActivations.push_back("BipolarSigmoid");
-	vsActivations.push_back("CELU");
+    vsActivations.push_back("Bump");
+    vsActivations.push_back("CELU");
 	vsActivations.push_back("ComplementaryLogLog");
 	vsActivations.push_back("DivideBy256");
 	vsActivations.push_back("dSiLU");

@@ -55,7 +55,7 @@ int main()
   
 	//create simple net:
 	net.add(new LayerDense(784, 128));
-	net.add(new LayerActivation("Relu"));
+	net.add(new LayerActivation("Bump"));
 	net.add(new LayerDropout(0.2f)); //reduce overfitting
 	net.add(new LayerDense(128, 10));
 	net.add(new LayerSoftmax());
