@@ -34,6 +34,7 @@ void epoch_callback()
 int main()
 {
 	cout << "simple MNIST classification with a KMeans algorithm" << endl;
+	cout << "validation accuracy > 92.3%, after 10 epochs (5s by epochs)" << endl;
 
     iEpoch = 0;
 
@@ -51,7 +52,7 @@ int main()
 
 	//setup train options
 	kmTrain.set_kmeans(km);
-	kmTrain.set_epochs(30);
+	kmTrain.set_epochs(10);
 	kmTrain.set_batchsize(10000);
 	kmTrain.set_epoch_callback(epoch_callback); //optional, to show the progress
 	kmTrain.set_train_data(mr.train_data(),mr.train_truth());

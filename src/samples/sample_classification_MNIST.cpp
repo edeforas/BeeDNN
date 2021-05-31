@@ -40,7 +40,7 @@ void epoch_callback()
 int main()
 {
 	cout << "simple  classification MNIST with a dense layer" << endl;
-	cout << "validation accuracy > 98.1%, after 15 epochs (1s by epochs)" << endl;
+	cout << "validation accuracy > 98%, after 15 epochs (1s by epochs)" << endl;
 
     iEpoch = 0;
 
@@ -89,7 +89,7 @@ int main()
 	cout << "Validation confusion matrix:" << endl << toString(crVal.mConfMat) << endl;
 
 	//testu function
-	if (crVal.accuracy < 98.1f)
+	if (crVal.accuracy < 98.f)
 	{
 		cout << "Test failed! accuracy=" << crVal.accuracy << endl;
 		return -1;

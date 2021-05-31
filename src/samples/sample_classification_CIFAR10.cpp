@@ -89,7 +89,7 @@ int main()
 
 	//setup train options
 	netTrain.set_net(net);
-	netTrain.set_epochs(50);
+	netTrain.set_epochs(20);
 	netTrain.set_batchsize(256);
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_epoch_callback(epoch_callback); //optional, show the progress

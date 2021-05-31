@@ -21,12 +21,12 @@ bool CIFAR10Reader::load(const string& sFolder)
 ////////////////////////////////////////////////////////////////////////////////////
 bool CIFAR10Reader::read_from_folder(const string& sFolder,MatrixFloat& mRefImages,MatrixFloat& mRefLabels,MatrixFloat& mTestImages,MatrixFloat& mTestLabels)
 {
-	string sRefImages1=sFolder+"\\data_batch_1.bin";
-	string sRefImages2=sFolder+"\\data_batch_2.bin";
-	string sRefImages3=sFolder+"\\data_batch_3.bin";
-	string sRefImages4=sFolder+"\\data_batch_4.bin";
-	string sRefImages5=sFolder+"\\data_batch_5.bin";
-	string sTestImages=sFolder+"\\test_batch.bin";
+	string sRefImages1=sFolder+"/data_batch_1.bin";
+	string sRefImages2=sFolder+"/data_batch_2.bin";
+	string sRefImages3=sFolder+"/data_batch_3.bin";
+	string sRefImages4=sFolder+"/data_batch_4.bin";
+	string sRefImages5=sFolder+"/data_batch_5.bin";
+	string sTestImages=sFolder+"/test_batch.bin";
 
 	MatrixFloat mImage, mTruth;
 	MatrixFloat mTestImage, mTestTruth;

@@ -1,4 +1,9 @@
 cmake_minimum_required(VERSION 3.0.0)
+
+if (UNIX)
+	list(APPEND CMAKE_CXX_FLAGS "-pthread -std=c++11 ${CMAKE_CXX_FLAGS}")
+endif (UNIX)
+
 project (test_samples)
 
 include_directories(..)
@@ -36,6 +41,7 @@ set(CPP_files
 ../Loss.cpp
 ../Matrix.cpp
 ../MNISTReader.cpp
+../CIFAR10Reader.cpp
 ../MetaOptimizer.cpp
 ../Net.cpp
 ../NetTrain.cpp
@@ -76,6 +82,7 @@ set(H_files
 ../Loss.h
 ../Matrix.h
 ../MNISTReader.h
+../CIFAR10Reader.h
 ../MetaOptimizer.h
 ../Net.h
 ../NetTrain.h
@@ -133,3 +140,8 @@ add_executable(sample_MetaOptimizer_MNIST
 	${H_files}
 )
  
+add_executable(sample_classification_CIFAR10
+	sample_classification_CIFAR10.cpp
+	${CPP_files}
+	${H_files}
+)
