@@ -44,8 +44,6 @@ Layer* LayerPoolMax2D::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerPoolMax2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
-	mOut = mIn;
-	
 	mOut.resize(mIn.rows(), _iOutPlaneSize*_iInChannels);
 	if(_bTrainMode)
 		_mMaxIndex.resizeLike(mOut); //index to selected input max data
@@ -98,16 +96,16 @@ void LayerPoolMax2D::backpropagation(const MatrixFloat &mIn,const MatrixFloat &m
 
 	mGradientIn.setZero(mGradientOut.rows(), _iInPlaneSize*_iInChannels);
 
-	for (Index l = 0; l < mGradientOut.rows(); l++)
+	for (Index r = 0; r < mGradientOut.rows(); r++)
 	{
 		for (Index channel = 0; channel < _iInChannels; channel++)
 		{
-			const float* lOut = mGradientOut.row(l).data() +channel * _iOutPlaneSize;
-			float* lIn = mGradientIn.row(l).data() +channel * _iInPlaneSize;
+			const float* lOut = mGradientOut.row(r).data() +channel * _iOutPlaneSize;
+			float* lIn = mGradientIn.row(r).data() +channel * _iInPlaneSize;
 
 			for (Index i = 0; i < _iOutPlaneSize; i++)
 			{
-				lIn[(int)_mMaxIndex(i)] = lOut[i];
+				lIn[(Index)_mMaxIndex(i)] = lOut[i];
 			}
 		}
 	}
