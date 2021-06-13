@@ -3,10 +3,10 @@ ALL = samples
 all: $(ALL)
 
 clean:
-	cd ./sample_code && make clean
+	cd ./samples && make clean
 
 samples:
-	cd ./sample_code && make
+	cd ./samples && make
 	
 test: all
-	cd ./sample_code && make test
+	cd ./samples && make test
