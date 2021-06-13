@@ -23,32 +23,32 @@
     <ProjectGuid>{70A52316-353A-4598-975D-40F4F41342D3}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>BeeDNNLib</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -93,7 +93,7 @@
       <PreprocessorDefinitions>NDEBUG;BEEDNNLIB_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);BEEDNNLIB_BUILD;BEEDNNLIB_BUILD;USE_EIGEN</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);..</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EIGEN_PATH);../src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -113,7 +113,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;BEEDNNLIB_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);BEEDNNLIB_BUILD;BEEDNNLIB_BUILD;USE_EIGEN</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);..</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EIGEN_PATH);../src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -131,7 +131,7 @@
       <PreprocessorDefinitions>_DEBUG;BEEDNNLIB_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);BEEDNNLIB_BUILD;BEEDNNLIB_BUILD;USE_EIGEN</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);..</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EIGEN_PATH);../src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -151,7 +151,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;BEEDNNLIB_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);BEEDNNLIB_BUILD;BEEDNNLIB_BUILD;USE_EIGEN</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);..</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EIGEN_PATH);../src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -163,87 +163,87 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Activations.cpp" />
-    <ClCompile Include="..\CIFAR10Reader.cpp" />
-    <ClCompile Include="..\ConfusionMatrix.cpp" />
-    <ClCompile Include="..\CsvFileReader.cpp" />
-    <ClCompile Include="..\DataSource.cpp" />
-    <ClCompile Include="..\KMeans.cpp" />
-    <ClCompile Include="..\KMeansTrain.cpp" />
-    <ClCompile Include="..\Layer.cpp" />
-    <ClCompile Include="..\LayerActivation.cpp" />
-    <ClCompile Include="..\LayerAffine.cpp" />
-    <ClCompile Include="..\LayerBias.cpp" />
-    <ClCompile Include="..\LayerChannelBias.cpp" />
-    <ClCompile Include="..\LayerConvolution2D.cpp" />
-    <ClCompile Include="..\LayerDense.cpp" />
-    <ClCompile Include="..\LayerDropout.cpp" />
-    <ClCompile Include="..\LayerFactory.cpp" />
-    <ClCompile Include="..\LayerGain.cpp" />
-    <ClCompile Include="..\LayerGaussianDropout.cpp" />
-    <ClCompile Include="..\LayerGaussianNoise.cpp" />
-    <ClCompile Include="..\LayerGlobalAffine.cpp" />
-    <ClCompile Include="..\LayerGlobalBias.cpp" />
-    <ClCompile Include="..\LayerGlobalGain.cpp" />
-    <ClCompile Include="..\LayerPoolMax2D.cpp" />
-    <ClCompile Include="..\LayerPRelu.cpp" />
-    <ClCompile Include="..\LayerRRelu.cpp" />
-    <ClCompile Include="..\LayerSoftmax.cpp" />
-    <ClCompile Include="..\LayerSoftmin.cpp" />
-    <ClCompile Include="..\LayerUniformNoise.cpp" />
-    <ClCompile Include="..\Loss.cpp" />
-    <ClCompile Include="..\Matrix.cpp" />
-    <ClCompile Include="..\MetaOptimizer.cpp" />
-    <ClCompile Include="..\MNISTReader.cpp" />
-    <ClCompile Include="..\Net.cpp" />
-    <ClCompile Include="..\NetTrain.cpp" />
-    <ClCompile Include="..\NetUtil.cpp" />
-    <ClCompile Include="..\Optimizer.cpp" />
-    <ClCompile Include="..\Regularizer.cpp" />
-    <ClCompile Include="..\StandardScaler.cpp" />
-    <ClCompile Include="..\TimeSeriesUtil.cpp" />
+    <ClCompile Include="..\src\Activations.cpp" />
+    <ClCompile Include="..\src\CIFAR10Reader.cpp" />
+    <ClCompile Include="..\src\ConfusionMatrix.cpp" />
+    <ClCompile Include="..\src\CsvFileReader.cpp" />
+    <ClCompile Include="..\src\DataSource.cpp" />
+    <ClCompile Include="..\src\KMeans.cpp" />
+    <ClCompile Include="..\src\KMeansTrain.cpp" />
+    <ClCompile Include="..\src\Layer.cpp" />
+    <ClCompile Include="..\src\LayerActivation.cpp" />
+    <ClCompile Include="..\src\LayerAffine.cpp" />
+    <ClCompile Include="..\src\LayerBias.cpp" />
+    <ClCompile Include="..\src\LayerChannelBias.cpp" />
+    <ClCompile Include="..\src\LayerConvolution2D.cpp" />
+    <ClCompile Include="..\src\LayerDense.cpp" />
+    <ClCompile Include="..\src\LayerDropout.cpp" />
+    <ClCompile Include="..\src\LayerFactory.cpp" />
+    <ClCompile Include="..\src\LayerGain.cpp" />
+    <ClCompile Include="..\src\LayerGaussianDropout.cpp" />
+    <ClCompile Include="..\src\LayerGaussianNoise.cpp" />
+    <ClCompile Include="..\src\LayerGlobalAffine.cpp" />
+    <ClCompile Include="..\src\LayerGlobalBias.cpp" />
+    <ClCompile Include="..\src\LayerGlobalGain.cpp" />
+    <ClCompile Include="..\src\LayerPoolMax2D.cpp" />
+    <ClCompile Include="..\src\LayerPRelu.cpp" />
+    <ClCompile Include="..\src\LayerRRelu.cpp" />
+    <ClCompile Include="..\src\LayerSoftmax.cpp" />
+    <ClCompile Include="..\src\LayerSoftmin.cpp" />
+    <ClCompile Include="..\src\LayerUniformNoise.cpp" />
+    <ClCompile Include="..\src\Loss.cpp" />
+    <ClCompile Include="..\src\Matrix.cpp" />
+    <ClCompile Include="..\src\MetaOptimizer.cpp" />
+    <ClCompile Include="..\src\MNISTReader.cpp" />
+    <ClCompile Include="..\src\Net.cpp" />
+    <ClCompile Include="..\src\NetTrain.cpp" />
+    <ClCompile Include="..\src\NetUtil.cpp" />
+    <ClCompile Include="..\src\Optimizer.cpp" />
+    <ClCompile Include="..\src\Regularizer.cpp" />
+    <ClCompile Include="..\src\StandardScaler.cpp" />
+    <ClCompile Include="..\src\TimeSeriesUtil.cpp" />
     <ClCompile Include="BeeDNNLib.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Activations.h" />
-    <ClInclude Include="..\CIFAR10Reader.h" />
-    <ClInclude Include="..\ConfusionMatrix.h" />
-    <ClInclude Include="..\CsvFileReader.h" />
-    <ClInclude Include="..\DataSource.h" />
-    <ClInclude Include="..\KMeans.h" />
-    <ClInclude Include="..\KMeansTrain.h" />
-    <ClInclude Include="..\Layer.h" />
-    <ClInclude Include="..\LayerActivation.h" />
-    <ClInclude Include="..\LayerAffine.h" />
-    <ClInclude Include="..\LayerBias.h" />
-    <ClInclude Include="..\LayerChannelBias.h" />
-    <ClInclude Include="..\LayerConvolution2D.h" />
-    <ClInclude Include="..\LayerDense.h" />
-    <ClInclude Include="..\LayerDropout.h" />
-    <ClInclude Include="..\LayerFactory.h" />
-    <ClInclude Include="..\LayerGain.h" />
-    <ClInclude Include="..\LayerGaussianDropout.h" />
-    <ClInclude Include="..\LayerGaussianNoise.h" />
-    <ClInclude Include="..\LayerGlobalAffine.h" />
-    <ClInclude Include="..\LayerGlobalBias.h" />
-    <ClInclude Include="..\LayerGlobalGain.h" />
-    <ClInclude Include="..\LayerPoolMax2D.h" />
-    <ClInclude Include="..\LayerPRelu.h" />
-    <ClInclude Include="..\LayerRRelu.h" />
-    <ClInclude Include="..\LayerSoftmax.h" />
-    <ClInclude Include="..\LayerSoftmin.h" />
-    <ClInclude Include="..\LayerUniformNoise.h" />
-    <ClInclude Include="..\Loss.h" />
-    <ClInclude Include="..\Matrix.h" />
-    <ClInclude Include="..\MetaOptimizer.h" />
-    <ClInclude Include="..\MNISTReader.h" />
-    <ClInclude Include="..\Net.h" />
-    <ClInclude Include="..\NetTrain.h" />
-    <ClInclude Include="..\NetUtil.h" />
-    <ClInclude Include="..\Optimizer.h" />
-    <ClInclude Include="..\Regularizer.h" />
-    <ClInclude Include="..\StandardScaler.h" />
-    <ClInclude Include="..\TimeSeriesUtil.h" />
+    <ClInclude Include="..\src\Activations.h" />
+    <ClInclude Include="..\src\CIFAR10Reader.h" />
+    <ClInclude Include="..\src\ConfusionMatrix.h" />
+    <ClInclude Include="..\src\CsvFileReader.h" />
+    <ClInclude Include="..\src\DataSource.h" />
+    <ClInclude Include="..\src\KMeans.h" />
+    <ClInclude Include="..\src\KMeansTrain.h" />
+    <ClInclude Include="..\src\Layer.h" />
+    <ClInclude Include="..\src\LayerActivation.h" />
+    <ClInclude Include="..\src\LayerAffine.h" />
+    <ClInclude Include="..\src\LayerBias.h" />
+    <ClInclude Include="..\src\LayerChannelBias.h" />
+    <ClInclude Include="..\src\LayerConvolution2D.h" />
+    <ClInclude Include="..\src\LayerDense.h" />
+    <ClInclude Include="..\src\LayerDropout.h" />
+    <ClInclude Include="..\src\LayerFactory.h" />
+    <ClInclude Include="..\src\LayerGain.h" />
+    <ClInclude Include="..\src\LayerGaussianDropout.h" />
+    <ClInclude Include="..\src\LayerGaussianNoise.h" />
+    <ClInclude Include="..\src\LayerGlobalAffine.h" />
+    <ClInclude Include="..\src\LayerGlobalBias.h" />
+    <ClInclude Include="..\src\LayerGlobalGain.h" />
+    <ClInclude Include="..\src\LayerPoolMax2D.h" />
+    <ClInclude Include="..\src\LayerPRelu.h" />
+    <ClInclude Include="..\src\LayerRRelu.h" />
+    <ClInclude Include="..\src\LayerSoftmax.h" />
+    <ClInclude Include="..\src\LayerSoftmin.h" />
+    <ClInclude Include="..\src\LayerUniformNoise.h" />
+    <ClInclude Include="..\src\Loss.h" />
+    <ClInclude Include="..\src\Matrix.h" />
+    <ClInclude Include="..\src\MetaOptimizer.h" />
+    <ClInclude Include="..\src\MNISTReader.h" />
+    <ClInclude Include="..\src\Net.h" />
+    <ClInclude Include="..\src\NetTrain.h" />
+    <ClInclude Include="..\src\NetUtil.h" />
+    <ClInclude Include="..\src\Optimizer.h" />
+    <ClInclude Include="..\src\Regularizer.h" />
+    <ClInclude Include="..\src\StandardScaler.h" />
+    <ClInclude Include="..\src\TimeSeriesUtil.h" />
     <ClInclude Include="BeeDNNLib.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
