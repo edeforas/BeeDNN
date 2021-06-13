@@ -20,10 +20,11 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{619EC855-2EDB-40BA-B244-0E6345727D8D}</ProjectGuid>
+    <ProjectGuid>{F1B17300-0846-4456-9B79-9B30ACADA3F6}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>testmetaoptimizerMNIST</RootNamespace>
+    <RootNamespace>testclassificationMNIST</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>test_layer_convolution</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -74,13 +75,13 @@
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Configuration)\build_sample_metaoptimizer_mnist\</IntDir>
+    <IntDir>$(Configuration)\build_test_layer_convolution\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Platform)\$(Configuration)\build_sample_metaoptimizer_mnist\</IntDir>
+    <IntDir>$(Platform)\$(Configuration)\build_test_layer_convolution\</IntDir>
     <OutDir>$(SolutionDir)\output\</OutDir>
     <TargetName>$(ProjectName)_debug</TargetName>
   </PropertyGroup>
@@ -88,13 +89,13 @@
     <LinkIncremental>false</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Configuration)\build_sample_metaoptimizer_mnist\</IntDir>
+    <IntDir>$(Configuration)\build_test_layer_convolution\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Platform)\$(Configuration)\build_sample_metaoptimizer_mnist\</IntDir>
+    <IntDir>$(Platform)\$(Configuration)\build_test_layer_convolution\</IntDir>
     <OutDir>$(SolutionDir)\output\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -103,11 +104,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>USE_EIGEN</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_EIGEN;NDEBUG</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <EnablePREfast>false</EnablePREfast>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OpenMPSupport>false</OpenMPSupport>
+      <AdditionalIncludeDirectories>$(EIGEN_PATH);../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -123,8 +125,9 @@
       <PreprocessorDefinitions>USE_EIGEN</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EIGEN_PATH);../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <EnablePREfast>false</EnablePREfast>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -139,11 +142,12 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>USE_EIGEN</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_EIGEN;NDEBUG</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <EnablePREfast>false</EnablePREfast>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OpenMPSupport>false</OpenMPSupport>
+      <AdditionalIncludeDirectories>$(EIGEN_PATH);../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -163,10 +167,11 @@
       <PreprocessorDefinitions>USE_EIGEN;NDEBUG</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EIGEN_PATH);../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
       <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
       <EnablePREfast>false</EnablePREfast>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -176,74 +181,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Activations.cpp" />
-    <ClCompile Include="..\ConfusionMatrix.cpp" />
-    <ClCompile Include="..\DataSource.cpp" />
-    <ClCompile Include="..\Layer.cpp" />
-    <ClCompile Include="..\LayerActivation.cpp" />
-    <ClCompile Include="..\LayerAffine.cpp" />
-    <ClCompile Include="..\LayerBias.cpp" />
-    <ClCompile Include="..\LayerChannelBias.cpp" />
-    <ClCompile Include="..\LayerConvolution2D.cpp" />
-    <ClCompile Include="..\LayerDense.cpp" />
-    <ClCompile Include="..\LayerDropout.cpp" />
-    <ClCompile Include="..\LayerFactory.cpp" />
-    <ClCompile Include="..\LayerGain.cpp" />
-    <ClCompile Include="..\LayerGaussianDropout.cpp" />
-    <ClCompile Include="..\LayerGaussianNoise.cpp" />
-    <ClCompile Include="..\LayerGlobalAffine.cpp" />
-    <ClCompile Include="..\LayerGlobalBias.cpp" />
-    <ClCompile Include="..\LayerGlobalGain.cpp" />
-    <ClCompile Include="..\LayerPoolMax2D.cpp" />
-    <ClCompile Include="..\LayerPRelu.cpp" />
-    <ClCompile Include="..\LayerRRelu.cpp" />
-    <ClCompile Include="..\LayerSoftmax.cpp" />
-    <ClCompile Include="..\LayerSoftmin.cpp" />
-    <ClCompile Include="..\LayerUniformNoise.cpp" />
-    <ClCompile Include="..\Loss.cpp" />
-    <ClCompile Include="..\Matrix.cpp" />
-    <ClCompile Include="..\MetaOptimizer.cpp" />
-    <ClCompile Include="..\MNISTReader.cpp" />
-    <ClCompile Include="..\Net.cpp" />
-    <ClCompile Include="..\NetTrain.cpp" />
-    <ClCompile Include="..\NetUtil.cpp" />
-    <ClCompile Include="..\Optimizer.cpp" />
-    <ClCompile Include="..\Regularizer.cpp" />
-    <ClCompile Include="sample_MetaOptimizer_MNIST.cpp" />
+    <ClCompile Include="..\src\Layer.cpp" />
+    <ClCompile Include="..\src\LayerConvolution2D.cpp" />
+    <ClCompile Include="..\src\Matrix.cpp" />
+    <ClCompile Include="test_layer_convolution.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Activations.h" />
-    <ClInclude Include="..\ConfusionMatrix.h" />
-    <ClInclude Include="..\DataSource.h" />
-    <ClInclude Include="..\Layer.h" />
-    <ClInclude Include="..\LayerActivation.h" />
-    <ClInclude Include="..\LayerAffine.h" />
-    <ClInclude Include="..\LayerBias.h" />
-    <ClInclude Include="..\LayerChannelBias.h" />
-    <ClInclude Include="..\LayerConvolution2D.h" />
-    <ClInclude Include="..\LayerDense.h" />
-    <ClInclude Include="..\LayerDropout.h" />
-    <ClInclude Include="..\LayerFactory.h" />
-    <ClInclude Include="..\LayerGaussianDropout.h" />
-    <ClInclude Include="..\LayerGaussianNoise.h" />
-    <ClInclude Include="..\LayerGlobalAffine.h" />
-    <ClInclude Include="..\LayerGlobalBias.h" />
-    <ClInclude Include="..\LayerGlobalGain.h" />
-    <ClInclude Include="..\LayerPoolMax2D.h" />
-    <ClInclude Include="..\LayerPRelu.h" />
-    <ClInclude Include="..\LayerRRelu.h" />
-    <ClInclude Include="..\LayerSoftmax.h" />
-    <ClInclude Include="..\LayerSoftmin.h" />
-    <ClInclude Include="..\LayerUniformNoise.h" />
-    <ClInclude Include="..\Loss.h" />
-    <ClInclude Include="..\Matrix.h" />
-    <ClInclude Include="..\MetaOptimizer.h" />
-    <ClInclude Include="..\MNISTReader.h" />
-    <ClInclude Include="..\Net.h" />
-    <ClInclude Include="..\NetTrain.h" />
-    <ClInclude Include="..\NetUtil.h" />
-    <ClInclude Include="..\Optimizer.h" />
-    <ClInclude Include="..\Regularizer.h" />
+    <ClInclude Include="..\src\Layer.h" />
+    <ClInclude Include="..\src\LayerConvolution2D.h" />
+    <ClInclude Include="..\src\Matrix.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

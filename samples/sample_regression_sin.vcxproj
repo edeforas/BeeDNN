@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{39345D70-FA19-483B-97C6-334F817A5F62}</ProjectGuid>
+    <ProjectGuid>{E6ED7C3E-C046-41EF-82C9-FD3792C43363}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>testclassificationCIFAR10</RootNamespace>
+    <RootNamespace>sample_regression_sin</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -73,28 +73,24 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Configuration)\build_sample_classification_cifar10\</IntDir>
+    <IntDir>$(Configuration)\sample_regression_sin\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Platform)\$(Configuration)\build_sample_classification_cifar10\</IntDir>
+    <IntDir>$(Platform)\$(Configuration)\sample_regression_sin\</IntDir>
     <OutDir>$(SolutionDir)\output\</OutDir>
     <TargetName>$(ProjectName)_debug</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Configuration)\build_sample_classification_cifar10\</IntDir>
+    <IntDir>$(Configuration)\sample_regression_sin\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Platform)\$(Configuration)\build_sample_classification_cifar10\</IntDir>
+    <IntDir>$(Platform)\$(Configuration)\sample_regression_sin\</IntDir>
     <OutDir>$(SolutionDir)\output\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -103,11 +99,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>USE_EIGEN</PreprocessorDefinitions>
+      <PreprocessorDefinitions>
+      </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <EnablePREfast>false</EnablePREfast>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -120,12 +116,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>USE_EIGEN</PreprocessorDefinitions>
+      <PreprocessorDefinitions>
+      </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <EnablePREfast>false</EnablePREfast>
-      <OpenMPSupport>false</OpenMPSupport>
+      <AdditionalIncludeDirectories>../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -140,11 +135,11 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>USE_EIGEN</PreprocessorDefinitions>
+      <PreprocessorDefinitions>
+      </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <EnablePREfast>false</EnablePREfast>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -161,14 +156,13 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>USE_EIGEN;NDEBUG</PreprocessorDefinitions>
+      <PreprocessorDefinitions>
+      </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
       <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
-      <EnablePREfast>false</EnablePREfast>
-      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -178,75 +172,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Activations.cpp" />
-    <ClCompile Include="..\CIFAR10Reader.cpp" />
-    <ClCompile Include="..\ConfusionMatrix.cpp" />
-    <ClCompile Include="..\DataSource.cpp" />
-    <ClCompile Include="..\Layer.cpp" />
-    <ClCompile Include="..\LayerActivation.cpp" />
-    <ClCompile Include="..\LayerAffine.cpp" />
-    <ClCompile Include="..\LayerBias.cpp" />
-    <ClCompile Include="..\LayerChannelBias.cpp" />
-    <ClCompile Include="..\LayerConvolution2D.cpp" />
-    <ClCompile Include="..\LayerDense.cpp" />
-    <ClCompile Include="..\LayerDropout.cpp" />
-    <ClCompile Include="..\LayerFactory.cpp" />
-    <ClCompile Include="..\LayerGain.cpp" />
-    <ClCompile Include="..\LayerGaussianDropout.cpp" />
-    <ClCompile Include="..\LayerGaussianNoise.cpp" />
-    <ClCompile Include="..\LayerGlobalAffine.cpp" />
-    <ClCompile Include="..\LayerGlobalBias.cpp" />
-    <ClCompile Include="..\LayerGlobalGain.cpp" />
-    <ClCompile Include="..\LayerPoolMax2D.cpp" />
-    <ClCompile Include="..\LayerPRelu.cpp" />
-    <ClCompile Include="..\LayerRRelu.cpp" />
-    <ClCompile Include="..\LayerSoftmax.cpp" />
-    <ClCompile Include="..\LayerSoftmin.cpp" />
-    <ClCompile Include="..\LayerUniformNoise.cpp" />
-    <ClCompile Include="..\Loss.cpp" />
-    <ClCompile Include="..\Matrix.cpp" />
-    <ClCompile Include="..\MNISTReader.cpp" />
-    <ClCompile Include="..\Net.cpp" />
-    <ClCompile Include="..\NetTrain.cpp" />
-    <ClCompile Include="..\NetUtil.cpp" />
-    <ClCompile Include="..\Optimizer.cpp" />
-    <ClCompile Include="..\Regularizer.cpp" />
-    <ClCompile Include="sample_classification_CIFAR10.cpp" />
+    <ClCompile Include="..\src\Activations.cpp" />
+    <ClCompile Include="..\src\Layer.cpp" />
+    <ClCompile Include="..\src\LayerActivation.cpp" />
+    <ClCompile Include="..\src\LayerDense.cpp" />
+    <ClCompile Include="..\src\Loss.cpp" />
+    <ClCompile Include="..\src\Matrix.cpp" />
+    <ClCompile Include="..\src\Net.cpp" />
+    <ClCompile Include="..\src\NetTrain.cpp" />
+    <ClCompile Include="..\src\Optimizer.cpp" />
+    <ClCompile Include="..\src\Regularizer.cpp" />
+    <ClCompile Include="sample_regression_sin.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Activations.h" />
-    <ClInclude Include="..\CIFAR10Reader.h" />
-    <ClInclude Include="..\ConfusionMatrix.h" />
-    <ClInclude Include="..\DataSource.h" />
-    <ClInclude Include="..\Layer.h" />
-    <ClInclude Include="..\LayerActivation.h" />
-    <ClInclude Include="..\LayerAffine.h" />
-    <ClInclude Include="..\LayerBias.h" />
-    <ClInclude Include="..\LayerChannelBias.h" />
-    <ClInclude Include="..\LayerConvolution2D.h" />
-    <ClInclude Include="..\LayerDense.h" />
-    <ClInclude Include="..\LayerDropout.h" />
-    <ClInclude Include="..\LayerFactory.h" />
-    <ClInclude Include="..\LayerGain.h" />
-    <ClInclude Include="..\LayerGaussianDropout.h" />
-    <ClInclude Include="..\LayerGaussianNoise.h" />
-    <ClInclude Include="..\LayerGlobalAffine.h" />
-    <ClInclude Include="..\LayerGlobalBias.h" />
-    <ClInclude Include="..\LayerGlobalGain.h" />
-    <ClInclude Include="..\LayerPoolMax2D.h" />
-    <ClInclude Include="..\LayerPRelu.h" />
-    <ClInclude Include="..\LayerRRelu.h" />
-    <ClInclude Include="..\LayerSoftmax.h" />
-    <ClInclude Include="..\LayerSoftmin.h" />
-    <ClInclude Include="..\LayerUniformNoise.h" />
-    <ClInclude Include="..\Loss.h" />
-    <ClInclude Include="..\Matrix.h" />
-    <ClInclude Include="..\MNISTReader.h" />
-    <ClInclude Include="..\Net.h" />
-    <ClInclude Include="..\NetTrain.h" />
-    <ClInclude Include="..\NetUtil.h" />
-    <ClInclude Include="..\Optimizer.h" />
-    <ClInclude Include="..\Regularizer.h" />
+    <ClInclude Include="..\src\Activations.h" />
+    <ClInclude Include="..\src\Layer.h" />
+    <ClInclude Include="..\src\LayerActivation.h" />
+    <ClInclude Include="..\src\LayerDense.h" />
+    <ClInclude Include="..\src\Loss.h" />
+    <ClInclude Include="..\src\Matrix.h" />
+    <ClInclude Include="..\src\Net.h" />
+    <ClInclude Include="..\src\NetTrain.h" />
+    <ClInclude Include="..\src\Optimizer.h" />
+    <ClInclude Include="..\src\Regularizer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{C810BFE4-BB10-41B6-9EA9-B6210DF9B504}</ProjectGuid>
+    <ProjectGuid>{F418D54A-F4B9-4FBD-83EA-F7D29365A301}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>testclassificationMNIST</RootNamespace>
+    <RootNamespace>samplesunspotprediction</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -74,13 +74,13 @@
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Configuration)\build_sample_classification_mnistallconvolutional\</IntDir>
+    <IntDir>$(Configuration)\build_sample_sunspot_prediction_fc\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Platform)\$(Configuration)\build_sample_classification_mnistallconvolutional\</IntDir>
+    <IntDir>$(Platform)\$(Configuration)\build_sample_sunspot_prediction_fc\</IntDir>
     <OutDir>$(SolutionDir)\output\</OutDir>
     <TargetName>$(ProjectName)_debug</TargetName>
   </PropertyGroup>
@@ -88,13 +88,13 @@
     <LinkIncremental>false</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Configuration)\build_sample_classification_mnistallconvolutional\</IntDir>
+    <IntDir>$(Configuration)\build_sample_sunspot_prediction_fc\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Platform)\$(Configuration)\build_sample_classification_mnistallconvolutional\</IntDir>
+    <IntDir>$(Platform)\$(Configuration)\build_sample_sunspot_prediction_fc\</IntDir>
     <OutDir>$(SolutionDir)\output\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -107,7 +107,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <EnablePREfast>false</EnablePREfast>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EIGEN_PATH);../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -123,7 +123,7 @@
       <PreprocessorDefinitions>USE_EIGEN</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EIGEN_PATH);../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <EnablePREfast>false</EnablePREfast>
       <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
@@ -144,7 +144,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <EnablePREfast>false</EnablePREfast>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EIGEN_PATH);../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -164,10 +164,11 @@
       <PreprocessorDefinitions>USE_EIGEN;NDEBUG</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EIGEN_PATH);../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
       <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
       <EnablePREfast>false</EnablePREfast>
+      <LanguageStandard>stdcpp14</LanguageStandard>
       <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
@@ -178,61 +179,43 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Activations.cpp" />
-    <ClCompile Include="..\ConfusionMatrix.cpp" />
-    <ClCompile Include="..\DataSource.cpp" />
-    <ClCompile Include="..\Layer.cpp" />
-    <ClCompile Include="..\LayerActivation.cpp" />
-    <ClCompile Include="..\LayerBias.cpp" />
-    <ClCompile Include="..\LayerChannelBias.cpp" />
-    <ClCompile Include="..\LayerConvolution2D.cpp" />
-    <ClCompile Include="..\LayerDense.cpp" />
-    <ClCompile Include="..\LayerDropout.cpp" />
-    <ClCompile Include="..\LayerGain.cpp" />
-    <ClCompile Include="..\LayerGaussianDropout.cpp" />
-    <ClCompile Include="..\LayerGaussianNoise.cpp" />
-    <ClCompile Include="..\LayerGlobalBias.cpp" />
-    <ClCompile Include="..\LayerGlobalGain.cpp" />
-    <ClCompile Include="..\LayerPoolMax2D.cpp" />
-    <ClCompile Include="..\LayerPRelu.cpp" />
-    <ClCompile Include="..\LayerSoftmax.cpp" />
-    <ClCompile Include="..\LayerUniformNoise.cpp" />
-    <ClCompile Include="..\Loss.cpp" />
-    <ClCompile Include="..\Matrix.cpp" />
-    <ClCompile Include="..\MNISTReader.cpp" />
-    <ClCompile Include="..\Net.cpp" />
-    <ClCompile Include="..\NetTrain.cpp" />
-    <ClCompile Include="..\Optimizer.cpp" />
-    <ClCompile Include="..\Regularizer.cpp" />
-    <ClCompile Include="sample_classification_MNIST_allconvolutional.cpp" />
+    <ClCompile Include="..\src\Activations.cpp" />
+    <ClCompile Include="..\src\ConfusionMatrix.cpp" />
+    <ClCompile Include="..\src\CsvFileReader.cpp" />
+    <ClCompile Include="..\src\DataSource.cpp" />
+    <ClCompile Include="..\src\Layer.cpp" />
+    <ClCompile Include="..\src\LayerActivation.cpp" />
+    <ClCompile Include="..\src\LayerDense.cpp" />
+    <ClCompile Include="..\src\LayerDropout.cpp" />
+    <ClCompile Include="..\src\LayerSimpleRNN.cpp" />
+    <ClCompile Include="..\src\LayerSoftmax.cpp" />
+    <ClCompile Include="..\src\Loss.cpp" />
+    <ClCompile Include="..\src\Matrix.cpp" />
+    <ClCompile Include="..\src\Net.cpp" />
+    <ClCompile Include="..\src\NetTrain.cpp" />
+    <ClCompile Include="..\src\Optimizer.cpp" />
+    <ClCompile Include="..\src\Regularizer.cpp" />
+    <ClCompile Include="..\src\TimeSeriesUtil.cpp" />
+    <ClCompile Include="sample_sunspot_prediction.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Activations.h" />
-    <ClInclude Include="..\ConfusionMatrix.h" />
-    <ClInclude Include="..\DataSource.h" />
-    <ClInclude Include="..\Layer.h" />
-    <ClInclude Include="..\LayerActivation.h" />
-    <ClInclude Include="..\LayerBias.h" />
-    <ClInclude Include="..\LayerChannelBias.h" />
-    <ClInclude Include="..\LayerConvolution2D.h" />
-    <ClInclude Include="..\LayerDense.h" />
-    <ClInclude Include="..\LayerDropout.h" />
-    <ClInclude Include="..\LayerGain.h" />
-    <ClInclude Include="..\LayerGaussianDropout.h" />
-    <ClInclude Include="..\LayerGaussianNoise.h" />
-    <ClInclude Include="..\LayerGlobalBias.h" />
-    <ClInclude Include="..\LayerGlobalGain.h" />
-    <ClInclude Include="..\LayerPoolMax2D.h" />
-    <ClInclude Include="..\LayerPRelu.h" />
-    <ClInclude Include="..\LayerSoftmax.h" />
-    <ClInclude Include="..\LayerUniformNoise.h" />
-    <ClInclude Include="..\Loss.h" />
-    <ClInclude Include="..\Matrix.h" />
-    <ClInclude Include="..\MNISTReader.h" />
-    <ClInclude Include="..\Net.h" />
-    <ClInclude Include="..\NetTrain.h" />
-    <ClInclude Include="..\Optimizer.h" />
-    <ClInclude Include="..\Regularizer.h" />
+    <ClInclude Include="..\src\Activations.h" />
+    <ClInclude Include="..\src\ConfusionMatrix.h" />
+    <ClInclude Include="..\src\CsvFileReader.h" />
+    <ClInclude Include="..\src\DataSource.h" />
+    <ClInclude Include="..\src\Layer.h" />
+    <ClInclude Include="..\src\LayerActivation.h" />
+    <ClInclude Include="..\src\LayerDense.h" />
+    <ClInclude Include="..\src\LayerDropout.h" />
+    <ClInclude Include="..\src\LayerSimpleRNN.h" />
+    <ClInclude Include="..\src\LayerSoftmax.h" />
+    <ClInclude Include="..\src\Loss.h" />
+    <ClInclude Include="..\src\Matrix.h" />
+    <ClInclude Include="..\src\Net.h" />
+    <ClInclude Include="..\src\NetTrain.h" />
+    <ClInclude Include="..\src\Optimizer.h" />
+    <ClInclude Include="..\src\Regularizer.h" />
+    <ClInclude Include="..\src\TimeSeriesUtil.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

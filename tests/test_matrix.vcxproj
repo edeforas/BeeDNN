@@ -20,11 +20,11 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{F1B17300-0846-4456-9B79-9B30ACADA3F6}</ProjectGuid>
+    <ProjectGuid>{3E64F758-BD1B-42F0-B6F4-F6D1A382C83C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>testclassificationMNIST</RootNamespace>
+    <RootNamespace>testMatrix</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>test_layer_convolution</ProjectName>
+    <ProjectName>test_matrix</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -75,13 +75,13 @@
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Configuration)\build_test_layer_convolution\</IntDir>
+    <IntDir>$(Configuration)\build_test_matrix\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Platform)\$(Configuration)\build_test_layer_convolution\</IntDir>
+    <IntDir>$(Platform)\$(Configuration)\build_test_matrix\</IntDir>
     <OutDir>$(SolutionDir)\output\</OutDir>
     <TargetName>$(ProjectName)_debug</TargetName>
   </PropertyGroup>
@@ -89,13 +89,13 @@
     <LinkIncremental>false</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Configuration)\build_test_layer_convolution\</IntDir>
+    <IntDir>$(Configuration)\build_test_matrix\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Platform)\$(Configuration)\build_test_layer_convolution\</IntDir>
+    <IntDir>$(Platform)\$(Configuration)\build_test_matrix\</IntDir>
     <OutDir>$(SolutionDir)\output\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -108,8 +108,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <EnablePREfast>false</EnablePREfast>
-      <OpenMPSupport>false</OpenMPSupport>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EIGEN_PATH);../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -122,12 +121,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>USE_EIGEN</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_EIGEN;NDEBUG</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EIGEN_PATH);../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <EnablePREfast>false</EnablePREfast>
-      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -146,8 +144,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <EnablePREfast>false</EnablePREfast>
-      <OpenMPSupport>false</OpenMPSupport>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EIGEN_PATH);../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -167,11 +164,10 @@
       <PreprocessorDefinitions>USE_EIGEN;NDEBUG</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EIGEN_PATH);../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
       <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
       <EnablePREfast>false</EnablePREfast>
-      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -181,15 +177,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Layer.cpp" />
-    <ClCompile Include="..\LayerConvolution2D.cpp" />
-    <ClCompile Include="..\Matrix.cpp" />
-    <ClCompile Include="test_layer_convolution.cpp" />
+    <ClCompile Include="..\src\Matrix.cpp" />
+    <ClCompile Include="test_matrix.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Layer.h" />
-    <ClInclude Include="..\LayerConvolution2D.h" />
-    <ClInclude Include="..\Matrix.h" />
+    <ClInclude Include="..\src\Matrix.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

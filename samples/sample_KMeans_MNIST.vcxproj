@@ -107,7 +107,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <EnablePREfast>false</EnablePREfast>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EIGEN_PATH);../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -123,7 +123,7 @@
       <PreprocessorDefinitions>USE_EIGEN</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EIGEN_PATH);../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <EnablePREfast>false</EnablePREfast>
       <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
@@ -144,7 +144,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <EnablePREfast>false</EnablePREfast>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EIGEN_PATH);../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -164,7 +164,7 @@
       <PreprocessorDefinitions>USE_EIGEN;NDEBUG</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(EIGEN_PATH);..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EIGEN_PATH);../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
       <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
       <EnablePREfast>false</EnablePREfast>
@@ -179,23 +179,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\ConfusionMatrix.cpp" />
-    <ClCompile Include="..\DataSource.cpp" />
-    <ClCompile Include="..\KMeans.cpp" />
-    <ClCompile Include="..\KMeansTrain.cpp" />
-    <ClCompile Include="..\Loss.cpp" />
-    <ClCompile Include="..\Matrix.cpp" />
-    <ClCompile Include="..\MNISTReader.cpp" />
+    <ClCompile Include="..\src\ConfusionMatrix.cpp" />
+    <ClCompile Include="..\src\DataSource.cpp" />
+    <ClCompile Include="..\src\KMeans.cpp" />
+    <ClCompile Include="..\src\KMeansTrain.cpp" />
+    <ClCompile Include="..\src\Loss.cpp" />
+    <ClCompile Include="..\src\Matrix.cpp" />
+    <ClCompile Include="..\src\MNISTReader.cpp" />
     <ClCompile Include="sample_KMeans_MNIST.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\ConfusionMatrix.h" />
-    <ClInclude Include="..\DataSource.h" />
-    <ClInclude Include="..\KMeans.h" />
-    <ClInclude Include="..\KMeansTrain.h" />
-    <ClInclude Include="..\Loss.h" />
-    <ClInclude Include="..\Matrix.h" />
-    <ClInclude Include="..\MNISTReader.h" />
+    <ClInclude Include="..\src\ConfusionMatrix.h" />
+    <ClInclude Include="..\src\DataSource.h" />
+    <ClInclude Include="..\src\KMeans.h" />
+    <ClInclude Include="..\src\KMeansTrain.h" />
+    <ClInclude Include="..\src\Loss.h" />
+    <ClInclude Include="..\src\Matrix.h" />
+    <ClInclude Include="..\src\MNISTReader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
