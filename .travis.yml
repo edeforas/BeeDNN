@@ -13,12 +13,3 @@ install:
 script:
   - make
   - make test
-
-language: python
-python:
-  - "3.8"
-
-install:
-script:
-  - cd src/python
-  - pytest
