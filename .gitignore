@@ -71,3 +71,4 @@ ui_*.h
 *.iobj
 *.ipdb
 *.json
+build
