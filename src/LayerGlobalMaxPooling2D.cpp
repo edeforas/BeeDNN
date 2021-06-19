@@ -15,8 +15,6 @@ LayerGlobalMaxPooling2D::LayerGlobalMaxPooling2D(Index iInRows, Index iInCols, I
 	_iInRows = iInRows;
 	_iInCols = iInCols;
 	_iInChannels = iInChannels;
-
-    LayerGlobalMaxPooling2D::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
 LayerGlobalMaxPooling2D::~LayerGlobalMaxPooling2D()
@@ -37,14 +35,13 @@ Layer* LayerGlobalMaxPooling2D::clone() const
 void LayerGlobalMaxPooling2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	//not optimized yet
-
 	mOut.resize( mIn.rows(),_iInChannels);
 	if(_bTrainMode)
 		_mMaxIndex.resizeLike(mOut); //index to selected input max data
 
 	Index iBatchSize = mIn.rows();
 
-	for(Index b=0;b<iBatchSize;b++)
+	for(Index batch=0;batch<iBatchSize;batch++)
 		for (Index channel = 0; channel < _iInChannels; channel++)
 		{
 			float fMax = -1.e38f;
@@ -54,7 +51,7 @@ void LayerGlobalMaxPooling2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 				for (Index c = 0; c < _iInCols; c++)
 				{
 					Index iPosIn = channel * _iInRows * _iInCols + r * _iInCols + c;
-					float fSample = mIn(b, iPosIn);
+					float fSample = mIn(batch, iPosIn);
 					if (fSample > fMax)
 					{
 						fMax = fSample;
@@ -63,9 +60,9 @@ void LayerGlobalMaxPooling2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 				}
 			}
 
-			mOut(b, channel) = fMax;
+			mOut(batch, channel) = fMax;
 			if(_bTrainMode)
-				_mMaxIndex(b,channel)=(float)iPosMaxIn; // todo use Matrix<index>
+				_mMaxIndex(batch,channel)=(float)iPosMaxIn; // todo use Matrix<index>
 		}
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -78,11 +75,11 @@ void LayerGlobalMaxPooling2D::backpropagation(const MatrixFloat &mIn,const Matri
 
 	mGradientIn.setZero(mGradientOut.rows(), _iInChannels*_iInCols*_iInRows);
 
-	for (Index r = 0; r < mGradientOut.rows(); r++)
+	for (Index batch = 0; batch < mGradientOut.rows(); batch++)
 	{
 		for (Index channel = 0; channel < _iInChannels; channel++)
 		{
-			mGradientIn(r, (Index)_mMaxIndex(r, channel)) = mGradientOut(r,channel );
+			mGradientIn(batch, (Index)_mMaxIndex(batch, channel)) = mGradientOut(batch,channel );
 		}
 	}
 }

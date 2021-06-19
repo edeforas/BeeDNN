@@ -6,11 +6,11 @@
     in the LICENSE.txt file.
 */
 
-#include "LayerPoolMax2D.h"
+#include "LayerAveragePooling2D.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerPoolMax2D::LayerPoolMax2D(Index iInRows, Index iInCols, Index iInChannels, Index iRowFactor, Index iColFactor) :
-    Layer("PoolMax2D")
+LayerAveragePooling2D::LayerAveragePooling2D(Index iInRows, Index iInCols, Index iInChannels, Index iRowFactor, Index iColFactor) :
+    Layer("PAveragePooling2D")
 {
 	_iInRows = iInRows;
 	_iInCols = iInCols;
@@ -21,12 +21,13 @@ LayerPoolMax2D::LayerPoolMax2D(Index iInRows, Index iInCols, Index iInChannels, 
 	_iOutCols = iInCols/iColFactor;
 	_iInPlaneSize = _iInRows * _iInCols;
 	_iOutPlaneSize = _iOutRows * _iOutCols;
+	_fInvKernelSize = 1.f / (float)(_iRowFactor * _iColFactor);
 }
 ///////////////////////////////////////////////////////////////////////////////
-LayerPoolMax2D::~LayerPoolMax2D()
+LayerAveragePooling2D::~LayerAveragePooling2D()
 { }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPoolMax2D::get_params(Index& iInRows, Index& iInCols, Index & iInChannels, Index& iRowFactor, Index& iColFactor) const
+void LayerAveragePooling2D::get_params(Index& iInRows, Index& iInCols, Index & iInChannels, Index& iRowFactor, Index& iColFactor) const
 {
 	iInRows = _iInRows;
 	iInCols = _iInCols;
@@ -35,16 +36,14 @@ void LayerPoolMax2D::get_params(Index& iInRows, Index& iInCols, Index & iInChann
 	iColFactor= _iColFactor;
 }
 ///////////////////////////////////////////////////////////////////////////////
-Layer* LayerPoolMax2D::clone() const
+Layer* LayerAveragePooling2D::clone() const
 {
-    return new LayerPoolMax2D(_iInRows, _iInCols, _iInChannels, _iRowFactor, _iColFactor);
+    return new LayerAveragePooling2D(_iInRows, _iInCols, _iInChannels, _iRowFactor, _iColFactor);
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPoolMax2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerAveragePooling2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	mOut.resize(mIn.rows(), _iOutPlaneSize*_iInChannels);
-	if(_bTrainMode)
-		_mMaxIndex.resizeLike(mOut); //index to selected input max data
 
 	//not optimized yet
 	for (Index batch = 0; batch < mIn.rows(); batch++)
@@ -57,42 +56,63 @@ void LayerPoolMax2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 			{
 				for (Index c = 0; c < _iOutCols; c++)
 				{
-					float fMax = -1.e38f;
-					Index iPosIn = -1;
+					float fSum= 0.f;
 					
 					for (Index ri = r * _iRowFactor; ri < r*_iRowFactor + _iRowFactor; ri++)
 					{
 						for (Index ci = c * _iColFactor; ci < c*_iColFactor + _iColFactor; ci++)
 						{
 							Index iIndex = ri * _iInCols + ci; //flat index in plane
-							float fSample = lIn[iIndex];
-
-							if (fSample > fMax)
-							{
-								fMax = fSample;
-								iPosIn = iIndex;
-							}
+							fSum += lIn[iIndex];
 						}
 					}
 
-					Index iIndexOut = r * _iOutCols + c;
-					lOut[iIndexOut] = fMax;
-					if (_bTrainMode)
-						_mMaxIndex(batch, channel*_iOutPlaneSize +iIndexOut) = (float)iPosIn;
+					lOut[r * _iOutCols + c] = fSum*_fInvKernelSize;
 				}
 			}
 		}
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPoolMax2D::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
+void LayerAveragePooling2D::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
     (void)mIn;
 
 	if (_bFirstLayer)
 		return;
 
-	mGradientIn.setZero(mGradientOut.rows(), _iInPlaneSize*_iInChannels);
+	mGradientIn.setZero(mGradientOut.rows(), _iInPlaneSize * _iInChannels);
+	/*
+	//not optimized yet
+	for (Index channel = 0; channel < _iInChannels; channel++)
+	{
+		for (Index l = 0; l < _iInRows; l++)
+		{
+			const float* lIn = mIn.row(l).data() + channel * _iInPlaneSize;
+			float* lOut = mOut.row(l).data() + channel * _iOutPlaneSize;
+			for (Index r = 0; r < _iOutRows; r++)
+			{
+				for (Index c = 0; c < _iOutCols; c++)
+				{
+					float fSum = -0.f;
+
+					for (Index ri = r * _iRowFactor; ri < r * _iRowFactor + _iRowFactor; ri++)
+					{
+						for (Index ci = c * _iColFactor; ci < c * _iColFactor + _iColFactor; ci++)
+						{
+							Index iIndex = ri * _iInCols + ci; //flat index in plane
+							fSum += lIn[iIndex];
+						}
+					}
+
+					lOut[r * _iOutCols + c] = fSum * fInvKernelSize;
+				}
+			}
+		}
+	}
+
+
+
 
 	for (Index r = 0; r < mGradientOut.rows(); r++)
 	{
@@ -107,5 +127,6 @@ void LayerPoolMax2D::backpropagation(const MatrixFloat &mIn,const MatrixFloat &m
 			}
 		}
 	}
+*/
 }
 ///////////////////////////////////////////////////////////////////////////////
