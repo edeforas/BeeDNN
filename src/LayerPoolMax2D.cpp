@@ -47,12 +47,12 @@ void LayerPoolMax2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 		_mMaxIndex.resizeLike(mOut); //index to selected input max data
 
 	//not optimized yet
-	for (Index batch = 0; batch < mIn.rows(); batch++)
+	for (Index sample = 0; sample < mIn.rows(); sample++)
 	{
 		for (Index channel = 0; channel < _iInChannels; channel++)
 		{
-			const float* lIn = mIn.row(batch).data()+ channel * _iInPlaneSize;
-			float* lOut = mOut.row(batch).data()+channel* _iOutPlaneSize;
+			const float* lIn = mIn.row(sample).data()+ channel * _iInPlaneSize;
+			float* lOut = mOut.row(sample).data()+channel* _iOutPlaneSize;
 			for (Index r = 0; r < _iOutRows; r++)
 			{
 				for (Index c = 0; c < _iOutCols; c++)
@@ -78,7 +78,7 @@ void LayerPoolMax2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 					Index iIndexOut = r * _iOutCols + c;
 					lOut[iIndexOut] = fMax;
 					if (_bTrainMode)
-						_mMaxIndex(batch, channel*_iOutPlaneSize +iIndexOut) = (float)iPosIn;
+						_mMaxIndex(sample, channel*_iOutPlaneSize +iIndexOut) = (float)iPosIn;
 				}
 			}
 		}
@@ -94,12 +94,12 @@ void LayerPoolMax2D::backpropagation(const MatrixFloat &mIn,const MatrixFloat &m
 
 	mGradientIn.setZero(mGradientOut.rows(), _iInPlaneSize*_iInChannels);
 
-	for (Index r = 0; r < mGradientOut.rows(); r++)
+	for (Index sample = 0; sample < mGradientOut.rows(); sample++)
 	{
 		for (Index channel = 0; channel < _iInChannels; channel++)
 		{
-			const float* lOut = mGradientOut.row(r).data() +channel * _iOutPlaneSize;
-			float* lIn = mGradientIn.row(r).data() +channel * _iInPlaneSize;
+			const float* lOut = mGradientOut.row(sample).data() +channel * _iOutPlaneSize;
+			float* lIn = mGradientIn.row(sample).data() +channel * _iInPlaneSize;
 
 			for (Index i = 0; i < _iOutPlaneSize; i++)
 			{

@@ -39,9 +39,7 @@ void LayerGlobalMaxPooling2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 	if(_bTrainMode)
 		_mMaxIndex.resizeLike(mOut); //index to selected input max data
 
-	Index iBatchSize = mIn.rows();
-
-	for(Index batch=0;batch<iBatchSize;batch++)
+	for(Index sample =0; sample < mIn.rows(); sample++)
 		for (Index channel = 0; channel < _iInChannels; channel++)
 		{
 			float fMax = -1.e38f;
@@ -51,7 +49,7 @@ void LayerGlobalMaxPooling2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 				for (Index c = 0; c < _iInCols; c++)
 				{
 					Index iPosIn = channel * _iInRows * _iInCols + r * _iInCols + c;
-					float fSample = mIn(batch, iPosIn);
+					float fSample = mIn(sample, iPosIn);
 					if (fSample > fMax)
 					{
 						fMax = fSample;
@@ -60,9 +58,9 @@ void LayerGlobalMaxPooling2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 				}
 			}
 
-			mOut(batch, channel) = fMax;
+			mOut(sample, channel) = fMax;
 			if(_bTrainMode)
-				_mMaxIndex(batch,channel)=(float)iPosMaxIn; // todo use Matrix<index>
+				_mMaxIndex(sample,channel)=(float)iPosMaxIn; // todo use Matrix<index>
 		}
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -75,11 +73,11 @@ void LayerGlobalMaxPooling2D::backpropagation(const MatrixFloat &mIn,const Matri
 
 	mGradientIn.setZero(mGradientOut.rows(), _iInChannels*_iInCols*_iInRows);
 
-	for (Index batch = 0; batch < mGradientOut.rows(); batch++)
+	for (Index sample = 0; sample < mGradientOut.rows(); sample++)
 	{
 		for (Index channel = 0; channel < _iInChannels; channel++)
 		{
-			mGradientIn(batch, (Index)_mMaxIndex(batch, channel)) = mGradientOut(batch,channel );
+			mGradientIn(sample, (Index)_mMaxIndex(sample, channel)) = mGradientOut(sample,channel );
 		}
 	}
 }

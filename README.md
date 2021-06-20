@@ -14,10 +14,14 @@ To increase speed, ones can choose the Eigen library (http://eigen.tuxfamily.org
 Layers:
 - Dense, with or without bias
 - GlobalGain, GlobalBias GlobalAffine, Gain, Bias, Affine
-- Convolution2D, PoolMax2D, GlobalMaxPooling2D, ChannelBias
 - Softmax, Softmin
 - PRelu, RRelu, PELU, TERELU
 - Layers and activations are decoupled and can be in any order
+
+2D layers:
+- Convolution2D, ChannelBias
+- PoolMax2D, GlobalMaxPooling2D, 
+- AveragePooling2D
 
 Activations (in alphabetical order):
 - Absolute, Asinh, Atan

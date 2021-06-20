@@ -10,7 +10,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerAveragePooling2D::LayerAveragePooling2D(Index iInRows, Index iInCols, Index iInChannels, Index iRowFactor, Index iColFactor) :
-    Layer("PAveragePooling2D")
+    Layer("AveragePooling2D")
 {
 	_iInRows = iInRows;
 	_iInCols = iInCols;
@@ -46,12 +46,12 @@ void LayerAveragePooling2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 	mOut.resize(mIn.rows(), _iOutPlaneSize*_iInChannels);
 
 	//not optimized yet
-	for (Index batch = 0; batch < mIn.rows(); batch++)
+	for (Index sample = 0; sample < mIn.rows(); sample++)
 	{
 		for (Index channel = 0; channel < _iInChannels; channel++)
 		{
-			const float* lIn = mIn.row(batch).data()+ channel * _iInPlaneSize;
-			float* lOut = mOut.row(batch).data()+channel* _iOutPlaneSize;
+			const float* lIn = mIn.row(sample).data()+ channel * _iInPlaneSize;
+			float* lOut = mOut.row(sample).data()+channel* _iOutPlaneSize;
 			for (Index r = 0; r < _iOutRows; r++)
 			{
 				for (Index c = 0; c < _iOutCols; c++)
@@ -82,51 +82,32 @@ void LayerAveragePooling2D::backpropagation(const MatrixFloat &mIn,const MatrixF
 		return;
 
 	mGradientIn.setZero(mGradientOut.rows(), _iInPlaneSize * _iInChannels);
-	/*
+
 	//not optimized yet
-	for (Index channel = 0; channel < _iInChannels; channel++)
+	for (Index sample = 0; sample < mGradientOut.rows(); sample++)
 	{
-		for (Index l = 0; l < _iInRows; l++)
+		for (Index channel = 0; channel < _iInChannels; channel++)
 		{
-			const float* lIn = mIn.row(l).data() + channel * _iInPlaneSize;
-			float* lOut = mOut.row(l).data() + channel * _iOutPlaneSize;
+			const float* lGradientOut= mGradientOut.row(sample).data() + channel * _iOutPlaneSize;
+			float* lGradientIn = mGradientIn.row(sample).data() + channel * _iInPlaneSize;
+
 			for (Index r = 0; r < _iOutRows; r++)
 			{
 				for (Index c = 0; c < _iOutCols; c++)
 				{
-					float fSum = -0.f;
+					float fGradOut= lGradientOut[c+r*_iOutCols]* _fInvKernelSize;
 
 					for (Index ri = r * _iRowFactor; ri < r * _iRowFactor + _iRowFactor; ri++)
 					{
 						for (Index ci = c * _iColFactor; ci < c * _iColFactor + _iColFactor; ci++)
 						{
-							Index iIndex = ri * _iInCols + ci; //flat index in plane
-							fSum += lIn[iIndex];
+							Index iIndexIn = ri * _iInCols + ci; //flat index in plane
+							lGradientIn[iIndexIn]+= fGradOut;
 						}
 					}
-
-					lOut[r * _iOutCols + c] = fSum * fInvKernelSize;
 				}
 			}
 		}
 	}
-
-
-
-
-	for (Index r = 0; r < mGradientOut.rows(); r++)
-	{
-		for (Index channel = 0; channel < _iInChannels; channel++)
-		{
-			const float* lOut = mGradientOut.row(r).data() +channel * _iOutPlaneSize;
-			float* lIn = mGradientIn.row(r).data() +channel * _iInPlaneSize;
-
-			for (Index i = 0; i < _iOutPlaneSize; i++)
-			{
-				lIn[(Index)_mMaxIndex(i)] = lOut[i];
-			}
-		}
-	}
-*/
 }
 ///////////////////////////////////////////////////////////////////////////////
