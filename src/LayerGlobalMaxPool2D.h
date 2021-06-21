@@ -6,19 +6,21 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerPoolMax2D_
-#define LayerPoolMax2D_
+#ifndef LayerGlobalMaxPool2D_
+#define LayerGlobalMaxPool2D_
 
 #include "Layer.h"
 #include "Matrix.h"
 
-class LayerPoolMax2D : public Layer
+// GlobalMaxPool2D Layer as in :  https://keras.io/api/layers/pooling_layers/global_max_pooling2d/
+
+class LayerGlobalMaxPool2D : public Layer
 {
 public:
-	explicit LayerPoolMax2D(Index iInRows, Index iInCols, Index iInChannels, Index iRowFactor = 2, Index iColFactor = 2);
-    virtual ~LayerPoolMax2D() override;
+	explicit LayerGlobalMaxPool2D(Index iInRows, Index iInCols, Index iInChannels);
+    virtual ~LayerGlobalMaxPool2D() override;
 
-	void get_params(Index& iInRows, Index& iInCols, Index& iInChannels, Index& iRowFactor, Index& iColFactor) const;
+	void get_params(Index& iInRows, Index& iInCols, Index& iInChannels) const;
 
     virtual Layer* clone() const override;
 
@@ -29,13 +31,6 @@ private:
 	Index _iInRows;
 	Index _iInCols;
 	Index _iInChannels;
-	Index _iRowFactor;
-	Index _iColFactor;
-	Index _iOutRows;
-	Index _iOutCols;
-
-	Index _iInPlaneSize;
-	Index _iOutPlaneSize;
 
 	MatrixFloat _mMaxIndex;
 };

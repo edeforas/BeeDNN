@@ -193,7 +193,6 @@
     <ClCompile Include="..\src\LayerGaussianNoise.cpp" />
     <ClCompile Include="..\src\LayerGlobalBias.cpp" />
     <ClCompile Include="..\src\LayerGlobalGain.cpp" />
-    <ClCompile Include="..\src\LayerPoolMax2D.cpp" />
     <ClCompile Include="..\src\LayerPRelu.cpp" />
     <ClCompile Include="..\src\LayerSoftmax.cpp" />
     <ClCompile Include="..\src\LayerUniformNoise.cpp" />
@@ -222,7 +221,6 @@
     <ClInclude Include="..\src\LayerGaussianNoise.h" />
     <ClInclude Include="..\src\LayerGlobalBias.h" />
     <ClInclude Include="..\src\LayerGlobalGain.h" />
-    <ClInclude Include="..\src\LayerPoolMax2D.h" />
     <ClInclude Include="..\src\LayerPRelu.h" />
     <ClInclude Include="..\src\LayerSoftmax.h" />
     <ClInclude Include="..\src\LayerUniformNoise.h" />

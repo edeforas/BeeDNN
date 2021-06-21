@@ -194,7 +194,8 @@
     <ClCompile Include="..\src\LayerGlobalAffine.cpp" />
     <ClCompile Include="..\src\LayerGlobalBias.cpp" />
     <ClCompile Include="..\src\LayerGlobalGain.cpp" />
-    <ClCompile Include="..\src\LayerPoolMax2D.cpp" />
+    <ClCompile Include="..\src\LayerGlobalMaxPool2D.cpp" />
+    <ClCompile Include="..\src\LayerMaxPool2D.cpp" />
     <ClCompile Include="..\src\LayerPRelu.cpp" />
     <ClCompile Include="..\src\LayerRRelu.cpp" />
     <ClCompile Include="..\src\LayerSoftmax.cpp" />
@@ -229,7 +230,8 @@
     <ClInclude Include="..\src\LayerGlobalAffine.h" />
     <ClInclude Include="..\src\LayerGlobalBias.h" />
     <ClInclude Include="..\src\LayerGlobalGain.h" />
-    <ClInclude Include="..\src\LayerPoolMax2D.h" />
+    <ClInclude Include="..\src\LayerGlobalMaxPool2D.h" />
+    <ClInclude Include="..\src\LayerMaxPool2D.h" />
     <ClInclude Include="..\src\LayerPRelu.h" />
     <ClInclude Include="..\src\LayerRRelu.h" />
     <ClInclude Include="..\src\LayerSoftmax.h" />

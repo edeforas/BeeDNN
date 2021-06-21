@@ -16,7 +16,8 @@
 #include "LayerGaussianNoise.h"
 #include "LayerPRelu.h"
 #include "LayerRRelu.h"
-#include "LayerPoolMax2D.h"
+#include "LayerMaxPool2D.h"
+#include "LayerGlobalMaxPool2D.h"
 #include "LayerSoftmax.h"
 #include "LayerSoftmin.h"
 
@@ -55,6 +56,12 @@ Layer* LayerFactory::create(const string& sLayer,float fArg1,float fArg2,float f
 
 	if (sLayer == "ChannelBias")
 		return new LayerChannelBias((Index)fArg1, (Index)fArg2,(Index)fArg3);
+
+	if (sLayer == "MaxPool2D")
+		return new LayerMaxPool2D((Index)fArg1, (Index)fArg2, (Index)fArg3);
+
+	if (sLayer == "GlobalMaxPool2D")
+		return new LayerGlobalMaxPool2D((Index)fArg1, (Index)fArg2, (Index)fArg3);
 
 	if (sLayer == "Softmax")
 		return new LayerSoftmax();

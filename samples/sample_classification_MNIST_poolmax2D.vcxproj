@@ -186,7 +186,7 @@
     <ClCompile Include="..\src\LayerBias.cpp" />
     <ClCompile Include="..\src\LayerDense.cpp" />
     <ClCompile Include="..\src\LayerGain.cpp" />
-    <ClCompile Include="..\src\LayerPoolMax2D.cpp" />
+    <ClCompile Include="..\src\LayerMaxPool2D.cpp" />
     <ClCompile Include="..\src\LayerSoftmax.cpp" />
     <ClCompile Include="..\src\Loss.cpp" />
     <ClCompile Include="..\src\Matrix.cpp" />
@@ -206,7 +206,7 @@
     <ClInclude Include="..\src\LayerBias.h" />
     <ClInclude Include="..\src\LayerDense.h" />
     <ClInclude Include="..\src\LayerGain.h" />
-    <ClInclude Include="..\src\LayerPoolMax2D.h" />
+    <ClInclude Include="..\src\LayerMaxPool2D.h" />
     <ClInclude Include="..\src\LayerSoftmax.h" />
     <ClInclude Include="..\src\Loss.h" />
     <ClInclude Include="..\src\Matrix.h" />

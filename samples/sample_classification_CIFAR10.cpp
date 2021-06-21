@@ -22,7 +22,7 @@ using namespace std;
 #include "LayerDense.h"
 #include "LayerDropout.h"
 #include "LayerSoftmax.h"
-#include "LayerPoolMax2D.h"
+#include "LayerMaxPool2D.h"
 #include "LayerConvolution2D.h"
 
 Net net;
@@ -77,7 +77,7 @@ int main()
 	net.add(new LayerConvolution2D(32, 32, 3, 3, 3, 8));
 	net.add(new LayerChannelBias(30, 30, 8));
 	net.add(new LayerActivation("Relu"));
-	net.add(new LayerPoolMax2D(30, 30, 8, 2, 2));
+	net.add(new LayerMaxPool2D(30, 30, 8, 2, 2));
 	net.add(new LayerActivation("Relu"));
 	net.add(new LayerConvolution2D(15, 15, 8, 3, 3, 16));
 	net.add(new LayerChannelBias(13, 13, 16));

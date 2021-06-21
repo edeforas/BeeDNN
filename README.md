@@ -20,7 +20,7 @@ Layers:
 
 2D layers:
 - Convolution2D, ChannelBias
-- PoolMax2D, GlobalMaxPooling2D, 
+- MaxPool2D, GlobalMaxPool2D, 
 - AveragePooling2D
 
 Activations (in alphabetical order):

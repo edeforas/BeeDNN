@@ -72,3 +72,4 @@ ui_*.h
 *.ipdb
 *.json
 build
+*.exe

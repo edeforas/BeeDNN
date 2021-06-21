@@ -6,33 +6,33 @@
     in the LICENSE.txt file.
 */
 
-#include "LayerGlobalMaxPooling2D.h"
+#include "LayerGlobalMaxPool2D.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerGlobalMaxPooling2D::LayerGlobalMaxPooling2D(Index iInRows, Index iInCols, Index iInChannels) :
-    Layer("GlobalMaxPooling2D")
+LayerGlobalMaxPool2D::LayerGlobalMaxPool2D(Index iInRows, Index iInCols, Index iInChannels) :
+    Layer("GlobalMaxPool2D")
 {
 	_iInRows = iInRows;
 	_iInCols = iInCols;
 	_iInChannels = iInChannels;
 }
 ///////////////////////////////////////////////////////////////////////////////
-LayerGlobalMaxPooling2D::~LayerGlobalMaxPooling2D()
+LayerGlobalMaxPool2D::~LayerGlobalMaxPool2D()
 { }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerGlobalMaxPooling2D::get_params(Index& iInRows, Index& iInCols, Index & iInChannels) const
+void LayerGlobalMaxPool2D::get_params(Index& iInRows, Index& iInCols, Index & iInChannels) const
 {
 	iInRows = _iInRows;
 	iInCols = _iInCols;
 	iInChannels = _iInChannels;
 }
 ///////////////////////////////////////////////////////////////////////////////
-Layer* LayerGlobalMaxPooling2D::clone() const
+Layer* LayerGlobalMaxPool2D::clone() const
 {
-    return new LayerGlobalMaxPooling2D(_iInRows, _iInCols, _iInChannels);
+    return new LayerGlobalMaxPool2D(_iInRows, _iInCols, _iInChannels);
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerGlobalMaxPooling2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerGlobalMaxPool2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	//not optimized yet
 	mOut.resize( mIn.rows(),_iInChannels);
@@ -64,7 +64,7 @@ void LayerGlobalMaxPooling2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 		}
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerGlobalMaxPooling2D::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
+void LayerGlobalMaxPool2D::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
     (void)mIn;
 

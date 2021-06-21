@@ -24,7 +24,7 @@
 #include "LayerGlobalBias.h"
 #include "LayerGlobalGain.h"
 #include "LayerGlobalAffine.h"
-#include "LayerPoolMax2D.h"
+#include "LayerMaxPool2D.h"
 #include "LayerPRelu.h"
 #include "LayerRRelu.h"
 #include "LayerSoftmax.h"
@@ -146,7 +146,7 @@ void write(const Net& net,string & s)
 		}
 		else if (layer->type() == "PoolMax2D")
 		{
-			LayerPoolMax2D* l = static_cast<LayerPoolMax2D*>(layer);
+			LayerMaxPool2D* l = static_cast<LayerMaxPool2D*>(layer);
 
 			Index inRows, inCols, iChannels, rowFactor, colFactor;
 			l->get_params(inRows, inCols, iChannels, rowFactor, colFactor);
@@ -336,7 +336,7 @@ void read(const string& s,Net& net)
 			Index inChannels = stoi(find_key(s, sLayer + ".inChannels"));
 			Index factorX = stoi(find_key(s, sLayer + ".rowFactor"));
 			Index factorY = stoi(find_key(s, sLayer + ".colFactor"));
-			net.add(new LayerPoolMax2D(inSizeX, inSizeY, inChannels, factorX, factorY));
+			net.add(new LayerMaxPool2D(inSizeX, inSizeY, inChannels, factorX, factorY));
 		}
 
 		else if (sType == "Convolution2D")

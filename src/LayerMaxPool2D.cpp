@@ -6,11 +6,11 @@
     in the LICENSE.txt file.
 */
 
-#include "LayerPoolMax2D.h"
+#include "LayerMaxPool2D.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerPoolMax2D::LayerPoolMax2D(Index iInRows, Index iInCols, Index iInChannels, Index iRowFactor, Index iColFactor) :
-    Layer("PoolMax2D")
+LayerMaxPool2D::LayerMaxPool2D(Index iInRows, Index iInCols, Index iInChannels, Index iRowFactor, Index iColFactor) :
+    Layer("MaxPool2D")
 {
 	_iInRows = iInRows;
 	_iInCols = iInCols;
@@ -23,10 +23,10 @@ LayerPoolMax2D::LayerPoolMax2D(Index iInRows, Index iInCols, Index iInChannels, 
 	_iOutPlaneSize = _iOutRows * _iOutCols;
 }
 ///////////////////////////////////////////////////////////////////////////////
-LayerPoolMax2D::~LayerPoolMax2D()
+LayerMaxPool2D::~LayerMaxPool2D()
 { }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPoolMax2D::get_params(Index& iInRows, Index& iInCols, Index & iInChannels, Index& iRowFactor, Index& iColFactor) const
+void LayerMaxPool2D::get_params(Index& iInRows, Index& iInCols, Index & iInChannels, Index& iRowFactor, Index& iColFactor) const
 {
 	iInRows = _iInRows;
 	iInCols = _iInCols;
@@ -35,12 +35,12 @@ void LayerPoolMax2D::get_params(Index& iInRows, Index& iInCols, Index & iInChann
 	iColFactor= _iColFactor;
 }
 ///////////////////////////////////////////////////////////////////////////////
-Layer* LayerPoolMax2D::clone() const
+Layer* LayerMaxPool2D::clone() const
 {
-    return new LayerPoolMax2D(_iInRows, _iInCols, _iInChannels, _iRowFactor, _iColFactor);
+    return new LayerMaxPool2D(_iInRows, _iInCols, _iInChannels, _iRowFactor, _iColFactor);
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPoolMax2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerMaxPool2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	mOut.resize(mIn.rows(), _iOutPlaneSize*_iInChannels);
 	if(_bTrainMode)
@@ -85,7 +85,7 @@ void LayerPoolMax2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerPoolMax2D::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
+void LayerMaxPool2D::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
     (void)mIn;
 

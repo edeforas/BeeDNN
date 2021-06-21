@@ -13,7 +13,7 @@ using namespace std;
 
 #include "LayerActivation.h"
 #include "LayerDense.h"
-#include "LayerPoolMax2D.h"
+#include "LayerMaxPool2D.h"
 #include "LayerSoftmax.h"
 
 Net net;
@@ -55,7 +55,7 @@ int main()
     }
   
 	//create simple net:
-	net.add(new LayerPoolMax2D(28,28,1, 2, 2)); //input rows, input cols,input channels, factor rows, factor cols
+	net.add(new LayerMaxPool2D(28,28,1, 2, 2)); //input rows, input cols,input channels, factor rows, factor cols
 	net.add(new LayerDense(784/4, 128)); // new size is 4x smaller
 	net.add(new LayerActivation("Relu"));
 	net.add(new LayerDense(128, 10));
