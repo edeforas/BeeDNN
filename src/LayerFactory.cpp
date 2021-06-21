@@ -18,6 +18,8 @@
 #include "LayerRRelu.h"
 #include "LayerMaxPool2D.h"
 #include "LayerGlobalMaxPool2D.h"
+#include "LayerAveragePooling2D.h"
+#include "LayerGlobalAveragePooling2D.h"
 #include "LayerSoftmax.h"
 #include "LayerSoftmin.h"
 
@@ -62,6 +64,12 @@ Layer* LayerFactory::create(const string& sLayer,float fArg1,float fArg2,float f
 
 	if (sLayer == "GlobalMaxPool2D")
 		return new LayerGlobalMaxPool2D((Index)fArg1, (Index)fArg2, (Index)fArg3);
+
+	if (sLayer == "AveragePooling2D")
+		return new LayerAveragePooling2D((Index)fArg1, (Index)fArg2, (Index)fArg3);
+
+	if (sLayer == "GlobalAveragePooling2D")
+		return new LayerGlobalAveragePooling2D((Index)fArg1, (Index)fArg2, (Index)fArg3);
 
 	if (sLayer == "Softmax")
 		return new LayerSoftmax();
