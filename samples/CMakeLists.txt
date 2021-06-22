@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0.0)
 
 if (UNIX)
-	list(APPEND CMAKE_CXX_FLAGS "-pthread -std=c++11 ${CMAKE_CXX_FLAGS}")
+	list(APPEND CMAKE_CXX_FLAGS "-fopenmp" ${CMAKE_CXX_FLAGS})
 endif (UNIX)
 
 project (test_samples)
