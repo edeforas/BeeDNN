@@ -186,6 +186,7 @@
     <ClCompile Include="..\src\LayerBias.cpp" />
     <ClCompile Include="..\src\LayerChannelBias.cpp" />
     <ClCompile Include="..\src\LayerConvolution2D.cpp" />
+    <ClCompile Include="..\src\LayerCRelu.cpp" />
     <ClCompile Include="..\src\LayerDense.cpp" />
     <ClCompile Include="..\src\LayerDropout.cpp" />
     <ClCompile Include="..\src\LayerFactory.cpp" />
@@ -225,6 +226,7 @@
     <ClInclude Include="..\src\LayerBias.h" />
     <ClInclude Include="..\src\LayerChannelBias.h" />
     <ClInclude Include="..\src\LayerConvolution2D.h" />
+    <ClInclude Include="..\src\LayerCRelu.h" />
     <ClInclude Include="..\src\LayerDense.h" />
     <ClInclude Include="..\src\LayerDropout.h" />
     <ClInclude Include="..\src\LayerFactory.h" />

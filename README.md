@@ -15,7 +15,7 @@ Layers:
 - Dense, with or without bias
 - GlobalGain, GlobalBias, GlobalAffine, Gain, Bias, Affine
 - Softmax, Softmin
-- PRelu, RRelu, PELU, TERELU
+- PRelu, RRelu, PELU, TERELU, CRelu
 - Layers and activations are decoupled and can be in any order
 
 2D layers:

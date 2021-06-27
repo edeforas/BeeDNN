@@ -25,6 +25,7 @@
 #include "LayerGlobalGain.h"
 #include "LayerGlobalAffine.h"
 #include "LayerMaxPool2D.h"
+#include "LayerCRelu.h"
 #include "LayerPRelu.h"
 #include "LayerRRelu.h"
 #include "LayerSoftmax.h"

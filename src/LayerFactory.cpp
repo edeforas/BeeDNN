@@ -3,6 +3,7 @@
 #include "LayerActivation.h"
 #include "LayerChannelBias.h"
 #include "LayerConvolution2D.h"
+#include "LayerCRelu.h"
 #include "LayerDense.h"
 #include "LayerDropout.h"
 #include "LayerGaussianDropout.h"
@@ -31,6 +32,9 @@ Layer* LayerFactory::create(const string& sLayer,float fArg1,float fArg2,float f
 
 	if(sLayer=="Dense")
 		return new LayerDense((Index)fArg1,(Index)fArg2);
+
+	if (sLayer == "CRelu")
+		return new LayerCRelu();
 
 	if (sLayer == "RRelu")
 		return new LayerRRelu();
