@@ -22,6 +22,7 @@ Layers:
 - Convolution2D, ChannelBias
 - MaxPool2D, GlobalMaxPool2D, 
 - AveragePooling2D, GlobalAveragePooling2D
+- ZeroPadding2D
 
 Activations (in alphabetical order):
 - Absolute, Asinh, Atan

@@ -23,6 +23,8 @@
 #include "LayerGlobalAveragePooling2D.h"
 #include "LayerSoftmax.h"
 #include "LayerSoftmin.h"
+#include "LayerZeroPadding2D.h"
+
 
 //////////////////////////////////////////////////////////////////////////////
 Layer* LayerFactory::create(const string& sLayer,float fArg1,float fArg2,float fArg3,float fArg4,float fArg5)
@@ -80,6 +82,9 @@ Layer* LayerFactory::create(const string& sLayer,float fArg1,float fArg2,float f
 
 	if (sLayer == "Softmin")
 		return new LayerSoftmin();
+	
+	if (sLayer == "ZeroPadding2D")
+		return new LayerZeroPadding2D((Index)fArg1, (Index)fArg2, (Index)fArg3, (Index)fArg4);
 
 	return new LayerActivation(sLayer);
 }

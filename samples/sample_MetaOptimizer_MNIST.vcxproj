@@ -204,6 +204,7 @@
     <ClCompile Include="..\src\LayerSoftmax.cpp" />
     <ClCompile Include="..\src\LayerSoftmin.cpp" />
     <ClCompile Include="..\src\LayerUniformNoise.cpp" />
+    <ClCompile Include="..\src\LayerZeroPadding2D.cpp" />
     <ClCompile Include="..\src\Loss.cpp" />
     <ClCompile Include="..\src\Matrix.cpp" />
     <ClCompile Include="..\src\MetaOptimizer.cpp" />
@@ -243,6 +244,7 @@
     <ClInclude Include="..\src\LayerSoftmax.h" />
     <ClInclude Include="..\src\LayerSoftmin.h" />
     <ClInclude Include="..\src\LayerUniformNoise.h" />
+    <ClInclude Include="..\src\LayerZeroPadding2D.h" />
     <ClInclude Include="..\src\Loss.h" />
     <ClInclude Include="..\src\Matrix.h" />
     <ClInclude Include="..\src\MetaOptimizer.h" />
