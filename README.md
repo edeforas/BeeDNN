@@ -57,7 +57,7 @@ Overfitting:
 - Regularizer: GradientClip, GradientNormClip, GradientClipTanh, L1, L2, L1L2
 
 Data augmentation
-- WIP
+- RandomFlipLeftRight2D
 
 Learning and optimization:
 - Classification or regression, test and/or learn

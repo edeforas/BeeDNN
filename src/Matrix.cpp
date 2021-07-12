@@ -535,3 +535,11 @@ MatrixFloat tanh(const MatrixFloat& m)
 	return r;
 }
 ///////////////////////////////////////////////////////////////////////////
+void reverseData(float* pData, Index iSize)
+{
+	float* pDataEnd = pData + iSize - 1;
+	Index iHalfSize = iSize >> 1;
+	for (Index i = 0; i <= iHalfSize; i++)
+		*pData++ = *pDataEnd--;
+}
+///////////////////////////////////////////////////////////////////////////

@@ -711,6 +711,8 @@ bool toFile(const string& sFile, const MatrixFloat & m);
 void setRandomUniform(MatrixFloat& m, float fMin=-1.f, float fMax=1.f);
 void setQuickBernoulli(MatrixFloat& m, float fProba); //quick bernoulli is 6x faster than ref bernoulli, resolution proba is 1/65536 
 
+void reverseData(float* pData, Index iSize);
+
 default_random_engine& randomEngine();
 
 MatrixFloat tanh(const MatrixFloat& m);

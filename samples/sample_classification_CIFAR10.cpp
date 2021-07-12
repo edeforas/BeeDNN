@@ -24,6 +24,7 @@ using namespace std;
 #include "LayerSoftmax.h"
 #include "LayerMaxPool2D.h"
 #include "LayerConvolution2D.h"
+#include "LayerRandomFlipLeftRight2D.h"
 
 Net net;
 NetTrain netTrain;
@@ -74,6 +75,7 @@ int main()
 	}
   
 	//create simple convolutionnal net:
+	net.add(new LayerRandomFlipLeftRight2D(32, 32, 3)); // data augmentation: same class if using left right symetry
 	net.add(new LayerConvolution2D(32, 32, 3, 3, 3, 8));
 	net.add(new LayerChannelBias(30, 30, 8));
 	net.add(new LayerActivation("Relu"));
