@@ -57,6 +57,8 @@ void LayerDense::init()
 ///////////////////////////////////////////////////////////////////////////////
 void LayerDense::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
+	assert(mIn.cols() == _weight.rows());
+	assert(_weight.cols() == _bias.cols());
 	mOut = mIn * _weight;
 
     if (_bHasBias)

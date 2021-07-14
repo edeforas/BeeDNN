@@ -39,10 +39,13 @@ void LayerActivation::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 ///////////////////////////////////////////////////////////////////////////////
 void LayerActivation::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
+    assert(mIn.rows() == mGradientOut.rows());
+    assert(mIn.cols() == mGradientOut.cols());
+
 	if (_bFirstLayer)
 		return;
 
-    mGradientIn.resizeLike(mIn);
+    mGradientIn.resizeLike(mGradientOut);
     for(Index i=0;i<mGradientIn.size();i++)
         mGradientIn(i)=_pActivation->derivation(mIn(i));
 
