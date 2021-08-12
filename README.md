@@ -17,6 +17,7 @@ Layers:
 - Softmax, Softmin
 - PRelu, RRelu, PELU, TERELU, CRelu
 - Layers and activations are decoupled and can be in any order
+- TimeDistributedBias
 
 2D layers:
 - Convolution2D, ChannelBias

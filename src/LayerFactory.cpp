@@ -23,6 +23,9 @@
 #include "LayerGlobalAveragePooling2D.h"
 #include "LayerSoftmax.h"
 #include "LayerSoftmin.h"
+
+#include "LayerTimeDistributedBias.h"
+
 #include "LayerZeroPadding2D.h"
 #include "LayerRandomFlipLeftRight2D.h"
 
@@ -49,6 +52,9 @@ Layer* LayerFactory::create(const string& sLayer,float fArg1,float fArg2,float f
 
 	if (sLayer == "Bias")
 		return new LayerBias();
+
+	if (sLayer == "TimeDistributedBias")
+		return new LayerTimeDistributedBias((Index)fArg1);
 
 	if (sLayer == "Affine")
 		return new LayerAffine();

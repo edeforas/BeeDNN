@@ -679,11 +679,14 @@ MatrixFloat rowWiseSumSq(const MatrixFloat& m);
 MatrixFloat colWiseSum(const MatrixFloat& m);
 MatrixFloat colWiseSumSq(const MatrixFloat& m);
 MatrixFloat colWiseMean(const MatrixFloat& m);
+MatrixFloat colWiseTimeDistributedMean(const MatrixFloat& m, Index iFrameSize);
 
 MatrixFloat colWiseMin(const MatrixFloat& m);
 MatrixFloat colWiseMax(const MatrixFloat& m);
 
 MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d);
+MatrixFloat rowWiseTimeDistributedAdd(const MatrixFloat& m, const MatrixFloat& d);
+
 MatrixFloat rowWiseMult(const MatrixFloat& m, const MatrixFloat& d);
 MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d);
 vector<Index> randPerm(Index iSize); //create a vector of index shuffled
