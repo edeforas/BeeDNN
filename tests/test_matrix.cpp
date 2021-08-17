@@ -187,96 +187,6 @@ void test_hyperbolic()
 	}
 }
 ////////////////////////////////////////////////////////
-void GEMM_naive(const MatrixFloat& a, const MatrixFloat& b, MatrixFloat& ab)
-{
-	ab.resize(a.rows(), b.cols());
-
-	Index rows = ab.rows();
-	Index cols = ab.cols();
-	Index inCols = a.cols();
-	
-	for (Index r = 0; r < rows; r++)
-	{
-		for (Index c = 0; c < cols; c++)
-		{
-			float temp = 0.f;
-
-			for (Index k = 0; k < inCols; k++)
-				temp += a(r, k)*b(k, c);
-
-			ab(r, c) = temp;
-		}
-	}
-}
-////////////////////////////////////////////////////////
-void GEMM_naive2(const MatrixFloat& a, const MatrixFloat& b, MatrixFloat& ab)
-{
-	ab.resize(a.rows(), b.cols());
-
-	Index rows = ab.rows();
-	Index cols = ab.cols();
-	Index inDepth = a.cols();
-
-	vector<float> oneCol(inDepth);
-
-	for (Index c = 0; c < cols; c++)
-	{
-		//unstripe data
-		for (Index r = 0; r < inDepth; r++)
-			oneCol[r] = b(r, c);
-
-		for (Index r = 0; r < rows; r++)
-		{
-			float temp = 0.f;
-			const float * pA = a.row(r).data();
-			const float * pB = oneCol.data();
-
-			for (Index k = 0; k < inDepth; k++)
-				temp += (*pA++)*(*pB++);
-
-			ab(r, c) = temp;
-		}
-	}
-}
-////////////////////////////////////////////////////////
-void test_GEMM()
-{
-	cout << endl << "GEMM test:" << endl;
-
-	chrono::steady_clock::time_point start, end;
-
-	for (int sz = 1; sz <= 2048; sz*=2)
-	{
-		MatrixFloat m1(sz, sz);
-		m1.setRandom();
-
-		MatrixFloat m2(sz, sz);
-		m2.setRandom();
-
-		start = chrono::steady_clock::now();
-		MatrixFloat m3optim= m1 * m2;
-		end = chrono::steady_clock::now();
-		long long deltaOptim = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-
-		start = chrono::steady_clock::now();
-		MatrixFloat m3Naive;
-		GEMM_naive(m1, m2, m3Naive);
-		end = chrono::steady_clock::now();
-		long long deltaNaive = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-		
-		start = chrono::steady_clock::now();
-		MatrixFloat m3Naive2;
-		GEMM_naive2(m1, m2, m3Naive2);
-		end = chrono::steady_clock::now();
-		long long deltaNaive2 = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-
-		float fErrorNaive = (m3optim - m3Naive).cwiseAbs().maxCoeff();
-		float fErrorNaive2 = (m3optim - m3Naive2).cwiseAbs().maxCoeff();
-
-		cout << "Optim/Naive/Naive2 size:" << sz << " time: " << deltaOptim << "/" << deltaNaive << "/" << deltaNaive2 << " errNaive: " << fErrorNaive << " errNaive2: " << fErrorNaive2 << endl;
-	}
-}
-////////////////////////////////////////////////////////
 void test_sse()
 {
 	Mat44f m1,m2,mr;
@@ -320,12 +230,11 @@ void test_sse()
 ////////////////////////////////////////////////////////
 int main()
 {
-	//elementary_tests();
-	//check_matrixView();
-	//test_bernoulli();
+	elementary_tests();
+	check_matrixView();
+	test_bernoulli();
 	test_hyperbolic();
-	//test_GEMM();
-	//test_sse();
+	test_sse();
 
     cout << "Tests finished." << endl;
     return 0;
