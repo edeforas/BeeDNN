@@ -12,7 +12,7 @@ No dependencies needed, every algorithm rewritten in C++ from scratch.
 To increase speed, ones can choose the Eigen library (http://eigen.tuxfamily.org), instead of the internal matrix library.
 
 Layers:
-- Dense, with or without bias
+- Dense (with bias), Dot (without bias)
 - GlobalGain, GlobalBias, GlobalAffine, Gain, Bias, Affine
 - Softmax, Softmin
 - PRelu, RRelu, PELU, TERELU, CRelu

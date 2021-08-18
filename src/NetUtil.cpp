@@ -16,6 +16,7 @@
 #include "LayerChannelBias.h"
 #include "LayerConvolution2D.h"
 #include "LayerDense.h"
+#include "LayerDot.h"
 #include "LayerDropout.h"
 #include "LayerGain.h"
 #include "LayerBias.h"
@@ -31,6 +32,7 @@
 #include "LayerSoftmax.h"
 #include "LayerSoftmin.h"
 #include "LayerUniformNoise.h"
+#include "LayerTimeDistributedBias.h"
 
 #include <sstream>
 #include <fstream>
@@ -68,7 +70,15 @@ void write(const Net& net,string & s)
 				ss << "Layer" << i + 1 << ".bias=" << endl << toString(layer->bias()) << endl;
         }
 
-        else if(layer->type()=="GlobalGain")
+		if (layer->type() == "Dot")
+		{
+			LayerDense* l = static_cast<LayerDense*>(layer);
+			ss << "Layer" << i + 1 << ".inputSize=" << l->input_size() << endl;
+			ss << "Layer" << i + 1 << ".outputSize=" << l->output_size() << endl;
+			ss << "Layer" << i + 1 << ".weight=" << endl << toString(layer->weights()) << endl;
+		}
+		
+		else if(layer->type()=="GlobalGain")
         {
             LayerGlobalGain* l=static_cast<LayerGlobalGain*>(layer);
             ss << "Layer" << i+1 << ".globalGain=" << l->weights()(0) << endl;
@@ -203,26 +213,36 @@ void read(const string& s,Net& net)
 			string sOutputSize=find_key(s,sLayer+".outputSize");
             Index iInputSize=stoi(sInputSize); 
 			Index iOutputSize=stoi(sOutputSize);
-			string sHasBias=find_key(s,sLayer+".hasBias");
-            bool bHasBias=sHasBias!="0";
 
-            net.add(new LayerDense(iInputSize,iOutputSize,bHasBias));
+            net.add(new LayerDense(iInputSize,iOutputSize));
 
             string sWeight=find_key(s,sLayer+".weight");
 			MatrixFloat mf = fromString(sWeight);
 			mf.resize(iInputSize, iOutputSize);
             net.layer(net.size()-1).weights()= mf;
 
-			if (bHasBias)
-			{
-				string sBias = find_key(s, sLayer + ".bias");
-				mf = fromString(sBias);
-				mf.resize(1, iOutputSize);
-				net.layer(net.size() - 1).bias() = mf;
-			}
+			string sBias = find_key(s, sLayer + ".bias");
+			mf = fromString(sBias);
+			mf.resize(1, iOutputSize);
+			net.layer(net.size() - 1).bias() = mf;
         }
 
-        else if(sType=="GlobalGain")
+		if (sType == "Dot")
+		{
+			string sInputSize = find_key(s, sLayer + ".inputSize");
+			string sOutputSize = find_key(s, sLayer + ".outputSize");
+			Index iInputSize = stoi(sInputSize);
+			Index iOutputSize = stoi(sOutputSize);
+
+			net.add(new LayerDot(iInputSize, iOutputSize));
+
+			string sWeight = find_key(s, sLayer + ".weight");
+			MatrixFloat mf = fromString(sWeight);
+			mf.resize(iInputSize, iOutputSize);
+			net.layer(net.size() - 1).weights() = mf;
+		}
+
+		else if(sType=="GlobalGain")
         {
             float fGain= stof(find_key(s,sLayer+".globalGain"));
             net.add(new LayerGlobalGain());

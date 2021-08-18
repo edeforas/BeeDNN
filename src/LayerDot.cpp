@@ -6,31 +6,30 @@
     in the LICENSE.txt file.
 */
 
-#include "LayerDense.h"
+#include "LayerDot.h"
 
 #include <cmath> // for sqrt
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerDense::LayerDense(Index iInputSize, Index iOutputSize) :
-    Layer( "Dense"),
+LayerDot::LayerDot(Index iInputSize, Index iOutputSize) :
+    Layer( "Dot"),
 	_iInputSize(iInputSize),
 	_iOutputSize(iOutputSize)
 {
-	LayerDense::init();
+	LayerDot::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-LayerDense::~LayerDense()
+LayerDot::~LayerDot()
 { }
 ///////////////////////////////////////////////////////////////////////////////
-Layer* LayerDense::clone() const
+Layer* LayerDot::clone() const
 {
-    LayerDense* pLayer=new LayerDense(_iInputSize, _iOutputSize);
+    LayerDot* pLayer=new LayerDot(_iInputSize, _iOutputSize);
     pLayer->_weight=_weight;
-	pLayer->_bias = _bias;
 	return pLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerDense::init()
+void LayerDot::init()
 {
 	if (_iInputSize == 0)
 		return;
@@ -47,36 +46,31 @@ void LayerDense::init()
     float a =sqrtf(6.f/(_iInputSize + _iOutputSize));
     _weight.setRandom();
     _weight*=a;
-
-	_bias.setZero(1, _iOutputSize);
 	
 	Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerDense::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerDot::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	assert(mIn.cols() == _weight.rows());
-	assert(_weight.cols() == _bias.cols());
 	mOut = mIn * _weight;
-    mOut = rowWiseAdd(mOut,_bias);
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerDense::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
+void LayerDot::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
 	// average the gradient as in: https://stats.stackexchange.com/questions/183840/sum-or-average-of-gradients-in-mini-batch-gradient-decent
 	_gradientWeight = (mIn.transpose())*mGradientOut*(1.f / mIn.rows());
-	_gradientBias = colWiseMean(mGradientOut);
 
 	if (!_bFirstLayer)
 		mGradientIn = mGradientOut * (_weight.transpose());
 }
 ///////////////////////////////////////////////////////////////
-Index LayerDense::input_size() const
+Index LayerDot::input_size() const
 {
 	return _iInputSize;
 }
 ///////////////////////////////////////////////////////////////
-Index LayerDense::output_size() const
+Index LayerDot::output_size() const
 {
 	return _iOutputSize;
 }

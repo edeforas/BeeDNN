@@ -188,6 +188,7 @@
     <ClCompile Include="..\src\LayerConvolution2D.cpp" />
     <ClCompile Include="..\src\LayerCRelu.cpp" />
     <ClCompile Include="..\src\LayerDense.cpp" />
+    <ClCompile Include="..\src\LayerDot.cpp" />
     <ClCompile Include="..\src\LayerDropout.cpp" />
     <ClCompile Include="..\src\LayerFactory.cpp" />
     <ClCompile Include="..\src\LayerGain.cpp" />
@@ -231,6 +232,7 @@
     <ClInclude Include="..\src\LayerConvolution2D.h" />
     <ClInclude Include="..\src\LayerCRelu.h" />
     <ClInclude Include="..\src\LayerDense.h" />
+    <ClInclude Include="..\src\LayerDot.h" />
     <ClInclude Include="..\src\LayerDropout.h" />
     <ClInclude Include="..\src\LayerFactory.h" />
     <ClInclude Include="..\src\LayerGaussianDropout.h" />

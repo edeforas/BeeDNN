@@ -5,6 +5,7 @@
 #include "LayerConvolution2D.h"
 #include "LayerCRelu.h"
 #include "LayerDense.h"
+#include "LayerDot.h"
 #include "LayerDropout.h"
 #include "LayerGaussianDropout.h"
 #include "LayerGlobalGain.h"
@@ -37,6 +38,9 @@ Layer* LayerFactory::create(const string& sLayer,float fArg1,float fArg2,float f
 
 	if(sLayer=="Dense")
 		return new LayerDense((Index)fArg1,(Index)fArg2);
+
+	if(sLayer=="Dot")
+		return new LayerDot((Index)fArg1,(Index)fArg2);
 
 	if (sLayer == "CRelu")
 		return new LayerCRelu();

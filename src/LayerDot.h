@@ -6,17 +6,17 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerDense_
-#define LayerDense_
+#ifndef LayerDot_
+#define LayerDot_
 
 #include "Layer.h"
 #include "Matrix.h"
 
-class LayerDense : public Layer
+class LayerDot : public Layer
 {
 public:
-    LayerDense(Index iInputSize,Index iOutputSize);
-    virtual ~LayerDense() override;
+    LayerDot(Index iInputSize,Index iOutputSize);
+    virtual ~LayerDot() override;
 
 	Index input_size() const;
 	Index output_size() const;
