@@ -29,6 +29,27 @@ void disp(const MatrixFloat& m)
         cout << endl;
     }
 }
+
+////////////////////////////////////////////////////////
+// https://stackoverflow.com/questions/18499971/efficient-4x4-matrix-multiplication-c-vs-assembly
+void M4x4_SSE(const float* A, const float* B, float* C)
+{
+	__m128 row1 = _mm_load_ps(&B[0]);
+	__m128 row2 = _mm_load_ps(&B[4]);
+	__m128 row3 = _mm_load_ps(&B[8]);
+	__m128 row4 = _mm_load_ps(&B[12]);
+	for (int i = 0; i < 4; i++) {
+		__m128 brod1 = _mm_set1_ps(A[4 * i + 0]);
+		__m128 brod2 = _mm_set1_ps(A[4 * i + 1]);
+		__m128 brod3 = _mm_set1_ps(A[4 * i + 2]);
+		__m128 brod4 = _mm_set1_ps(A[4 * i + 3]);
+		__m128 row = _mm_add_ps(
+			_mm_add_ps(	_mm_mul_ps(brod1, row1),	_mm_mul_ps(brod2, row2)),
+			_mm_add_ps(	_mm_mul_ps(brod3, row3),	_mm_mul_ps(brod4, row4))
+		);
+		_mm_store_ps(&C[4 * i], row);
+	}
+}
 ////////////////////////////////////////////////////////
 void GEMM_col_row_k_ptr(const MatrixFloat& a, const MatrixFloat& b, MatrixFloat& ab)
 {
@@ -85,24 +106,29 @@ void GEMM_row_col_k_block44(const MatrixFloat& a, const MatrixFloat& b, MatrixFl
 	Index colsb = cols >> 2;
 	Index kMaxb = kMax >> 2;
 
+	float a_block[4 * 4];
+	float b_block[4 * 4];
+	float ab_block[4 * 4];
+
 	for (Index rb = 0; rb < rows; rb+=4)
 		for (Index cb = 0; cb < cols; cb+=4)
 			for(Index kb = 0; kb < kMax; kb+=4)
 			{
 				//read the a block
-				float a_block[4*4];
 				for (Index i = 0; i < 4; i++)
 					for (Index j = 0; j < 4; j++)
 						a_block[i * 4 + j] = a(rb + i, kb + j);
 
 				// read the b block
-				float b_block[4*4];
 				for (Index i = 0; i < 4; i++)
 					for (Index j = 0; j < 4; j++)
 						b_block[i * 4 + j] = b(kb + i, cb + j);
 
+				// use SSE 
+				M4x4_SSE(a_block, b_block, ab_block);
+				// or
+				/*
 				// compute the 4x4 product
-				float ab_block[4*4];
 				for (Index i = 0; i < 4; i++)
 					for (Index j = 0; j < 4; j++)
 					{
@@ -111,7 +137,8 @@ void GEMM_row_col_k_block44(const MatrixFloat& a, const MatrixFloat& b, MatrixFl
 							sum += a_block[i * 4 + k] * b_block[j + k * 4];
 						ab_block[i * 4 + j] = sum;
 					}
-												
+				*/
+
 				// add to ab
 				for (Index i = 0; i < 4; i++)
 					for (Index j = 0; j < 4; j++)
@@ -195,7 +222,7 @@ void test_GEMM_order()
 
 	chrono::steady_clock::time_point start, end;
 
-	for (int sz = 8; sz <= 1024; sz *= 2)
+	for (int sz = 4; sz <= 1024; sz *= 2)
 	{
 		MatrixFloat m1;
 		m1.setRandom(sz, sz);
@@ -207,7 +234,6 @@ void test_GEMM_order()
 		MatrixFloat m3optim = m1 * m2;
 		end = chrono::steady_clock::now();
 		long long deltaOptim = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-//		cout << m3optim << endl << endl;
 
 		start = chrono::steady_clock::now();
 		MatrixFloat m3Naive1;
@@ -268,7 +294,6 @@ void test_GEMM_order()
 		start = chrono::steady_clock::now();
 		MatrixFloat m3Naive8;
 		GEMM_row_col_k_block44(m1, m2, m3Naive8);
-	//	cout << m3Naive8 << endl;
 		end = chrono::steady_clock::now();
 		long long delta_row_col_k_block44 = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 		float fErrorNaive8 = (m3optim - m3Naive8).cwiseAbs().maxCoeff();
