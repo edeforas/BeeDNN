@@ -63,7 +63,7 @@ void GEMM_col_row_k_ptr(const MatrixFloat& a, const MatrixFloat& b, MatrixFloat&
 
 	for (Index c = 0; c < cols; c++)
 	{
-		//unstride data
+		//unstride stridded data (b column)
 		for (Index k = 0; k < kMax; k++)
 			oneCol[k] = b(k, c);
 

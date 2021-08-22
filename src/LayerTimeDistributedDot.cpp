@@ -6,39 +6,43 @@
     in the LICENSE.txt file.
 */
 
-#include "LayerTimeDistributedBias.h"
+#include "LayerTimeDistributedDot.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerTimeDistributedBias::LayerTimeDistributedBias(int iFrameSize) :
+LayerTimeDistributedDot::LayerTimeDistributedDot(int iFrameSize, int iOutFrameSize) :
     Layer("Bias")
 {
 	_iFrameSize=iFrameSize;
-    LayerTimeDistributedBias::init();
+	_iOutFrameSize=iOutFrameSize;
+    LayerTimeDistributedDot::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-LayerTimeDistributedBias::~LayerTimeDistributedBias()
+LayerTimeDistributedDot::~LayerTimeDistributedDot()
 { }
 ///////////////////////////////////////////////////////////////////////////////
-Layer* LayerTimeDistributedBias::clone() const
+Layer* LayerTimeDistributedDot::clone() const
 {
-    LayerTimeDistributedBias* pLayer=new LayerTimeDistributedBias(this->_iFrameSize);
-	pLayer->_bias = _bias;
+    LayerTimeDistributedDot* pLayer=new LayerTimeDistributedDot(_iFrameSize,_iOutFrameSize);
+	pLayer->_weight = _weight;
 
     return pLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerTimeDistributedBias::init()
+void LayerTimeDistributedDot::init()
 {
-    _bias.setZero(1, _iFrameSize);
+	_weight.resize(0,0);
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerTimeDistributedBias::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerTimeDistributedDot::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
+	if(_weight.size()==0)
+		_weight.setZero(1, _iFrameSize);
+
     mOut = rowWiseTimeDistributedAdd( mIn , _bias);
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerTimeDistributedBias::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
+void LayerTimeDistributedDot::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
 	(void)mIn;
 	
@@ -49,4 +53,4 @@ void LayerTimeDistributedBias::backpropagation(const MatrixFloat &mIn,const Matr
 
     mGradientIn = mGradientOut;
 }
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////

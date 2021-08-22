@@ -1,8 +1,6 @@
 #include "LayerFactory.h"
 
 #include "LayerActivation.h"
-#include "LayerChannelBias.h"
-#include "LayerConvolution2D.h"
 #include "LayerCRelu.h"
 #include "LayerDense.h"
 #include "LayerDot.h"
@@ -18,17 +16,23 @@
 #include "LayerGaussianNoise.h"
 #include "LayerPRelu.h"
 #include "LayerRRelu.h"
+
+// time series
+#include "LayerTimeDistributedBias.h"
+#include "LayerTimeDistributedDot.h"
+
+// 2D layers
+#include "LayerChannelBias.h"
+#include "LayerConvolution2D.h"
 #include "LayerMaxPool2D.h"
 #include "LayerGlobalMaxPool2D.h"
 #include "LayerAveragePooling2D.h"
 #include "LayerGlobalAveragePooling2D.h"
-#include "LayerSoftmax.h"
-#include "LayerSoftmin.h"
-
-#include "LayerTimeDistributedBias.h"
-
 #include "LayerZeroPadding2D.h"
 #include "LayerRandomFlipLeftRight2D.h"
+
+#include "LayerSoftmax.h"
+#include "LayerSoftmin.h"
 
 //////////////////////////////////////////////////////////////////////////////
 Layer* LayerFactory::create(const string& sLayer,float fArg1,float fArg2,float fArg3,float fArg4,float fArg5)
@@ -36,10 +40,10 @@ Layer* LayerFactory::create(const string& sLayer,float fArg1,float fArg2,float f
 	(void)fArg4;
 	(void)fArg5;
 
-	if(sLayer=="Dense")
+	if(sLayer == "Dense")
 		return new LayerDense((Index)fArg1,(Index)fArg2);
 
-	if(sLayer=="Dot")
+	if(sLayer == "Dot")
 		return new LayerDot((Index)fArg1,(Index)fArg2);
 
 	if (sLayer == "CRelu")
@@ -59,6 +63,9 @@ Layer* LayerFactory::create(const string& sLayer,float fArg1,float fArg2,float f
 
 	if (sLayer == "TimeDistributedBias")
 		return new LayerTimeDistributedBias((Index)fArg1);
+
+	if (sLayer == "TimeDistributedDot")
+		return new LayerTimeDistributedDot((Index)fArg1, (Index)fArg2);
 
 	if (sLayer == "Affine")
 		return new LayerAffine();
