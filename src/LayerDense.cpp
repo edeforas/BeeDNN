@@ -41,11 +41,9 @@ void LayerDense::init()
 	assert(_iInputSize > 0);
 	assert(_iOutputSize > 0);
 	
-	_weight.resize(_iInputSize , _iOutputSize);
-
     //Xavier uniform initialization
     float a =sqrtf(6.f/(_iInputSize + _iOutputSize));
-    _weight.setRandom();
+    _weight.setRandom(_iInputSize, _iOutputSize);
     _weight*=a;
 
 	_bias.setZero(1, _iOutputSize);

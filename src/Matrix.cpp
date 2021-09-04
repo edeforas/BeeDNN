@@ -26,6 +26,11 @@ const MatrixFloatView fromRawBuffer(const float *pBuffer,Index iRows,Index iCols
 #endif
 }
 ///////////////////////////////////////////////////////////////////////////
+const MatrixFloatView constResize(const MatrixFloat& m, Index iRows, Index iCols)
+{
+	return fromRawBuffer(m.data(), iRows, iCols);
+}
+///////////////////////////////////////////////////////////////////////////
 MatrixFloatView fromRawBuffer(float *pBuffer,Index iRows,Index iCols)
 {
 #ifdef USE_EIGEN
@@ -468,23 +473,6 @@ const MatrixFloat rowView(const MatrixFloat& m, Index iStartRow, Index iEndRow)
     assert(m.rows() >= iEndRow);
 
     return fromRawBuffer(m.data() + iStartRow * m.cols(), iEndRow- iStartRow, (Index)m.cols());
-}
-///////////////////////////////////////////////////////////////////////////
-//create a col view starting at iStartCol ending at iEndCol (not included)
-const MatrixFloat colView(const MatrixFloat& m, Index iStartCol, Index iEndCol)
-{
-#ifdef USE_EIGEN
-	return m.block(0, iStartCol, m.rows(), iEndCol - iStartCol);
-#else
-	MatrixFloat mOut(m.rows(), iEndCol - iStartCol);
-	for (Index iR = 0; iR < m.rows(); iR++)
-	{
-		for (Index iC = iStartCol; iC < iEndCol; iC++)
-			mOut(iR, iC - iStartCol) = m(iR, iC);
-	}
-
-	return mOut;
-#endif
 }
 ///////////////////////////////////////////////////////////////////////////
 default_random_engine& randomEngine()

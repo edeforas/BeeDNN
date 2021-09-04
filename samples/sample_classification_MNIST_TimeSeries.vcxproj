@@ -189,6 +189,7 @@
     <ClCompile Include="..\src\LayerDropout.cpp" />
     <ClCompile Include="..\src\LayerSoftmax.cpp" />
     <ClCompile Include="..\src\LayerTimeDistributedBias.cpp" />
+    <ClCompile Include="..\src\LayerTimeDistributedDot.cpp" />
     <ClCompile Include="..\src\Loss.cpp" />
     <ClCompile Include="..\src\Matrix.cpp" />
     <ClCompile Include="..\src\MNISTReader.cpp" />
@@ -209,6 +210,7 @@
     <ClInclude Include="..\src\LayerDropout.h" />
     <ClInclude Include="..\src\LayerSoftmax.h" />
     <ClInclude Include="..\src\LayerTimeDistributedBias.h" />
+    <ClInclude Include="..\src\LayerTimeDistributedDot.h" />
     <ClInclude Include="..\src\Loss.h" />
     <ClInclude Include="..\src\Matrix.h" />
     <ClInclude Include="..\src\MNISTReader.h" />

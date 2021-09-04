@@ -10,7 +10,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerTimeDistributedBias::LayerTimeDistributedBias(int iFrameSize) :
-    Layer("Bias")
+    Layer("TimeDistributedBias")
 {
 	_iFrameSize=iFrameSize;
     LayerTimeDistributedBias::init();

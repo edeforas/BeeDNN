@@ -15,7 +15,7 @@
 class LayerTimeDistributedDot : public Layer
 {
 public:
-    explicit LayerTimeDistributedDot(int iFrameSize,int iOutFrameSize);
+    explicit LayerTimeDistributedDot(int iInFrameSize,int iOutFrameSize);
     virtual ~LayerTimeDistributedDot();
 
     virtual Layer* clone() const override;
@@ -25,8 +25,7 @@ public:
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 	
 private:
-	int _iFrameSize;
-	int _iOutFrameSize;
+	int _iInFrameSize, _iOutFrameSize;
 };
 
 #endif
