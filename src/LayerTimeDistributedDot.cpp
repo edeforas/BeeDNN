@@ -49,20 +49,25 @@ void LayerTimeDistributedDot::init()
 ///////////////////////////////////////////////////////////////////////////////
 void LayerTimeDistributedDot::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
+	Index iNbFrames = mIn.cols() / _iInFrameSize;
 	mOut = constResize(mIn,mIn.size() / _iInFrameSize,_iInFrameSize) * _weight;
-	mOut.resize(mIn.cols(), _iOutFrameSize);
+	mOut.resize(mIn.rows(), _iOutFrameSize* iNbFrames);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerTimeDistributedDot::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
 	(void)mIn;
-	/*
-	_gradientBias = colWiseTimeDistributedMean(mGradientOut,_iInFrameSize);
 
-	if (_bFirstLayer)
-		return;
+	MatrixFloat mGradOut = constResize(mGradientOut, mIn.size() / _iOutFrameSize, _iOutFrameSize);
 
-    mGradientIn = mGradientOut;
-*/
+	// average the gradient as in: https://stats.stackexchange.com/questions/183840/sum-or-average-of-gradients-in-mini-batch-gradient-decent
+	_gradientWeight = (mIn.transpose()) * mGradOut * (1.f / mIn.rows());
+
+	if (!_bFirstLayer)
+	{
+		Index iNbFrames = mGradientOut.cols() / _iOutFrameSize;
+		mGradientIn = mGradOut * (_weight.transpose());
+		mGradientIn.resize(mGradientOut.rows(), _iInFrameSize* iNbFrames);
+	}
 }
 ///////////////////////////////////////////////////////////////

@@ -58,7 +58,7 @@ int main()
 	//create simple net:
 	net.add(new LayerTimeDistributedBias(28));
 	net.add(new LayerTimeDistributedDot(28,8));
-	net.add(new LayerDot(28*28, 128));
+	net.add(new LayerDense(28*8, 128));
 	net.add(new LayerActivation("Relu"));
 	net.add(new LayerDropout(0.2f)); //reduce overfitting
 	net.add(new LayerDense(128, 10));
