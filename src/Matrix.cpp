@@ -28,6 +28,8 @@ const MatrixFloatView fromRawBuffer(const float *pBuffer,Index iRows,Index iCols
 ///////////////////////////////////////////////////////////////////////////
 const MatrixFloatView constResize(const MatrixFloat& m, Index iRows, Index iCols)
 {
+	assert(m.size() == iRows * iCols);
+
 	return fromRawBuffer(m.data(), iRows, iCols);
 }
 ///////////////////////////////////////////////////////////////////////////

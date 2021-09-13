@@ -58,7 +58,7 @@ void LayerTimeDistributedDot::backpropagation(const MatrixFloat &mIn,const Matri
 {
 	(void)mIn;
 
-	MatrixFloat mGradOut = constResize(mGradientOut, mIn.size() / _iOutFrameSize, _iOutFrameSize);
+	MatrixFloat mGradOut = constResize(mGradientOut, mGradientOut.size() / _iOutFrameSize, _iOutFrameSize);
 
 	// average the gradient as in: https://stats.stackexchange.com/questions/183840/sum-or-average-of-gradients-in-mini-batch-gradient-decent
 	_gradientWeight = (mIn.transpose()) * mGradOut * (1.f / mIn.rows());
