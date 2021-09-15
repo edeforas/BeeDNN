@@ -26,7 +26,7 @@ const MatrixFloatView fromRawBuffer(const float *pBuffer,Index iRows,Index iCols
 #endif
 }
 ///////////////////////////////////////////////////////////////////////////
-const MatrixFloatView constResize(const MatrixFloat& m, Index iRows, Index iCols)
+const MatrixFloatView viewResize(const MatrixFloat& m, Index iRows, Index iCols)
 {
 	assert(m.size() == iRows * iCols);
 
@@ -98,21 +98,6 @@ MatrixFloat rowWiseMean(const MatrixFloat& m)
 #endif
 }
 ///////////////////////////////////////////////////////////////////////////
-MatrixFloat rowWiseTimeDistributedAdd(const MatrixFloat& m, const MatrixFloat& d)
-{
-	Index iFrameSize = d.cols();
-	assert(iFrameSize > 0);
-	Index iNbFrames = m.cols() / iFrameSize;
-	assert(iNbFrames * iFrameSize == m.cols());
-	MatrixFloat result=m;
-
-	for (Index r = 0; r < m.rows(); r++)
-		for (Index nbf = 0; nbf < iNbFrames; nbf++)
-			for (Index c = 0; c < iFrameSize; c++)
-				result(r, c + nbf * iFrameSize) += d(c);
-
-	return result;
-}///////////////////////////////////////////////////////////////////////////
 MatrixFloat rowWiseSumSq(const MatrixFloat& m)
 {
 #ifdef USE_EIGEN
@@ -270,36 +255,15 @@ MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d)
     assert(d.rows() == 1);
     assert(d.cols() == m.cols());
 
-/* 
-//eigen function removed for now, slower than direct computation!
-#ifdef USE_EIGEN
-    return m + d.replicate(m.rows(), 1);
-#else
-*/
-    MatrixFloat r = m;
+	MatrixFloat r = m;
+
+//#ifdef USE_EIGEN
+//	r.rowwise() += d;// error cannot use a vector
+//#else
     for (Index l = 0; l < r.rows(); l++)
         r.row(l) += d;
-    return r;
 //#endif
-}
-///////////////////////////////////////////////////////////////////////////
-MatrixFloat colWiseTimeDistributedMean(const MatrixFloat& m, Index iFrameSize)
-{
-	assert(iFrameSize >= 1);
-	Index iNbFrames = m.cols() / iFrameSize;
-	assert(iNbFrames * iFrameSize == m.cols());
-
-	// not optimized
-	MatrixFloat out;
-	out.setZero(1, iFrameSize);
-
-	for (Index r = 0; r < m.rows(); r++)
-		for (Index f = 0; f < iNbFrames; f++)
-			for (Index c = 0; c < iFrameSize; c++)
-				out(0, c) += m(r,c+iFrameSize*f);
-
-	out /= (float)(iFrameSize * m.rows());
-	return out;
+	return r;
 }
 ///////////////////////////////////////////////////////////////////////////
 vector<Index> randPerm(Index iSize) //create a vector of index shuffled
@@ -469,7 +433,7 @@ bool toFile(const string& sFile, const MatrixFloat & m)
 }
 ///////////////////////////////////////////////////////////////////////////
 //create a row view starting at iStartRow ending at iEndRow (not included)
-const MatrixFloat rowView(const MatrixFloat& m, Index iStartRow, Index iEndRow)
+const MatrixFloat viewRow(const MatrixFloat& m, Index iStartRow, Index iEndRow)
 {
     assert(iStartRow < iEndRow); //iEndRow not included
     assert(m.rows() >= iEndRow);

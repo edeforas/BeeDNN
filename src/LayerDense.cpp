@@ -25,7 +25,7 @@ LayerDense::~LayerDense()
 Layer* LayerDense::clone() const
 {
     LayerDense* pLayer=new LayerDense(_iInputSize, _iOutputSize);
-    pLayer->_weight=_weight;
+    pLayer->_weight = _weight;
 	pLayer->_bias = _bias;
 	return pLayer;
 }

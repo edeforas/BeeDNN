@@ -670,39 +670,39 @@ typedef Matrix<float> MatrixFloatView;
 
 MatrixFloatView fromRawBuffer(float *pBuffer, Index iRows, Index iCols);
 const MatrixFloatView fromRawBuffer(const float *pBuffer, Index iRows, Index iCols);
-const MatrixFloatView constResize(const MatrixFloat& m, Index iRows, Index iCols);
-MatrixFloatView createView(MatrixFloat & mRef);
 void copyInto(const MatrixFloat& mToCopy, MatrixFloat& m, Index iStartRow);
+float* rowPtr(MatrixFloat& m, Index iRow);
+const float* rowPtr(const MatrixFloat& m, Index iRow);
+
+MatrixFloatView createView(MatrixFloat& mRef);
+const MatrixFloatView viewResize(const MatrixFloat& m, Index iRows, Index iCols);
+const MatrixFloat viewRow(const MatrixFloat& m, Index iStartRow, Index iEndRow); //create a row view starting at iStartRow to (not included) iEndRow
 
 MatrixFloat rowWiseSum(const MatrixFloat& m);
 MatrixFloat rowWiseSumSq(const MatrixFloat& m);
+MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d);
+MatrixFloat rowWiseMult(const MatrixFloat& m, const MatrixFloat& d);
+MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d);
 
 MatrixFloat colWiseSum(const MatrixFloat& m);
 MatrixFloat colWiseSumSq(const MatrixFloat& m);
 MatrixFloat colWiseMean(const MatrixFloat& m);
-MatrixFloat colWiseTimeDistributedMean(const MatrixFloat& m, Index iFrameSize);
-
 MatrixFloat colWiseMin(const MatrixFloat& m);
 MatrixFloat colWiseMax(const MatrixFloat& m);
 
-MatrixFloat rowWiseAdd(const MatrixFloat& m, const MatrixFloat& d);
-MatrixFloat rowWiseTimeDistributedAdd(const MatrixFloat& m, const MatrixFloat& d);
-
-MatrixFloat rowWiseMult(const MatrixFloat& m, const MatrixFloat& d);
-MatrixFloat rowWiseDivide(const MatrixFloat& m, const MatrixFloat& d);
+void setRandomUniform(MatrixFloat& m, float fMin = -1.f, float fMax = 1.f);
+void setQuickBernoulli(MatrixFloat& m, float fProba); //quick bernoulli is 6x faster than ref bernoulli, resolution proba is 1/65536 
+default_random_engine& randomEngine();
 vector<Index> randPerm(Index iSize); //create a vector of index shuffled
 void applyRowPermutation(const vector<Index>& vPermutation, const MatrixFloat & mIn, MatrixFloat & mPermuted);
-const MatrixFloat rowView(const MatrixFloat& m, Index iStartRow, Index iEndRow); //create a row view starting at iStartRow to (not included) iEndRow
 MatrixFloat decimate(const MatrixFloat& m, Index iRatio);
 Index argmax(const MatrixFloat& m);
 void rowsArgmax(const MatrixFloat& m, MatrixFloat& argM); //compute the argmax row by row
-
 void clamp(MatrixFloat& m,float fClampMin,float fClampMax);
+MatrixFloat tanh(const MatrixFloat& m);
+void reverseData(float* pData, Index iSize);
 
-float * rowPtr(MatrixFloat& m, Index iRow);
-const float * rowPtr(const MatrixFloat& m, Index iRow);
-
-//4D tensor functions, access order in memory is: sample, channel, row , column
+//4D tensor functions, access order in memory is: sample, channel, row, column
 void channelWiseAdd(MatrixFloat& mIn,Index iNbSamples,Index iNbChannels,Index iNbRows,Index iNbCols,const MatrixFloat & weight);
 MatrixFloat channelWiseMean(const MatrixFloat& m, Index iNbSamples, Index iNbChannels, Index iNbRows, Index iNbCols);
 
@@ -710,14 +710,5 @@ string toString(const MatrixFloat& m);
 const MatrixFloat fromFile(const string& sFile);
 const MatrixFloat fromString(const string& s);
 bool toFile(const string& sFile, const MatrixFloat & m);
-
-void setRandomUniform(MatrixFloat& m, float fMin=-1.f, float fMax=1.f);
-void setQuickBernoulli(MatrixFloat& m, float fProba); //quick bernoulli is 6x faster than ref bernoulli, resolution proba is 1/65536 
-
-void reverseData(float* pData, Index iSize);
-
-default_random_engine& randomEngine();
-
-MatrixFloat tanh(const MatrixFloat& m);
 
 #endif

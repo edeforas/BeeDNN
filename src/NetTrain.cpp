@@ -329,8 +329,8 @@ float NetTrain::compute_loss_accuracy(const MatrixFloat &mSamples, const MatrixF
 			iEnd = iNbSamples;
 		Index iBatchSize = iEnd - iStart;
 
-		mSamplesBatch = rowView(mSamples, iStart, iEnd);
-		mTruthBatch = rowView(mTruth, iStart, iEnd);
+		mSamplesBatch = viewRow(mSamples, iStart, iEnd);
+		mTruthBatch = viewRow(mTruth, iStart, iEnd);
 		
 		_pNet->predict(mSamplesBatch, mOut);
 		_pLoss->compute(mOut, mTruthBatch,mLoss);
@@ -718,8 +718,8 @@ void NetTrain::train_one_epoch(const MatrixFloat& mSampleShuffled, const MatrixF
 		if (iBatchEnd > iNbSamples)
 			iBatchEnd = iNbSamples;
 
-		const MatrixFloat mSample = rowView(mSampleShuffled, iBatchStart, iBatchEnd);
-		const MatrixFloat mTarget = rowView(mTruthShuffled, iBatchStart, iBatchEnd);
+		const MatrixFloat mSample = viewRow(mSampleShuffled, iBatchStart, iBatchEnd);
+		const MatrixFloat mTarget = viewRow(mTruthShuffled, iBatchStart, iBatchEnd);
 
 		train_batch(mSample, mTarget);
 

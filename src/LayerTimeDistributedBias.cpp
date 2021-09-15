@@ -35,14 +35,19 @@ void LayerTimeDistributedBias::init()
 ///////////////////////////////////////////////////////////////////////////////
 void LayerTimeDistributedBias::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
-    mOut = rowWiseTimeDistributedAdd( mIn , _bias);
+    // reshape the input to (x, _iFrameSize), compute, reshape back
+    MatrixFloat mInR = viewResize(mIn,mIn.size()/ _iFrameSize,_iFrameSize);
+    mOut=rowWiseAdd(mInR, _bias);
+    mOut.resize(mIn.rows(), mIn.cols());
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerTimeDistributedBias::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
-	(void)mIn;
-	
-	_gradientBias = colWiseTimeDistributedMean(mGradientOut,_iFrameSize);
+    (void)mIn;
+
+    // reshape the gradient to (x, _iFrameSize), compute
+    MatrixFloat mGradientOutR = viewResize(mGradientOut, mGradientOut.size() / _iFrameSize, _iFrameSize);
+    _gradientBias = colWiseMean(mGradientOutR);
 
 	if (_bFirstLayer)
 		return;
