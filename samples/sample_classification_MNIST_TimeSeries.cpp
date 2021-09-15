@@ -1,5 +1,5 @@
 // simple MNIST classification, all image seen as a time series rows by rows
-// validation accuracy > 98.1%, after 20 epochs (1s by epochs)
+// validation accuracy > 98%, after 20 epochs (1s by epochs)
 
 #include <iostream>
 #include <chrono>
@@ -11,7 +11,6 @@ using namespace std;
 #include "ConfusionMatrix.h"
 
 #include "LayerActivation.h"
-#include "LayerDot.h"
 #include "LayerDense.h"
 #include "LayerTimeDistributedBias.h"
 #include "LayerTimeDistributedDot.h"
@@ -56,8 +55,8 @@ int main()
     }
   
 	//create simple net:
-	net.add(new LayerTimeDistributedBias(28));
 	net.add(new LayerTimeDistributedDot(28,8));
+	net.add(new LayerTimeDistributedBias(8));
 	net.add(new LayerDense(28*8, 128));
 	net.add(new LayerActivation("Relu"));
 	net.add(new LayerDropout(0.2f)); //reduce overfitting

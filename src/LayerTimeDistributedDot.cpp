@@ -58,13 +58,14 @@ void LayerTimeDistributedDot::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 ///////////////////////////////////////////////////////////////////////////////
 void LayerTimeDistributedDot::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
-	// reshape the input to (x, _iFrameSize), compute, reshape back
+	// average the gradient as in: https://stats.stackexchange.com/questions/183840/sum-or-average-of-gradients-in-mini-batch-gradient-decent
+
+	// reshape the input and gradient to (x, _iFrameSize), compute product, reshape back
 	Index iNbFrames = mGradientOut.cols() / _iOutFrameSize;
 	MatrixFloat mGradientOutR = viewResize(mGradientOut, iNbFrames * mGradientOut.rows(), _iOutFrameSize);
-
-	// average the gradient as in: https://stats.stackexchange.com/questions/183840/sum-or-average-of-gradients-in-mini-batch-gradient-decent
-	_gradientWeight = (mIn.transpose()) * mGradientOut * (1.f / mIn.rows());
-//	_gradientWeight.resize(_iOutFrameSize, _iInFrameSize);
+	MatrixFloat mInR = viewResize(mIn, iNbFrames * mIn.rows(), _iInFrameSize);
+	
+	_gradientWeight = (mInR.transpose()) * mGradientOutR * (1.f / mIn.rows());
 
 	if (!_bFirstLayer)
 	{
