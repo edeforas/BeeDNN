@@ -25,7 +25,7 @@ LayerDense::~LayerDense()
 Layer* LayerDense::clone() const
 {
     LayerDense* pLayer=new LayerDense(_iInputSize, _iOutputSize);
-    pLayer->_weight=_weight;
+    pLayer->_weight = _weight;
 	pLayer->_bias = _bias;
 	return pLayer;
 }
@@ -41,11 +41,9 @@ void LayerDense::init()
 	assert(_iInputSize > 0);
 	assert(_iOutputSize > 0);
 	
-	_weight.resize(_iInputSize , _iOutputSize);
-
     //Xavier uniform initialization
     float a =sqrtf(6.f/(_iInputSize + _iOutputSize));
-    _weight.setRandom();
+    _weight.setRandom(_iInputSize, _iOutputSize);
     _weight*=a;
 
 	_bias.setZero(1, _iOutputSize);

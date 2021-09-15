@@ -16,7 +16,7 @@ LayerActivation::LayerActivation(const string& sActivation):
 {
     _pActivation=get_activation(sActivation);
 
-	assert(_pActivation != nullptr);
+	assert(_pActivation);
 }
 ///////////////////////////////////////////////////////////////////////////////
 LayerActivation::~LayerActivation()
@@ -31,6 +31,7 @@ Layer* LayerActivation::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerActivation::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
+    assert(_pActivation);
     mOut.resizeLike(mIn);
 
     for(Index i=0;i<mOut.size();i++)
@@ -41,6 +42,7 @@ void LayerActivation::backpropagation(const MatrixFloat &mIn,const MatrixFloat &
 {
     assert(mIn.rows() == mGradientOut.rows());
     assert(mIn.cols() == mGradientOut.cols());
+    assert(_pActivation);
 
 	if (_bFirstLayer)
 		return;

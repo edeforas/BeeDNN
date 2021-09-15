@@ -5,7 +5,6 @@ using namespace std;
 
 #include "Matrix.h"
 
-
 /////////////////////////////////////////////////////////////////////
 // for testU only
 inline bool is_near(double a, double b, double tolerancis = 1.e-10)
@@ -31,7 +30,7 @@ void disp(const MatrixFloat& m)
     }
 }
 ////////////////////////////////////////////////////////
-void elementary_tests()
+void test_elementary()
 {
 	float a[] = { 4 , 5 , 6, 7 };
 	float b[] = { 2 , 3 };
@@ -56,7 +55,7 @@ void elementary_tests()
 	disp(mS);
 }
 ////////////////////////////////////////////////////////////
-void check_matrixView()
+void test_matrixView()
 {
 	cout << "check_matrixView:" << endl;
 
@@ -143,8 +142,8 @@ void test_hyperbolic()
 ////////////////////////////////////////////////////////
 int main()
 {
-	elementary_tests();
-	check_matrixView();
+	test_elementary();
+	test_matrixView();
 	test_bernoulli();
 	test_hyperbolic();
 

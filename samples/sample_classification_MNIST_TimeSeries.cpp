@@ -1,6 +1,5 @@
-// simple MNIST classification with a dense layer, similar as :
-// https://colab.research.google.com/github/tensorflow/docs/blob/master/site/en/tutorials/_index.ipynb
-// validation accuracy > 98.1%, after 20 epochs (1s by epochs)
+// simple MNIST classification, all image seen as a time series rows by rows
+// validation accuracy > 98%, after 20 epochs (1s by epochs)
 
 #include <iostream>
 #include <chrono>
@@ -13,6 +12,8 @@ using namespace std;
 
 #include "LayerActivation.h"
 #include "LayerDense.h"
+#include "LayerTimeDistributedBias.h"
+#include "LayerTimeDistributedDot.h"
 #include "LayerDropout.h"
 #include "LayerSoftmax.h"
 
@@ -39,7 +40,7 @@ void epoch_callback()
 //////////////////////////////////////////////////////////////////////////////
 int main()
 {
-	cout << "simple  classification MNIST with a dense layer" << endl;
+	cout << "simple MNIST classification, all image seen as a time series rows by rows" << endl;
 	cout << "validation accuracy > 98%, after 15 epochs (1s by epochs)" << endl;
 
     iEpoch = 0;
@@ -54,7 +55,9 @@ int main()
     }
   
 	//create simple net:
-	net.add(new LayerDense(784, 128));
+	net.add(new LayerTimeDistributedDot(28,8));
+	net.add(new LayerTimeDistributedBias(8));
+	net.add(new LayerDense(28*8, 128));
 	net.add(new LayerActivation("Relu"));
 	net.add(new LayerDropout(0.2f)); //reduce overfitting
 	net.add(new LayerDense(128, 10));

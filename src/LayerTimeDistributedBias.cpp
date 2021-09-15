@@ -10,7 +10,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerTimeDistributedBias::LayerTimeDistributedBias(int iFrameSize) :
-    Layer("Bias")
+    Layer("TimeDistributedBias")
 {
 	_iFrameSize=iFrameSize;
     LayerTimeDistributedBias::init();
@@ -29,27 +29,29 @@ Layer* LayerTimeDistributedBias::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerTimeDistributedBias::init()
 {
-	_bias.resize(0,0);
+    _bias.setZero(1, _iFrameSize);
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerTimeDistributedBias::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
-	if(_bias.size()==0)
-		_bias.setZero(1, _iFrameSize);
-
-    mOut = rowWiseTimeDistributedAdd( mIn , _bias);
+    // reshape the input to (x, _iFrameSize), compute, reshape back
+    MatrixFloat mInR = viewResize(mIn,mIn.size()/ _iFrameSize,_iFrameSize);
+    mOut=rowWiseAdd(mInR, _bias);
+    mOut.resize(mIn.rows(), mIn.cols());
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerTimeDistributedBias::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
-	(void)mIn;
-	
-	_gradientBias = colWiseTimeDistributedMean(mGradientOut,_iFrameSize);
+    (void)mIn;
+
+    // reshape the gradient to (x, _iFrameSize), compute
+    MatrixFloat mGradientOutR = viewResize(mGradientOut, mGradientOut.size() / _iFrameSize, _iFrameSize);
+    _gradientBias = colWiseMean(mGradientOutR);
 
 	if (_bFirstLayer)
 		return;
 
     mGradientIn = mGradientOut;
 }
-///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////

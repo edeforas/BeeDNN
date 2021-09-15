@@ -17,7 +17,11 @@ Layers:
 - Softmax, Softmin
 - PRelu, RRelu, PELU, TERELU, CRelu
 - Layers and activations are decoupled and can be in any order
+
+Time series:
 - TimeDistributedBias
+- TimeDistributedDot
+- WIP
 
 2D layers:
 - Convolution2D, ChannelBias
@@ -92,10 +96,11 @@ Commented samples:
 - Simple XOR classification, with and w/o softmax
 - Simple sinus regression
 - MNIST with dense net
+- MNIST using time serie (a time frame is an image row)
 - MNIST with poolmax2D
 - MNIST all convolutional
 - MNIST and Meta Optimizer: select best activation
-- CIFAR10 conv2D + poolmax2D
+- CIFAR10 conv2D using poolmax2D
 - MNIST with kmeans and custom loss
 
 To compile, run the samples, etc, please read the HOWTO.md file

@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{619EC855-2EDB-40BA-B244-0E6345727D8D}</ProjectGuid>
+    <ProjectGuid>{499AB42E-3646-4824-B6AC-778E39558370}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>testmetaoptimizerMNIST</RootNamespace>
+    <RootNamespace>testclassificationMNIST</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -74,13 +74,13 @@
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Configuration)\build_sample_metaoptimizer_mnist\</IntDir>
+    <IntDir>$(Configuration)\build_sample_classification_mnist_timeseries\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Platform)\$(Configuration)\build_sample_metaoptimizer_mnist\</IntDir>
+    <IntDir>$(Platform)\$(Configuration)\build_sample_classification_mnist_timeseries\</IntDir>
     <OutDir>$(SolutionDir)\output\</OutDir>
     <TargetName>$(ProjectName)_debug</TargetName>
   </PropertyGroup>
@@ -88,13 +88,13 @@
     <LinkIncremental>false</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Configuration)\build_sample_metaoptimizer_mnist\</IntDir>
+    <IntDir>$(Configuration)\build_sample_classification_mnist_timeseries\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IntDir>$(Platform)\$(Configuration)\build_sample_metaoptimizer_mnist\</IntDir>
+    <IntDir>$(Platform)\$(Configuration)\build_sample_classification_mnist_timeseries\</IntDir>
     <OutDir>$(SolutionDir)\output\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -125,6 +125,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(EIGEN_PATH);../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <EnablePREfast>false</EnablePREfast>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -167,6 +168,8 @@
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
       <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
       <EnablePREfast>false</EnablePREfast>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -181,44 +184,20 @@
     <ClCompile Include="..\src\DataSource.cpp" />
     <ClCompile Include="..\src\Layer.cpp" />
     <ClCompile Include="..\src\LayerActivation.cpp" />
-    <ClCompile Include="..\src\LayerAffine.cpp" />
-    <ClCompile Include="..\src\LayerAveragePooling2D.cpp" />
-    <ClCompile Include="..\src\LayerBias.cpp" />
-    <ClCompile Include="..\src\LayerChannelBias.cpp" />
-    <ClCompile Include="..\src\LayerConvolution2D.cpp" />
-    <ClCompile Include="..\src\LayerCRelu.cpp" />
     <ClCompile Include="..\src\LayerDense.cpp" />
     <ClCompile Include="..\src\LayerDot.cpp" />
     <ClCompile Include="..\src\LayerDropout.cpp" />
-    <ClCompile Include="..\src\LayerFactory.cpp" />
-    <ClCompile Include="..\src\LayerGain.cpp" />
-    <ClCompile Include="..\src\LayerGaussianDropout.cpp" />
-    <ClCompile Include="..\src\LayerGaussianNoise.cpp" />
-    <ClCompile Include="..\src\LayerGlobalAffine.cpp" />
-    <ClCompile Include="..\src\LayerGlobalAveragePooling2D.cpp" />
-    <ClCompile Include="..\src\LayerGlobalBias.cpp" />
-    <ClCompile Include="..\src\LayerGlobalGain.cpp" />
-    <ClCompile Include="..\src\LayerGlobalMaxPool2D.cpp" />
-    <ClCompile Include="..\src\LayerMaxPool2D.cpp" />
-    <ClCompile Include="..\src\LayerPRelu.cpp" />
-    <ClCompile Include="..\src\LayerRandomFlipLeftRight2D.cpp" />
-    <ClCompile Include="..\src\LayerRRelu.cpp" />
     <ClCompile Include="..\src\LayerSoftmax.cpp" />
-    <ClCompile Include="..\src\LayerSoftmin.cpp" />
     <ClCompile Include="..\src\LayerTimeDistributedBias.cpp" />
     <ClCompile Include="..\src\LayerTimeDistributedDot.cpp" />
-    <ClCompile Include="..\src\LayerUniformNoise.cpp" />
-    <ClCompile Include="..\src\LayerZeroPadding2D.cpp" />
     <ClCompile Include="..\src\Loss.cpp" />
     <ClCompile Include="..\src\Matrix.cpp" />
-    <ClCompile Include="..\src\MetaOptimizer.cpp" />
     <ClCompile Include="..\src\MNISTReader.cpp" />
     <ClCompile Include="..\src\Net.cpp" />
     <ClCompile Include="..\src\NetTrain.cpp" />
-    <ClCompile Include="..\src\NetUtil.cpp" />
     <ClCompile Include="..\src\Optimizer.cpp" />
     <ClCompile Include="..\src\Regularizer.cpp" />
-    <ClCompile Include="sample_MetaOptimizer_MNIST.cpp" />
+    <ClCompile Include="sample_classification_MNIST_TimeSeries.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Activations.h" />
@@ -226,40 +205,17 @@
     <ClInclude Include="..\src\DataSource.h" />
     <ClInclude Include="..\src\Layer.h" />
     <ClInclude Include="..\src\LayerActivation.h" />
-    <ClInclude Include="..\src\LayerAffine.h" />
-    <ClInclude Include="..\src\LayerAveragePooling2D.h" />
-    <ClInclude Include="..\src\LayerBias.h" />
-    <ClInclude Include="..\src\LayerChannelBias.h" />
-    <ClInclude Include="..\src\LayerConvolution2D.h" />
-    <ClInclude Include="..\src\LayerCRelu.h" />
     <ClInclude Include="..\src\LayerDense.h" />
     <ClInclude Include="..\src\LayerDot.h" />
     <ClInclude Include="..\src\LayerDropout.h" />
-    <ClInclude Include="..\src\LayerFactory.h" />
-    <ClInclude Include="..\src\LayerGaussianDropout.h" />
-    <ClInclude Include="..\src\LayerGaussianNoise.h" />
-    <ClInclude Include="..\src\LayerGlobalAffine.h" />
-    <ClInclude Include="..\src\LayerGlobalAveragePooling2D.h" />
-    <ClInclude Include="..\src\LayerGlobalBias.h" />
-    <ClInclude Include="..\src\LayerGlobalGain.h" />
-    <ClInclude Include="..\src\LayerGlobalMaxPool2D.h" />
-    <ClInclude Include="..\src\LayerMaxPool2D.h" />
-    <ClInclude Include="..\src\LayerPRelu.h" />
-    <ClInclude Include="..\src\LayerRandomFlipLeftRight2D.h" />
-    <ClInclude Include="..\src\LayerRRelu.h" />
     <ClInclude Include="..\src\LayerSoftmax.h" />
-    <ClInclude Include="..\src\LayerSoftmin.h" />
     <ClInclude Include="..\src\LayerTimeDistributedBias.h" />
     <ClInclude Include="..\src\LayerTimeDistributedDot.h" />
-    <ClInclude Include="..\src\LayerUniformNoise.h" />
-    <ClInclude Include="..\src\LayerZeroPadding2D.h" />
     <ClInclude Include="..\src\Loss.h" />
     <ClInclude Include="..\src\Matrix.h" />
-    <ClInclude Include="..\src\MetaOptimizer.h" />
     <ClInclude Include="..\src\MNISTReader.h" />
     <ClInclude Include="..\src\Net.h" />
     <ClInclude Include="..\src\NetTrain.h" />
-    <ClInclude Include="..\src\NetUtil.h" />
     <ClInclude Include="..\src\Optimizer.h" />
     <ClInclude Include="..\src\Regularizer.h" />
   </ItemGroup>

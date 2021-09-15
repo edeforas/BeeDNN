@@ -96,8 +96,8 @@ float KMeansTrain::compute_accuracy(const MatrixFloat &mSamples, const MatrixFlo
 			iEnd = iNbSamples;
 		Index iBatchSize = iEnd - iStart;
 
-		mSamplesBatch = rowView(mSamples, iStart, iEnd);
-		mTruthBatch = rowView(mTruth, iStart, iEnd);
+		mSamplesBatch = viewRow(mSamples, iStart, iEnd);
+		mTruthBatch = viewRow(mTruth, iStart, iEnd);
 		
 		_pKm->predict_classes(mSamplesBatch, mOut);
 			
