@@ -12,8 +12,7 @@ using namespace std;
 
 #include "LayerActivation.h"
 #include "LayerDense.h"
-#include "LayerTimeDistributedBias.h"
-#include "LayerTimeDistributedDot.h"
+#include "LayerTimeDistributedDense.h"
 #include "LayerDropout.h"
 #include "LayerSoftmax.h"
 
@@ -55,8 +54,7 @@ int main()
     }
   
 	//create simple net:
-	net.add(new LayerTimeDistributedDot(28,8));
-	net.add(new LayerTimeDistributedBias(8));
+	net.add(new LayerTimeDistributedDense(28,8));
 	net.add(new LayerDense(28*8, 128));
 	net.add(new LayerActivation("Relu"));
 	net.add(new LayerDropout(0.2f)); //reduce overfitting

@@ -21,6 +21,7 @@ Layers:
 Time series:
 - TimeDistributedBias
 - TimeDistributedDot
+- TimeDistributedDense
 - WIP
 
 2D layers:
