@@ -62,8 +62,8 @@ void NetTrainHogwild::train_one_epoch( const MatrixFloat& mSampleShuffled, const
 	/*	if (iBatchEnd > iNbSamples)
 			iBatchEnd = iNbSamples;
 		*/
-		const MatrixFloat mSample = rowView(mSampleShuffled, iBatchStart, iBatchEnd);
-		const MatrixFloat mTruth = rowView(mTruthShuffled, iBatchStart, iBatchEnd);
+		const MatrixFloat mSample = viewRow(mSampleShuffled, iBatchStart, iBatchEnd);
+		const MatrixFloat mTruth = viewRow(mTruthShuffled, iBatchStart, iBatchEnd);
 
 		NetTrain& nt = vNetTrain[iThread];
 		Net& n = nt.net();

@@ -37,11 +37,6 @@ add_executable(sample_regression_sin
 	${SOURCE_FILES}
 )
 
-add_executable(sample_sunspot_prediction
-	sample_sunspot_prediction.cpp
-	${SOURCE_FILES}
-)
-
 add_executable(sample_KMeans_MNIST
 	sample_KMeans_MNIST.cpp
 	${SOURCE_FILES}
