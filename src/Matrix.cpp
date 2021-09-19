@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include <cstdlib>
+#include <cstring>
 #include <sstream>
 #include <fstream>
 #include <random>
@@ -283,6 +284,7 @@ void applyRowPermutation(const vector<Index>& vPermutation, const MatrixFloat & 
 
     mPermuted.resizeLike(mIn);
 
+	Index iCols = mIn.cols();
 	for (Index i = 0; i < (Index)(vPermutation.size()); i++)
 	{
 		Index iPerm= vPermutation[i];
@@ -290,7 +292,8 @@ void applyRowPermutation(const vector<Index>& vPermutation, const MatrixFloat & 
 		assert(iPerm >=0);
 		assert(iPerm < mIn.rows());
 
-		mPermuted.row(i) = mIn.row(iPerm);
+		//mPermuted.row(i) = mIn.row(iPerm);
+		std::memcpy(mPermuted.data() + iCols * i, mIn.data() + iCols * iPerm, iCols * sizeof(float));
 	}
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -433,7 +436,7 @@ bool toFile(const string& sFile, const MatrixFloat & m)
 }
 ///////////////////////////////////////////////////////////////////////////
 //create a row view starting at iStartRow ending at iEndRow (not included)
-const MatrixFloat viewRow(const MatrixFloat& m, Index iStartRow, Index iEndRow)
+const MatrixFloatView viewRow(const MatrixFloat& m, Index iStartRow, Index iEndRow)
 {
     assert(iStartRow < iEndRow); //iEndRow not included
     assert(m.rows() >= iEndRow);

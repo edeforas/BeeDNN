@@ -718,9 +718,8 @@ void NetTrain::train_one_epoch(const MatrixFloat& mSampleShuffled, const MatrixF
 		if (iBatchEnd > iNbSamples)
 			iBatchEnd = iNbSamples;
 
-		const MatrixFloat mSample = viewRow(mSampleShuffled, iBatchStart, iBatchEnd);
-		const MatrixFloat mTarget = viewRow(mTruthShuffled, iBatchStart, iBatchEnd);
-
+		auto mSample = viewRow(mSampleShuffled, iBatchStart, iBatchEnd);
+		auto mTarget = viewRow(mTruthShuffled, iBatchStart, iBatchEnd);
 		train_batch(mSample, mTarget);
 
 		iBatchStart = iBatchEnd;

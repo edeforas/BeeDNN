@@ -676,7 +676,7 @@ const float* rowPtr(const MatrixFloat& m, Index iRow);
 
 MatrixFloatView createView(MatrixFloat& mRef);
 const MatrixFloatView viewResize(const MatrixFloat& m, Index iRows, Index iCols);
-const MatrixFloat viewRow(const MatrixFloat& m, Index iStartRow, Index iEndRow); //create a row view starting at iStartRow to (not included) iEndRow
+const MatrixFloatView viewRow(const MatrixFloat& m, Index iStartRow, Index iEndRow); //create a row view starting at iStartRow to (not included) iEndRow
 
 MatrixFloat rowWiseSum(const MatrixFloat& m);
 MatrixFloat rowWiseSumSq(const MatrixFloat& m);
