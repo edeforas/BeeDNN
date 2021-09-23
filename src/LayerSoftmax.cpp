@@ -38,25 +38,27 @@ void LayerSoftmax::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 }
 ///////////////////////////////////////////////////////////////////////////////
 // from https://medium.com/@14prakash/back-propagation-is-very-simple-who-made-it-complicated-97b794c97e5c
+// read also https://deepnotes.io/softmax-crossentropy
 void LayerSoftmax::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
 	if (_bFirstLayer)
 		return;
 
     MatrixFloat S;
-	mGradientIn.resizeLike(mGradientOut);
+	mGradientIn=mGradientOut;
 
 	for (Index r = 0; r < mIn.rows(); r++) // todo simplify and optimize
 	{
+		// todo compute from mOut
 		S = mIn.row(r);
 		S.array() -= S.maxCoeff(); //remove max
 		S = S.array().exp();
+		S/= S.sum();
 
-		float s = S.sum();
 		for (Index c = 0; c < S.cols(); c++)
 		{
-			float expx = S(c);
-			mGradientIn(r, c) = mGradientOut(r, c)*(expx*(s-expx)) / (s*s);
+			float p = S(c);
+			mGradientIn(r, c) *=  ( p * (1.f-p) );
 		}
 	}
 }
