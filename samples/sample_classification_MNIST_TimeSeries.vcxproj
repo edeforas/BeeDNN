@@ -188,6 +188,8 @@
     <ClCompile Include="..\src\LayerDense.cpp" />
     <ClCompile Include="..\src\LayerDot.cpp" />
     <ClCompile Include="..\src\LayerDropout.cpp" />
+    <ClCompile Include="..\src\LayerRNN.cpp" />
+    <ClCompile Include="..\src\LayerSimpleRNN.cpp" />
     <ClCompile Include="..\src\LayerSoftmax.cpp" />
     <ClCompile Include="..\src\LayerTimeDistributedBias.cpp" />
     <ClCompile Include="..\src\LayerTimeDistributedDense.cpp" />
@@ -210,6 +212,8 @@
     <ClInclude Include="..\src\LayerDense.h" />
     <ClInclude Include="..\src\LayerDot.h" />
     <ClInclude Include="..\src\LayerDropout.h" />
+    <ClInclude Include="..\src\LayerRNN.h" />
+    <ClInclude Include="..\src\LayerSimpleRNN.h" />
     <ClInclude Include="..\src\LayerSoftmax.h" />
     <ClInclude Include="..\src\LayerTimeDistributedBias.h" />
     <ClInclude Include="..\src\LayerTimeDistributedDense.h" />
