@@ -24,8 +24,8 @@ public:
     virtual void forward(const MatrixFloat& mIn, MatrixFloat& mOut) override;
     virtual void backpropagation(const MatrixFloat& mIn, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn) override;
 
-    virtual void forward_sample(const MatrixFloat& mIn, MatrixFloat& mOut) =0;
-    virtual void backpropagation_sample(const MatrixFloat& mIn, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn) =0;
+    virtual void forward_frame(const MatrixFloat& mIn, MatrixFloat& mOut) =0;
+    virtual void backpropagation_frame(const MatrixFloat& mIn, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn) =0;
 
 protected:
     int _iSampleSize;

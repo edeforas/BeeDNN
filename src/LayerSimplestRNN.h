@@ -6,20 +6,21 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerSimpleRNN_
-#define LayerSimpleRNN_
+#ifndef LayerSimplestRNN_
+#define LayerSimplestRNN_
 
 #include "Layer.h"
 #include "Matrix.h"
 #include "LayerRNN.h"
 
-// Simple RNN algorithm as in : https://arxiv.org/abs/1610.02583
+// Simplest possible RNN algorithm (removed the time distributed applied on the input)
+// this layer is simpler than the LayerSimpleRNN
 
-class LayerSimpleRNN : public LayerRNN
+class LayerSimplestRNN : public LayerRNN
 {
 public:
-    explicit LayerSimpleRNN(int iSampleSize,int iUnits);
-    virtual ~LayerSimpleRNN();
+    explicit LayerSimplestRNN(int iSampleSize);
+    virtual ~LayerSimplestRNN();
     virtual void init() override;
 
     virtual Layer* clone() const override;
@@ -27,7 +28,7 @@ public:
     virtual void backpropagation_frame(const MatrixFloat& mIn, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn) override;
 
 private:
-    MatrixFloat _whh, _wxh, _bh,_h;
+    MatrixFloat _whh, _h;
 };
 
 #endif

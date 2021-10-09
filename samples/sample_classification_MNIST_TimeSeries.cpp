@@ -1,5 +1,5 @@
 // simple MNIST classification, all image seen as a time series rows by rows
-// validation accuracy > 98%, after 20 epochs (1s by epochs)
+// validation accuracy > 98.3%, after 30 epochs (0.5s by epochs)
 
 #include <iostream>
 #include <chrono>
@@ -13,6 +13,7 @@ using namespace std;
 #include "LayerActivation.h"
 #include "LayerDense.h"
 #include "LayerTimeDistributedDense.h"
+#include "LayerSimplestRNN.h"
 #include "LayerDropout.h"
 #include "LayerSoftmax.h"
 
@@ -40,7 +41,7 @@ void epoch_callback()
 int main()
 {
 	cout << "simple MNIST classification, all image seen as a time series rows by rows" << endl;
-	cout << "validation accuracy > 98%, after 15 epochs (1s by epochs)" << endl;
+	cout << "validation accuracy > 98.3%, after 30 epochs (0.5s by epochs)" << endl;
 
     iEpoch = 0;
 
@@ -55,15 +56,16 @@ int main()
   
 	//create simple net:
 	net.add(new LayerTimeDistributedDense(28,8));
-	net.add(new LayerDense(28*8, 128));
+	net.add(new LayerSimplestRNN(8));
+	net.add(new LayerDense(8, 32));
 	net.add(new LayerActivation("Relu"));
 	net.add(new LayerDropout(0.2f)); //reduce overfitting
-	net.add(new LayerDense(128, 10));
+	net.add(new LayerDense(32, 10));
 	net.add(new LayerSoftmax());
 
 	//setup train options
 	netTrain.set_net(net);
-	netTrain.set_epochs(15);
+	netTrain.set_epochs(30);
 	netTrain.set_batchsize(64);
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_epoch_callback(epoch_callback); //optional, to show the progress

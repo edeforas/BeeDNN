@@ -358,7 +358,6 @@ float NetTrain::compute_loss_accuracy(const MatrixFloat &mSamples, const MatrixF
 						iGood += roundf(mOut(i)) == mTruthBatch(i);
 				}
 			}
-
 		}
 	}
 

@@ -6,48 +6,43 @@
     in the LICENSE.txt file.
 */
 
-#include "LayerSimpleRNN.h"
+#include "LayerSimplestRNN.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerSimpleRNN::LayerSimpleRNN(int iSampleSize, int iUnits) :
-    LayerRNN(iSampleSize, iUnits)
+LayerSimplestRNN::LayerSimplestRNN(int iSampleSize) :
+    LayerRNN(iSampleSize, iSampleSize)
 {
-    LayerSimpleRNN::init();
+    LayerSimplestRNN::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-LayerSimpleRNN::~LayerSimpleRNN()
+LayerSimplestRNN::~LayerSimplestRNN()
 { }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerSimpleRNN::init()
+void LayerSimplestRNN::init()
 {
     _whh.setRandom(_iUnits, _iUnits); // Todo Xavier init ?
-    _wxh.setRandom(_iSampleSize, _iUnits); // Todo Xavier init ?
-    _bh.setZero(1, _iUnits);
     _h.setZero(1, _iUnits);
 
     LayerRNN::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-Layer* LayerSimpleRNN::clone() const
+Layer* LayerSimplestRNN::clone() const
 {
-    LayerSimpleRNN* pLayer=new LayerSimpleRNN(_iSampleSize,_iUnits);
+    LayerSimplestRNN* pLayer=new LayerSimplestRNN(_iSampleSize);
 	pLayer->_whh = _whh;
-    pLayer->_wxh = _wxh;
-    pLayer->_bh = _bh;
     pLayer->_h = _h;
 
     return pLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerSimpleRNN::forward_frame(const MatrixFloat& mIn, MatrixFloat& mOut)
+void LayerSimplestRNN::forward_frame(const MatrixFloat& mIn, MatrixFloat& mOut)
 {
-        _h = _h * _whh + mIn * _wxh;
-        rowWiseAdd(_h, _bh);
+        _h = _h * _whh + mIn ;
         _h = tanh(_h);
 		mOut=_h;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerSimpleRNN::backpropagation_frame(const MatrixFloat& mIn, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn)
+void LayerSimplestRNN::backpropagation_frame(const MatrixFloat& mIn, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn)
 {
     //Todo
 }
