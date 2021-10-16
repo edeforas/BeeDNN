@@ -49,7 +49,7 @@ Activations (in alphabetical order):
 - SmoothSigmoid
 - Relu, Relu6
 - Selu, SQNL, SQ-RBF, SoftPlus, Sin, SinC, Sigmoid, SiLU, Swish, SoftShrink, SoftSign, SoftSteps, SineReLU
-- Tanh, TanhShrink, ThresholdedRelu,TwiceLeakyRelu6
+- Tanh, TanhExp, TanhShrink, ThresholdedRelu,TwiceLeakyRelu6
 
 Loss functions: 
 - MeanSquareError, MeanAbsoluteError, MeanCubicError

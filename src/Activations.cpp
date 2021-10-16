@@ -1570,6 +1570,26 @@ public:
 	}
 };
 //////////////////////////////////////////////////////////////////////////////
+//TanhExp as in paper: https://arxiv.org/pdf/2003.09855v2.pdf
+class ActivationTanhExp : public Activation
+{
+public:
+    string name() const override
+    {
+        return "TanhExp";
+    }
+
+    float apply(float x) const override
+    {
+        return x*tanhf(expf(x));
+    }
+    float derivation(float x) const override
+    {
+        float f = x * tanhf(expf(x));
+        return f - x * (f * f - 1.f);
+    }
+};
+//////////////////////////////////////////////////////////////////////////////
 class ActivationTanhShrink : public Activation
 {
 public:
@@ -1795,6 +1815,9 @@ Activation* get_activation(const string& sActivation)
 	else if(sActivation=="Tanh")
         return new ActivationTanh;
 
+    else if (sActivation == "TanhExp")
+        return new ActivationTanhExp;
+
     else if(sActivation=="TanhShrink")
         return new ActivationTanhShrink;
 
@@ -1869,7 +1892,8 @@ void list_activations_available(vector<string>& vsActivations)
 	vsActivations.push_back("SineReLU");
 	vsActivations.push_back("Swish");
     vsActivations.push_back("Tanh");
-	vsActivations.push_back("TanhShrink");
+    vsActivations.push_back("TanhExp");
+    vsActivations.push_back("TanhShrink");
 	vsActivations.push_back("ThresholdedRelu");
 }
 //////////////////////////////////////////////////////////////////////////////
