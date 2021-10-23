@@ -35,7 +35,7 @@ void LayerRNN::forward(const MatrixFloat& mIn, MatrixFloat& mOut)
     MatrixFloat mSample;
     for (Index iS = 0; iS < mIn.cols(); iS+=_iSampleSize)
     {
-      //  mSample = colView(mIn, iS , iS + _iSampleSize); //TODO
+        mSample = colExtract(mIn, iS , iS + _iSampleSize);
 		forward_frame(mSample,mOut);
     }
 }
