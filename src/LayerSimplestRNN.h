@@ -28,7 +28,7 @@ public:
     virtual void backpropagation_frame(const MatrixFloat& mIn, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn) override;
 
 private:
-    MatrixFloat _whh, _h;
+    MatrixFloat _whh, _h; // todo move _h to super class ?
 };
 
 #endif
