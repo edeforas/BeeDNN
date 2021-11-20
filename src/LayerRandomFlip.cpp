@@ -6,11 +6,12 @@
     in the LICENSE.txt file.
 */
 
-#include "LayerRandomFlipLeftRight2D.h"
+// only left-right (horizontal) mode for now
+#include "LayerRandomFlip.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerRandomFlipLeftRight2D::LayerRandomFlipLeftRight2D(Index iNbRows,Index iNbCols,Index iNbChannels) :
-    Layer("RandomFlipLeftRight2D")
+LayerRandomFlip::LayerRandomFlip(Index iNbRows,Index iNbCols,Index iNbChannels) :
+    Layer("RandomFlip")
 {
 	_iNbRows=iNbRows;
 	_iNbCols=iNbCols;
@@ -19,27 +20,27 @@ LayerRandomFlipLeftRight2D::LayerRandomFlipLeftRight2D(Index iNbRows,Index iNbCo
 	_iPlaneSize = _iNbRows * _iNbCols;
 }
 ///////////////////////////////////////////////////////////////////////////////
-LayerRandomFlipLeftRight2D::~LayerRandomFlipLeftRight2D()
+LayerRandomFlip::~LayerRandomFlip()
 { }
 ///////////////////////////////////////////////////////////////////////////////
-Layer* LayerRandomFlipLeftRight2D::clone() const
+Layer* LayerRandomFlip::clone() const
 {
-    return new LayerRandomFlipLeftRight2D(_iNbRows,_iNbCols,_iNbChannels);
+    return new LayerRandomFlip(_iNbRows,_iNbCols,_iNbChannels);
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerRandomFlipLeftRight2D::init()
+void LayerRandomFlip::init()
 {
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerRandomFlipLeftRight2D::get_params(Index & iRows, Index & iCols, Index & iChannels) const
+void LayerRandomFlip::get_params(Index & iRows, Index & iCols, Index & iChannels) const
 {
 	iRows = _iNbRows;
 	iCols = _iNbCols;
 	iChannels = _iNbChannels;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerRandomFlipLeftRight2D::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
+void LayerRandomFlip::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	mOut = mIn;
 	if (_bTrainMode)
@@ -66,7 +67,7 @@ void LayerRandomFlipLeftRight2D::forward(const MatrixFloat& mIn,MatrixFloat& mOu
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerRandomFlipLeftRight2D::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
+void LayerRandomFlip::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
 	(void)mIn;
 

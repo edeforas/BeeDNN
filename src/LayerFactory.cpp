@@ -29,7 +29,7 @@
 #include "LayerAveragePooling2D.h"
 #include "LayerGlobalAveragePooling2D.h"
 #include "LayerZeroPadding2D.h"
-#include "LayerRandomFlipLeftRight2D.h"
+#include "LayerRandomFlip.h"
 
 #include "LayerSoftmax.h"
 #include "LayerSoftmin.h"
@@ -103,8 +103,8 @@ Layer* LayerFactory::create(const string& sLayer,float fArg1,float fArg2,float f
 	if (sLayer == "ZeroPadding2D")
 		return new LayerZeroPadding2D((Index)fArg1, (Index)fArg2, (Index)fArg3, (Index)fArg4);
 
-	if (sLayer == "RandFlipLeftRight2D")
-		return new LayerRandomFlipLeftRight2D((Index)fArg1, (Index)fArg2, (Index)fArg3);
+	if (sLayer == "RandFlip")
+		return new LayerRandomFlip((Index)fArg1, (Index)fArg2, (Index)fArg3);
 
 	return new LayerActivation(sLayer);
 }

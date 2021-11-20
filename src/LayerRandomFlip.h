@@ -6,18 +6,19 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerRandomFlipLeftRight2D_
-#define LayerRandomFlipLeftRight2D_
+#ifndef LayerRandomFlip_
+#define LayerRandomFlip_
 
 #include "Layer.h"
 #include "Matrix.h"
 #include <vector>
 
-class LayerRandomFlipLeftRight2D : public Layer
+// only left-right (horizontal) mode for now
+class LayerRandomFlip : public Layer
 {
 public:
-    explicit LayerRandomFlipLeftRight2D(Index iNbRows,Index iNbCols,Index iNbChannels);
-    virtual ~LayerRandomFlipLeftRight2D();
+    explicit LayerRandomFlip(Index iNbRows,Index iNbCols,Index iNbChannels);
+    virtual ~LayerRandomFlip();
 
     virtual Layer* clone() const override;
     virtual void init() override;
