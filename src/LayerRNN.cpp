@@ -13,9 +13,7 @@ LayerRNN::LayerRNN(int iSampleSize, int iUnits) :
     Layer("RNN"),
     _iSampleSize(iSampleSize),
     _iUnits(iUnits)
-{
-//    LayerRNN::init();
-}
+{ }
 ///////////////////////////////////////////////////////////////////////////////
 LayerRNN::~LayerRNN()
 { }
@@ -32,17 +30,23 @@ void LayerRNN::forward(const MatrixFloat& mIn, MatrixFloat& mOut)
         init();
     }
 
-    MatrixFloat mSample;
-    for (Index iS = 0; iS < mIn.cols(); iS+=_iSampleSize)
+    MatrixFloat mFrame;
+    for (Index iS = 0; iS < mIn.cols()- _iSampleSize; iS+=_iSampleSize)
     {
-        mSample = colExtract(mIn, iS , iS + _iSampleSize);
-		forward_frame(mSample,mOut);
+        mFrame = colExtract(mIn, iS , iS + _iSampleSize);
+	    forward_frame(mFrame,mOut);
     }
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerRNN::backpropagation(const MatrixFloat& mIn, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn)
 {
-    //Todo
+    MatrixFloat mFrame,mGradientOutTemp= mGradientOut;
+    for (Index iS = mIn.cols()-1- _iSampleSize; iS >=0; iS -= _iSampleSize)
+    {
+        mFrame = colExtract(mIn, iS, iS + _iSampleSize);
+        backpropagation_frame(mFrame, mGradientOutTemp, mGradientIn);
+        mGradientOutTemp = mGradientIn;
+    }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 void LayerRNN::init()

@@ -34,18 +34,18 @@ Layer* LayerSimplestRNN::clone() const
     return pLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerSimplestRNN::forward_frame(const MatrixFloat& mIn, MatrixFloat& mOut)
+void LayerSimplestRNN::forward_frame(const MatrixFloat& mInFrame, MatrixFloat& mOut)
 {
-    if (_h.rows() != mIn.rows())  // adapt to batch size
-        _h.setZero(mIn.rows(), _iUnits);
+    if (_h.rows() != mInFrame.rows())  // adapt to batch size
+        _h.setZero(mInFrame.rows(), _iUnits);
 
-    _h = _h * _whh + mIn ;
-    _h = tanh(_h);
+    _h = tanh(_h * _whh + mInFrame);
 	mOut=_h;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerSimplestRNN::backpropagation_frame(const MatrixFloat& mIn, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn)
+void LayerSimplestRNN::backpropagation_frame(const MatrixFloat& mInFrame, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn)
 {
-    //Todo
+    //grad(L/_Whh)=grad(L/h(t))*h(t-1)*(1-h(t)**2)
+    //grad(L/h(t-1))=grad(L/h(t))*_Whh*(1-h(t)**2)
 }
 /////////////////////////////////////////////////////////////////////////////////////////////

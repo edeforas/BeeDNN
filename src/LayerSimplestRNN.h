@@ -24,8 +24,8 @@ public:
     virtual void init() override;
 
     virtual Layer* clone() const override;
-    virtual void forward_frame(const MatrixFloat& mIn, MatrixFloat& mOut) override;
-    virtual void backpropagation_frame(const MatrixFloat& mIn, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn) override;
+    virtual void forward_frame(const MatrixFloat& mInFrame, MatrixFloat& mOut) override;
+    virtual void backpropagation_frame(const MatrixFloat& mInFrame, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn) override;
 
 private:
     MatrixFloat _whh, _h; // todo move _h to super class ?
