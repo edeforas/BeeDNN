@@ -538,6 +538,15 @@ MatrixFloat tanh(const MatrixFloat& m)
 	return r;
 }
 ///////////////////////////////////////////////////////////////////////////
+MatrixFloat oneMinusSquare(const MatrixFloat& m)
+{
+	MatrixFloat r = m;
+	for (Index i = 0; i < r.size(); i++)
+		r(i) = 1.f-m(i)*m(i);
+
+	return r;
+}
+///////////////////////////////////////////////////////////////////////////
 void reverseData(float* pData, Index iSize)
 {
 	float* pDataEnd = pData + iSize - 1;

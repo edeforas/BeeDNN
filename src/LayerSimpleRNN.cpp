@@ -47,7 +47,7 @@ void LayerSimpleRNN::forward_frame(const MatrixFloat& mIn, MatrixFloat& mOut)
 		mOut=_h;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerSimpleRNN::backpropagation_frame(const MatrixFloat& mIn, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn)
+void LayerSimpleRNN::backpropagation_frame(const MatrixFloat& mInFrame, const MatrixFloat& mH, const MatrixFloat& mHm1, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn)
 {
     //Todo
 }

@@ -701,6 +701,7 @@ Index argmax(const MatrixFloat& m);
 void rowsArgmax(const MatrixFloat& m, MatrixFloat& argM); //compute the argmax row by row
 void clamp(MatrixFloat& m,float fClampMin,float fClampMax);
 MatrixFloat tanh(const MatrixFloat& m);
+MatrixFloat oneMinusSquare(const MatrixFloat& m);
 void reverseData(float* pData, Index iSize);
 
 //4D tensor functions, access order in memory is: sample, channel, row, column

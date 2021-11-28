@@ -13,6 +13,8 @@
 #include "Matrix.h"
 #include "Layer.h"
 
+#include <vector>
+
 class LayerRNN : public Layer
 {
 public:
@@ -25,9 +27,12 @@ public:
     virtual void backpropagation(const MatrixFloat& mIn, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn) override;
 
     virtual void forward_frame(const MatrixFloat& mInFrame, MatrixFloat& mOut) =0;
-    virtual void backpropagation_frame(const MatrixFloat& mInFrame, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn) =0;
+    virtual void backpropagation_frame(const MatrixFloat& mInFrame, const MatrixFloat& mH, const MatrixFloat& mHm1,const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn) =0;
 
 protected:
+    MatrixFloat _h;
+    std::vector<MatrixFloat> _savedH; // used for back propagation
+
     int _iSampleSize;
     int _iUnits;
 };

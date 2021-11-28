@@ -43,9 +43,16 @@ void LayerSimplestRNN::forward_frame(const MatrixFloat& mInFrame, MatrixFloat& m
 	mOut=_h;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void LayerSimplestRNN::backpropagation_frame(const MatrixFloat& mInFrame, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn)
+void LayerSimplestRNN::backpropagation_frame(const MatrixFloat& mInFrame, const MatrixFloat& mH, const MatrixFloat& mHm1, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn)
 {
-    //grad(L/_Whh)=grad(L/h(t))*h(t-1)*(1-h(t)**2)
-    //grad(L/h(t-1))=grad(L/h(t))*_Whh*(1-h(t)**2)
+    MatrixFloat mDerivTanh = oneMinusSquare(mH);
+
+        //grad(L/h(t-1))=grad(L/h(t))*_Whh*(1-h(t)**2)
+        mGradientIn = mGradientOut * _whh * mDerivTanh;
+
+        //grad(L/_Whh)=grad(L/h(t))*h(t-1)*(1-h(t)**2)
+        _gradientWhh = mGradientOut * mHm1 * mDerivTanh;
+
+        // todo use _gradientHH
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
