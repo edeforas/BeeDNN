@@ -39,23 +39,23 @@ void LayerSimplestRNN::forward_frame(const MatrixFloat& mInFrame, MatrixFloat& m
     if (_h.rows() != mInFrame.rows())  // adapt to batch size
         _h.setZero(mInFrame.rows(), _iUnits);
 
-    _h = tanh(_h * _weight + mInFrame);
+    MatrixFloat u = _h * _weight + mInFrame;
+    _h = tanh(u);
 	mOut=_h;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerSimplestRNN::backpropagation_frame(const MatrixFloat& mInFrame, const MatrixFloat& mH, const MatrixFloat& mHm1, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn)
 {
-    MatrixFloat mDerivTanh = oneMinusSquare(mH);
+    MatrixFloat mGradU = oneMinusSquare(mH); // derivative of tanh
 
-    //grad(L/_Whh)=grad(L/h(t))*h(t-1)*(1-h(t)**2)
-    _gradientWeight = mGradientOut*mHm1.transpose() * mDerivTanh;
+    //grad(L/_Whh)=grad(L/U))*h(t-1)
+    _gradientWeight = mGradU *(mHm1.transpose());
     _gradientWeight *= (1.f / _gradientWeight.rows());
 
-    //grad(L/h(t-1))=grad(L/h(t))*_Whh*(1-h(t)**2)
     if (!_bFirstLayer)
     {
-        MatrixFloat m1 = (mGradientOut * (_weight.transpose()));
-        mGradientIn = (m1.transpose()) * mDerivTanh;
+        //grad(L/h(t-1))=grad(L/U))*whh
+        mGradientIn = mGradU* (_weight.transpose());
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
