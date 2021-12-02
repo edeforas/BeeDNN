@@ -20,7 +20,7 @@ LayerSimplestRNN::~LayerSimplestRNN()
 ///////////////////////////////////////////////////////////////////////////////
 void LayerSimplestRNN::init()
 {
-    _whh.setRandom(_iUnits, _iUnits); // Todo Xavier init ?
+    _weight.setRandom(_iUnits, _iUnits); // Todo Xavier init ?
 
     LayerRNN::init();
 }
@@ -28,7 +28,7 @@ void LayerSimplestRNN::init()
 Layer* LayerSimplestRNN::clone() const
 {
     LayerSimplestRNN* pLayer=new LayerSimplestRNN(_iSampleSize);
-	pLayer->_whh = _whh;
+	pLayer->_weight = _weight;
     pLayer->_h = _h;
 
     return pLayer;
@@ -39,7 +39,7 @@ void LayerSimplestRNN::forward_frame(const MatrixFloat& mInFrame, MatrixFloat& m
     if (_h.rows() != mInFrame.rows())  // adapt to batch size
         _h.setZero(mInFrame.rows(), _iUnits);
 
-    _h = tanh(_h * _whh + mInFrame);
+    _h = tanh(_h * _weight + mInFrame);
 	mOut=_h;
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -47,12 +47,15 @@ void LayerSimplestRNN::backpropagation_frame(const MatrixFloat& mInFrame, const 
 {
     MatrixFloat mDerivTanh = oneMinusSquare(mH);
 
-        //grad(L/h(t-1))=grad(L/h(t))*_Whh*(1-h(t)**2)
-        mGradientIn = mGradientOut * _whh * mDerivTanh;
+    //grad(L/_Whh)=grad(L/h(t))*h(t-1)*(1-h(t)**2)
+    _gradientWeight = mGradientOut*mHm1.transpose() * mDerivTanh;
+    _gradientWeight *= (1.f / _gradientWeight.rows());
 
-        //grad(L/_Whh)=grad(L/h(t))*h(t-1)*(1-h(t)**2)
-        _gradientWhh = mGradientOut * mHm1 * mDerivTanh;
-
-        // todo use _gradientHH
+    //grad(L/h(t-1))=grad(L/h(t))*_Whh*(1-h(t)**2)
+    if (!_bFirstLayer)
+    {
+        MatrixFloat m1 = (mGradientOut * (_weight.transpose()));
+        mGradientIn = (m1.transpose()) * mDerivTanh;
+    }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
