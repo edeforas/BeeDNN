@@ -27,9 +27,6 @@ public:
     virtual void forward_frame(const MatrixFloat& mInFrame, MatrixFloat& mOut) override;
 
     virtual void backpropagation_frame(const MatrixFloat& mInFrame, const MatrixFloat& mH, const MatrixFloat& mHm1, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn) override;
-
-private:
-    MatrixFloat _whh, _gradientWhh;
 };
 
 #endif

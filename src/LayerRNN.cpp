@@ -51,19 +51,25 @@ void LayerRNN::forward(const MatrixFloat& mIn, MatrixFloat& mOut)
 void LayerRNN::backpropagation(const MatrixFloat& mIn, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn)
 {
     MatrixFloat mFrame,mGradientOutTemp= mGradientOut,mH,mHm1;
-    for (Index iS = mIn.cols()-1- _iSampleSize; iS >=0; iS -= _iSampleSize)
+    MatrixFloat mGradientWeightSum;
+    Index iNbSamples = mIn.cols() / _iSampleSize;
+    for (Index iS = iNbSamples-1; iS >0; iS --)
     {
-        mH = _savedH[iS / _iSampleSize];
-        mHm1 = _savedH[iS / _iSampleSize-1];
-        mFrame = colExtract(mIn, iS, iS + _iSampleSize);
+        mH = _savedH[iS];
+        mHm1 = _savedH[iS-1];
+        mFrame = colExtract(mIn, iS* _iSampleSize, iS* _iSampleSize + _iSampleSize);
         backpropagation_frame(mFrame, mH,mHm1,mGradientOutTemp, mGradientIn);
         mGradientOutTemp = mGradientIn;
-    }
 
-    // compute mean of _whh
-    // 
-    // compute mean of _gradientWhh
-    // optimize
+        //sum gradient weights
+        if (mGradientWeightSum.size() == 0)
+            mGradientWeightSum = _gradientWeight;
+        else
+            mGradientWeightSum += _gradientWeight;
+    }
+ 
+    // compute mean of _gradientWeight
+    _gradientWeight = mGradientWeightSum * (1.f / iNbSamples);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 void LayerRNN::init()
