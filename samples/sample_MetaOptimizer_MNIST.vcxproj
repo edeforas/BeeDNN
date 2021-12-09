@@ -180,6 +180,7 @@
     <ClCompile Include="..\src\Activations.cpp" />
     <ClCompile Include="..\src\ConfusionMatrix.cpp" />
     <ClCompile Include="..\src\DataSource.cpp" />
+    <ClCompile Include="..\src\Initializers.cpp" />
     <ClCompile Include="..\src\Layer.cpp" />
     <ClCompile Include="..\src\LayerActivation.cpp" />
     <ClCompile Include="..\src\LayerAffine.cpp" />
@@ -225,6 +226,7 @@
     <ClInclude Include="..\src\Activations.h" />
     <ClInclude Include="..\src\ConfusionMatrix.h" />
     <ClInclude Include="..\src\DataSource.h" />
+    <ClInclude Include="..\src\Initializers.h" />
     <ClInclude Include="..\src\Layer.h" />
     <ClInclude Include="..\src\LayerActivation.h" />
     <ClInclude Include="..\src\LayerAffine.h" />

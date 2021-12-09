@@ -444,6 +444,18 @@ const MatrixFloatView viewRow(const MatrixFloat& m, Index iStartRow, Index iEndR
     return fromRawBuffer(m.data() + iStartRow * m.cols(), iEndRow- iStartRow, (Index)m.cols());
 }
 ///////////////////////////////////////////////////////////////////////////
+const MatrixFloat colExtract(const MatrixFloat& m, Index iStartCol, Index iEndCol)
+{
+	// TODO slow for now, use view on strided matrix later
+	MatrixFloat mr(m.rows(), iEndCol - iStartCol);
+
+	for (Index iR = 0; iR < mr.rows(); iR++)
+		for (Index iC = 0; iC < mr.cols(); iC++)
+			mr(iR, iC) = m(iR, iC + iStartCol);
+
+	return mr;
+}
+///////////////////////////////////////////////////////////////////////////
 default_random_engine& randomEngine()
 {
 	static default_random_engine rng;
@@ -522,6 +534,15 @@ MatrixFloat tanh(const MatrixFloat& m)
 	MatrixFloat r = m;
 	for (Index i = 0; i < r.size(); i++)
 		r(i)=::tanh(m(i));
+
+	return r;
+}
+///////////////////////////////////////////////////////////////////////////
+MatrixFloat oneMinusSquare(const MatrixFloat& m)
+{
+	MatrixFloat r = m;
+	for (Index i = 0; i < r.size(); i++)
+		r(i) = 1.f-m(i)*m(i);
 
 	return r;
 }
