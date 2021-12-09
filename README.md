@@ -18,6 +18,11 @@ Layers:
 - PRelu, RRelu, PELU, TERELU, CRelu
 - Layers and activations are decoupled and can be in any order
 
+Initializers:
+- XavierUniform
+- Zero
+- WIP
+
 Time series:
 - TimeDistributedBias
 - TimeDistributedDot

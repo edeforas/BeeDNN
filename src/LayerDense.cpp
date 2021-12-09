@@ -7,8 +7,7 @@
 */
 
 #include "LayerDense.h"
-
-#include <cmath> // for sqrt
+#include "Initializers.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerDense::LayerDense(Index iInputSize, Index iOutputSize) :
@@ -38,15 +37,9 @@ void LayerDense::init()
 	if (_iOutputSize == 0)
 		return;
 
-	assert(_iInputSize > 0);
-	assert(_iOutputSize > 0);
-	
-    //Xavier uniform initialization
-    float a =sqrtf(6.f/(_iInputSize + _iOutputSize));
-    _weight.setRandom(_iInputSize, _iOutputSize);
-    _weight*=a;
-
-	_bias.setZero(1, _iOutputSize);
+    // init weights and bias
+	Initializers::XavierUniform(_weight, _iInputSize, _iOutputSize);
+	Initializers::Zero(_bias, 1, _iOutputSize);
 	
 	Layer::init();
 }

@@ -182,12 +182,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\Initializers.cpp" />
     <ClCompile Include="..\src\Layer.cpp" />
     <ClCompile Include="..\src\LayerConvolution2D.cpp" />
     <ClCompile Include="..\src\Matrix.cpp" />
     <ClCompile Include="test_layer_convolution.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\Initializers.h" />
     <ClInclude Include="..\src\Layer.h" />
     <ClInclude Include="..\src\LayerConvolution2D.h" />
     <ClInclude Include="..\src\Matrix.h" />
