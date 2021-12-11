@@ -49,13 +49,13 @@ void LayerSimplestRNN::backpropagation_frame(const MatrixFloat& mInFrame, const 
     MatrixFloat mGradU = oneMinusSquare(mH); // derivative of tanh
 
     //grad(L/_Whh)=grad(L/U))*h(t-1)
-    _gradientWeight = mGradU *(mHm1.transpose());
+    _gradientWeight = mGradU.transpose() *mHm1;
     _gradientWeight *= (1.f / _gradientWeight.rows());
 
     if (!_bFirstLayer)
     {
         //grad(L/h(t-1))=grad(L/U))*whh
-        mGradientIn = mGradU* (_weight.transpose());
+        mGradientIn = mGradU.transpose()*_weight;
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
