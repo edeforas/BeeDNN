@@ -11,17 +11,18 @@ Please see at: https://github.com/edeforas/BeeDNN/issues for contributing ideas.
 No dependencies needed, every algorithm rewritten in C++ from scratch.
 To increase speed, ones can choose the Eigen library (http://eigen.tuxfamily.org), instead of the internal matrix library.
 
+Initializers:
+- GlorotUniform
+- HeUniform
+- LecunUniform
+- Zeros, Ones
+
 Layers:
 - Dense (with bias), Dot (without bias)
 - GlobalGain, GlobalBias, GlobalAffine, Gain, Bias, Affine
 - Softmax, Softmin
 - PRelu, RRelu, PELU, TERELU, CRelu
 - Layers and activations are decoupled and can be in any order
-
-Initializers:
-- XavierUniform
-- Zero
-- WIP
 
 Time series:
 - TimeDistributedBias
@@ -68,7 +69,7 @@ Overfitting:
 - Regularizer: GradientClip, GradientNormClip, GradientClipTanh, L1, L2, L1L2
 
 Data augmentation
-- RandomFlipLeftRight2D
+- RandomFlip
 
 Learning and optimization:
 - Classification or regression, test and/or learn
@@ -93,7 +94,7 @@ I/O:
 - MNIST reader
 - CIFAR10 reader
 - csv file reader
-- Network, weights and training parameters are saved in a simple .txt file
+- model, weights and training parameters are saved in a simple .txt file
 
 Precomputing:
 - StandardScaler, MinMaxScaler

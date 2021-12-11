@@ -12,11 +12,17 @@
 #include "Layer.h"
 #include "Matrix.h"
 
+// from https://www.tensorflow.org/api_docs/python/tf/keras/initializers
+
+
 class Initializers
 {
 public:
-	static void XavierUniform(MatrixFloat &m,Index iInputSize,Index iOutputSize);
-	static void Zero(MatrixFloat &m,Index iInputSize,Index iOutputSize);
+	static void GlorotUniform(MatrixFloat &m,Index iInputSize,Index iOutputSize);
+    static void HeUniform(MatrixFloat& m, Index iInputSize, Index iOutputSize);
+    static void LecunUniform(MatrixFloat& m, Index iInputSize, Index iOutputSize);
+    static void Zeros(MatrixFloat &m,Index iInputSize,Index iOutputSize);
+    static void Ones(MatrixFloat& m, Index iInputSize, Index iOutputSize);
 };
 
 #endif

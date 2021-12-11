@@ -9,18 +9,41 @@
 #include <cmath> // for sqrt
 #include "Initializers.h"
 
+// from https://www.tensorflow.org/api_docs/python/tf/keras/initializers
+
 ///////////////////////////////////////////////////////////////////////////////
-void Initializers::XavierUniform(MatrixFloat &m,Index iInputSize,Index iOutputSize)
+void Initializers::GlorotUniform(MatrixFloat &m,Index iInputSize,Index iOutputSize)
 {
-    //Xavier uniform initialization
+    //Xavier Glorot uniform
     float a =sqrtf(6.f/(iInputSize + iOutputSize));
     m.setRandom(iInputSize, iOutputSize);
     m*=a;
 }
 ///////////////////////////////////////////////////////////////////////////////
-void Initializers::Zero(MatrixFloat &m,Index iInputSize,Index iOutputSize)
+void Initializers::HeUniform(MatrixFloat& m, Index iInputSize, Index iOutputSize)
+{
+    //He uniform
+    float a = sqrtf(6.f / iInputSize);
+    m.setRandom(iInputSize, iOutputSize);
+    m *= a;
+}
+///////////////////////////////////////////////////////////////////////////////
+void Initializers::LecunUniform(MatrixFloat& m, Index iInputSize, Index iOutputSize)
+{
+    //He uniform
+    float a = sqrtf(3.f / iInputSize);
+    m.setRandom(iInputSize, iOutputSize);
+    m *= a;
+}
+///////////////////////////////////////////////////////////////////////////////
+void Initializers::Zeros(MatrixFloat &m,Index iInputSize,Index iOutputSize)
 {
     //Zero initialization, used mainly on biases
     m.setZero(iInputSize, iOutputSize);
+}
+///////////////////////////////////////////////////////////////////////////////
+void Initializers::Ones(MatrixFloat& m, Index iInputSize, Index iOutputSize)
+{
+    m.setOnes(iInputSize, iOutputSize);
 }
 ///////////////////////////////////////////////////////////////////////////////

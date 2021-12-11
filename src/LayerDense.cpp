@@ -38,8 +38,8 @@ void LayerDense::init()
 		return;
 
     // init weights and bias
-	Initializers::XavierUniform(_weight, _iInputSize, _iOutputSize);
-	Initializers::Zero(_bias, 1, _iOutputSize);
+	Initializers::GlorotUniform(_weight, _iInputSize, _iOutputSize);
+	Initializers::Zeros(_bias, 1, _iOutputSize);
 	
 	Layer::init();
 }
