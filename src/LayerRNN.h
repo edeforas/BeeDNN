@@ -18,7 +18,7 @@
 class LayerRNN : public Layer
 {
 public:
-    explicit LayerRNN(int iSampleSize,int iUnits);
+    explicit LayerRNN(int iFrameSize,int iUnits);
     virtual ~LayerRNN();
     virtual void init();
 
@@ -33,7 +33,7 @@ protected:
     MatrixFloat _h;
     std::vector<MatrixFloat> _savedH; // used for back propagation
 
-    int _iSampleSize;
+    int _iFrameSize;
     int _iUnits;
 };
 

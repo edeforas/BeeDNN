@@ -9,8 +9,8 @@
 #include "LayerSimplestRNN.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerSimplestRNN::LayerSimplestRNN(int iSampleSize) :
-    LayerRNN(iSampleSize, iSampleSize)
+LayerSimplestRNN::LayerSimplestRNN(int iFrameSize) :
+    LayerRNN(iFrameSize, iFrameSize)
 {
     LayerSimplestRNN::init();
 }
@@ -27,7 +27,7 @@ void LayerSimplestRNN::init()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerSimplestRNN::clone() const
 {
-    LayerSimplestRNN* pLayer=new LayerSimplestRNN(_iSampleSize);
+    LayerSimplestRNN* pLayer=new LayerSimplestRNN(_iFrameSize);
 	pLayer->_weight = _weight;
     pLayer->_h = _h;
 

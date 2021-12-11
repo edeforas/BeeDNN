@@ -9,9 +9,9 @@
 #include "LayerRNN.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerRNN::LayerRNN(int iSampleSize, int iUnits) :
+LayerRNN::LayerRNN(int iFrameSize, int iUnits) :
     Layer("RNN"),
-    _iSampleSize(iSampleSize),
+    _iFrameSize(iFrameSize),
     _iUnits(iUnits)
 { }
 ///////////////////////////////////////////////////////////////////////////////
@@ -20,11 +20,11 @@ LayerRNN::~LayerRNN()
 ///////////////////////////////////////////////////////////////////////////////
 void LayerRNN::forward(const MatrixFloat& mIn, MatrixFloat& mOut)
 {
-    assert( (mIn.cols() % _iSampleSize)==0); // all samples are concatened horizontaly
+    assert( (mIn.cols() % _iFrameSize)==0); // all samples are concatened horizontaly
 
     Index iNbSamples = mIn.rows();
 
-    if (mIn.size() != _iSampleSize) // todo use train mode
+    if (mIn.size() != _iFrameSize) // todo use train mode
     {
         // not on-the-fly prediction, reset state on startup
         init();
@@ -38,9 +38,9 @@ void LayerRNN::forward(const MatrixFloat& mIn, MatrixFloat& mOut)
         _savedH.push_back(_h);
     }
     
-    for (Index iS = 0; iS < mIn.cols() - _iSampleSize; iS += _iSampleSize)
+    for (Index iS = 0; iS < mIn.cols() - _iFrameSize; iS += _iFrameSize)
     {
-        mFrame = colExtract(mIn, iS , iS + _iSampleSize);
+        mFrame = colExtract(mIn, iS , iS + _iFrameSize);
 	    forward_frame(mFrame,mOut);
 
         if (_bTrainMode)
@@ -52,12 +52,12 @@ void LayerRNN::backpropagation(const MatrixFloat& mIn, const MatrixFloat& mGradi
 {
     MatrixFloat mFrame,mGradientOutTemp= mGradientOut,mH,mHm1;
     MatrixFloat mGradientWeightSum;
-    Index iNbSamples = mIn.cols() / _iSampleSize;
+    Index iNbSamples = mIn.cols() / _iFrameSize;
     for (Index iS = iNbSamples-1; iS >0; iS --)
     {
         mH = _savedH[iS];
         mHm1 = _savedH[iS-1];
-        mFrame = colExtract(mIn, iS* _iSampleSize, iS* _iSampleSize + _iSampleSize);
+        mFrame = colExtract(mIn, iS* _iFrameSize, iS* _iFrameSize + _iFrameSize);
         backpropagation_frame(mFrame, mH,mHm1,mGradientOutTemp, mGradientIn);
         mGradientOutTemp = mGradientIn;
 

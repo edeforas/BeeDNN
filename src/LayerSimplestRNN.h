@@ -19,7 +19,7 @@
 class LayerSimplestRNN : public LayerRNN
 {
 public:
-    explicit LayerSimplestRNN(int iSampleSize);
+    explicit LayerSimplestRNN(int iFrameSize);
     virtual ~LayerSimplestRNN();
     virtual void init() override;
 

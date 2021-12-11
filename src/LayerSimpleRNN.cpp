@@ -21,7 +21,7 @@ LayerSimpleRNN::~LayerSimpleRNN()
 void LayerSimpleRNN::init()
 {
     _whh.setRandom(_iUnits, _iUnits); // Todo Xavier init ?
-    _wxh.setRandom(_iSampleSize, _iUnits); // Todo Xavier init ?
+    _wxh.setRandom(_iFrameSize, _iUnits); // Todo Xavier init ?
     _bh.setZero(1, _iUnits);
     _h.setZero(1, _iUnits);
 
@@ -30,7 +30,7 @@ void LayerSimpleRNN::init()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerSimpleRNN::clone() const
 {
-    LayerSimpleRNN* pLayer=new LayerSimpleRNN(_iSampleSize,_iUnits);
+    LayerSimpleRNN* pLayer=new LayerSimpleRNN(_iFrameSize,_iUnits);
 	pLayer->_whh = _whh;
     pLayer->_wxh = _wxh;
     pLayer->_bh = _bh;
