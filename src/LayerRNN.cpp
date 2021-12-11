@@ -22,8 +22,6 @@ void LayerRNN::forward(const MatrixFloat& mIn, MatrixFloat& mOut)
 {
     assert( (mIn.cols() % _iFrameSize)==0); // all samples are concatened horizontaly
 
-    Index iNbSamples = mIn.rows();
-
     if (mIn.size() != _iFrameSize) // todo use train mode
     {
         // not on-the-fly prediction, reset state on startup

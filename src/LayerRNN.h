@@ -20,7 +20,7 @@ class LayerRNN : public Layer
 public:
     explicit LayerRNN(int iFrameSize,int iUnits);
     virtual ~LayerRNN();
-    virtual void init();
+    virtual void init() override;
 
     virtual Layer* clone() const =0;
     virtual void forward(const MatrixFloat& mIn, MatrixFloat& mOut) override;
