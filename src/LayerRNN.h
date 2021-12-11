@@ -22,7 +22,7 @@ public:
     virtual ~LayerRNN();
     virtual void init() override;
 
-    virtual Layer* clone() const =0;
+    virtual Layer* clone() const override =0;
     virtual void forward(const MatrixFloat& mIn, MatrixFloat& mOut) override;
     virtual void backpropagation(const MatrixFloat& mIn, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn) override;
 
