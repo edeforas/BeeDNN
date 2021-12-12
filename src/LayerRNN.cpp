@@ -44,7 +44,7 @@ void LayerRNN::backpropagation(const MatrixFloat& mIn, const MatrixFloat& mGradi
     MatrixFloat mFrame,mGradientOutTemp= mGradientOut,mH,mHm1;
     MatrixFloat mGradientWeightSum;
     Index iNbSamples = mIn.cols() / _iFrameSize;
-    for (Index iS = iNbSamples-2; iS >0; iS --) //was-1 TODO FIXME
+    for (Index iS = iNbSamples-2; iS >0; iS --) //was  iNbSamples-1 TODO FIXME
     {
         mH = _savedH[iS];
         mHm1 = _savedH[iS-1];

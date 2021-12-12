@@ -73,3 +73,4 @@ ui_*.h
 *.json
 build
 *.exe
+*solution_accuracy*
