@@ -22,20 +22,13 @@ void LayerRNN::forward(const MatrixFloat& mIn, MatrixFloat& mOut)
 {
     assert( (mIn.cols() % _iFrameSize)==0); // all samples are concatened horizontaly
 
-    if (mIn.size() != _iFrameSize) // todo use train mode
+    if ( (mIn.size() != _iFrameSize) || _bTrainMode)
     {
         // not on-the-fly prediction, reset state on startup
         init();
     }
 
-    MatrixFloat mFrame;
-
-    if (_bTrainMode)
-    {
-        _savedH.clear();
-        _savedH.push_back(_h);
-    }
-    
+    MatrixFloat mFrame;   
     for (Index iS = 0; iS < mIn.cols() - _iFrameSize; iS += _iFrameSize)
     {
         mFrame = colExtract(mIn, iS , iS + _iFrameSize);
@@ -51,7 +44,7 @@ void LayerRNN::backpropagation(const MatrixFloat& mIn, const MatrixFloat& mGradi
     MatrixFloat mFrame,mGradientOutTemp= mGradientOut,mH,mHm1;
     MatrixFloat mGradientWeightSum;
     Index iNbSamples = mIn.cols() / _iFrameSize;
-    for (Index iS = iNbSamples-1; iS >0; iS --)
+    for (Index iS = iNbSamples-2; iS >0; iS --) //was-1 TODO FIXME
     {
         mH = _savedH[iS];
         mHm1 = _savedH[iS-1];
@@ -73,5 +66,6 @@ void LayerRNN::backpropagation(const MatrixFloat& mIn, const MatrixFloat& mGradi
 void LayerRNN::init()
 {
     Layer::init();
+    _savedH.clear();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////

@@ -55,9 +55,9 @@ int main()
     }
   
 	//create simple net:
-	net.add(new LayerTimeDistributedDense(28,8));
-//	net.add(new LayerSimplestRNN(8)); // WIP, removed for now
-	net.add(new LayerDense(28*8, 32));
+//	net.add(new LayerTimeDistributedDense(28,8));
+	net.add(new LayerSimplestRNN(28)); // WIP, removed for now
+	net.add(new LayerDense(28, 32));
 	net.add(new LayerActivation("Relu"));
 	net.add(new LayerDropout(0.2f)); //reduce overfitting
 	net.add(new LayerDense(32, 10));
@@ -66,7 +66,7 @@ int main()
 	//setup train options
 	netTrain.set_net(net);
 	netTrain.set_epochs(30);
-	netTrain.set_batchsize(64);
+	netTrain.set_batchsize(128);
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_epoch_callback(epoch_callback); //optional, to show the progress
 	netTrain.set_train_data(mr.train_data(),mr.train_truth());
