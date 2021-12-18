@@ -19,8 +19,11 @@ class Initializers
 {
 public:
 	static void GlorotUniform(MatrixFloat &m,Index iInputSize,Index iOutputSize);
+    static void GlorotNormal(MatrixFloat& m, Index iInputSize, Index iOutputSize);
     static void HeUniform(MatrixFloat& m, Index iInputSize, Index iOutputSize);
+    static void HeNormal(MatrixFloat& m, Index iInputSize, Index iOutputSize);
     static void LecunUniform(MatrixFloat& m, Index iInputSize, Index iOutputSize);
+    static void LecunNormal(MatrixFloat& m, Index iInputSize, Index iOutputSize);
     static void Zeros(MatrixFloat &m,Index iInputSize,Index iOutputSize);
     static void Ones(MatrixFloat& m, Index iInputSize, Index iOutputSize);
 };

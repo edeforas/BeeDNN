@@ -12,9 +12,9 @@ No dependencies needed, every algorithm rewritten in C++ from scratch.
 To increase speed, ones can choose the Eigen library (http://eigen.tuxfamily.org), instead of the internal matrix library.
 
 Initializers:
-- GlorotUniform
-- HeUniform
-- LecunUniform
+- GlorotUniform, GlorotNormal
+- HeUniform, HeNormal
+- LecunUniform, LecunNormal
 - Zeros, Ones
 
 Layers:

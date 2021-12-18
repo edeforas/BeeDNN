@@ -692,6 +692,7 @@ MatrixFloat colWiseMin(const MatrixFloat& m);
 MatrixFloat colWiseMax(const MatrixFloat& m);
 
 void setRandomUniform(MatrixFloat& m, float fMin = -1.f, float fMax = 1.f);
+void setRandomNormal(MatrixFloat& m, float fMean, float fNormal);
 void setQuickBernoulli(MatrixFloat& m, float fProba); //quick bernoulli is 6x faster than ref bernoulli, resolution proba is 1/65536 
 default_random_engine& randomEngine();
 vector<Index> randPerm(Index iSize); //create a vector of index shuffled

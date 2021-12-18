@@ -20,6 +20,14 @@ void Initializers::GlorotUniform(MatrixFloat &m,Index iInputSize,Index iOutputSi
     m*=a;
 }
 ///////////////////////////////////////////////////////////////////////////////
+void Initializers::GlorotNormal(MatrixFloat& m, Index iInputSize, Index iOutputSize)
+{
+    //Xavier Glorot normal
+    float a = sqrtf(2.f / (iInputSize + iOutputSize));
+    m.resize(iInputSize, iOutputSize);
+    setRandomNormal(m,0.f,a);
+}
+///////////////////////////////////////////////////////////////////////////////
 void Initializers::HeUniform(MatrixFloat& m, Index iInputSize, Index iOutputSize)
 {
     //He uniform
@@ -28,12 +36,28 @@ void Initializers::HeUniform(MatrixFloat& m, Index iInputSize, Index iOutputSize
     m *= a;
 }
 ///////////////////////////////////////////////////////////////////////////////
+void Initializers::HeNormal(MatrixFloat& m, Index iInputSize, Index iOutputSize)
+{
+    //He Normal
+    float a = sqrtf(2.f / (iInputSize ));
+    m.resize(iInputSize, iOutputSize);
+    setRandomNormal(m, 0.f, a);
+}
+///////////////////////////////////////////////////////////////////////////////
 void Initializers::LecunUniform(MatrixFloat& m, Index iInputSize, Index iOutputSize)
 {
     //He uniform
     float a = sqrtf(3.f / iInputSize);
     m.setRandom(iInputSize, iOutputSize);
     m *= a;
+}
+///////////////////////////////////////////////////////////////////////////////
+void Initializers::LecunNormal(MatrixFloat& m, Index iInputSize, Index iOutputSize)
+{
+    //He Normal
+    float a = sqrtf(1.f / (iInputSize));
+    m.resize(iInputSize, iOutputSize);
+    setRandomNormal(m, 0.f, a);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void Initializers::Zeros(MatrixFloat &m,Index iInputSize,Index iOutputSize)

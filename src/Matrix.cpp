@@ -470,6 +470,14 @@ void setRandomUniform(MatrixFloat& m, float fMin, float fMax)
 		m(i) = dis(randomEngine());
 }
 ///////////////////////////////////////////////////////////////////////////
+void setRandomNormal(MatrixFloat& m, float fMean, float fNormal)
+{
+	normal_distribution<float> dis(fMean, fNormal);
+
+	for (Index i = 0; i < m.size(); i++)
+		m(i) = dis(randomEngine());
+}
+///////////////////////////////////////////////////////////////////////////
 void setQuickBernoulli(MatrixFloat& m, float fProba)
 {
 	// quick bernoulli ; resolution proba = 1/65536.
