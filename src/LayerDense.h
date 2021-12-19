@@ -20,6 +20,8 @@ public:
 
 	Index input_size() const;
 	Index output_size() const;
+    string weight_initializer() const;
+    string bias_initializer() const;
 
     virtual Layer* clone() const override;
 

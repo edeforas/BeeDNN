@@ -66,6 +66,9 @@ void write(const Net& net,string & s)
 			ss << "Layer" << i + 1 << ".outputSize=" << l->output_size() << endl;
             ss << "Layer" << i+1 << ".weight=" << endl << toString(layer->weights()) << endl;
 
+            ss << "Layer" << i+1 << ".weightInitializer=" << l->weight_initializer() << endl;
+			ss << "Layer" << i+1 << ".biasInitializer=" << l->bias_initializer() << endl;
+						
 			if (l->has_bias())
 				ss << "Layer" << i + 1 << ".bias=" << endl << toString(layer->bias()) << endl;
         }
@@ -211,10 +214,13 @@ void read(const string& s,Net& net)
         {        
 			string sInputSize=find_key(s,sLayer+".inputSize");
 			string sOutputSize=find_key(s,sLayer+".outputSize");
+			string sWeightInitializer=find_key(s,sLayer+".weightInitializer");
+			string sBiasInitializer=find_key(s,sLayer+".biasInitializer");
+			
             Index iInputSize=stoi(sInputSize); 
 			Index iOutputSize=stoi(sOutputSize);
 
-            net.add(new LayerDense(iInputSize,iOutputSize));
+            net.add(new LayerDense(iInputSize,iOutputSize,sWeightInitializer,sBiasInitializer));
 
             string sWeight=find_key(s,sLayer+".weight");
 			MatrixFloat mf = fromString(sWeight);
