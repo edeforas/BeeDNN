@@ -71,3 +71,34 @@ void Initializers::Ones(MatrixFloat& m, Index iInputSize, Index iOutputSize)
     m.setOnes(iInputSize, iOutputSize);
 }
 ///////////////////////////////////////////////////////////////////////////////
+void Initializers::compute(string sInitializer, MatrixFloat& m, Index iInputSize, Index iOutputSize)
+{
+    // Todo , optimize
+
+    if (sInitializer == "GlorotUniform")
+        Initializers::GlorotUniform(m, iInputSize, iOutputSize);
+
+    else if (sInitializer == "GlorotNormal")
+        Initializers::GlorotNormal(m, iInputSize, iOutputSize);
+
+    else if (sInitializer == "HeUniform")
+        Initializers::HeUniform(m, iInputSize, iOutputSize);
+
+    else if (sInitializer == "HeNormal")
+        Initializers::HeNormal(m, iInputSize, iOutputSize);
+
+    else if (sInitializer == "LecunUniform")
+        Initializers::LecunUniform(m, iInputSize, iOutputSize);
+
+    else if (sInitializer == "LecunNormal")
+        Initializers::LecunNormal(m, iInputSize, iOutputSize);
+
+    else if (sInitializer == "Zeros")
+        Initializers::Zeros(m, iInputSize, iOutputSize);
+
+    else if (sInitializer == "Ones")
+        Initializers::Ones(m, iInputSize, iOutputSize);
+
+    // throw an error if here
+}
+///////////////////////////////////////////////////////////////////////////////

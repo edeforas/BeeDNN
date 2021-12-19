@@ -26,6 +26,8 @@ public:
     static void LecunNormal(MatrixFloat& m, Index iInputSize, Index iOutputSize);
     static void Zeros(MatrixFloat &m,Index iInputSize,Index iOutputSize);
     static void Ones(MatrixFloat& m, Index iInputSize, Index iOutputSize);
+
+    static void compute(string sInitializer, MatrixFloat& m, Index iInputSize, Index iOutputSize);
 };
 
 #endif

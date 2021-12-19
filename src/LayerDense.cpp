@@ -10,11 +10,13 @@
 #include "Initializers.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerDense::LayerDense(Index iInputSize, Index iOutputSize) :
+LayerDense::LayerDense(Index iInputSize, Index iOutputSize, string sWeightInitializer, string sBiasInitializer) :
     Layer( "Dense"),
 	_iInputSize(iInputSize),
 	_iOutputSize(iOutputSize)
 {
+	_sWeightInitializer = sWeightInitializer;
+	_sBiasInitializer = sBiasInitializer;
 	LayerDense::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -23,9 +25,10 @@ LayerDense::~LayerDense()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerDense::clone() const
 {
-    LayerDense* pLayer=new LayerDense(_iInputSize, _iOutputSize);
+    LayerDense* pLayer=new LayerDense(_iInputSize, _iOutputSize,_sWeightInitializer,_sBiasInitializer);
     pLayer->_weight = _weight;
 	pLayer->_bias = _bias;
+	
 	return pLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -38,8 +41,8 @@ void LayerDense::init()
 		return;
 
     // init weights and bias
-	Initializers::GlorotUniform(_weight, _iInputSize, _iOutputSize);
-	Initializers::Zeros(_bias, 1, _iOutputSize);
+	Initializers::compute(_sWeightInitializer,_weight, _iInputSize, _iOutputSize);
+	Initializers::compute(_sBiasInitializer,_bias, 1, _iOutputSize);
 	
 	Layer::init();
 }
