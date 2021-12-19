@@ -60,6 +60,17 @@ void Initializers::LecunNormal(MatrixFloat& m, Index iInputSize, Index iOutputSi
     setRandomNormal(m, 0.f, a);
 }
 ///////////////////////////////////////////////////////////////////////////////
+void Initializers::Uniform(MatrixFloat& m, Index iInputSize, Index iOutputSize)
+{
+    m.setRandom(iInputSize, iOutputSize);
+}
+///////////////////////////////////////////////////////////////////////////////
+void Initializers::Normal(MatrixFloat& m, Index iInputSize, Index iOutputSize)
+{
+    m.resize(iInputSize, iOutputSize);
+    setRandomNormal(m, 0.f, 1.f);
+}
+///////////////////////////////////////////////////////////////////////////////
 void Initializers::Zeros(MatrixFloat &m,Index iInputSize,Index iOutputSize)
 {
     //Zero initialization, used mainly on biases
@@ -73,7 +84,7 @@ void Initializers::Ones(MatrixFloat& m, Index iInputSize, Index iOutputSize)
 ///////////////////////////////////////////////////////////////////////////////
 void Initializers::compute(string sInitializer, MatrixFloat& m, Index iInputSize, Index iOutputSize)
 {
-    // Todo , optimize
+    // Todo , optimize, but not mandatory for now
 
     if (sInitializer == "GlorotUniform")
         Initializers::GlorotUniform(m, iInputSize, iOutputSize);
@@ -93,12 +104,18 @@ void Initializers::compute(string sInitializer, MatrixFloat& m, Index iInputSize
     else if (sInitializer == "LecunNormal")
         Initializers::LecunNormal(m, iInputSize, iOutputSize);
 
+    else if (sInitializer == "Uniform")
+        Initializers::Uniform(m, iInputSize, iOutputSize);
+
+    else if (sInitializer == "Normal")
+        Initializers::Normal(m, iInputSize, iOutputSize);
+
     else if (sInitializer == "Zeros")
         Initializers::Zeros(m, iInputSize, iOutputSize);
 
     else if (sInitializer == "Ones")
         Initializers::Ones(m, iInputSize, iOutputSize);
 
-    // throw an error if here
+    // todo : throw an error if here
 }
 ///////////////////////////////////////////////////////////////////////////////

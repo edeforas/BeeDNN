@@ -15,8 +15,8 @@ LayerDense::LayerDense(Index iInputSize, Index iOutputSize, string sWeightInitia
 	_iInputSize(iInputSize),
 	_iOutputSize(iOutputSize)
 {
-	_sWeightInitializer = sWeightInitializer;
-	_sBiasInitializer = sBiasInitializer;
+	set_weight_initializer(sWeightInitializer);
+	set_bias_initializer(sBiasInitializer);
 	LayerDense::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ LayerDense::~LayerDense()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerDense::clone() const
 {
-    LayerDense* pLayer=new LayerDense(_iInputSize, _iOutputSize,_sWeightInitializer,_sBiasInitializer);
+    LayerDense* pLayer=new LayerDense(_iInputSize, _iOutputSize,weight_initializer(),bias_initializer());
     pLayer->_weight = _weight;
 	pLayer->_bias = _bias;
 	
@@ -41,8 +41,8 @@ void LayerDense::init()
 		return;
 
     // init weights and bias
-	Initializers::compute(_sWeightInitializer,_weight, _iInputSize, _iOutputSize);
-	Initializers::compute(_sBiasInitializer,_bias, 1, _iOutputSize);
+	Initializers::compute(weight_initializer(),_weight, _iInputSize, _iOutputSize);
+	Initializers::compute(bias_initializer(),_bias, 1, _iOutputSize);
 	
 	Layer::init();
 }
@@ -78,18 +78,6 @@ Index LayerDense::output_size() const
 	return _iOutputSize;
 }
 ///////////////////////////////////////////////////////////////
-string LayerDense::weight_initializer() const
-{
-	return _sWeightInitializer;
-}
-///////////////////////////////////////////////////////////////
-string LayerDense::bias_initializer() const
-{
-	return _sBiasInitializer;
-}
-///////////////////////////////////////////////////////////////
-
-
 
 
 

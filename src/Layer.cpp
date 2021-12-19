@@ -14,6 +14,9 @@ _sType(sType)
 { 
 	_bTrainMode = false;
 	_bFirstLayer = false;
+
+	_sWeightInitializer = "";
+	_sBiasInitializer = "";
 }
 ////////////////////////////////////////////////////////////////
 Layer::~Layer()
@@ -65,5 +68,25 @@ MatrixFloat& Layer::bias()
 MatrixFloat& Layer::gradient_bias()
 {
 	return _gradientBias;
+}
+///////////////////////////////////////////////////////////////
+void Layer::set_weight_initializer(string sWeightInitializer)
+{
+	_sWeightInitializer = sWeightInitializer;
+}
+///////////////////////////////////////////////////////////////
+void Layer::set_bias_initializer(string sBiasInitializer)
+{
+	_sBiasInitializer = sBiasInitializer;
+}
+///////////////////////////////////////////////////////////////
+string Layer::weight_initializer() const
+{
+	return _sWeightInitializer;
+}
+///////////////////////////////////////////////////////////////
+string Layer::bias_initializer() const
+{
+	return _sBiasInitializer;
 }
 ///////////////////////////////////////////////////////////////

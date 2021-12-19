@@ -24,6 +24,9 @@ public:
     static void HeNormal(MatrixFloat& m, Index iInputSize, Index iOutputSize);
     static void LecunUniform(MatrixFloat& m, Index iInputSize, Index iOutputSize);
     static void LecunNormal(MatrixFloat& m, Index iInputSize, Index iOutputSize);
+    
+    static void Uniform(MatrixFloat& m, Index iInputSize, Index iOutputSize);
+    static void Normal(MatrixFloat& m, Index iInputSize, Index iOutputSize);
     static void Zeros(MatrixFloat &m,Index iInputSize,Index iOutputSize);
     static void Ones(MatrixFloat& m, Index iInputSize, Index iOutputSize);
 

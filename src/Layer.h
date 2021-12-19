@@ -41,6 +41,12 @@ public:
 	MatrixFloat& bias();
 	MatrixFloat& gradient_bias();
 
+    void set_weight_initializer(string _sWeightInitializer);
+    void set_bias_initializer(string _sBiasInitializer);
+
+    string weight_initializer() const;
+    string bias_initializer() const;
+
 protected:
     MatrixFloat _weight,_gradientWeight;
 	MatrixFloat _bias, _gradientBias;
@@ -49,6 +55,7 @@ protected:
 
 private:
     string _sType;
+    string _sWeightInitializer, _sBiasInitializer;
 };
 
 #endif

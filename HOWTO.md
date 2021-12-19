@@ -36,16 +36,16 @@ To use eigen:
 
 1/Download eigen at : http://eigen.tuxfamily.org/
 2/Unzip
-3/Set the environmement variable "EIGEN_PATH" to the folder containing the unziped eigen, for example in my case: "C:\dev\eigen-3.3.8"
+3/Set the environmement variable "EIGEN_PATH" to the folder containing the unziped eigen, for example in my case: "C:\dev\eigen-3.4.0"
 4/Reload Visual Studio 2017
 
 Now, you should be able to compile the sample sample_classification_MNIST (compile in Release, 64 bit mode, for good performances)
 
-Before running the sample, you need to download the MNIST train and test data, (this dataset is used very frequently)
-go to: http://yann.lecun.com/exdb/mnist/ , download and unzip the 4 .gz files ( 7-Zip (at : https://www.7-zip.org/ ) can be used to do the unzip taks, put the uzipped files (*.ubytes) near the sample executable.
+Before running the sample, you need to download the MNIST train and test dataset, (this dataset is used very frequently)
+Go to: http://yann.lecun.com/exdb/mnist/ , download and unzip the 4 .gz files ( 7-Zip (at : https://www.7-zip.org/ ) can be used to do the unzip taks, put the uzipped files (*.ubytes) near the sample executable.
 
-Now, you can run sample_classification_MNIST, you should have an accuracy>98.1% after 15 epochs , 2s by epochs.
-The learning speed and performances are one comparable with Tensorflow!
+Now, you can run sample_classification_MNIST, you should have an accuracy>98.1% after 15 epochs, 2s by epochs.
+The learning speed and performances are comparable with Tensorflow on Dense layers.
 
 3/ MNIST with convolution layers
 
