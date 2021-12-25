@@ -1,4 +1,4 @@
-BeeDNN is a Deep Learing library in C++.
+BeeDNN is a Deep Learning library in C++.
 (There is also an prototyping python code to test quickly new ideas).
 
 Compilation projects are using vs2019 or CMake.
@@ -29,7 +29,6 @@ Test succeded.
 ( This sample learn to reproduce a XOR gate )
 
 Congratulation! You built, trained and computed the output of your first Neural Network. 
-
 You can try also the sample: sample_regression_sin, for regression tasks
 
 
@@ -61,8 +60,9 @@ This sample is similar as the previous sample sample_classification_MNIST, but t
 
 4/ Meta optimisation
 
-Use the sample sample_MetaOptimizer_MNIST
-Todo
+The sample is sample_MetaOptimizer_MNIST.
+It launch several train in parallel (uses all cpu core), and keep the top solutions.
+Top solutions are saved on disk, in simples .txt files that can be reloaded.
 
 5/ Contributing
 Any help welcome!
