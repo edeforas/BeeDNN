@@ -110,4 +110,5 @@ Commented samples:
 - CIFAR10 conv2D using poolmax2D
 - MNIST with kmeans and custom loss
 
+Build with vs2019 or CMake.
 To compile, run the samples, etc, please read the HOWTO.md file
