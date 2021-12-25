@@ -6,7 +6,7 @@ Compilation projects are using VisualStudio2019 or CMake.
 
 ## 0/ Prerequisite:
 
-A C++ compiler.
+The only dependency needed is a C++ compiler.
 This tutorial is using VisualStudio2019, any recent version is ok.
 This code can also be compiled under GCC or CLang
 To compile, use the vs2019 project files or the CMake files.
