@@ -55,9 +55,9 @@ int main()
     }
   
 	//create simple net:
-//	net.add(new LayerTimeDistributedDense(28,8));
-	net.add(new LayerSimplestRNN(28)); // WIP, removed for now
-	net.add(new LayerDense(28, 32));
+	net.add(new LayerTimeDistributedDense(28,8));
+//	net.add(new LayerSimplestRNN(28)); // WIP, removed for now
+	net.add(new LayerDense(28*8, 32));
 	net.add(new LayerActivation("Relu"));
 	net.add(new LayerDropout(0.2f)); //reduce overfitting
 	net.add(new LayerDense(32, 10));
