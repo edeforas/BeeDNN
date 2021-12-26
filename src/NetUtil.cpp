@@ -33,6 +33,10 @@
 #include "LayerSoftmin.h"
 #include "LayerUniformNoise.h"
 #include "LayerTimeDistributedBias.h"
+#include "LayerTimeDistributedDot.h"
+#include "LayerTimeDistributedDense.h"
+
+#include "JsonFile.h"
 
 #include <sstream>
 #include <fstream>
@@ -43,35 +47,41 @@ namespace NetUtil {
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void write(const Net& net,string & s)
 {
+	JsonFile jf;
+
     stringstream ss;
 
     auto layers=net.layers();
-    ss << "Engine=BeeDNN" << endl;
-    ss << "NbLayers=" << layers.size() << endl;
-
-	string sProblem= net.is_classification_mode()?"Classification":"Regression";
-	ss << "Problem=" << sProblem << endl;
+    
+	jf.add_key("Engine", "BeeDNN");
+	jf.add_key("NbLayers", (int)layers.size());
+	jf.add_key("Problem", net.is_classification_mode() ? "Classification" : "Regression");
 
     for(size_t i=0;i<layers.size();i++)
     {
         Layer* layer=layers[i];
+		
+		stringstream ssi; ssi << "Layer" << i;
+		string sLayer = ssi.str();
+		jf.add_key(sLayer + ".type", layer->type());
 
-        ss << endl;
-        ss << "Layer" << i+1 << ".type=" << layer->type() << endl;
         if(layer->type()=="Dense")
         {
             LayerDense* l=static_cast<LayerDense*>(layer);
-            ss << "Layer" << i+1 << ".hasBias=" << (l->has_bias()?1:0) << endl;
-			ss << "Layer" << i + 1 << ".inputSize=" << l->input_size() << endl;
-			ss << "Layer" << i + 1 << ".outputSize=" << l->output_size() << endl;
-            ss << "Layer" << i+1 << ".weight=" << endl << toString(layer->weights()) << endl;
 
-            ss << "Layer" << i+1 << ".weightInitializer=" << l->weight_initializer() << endl;
-			ss << "Layer" << i+1 << ".biasInitializer=" << l->bias_initializer() << endl;
-						
+			jf.add_key(sLayer + ".hasBias", l->has_bias());
+			jf.add_key(sLayer + ".inputSize", (int)l->input_size());
+			jf.add_key(sLayer + ".outputSize", (int)l->output_size());
+			jf.add_key(sLayer + ".weight", toString(layer->weights()));
+
+			jf.add_key(sLayer + ".weightInitializer", l->weight_initializer());
+			jf.add_key(sLayer + ".biasInitializer", l->bias_initializer());
+
 			if (l->has_bias())
-				ss << "Layer" << i + 1 << ".bias=" << endl << toString(layer->bias()) << endl;
-        }
+			{
+				jf.add_key(sLayer + ".bias", toString(layer->bias()));
+			}
+		}
 
 		if (layer->type() == "Dot")
 		{
@@ -130,7 +140,7 @@ void write(const Net& net,string & s)
 		else if(layer->type()=="Dropout")
         {
             LayerDropout* l=static_cast<LayerDropout*>(layer);
-            ss << "Layer" << i+1 << ".rate=" << l->get_rate() << endl;
+			jf.add_key(sLayer, l->get_rate());
         }
 
 		else if (layer->type() == "PRelu")
@@ -190,7 +200,7 @@ void write(const Net& net,string & s)
 		}
 	}
 
-    s+=ss.str();
+ 	s += jf.str();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void read(const string& s,Net& net)
@@ -403,6 +413,9 @@ void read(const string& s,Net& net)
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void write(const NetTrain& train,string & s)
 {
+	JsonFile jf;
+
+
     stringstream ss;
     ss << "Epochs=" <<train.get_epochs() << endl;
     ss << "BatchSize=" <<train.get_batchsize() << endl;
@@ -466,7 +479,7 @@ void read(const string& s,NetTrain& train)
 ////////////////////////////////////////////////////////////////////////////////////////////////
 string find_key(string s,string sKey)
 {
-    auto i = s.find(sKey+"=");
+    auto i = s.find(sKey+":");
 
     if(i==string::npos)
         return "";

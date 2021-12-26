@@ -77,21 +77,18 @@ int main()
 	optim.add_layer_variation(1, "Relu");
 	optim.add_layer_variation(1, "RRelu");
 	optim.add_layer_variation(1, "PRelu");
-	optim.add_layer_variation(1, "LeakyTwiceRelu6");
-	optim.add_layer_variation(1, "Relu6");
 	optim.add_layer_variation(1, "LeakyRelu");
 	optim.add_layer_variation(1, "Swish");
 	optim.add_layer_variation(1, "LogSigmoid");
 	optim.add_layer_variation(1, "Tanh");
-	optim.add_layer_variation(1, "Sigmoid");
 	optim.add_layer_variation(1, "HardTanh");
+	optim.add_layer_variation(1, "Sigmoid");
 	optim.add_layer_variation(1, "Mish");
 	
 	// add optimizer variations
 	optim.add_optimizer_variation("AdamW", 0.01f);
 	optim.add_optimizer_variation("Adam", 0.01f);
 	optim.add_optimizer_variation("Nadam", 0.01f);
-	optim.add_optimizer_variation("iRPROP-");
 
 	optim.set_repeat_all(20); //re-do everything 10 times
 	optim.set_better_solution_callback(better_solution_callback); //called on better solution found
