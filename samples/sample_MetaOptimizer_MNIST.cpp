@@ -88,7 +88,7 @@ int main()
 	optim.add_optimizer_variation("Adam", 0.01f);
 	optim.add_optimizer_variation("Nadam", 0.01f);
 
-	optim.set_repeat_all(20); //re-do everything 10 times
+	optim.set_repeat_all(10); //re-do everything 10 times
 	optim.set_better_solution_callback(better_solution_callback); //called on better solution found
 
 	cout << "Training with all CPU cores ..." << endl;

@@ -48,7 +48,7 @@ void epoch_callback()
 	string s;
 	NetUtil::write(netTrain.net(), netTrain, s);
 	ostringstream sFile;
-	sFile << "solution_accuracy" << fixed << setprecision(2) << netTrain.get_current_validation_accuracy() << ".txt";
+	sFile << "solution_accuracy" << fixed << setprecision(2) << netTrain.get_current_validation_accuracy() << ".json";
 	std::ofstream f(sFile.str());
 	f << s;
 }

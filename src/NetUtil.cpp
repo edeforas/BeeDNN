@@ -113,6 +113,7 @@ void write(const Net& net, const NetTrain& train,string & s)
 			jf.add_key("inputSize", (int)l->input_size());
 			jf.add_key("outputSize", (int)l->output_size());
 			jf.add_key("weight", toString(layer->weights()));			
+			jf.add_key("weightInitializer", l->weight_initializer());
 		}
 		
 		else if(layer->type()=="GlobalGain")

@@ -8,14 +8,17 @@
 
 #include "LayerDot.h"
 
+#include "Initializers.h"
+
 #include <cmath> // for sqrt
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerDot::LayerDot(Index iInputSize, Index iOutputSize) :
+LayerDot::LayerDot(Index iInputSize, Index iOutputSize, string sWeightInitializer) :
     Layer( "Dot"),
 	_iInputSize(iInputSize),
 	_iOutputSize(iOutputSize)
 {
+	set_weight_initializer(sWeightInitializer);
 	LayerDot::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -40,12 +43,7 @@ void LayerDot::init()
 	assert(_iInputSize > 0);
 	assert(_iOutputSize > 0);
 	
-	_weight.resize(_iInputSize , _iOutputSize);
-
-    //Xavier uniform initialization
-    float a =sqrtf(6.f/(_iInputSize + _iOutputSize));
-    _weight.setRandom();
-    _weight*=a;
+	Initializers::compute(weight_initializer(), _weight, _iInputSize, _iOutputSize);
 	
 	Layer::init();
 }
