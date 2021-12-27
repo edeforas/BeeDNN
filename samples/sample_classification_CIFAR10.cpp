@@ -44,16 +44,13 @@ void epoch_callback()
 	cout  << " TrainAccuracy: " << netTrain.get_current_train_accuracy() << " %" ;
 	cout << " ValidationAccuracy: " << netTrain.get_current_validation_accuracy() << " %" << endl;
 
-	// save current epoch solution to file using a string buffer
+	// save solution
 	string s;
-	NetUtil::write(netTrain, s); //save train parameters
-	NetUtil::write(netTrain.net(), s); // save network
+	NetUtil::write(netTrain.net(), netTrain, s);
 	ostringstream sFile;
 	sFile << "solution_accuracy" << fixed << setprecision(2) << netTrain.get_current_validation_accuracy() << ".txt";
 	std::ofstream f(sFile.str());
 	f << s;
-
-	cout << endl;
 }
 //////////////////////////////////////////////////////////////////////////////
 int main()

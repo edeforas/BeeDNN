@@ -25,13 +25,11 @@ void better_solution_callback(NetTrain& train)
 {
 	cout << "Better solution found: Accuracy= " << train.get_current_validation_accuracy() << endl;
 
-	// save solution to file using a string buffer
+	// save solution
 	string s;
-	NetUtil::write(train,s); //save train parameters
-	NetUtil::write(train.net(),s); // save network
-
+	NetUtil::write(train.net(),train, s); //save train parameters
 	ostringstream sFile;
-	sFile << "solution_accuracy" << fixed << setprecision(2) << train.get_current_validation_accuracy() << ".txt";
+	sFile << "solution_accuracy" << fixed << setprecision(2) << train.get_current_validation_accuracy() << ".json";
 	std::ofstream f(sFile.str());
 	f << s;
 }

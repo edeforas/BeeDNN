@@ -45,17 +45,38 @@ using namespace std;
 namespace NetUtil {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void write(const Net& net,string & s)
+void write(const Net& net, const NetTrain& train,string & s)
 {
 	JsonFile jf;
-
     stringstream ss;
 
+	jf.add_key("Engine", string("BeeDNN"));
+	jf.add_key("Problem", string(net.is_classification_mode() ? "Classification" : "Regression"));
+	
+	// write optimizer settings
+	jf.enter_section("Optimizer");
+	jf.add_key("Optimizer", train.get_optimizer());
+	jf.add_key("LearningRate", train.get_learningrate());
+	jf.add_key("Epochs", train.get_epochs());
+	jf.add_key("Decay", train.get_decay());
+	jf.add_key("Momentum", train.get_momentum());
+	jf.add_key("Patience", train.get_patience());
+	jf.add_key("BatchSize", (int)train.get_batchsize());
+	jf.add_key("Loss", train.get_loss());
+	jf.add_key("KeepBest", train.get_keepbest());
+	jf.add_key("ReboostEveryEpochs", train.get_reboost_every_epochs());
+	jf.add_key("ClassBalancingWeightLoss", train.get_classbalancing());
+	if (!train.get_regularizer().empty())
+	{
+		jf.add_key("Regularizer", train.get_regularizer());
+		jf.add_key("RegularizerParameter", train.get_regularizer_parameter());
+	}
+	jf.leave_section();
+	
+	// write layers
     auto layers=net.layers();
-    
-	jf.add_key("Engine", "BeeDNN");
+
 	jf.add_key("NbLayers", (int)layers.size());
-	jf.add_key("Problem", net.is_classification_mode() ? "Classification" : "Regression");
 
     for(size_t i=0;i<layers.size();i++)
     {
@@ -63,32 +84,35 @@ void write(const Net& net,string & s)
 		
 		stringstream ssi; ssi << "Layer" << i;
 		string sLayer = ssi.str();
-		jf.add_key(sLayer + ".type", layer->type());
+
+		string s;
+		jf.enter_section(sLayer);
+		jf.add_key("type", layer->type());
 
         if(layer->type()=="Dense")
         {
             LayerDense* l=static_cast<LayerDense*>(layer);
 
-			jf.add_key(sLayer + ".hasBias", l->has_bias());
-			jf.add_key(sLayer + ".inputSize", (int)l->input_size());
-			jf.add_key(sLayer + ".outputSize", (int)l->output_size());
-			jf.add_key(sLayer + ".weight", toString(layer->weights()));
+			jf.add_key("hasBias", l->has_bias());
+			jf.add_key("inputSize", (int)l->input_size());
+			jf.add_key("outputSize", (int)l->output_size());
+			jf.add_key("weight", toString(layer->weights()));
 
-			jf.add_key(sLayer + ".weightInitializer", l->weight_initializer());
-			jf.add_key(sLayer + ".biasInitializer", l->bias_initializer());
+			jf.add_key("weightInitializer", l->weight_initializer());
+			jf.add_key("biasInitializer", l->bias_initializer());
 
 			if (l->has_bias())
 			{
-				jf.add_key(sLayer + ".bias", toString(layer->bias()));
+				jf.add_key("bias", toString(layer->bias()));
 			}
 		}
 
 		if (layer->type() == "Dot")
 		{
 			LayerDense* l = static_cast<LayerDense*>(layer);
-			ss << "Layer" << i + 1 << ".inputSize=" << l->input_size() << endl;
-			ss << "Layer" << i + 1 << ".outputSize=" << l->output_size() << endl;
-			ss << "Layer" << i + 1 << ".weight=" << endl << toString(layer->weights()) << endl;
+			jf.add_key("inputSize", (int)l->input_size());
+			jf.add_key("outputSize", (int)l->output_size());
+			jf.add_key("weight", toString(layer->weights()));			
 		}
 		
 		else if(layer->type()=="GlobalGain")
@@ -198,9 +222,10 @@ void write(const Net& net,string & s)
 			ss << "Layer" << i + 1 << ".colStride=" << colStride << endl;
 			ss << "Layer" << i + 1 << ".outChannels=" << outChannels << endl;
 		}
+		jf.leave_section();
 	}
 
- 	s += jf.str();
+ 	s += jf.to_string();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void read(const string& s,Net& net)

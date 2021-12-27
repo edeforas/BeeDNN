@@ -18,11 +18,11 @@ using namespace std;
 
 namespace NetUtil {
 
-void write(const Net& net,string& s);
-void read(const string& s,Net& net);
+void write(const Net& net, const NetTrain& train,string& s);
+//void read(const string& s,Net& net);
 
-void write(const NetTrain& train,string& s);
-void read(const string& s,NetTrain& train);
+//void write(const NetTrain& train,string& s);
+//void read(const string& s,NetTrain& train);
 
 string find_key(string s,string sKey);
 
