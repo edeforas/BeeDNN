@@ -95,13 +95,15 @@ namespace NetUtil {
 				jf.add_key("hasBias", l->has_bias());
 				jf.add_key("inputSize", (int)l->input_size());
 				jf.add_key("outputSize", (int)l->output_size());
-				jf.add_key("weight", toString(layer->weights()));
 				jf.add_key("weightInitializer", l->weight_initializer());
-
+				const MatrixFloat& m = l->weights();
+				jf.add_array("weight", (int)m.size(), m.data());
 				if (l->has_bias())
 				{
-					jf.add_key("bias", toString(layer->bias()));
 					jf.add_key("biasInitializer", l->bias_initializer());
+
+					const MatrixFloat& mb = l->bias();
+					jf.add_array("bias", (int)mb.size(), mb.data());
 				}
 			}
 
@@ -110,14 +112,17 @@ namespace NetUtil {
 				LayerDense* l = static_cast<LayerDense*>(layer);
 				jf.add_key("inputSize", (int)l->input_size());
 				jf.add_key("outputSize", (int)l->output_size());
-				jf.add_key("weight", toString(layer->weights()));
+				const MatrixFloat& m = l->weights();
+				jf.add_array("weight", (int)m.size(), m.data());
 				jf.add_key("weightInitializer", l->weight_initializer());
 			}
 
 			else if (layer->type() == "Bias")
 			{
 				LayerBias* l = static_cast<LayerBias*>(layer);
-				jf.add_key("bias", toString(l->bias()));
+
+				const MatrixFloat& mb = l->bias();
+				jf.add_array("bias", (int)mb.size(), mb.data());
 				jf.add_key("biasInitializer", l->bias_initializer());
 			}
 
@@ -135,19 +140,25 @@ namespace NetUtil {
 
 			else if (layer->type() == "GlobalAffine")
 			{
-				ss << "Layer" << i + 1 << ".globalGain=" << layer->weights()(0) << endl;
-				ss << "Layer" << i + 1 << ".globalBias=" << layer->bias()(0) << endl;
+				LayerGlobalAffine* l = static_cast<LayerGlobalAffine*>(layer);
+				jf.add_key("global_gain", l->weights()(0));
+				jf.add_key("global_bias", l->bias()(0));
 			}
 
 			else if (layer->type() == "Gain")
 			{
-				ss << "Layer" << i + 1 << ".gain=" << toString(layer->weights()) << endl;
+				LayerGain* l = static_cast<LayerGain*>(layer);
+				const MatrixFloat& m = l->weights();
+				jf.add_array("gain", (int)m.size(), m.data());
 			}
 
 			else if (layer->type() == "Affine")
 			{
-				ss << "Layer" << i + 1 << ".gain=" << toString(layer->weights()) << endl;
-				ss << "Layer" << i + 1 << ".bias=" << toString(layer->bias()) << endl;
+				LayerAffine* l = static_cast<LayerAffine*>(layer);
+				const MatrixFloat& mw = l->weights();
+				jf.add_array("gain", (int)mw.size(), mw.data());
+				const MatrixFloat& mb = l->bias();
+				jf.add_array("bias", (int)mb.size(), mb.data());
 			}
 
 			else if (layer->type() == "ChannelBias")
@@ -171,7 +182,9 @@ namespace NetUtil {
 
 			else if (layer->type() == "PRelu")
 			{
-				ss << "Layer" << i + 1 << ".weight=" << endl << toString(layer->weights()) << endl;
+				LayerPRelu* l= static_cast<LayerPRelu*>(layer);
+				const MatrixFloat& m = l->weights();
+				jf.add_array("gain",(int) m.size(), m.data());
 			}
 
 			else if (layer->type() == "RRelu")

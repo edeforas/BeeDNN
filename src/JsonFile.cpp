@@ -46,7 +46,7 @@ void JsonFile::leave_section()
     _sSectionIndent = _sSectionIndent.substr(4);
 
     _sOut += "\n" + _sSectionIndent + "}";
-	_bPendingComma=false;
+	_bPendingComma=true;
 }
 //////////////////////////////////////////////////////////////////////////////
 void JsonFile::add_key(string sKey, string sVal)
@@ -71,6 +71,19 @@ void JsonFile::add_key(string sKey, float fVal)
 void JsonFile::add_key(string sKey, bool bVal)
 {
     add(sKey, (bVal ? "true" : "false"));
+}
+//////////////////////////////////////////////////////////////////////////////
+void JsonFile::add_array(string sKey, int iSize, const float* pVal)
+{
+    stringstream ss;
+    for (int i = 0; i < iSize; i++)
+    {
+        ss << pVal[i];
+        if (i != iSize - 1)
+            ss << " , ";
+    }
+
+    add(sKey, "[" + ss.str() +"]");
 }
 //////////////////////////////////////////////////////////////////////////////
 void JsonFile::add(string sKey, string sValNoFormatting)

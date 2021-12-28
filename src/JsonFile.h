@@ -28,6 +28,7 @@ public:
     void add_key(string sKey, float fVal);
     void add_key(string sKey, bool bVal);
 
+    void add_array(string sKey, int iSize, const float* pVal);
 private:
     void add(string sKey, string sValNoFormatting);
     
