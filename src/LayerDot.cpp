@@ -10,8 +10,6 @@
 
 #include "Initializers.h"
 
-#include <cmath> // for sqrt
-
 ///////////////////////////////////////////////////////////////////////////////
 LayerDot::LayerDot(Index iInputSize, Index iOutputSize, string sWeightInitializer) :
     Layer( "Dot"),

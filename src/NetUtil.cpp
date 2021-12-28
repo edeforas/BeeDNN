@@ -38,10 +38,7 @@
 
 #include "JsonFile.h"
 
-#include <sstream>
-#include <fstream>
 #include <string>
-#include <vector>
 using namespace std;
 
 namespace NetUtil {
@@ -49,14 +46,6 @@ namespace NetUtil {
 	void save(string sFile,const Net& net, const NetTrain& train)
 	{
 		// save solution
-		string s;
-		write(train.net(), train, s); //save train parameters + model
-		std::ofstream f(sFile);
-		f << s;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////
-	void write(const Net& net, const NetTrain& train, string& s)
-	{
 		JsonFile jf;
 		stringstream ss;
 
@@ -237,7 +226,7 @@ namespace NetUtil {
 			jf.leave_section();
 		}
 
-		s += jf.to_string();
+		jf.save(sFile);
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	/*

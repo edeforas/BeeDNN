@@ -11,32 +11,23 @@
 using namespace std;
 
 #include "JsonFile.h"
+
 //////////////////////////////////////////////////////////////////////////////
 JsonFile::JsonFile()
 { 
     clear();
-	_bPendingComma=false;
 }
 //////////////////////////////////////////////////////////////////////////////
 void JsonFile::clear()
 {
-    _sSectionIndent = "";
+    _sSectionIndent = "    ";
     _sOut = "";
-    enter_section("");
+    _bPendingComma = false;
 }
 //////////////////////////////////////////////////////////////////////////////
 string JsonFile::to_string()
 {
-    /*
-    string s;
-    for (auto it = _allPairs.begin(); it != _allPairs.end(); it++)
-    {
-        s = s + it->first + ": " + it->second + "\n";
-    }
-    */
-
-    leave_section();
-    return _sOut;
+    return "{"+_sOut+"\n}";
 }
 //////////////////////////////////////////////////////////////////////////////
 void JsonFile::enter_section(string sSection)
@@ -44,10 +35,7 @@ void JsonFile::enter_section(string sSection)
     if (_bPendingComma)
         _sOut += ",";
 
-    if(sSection.empty())
-        _sOut += _sSectionIndent + "{";
-    else
-        _sOut += "\n" + _sSectionIndent + "\"" + sSection + "\":{";
+    _sOut += "\n" + _sSectionIndent + "\"" + sSection + "\":{";
 
     _sSectionIndent += "    ";
 	_bPendingComma=false;
@@ -92,6 +80,12 @@ void JsonFile::add(string sKey, string sValNoFormatting)
 	
     _sOut += "\n" + _sSectionIndent + "\"" + sKey + "\":" + sValNoFormatting;
 	_bPendingComma=true;
+}
+//////////////////////////////////////////////////////////////////////////////
+void JsonFile::save(string sFile)
+{
+    std::ofstream f(sFile);
+    f << this->to_string();
 }
 //////////////////////////////////////////////////////////////////////////////
 

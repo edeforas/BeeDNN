@@ -10,15 +10,15 @@
 #define JsonFile_
 
 #include <string>
-#include <vector>
-#include <map>
 using namespace std;
 
 class JsonFile {
 public:
     JsonFile();
+
     void clear();
     string to_string();
+    void save(string sFile);
 
     void enter_section(string sSection);
     void leave_section();
@@ -29,16 +29,15 @@ public:
     void add_key(string sKey, bool bVal);
 
 private:
-	bool _bPendingComma;
     void add(string sKey, string sValNoFormatting);
-
+    
+    bool _bPendingComma;
     string _sSectionIndent;
+    string _sOut;
 
     //   string find_key(string s, string sKey);
  //   void split(string s, vector<string>& vsItems, char cDelimiter=' ');
     //map<string, string> _allPairs;
-
-    string _sOut;
 };
 
 #endif

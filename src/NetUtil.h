@@ -17,15 +17,12 @@ using namespace std;
 
 namespace NetUtil {
 
-    void write(const Net& net, const NetTrain& train, string& s);
     void save(string sFile, const Net& net, const NetTrain& train);
-    //void read(const string& s,Net& net);
 
+    //void read(const string& s,Net& net);
     //void write(const NetTrain& train,string& s);
     //void read(const string& s,NetTrain& train);
-
     //string find_key(string s,string sKey);
-
     //void split(string s, vector<string>& vsItems, char cDelimiter=' ');
 }
 #endif
