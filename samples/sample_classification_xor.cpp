@@ -1,5 +1,5 @@
 // this sample shows how to do a simple classification
-// the use case is to learn a XOR gate
+// the usecase is to learn a XOR gate
 
 #include <iostream>
 using namespace std;
@@ -12,7 +12,7 @@ using namespace std;
 
 /////////////////////////////////////////////////////////////////////
 // for testU only
-inline bool is_near(double a,double b, double tolerancis=1.e-10)
+inline bool is_near(double a,double b, double tolerancis=0.001)
 {
     return fabs(a-b)<tolerancis;
 }
@@ -28,7 +28,7 @@ void test(bool bTest,const string & sMessage="")
 int main()
 {
 	cout << "This sample shows how to do a simple classification" << endl;
-	cout << "The use case is to learn a XOR gate" << endl;
+	cout << "The usecase is to learn a XOR gate" << endl;
 
 	//construct network, 2 input, 1 output
     Net net;

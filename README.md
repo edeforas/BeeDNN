@@ -94,7 +94,7 @@ I/O:
 - MNIST reader
 - CIFAR10 reader
 - csv file reader
-- model, weights and training parameters are saved in a simple .txt file
+- model, weights and training parameters are saved in a simple .json file
 
 Precomputing:
 - StandardScaler, MinMaxScaler
