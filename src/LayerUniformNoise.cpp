@@ -25,15 +25,12 @@ Layer* LayerUniformNoise::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerUniformNoise::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
+	mOut = mIn;
 	if (_bTrainMode && (_fNoise > 0.f) )
 	{
-		mOut.resize(mIn.rows(), mIn.cols());
-
 		for (Index i = 0; i < mOut.size(); i++)
-			mOut(i) = mIn(i) + _distUniform(randomEngine());
+			mOut(i) += _distUniform(randomEngine());
 	}
-	else
-		mOut = mIn; // in test mode or sigma==0.
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerUniformNoise::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)

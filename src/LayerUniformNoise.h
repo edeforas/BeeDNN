@@ -15,7 +15,6 @@
 #include <random>
 using namespace std;
 
-class Activation;
 
 class LayerUniformNoise : public Layer
 {

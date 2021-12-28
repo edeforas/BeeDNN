@@ -1,6 +1,6 @@
 //This sample launch in parallel multiple runs of the same net optimization 
 //This sample can also test for many different activations and optimizers
-//It shows and save the current best solution on disk
+//It shows and save the current best model on disk
 //To stop by anytime, type CTRL+C
 
 #include <iostream>
@@ -21,26 +21,21 @@ using namespace std;
 #include "NetUtil.h" //for net file saving
 
 //////////////////////////////////////////////////////////////////////////////
-void better_solution_callback(NetTrain& train)
+void better_model_callback(NetTrain& train)
 {
-	cout << "Better solution found: Accuracy= " << train.get_current_validation_accuracy() << endl;
+	cout << "Better model found: Accuracy= " << train.get_current_validation_accuracy() << endl;
 
-	// save solution to file using a string buffer
-	string s;
-	NetUtil::write(train,s); //save train parameters
-	NetUtil::write(train.net(),s); // save network
-
+	// save solution
 	ostringstream sFile;
-	sFile << "solution_accuracy" << fixed << setprecision(2) << train.get_current_validation_accuracy() << ".txt";
-	std::ofstream f(sFile.str());
-	f << s;
+	sFile << "model_accuracy" << fixed << setprecision(2) << train.get_current_validation_accuracy() << ".json";
+	NetUtil::save(sFile.str(),train.net(),train); //save train parameters and net
 }
 //////////////////////////////////////////////////////////////////////////////
 int main()
 {
 	cout << "This sample launch in parallel multiple runs of the same net optimization" << endl;
 	cout << "This sample can also test for many different activations and optimizers" << endl;
-	cout << "It shows and save the current best solution on disk" << endl;
+	cout << "It shows and save the current best model on disk" << endl;
 	cout << "To stop by anytime, type CTRL+C" << endl;
 
 	//load MNIST data
@@ -77,24 +72,21 @@ int main()
 	optim.add_layer_variation(1, "Relu");
 	optim.add_layer_variation(1, "RRelu");
 	optim.add_layer_variation(1, "PRelu");
-	optim.add_layer_variation(1, "LeakyTwiceRelu6");
-	optim.add_layer_variation(1, "Relu6");
 	optim.add_layer_variation(1, "LeakyRelu");
 	optim.add_layer_variation(1, "Swish");
 	optim.add_layer_variation(1, "LogSigmoid");
 	optim.add_layer_variation(1, "Tanh");
-	optim.add_layer_variation(1, "Sigmoid");
 	optim.add_layer_variation(1, "HardTanh");
+	optim.add_layer_variation(1, "Sigmoid");
 	optim.add_layer_variation(1, "Mish");
 	
 	// add optimizer variations
 	optim.add_optimizer_variation("AdamW", 0.01f);
 	optim.add_optimizer_variation("Adam", 0.01f);
 	optim.add_optimizer_variation("Nadam", 0.01f);
-	optim.add_optimizer_variation("iRPROP-");
 
-	optim.set_repeat_all(20); //re-do everything 10 times
-	optim.set_better_solution_callback(better_solution_callback); //called on better solution found
+	optim.set_repeat_all(10); //re-do everything 10 times
+	optim.set_better_model_callback(better_model_callback); //called on better solution found
 
 	cout << "Training with all CPU cores ..." << endl;
 	optim.fit(); // will use 100% CPU

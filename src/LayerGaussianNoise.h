@@ -15,12 +15,10 @@
 #include <random>
 using namespace std;
 
-class Activation;
-
 class LayerGaussianNoise : public Layer
 {
 public:
-    explicit LayerGaussianNoise(float fStd);
+    explicit LayerGaussianNoise(float fNoise);
     virtual ~LayerGaussianNoise() override;
 
     virtual Layer* clone() const override;
@@ -28,10 +26,10 @@ public:
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 
-    float get_std() const;
+    float get_noise() const;
 
 private:
-    float _fStd;
+    float _fNoise;
 	normal_distribution<float> _distNormal;
 };
 

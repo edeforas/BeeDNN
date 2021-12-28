@@ -11,10 +11,10 @@
 #include <random>
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerGaussianNoise::LayerGaussianNoise(float fStd):
+LayerGaussianNoise::LayerGaussianNoise(float fNoise):
     Layer("GaussianNoise"),
-    _fStd(fStd),
-	_distNormal(0.f, fStd)
+    _fNoise(fNoise),
+	_distNormal(0.f, fNoise)
 { }
 ///////////////////////////////////////////////////////////////////////////////
 LayerGaussianNoise::~LayerGaussianNoise()
@@ -22,20 +22,17 @@ LayerGaussianNoise::~LayerGaussianNoise()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerGaussianNoise::clone() const
 {
-    return new LayerGaussianNoise(_fStd);
+    return new LayerGaussianNoise(_fNoise);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGaussianNoise::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
-	if (_bTrainMode && (_fStd > 0.f) )
+	mOut = mIn;
+	if (_bTrainMode && (_fNoise > 0.f) )
 	{
-		mOut.resize(mIn.rows(), mIn.cols());
-
 		for (Index i = 0; i < mOut.size(); i++)
-			mOut(i) = mIn(i) + _distNormal(randomEngine());
+			mOut(i) += _distNormal(randomEngine());
 	}
-	else
-		mOut = mIn; // in test mode or sigma==0.
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerGaussianNoise::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
@@ -48,8 +45,8 @@ void LayerGaussianNoise::backpropagation(const MatrixFloat &mIn,const MatrixFloa
 	mGradientIn= mGradientOut;
 }
 ///////////////////////////////////////////////////////////////////////////////
-float LayerGaussianNoise::get_std() const
+float LayerGaussianNoise::get_noise() const
 {
-    return _fStd;
+    return _fNoise;
 }
 ///////////////////////////////////////////////////////////////////////////////
