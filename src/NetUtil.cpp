@@ -135,12 +135,13 @@ namespace NetUtil {
 			else if (layer->type() == "GlobalGain")
 			{
 				LayerGlobalGain* l = static_cast<LayerGlobalGain*>(layer);
-				ss << "Layer" << i + 1 << ".globalGain=" << l->weights()(0) << endl;
+				jf.add_key("global_gain", l->weights()(0));
 			}
 
 			else if (layer->type() == "GlobalBias")
 			{
-				ss << "Layer" << i + 1 << ".globalBias=" << layer->bias()(0) << endl;
+				LayerGlobalBias* l = static_cast<LayerGlobalBias*>(layer);
+				jf.add_key("global_bias", l->bias()(0));
 			}
 
 			else if (layer->type() == "GlobalAffine")
@@ -176,7 +177,7 @@ namespace NetUtil {
 			else if (layer->type() == "Dropout")
 			{
 				LayerDropout* l = static_cast<LayerDropout*>(layer);
-				jf.add_key(sLayer, l->get_rate());
+				jf.add_key("rate", l->get_rate());
 			}
 
 			else if (layer->type() == "PRelu")
@@ -189,20 +190,19 @@ namespace NetUtil {
 				LayerRRelu* l = static_cast<LayerRRelu*>(layer);
 				float alpha1, alpha2;
 				l->get_params(alpha1, alpha2);
-
-				ss << "Layer" << i + 1 << ".alpha1=" << alpha1 << endl;
-				ss << "Layer" << i + 1 << ".alpha2=" << alpha2 << endl;
+				jf.add_key("alpha1", alpha1);
+				jf.add_key("alpha2", alpha2);
 			}
 
 			else if (layer->type() == "GaussianNoise")
 			{
 				LayerGaussianNoise* l = static_cast<LayerGaussianNoise*>(layer);
-				ss << "Layer" << i + 1 << ".stdNoise=" << l->get_std() << endl;
+				jf.add_key("noise", l->get_noise());
 			}
 			else if (layer->type() == "UniformNoise")
 			{
 				LayerUniformNoise* l = static_cast<LayerUniformNoise*>(layer);
-				ss << "Layer" << i + 1 << ".noise=" << l->get_noise() << endl;
+				jf.add_key("noise", l->get_noise());
 			}
 			else if (layer->type() == "PoolMax2D")
 			{

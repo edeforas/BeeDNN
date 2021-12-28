@@ -12,21 +12,16 @@ using namespace std;
 
 #include "JsonFile.h"
 //////////////////////////////////////////////////////////////////////////////
-JsonFile::JsonFile():
-    _iNbSections(0)
+JsonFile::JsonFile()
 { 
     clear();
+	_bPendingComma=false;
 }
 //////////////////////////////////////////////////////////////////////////////
 void JsonFile::clear()
 {
-   // _allPairs.clear();
-    _sSection = "";
-    _iNbSections = 0;
     _sSectionIndent = "";
     _sOut = "";
-    _sSeparator = "\n";
-
     enter_section("");
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -46,55 +41,61 @@ string JsonFile::to_string()
 //////////////////////////////////////////////////////////////////////////////
 void JsonFile::enter_section(string sSection)
 {
-    _sSection = sSection;
-    _iNbSections++;
+    if (_bPendingComma)
+        _sOut += ",";
 
     if(sSection.empty())
         _sOut += _sSectionIndent + "{";
     else
         _sOut += "\n" + _sSectionIndent + "\"" + sSection + "\":{";
 
-    _sSectionIndent = "";
-    for (int i = 0; i < _iNbSections; i++)
-        _sSectionIndent += "    ";
+    _sSectionIndent += "    ";
+	_bPendingComma=false;
 }
 //////////////////////////////////////////////////////////////////////////////
 void JsonFile::leave_section()
 {
-    _iNbSections--;
-
-    _sSectionIndent = "";
-    for (int i = 0; i < _iNbSections; i++)
-        _sSectionIndent += "    ";
+    _sSectionIndent = _sSectionIndent.substr(4);
 
     _sOut += "\n" + _sSectionIndent + "}";
+	_bPendingComma=false;
 }
 //////////////////////////////////////////////////////////////////////////////
 void JsonFile::add_key(string sKey, string sVal)
 {
-    _sOut += "\n"+_sSectionIndent + "\"" +sKey + "\":\"" + sVal + "\"";
-//    _allPairs.insert({ sKey,sVal });
+    add(sKey, "\"" + sVal + "\"");
 }
 //////////////////////////////////////////////////////////////////////////////
 void JsonFile::add_key(string sKey, int iVal)
 {
     stringstream ss;
     ss << iVal;
-    _sOut += "\n"+_sSectionIndent + "\"" +sKey + +"\":" + ss.str();
+    add(sKey, ss.str());
 }
 //////////////////////////////////////////////////////////////////////////////
 void JsonFile::add_key(string sKey, float fVal)
 {
     stringstream ss;
     ss << fVal;
-    _sOut += "\n"+_sSectionIndent + "\"" + sKey + "\":" + ss.str();
+    add(sKey, ss.str());
 }
 //////////////////////////////////////////////////////////////////////////////
 void JsonFile::add_key(string sKey, bool bVal)
 {
-    _sOut += "\n"+_sSectionIndent + "\"" + sKey + "\":" + (bVal ? "true" : "false");
+    add(sKey, (bVal ? "true" : "false"));
 }
 //////////////////////////////////////////////////////////////////////////////
+void JsonFile::add(string sKey, string sValNoFormatting)
+{
+    if (_bPendingComma)
+        _sOut += ",";
+	
+    _sOut += "\n" + _sSectionIndent + "\"" + sKey + "\":" + sValNoFormatting;
+	_bPendingComma=true;
+}
+//////////////////////////////////////////////////////////////////////////////
+
+
 /*string JsonFile::find_key(string s, string sKey)
 {
     auto i = s.find(sKey + ":");

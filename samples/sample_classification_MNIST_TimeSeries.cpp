@@ -1,5 +1,5 @@
-// simple MNIST classification, all image seen as a time series rows by rows
-// validation accuracy > 98.3%, after 30 epochs (0.5s by epochs)
+// simple MNIST classification using time series, all image seen row by row
+// validation accuracy > 97%, after 30 epochs (0.2s by epochs)
 
 #include <iostream>
 #include <chrono>
@@ -40,8 +40,8 @@ void epoch_callback()
 //////////////////////////////////////////////////////////////////////////////
 int main()
 {
-	cout << "simple MNIST classification, all image seen as a time series rows by rows" << endl;
-	cout << "validation accuracy > 98.3%, after 30 epochs (0.5s by epochs)" << endl;
+	cout << "simple MNIST classification using time series, all image seen row by row" << endl;
+	cout << "validation accuracy > 97%, after 30 epochs (0.2s by epochs)" << endl;
 
     iEpoch = 0;
 

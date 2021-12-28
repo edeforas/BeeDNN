@@ -29,14 +29,13 @@ public:
     void add_key(string sKey, bool bVal);
 
 private:
-    string _sSection;
+	bool _bPendingComma;
+    void add(string sKey, string sValNoFormatting);
+
     string _sSectionIndent;
-    string _sSeparator;
-    int _iNbSections;
 
     //   string find_key(string s, string sKey);
  //   void split(string s, vector<string>& vsItems, char cDelimiter=' ');
-
     //map<string, string> _allPairs;
 
     string _sOut;
