@@ -50,7 +50,7 @@ namespace NetUtil {
 	{
 		// save solution
 		string s;
-		write(train.net(), train, s); //save train parameters +model
+		write(train.net(), train, s); //save train parameters + model
 		std::ofstream f(sFile);
 		f << s;
 	}
@@ -107,13 +107,12 @@ namespace NetUtil {
 				jf.add_key("inputSize", (int)l->input_size());
 				jf.add_key("outputSize", (int)l->output_size());
 				jf.add_key("weight", toString(layer->weights()));
-
 				jf.add_key("weightInitializer", l->weight_initializer());
-				jf.add_key("biasInitializer", l->bias_initializer());
 
 				if (l->has_bias())
 				{
 					jf.add_key("bias", toString(layer->bias()));
+					jf.add_key("biasInitializer", l->bias_initializer());
 				}
 			}
 
@@ -124,6 +123,13 @@ namespace NetUtil {
 				jf.add_key("outputSize", (int)l->output_size());
 				jf.add_key("weight", toString(layer->weights()));
 				jf.add_key("weightInitializer", l->weight_initializer());
+			}
+
+			else if (layer->type() == "Bias")
+			{
+				LayerBias* l = static_cast<LayerBias*>(layer);
+				jf.add_key("bias", toString(l->bias()));
+				jf.add_key("biasInitializer", l->bias_initializer());
 			}
 
 			else if (layer->type() == "GlobalGain")
@@ -151,11 +157,6 @@ namespace NetUtil {
 			else if (layer->type() == "Affine")
 			{
 				ss << "Layer" << i + 1 << ".gain=" << toString(layer->weights()) << endl;
-				ss << "Layer" << i + 1 << ".bias=" << toString(layer->bias()) << endl;
-			}
-
-			else if (layer->type() == "Bias")
-			{
 				ss << "Layer" << i + 1 << ".bias=" << toString(layer->bias()) << endl;
 			}
 
