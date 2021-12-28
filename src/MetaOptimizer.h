@@ -59,7 +59,7 @@ public:
 	void set_repeat_all(int iNbRepeatAll);
 	
 	void fit();
-	void set_better_solution_callback(std::function<void(NetTrain& train)> betterSolutionCallBack);
+	void set_better_model_callback(std::function<void(NetTrain& train)> betterSolutionCallBack);
 
 private:
 	void new_epoch(NetTrain& trainT);

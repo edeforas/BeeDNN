@@ -32,6 +32,7 @@ public:
 	
 	void set_net(Net& net);
 	Net& net();
+	const Net& net() const;
     void set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth);
 	void set_validation_data(const MatrixFloat& mSamplesValidation, const MatrixFloat& mTruthValidation);
 

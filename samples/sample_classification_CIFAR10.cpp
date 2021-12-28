@@ -1,5 +1,5 @@
-// simple toy classification CIFAR10, with a convolutional Layers, low accuracy (60% after 20 epochs), 25s /epoch
-// It shows and save the current best solution on disk
+// simple toy classification CIFAR10, with a convolutional Layers, small accuracy (60% after 20 epochs), 25s /epoch
+// It shows and save the current model vs. epochs on disk
 // To stop by anytime, type CTRL+C"
 
 // use a DataSource for Data augmentations (WIP)
@@ -45,18 +45,15 @@ void epoch_callback()
 	cout << " ValidationAccuracy: " << netTrain.get_current_validation_accuracy() << " %" << endl;
 
 	// save solution
-	string s;
-	NetUtil::write(netTrain.net(), netTrain, s);
 	ostringstream sFile;
-	sFile << "solution_accuracy" << fixed << setprecision(2) << netTrain.get_current_validation_accuracy() << ".json";
-	std::ofstream f(sFile.str());
-	f << s;
+	sFile << "model_" << "epoch_" << iEpoch << "_accuracy_" << fixed << setprecision(2) << netTrain.get_current_validation_accuracy() << ".json";
+	NetUtil::save(sFile.str(), netTrain.net(), netTrain); //save train parameters and net
 }
 //////////////////////////////////////////////////////////////////////////////
 int main()
 {
-	cout << "Simple toy classification CIFAR10, low accuracy (60% after 20 epochs), 25s /epoch" << endl;
-	cout << "It shows and save the current best solution on disk" << endl;
+	cout << "Simple toy classification CIFAR10, small accuracy (60% after 20 epochs), 25s /epoch" << endl;
+	cout << "It shows and save the current model vs. epoch on disk" << endl;
 	cout << "To stop by anytime, type CTRL+C" << endl;
 
 	iEpoch = 0;

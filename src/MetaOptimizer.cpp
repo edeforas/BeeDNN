@@ -100,7 +100,7 @@ int MetaOptimizer::run_thread(int iThread, MetaOptimizer* self)
 	return 0; 
 }
 ////////////////////////////////////////////////////////////////
-void MetaOptimizer::set_better_solution_callback(std::function<void(NetTrain& train)> betterSolutionCallBack)
+void MetaOptimizer::set_better_model_callback(std::function<void(NetTrain& train)> betterSolutionCallBack)
 {
 	_betterSolutionCallBack = betterSolutionCallBack;
 }

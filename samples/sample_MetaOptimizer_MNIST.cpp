@@ -1,6 +1,6 @@
 //This sample launch in parallel multiple runs of the same net optimization 
 //This sample can also test for many different activations and optimizers
-//It shows and save the current best solution on disk
+//It shows and save the current best model on disk
 //To stop by anytime, type CTRL+C
 
 #include <iostream>
@@ -21,24 +21,21 @@ using namespace std;
 #include "NetUtil.h" //for net file saving
 
 //////////////////////////////////////////////////////////////////////////////
-void better_solution_callback(NetTrain& train)
+void better_model_callback(NetTrain& train)
 {
-	cout << "Better solution found: Accuracy= " << train.get_current_validation_accuracy() << endl;
+	cout << "Better model found: Accuracy= " << train.get_current_validation_accuracy() << endl;
 
 	// save solution
-	string s;
-	NetUtil::write(train.net(),train, s); //save train parameters
 	ostringstream sFile;
-	sFile << "solution_accuracy" << fixed << setprecision(2) << train.get_current_validation_accuracy() << ".json";
-	std::ofstream f(sFile.str());
-	f << s;
+	sFile << "model_accuracy" << fixed << setprecision(2) << train.get_current_validation_accuracy() << ".json";
+	NetUtil::save(sFile.str(),train.net(),train); //save train parameters and net
 }
 //////////////////////////////////////////////////////////////////////////////
 int main()
 {
 	cout << "This sample launch in parallel multiple runs of the same net optimization" << endl;
 	cout << "This sample can also test for many different activations and optimizers" << endl;
-	cout << "It shows and save the current best solution on disk" << endl;
+	cout << "It shows and save the current best model on disk" << endl;
 	cout << "To stop by anytime, type CTRL+C" << endl;
 
 	//load MNIST data
@@ -89,7 +86,7 @@ int main()
 	optim.add_optimizer_variation("Nadam", 0.01f);
 
 	optim.set_repeat_all(10); //re-do everything 10 times
-	optim.set_better_solution_callback(better_solution_callback); //called on better solution found
+	optim.set_better_model_callback(better_model_callback); //called on better solution found
 
 	cout << "Training with all CPU cores ..." << endl;
 	optim.fit(); // will use 100% CPU
