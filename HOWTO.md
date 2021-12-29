@@ -1,22 +1,21 @@
-# BeeDNN is a Deep Learning library in C++.
+# BeeDNN Howto
 
-(There is also an prototyping python code to test quickly new ideas).
-
-Compilation projects are using VisualStudio2019 or CMake.
+BeeDNN is a Deep Learning library in C++. Train model, predict results, on any platform, with a FPU.
 
 ## 0/ Prerequisite:
 
-The only dependency needed is a C++ compiler.
-This tutorial is using VisualStudio2019, any recent version is ok.
-This code can also be compiled under GCC or CLang
-To compile, use the vs2019 project files or the CMake files.
-With vs2019 the CMake files can be used if needed.
+BeeDNN only need a C++ compiler, no other dependencies.
+Projects files are using CMake or VisualStudio2019.
+To compile, use the vs2019 project files or the CMake files. This tutorial use the vs2019 files.
 The sample codes are commented and are mostly self explanatory.
 
+To speed up training, it is possible to use the eigen library, see in below samples.
 
-## 1/ First classification. The sample is sample_classification_xor
 
-For the first classification, double clic on the all.sln solution file in the src/ folder, then:
+## 1/ First classification: XOR classification
+
+This sample learn to reproduce a XOR gate
+Launch the all.sln solution file in the src/ folder, then:
 
 Compile the sample `sample_classification_xor`, run.
 You should see the text :
@@ -27,17 +26,15 @@ You should see the text :
 1_xor_1=0
 Test succeded.
 
-( This sample learn to reproduce a XOR gate )
-
-Congratulation! You built, trained and computed the output, of your first Neural Network. 
+Congratulation! You built, trained, and computed the output of your first Neural Network. 
 You can try also the sample: `sample_regression_sin`, for regression tasks
 
 
-## 2/ A more advanced classification (MNIST digits dataset)
+## 2/ A more advanced classification: (MNIST digits dataset)+ Dense layers
 
 The previous XOR sample is using the simple internal Matrix Library, but for heavy learning tasks, use the eigen library.
 Eigen is a header only library, with no dependencies.
-BeeDNN can use either the internal matrix library or Eigen, to change, set an environnement variable.
+BeeDNN can use either the internal matrix library or Eigen, to select it, set an environnement variable.
 
 To use eigen:
 
@@ -62,7 +59,7 @@ This sample is similar to  the previous sample, but uses convolutional layers, t
 
 The sample is `sample_MetaOptimizer_MNIST`.
 It launch several train in parallel (uses all cpu core), and keep the best solutions.
-Best solutions are saved on disk, in  .txt files that can be reloaded.
+Best solutions are saved on disk, in  .json files that can be reloaded.
 
 ## 5/ Times Series
 Todo

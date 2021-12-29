@@ -1,4 +1,4 @@
-// simple toy classification CIFAR10, with a convolutional Layers, small accuracy (60% after 20 epochs), 25s /epoch
+// simple toy classification CIFAR10, with a convolutional Layers, small accuracy (60% after 15 epochs), 20s /epoch
 // It shows and save the current model vs. epochs on disk
 // To stop by anytime, type CTRL+C"
 
@@ -24,6 +24,7 @@ using namespace std;
 #include "LayerSoftmax.h"
 #include "LayerMaxPool2D.h"
 #include "LayerConvolution2D.h"
+#include "LayerRandomFlip.h"
 
 Net net;
 NetTrain netTrain;
@@ -52,7 +53,7 @@ void epoch_callback()
 //////////////////////////////////////////////////////////////////////////////
 int main()
 {
-	cout << "Simple toy classification CIFAR10, small accuracy (60% after 20 epochs), 25s /epoch" << endl;
+	cout << "Simple toy classification CIFAR10, small accuracy (60% after 15 epochs), 20s /epoch" << endl;
 	cout << "It shows and save the current model vs. epoch on disk" << endl;
 	cout << "To stop by anytime, type CTRL+C" << endl;
 
@@ -68,6 +69,7 @@ int main()
 	}
   
 	//create simple convolutionnal net:
+	net.add(new LayerRandomFlip(32, 32, 3));
 	net.add(new LayerConvolution2D(32, 32, 3, 3, 3, 8));
 	net.add(new LayerChannelBias(30, 30, 8));
 	net.add(new LayerActivation("Relu"));

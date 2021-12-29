@@ -49,28 +49,28 @@ void JsonFile::leave_section()
 	_bPendingComma=true;
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFile::add_key(string sKey, string sVal)
+void JsonFile::add(string sKey, string sVal)
 {
-    add(sKey, "\"" + sVal + "\"");
+    add_string(sKey, "\"" + sVal + "\"");
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFile::add_key(string sKey, int iVal)
+void JsonFile::add(string sKey, int iVal)
 {
     stringstream ss;
     ss << iVal;
-    add(sKey, ss.str());
+    add_string(sKey, ss.str());
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFile::add_key(string sKey, float fVal)
+void JsonFile::add(string sKey, float fVal)
 {
     stringstream ss;
     ss << fVal;
-    add(sKey, ss.str());
+    add_string(sKey, ss.str());
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFile::add_key(string sKey, bool bVal)
+void JsonFile::add(string sKey, bool bVal)
 {
-    add(sKey, (bVal ? "true" : "false"));
+    add_string(sKey, (bVal ? "true" : "false"));
 }
 //////////////////////////////////////////////////////////////////////////////
 void JsonFile::add_array(string sKey, int iSize, const float* pVal)
@@ -80,18 +80,18 @@ void JsonFile::add_array(string sKey, int iSize, const float* pVal)
     {
         ss << pVal[i];
         if (i != iSize - 1)
-            ss << " , ";
+            ss << ",";
     }
 
     add(sKey, "[" + ss.str() +"]");
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFile::add(string sKey, string sValNoFormatting)
+void JsonFile::add_string(const string&  sKey, string s)
 {
     if (_bPendingComma)
         _sOut += ",";
 	
-    _sOut += "\n" + _sSectionIndent + "\"" + sKey + "\":" + sValNoFormatting;
+    _sOut += "\n" + _sSectionIndent + "\"" + sKey + "\":" + s;
 	_bPendingComma=true;
 }
 //////////////////////////////////////////////////////////////////////////////

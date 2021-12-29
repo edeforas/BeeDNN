@@ -23,14 +23,14 @@ public:
     void enter_section(string sSection);
     void leave_section();
 
-    void add_key(string sKey, string sVal);
-    void add_key(string sKey, int iVal);
-    void add_key(string sKey, float fVal);
-    void add_key(string sKey, bool bVal);
+    void add(string sKey, string sVal);
+    void add(string sKey, int iVal);
+    void add(string sKey, float fVal);
+    void add(string sKey, bool bVal);
 
     void add_array(string sKey, int iSize, const float* pVal);
 private:
-    void add(string sKey, string sValNoFormatting);
+    void add_string(const string& sKey, string sValNoFormatting);
     
     bool _bPendingComma;
     string _sSectionIndent;

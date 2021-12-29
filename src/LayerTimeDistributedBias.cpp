@@ -27,6 +27,11 @@ Layer* LayerTimeDistributedBias::clone() const
     return pLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////
+int LayerTimeDistributedBias::frame_size() const
+{
+    return _iFrameSize;
+}
+///////////////////////////////////////////////////////////////////////////////
 void LayerTimeDistributedBias::init()
 {
     _bias.setZero(1, _iFrameSize);

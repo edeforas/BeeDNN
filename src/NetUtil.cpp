@@ -26,6 +26,7 @@
 #include "LayerGlobalGain.h"
 #include "LayerGlobalAffine.h"
 #include "LayerMaxPool2D.h"
+#include "LayerGlobalMaxPool2D.h"
 #include "LayerCRelu.h"
 #include "LayerPRelu.h"
 #include "LayerRRelu.h"
@@ -35,6 +36,7 @@
 #include "LayerTimeDistributedBias.h"
 #include "LayerTimeDistributedDot.h"
 #include "LayerTimeDistributedDense.h"
+#include "LayerSimplestRNN.h"
 
 #include "JsonFile.h"
 
@@ -48,35 +50,34 @@ namespace NetUtil {
 	{
 		// save solution
 		JsonFile jf;
-		stringstream ss;
 
-		jf.add_key("Engine", string("BeeDNN"));
-		jf.add_key("Problem", string(net.is_classification_mode() ? "Classification" : "Regression"));
+		jf.add("Engine", string("BeeDNN"));
+		jf.add("Problem", string(net.is_classification_mode() ? "Classification" : "Regression"));
 
 		// write optimizer settings
 		jf.enter_section("Optimizer");
-		jf.add_key("Optimizer", train.get_optimizer());
-		jf.add_key("LearningRate", train.get_learningrate());
-		jf.add_key("Epochs", train.get_epochs());
-		jf.add_key("Decay", train.get_decay());
-		jf.add_key("Momentum", train.get_momentum());
-		jf.add_key("Patience", train.get_patience());
-		jf.add_key("BatchSize", (int)train.get_batchsize());
-		jf.add_key("Loss", train.get_loss());
-		jf.add_key("KeepBest", train.get_keepbest());
-		jf.add_key("ReboostEveryEpochs", train.get_reboost_every_epochs());
-		jf.add_key("ClassBalancingWeightLoss", train.get_classbalancing());
+		jf.add("Optimizer", train.get_optimizer());
+		jf.add("LearningRate", train.get_learningrate());
+		jf.add("Epochs", train.get_epochs());
+		jf.add("Decay", train.get_decay());
+		jf.add("Momentum", train.get_momentum());
+		jf.add("Patience", train.get_patience());
+		jf.add("BatchSize", (int)train.get_batchsize());
+		jf.add("Loss", train.get_loss());
+		jf.add("KeepBest", train.get_keepbest());
+		jf.add("ReboostEveryEpochs", train.get_reboost_every_epochs());
+		jf.add("ClassBalancingWeightLoss", train.get_classbalancing());
 		if (!train.get_regularizer().empty())
 		{
-			jf.add_key("Regularizer", train.get_regularizer());
-			jf.add_key("RegularizerParameter", train.get_regularizer_parameter());
+			jf.add("Regularizer", train.get_regularizer());
+			jf.add("RegularizerParameter", train.get_regularizer_parameter());
 		}
 		jf.leave_section();
 
 		// write layers
 		auto layers = net.layers();
 
-		jf.add_key("NbLayers", (int)layers.size());
+		jf.add("NbLayers", (int)layers.size());
 
 		for (size_t i = 0; i < layers.size(); i++)
 		{
@@ -85,23 +86,22 @@ namespace NetUtil {
 			stringstream ssi; ssi << "Layer" << i;
 			string sLayer = ssi.str();
 
-			string s;
 			jf.enter_section(sLayer);
-			jf.add_key("type", layer->type());
+			jf.add("type", layer->type());
 
 			if (layer->type() == "Dense")
 			{
 				LayerDense* l = static_cast<LayerDense*>(layer);
 
-				jf.add_key("hasBias", l->has_bias());
-				jf.add_key("inputSize", (int)l->input_size());
-				jf.add_key("outputSize", (int)l->output_size());
-				jf.add_key("weightInitializer", l->weight_initializer());
+				jf.add("hasBias", l->has_bias());
+				jf.add("inputSize", (int)l->input_size());
+				jf.add("outputSize", (int)l->output_size());
+				jf.add("weightInitializer", l->weight_initializer());
 				const MatrixFloat& m = l->weights();
 				jf.add_array("weight", (int)m.size(), m.data());
 				if (l->has_bias())
 				{
-					jf.add_key("biasInitializer", l->bias_initializer());
+					jf.add("biasInitializer", l->bias_initializer());
 
 					const MatrixFloat& mb = l->bias();
 					jf.add_array("bias", (int)mb.size(), mb.data());
@@ -111,11 +111,11 @@ namespace NetUtil {
 			if (layer->type() == "Dot")
 			{
 				LayerDense* l = static_cast<LayerDense*>(layer);
-				jf.add_key("inputSize", (int)l->input_size());
-				jf.add_key("outputSize", (int)l->output_size());
+				jf.add("inputSize", (int)l->input_size());
+				jf.add("outputSize", (int)l->output_size());
 				const MatrixFloat& m = l->weights();
 				jf.add_array("weight", (int)m.size(), m.data());
-				jf.add_key("weightInitializer", l->weight_initializer());
+				jf.add("weightInitializer", l->weight_initializer());
 			}
 
 			else if (layer->type() == "Bias")
@@ -124,40 +124,40 @@ namespace NetUtil {
 
 				const MatrixFloat& mb = l->bias();
 				jf.add_array("bias", (int)mb.size(), mb.data());
-				jf.add_key("biasInitializer", l->bias_initializer());
+				jf.add("biasInitializer", l->bias_initializer());
 			}
 
 			else if (layer->type() == "GlobalGain")
 			{
 				LayerGlobalGain* l = static_cast<LayerGlobalGain*>(layer);
-				jf.add_key("global_gain", l->weights()(0));
+				jf.add("weight", l->weights()(0));
 			}
 
 			else if (layer->type() == "GlobalBias")
 			{
 				LayerGlobalBias* l = static_cast<LayerGlobalBias*>(layer);
-				jf.add_key("global_bias", l->bias()(0));
+				jf.add("bias", l->bias()(0));
 			}
 
 			else if (layer->type() == "GlobalAffine")
 			{
 				LayerGlobalAffine* l = static_cast<LayerGlobalAffine*>(layer);
-				jf.add_key("global_gain", l->weights()(0));
-				jf.add_key("global_bias", l->bias()(0));
+				jf.add("weight", l->weights()(0));
+				jf.add("bias", l->bias()(0));
 			}
 
 			else if (layer->type() == "Gain")
 			{
 				LayerGain* l = static_cast<LayerGain*>(layer);
 				const MatrixFloat& m = l->weights();
-				jf.add_array("gain", (int)m.size(), m.data());
+				jf.add_array("weight", (int)m.size(), m.data());
 			}
 
 			else if (layer->type() == "Affine")
 			{
 				LayerAffine* l = static_cast<LayerAffine*>(layer);
 				const MatrixFloat& mw = l->weights();
-				jf.add_array("gain", (int)mw.size(), mw.data());
+				jf.add_array("weight", (int)mw.size(), mw.data());
 				const MatrixFloat& mb = l->bias();
 				jf.add_array("bias", (int)mb.size(), mb.data());
 			}
@@ -169,23 +169,25 @@ namespace NetUtil {
 				Index iRows, iCols, iChannels;
 				l->get_params(iRows, iCols, iChannels);
 
-				ss << "Layer" << i + 1 << ".rows=" << iRows << endl;
-				ss << "Layer" << i + 1 << ".cols=" << iCols << endl;
-				ss << "Layer" << i + 1 << ".channels=" << iChannels << endl;
-				ss << "Layer" << i + 1 << ".bias=" << endl << toString(layer->bias()) << endl;
+				jf.add("rows", (int)iRows);
+				jf.add("cols", (int)iCols);
+				jf.add("channels", (int)iChannels);
+
+				const MatrixFloat& mb = l->bias();
+				jf.add_array("bias", (int)mb.size(), mb.data());
 			}
 
 			else if (layer->type() == "Dropout")
 			{
 				LayerDropout* l = static_cast<LayerDropout*>(layer);
-				jf.add_key("rate", l->get_rate());
+				jf.add("rate", l->get_rate());
 			}
 
 			else if (layer->type() == "PRelu")
 			{
 				LayerPRelu* l= static_cast<LayerPRelu*>(layer);
 				const MatrixFloat& m = l->weights();
-				jf.add_array("gain",(int) m.size(), m.data());
+				jf.add_array("weight",(int) m.size(), m.data());
 			}
 
 			else if (layer->type() == "RRelu")
@@ -193,50 +195,103 @@ namespace NetUtil {
 				LayerRRelu* l = static_cast<LayerRRelu*>(layer);
 				float alpha1, alpha2;
 				l->get_params(alpha1, alpha2);
-				jf.add_key("alpha1", alpha1);
-				jf.add_key("alpha2", alpha2);
+				jf.add("alpha1", alpha1);
+				jf.add("alpha2", alpha2);
 			}
 
 			else if (layer->type() == "GaussianNoise")
 			{
 				LayerGaussianNoise* l = static_cast<LayerGaussianNoise*>(layer);
-				jf.add_key("noise", l->get_noise());
+				jf.add("noise", l->get_noise());
 			}
 			else if (layer->type() == "UniformNoise")
 			{
 				LayerUniformNoise* l = static_cast<LayerUniformNoise*>(layer);
-				jf.add_key("noise", l->get_noise());
+				jf.add("noise", l->get_noise());
 			}
-			else if (layer->type() == "PoolMax2D")
+			else if (layer->type() == "MaxPool2D")
 			{
 				LayerMaxPool2D* l = static_cast<LayerMaxPool2D*>(layer);
 
 				Index inRows, inCols, iChannels, rowFactor, colFactor;
 				l->get_params(inRows, inCols, iChannels, rowFactor, colFactor);
-				ss << "Layer" << i + 1 << ".inRows=" << inRows << endl;
-				ss << "Layer" << i + 1 << ".inCols=" << inCols << endl;
-				ss << "Layer" << i + 1 << ".inChannels=" << iChannels << endl;
-				ss << "Layer" << i + 1 << ".rowFactor=" << rowFactor << endl;
-				ss << "Layer" << i + 1 << ".colFactor=" << colFactor << endl;
+
+				jf.add("inRows", (int)inRows);
+				jf.add("inCols", (int)inCols);
+				jf.add("channels", (int)iChannels);
+				jf.add("rowFactor", (int)rowFactor);
+				jf.add("colFactor", (int)colFactor);
 			}
+
+			else if (layer->type() == "GlobalMaxPool2D")
+			{
+				LayerGlobalMaxPool2D* l = static_cast<LayerGlobalMaxPool2D*>(layer);
+
+				Index inRows, inCols, iChannels;
+				l->get_params(inRows, inCols, iChannels);
+
+				jf.add("inRows", (int)inRows);
+				jf.add("inCols", (int)inCols);
+				jf.add("channels", (int)iChannels);
+			}
+
 			else if (layer->type() == "Convolution2D")
 			{
 				LayerConvolution2D* l = static_cast<LayerConvolution2D*>(layer);
 
-				ss << "Layer" << i + 1 << ".weight=" << endl << toString(l->weights()) << endl;
-
 				Index inRows, inCols, inChannels, kernelRows, kernelCols, outChannels, rowStride, colStride;
 				l->get_params(inRows, inCols, inChannels, kernelRows, kernelCols, outChannels, rowStride, colStride);
 
-				ss << "Layer" << i + 1 << ".inRows=" << inRows << endl;
-				ss << "Layer" << i + 1 << ".inCols=" << inCols << endl;
-				ss << "Layer" << i + 1 << ".inChannels=" << inChannels << endl;
-				ss << "Layer" << i + 1 << ".kernelRows=" << kernelRows << endl;
-				ss << "Layer" << i + 1 << ".kernelCols=" << kernelCols << endl;
-				ss << "Layer" << i + 1 << ".rowStride=" << rowStride << endl;
-				ss << "Layer" << i + 1 << ".colStride=" << colStride << endl;
-				ss << "Layer" << i + 1 << ".outChannels=" << outChannels << endl;
+				jf.add("inRows", (int)inRows);
+				jf.add("inCols", (int)inCols);
+				jf.add("inChannels", (int)inChannels);
+				jf.add("kernelRows", (int)kernelRows);
+				jf.add("kernelCols", (int)kernelCols);
+				jf.add("rowStride", (int)rowStride);
+				jf.add("colStride", (int)colStride);
+				jf.add("outChannels", (int)outChannels);
+
+				const MatrixFloat& mw = l->weights();
+				jf.add_array("weight", (int)mw.size(), mw.data());
 			}
+
+			else if (layer->type() == "TimeDistributedBias")
+			{
+				LayerTimeDistributedBias* l = static_cast<LayerTimeDistributedBias*>(layer);
+				jf.add("frameSize", l->frame_size());
+				const MatrixFloat& mb = l->bias();
+				jf.add_array("bias", (int)mb.size(), mb.data());
+			}
+
+			else if (layer->type() == "TimeDistributedDot")
+			{
+				LayerTimeDistributedDot* l = static_cast<LayerTimeDistributedDot*>(layer);
+				jf.add("inFrameSize", l->in_frame_size());
+				jf.add("outFrameSize", l->out_frame_size());
+
+				const MatrixFloat& mw = l->weights();
+				jf.add_array("weight", (int)mw.size(), mw.data());
+			}
+
+			else if (layer->type() == "TimeDistributedDense")
+			{
+				LayerTimeDistributedDense* l = static_cast<LayerTimeDistributedDense*>(layer);
+				jf.add("inFrameSize", l->in_frame_size());
+				jf.add("outFrameSize", l->out_frame_size());
+
+				const MatrixFloat& mw = l->weights();
+				jf.add_array("weight", (int)mw.size(), mw.data());
+
+				const MatrixFloat& mb = l->bias();
+				jf.add_array("bias", (int)mb.size(), mb.data());
+			}
+
+			else if (layer->type() == "SimplestRNN")
+			{
+				LayerSimplestRNN* l = static_cast<LayerSimplestRNN*>(layer);
+				//TODO
+			}
+
 			jf.leave_section();
 		}
 

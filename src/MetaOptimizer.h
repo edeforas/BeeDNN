@@ -18,11 +18,11 @@ public:
 	float fArg4;
 	float fArg5;
 
-	LayerVariation()
+	LayerVariation():
+		sType("")
 	{
 		iLayer = 0;
-		sType = "";
-		fArg1=0.f;
+		fArg1 = 0.f;
 		fArg2 = 0.f;
 		fArg3 = 0.f;
 		fArg4 = 0.f;
@@ -37,9 +37,9 @@ public:
 	string sOptimizer;
 	float fLearningRate;
 
-	OptimizerVariation()
+	OptimizerVariation():
+		sOptimizer("")
 	{
-		sOptimizer = "";
 		fLearningRate = 0.f;
 	}
 };
