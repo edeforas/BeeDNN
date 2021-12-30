@@ -69,12 +69,10 @@ int main()
 	}
   
 	//create simple convolutionnal net:
-	net.add(new LayerRandomFlip(32, 32, 3));
 	net.add(new LayerConvolution2D(32, 32, 3, 3, 3, 8));
 	net.add(new LayerChannelBias(30, 30, 8));
 	net.add(new LayerActivation("Relu"));
 	net.add(new LayerMaxPool2D(30, 30, 8, 2, 2));
-	net.add(new LayerActivation("Relu"));
 	net.add(new LayerConvolution2D(15, 15, 8, 3, 3, 16));
 	net.add(new LayerChannelBias(13, 13, 16));
 	net.add(new LayerActivation("Relu"));
@@ -85,7 +83,7 @@ int main()
 
 	//setup train options
 	netTrain.set_net(net);
-	netTrain.set_epochs(20);
+	netTrain.set_epochs(15);
 	netTrain.set_batchsize(256);
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_epoch_callback(epoch_callback); //optional, show the progress

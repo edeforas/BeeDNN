@@ -30,15 +30,11 @@ public:
 
     void add_array(string sKey, int iSize, const float* pVal);
 private:
-    void add_string(const string& sKey, string sValNoFormatting);
+    void add_string(const string& sKey, string s);
     
     bool _bPendingComma;
     string _sSectionIndent;
     string _sOut;
-
-    //   string find_key(string s, string sKey);
- //   void split(string s, vector<string>& vsItems, char cDelimiter=' ');
-    //map<string, string> _allPairs;
 };
 
 #endif
