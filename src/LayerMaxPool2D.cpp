@@ -17,8 +17,8 @@ LayerMaxPool2D::LayerMaxPool2D(Index iInRows, Index iInCols, Index iInChannels, 
 	_iInChannels = iInChannels;
 	_iRowFactor = iRowFactor;
 	_iColFactor = iColFactor;
-	_iOutRows = iInRows/iRowFactor;
-	_iOutCols = iInCols/iColFactor;
+	_iOutRows = iInRows/iRowFactor; //padding='valid', no strides
+	_iOutCols = iInCols/iColFactor;  //padding='valid' no strides
 	_iInPlaneSize = _iInRows * _iInCols;
 	_iOutPlaneSize = _iOutRows * _iOutCols;
 }
