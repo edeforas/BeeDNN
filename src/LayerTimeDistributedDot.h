@@ -15,7 +15,7 @@
 class LayerTimeDistributedDot : public Layer
 {
 public:
-    explicit LayerTimeDistributedDot(int iInFrameSize,int iOutFrameSize);
+    explicit LayerTimeDistributedDot(int iInFrameSize,int iOutFrameSize, string sWeightInitializer = "GlorotUniform");
     virtual ~LayerTimeDistributedDot();
 
     virtual Layer* clone() const override;

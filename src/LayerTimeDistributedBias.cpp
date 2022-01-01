@@ -7,12 +7,14 @@
 */
 
 #include "LayerTimeDistributedBias.h"
+#include "Initializers.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerTimeDistributedBias::LayerTimeDistributedBias(int iFrameSize) :
+LayerTimeDistributedBias::LayerTimeDistributedBias(int iFrameSize,string sBiasInitializer ) :
     Layer("TimeDistributedBias")
 {
 	_iFrameSize=iFrameSize;
+    set_bias_initializer(sBiasInitializer);
     LayerTimeDistributedBias::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -21,7 +23,7 @@ LayerTimeDistributedBias::~LayerTimeDistributedBias()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerTimeDistributedBias::clone() const
 {
-    LayerTimeDistributedBias* pLayer=new LayerTimeDistributedBias(this->_iFrameSize);
+    LayerTimeDistributedBias* pLayer=new LayerTimeDistributedBias(_iFrameSize, bias_initializer());
 	pLayer->_bias = _bias;
 
     return pLayer;
@@ -34,7 +36,7 @@ int LayerTimeDistributedBias::frame_size() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerTimeDistributedBias::init()
 {
-    _bias.setZero(1, _iFrameSize);
+    Initializers::compute(bias_initializer(), _bias, 1, _iFrameSize);
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////

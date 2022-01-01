@@ -7,11 +7,13 @@
 */
 
 #include "LayerBias.h"
+#include "Initializers.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerBias::LayerBias() :
+LayerBias::LayerBias(string sBiasInitializer) :
     Layer("Bias")
 {
+    set_bias_initializer(sBiasInitializer);
     LayerBias::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -20,7 +22,7 @@ LayerBias::~LayerBias()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerBias::clone() const
 {
-    LayerBias* pLayer=new LayerBias();
+    LayerBias* pLayer=new LayerBias(bias_initializer());
 	pLayer->_bias = _bias;
 
     return pLayer;
@@ -35,7 +37,7 @@ void LayerBias::init()
 void LayerBias::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	if(_bias.size()==0)
-		_bias.setZero(1, mIn.cols());
+        Initializers::compute(bias_initializer(), _bias, 1, mIn.cols());
 
     mOut = rowWiseAdd( mIn , _bias);
 }

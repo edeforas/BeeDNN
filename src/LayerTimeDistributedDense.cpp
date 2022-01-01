@@ -7,13 +7,18 @@
 */
 
 #include "LayerTimeDistributedDense.h"
+#include "Initializers.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerTimeDistributedDense::LayerTimeDistributedDense(int iInFrameSize, int iOutFrameSize) :
+LayerTimeDistributedDense::LayerTimeDistributedDense(int iInFrameSize, int iOutFrameSize, string sWeightInitializer, string sBiasInitializer) :
     Layer("TimeDistributedDense")
 {
 	_iInFrameSize=iInFrameSize;
 	_iOutFrameSize=iOutFrameSize;
+
+	set_weight_initializer(sWeightInitializer);
+	set_bias_initializer(sBiasInitializer);
+
     LayerTimeDistributedDense::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -22,7 +27,7 @@ LayerTimeDistributedDense::~LayerTimeDistributedDense()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerTimeDistributedDense::clone() const
 {
-    LayerTimeDistributedDense* pLayer=new LayerTimeDistributedDense(_iInFrameSize,_iOutFrameSize);
+    LayerTimeDistributedDense* pLayer=new LayerTimeDistributedDense(_iInFrameSize,_iOutFrameSize, weight_initializer(), bias_initializer());
 	pLayer->_weight = _weight;
 	pLayer->_bias = _bias;
 
@@ -41,21 +46,8 @@ int LayerTimeDistributedDense::out_frame_size() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerTimeDistributedDense::init()
 {
-	if (_iInFrameSize == 0)
-		return;
-
-	if (_iOutFrameSize == 0)
-		return;
-
-	assert(_iInFrameSize > 0);
-	assert(_iOutFrameSize > 0);
-
-	//Xavier uniform initialization
-	float a = sqrtf(6.f / (_iInFrameSize + _iOutFrameSize));
-	_weight.setRandom(_iInFrameSize, _iOutFrameSize);
-	_weight *= a;
-
-    _bias.setZero(1, _iOutFrameSize);
+	Initializers::compute(weight_initializer(), _weight, _iInFrameSize, _iOutFrameSize);
+	Initializers::compute(bias_initializer(), _bias, 1, _iOutFrameSize);
 
     Layer::init();
 }

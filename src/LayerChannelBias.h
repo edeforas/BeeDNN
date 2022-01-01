@@ -15,7 +15,7 @@
 class LayerChannelBias : public Layer
 {
 public:
-    explicit LayerChannelBias(Index iNbRows,Index iNbCols,Index iNbChannels);
+    explicit LayerChannelBias(Index iNbRows,Index iNbCols,Index iNbChannels, string sBiasInitializer = "Zeros");
     virtual ~LayerChannelBias();
 
     virtual Layer* clone() const override;

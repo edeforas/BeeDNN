@@ -7,17 +7,17 @@
 */
 
 #include "LayerChannelBias.h"
+#include "Initializers.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerChannelBias::LayerChannelBias(Index iNbRows,Index iNbCols,Index iNbChannels) :
+LayerChannelBias::LayerChannelBias(Index iNbRows,Index iNbCols,Index iNbChannels, string sBiasInitializer) :
     Layer("ChannelBias")
 {
 	_iNbRows=iNbRows;
 	_iNbCols=iNbCols;
 	_iNbChannels=iNbChannels;
-	
-    _bias.setZero(1,_iNbChannels);
-	_gradientBias.setZero(1,_iNbChannels);
+
+	set_bias_initializer(sBiasInitializer);
     LayerChannelBias::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -26,14 +26,14 @@ LayerChannelBias::~LayerChannelBias()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerChannelBias::clone() const
 {
-    LayerChannelBias* pLayer=new LayerChannelBias(_iNbRows,_iNbCols,_iNbChannels);
+    LayerChannelBias* pLayer=new LayerChannelBias(_iNbRows,_iNbCols,_iNbChannels, bias_initializer());
 	pLayer->_bias = _bias;
 	return pLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerChannelBias::init()
 {
-	_bias.setZero();
+	Initializers::compute(bias_initializer(), _bias, 1, _iNbChannels);
     Layer::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -47,16 +47,14 @@ void LayerChannelBias::get_params(Index & iRows, Index & iCols, Index & iChannel
 void LayerChannelBias::forward(const MatrixFloat& mIn,MatrixFloat& mOut)
 {
 	mOut = mIn;
-	Index iNbSamples = mIn.rows();
-	channelWiseAdd(mOut,iNbSamples,_iNbChannels,_iNbRows,_iNbCols, _bias);
+	channelWiseAdd(mOut, mIn.rows(),_iNbChannels,_iNbRows,_iNbCols, _bias);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerChannelBias::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)
 {
 	(void)mIn;
 
-	Index iNbSamples = mGradientOut.rows();
-	_gradientBias =channelWiseMean(mGradientOut,iNbSamples,_iNbChannels,_iNbRows,_iNbCols);
+	_gradientBias =channelWiseMean(mGradientOut, mGradientOut.rows(),_iNbChannels,_iNbRows,_iNbCols);
 
 	if (_bFirstLayer)
 		return;

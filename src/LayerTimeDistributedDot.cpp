@@ -7,13 +7,16 @@
 */
 
 #include "LayerTimeDistributedDot.h"
+#include "Initializers.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerTimeDistributedDot::LayerTimeDistributedDot(int iInFrameSize, int iOutFrameSize) :
+LayerTimeDistributedDot::LayerTimeDistributedDot(int iInFrameSize, int iOutFrameSize, string sWeightInitializer) :
     Layer("TimeDistributedDot")
 {
 	_iInFrameSize=iInFrameSize;
 	_iOutFrameSize=iOutFrameSize;
+
+	set_weight_initializer(sWeightInitializer);
     LayerTimeDistributedDot::init();
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -22,7 +25,7 @@ LayerTimeDistributedDot::~LayerTimeDistributedDot()
 ///////////////////////////////////////////////////////////////////////////////
 Layer* LayerTimeDistributedDot::clone() const
 {
-    LayerTimeDistributedDot* pLayer=new LayerTimeDistributedDot(_iInFrameSize,_iOutFrameSize);
+    LayerTimeDistributedDot* pLayer=new LayerTimeDistributedDot(_iInFrameSize,_iOutFrameSize, weight_initializer());
 	pLayer->_weight = _weight;
 
     return pLayer;
@@ -40,19 +43,8 @@ int LayerTimeDistributedDot::out_frame_size() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerTimeDistributedDot::init()
 {
-	if (_iInFrameSize == 0)
-		return;
-
-	if (_iOutFrameSize == 0)
-		return;
-
-	assert(_iInFrameSize > 0);
-	assert(_iOutFrameSize > 0);
-
 	//Xavier uniform initialization
-	float a = sqrtf(6.f / (_iInFrameSize + _iOutFrameSize));
-	_weight.setRandom(_iInFrameSize, _iOutFrameSize);
-	_weight *= a;
+	Initializers::compute(weight_initializer(), _weight, _iInFrameSize, _iOutFrameSize);
 
     Layer::init();
 }

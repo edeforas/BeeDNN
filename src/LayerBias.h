@@ -15,7 +15,7 @@
 class LayerBias : public Layer
 {
 public:
-    explicit LayerBias();
+    explicit LayerBias(string sBiasInitializer = "Zeros");
     virtual ~LayerBias();
 
     virtual Layer* clone() const override;
