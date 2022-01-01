@@ -101,7 +101,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <OutputFile>../$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(TargetName)$(TargetExt)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -137,7 +137,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <OutputFile>../$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(TargetName)$(TargetExt)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -168,29 +168,41 @@
     <ClCompile Include="..\src\ConfusionMatrix.cpp" />
     <ClCompile Include="..\src\CsvFileReader.cpp" />
     <ClCompile Include="..\src\DataSource.cpp" />
+    <ClCompile Include="..\src\Initializers.cpp" />
+    <ClCompile Include="..\src\JsonFile.cpp" />
     <ClCompile Include="..\src\KMeans.cpp" />
     <ClCompile Include="..\src\KMeansTrain.cpp" />
     <ClCompile Include="..\src\Layer.cpp" />
     <ClCompile Include="..\src\LayerActivation.cpp" />
     <ClCompile Include="..\src\LayerAffine.cpp" />
+    <ClCompile Include="..\src\LayerAveragePooling2D.cpp" />
     <ClCompile Include="..\src\LayerBias.cpp" />
     <ClCompile Include="..\src\LayerChannelBias.cpp" />
     <ClCompile Include="..\src\LayerConvolution2D.cpp" />
+    <ClCompile Include="..\src\LayerCRelu.cpp" />
     <ClCompile Include="..\src\LayerDense.cpp" />
+    <ClCompile Include="..\src\LayerDot.cpp" />
     <ClCompile Include="..\src\LayerDropout.cpp" />
     <ClCompile Include="..\src\LayerFactory.cpp" />
     <ClCompile Include="..\src\LayerGain.cpp" />
     <ClCompile Include="..\src\LayerGaussianDropout.cpp" />
     <ClCompile Include="..\src\LayerGaussianNoise.cpp" />
     <ClCompile Include="..\src\LayerGlobalAffine.cpp" />
+    <ClCompile Include="..\src\LayerGlobalAveragePooling2D.cpp" />
     <ClCompile Include="..\src\LayerGlobalBias.cpp" />
     <ClCompile Include="..\src\LayerGlobalGain.cpp" />
-    <ClCompile Include="..\src\LayerPoolMax2D.cpp" />
+    <ClCompile Include="..\src\LayerGlobalMaxPool2D.cpp" />
+    <ClCompile Include="..\src\LayerMaxPool2D.cpp" />
     <ClCompile Include="..\src\LayerPRelu.cpp" />
+    <ClCompile Include="..\src\LayerRandomFlip.cpp" />
     <ClCompile Include="..\src\LayerRRelu.cpp" />
     <ClCompile Include="..\src\LayerSoftmax.cpp" />
     <ClCompile Include="..\src\LayerSoftmin.cpp" />
+    <ClCompile Include="..\src\LayerTimeDistributedBias.cpp" />
+    <ClCompile Include="..\src\LayerTimeDistributedDense.cpp" />
+    <ClCompile Include="..\src\LayerTimeDistributedDot.cpp" />
     <ClCompile Include="..\src\LayerUniformNoise.cpp" />
+    <ClCompile Include="..\src\LayerZeroPadding2D.cpp" />
     <ClCompile Include="..\src\Loss.cpp" />
     <ClCompile Include="..\src\Matrix.cpp" />
     <ClCompile Include="..\src\MetaOptimizer.cpp" />
@@ -201,7 +213,6 @@
     <ClCompile Include="..\src\Optimizer.cpp" />
     <ClCompile Include="..\src\Regularizer.cpp" />
     <ClCompile Include="..\src\StandardScaler.cpp" />
-    <ClCompile Include="..\src\TimeSeriesUtil.cpp" />
     <ClCompile Include="BeeDNNLib.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -210,29 +221,41 @@
     <ClInclude Include="..\src\ConfusionMatrix.h" />
     <ClInclude Include="..\src\CsvFileReader.h" />
     <ClInclude Include="..\src\DataSource.h" />
+    <ClInclude Include="..\src\Initializers.h" />
+    <ClInclude Include="..\src\JsonFile.h" />
     <ClInclude Include="..\src\KMeans.h" />
     <ClInclude Include="..\src\KMeansTrain.h" />
     <ClInclude Include="..\src\Layer.h" />
     <ClInclude Include="..\src\LayerActivation.h" />
     <ClInclude Include="..\src\LayerAffine.h" />
+    <ClInclude Include="..\src\LayerAveragePooling2D.h" />
     <ClInclude Include="..\src\LayerBias.h" />
     <ClInclude Include="..\src\LayerChannelBias.h" />
     <ClInclude Include="..\src\LayerConvolution2D.h" />
+    <ClInclude Include="..\src\LayerCRelu.h" />
     <ClInclude Include="..\src\LayerDense.h" />
+    <ClInclude Include="..\src\LayerDot.h" />
     <ClInclude Include="..\src\LayerDropout.h" />
     <ClInclude Include="..\src\LayerFactory.h" />
     <ClInclude Include="..\src\LayerGain.h" />
     <ClInclude Include="..\src\LayerGaussianDropout.h" />
     <ClInclude Include="..\src\LayerGaussianNoise.h" />
     <ClInclude Include="..\src\LayerGlobalAffine.h" />
+    <ClInclude Include="..\src\LayerGlobalAveragePooling2D.h" />
     <ClInclude Include="..\src\LayerGlobalBias.h" />
     <ClInclude Include="..\src\LayerGlobalGain.h" />
-    <ClInclude Include="..\src\LayerPoolMax2D.h" />
+    <ClInclude Include="..\src\LayerGlobalMaxPool2D.h" />
+    <ClInclude Include="..\src\LayerMaxPool2D.h" />
     <ClInclude Include="..\src\LayerPRelu.h" />
+    <ClInclude Include="..\src\LayerRandomFlip.h" />
     <ClInclude Include="..\src\LayerRRelu.h" />
     <ClInclude Include="..\src\LayerSoftmax.h" />
     <ClInclude Include="..\src\LayerSoftmin.h" />
+    <ClInclude Include="..\src\LayerTimeDistributedBias.h" />
+    <ClInclude Include="..\src\LayerTimeDistributedDense.h" />
+    <ClInclude Include="..\src\LayerTimeDistributedDot.h" />
     <ClInclude Include="..\src\LayerUniformNoise.h" />
+    <ClInclude Include="..\src\LayerZeroPadding2D.h" />
     <ClInclude Include="..\src\Loss.h" />
     <ClInclude Include="..\src\Matrix.h" />
     <ClInclude Include="..\src\MetaOptimizer.h" />
@@ -243,7 +266,6 @@
     <ClInclude Include="..\src\Optimizer.h" />
     <ClInclude Include="..\src\Regularizer.h" />
     <ClInclude Include="..\src\StandardScaler.h" />
-    <ClInclude Include="..\src\TimeSeriesUtil.h" />
     <ClInclude Include="BeeDNNLib.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
