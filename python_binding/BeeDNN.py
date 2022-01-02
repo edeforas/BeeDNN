@@ -9,6 +9,7 @@ class BeeDNN:
     lib.add_layer.argtypes = [ct.c_void_p,ct.c_char_p]
     lib.set_classification_mode.argtypes = [ct.c_void_p,ct.c_int32]
     lib.predict.argtypes=[ct.c_void_p,c_float_p,c_float_p,ct.c_int32]
+    lib.save.argtypes = [ct.c_void_p,ct.c_char_p]
         
     def __init__(self,inputSize):
         self.net = ct.c_void_p(self.lib.create(inputSize))
@@ -17,6 +18,10 @@ class BeeDNN:
     def add_layer(self,layer_name):
         cstr = ct.c_char_p(layer_name.encode('utf-8'))
         self.lib.add_layer(self.net,cstr)
+
+    def save(self,filename):
+        cstr = ct.c_char_p(filename.encode('utf-8'))
+        self.lib.save(self.net,cstr)
 
     def set_classification_mode(self,bClassificationMode):
         self.lib.set_classification_mode(self.net,ct.c_int32(bClassificationMode))

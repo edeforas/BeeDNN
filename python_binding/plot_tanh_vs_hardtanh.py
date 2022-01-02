@@ -1,5 +1,6 @@
 # compare the activations: tanh, smoothtanh and hardtanh
 # -> create three simple network with one activation layer in each, and call predict
+# no train yet
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -16,6 +17,7 @@ nnSmoothTanh.set_classification_mode(0)
 nnHardTanh=nn.BeeDNN(1)
 nnHardTanh.add_layer('HardTanh')
 nnHardTanh.set_classification_mode(0)
+#nnHardTanh.save('HardTanh.json') # uncomment to see the network saved in a json file
 
 x=np.arange(-5,5,0.1,dtype=np.float32)
 y=np.zeros_like(x)
