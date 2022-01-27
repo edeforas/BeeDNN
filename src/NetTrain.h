@@ -108,6 +108,7 @@ protected:
 	Net* _pNet;
 
 private:
+	void grab_all_weights_biases();
 	void update_class_weight(); // compute balanced class weight loss (if asked) and update loss
 	void clear_optimizers();
 
@@ -140,6 +141,11 @@ private:
 	
 	vector<float> _validationLoss;
 	vector<float> _validationAccuracy;
+
+	vector<MatrixFloat*> _pWeights;
+	vector<MatrixFloat*> _pGradWeights;
+	vector<MatrixFloat*> _pBiases;
+	vector<MatrixFloat*> _pGradBiases;
 
 	float _fTrainLoss;
 	float _fTrainAccuracy;

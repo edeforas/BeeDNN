@@ -40,22 +40,36 @@ void Layer::set_train_mode(bool bTrainMode)
 	_bTrainMode = bTrainMode;
 }
 ///////////////////////////////////////////////////////////////
-bool Layer::has_weight() const
+bool Layer::has_weights() const
 {
     return _weight.size()!=0.;
 }
 ///////////////////////////////////////////////////////////////
-MatrixFloat& Layer::weights()
+MatrixFloat& Layer::weight()
 {
     return _weight;
 }
 ///////////////////////////////////////////////////////////////
-MatrixFloat& Layer::gradient_weights()
+vector<MatrixFloat*> Layer::weights()
+{
+	vector<MatrixFloat*> v;
+	v.push_back(&_weight);
+	return v;
+}
+///////////////////////////////////////////////////////////////
+MatrixFloat& Layer::gradient_weight()
 {
     return _gradientWeight;
 }
 ///////////////////////////////////////////////////////////////
-bool Layer::has_bias() const
+vector<MatrixFloat*> Layer::gradient_weights()
+{
+	vector<MatrixFloat*> v;
+	v.push_back(&_gradientWeight);
+	return v;
+}
+///////////////////////////////////////////////////////////////
+bool Layer::has_biases() const
 {
 	return _bias.size() != 0.;
 }
@@ -65,9 +79,23 @@ MatrixFloat& Layer::bias()
 	return _bias;
 }
 ///////////////////////////////////////////////////////////////
+vector<MatrixFloat*> Layer::biases()
+{
+	vector<MatrixFloat*> v;
+	v.push_back(&_bias);
+	return v;
+}
+///////////////////////////////////////////////////////////////
 MatrixFloat& Layer::gradient_bias()
 {
 	return _gradientBias;
+}
+///////////////////////////////////////////////////////////////
+vector<MatrixFloat*> Layer::gradient_biases()
+{
+	vector<MatrixFloat*> v;
+	v.push_back(&_gradientBias);
+	return v;
 }
 ///////////////////////////////////////////////////////////////
 void Layer::set_weight_initializer(string sWeightInitializer)

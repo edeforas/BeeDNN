@@ -143,7 +143,18 @@ void NetTrain::set_net(Net& net)
 	if (_iNbLayers != 0)
 		_pNet->layers()[0]->set_first_layer(true);
 	
-//	clear_optimizers(); todo keep ?
+	_gradient.resize(_iNbLayers + 1);
+	_inOut.resize(_iNbLayers + 1);
+
+	//init all optimizers, for now, same for bias and weights
+	clear_optimizers();
+	grab_all_weights_biases();
+	Index iNbOptimizers = _pWeights.size() + _pBiases.size();
+	for (Index i = 0; i < iNbOptimizers; i++)
+	{
+		_optimizers.push_back(create_optimizer(_sOptimizer));
+		_optimizers[i]->set_params(_fLearningRate, _fDecay, _fMomentum);
+	}
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 Net& NetTrain::net()
@@ -418,21 +429,10 @@ void NetTrain::fit()
     if( (_iBatchSizeAdjusted >iNbSamples) || (_iBatchSizeAdjusted ==0) )
         _iBatchSizeAdjusted =iNbSamples;
 
-    _inOut.resize(_iNbLayers + 1);
-
-    _gradient.resize(_iNbLayers +1);
-
-	if (_optimizers.empty())
-	{
-		//init all optimizers
-		for (size_t i = 0; i < _iNbLayers*2; i++)
-		{
-			// one optimizer for weight, one for bias
-			_optimizers.push_back(create_optimizer(_sOptimizer));
-			_optimizers[i]->set_params(_fLearningRate, _fDecay, _fMomentum);
-		}
-	}
-
+	// init all optimizers
+	for (int iOptim = 0; iOptim < _optimizers.size(); iOptim++)
+		_optimizers[iOptim]->init();
+	
     //compute the accuracy at epoch 0, if keepbest is selected
 	float fMaxAccuracy = 0.f;
 	float fMinLoss = 1.e10f;
@@ -557,7 +557,6 @@ void NetTrain::fit()
 void NetTrain::train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth)
 {
 	assert(_pNet);
-	assert(_optimizers.size() == _iNbLayers * 2);
 
 	//forward pass with store
 	_inOut[0] = mSample;
@@ -567,29 +566,57 @@ void NetTrain::train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth
 	//compute error gradient
 	_pLoss->compute_gradient(_inOut[_iNbLayers], mTruth, _gradient[_iNbLayers]);
 
-	//backward pass with optimizer
+	//backward pass
 	for (int i = (int)_iNbLayers - 1; i >= 0; i--)
+		_pNet->layer(i).backpropagation(_inOut[i], _gradient[i + 1], _gradient[i]);
+
+	// optimize weights and biases
+	Index iNbWeights = _pWeights.size();
+	Index iNbBiases = _pBiases.size();
+	for (int i = 0; i < iNbWeights; i++)
 	{
-		Layer& l = _pNet->layer(i);
-		l.backpropagation(_inOut[i], _gradient[i + 1], _gradient[i]);
-
-		if (l.has_weight())
-		{
-			if (_pRegularizer)
-				_pRegularizer->apply(l.weights(),l.gradient_weights());
-			
-			_optimizers[2*i]->optimize(l.weights(), l.gradient_weights());
-		}
-
-		if (l.has_bias())
-		{
-			//bias does not need regularization 
-			_optimizers[2 * i+1]->optimize(l.bias(), l.gradient_bias());
-		}
+		_optimizers[i]->optimize(*_pWeights[i], *_pGradWeights[i]);
+		if (_pRegularizer)
+			_pRegularizer->apply(*_pWeights[i], *_pGradWeights[i]);
+	}
+	for (int i = 0; i < iNbBiases; i++)
+	{
+		_optimizers[i + iNbWeights]->optimize(*_pBiases[i], *_pGradBiases[i]);
+		if (_pRegularizer)
+			_pRegularizer->apply(*_pBiases[i], *_pGradBiases[i]);
 	}
 
 	//compute and save statistics
 	add_online_statistics(_inOut[_iNbLayers], mTruth);
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
+void NetTrain::grab_all_weights_biases()
+{
+	_pWeights.clear();
+	_pGradWeights.clear();
+	_pBiases.clear();
+	_pGradBiases.clear();
+	
+	for (size_t i = 0; i < _iNbLayers; i++)
+	{
+		Layer& l = _pNet->layer(i);
+		if (l.has_weights())
+		{
+			vector<MatrixFloat*> vw = l.weights();
+			_pWeights.insert(_pWeights.end(), vw.begin(), vw.end());
+
+			vector<MatrixFloat*> vgw = l.gradient_weights();
+			_pGradWeights.insert(_pGradWeights.end(), vgw.begin(), vgw.end());
+		}
+		if (l.has_biases())
+		{
+			vector<MatrixFloat*> vb = l.biases();
+			_pBiases.insert(_pBiases.end(), vb.begin(), vb.end());
+
+			vector<MatrixFloat*> vgb = l.gradient_biases();
+			_pGradBiases.insert(_pGradBiases.end(), vgb.begin(), vgb.end());
+		}
+	}
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::add_online_statistics(const MatrixFloat&mPredicted, const MatrixFloat&mTruth )

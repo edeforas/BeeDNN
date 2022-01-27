@@ -29,6 +29,7 @@ public:
     void add(string sKey, bool bVal);
 
     void add_array(string sKey, int iSize, const float* pVal);
+
 private:
     void add_string(const string& sKey, string s);
     

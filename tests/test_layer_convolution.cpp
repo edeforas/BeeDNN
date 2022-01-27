@@ -99,7 +99,7 @@ void simple_image_conv2d()
 	mKernel.resize(1, 3 * 3);
 	
 	LayerConvolution2D conv2d(5,5,1,3,3,1);
-	conv2d.weights() = mKernel;
+	conv2d.weight() = mKernel;
 	conv2d.forward(mIn, mOut);
 
 	mOut.resize(3, 3);
@@ -124,7 +124,7 @@ void batch_conv2d()
 	mKernel.resize(1, 3 * 3);
 
 	LayerConvolution2D conv2d(5, 5, 1, 3, 3, 1);
-	conv2d.weights() = mKernel;
+	conv2d.weight() = mKernel;
 	conv2d.forward(mIn, mOut);
 
 	mOut.resize(6, 3);
@@ -154,7 +154,7 @@ void image_2_input_channels_conv2d()
 	mKernel.resize(1, 2 * 3 * 3);
 
 	LayerConvolution2D conv2d(5, 5, 2, 3, 3, 1);
-	conv2d.weights() = mKernel;
+	conv2d.weight() = mKernel;
 	conv2d.forward(mIn, mOut);
 
 	mOut.resize(3, 3);
@@ -183,7 +183,7 @@ void image_2_output_channels_conv2d()
 	mKernel.resize(2, 3 * 3);
 
 	LayerConvolution2D conv2d(5, 5, 1, 3, 3, 2);
-	conv2d.weights() = mKernel;
+	conv2d.weight() = mKernel;
 	conv2d.forward(mIn, mOut);
 
 	mOut.resize(6, 3);
@@ -238,7 +238,7 @@ void simple_image_conv2d_stride2()
 	mKernel.resize(1, 3 * 3);
 
 	LayerConvolution2D conv2d(5, 5, 1, 3, 3, 1,2,2);
-	conv2d.weights() = mKernel;
+	conv2d.weight() = mKernel;
 	conv2d.forward(mIn, mOut);
 
 	mOut.resize(2, 2);
@@ -264,7 +264,7 @@ void forward_conv2d_backprop_sgd()
 	LayerConvolution2D conv2d(5, 5, 1, 3, 3, 1);
 
 	//forward
-	conv2d.weights() = mKernel;
+	conv2d.weight() = mKernel;
 	conv2d.forward(mIn, mOut);
 
 	//backpropagation
@@ -278,9 +278,9 @@ void forward_conv2d_backprop_sgd()
 	cout << toString(mOut) << endl << endl;
 
 	//disp backpropagation
-	conv2d.gradient_weights().resize(3, 3);
+	conv2d.gradient_weight().resize(3, 3);
 	cout << "Backprop Weight gradient :" << endl;
-	cout << toString(conv2d.gradient_weights()) << endl << endl;
+	cout << toString(conv2d.gradient_weight()) << endl << endl;
 
 	mGradientIn.resize(5, 5);
 	cout << "Backprop Input gradient :" << endl;
@@ -305,7 +305,7 @@ void forward_stride2_backward()
 	LayerConvolution2D conv2d(5, 5, 1, 3, 3, 1, 2, 2);
 
 	//forward
-	conv2d.weights() = mKernel;
+	conv2d.weight() = mKernel;
 	conv2d.forward(mIn, mOut);
 
 	//backpropagation
@@ -319,9 +319,9 @@ void forward_stride2_backward()
 	cout << toString(mOut) << endl << endl;
 
 	//disp backpropagation
-	conv2d.gradient_weights().resize(3, 3);
+	conv2d.gradient_weight().resize(3, 3);
 	cout << "Backprop Weight gradient :" << endl;
-	cout << toString(conv2d.gradient_weights()) << endl << endl;
+	cout << toString(conv2d.gradient_weight()) << endl << endl;
 
 	mGradientIn.resize(5, 5);
 	cout << "Backprop Input gradient :" << endl;

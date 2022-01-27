@@ -40,13 +40,13 @@ void LayerSimplestRNN::forward_frame(const MatrixFloat& mInFrame, MatrixFloat& m
         _h.setZero(mInFrame.rows(), _iUnits);
 
     MatrixFloat u = _h * _weight + mInFrame;
-    _h = tanh(u);
+    _h = u;// tanh(u);
 	mOut=_h;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerSimplestRNN::backpropagation_frame(const MatrixFloat& mInFrame, const MatrixFloat& mH, const MatrixFloat& mHm1, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn)
 {
-    MatrixFloat mGradU = oneMinusSquare(mH); // derivative of tanh
+    MatrixFloat mGradU = mH;// oneMinusSquare(mH); // derivative of tanh
 
     //grad(L/_Whh)=grad(L/U))*h(t-1)
     _gradientWeight = mGradU.transpose() *mHm1;
