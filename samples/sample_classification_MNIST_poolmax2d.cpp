@@ -62,7 +62,6 @@ int main()
 	net.add(new LayerSoftmax());
 
 	//setup train options
-	netTrain.set_net(net);
 	netTrain.set_epochs(20);
 	netTrain.set_batchsize(64);
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
@@ -73,7 +72,7 @@ int main()
 	// train net
 	cout << "Training..." << endl << endl;
 	start = chrono::steady_clock::now();
-	netTrain.fit();
+	netTrain.fit(net);
 
 	// show train results
 	MatrixFloat mClassPredicted;

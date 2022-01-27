@@ -44,12 +44,11 @@ int main()
 
     //optimize network
 	NetTrain netFit;
-	netFit.set_net(net);
 	netFit.set_epochs(500);
 	netFit.set_train_data(mSamples, mTruth);
 
 	//predict and show results
-	netFit.fit();
+	netFit.fit(net);
 	MatrixFloat mOut;
 	net.predict_classes(mSamples, mOut);
 	cout << "0_xor_0=" << mOut(0) << endl << "0_xor_1=" << mOut(1) << endl << "1_xor_0=" << mOut(2) << endl << "1_xor_1=" << mOut(3) << endl;

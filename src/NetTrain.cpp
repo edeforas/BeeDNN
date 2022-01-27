@@ -395,8 +395,10 @@ void NetTrain::set_validation_data(const MatrixFloat& mSamplesValidation, const 
 	_pmTruthValidation = &mTruthValidation;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::fit()
+void NetTrain::fit(Net& rNet)
 {
+	set_net(rNet);
+
 	if (_pNet == nullptr)
 		return;
 

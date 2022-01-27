@@ -36,8 +36,9 @@ void MetaOptimizer::set_repeat_all(int iNbRepeatAll)
 	_iNRepeatAll = iNbRepeatAll;
 }
 //////////////////////////////////////////////////////////////////////////////
-void MetaOptimizer::fit()
+void MetaOptimizer::fit(Net& rNet)
 {
+	_pNet = &rNet;
 	int iNbThread = _iNbThread;
 	if (iNbThread == 0) //auto case
 		iNbThread = (int)(thread::hardware_concurrency());
@@ -81,9 +82,8 @@ int MetaOptimizer::run_thread(int iThread, MetaOptimizer* self)
 	//hard copy ref net and train
 	Net netT;
 	NetTrain trainT;
-	netT = self->_pTrain->net();
+	netT = *(self->_pNet);
 	trainT = *(self->_pTrain);
-	trainT.set_net(netT);
 
 	self->apply_variations(netT);
 
@@ -95,7 +95,7 @@ int MetaOptimizer::run_thread(int iThread, MetaOptimizer* self)
 		}
 	);
 
-	trainT.fit();
+	trainT.fit(netT);
 
 	return 0; 
 }
@@ -160,5 +160,3 @@ void MetaOptimizer::apply_variations(Net& net)
 	}
 }
 ////////////////////////////////////////////////////////////////
-
-

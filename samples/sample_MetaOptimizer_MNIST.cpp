@@ -62,7 +62,6 @@ int main()
 	netTrain.set_loss("SparseCategoricalCrossEntropy");
 	netTrain.set_train_data(mr.train_data(), mr.train_truth());
 	netTrain.set_validation_data(mr.validation_data(),mr.validation_truth());
-	netTrain.set_net(net);
 
 	//create meta optimizer
 	MetaOptimizer optim;
@@ -89,7 +88,7 @@ int main()
 	optim.set_better_model_callback(better_model_callback); //called on better solution found
 
 	cout << "Training with all CPU cores ..." << endl;
-	optim.fit(); // will use 100% CPU
+	optim.fit(net); // will use 100% CPU
 
 	// the end
 	cout << "End of test." << endl;

@@ -30,7 +30,6 @@ public:
 
     void clear();
 	
-	void set_net(Net& net);
 	Net& net();
 	const Net& net() const;
     void set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth);
@@ -79,7 +78,7 @@ public:
 	void set_validation_batchsize(Index iValBatchSize);
 	Index get_validation_batchsize() const;
 
-	void fit();
+	void fit(Net& rNet);
 
 	float compute_loss_accuracy(const MatrixFloat & mSamples, const MatrixFloat& mTruth,float* pfAccuracy = nullptr) const;
 
@@ -108,6 +107,7 @@ protected:
 	Net* _pNet;
 
 private:
+	void set_net(Net& net);
 	void grab_all_weights_biases();
 	void update_class_weight(); // compute balanced class weight loss (if asked) and update loss
 	void clear_optimizers();
