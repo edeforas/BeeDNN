@@ -45,21 +45,11 @@ bool Layer::has_weights() const
     return _weight.size()!=0.;
 }
 ///////////////////////////////////////////////////////////////
-MatrixFloat& Layer::weight()
-{
-    return _weight;
-}
-///////////////////////////////////////////////////////////////
 vector<MatrixFloat*> Layer::weights()
 {
 	vector<MatrixFloat*> v;
 	v.push_back(&_weight);
 	return v;
-}
-///////////////////////////////////////////////////////////////
-MatrixFloat& Layer::gradient_weight()
-{
-    return _gradientWeight;
 }
 ///////////////////////////////////////////////////////////////
 vector<MatrixFloat*> Layer::gradient_weights()
@@ -74,21 +64,11 @@ bool Layer::has_biases() const
 	return _bias.size() != 0.;
 }
 ///////////////////////////////////////////////////////////////
-MatrixFloat& Layer::bias()
-{
-	return _bias;
-}
-///////////////////////////////////////////////////////////////
 vector<MatrixFloat*> Layer::biases()
 {
 	vector<MatrixFloat*> v;
 	v.push_back(&_bias);
 	return v;
-}
-///////////////////////////////////////////////////////////////
-MatrixFloat& Layer::gradient_bias()
-{
-	return _gradientBias;
 }
 ///////////////////////////////////////////////////////////////
 vector<MatrixFloat*> Layer::gradient_biases()

@@ -78,8 +78,8 @@ void LayerConvolution2D::get_params(Index& iInRows, Index& iInCols, Index& iInCh
 Layer* LayerConvolution2D::clone() const
 {
 	LayerConvolution2D* pLayer = new LayerConvolution2D(_iInRows, _iInCols, _iInChannels,_iKernelRows,_iKernelCols,_iOutChannels,_iRowStride,_iColStride);
-	pLayer->weight() = _weight;
-	pLayer->gradient_weight() = _gradientWeight;
+	pLayer->_weight = _weight;
+	pLayer->_gradientWeight = _gradientWeight;
 	return pLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////

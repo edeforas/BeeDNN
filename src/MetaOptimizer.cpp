@@ -12,6 +12,7 @@
 MetaOptimizer::MetaOptimizer():
 	_betterSolutionCallBack(nullptr)
 {
+	_pNet=nullptr;
 	_fBestAccuracy = -1.;
 	_pTrain = nullptr;
 	_iNbThread = 0;

@@ -148,7 +148,7 @@ void NetTrain::set_net(Net& net)
 
 	//init all optimizers, for now, same for bias and weights
 	clear_optimizers();
-	grab_all_weights_biases();
+	collect_all_weights_biases();
 	Index iNbOptimizers = _pWeights.size() + _pBiases.size();
 	for (Index i = 0; i < iNbOptimizers; i++)
 	{
@@ -592,7 +592,7 @@ void NetTrain::train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth
 	add_online_statistics(_inOut[_iNbLayers], mTruth);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::grab_all_weights_biases()
+void NetTrain::collect_all_weights_biases()
 {
 	_pWeights.clear();
 	_pGradWeights.clear();

@@ -108,7 +108,7 @@ protected:
 
 private:
 	void set_net(Net& net);
-	void grab_all_weights_biases();
+	void collect_all_weights_biases();
 	void update_class_weight(); // compute balanced class weight loss (if asked) and update loss
 	void clear_optimizers();
 

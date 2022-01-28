@@ -37,17 +37,12 @@ public:
     void set_weight_initializer(string _sWeightInitializer);
     string weight_initializer() const;
     bool has_weights() const;
-    MatrixFloat& weight(); // short access to first weight
-    MatrixFloat& gradient_weight();
     vector<MatrixFloat*> weights();
     vector<MatrixFloat*> gradient_weights();
-
 
     void set_bias_initializer(string _sBiasInitializer);
     string bias_initializer() const;
 	bool has_biases() const;
-    MatrixFloat& bias(); // short access to first bias
-    MatrixFloat& gradient_bias();
     vector<MatrixFloat*> biases();
     vector<MatrixFloat*> gradient_biases();
 

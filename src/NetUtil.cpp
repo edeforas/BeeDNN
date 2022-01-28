@@ -93,16 +93,16 @@ namespace NetUtil {
 			{
 				jf.add("weightInitializer", layer->weight_initializer());
 				vector<MatrixFloat*> pW = layer->weights();
-				for (int i = 0; i < pW.size();i++)
-					jf.add_array("weight", (int)pW[i]->size(), pW[i]->data());	// todo add i			
+				for (int j = 0; j < pW.size();j++)
+					jf.add_array("weight_"+to_string(j), (int)pW[j]->size(), pW[j]->data());	// todo add i			
 			}
 
 			if (layer->has_biases())
 			{
 				jf.add("biasInitializer", layer->bias_initializer());
 				vector<MatrixFloat*> pB = layer->biases();
-				for (int i = 0; i < pB.size(); i++)
-					jf.add_array("bias", (int)pB[i]->size(), pB[i]->data()); // todo add i
+				for (int j = 0; j < pB.size(); j++)
+					jf.add_array("bias_" + to_string(j), (int)pB[j]->size(), pB[j]->data()); // todo add i
 			}
 
 			if (layer->type() == "Dense")
