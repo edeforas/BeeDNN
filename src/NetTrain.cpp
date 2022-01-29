@@ -81,6 +81,7 @@ void NetTrain::clear_optimizers()
 /////////////////////////////////////////////////////////////////////////////////////////////////
 NetTrain& NetTrain::operator=(const NetTrain& other)
 {
+	_pNet = nullptr;
     clear();
 
 	_iBatchSizeAdjusted=-1; //invalid
@@ -103,7 +104,6 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
 	_fValidationAccuracy = other._fValidationAccuracy;
 	_iNbLayers=other._iNbLayers;
 
-	clear_optimizers();
 	_sOptimizer = other._sOptimizer;
 	for (size_t i = 0; i < other._optimizers.size(); i++)
 		_optimizers.push_back(other._optimizers[i]->clone());
@@ -131,14 +131,13 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
 	_pmSamplesValidation = other._pmSamplesValidation;
 	_pmTruthValidation = other._pmTruthValidation;
 
-	set_net(*(other._pNet));
-
 	return *this;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::set_net(Net& net)
 {
 	_pNet = &net;
+	assert(_pNet != 0);
 	_iNbLayers = (int)_pNet->layers().size();
 	if (_iNbLayers != 0)
 		_pNet->layers()[0]->set_first_layer(true);
@@ -157,10 +156,10 @@ void NetTrain::set_net(Net& net)
 	}
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-Net& NetTrain::net()
-{
-	return *_pNet;
-}
+//Net& NetTrain::net()
+//{
+//	return *_pNet;
+//}
 /////////////////////////////////////////////////////////////////////////////////////////////////
 const Net& NetTrain::net() const
 {

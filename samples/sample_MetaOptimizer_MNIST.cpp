@@ -63,11 +63,8 @@ int main()
 	netTrain.set_train_data(mr.train_data(), mr.train_truth());
 	netTrain.set_validation_data(mr.validation_data(),mr.validation_truth());
 
-	//create meta optimizer
+	//create meta optimizer and variations
 	MetaOptimizer optim;
-	optim.set_train(netTrain);
-
-	//add activations variations
 	optim.add_layer_variation(1, "Relu");
 	optim.add_layer_variation(1, "RRelu");
 	optim.add_layer_variation(1, "PRelu");
@@ -88,6 +85,7 @@ int main()
 	optim.set_better_model_callback(better_model_callback); //called on better solution found
 
 	cout << "Training with all CPU cores ..." << endl;
+	optim.set_train(netTrain);
 	optim.fit(net); // will use 100% CPU
 
 	// the end

@@ -1,12 +1,11 @@
 #include "MetaOptimizer.h"
-
 #include "Net.h"
-
 #include "LayerFactory.h"
 
 #include <iostream>
 #include <ctime>
 #include <thread>
+using namespace std;
 
 //////////////////////////////////////////////////////////////////////////////
 MetaOptimizer::MetaOptimizer():
@@ -40,6 +39,7 @@ void MetaOptimizer::set_repeat_all(int iNbRepeatAll)
 void MetaOptimizer::fit(Net& rNet)
 {
 	_pNet = &rNet;
+	assert(_pNet != 0);
 	int iNbThread = _iNbThread;
 	if (iNbThread == 0) //auto case
 		iNbThread = (int)(thread::hardware_concurrency());

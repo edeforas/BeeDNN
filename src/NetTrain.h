@@ -30,7 +30,7 @@ public:
 
     void clear();
 	
-	Net& net();
+//	Net& net();
 	const Net& net() const;
     void set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth);
 	void set_validation_data(const MatrixFloat& mSamplesValidation, const MatrixFloat& mTruthValidation);
@@ -104,7 +104,6 @@ protected:
 	vector<MatrixFloat> _inOut;
 	vector<MatrixFloat> _gradient;
 	size_t _iNbLayers;
-	Net* _pNet;
 
 private:
 	void set_net(Net& net);
@@ -112,6 +111,7 @@ private:
 	void update_class_weight(); // compute balanced class weight loss (if asked) and update loss
 	void clear_optimizers();
 
+	Net* _pNet;
 	int _iOnlineAccuracyGood;
 	float _fOnlineLoss;
 
