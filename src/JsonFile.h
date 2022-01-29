@@ -12,9 +12,9 @@
 #include <string>
 using namespace std;
 
-class JsonFile {
+class JsonFileWriter {
 public:
-    JsonFile();
+    JsonFileWriter();
 
     void clear();
     string to_string();

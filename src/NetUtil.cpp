@@ -49,7 +49,7 @@ namespace NetUtil {
 	void save(string sFile,const Net& net, const NetTrain& train)
 	{
 		// save trained model and train parameters
-		JsonFile jf;
+		JsonFileWriter jf;
 
 		jf.add("Engine", string("BeeDNN"));
 		jf.add("Problem", string(net.is_classification_mode() ? "Classification" : "Regression"));
@@ -93,8 +93,8 @@ namespace NetUtil {
 			{
 				jf.add("weightInitializer", layer->weight_initializer());
 				vector<MatrixFloat*> pW = layer->weights();
-				for (int j = 0; j < pW.size();j++)
-					jf.add_array("weight_"+to_string(j), (int)pW[j]->size(), pW[j]->data());	// todo add i			
+				for (int j = 0; j < pW.size(); j++)
+					jf.add_array("weight_" + to_string(j), (int)pW[j]->size(), pW[j]->data());
 			}
 
 			if (layer->has_biases())
@@ -102,7 +102,7 @@ namespace NetUtil {
 				jf.add("biasInitializer", layer->bias_initializer());
 				vector<MatrixFloat*> pB = layer->biases();
 				for (int j = 0; j < pB.size(); j++)
-					jf.add_array("bias_" + to_string(j), (int)pB[j]->size(), pB[j]->data()); // todo add i
+					jf.add_array("bias_" + to_string(j), (int)pB[j]->size(), pB[j]->data());
 			}
 
 			if (layer->type() == "Dense")

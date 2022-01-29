@@ -13,24 +13,24 @@ using namespace std;
 #include "JsonFile.h"
 
 //////////////////////////////////////////////////////////////////////////////
-JsonFile::JsonFile()
+JsonFileWriter::JsonFileWriter()
 { 
     clear();
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFile::clear()
+void JsonFileWriter::clear()
 {
     _sSectionIndent = "    ";
     _sOut = "";
     _bPendingComma = false;
 }
 //////////////////////////////////////////////////////////////////////////////
-string JsonFile::to_string()
+string JsonFileWriter::to_string()
 {
     return "{"+_sOut+"\n}";
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFile::enter_section(string sSection)
+void JsonFileWriter::enter_section(string sSection)
 {
     if (_bPendingComma)
         _sOut += ",";
@@ -41,7 +41,7 @@ void JsonFile::enter_section(string sSection)
 	_bPendingComma=false;
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFile::leave_section()
+void JsonFileWriter::leave_section()
 {
     _sSectionIndent = _sSectionIndent.substr(4);
 
@@ -49,31 +49,31 @@ void JsonFile::leave_section()
 	_bPendingComma=true;
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFile::add(string sKey, string sVal)
+void JsonFileWriter::add(string sKey, string sVal)
 {
     add_string(sKey, "\"" + sVal + "\"");
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFile::add(string sKey, int iVal)
+void JsonFileWriter::add(string sKey, int iVal)
 {
     stringstream ss;
     ss << iVal;
     add_string(sKey, ss.str());
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFile::add(string sKey, float fVal)
+void JsonFileWriter::add(string sKey, float fVal)
 {
     stringstream ss;
     ss << fVal;
     add_string(sKey, ss.str());
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFile::add(string sKey, bool bVal)
+void JsonFileWriter::add(string sKey, bool bVal)
 {
     add_string(sKey, (bVal ? "true" : "false"));
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFile::add_array(string sKey, int iSize, const float* pVal)
+void JsonFileWriter::add_array(string sKey, int iSize, const float* pVal)
 {
     stringstream ss;
     for (int i = 0; i < iSize; i++)
@@ -83,10 +83,10 @@ void JsonFile::add_array(string sKey, int iSize, const float* pVal)
             ss << ",";
     }
 
-    add(sKey, "[" + ss.str() +"]");
+    add_string(sKey, "[" + ss.str() +"]");
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFile::add_string(const string&  sKey, string s)
+void JsonFileWriter::add_string(const string&  sKey, string s)
 {
     if (_bPendingComma)
         _sOut += ",";
@@ -95,7 +95,7 @@ void JsonFile::add_string(const string&  sKey, string s)
 	_bPendingComma=true;
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFile::save(string sFile)
+void JsonFileWriter::save(string sFile)
 {
     std::ofstream f(sFile);
     f << this->to_string();
