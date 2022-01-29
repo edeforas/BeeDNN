@@ -54,9 +54,8 @@ int main()
     cout << "Fitting..." << endl;
 	NetTrain netfit;
 	netfit.set_epochs(2000);
-	netfit.set_net(net);
 	netfit.set_train_data(mSamples, mTruth);
-	netfit.fit();
+	netfit.fit(net);
 
     //print truth and prediction
 	MatrixFloat mPredict;

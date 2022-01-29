@@ -1,17 +1,17 @@
 #include "MetaOptimizer.h"
-
 #include "Net.h"
-
 #include "LayerFactory.h"
 
 #include <iostream>
 #include <ctime>
 #include <thread>
+using namespace std;
 
 //////////////////////////////////////////////////////////////////////////////
 MetaOptimizer::MetaOptimizer():
 	_betterSolutionCallBack(nullptr)
 {
+	_pNet=nullptr;
 	_fBestAccuracy = -1.;
 	_pTrain = nullptr;
 	_iNbThread = 0;
@@ -36,8 +36,12 @@ void MetaOptimizer::set_repeat_all(int iNbRepeatAll)
 	_iNRepeatAll = iNbRepeatAll;
 }
 //////////////////////////////////////////////////////////////////////////////
-void MetaOptimizer::fit()
+void MetaOptimizer::fit(Net& rNet)
 {
+	assert(_pTrain != 0);
+
+	_pNet = &rNet;
+	assert(_pNet != 0);
 	int iNbThread = _iNbThread;
 	if (iNbThread == 0) //auto case
 		iNbThread = (int)(thread::hardware_concurrency());
@@ -81,9 +85,8 @@ int MetaOptimizer::run_thread(int iThread, MetaOptimizer* self)
 	//hard copy ref net and train
 	Net netT;
 	NetTrain trainT;
-	netT = self->_pTrain->net();
+	netT = *(self->_pNet);
 	trainT = *(self->_pTrain);
-	trainT.set_net(netT);
 
 	self->apply_variations(netT);
 
@@ -95,7 +98,7 @@ int MetaOptimizer::run_thread(int iThread, MetaOptimizer* self)
 		}
 	);
 
-	trainT.fit();
+	trainT.fit(netT);
 
 	return 0; 
 }
@@ -160,5 +163,3 @@ void MetaOptimizer::apply_variations(Net& net)
 	}
 }
 ////////////////////////////////////////////////////////////////
-
-

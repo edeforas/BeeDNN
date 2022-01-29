@@ -48,8 +48,8 @@ namespace NetUtil {
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	void save(string sFile,const Net& net, const NetTrain& train)
 	{
-		// save solution
-		JsonFile jf;
+		// save trained model and train parameters
+		JsonFileWriter jf;
 
 		jf.add("Engine", string("BeeDNN"));
 		jf.add("Problem", string(net.is_classification_mode() ? "Classification" : "Regression"));
@@ -89,23 +89,27 @@ namespace NetUtil {
 			jf.enter_section(sLayer);
 			jf.add("type", layer->type());
 
+			if (layer->has_weights())
+			{
+				jf.add("weightInitializer", layer->weight_initializer());
+				vector<MatrixFloat*> pW = layer->weights();
+				for (int j = 0; j < pW.size(); j++)
+					jf.add_array("weight_" + to_string(j), (int)pW[j]->size(), pW[j]->data());
+			}
+
+			if (layer->has_biases())
+			{
+				jf.add("biasInitializer", layer->bias_initializer());
+				vector<MatrixFloat*> pB = layer->biases();
+				for (int j = 0; j < pB.size(); j++)
+					jf.add_array("bias_" + to_string(j), (int)pB[j]->size(), pB[j]->data());
+			}
+
 			if (layer->type() == "Dense")
 			{
 				LayerDense* l = static_cast<LayerDense*>(layer);
-
-				jf.add("hasBias", l->has_bias());
 				jf.add("inputSize", (int)l->input_size());
 				jf.add("outputSize", (int)l->output_size());
-				jf.add("weightInitializer", l->weight_initializer());
-				const MatrixFloat& m = l->weights();
-				jf.add_array("weight", (int)m.size(), m.data());
-				if (l->has_bias())
-				{
-					jf.add("biasInitializer", l->bias_initializer());
-
-					const MatrixFloat& mb = l->bias();
-					jf.add_array("bias", (int)mb.size(), mb.data());
-				}
 			}
 
 			if (layer->type() == "Dot")
@@ -113,53 +117,6 @@ namespace NetUtil {
 				LayerDense* l = static_cast<LayerDense*>(layer);
 				jf.add("inputSize", (int)l->input_size());
 				jf.add("outputSize", (int)l->output_size());
-				const MatrixFloat& m = l->weights();
-				jf.add_array("weight", (int)m.size(), m.data());
-				jf.add("weightInitializer", l->weight_initializer());
-			}
-
-			else if (layer->type() == "Bias")
-			{
-				LayerBias* l = static_cast<LayerBias*>(layer);
-
-				const MatrixFloat& mb = l->bias();
-				jf.add_array("bias", (int)mb.size(), mb.data());
-				jf.add("biasInitializer", l->bias_initializer());
-			}
-
-			else if (layer->type() == "GlobalGain")
-			{
-				LayerGlobalGain* l = static_cast<LayerGlobalGain*>(layer);
-				jf.add("weight", l->weights()(0));
-			}
-
-			else if (layer->type() == "GlobalBias")
-			{
-				LayerGlobalBias* l = static_cast<LayerGlobalBias*>(layer);
-				jf.add("bias", l->bias()(0));
-			}
-
-			else if (layer->type() == "GlobalAffine")
-			{
-				LayerGlobalAffine* l = static_cast<LayerGlobalAffine*>(layer);
-				jf.add("weight", l->weights()(0));
-				jf.add("bias", l->bias()(0));
-			}
-
-			else if (layer->type() == "Gain")
-			{
-				LayerGain* l = static_cast<LayerGain*>(layer);
-				const MatrixFloat& m = l->weights();
-				jf.add_array("weight", (int)m.size(), m.data());
-			}
-
-			else if (layer->type() == "Affine")
-			{
-				LayerAffine* l = static_cast<LayerAffine*>(layer);
-				const MatrixFloat& mw = l->weights();
-				jf.add_array("weight", (int)mw.size(), mw.data());
-				const MatrixFloat& mb = l->bias();
-				jf.add_array("bias", (int)mb.size(), mb.data());
 			}
 
 			else if (layer->type() == "ChannelBias")
@@ -172,22 +129,12 @@ namespace NetUtil {
 				jf.add("rows", (int)iRows);
 				jf.add("cols", (int)iCols);
 				jf.add("channels", (int)iChannels);
-
-				const MatrixFloat& mb = l->bias();
-				jf.add_array("bias", (int)mb.size(), mb.data());
 			}
 
 			else if (layer->type() == "Dropout")
 			{
 				LayerDropout* l = static_cast<LayerDropout*>(layer);
 				jf.add("rate", l->get_rate());
-			}
-
-			else if (layer->type() == "PRelu")
-			{
-				LayerPRelu* l= static_cast<LayerPRelu*>(layer);
-				const MatrixFloat& m = l->weights();
-				jf.add_array("weight",(int) m.size(), m.data());
 			}
 
 			else if (layer->type() == "RRelu")
@@ -250,17 +197,12 @@ namespace NetUtil {
 				jf.add("rowStride", (int)rowStride);
 				jf.add("colStride", (int)colStride);
 				jf.add("outChannels", (int)outChannels);
-
-				const MatrixFloat& mw = l->weights();
-				jf.add_array("weight", (int)mw.size(), mw.data());
 			}
 
 			else if (layer->type() == "TimeDistributedBias")
 			{
 				LayerTimeDistributedBias* l = static_cast<LayerTimeDistributedBias*>(layer);
 				jf.add("frameSize", l->frame_size());
-				const MatrixFloat& mb = l->bias();
-				jf.add_array("bias", (int)mb.size(), mb.data());
 			}
 
 			else if (layer->type() == "TimeDistributedDot")
@@ -268,9 +210,6 @@ namespace NetUtil {
 				LayerTimeDistributedDot* l = static_cast<LayerTimeDistributedDot*>(layer);
 				jf.add("inFrameSize", l->in_frame_size());
 				jf.add("outFrameSize", l->out_frame_size());
-
-				const MatrixFloat& mw = l->weights();
-				jf.add_array("weight", (int)mw.size(), mw.data());
 			}
 
 			else if (layer->type() == "TimeDistributedDense")
@@ -278,12 +217,6 @@ namespace NetUtil {
 				LayerTimeDistributedDense* l = static_cast<LayerTimeDistributedDense*>(layer);
 				jf.add("inFrameSize", l->in_frame_size());
 				jf.add("outFrameSize", l->out_frame_size());
-
-				const MatrixFloat& mw = l->weights();
-				jf.add_array("weight", (int)mw.size(), mw.data());
-
-				const MatrixFloat& mb = l->bias();
-				jf.add_array("bias", (int)mb.size(), mb.data());
 			}
 
 			else if (layer->type() == "SimplestRNN")

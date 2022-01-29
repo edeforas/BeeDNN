@@ -58,7 +58,7 @@ public:
 
 	void set_repeat_all(int iNbRepeatAll);
 	
-	void fit();
+	void fit(Net& rNet);
 	void set_better_model_callback(std::function<void(NetTrain& train)> betterSolutionCallBack);
 
 private:
@@ -67,6 +67,7 @@ private:
 	std::function<void(NetTrain& train)> _betterSolutionCallBack;
 	
 	NetTrain* _pTrain;
+	Net* _pNet;
 	int _iNbThread;
 	int _iNRepeatAll;
 	float _fBestAccuracy;
