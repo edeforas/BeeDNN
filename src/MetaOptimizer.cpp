@@ -38,6 +38,8 @@ void MetaOptimizer::set_repeat_all(int iNbRepeatAll)
 //////////////////////////////////////////////////////////////////////////////
 void MetaOptimizer::fit(Net& rNet)
 {
+	assert(_pTrain != 0);
+
 	_pNet = &rNet;
 	assert(_pNet != 0);
 	int iNbThread = _iNbThread;
