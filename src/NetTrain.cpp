@@ -422,11 +422,11 @@ void NetTrain::fit(Net& rNet)
 
     //accept batch size == 0 or greater than nb samples  -> full size
     _iBatchSizeAdjusted=_iBatchSize;
-    if( (_iBatchSizeAdjusted >iNbSamples) || (_iBatchSizeAdjusted ==0) )
-        _iBatchSizeAdjusted =iNbSamples;
+	if( (_iBatchSizeAdjusted >iNbSamples) || (_iBatchSizeAdjusted ==0) )
+		_iBatchSizeAdjusted =iNbSamples;
 
 	// init all optimizers
-	for (int iOptim = 0; iOptim < _optimizers.size(); iOptim++)
+	for (size_t iOptim = 0; iOptim < _optimizers.size(); iOptim++)
 		_optimizers[iOptim]->init();
 	
     //compute the accuracy at epoch 0, if keepbest is selected

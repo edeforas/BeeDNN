@@ -221,7 +221,7 @@ namespace NetUtil {
 
 			else if (layer->type() == "SimplestRNN")
 			{
-				LayerSimplestRNN* l = static_cast<LayerSimplestRNN*>(layer);
+				//LayerSimplestRNN* l = static_cast<LayerSimplestRNN*>(layer);
 				//TODO
 			}
 
