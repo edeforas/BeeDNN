@@ -520,27 +520,33 @@ class LayerSimplestRNN(Layer): # compute only h <- tanh(Wx+h) # many to many
     if self.training:
       self.x=x
 
-    out=x
+    y=np.zeros_like(x)
     for f in range(0,cols,self.frameSize):
       xf=x[:,f:f+self.frameSize]
 
       #forward cell
       h=np.tanh( xf @ self.weight +h)
 
-      out[:,f:f+self.frameSize]=h
-    return out
+      y[:,f:f+self.frameSize]=h
+    return y
 
   def backpropagation(self,dldy):
     cols=self.x.shape[1]
+    nb_frames=int(cols/self.frameSize)
+    dldx=np.zeros_like(dldy)
+    self.dldw=np.zeros_like(self.weight)
     for f in reversed(range(0,cols,self.frameSize)):
       xf=self.x[:,f:f+self.frameSize]
       dldyf=dldy[:,f:f+self.frameSize]
 
       #backprop cell
-      dldt=1.-dldyf*dldyf # backprop tanh
-      dldh=dldt*1. # ot needed in many to many
-      self.dldw=(dldt.T)@xf
-      dldx=dldt@self.weight
+      dldt=1.-dldyf*dldyf # backpropagation tanh
+           #  dldh=dldt*1. # needed in many to many
+      self.dldw+=(dldt.T)@xf
+      dldxf=dldt@self.weight
+      dldx[:,f:f+self.frameSize]=dldxf
+
+    self.dldw/=nb_frames
     return dldx
 
 ##################################################################################################################################

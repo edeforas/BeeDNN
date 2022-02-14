@@ -34,7 +34,7 @@ sample,truth=create_sample_sin_db()
  
 n = nn.Net()
 n.append(layer.LayerTimeDistributedDense(1,3))
-#n.append(layer.LayerSimplestRNN(3))
+n.append(layer.LayerSimplestRNN(3))
 n.append(layer.LayerRELU())
 n.append(layer.LayerDense(nb_frame*3,nb_frame))
 
