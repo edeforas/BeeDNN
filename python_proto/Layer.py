@@ -502,51 +502,99 @@ class LayerTimeDistributedDense(Layer):
 
 ##################################################################################################################################
 
-class LayerSimplestRNN(Layer): # compute only h <- tanh(Wx+h) # many to many
-  def __init__(self,frameSize):
-    super().__init__()
-    self.learnWeight = True
-    self.frameSize=frameSize
-    self.init()
+class RNNCellNaive():
+  def __init__(self):
+    self.h=None
 
-  def init(self):
-    a=np.sqrt(6./(self.frameSize+self.frameSize)) # Xavier uniform initialization
-    self.weight = a*(np.random.rand(self.frameSize,self.frameSize) * 2. - 1.)
+  def init_w(self,framesize):
+    a=np.sqrt(6./(framesize+framesize)) # Glorot uniform initialization
+    self.weight = a*(np.random.rand(framesize,framesize) * 2. - 1.)
+
+  def init_state(self):
+    self.dldw=np.zeros_like(self.weight)
 
   def forward(self,x):
+    self.h=x@self.weight
+    return self.h
 
-    h=np.zeros((x.shape[0],self.frameSize))
-    cols=x.shape[1]
+  def backpropagation(self,x,dldy):
+      self.dldw= (x.T)@dldy
+      self.dldh=dldy*0.
+      dldx=dldy@ (self.weight.T)
+      return dldx
+
+
+class RNNCellSimplestRNN():
+  def __init__(self):
+    self.h=None
+
+  def init_w(self,framesize):
+    a=np.sqrt(6./(framesize+framesize)) # Glorot uniform initialization
+    self.weight = a*(np.random.rand(framesize,framesize) * 2. - 1.)
+
+  def init_state(self):
+    h=None
+    self.dldw=np.zeros_like(self.weight)
+
+  def forward(self,x):
+    if self.h is None:
+       self.h=np.zeros((x.shape[0],self.weight.shape[0]))
+    self.h=np.tanh( x + self.h @self.weight) # x could have been affined with a previous TimeDistributedDense
+    return self.h
+
+  def backpropagation(self,x,dldy):
+      dldt=1.-dldy*dldy # backpropagation tanh
+      self.dldw+=(dldt.T)@self.h
+      dldx=dldt
+      self.dldh=dldt@ (self.weight.T)
+      return dldx
+
+##################################################################################################################################
+
+class LayerSimplestRNN(Layer): # compute only h <- tanh(Wx+h) # many to many
+  def __init__(self,frameSize): 
+    super().__init__()
+
+    self.learnWeight = True
+    self.frameSize=frameSize
+    self.cell=RNNCellNaive()
+    self.cell.init_w(frameSize)
+
+  def forward(self,x):
+    self.cell.init_state()
+
     if self.training:
       self.x=x
 
     y=np.zeros_like(x)
-    for f in range(0,cols,self.frameSize):
+    for f in range(0,x.shape[1],self.frameSize):
       xf=x[:,f:f+self.frameSize]
-
-      #forward cell
-      h=np.tanh( xf @ self.weight +h)
-
+      h=self.cell.forward(xf)
       y[:,f:f+self.frameSize]=h
+
     return y
 
   def backpropagation(self,dldy):
     cols=self.x.shape[1]
     nb_frames=int(cols/self.frameSize)
     dldx=np.zeros_like(dldy)
-    self.dldw=np.zeros_like(self.weight)
+    self.dldw=np.zeros((cols,cols))
+    dldh=None
     for f in reversed(range(0,cols,self.frameSize)):
       xf=self.x[:,f:f+self.frameSize]
       dldyf=dldy[:,f:f+self.frameSize]
 
-      #backprop cell
-      dldt=1.-dldyf*dldyf # backpropagation tanh
-           #  dldh=dldt*1. # needed in many to many
-      self.dldw+=(dldt.T)@xf
-      dldxf=dldt@self.weight
-      dldx[:,f:f+self.frameSize]=dldxf
+      # add the loss gradient from next time
+      if dldh is not None:
+        dldyf+=dldh
 
-    self.dldw/=nb_frames
+      #backprop cell
+      dldxf=self.cell.backpropagation(xf,dldyf)
+      dldx[:,f:f+self.frameSize]=dldxf
+      dldh=self.cell.dldh
+
+    self.dldw=self.cell.dldw/nb_frames
+    self.weight=self.cell.weight
     return dldx
 
 ##################################################################################################################################
