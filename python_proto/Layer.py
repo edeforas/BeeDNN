@@ -539,7 +539,7 @@ class RNNCellSimplestRNN():
   def forward(self,x):
     if self.h is None:
        self.h=np.zeros((x.shape[0],self.weight.shape[0]))
-    self.h=np.tanh( x + self.h @self.weight) # x could have been affined with a previous TimeDistributedDense
+    self.h=np.tanh( x + self.h @self.weight) # x can have been affined with a previous TimeDistributedDense
     return self.h
 
   def backpropagation(self,x,dldy):
@@ -557,7 +557,7 @@ class LayerSimplestRNN(Layer): # compute only h <- tanh(Wx+h) # many to many
 
     self.learnWeight = True
     self.frameSize=frameSize
-    self.cell=RNNCellNaive()
+    self.cell=RNNCellSimplestRNN()
     self.cell.init_w(frameSize)
 
   def forward(self,x):
@@ -572,6 +572,7 @@ class LayerSimplestRNN(Layer): # compute only h <- tanh(Wx+h) # many to many
       h=self.cell.forward(xf)
       y[:,f:f+self.frameSize]=h
 
+    self.h=y
     return y
 
   def backpropagation(self,dldy):
@@ -583,12 +584,14 @@ class LayerSimplestRNN(Layer): # compute only h <- tanh(Wx+h) # many to many
     for f in reversed(range(0,cols,self.frameSize)):
       xf=self.x[:,f:f+self.frameSize]
       dldyf=dldy[:,f:f+self.frameSize]
+      hf=self.h[:,f:f+self.frameSize]
 
       # add the loss gradient from next time
       if dldh is not None:
-        dldyf+=dldh
+        dldyf=(dldyf+dldh)*0.5
 
       #backprop cell
+      self.cell.h=hf
       dldxf=self.cell.backpropagation(xf,dldyf)
       dldx[:,f:f+self.frameSize]=dldxf
       dldh=self.cell.dldh
