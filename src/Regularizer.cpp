@@ -75,7 +75,7 @@ public:
 
 	virtual void apply(MatrixFloat& w, MatrixFloat& dw) override
 	{
-		dw = dw - w.cwiseSign()*_fParameter;
+		dw = dw + w.cwiseSign()*_fParameter;
 	}
 };
 //////////////////////////////////////////////////////////
@@ -103,7 +103,7 @@ public:
 
 	virtual void apply(MatrixFloat& w, MatrixFloat& dw) override
 	{
-		dw = dw - w * _fParameter;
+		dw = dw + w * _fParameter;
 	}
 };
 //////////////////////////////////////////////////////////
@@ -133,7 +133,7 @@ public:
 
 	virtual void apply(MatrixFloat& w, MatrixFloat& dw) override
 	{
-		dw = dw - w * _fParameter - w.cwiseSign()*_fParameter;
+		dw = dw + w * _fParameter + w.cwiseSign()*_fParameter;
 	}
 };
 //////////////////////////////////////////////////////////

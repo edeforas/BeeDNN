@@ -571,15 +571,17 @@ void NetTrain::train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth
 	Index iNbBiases = _pBiases.size();
 	for (int i = 0; i < iNbWeights; i++)
 	{
-		_optimizers[i]->optimize(*_pWeights[i], *_pGradWeights[i]);
 		if (_pRegularizer)
 			_pRegularizer->apply(*_pWeights[i], *_pGradWeights[i]);
+
+		_optimizers[i]->optimize(*_pWeights[i], *_pGradWeights[i]);
 	}
 	for (int i = 0; i < iNbBiases; i++)
 	{
-		_optimizers[i + iNbWeights]->optimize(*_pBiases[i], *_pGradBiases[i]);
 		if (_pRegularizer)
 			_pRegularizer->apply(*_pBiases[i], *_pGradBiases[i]);
+
+		_optimizers[i + iNbWeights]->optimize(*_pBiases[i], *_pGradBiases[i]);
 	}
 
 	//compute and save statistics

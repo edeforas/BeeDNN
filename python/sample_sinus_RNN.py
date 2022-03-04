@@ -1,12 +1,13 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import random
-import BeeDNNProto as nn
-import Layer as layer
-
+import BeeDNN as nn
+import Layer
 
 nb_frame = 7
 nb_sample = 1000
+nb_epochs = 5000
+batch_size = 1000
 
 #####################################################################################
 def create_sample_sin():
@@ -33,17 +34,17 @@ def create_sample_sin_db():
 sample,truth=create_sample_sin_db()
  
 n = nn.Net()
-n.append(layer.LayerTimeDistributedDense(1,3))
-n.append(layer.LayerSimplestRNN(3))
-n.append(layer.LayerRELU())
-n.append(layer.LayerDense(nb_frame*3,nb_frame))
+n.append(Layer.LayerTimeDistributedDense(1,3))
+#n.append(Layer.LayerRNN(3,3,3)) # input frame size, state size, output frame size
+n.append(Layer.LayerRELU())
+n.append(Layer.LayerDense(3*nb_frame,nb_frame))
 
 # train net
 train = nn.NetTrain()
-train.set_epochs(1000)
-train.set_batch_size(1000)
-train.set_optimizer(nn.opt.OptimizerAdam())
-train.set_loss(layer.LossMAE()) # simple Mean Absolute Error
+train.set_epochs(nb_epochs)
+train.set_batch_size(batch_size)
+train.set_optimizer("Adam")
+train.set_loss("MAE") # simple Mean Absolute Error
 train.fit(n,sample,truth)
 
 # plot loss

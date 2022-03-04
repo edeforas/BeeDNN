@@ -1,8 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import BeeDNNProto as nn
+import BeeDNN as nn
 import MNIST_import
-import Layer as layer
+import Layer
 
 # Simple MNIST classification using a small network
 
@@ -13,20 +13,20 @@ test_data/=256.
 
 # construct net
 n = nn.Net()
-n.append(layer.LayerFlatten())
-n.append(layer.LayerDense(28*28,128))
-n.append(layer.LayerDropout(0.2))
-n.append(layer.LayerRELU())
-n.append(layer.LayerDense(128,10))
-n.append(layer.LayerSoftmax())
+n.append(Layer.LayerFlatten())
+n.append(Layer.LayerDense(28*28,128))
+n.append(Layer.LayerDropout(0.2))
+n.append(Layer.LayerRELU())
+n.append(Layer.LayerDense(128,10))
+n.append(Layer.LayerSoftmax())
 
 # train net
 train = nn.NetTrain()
 train.set_epochs(10)
 train.set_batch_size(128)
 train.set_test_data(test_data , test_truth)
-train.set_optimizer(nn.opt.OptimizerAdam())
-train.set_loss(layer.LossSparseCategoricalCrossEntropy())
+train.set_optimizer("Adam")
+train.set_loss("SparseCategoricalCrossEntropy")
 train.set_metrics("accuracy")
 train.fit(n,train_data,train_truth)
 n=train.best_net

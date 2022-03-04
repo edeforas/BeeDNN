@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import BeeDNNProto as nn
+import BeeDNN as nn
 import Layer as layer
 
 # simple xor classification
@@ -22,8 +22,8 @@ n.append(layer.LayerDense(10,1))
 train = nn.NetTrain()
 train.set_epochs(100)
 train.set_batch_size(0) #if set to 0, use full batch
-train.set_optimizer(nn.opt.OptimizerRPROPm())
-train.set_loss(layer.LossMSE()) # simple Mean Square Error
+train.set_optimizer("RPROPm")
+train.set_loss("MSE") # simple Mean Square Error
 train.fit(n,sample,truth)
 
 # plot loss

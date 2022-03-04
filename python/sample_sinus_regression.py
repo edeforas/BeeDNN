@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import BeeDNNProto as nn
-import Layer as layer
+import BeeDNN as nn
+import Layer
 
 # Simple Sinus regression using small network
 # network is intentionally very small, so we can see the fitting error
@@ -12,16 +12,16 @@ truth = np.sin(sample)
 
 # construct net
 n = nn.Net()
-n.append(layer.LayerDense(1,10))
-n.append(layer.LayerRELU())
-n.append(layer.LayerDense(10,1))
+n.append(Layer.LayerDense(1,10))
+n.append(Layer.LayerRELU())
+n.append(Layer.LayerDense(10,1))
 
 # train net
 train = nn.NetTrain()
 train.set_epochs(50)
 train.set_batch_size(32)
-train.set_optimizer(nn.opt.OptimizerNadam())
-train.set_loss(layer.LossMSE()) # simple Mean Square Error
+train.set_optimizer("Nadam")
+train.set_loss("MSE") # simple Mean Square Error
 train.fit(n,sample,truth)
 
 # plot loss

@@ -10,9 +10,8 @@ import numpy as np
 import copy
 import multiprocessing
 import threading
-import BeeDNNProto as nn
+import BeeDNN as nn
 import pickle
-
 
 ###################################################################################################
 class MetaOptimizer:

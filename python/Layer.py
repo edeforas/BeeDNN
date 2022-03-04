@@ -8,19 +8,26 @@
 
 import numpy as np
 import copy
+import Optimizer as opt
 
 ################################################################################################### Layers
 class Layer:
   def __init__(self):
     self.dydx = 1.
-    self.learnWeight = False # set to False to freeze Weight training
-    self.learnBias= False # set to False to freeze Bias training
     self.training = False # set to False in testing mode or True in training mode
+    self.regularizer=None
+    self.optimizer=None
 
   def init(self):
     pass
 
   def forward(self,x):
+    pass
+
+  def set_optimizer(self,optimizer):
+    self.optimizer=optimizer
+
+  def optimize(self):
     pass
 
   #compute input loss from output loss
@@ -267,12 +274,14 @@ class LayerTanhShrink(Layer):
       self.dydx = y * y
     return x-y
 
-####################################### special layers
+######################################################################################
 class LayerGlobalBias(Layer):
   def __init__(self):
     super().__init__()
-    self.learnBias= True
+  
+  def init(self):    
     self.bias = np.zeros(1,dtype=np.float32)
+    self.optimizer_Bias=opt.create(self.optimizer)
 
   def forward(self,x):
     return x + self.bias[0]
@@ -280,36 +289,50 @@ class LayerGlobalBias(Layer):
   def backpropagation(self,dldy):
     self.dldb = np.atleast_1d(dldy.mean())
     return dldy
-
+  
+  def optimize(self):
+    self.bias=self.optimizer_Bias.optimize(self.bias,self.dldb)
+######################################################################################
 class LayerBias(Layer):
   def __init__(self,outSize):
     super().__init__()
-    self.learnBias= True
-    self.bias = np.zeros((1,outSize),dtype=np.float32)
-
+    self.outSize=outSize
+  
+  def init(self):
+    self.bias = np.zeros((1,self.outSize),dtype=np.float32)
+    self.optimizer_Bias=opt.create(self.optimizer)
+    
   def forward(self,x):
     return x + self.bias
 
   def backpropagation(self,dldy):
     self.dldb = np.atleast_2d(np.mean(dldy,axis=0))
     return dldy
-
+  
+  def optimize(self):
+    self.bias=self.optimizer_Bias.optimize(self.bias,self.dldb)
+######################################################################################
 class LayerGlobalGain(Layer):
   def __init__(self):
     super().__init__()
-    self.learnWeight = True
-    self.weighteight = np.ones(1,dtype=np.float32)
+  
+  def init(self):
+    self.weight = 1
+    self.optimizer_Weight=opt.create(self.optimizer)
  
   def forward(self,x):
     if self.training:
-      self.dydx = self.weight[0]
+      self.dydx = self.weight
       self.dydw = x
-    return x * self.weight[0]
+    return x * self.weight
   
   def backpropagation(self,dldy):
     self.dldw = np.atleast_1d((self.dydw * dldy).mean())
     return dldy * self.dydx
 
+  def optimize(self):
+    self.weight=self.optimizer_Weight.optimize(self.weight,self.dldw)
+######################################################################################
 class LayerAddGaussianNoise(Layer):
   def __init__(self,stdev=0.1):
     super().__init__()
@@ -329,18 +352,17 @@ class LayerAddUniformNoise(Layer):
     if self.training:
       x += np.random.rand(*(x.shape))*self.noise
     return x
-
+######################################################################################
 class LayerDot(Layer):
   def __init__(self,inSize,outSize):
     super().__init__()
-    self.learnWeight = True
     self.inSize=inSize
     self.outSize=outSize
-    self.init()
 
   def init(self):
     a=np.sqrt(6./(self.inSize+self.outSize)) # Xavier uniform initialization
     self.weight = a*(np.random.rand(self.inSize,self.outSize) * 2. - 1.)
+    self.optimizer_Weight=opt.create(self.optimizer)
 
   def forward(self,x):
     if self.training:
@@ -352,19 +374,21 @@ class LayerDot(Layer):
     self.dldw *= (1./(self.dydw.shape[0]))
     return dldy @ (self.weight.transpose())
 
+  def optimize(self):
+    self.weight=self.optimizer_Weight.optimize(self.weight,self.dldw)
+######################################################################################
 class LayerDense(Layer): # with bias
   def __init__(self,inSize,outSize):
     super().__init__()
     self.inSize=inSize
     self.outSize=outSize
-    self.learnWeight = True
-    self.learnBias = True
-    self.init()
 
   def init(self):
     a=np.sqrt(6./(self.inSize+self.outSize)) # Xavier uniform initialization
     self.weight = a*(np.random.rand(self.inSize,self.outSize) * 2. - 1.)
     self.bias = np.zeros((1,self.outSize),dtype=np.float32)
+    self.optimizer_Weight=opt.create(self.optimizer)
+    self.optimizer_Bias=opt.create(self.optimizer)
  
   def forward(self,x):
     if self.training:
@@ -377,6 +401,10 @@ class LayerDense(Layer): # with bias
     self.dldb = np.atleast_2d(np.mean(dldy,axis=0))
     return dldy @ (self.weight.transpose())
 
+  def optimize(self):
+    self.weight=self.optimizer_Weight.optimize(self.weight,self.dldw)
+    self.bias=self.optimizer_Bias.optimize(self.bias,self.dldb)
+######################################################################################
 class LayerSoftmax(Layer):
   def __init__(self):
     super().__init__()
@@ -385,10 +413,12 @@ class LayerSoftmax(Layer):
     max_row=np.max(x,axis=1)
     ex=np.exp(x-max_row[:,None])
     sum_row=np.atleast_2d(np.sum(ex,axis=1)).transpose()
+    ex /= sum_row
+    
     if self.training:
-      self.dydx=-ex*(ex-sum_row)/(sum_row*sum_row)
-    return ex/sum_row
-
+      self.dydx=ex*(1.-ex)
+    return ex
+######################################################################################
 class LayerDropout(Layer):
   def __init__(self,rate=0.3):
     super().__init__()
@@ -399,18 +429,17 @@ class LayerDropout(Layer):
       z = np.random.binomial(size=(1,x.shape[1]), n=1, p= 1-self.rate)*(1./(1.-self.rate))
       x=x*z
     return x
-
+######################################################################################
 class LayerTimeDistributedDot(Layer):
   def __init__(self,inSize,outSize):
     super().__init__()
-    self.learnWeight = True
     self.inSize=inSize
     self.outSize=outSize
-    self.init()
 
   def init(self):
     a=np.sqrt(6./(self.inSize+self.outSize)) # Xavier uniform initialization
     self.weight = a*(np.random.rand(self.inSize,self.outSize) * 2. - 1.)
+    self.optimizer_Weight=opt.create(self.optimizer)
 
   def forward(self,x):
     if self.training:
@@ -435,16 +464,18 @@ class LayerTimeDistributedDot(Layer):
     # reshape back
     return d2.reshape(dldy.shape[0],-1)
 
+  def optimize(self):
+    self.weight=self.optimizer_Weight.optimize(self.weight,self.dldw)
+######################################################################################
 class LayerTimeDistributedBias(Layer):
   def __init__(self,iSize):
     super().__init__()
-    self.learnBias= True
     self.iSize=iSize
-    self.init()
 
   def init(self):
     self.bias = np.zeros((1,self.iSize),dtype=np.float32)
-
+    self.optimizer_Bias=opt.create(self.optimizer)
+    
   def forward(self,x):
     y=x.reshape((-1,self.iSize))
     d= y + self.bias
@@ -460,20 +491,23 @@ class LayerTimeDistributedBias(Layer):
 
     return dldy
 
+  def optimize(self):
+    self.bias=self.optimizer_Bias.optimize(self.bias,self.dldb)
+######################################################################################
 class LayerTimeDistributedDense(Layer):
   def __init__(self,inSize,outSize):
     super().__init__()
-    self.learnWeight = True
-    self.learnBias= True
     self.inSize=inSize
     self.outSize=outSize
-    self.init()
 
   def init(self):
     a=np.sqrt(6./(self.inSize+self.outSize)) # Xavier uniform initialization
     self.weight = a*(np.random.rand(self.inSize,self.outSize) * 2. - 1.)
     self.bias = np.zeros((1,self.outSize),dtype=np.float32)
+    self.optimizer_Weight=opt.create(self.optimizer)
+    self.optimizer_Bias=opt.create(self.optimizer)
 
+    
   def forward(self,x):
     if self.training:
       self.dydw = x
@@ -499,66 +533,80 @@ class LayerTimeDistributedDense(Layer):
 
     # reshape back
     return d2.reshape(dldy.shape[0],-1)
-
+  
+  def optimize(self):
+    self.weight=self.optimizer_Weight.optimize(self.weight,self.dldw)
+    self.bias=self.optimizer_Bias.optimize(self.bias,self.dldb)
 ##################################################################################################################################
 
-class RNNCellNaive():
+class RNNCellNaive(): # works like a TimeDistributedDot, no cell memory, toy RNN
   def __init__(self):
     self.h=None
 
-  def init_w(self,framesize):
-    a=np.sqrt(6./(framesize+framesize)) # Glorot uniform initialization
-    self.weight = a*(np.random.rand(framesize,framesize) * 2. - 1.)
+  def init_w(self,inFrameSize,hSize,outFrameSize):
+    a=np.sqrt(6./(inFrameSize+outFrameSize)) # Glorot uniform initialization
+    self.weight = a*(np.random.rand(inFrameSize,outFrameSize) * 2. - 1.)
+    self.hSize=hSize
 
   def init_state(self):
     self.dldw=np.zeros_like(self.weight)
 
-  def forward(self,x):
-    self.h=x@self.weight
-    return self.h
+  def forward(self,x,h):
+    if h is None: #init size and zeros
+      h=np.zeros((x.shape[0], self.hSize))
+    return x@self.weight,0*h #return y,h
 
-  def backpropagation(self,x,dldy):
-      self.dldw= (x.T)@dldy
-      self.dldh=dldy*0.
+  def backpropagation(self,dldy,dldh,x,h):
+      self.dldw+= (x.T)@dldy
       dldx=dldy@ (self.weight.T)
-      return dldx
-
+      dldh=dldy*0.
+      return dldx,dldh #return dldx,dldh
 
 class RNNCellSimplestRNN():
   def __init__(self):
     self.h=None
 
-  def init_w(self,framesize):
-    a=np.sqrt(6./(framesize+framesize)) # Glorot uniform initialization
-    self.weight = a*(np.random.rand(framesize,framesize) * 2. - 1.)
+  def init_w(self,inFrameSize,hSize,outFrameSize):
+    a=np.sqrt(6./(inFrameSize+outFrameSize)) # Glorot uniform initialization
+    self.weight = a*(np.random.rand(inFrameSize,outFrameSize) * 2. - 1.)
+    self.hSize=hSize
 
   def init_state(self):
-    h=None
     self.dldw=np.zeros_like(self.weight)
 
-  def forward(self,x):
-    if self.h is None:
-       self.h=np.zeros((x.shape[0],self.weight.shape[0]))
-    self.h=np.tanh( x + self.h @self.weight) # x can have been affined with a previous TimeDistributedDense
-    return self.h
+  def forward(self,x,h):
+    if h is None: #init size and zeros
+      h=np.zeros((x.shape[0], self.hSize))
+    h=np.tanh( x + h @self.weight) # x can have been affined with a previous TimeDistributedDense
+    return h,h #return y,h
 
-  def backpropagation(self,x,dldy):
-      dldt=1.-dldy*dldy # backpropagation tanh
-      self.dldw+=(dldt.T)@self.h
-      dldx=dldt
-      self.dldh=dldt@ (self.weight.T)
-      return dldx
+  def backpropagation(self,dldy,dldh,x,h):
+      dldout=(dldy+dldh)*0.5 #average grad output
+      dldu=1.-dldout*dldout #bp tanh
+
+      self.dldw+=(dldu.T)@h
+
+      dldx=dldu
+      dldh=dldu@ (self.weight.T)
+      return dldx,dldh
 
 ##################################################################################################################################
 
-class LayerSimplestRNN(Layer): # compute only h <- tanh(Wx+h) # many to many
-  def __init__(self,frameSize): 
+class LayerRNN(Layer): # many to many
+  def __init__(self,inFrameSize,hSize,outFrameSize):
     super().__init__()
 
-    self.learnWeight = True
-    self.frameSize=frameSize
-    self.cell=RNNCellSimplestRNN()
-    self.cell.init_w(frameSize)
+    self.inFrameSize=inFrameSize
+    self.hSize=hSize
+    self.outFrameSize=outFrameSize
+    #self.cell= RNNCellNaive()
+    self.cell= RNNCellSimplestRNN()
+    self.cell.init_w(inFrameSize,hSize,outFrameSize)
+
+  def init(self):
+    self.optimizer_Weight=opt.create(self.optimizer)
+    self.optimizer_Bias=opt.create(self.optimizer)
+
 
   def forward(self,x):
     self.cell.init_state()
@@ -566,122 +614,49 @@ class LayerSimplestRNN(Layer): # compute only h <- tanh(Wx+h) # many to many
     if self.training:
       self.x=x
 
-    y=np.zeros_like(x)
-    for f in range(0,x.shape[1],self.frameSize):
-      xf=x[:,f:f+self.frameSize]
-      h=self.cell.forward(xf)
-      y[:,f:f+self.frameSize]=h
+    hf=None
+    nb_frame=int(x.shape[1]/self.inFrameSize)
+    nb_sample=x.shape[0]
+    hSize=self.cell.hSize
+    for n in range(nb_frame):
+      xf=x[:,n*self.inFrameSize:(n+1)*self.inFrameSize]
+      y,h=self.cell.forward(xf,hf)
 
-    self.h=y
-    return y
+      if hf is None: # first init
+        self.h=np.zeros((nb_sample,hSize*nb_frame))
+        self.y=np.zeros((nb_sample,self.outFrameSize*nb_frame))
+
+      self.h[:,n*hSize:(n+1)*hSize]=h
+      self.y[:,n*self.outFrameSize:(n+1)*self.outFrameSize]=y
+      hf=h
+
+    return self.y
 
   def backpropagation(self,dldy):
+    nb_frames=int(self.x.shape[1]/self.inFrameSize)
+    dldx=np.zeros_like(self.x)
     cols=self.x.shape[1]
-    nb_frames=int(cols/self.frameSize)
-    dldx=np.zeros_like(dldy)
     self.dldw=np.zeros((cols,cols))
-    dldh=None
-    for f in reversed(range(0,cols,self.frameSize)):
-      xf=self.x[:,f:f+self.frameSize]
-      dldyf=dldy[:,f:f+self.frameSize]
-      hf=self.h[:,f:f+self.frameSize]
+    dldhf=None
+    for n in reversed(range(nb_frames)):
+
+      xf=self.x[:,n*self.inFrameSize:(n+1)*self.inFrameSize]
+      dldyf=dldy[:,n*self.outFrameSize:(n+1)*self.outFrameSize]
+      hf=self.h[:,n*self.outFrameSize:(n+1)*self.outFrameSize]
 
       # add the loss gradient from next time
-      if dldh is not None:
-        dldyf=(dldyf+dldh)*0.5
+      if dldhf is None:
+        dldhf=np.zeros_like(hf)
 
       #backprop cell
-      self.cell.h=hf
-      dldxf=self.cell.backpropagation(xf,dldyf)
-      dldx[:,f:f+self.frameSize]=dldxf
-      dldh=self.cell.dldh
+      dldxf,dldhf=self.cell.backpropagation(dldyf,dldhf,xf,hf)
+      dldx[:,n*self.inFrameSize:(n+1)*self.inFrameSize]=dldxf
 
     self.dldw=self.cell.dldw/nb_frames
     self.weight=self.cell.weight
     return dldx
+    
+  def optimize(self):
+    self.weight=self.optimizer_Weight.optimize(self.weight,self.dldw)
 
 ##################################################################################################################################
-class LayerLoss(Layer):
-    def __init__(self):
-      super().__init__()
-    
-    def set_truth(self,truth):
-      self.truth = truth
-
-    def gradient(self):
-      return self.dydx
-
-class LossMSE(LayerLoss): #mean square error
-  def __init__(self):
-    super().__init__()
-
-  def forward(self,x):
-    d = x - self.truth
-    if self.training:
-      self.dydx = d
-    return d * d * 0.5
-
-class LossMAE(LayerLoss): #mean absolute error
-  def __init__(self):
-    super().__init__()
- 
-  def forward(self,x):
-    d = x - self.truth
-    if self.training:
-      self.dydx = np.sign(d)
-    return np.abs(d)
-
-class LossLogCosh(LayerLoss):
-  def __init__(self):
-    super().__init__()
-  
-  def forward(self,x):
-    d = x - self.truth
-    if self.training:
-      self.dydx = np.tanh(d)
-    return  np.log(np.cosh(d))
-
-# see https://ml-cheatsheet.readthedocs.io/en/latest/loss_functions.html
-class LossBinaryCrossEntropy(LayerLoss):
-  def __init__(self):
-    super().__init__()
-  
-  def forward(self,x): #todo test x.size ==1
-    p=x
-    t=self.truth
-    if self.training:
-      self.dydx = np.atleast_2d(-t/np.maximum(1.e-8,p) +(1.-t)/np.maximum(1.e-8,1.-p) )
-    return  np.atleast_2d(-t*np.log(np.maximum(p,1.e-8)) -(1.-t)*np.log(np.maximum(1.e-8,1.-p)))
-
-# see https://gombru.github.io/2018/05/23/cross_entropy_loss
-class LossCrossEntropy(LayerLoss):
-  def __init__(self):
-    super().__init__()
-  
-  def forward(self,x):
-    p_max=np.maximum(x,1.e-8)
-    t=self.truth
-    if self.training:
-      ump_max=np.maximum(1.-x,1.e-8)
-      self.dydx = -t/p_max+(1.-t)/ump_max
-    return  np.atleast_2d(np.mean(-t*np.log(p_max),axis=1))
-
-class LossSparseCategoricalCrossEntropy(LayerLoss):
-  def __init__(self):
-    super().__init__()
-  
-  def to_one_hot(self,label,nb_class):
-    train_label_one_hot=np.eye(nb_class)[label]
-    train_label_one_hot = train_label_one_hot.reshape(label.shape[0], nb_class)
-    return train_label_one_hot
-    
-  def forward(self,x):
-    p_max=np.maximum(x,1.e-8)
-    
-    t=self.to_one_hot(self.truth,x.shape[1]) # todo optimize
-    if self.training:
-      ump_max=np.maximum(1.-x,1.e-8)
-      self.dydx = -t/p_max+(1.-t)/ump_max
-    return  np.atleast_2d(np.mean(-t*np.log(p_max),axis=1))
-
-###################################################################################################

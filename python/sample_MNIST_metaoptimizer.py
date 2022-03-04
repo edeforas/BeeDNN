@@ -1,8 +1,8 @@
 import numpy as np
-import BeeDNNProto as nn
+import BeeDNN as nn
 import MNIST_import
 import MetaOptimizer as meta
-import Layer as layer
+import Layer
 
 # MNIST classification using small network and meta optimizer
 
@@ -13,20 +13,20 @@ test_data/=256.
 
 # construct net with a small size
 n = nn.Net()
-n.append(layer.LayerFlatten())
-n.append(layer.LayerDense(28*28,64))
-n.append(layer.LayerDropout(0.2))
-n.append(layer.LayerRELU())
-n.append(layer.LayerDense(64,10))
-n.append(layer.LayerSoftmax())
+n.append(Layer.LayerFlatten())
+n.append(Layer.LayerDense(28*28,64))
+n.append(Layer.LayerDropout(0.2))
+n.append(Layer.LayerRELU())
+n.append(Layer.LayerDense(64,10))
+n.append(Layer.LayerSoftmax())
 
 # set optimizer
 train = nn.NetTrain()
 train.set_epochs(10)
 train.set_batch_size(128)
 train.set_test_data(test_data , test_truth)
-train.set_optimizer(nn.opt.OptimizerAdam())
-train.set_loss(layer.LossSparseCategoricalCrossEntropy())
+train.set_optimizer("Adam")
+train.set_loss("SparseCategoricalCrossEntropy")
 train.set_metrics("accuracy")
 
 # run the meta optimizer, using the optimizer as input

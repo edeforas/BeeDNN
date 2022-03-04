@@ -7,25 +7,24 @@
 """
 
 import numpy as np
-import copy
 
-################################################################################################### optimizers
+#######################################################################################
 class Optimizer:
   def optimize(self,w,dw):
     pass
-
+#######################################################################################
 #gradient descent algorithm using only gradient sign
 class OptimizerStep(Optimizer):
   lr = 0.01
   def optimize(self,w,dw):
     return w - np.sign(dw) * self.lr
-
+#######################################################################################
 #classical gradient descent algorithm
 class OptimizerSGD(Optimizer):
   lr = 0.01
   def optimize(self,w,dw):
     return w - dw * self.lr
-    
+#######################################################################################
 # Momentum from https://cs231n.github.io/neural-networks-3/#sgd
 # simplification of below Ng momentum, (avoid one mult)
 class OptimizerMomentum(Optimizer):
@@ -39,7 +38,7 @@ class OptimizerMomentum(Optimizer):
 
     self.v = self.v * self.momentum + dw * self.lr
     return w - self.v
-
+#######################################################################################
 # Andrew Ng definition of momentum
 class OptimizerMomentumNg(Optimizer):
   lr = 0.1 # can be high since gradient is smoothed
@@ -52,7 +51,7 @@ class OptimizerMomentumNg(Optimizer):
 
     self.v = self.v * self.momentum + dw * (1.-self.momentum) #recursive averaging
     return w - self.v*self.lr # sgd update step with smoothed gradient
-
+#######################################################################################
 # Nesterov from https://cs231n.github.io/neural-networks-3/#sgd
 class OptimizerNesterov(Optimizer):
   lr = 0.01
@@ -67,7 +66,7 @@ class OptimizerNesterov(Optimizer):
     self.v = self.momentum * self.v - self.lr * dw # velocity update stays the same
     w += -self.momentum * v_prev + (1. + self.momentum) * self.v # position update changes form
     return w
-
+#######################################################################################
 # RPROP-  as in : https://pdfs.semanticscholar.org/df9c/6a3843d54a28138a596acc85a96367a064c2.pdf
 # or in paper : Improving the Rprop Learning Algorithm (Christian Igel and Michael Husken)
 class OptimizerRPROPm(Optimizer):
@@ -88,11 +87,11 @@ class OptimizerRPROPm(Optimizer):
     w = w - self.mu * np.sign(dw)
     self.olddw = dw
     return w
-
+#######################################################################################
 #from https://towardsdatascience.com/adam-latest-trends-in-deep-learning-optimization-6be9a291375c
 class OptimizerAdam(Optimizer): #Adam, with first step bias correction
-  beta1=0.9;
-  beta2=0.999;
+  beta1=0.9
+  beta2=0.999
   lr = 0.001
   epsilon=1.e-8
   init = False
@@ -107,14 +106,14 @@ class OptimizerAdam(Optimizer): #Adam, with first step bias correction
 
     self.m = self.m*self.beta1+(1.-self.beta1)*dw
     self.v = self.v*self.beta2+(1.-self.beta2)*(dw**2)
-    w -= self.lr/(1.-self.beta1_prod) * self.m / (np.sqrt(self.v/(1.-self.beta2_prod)) + self.epsilon);
+    w -= self.lr/(1.-self.beta1_prod) * self.m / (np.sqrt(self.v/(1.-self.beta2_prod)) + self.epsilon)
     self.beta1_prod=self.beta1_prod*self.beta1
     self.beta2_prod=self.beta2_prod*self.beta2
     return w
-
+#######################################################################################
 class OptimizerAdamW(Optimizer):
-  beta1=0.9;
-  beta2=0.999;
+  beta1=0.9
+  beta2=0.999
   lr = 0.01
   epsilon=1.e-8
   init = False
@@ -130,14 +129,14 @@ class OptimizerAdamW(Optimizer):
 
     self.m = self.m*self.beta1+(1.-self.beta1)*dw
     self.v = self.v*self.beta2+(1.-self.beta2)*(dw**2)
-    w -= self.lr/(1.-self.beta1_prod) * self.m / (np.sqrt(self.v/(1.-self.beta2_prod)) + self.epsilon)+self.lambda_regul*w;
+    w -= self.lr/(1.-self.beta1_prod) * self.m / (np.sqrt(self.v/(1.-self.beta2_prod)) + self.epsilon)+self.lambda_regul*w
     self.beta1_prod=self.beta1_prod*self.beta1
     self.beta2_prod=self.beta2_prod*self.beta2
     return w
-
+#######################################################################################
 class OptimizerAdamax(Optimizer):
-  beta1=0.9;
-  beta2=0.999;
+  beta1=0.9
+  beta2=0.999
   lr = 0.01
   epsilon=1.e-8
   init = False
@@ -154,10 +153,10 @@ class OptimizerAdamax(Optimizer):
     w -= self.lr/(1.-self.beta1_prod) * self.m / self.v
     self.beta1_prod=self.beta1_prod*self.beta1
     return w
-
+#######################################################################################
 class OptimizerNadam(Optimizer):
-  beta1=0.9;
-  beta2=0.999;
+  beta1=0.9
+  beta2=0.999
   lr = 0.01
   epsilon=1.e-8
   init = False
@@ -179,10 +178,10 @@ class OptimizerNadam(Optimizer):
     self.beta1_prod=self.beta1_prod*self.beta1
     self.beta2_prod=self.beta2_prod*self.beta2
     return w
-
+#######################################################################################
 class OptimizerAmsgrad(Optimizer):
-  beta1=0.9;
-  beta2=0.999;
+  beta1=0.9
+  beta2=0.999
   lr = 0.01
   epsilon=1.e-8
   init = False
@@ -199,4 +198,30 @@ class OptimizerAmsgrad(Optimizer):
     self.v_hat = np.maximum(self.v, self.v_hat)
     w -= self.lr * self.m / (np.sqrt(self.v_hat) + self.epsilon)
     return w
+#######################################################################################
+def create(sOptimizer):
+  if sOptimizer=="Step":
+    return OptimizerStep()
+  if sOptimizer=="SGD":
+    return OptimizerSGD()
+  if sOptimizer=="Momentum":
+    return OptimizerMomentum()
+  if sOptimizer=="MomentumNg":
+    return OptimizerMomentumNg()
+  if sOptimizer=="Nesterov":
+    return OptimizerNesterov()
+  if sOptimizer=="RPROPm":
+    return OptimizerRPROPm()
+  if sOptimizer=="Adam":
+    return OptimizerAdam()
+  if sOptimizer=="AdamW":
+    return OptimizerAdamW()
+  if sOptimizer=="Adamax":
+    return OptimizerAdamax()
+  if sOptimizer=="Nadam":
+    return OptimizerNadam()
+  if sOptimizer=="Amsgrad":
+    return OptimizerAmsgrad()
 
+  return None
+#######################################################################################

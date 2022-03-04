@@ -10,6 +10,9 @@ import numpy as np
 import copy
 import Optimizer as opt
 import Layer as layer
+import Regularizer as regularizer
+import Optimizer as opt
+import Loss
 
 def compute_confusion_matrix(truth,predicted,nb_class=0):
   if nb_class==0:
@@ -44,11 +47,19 @@ class Net:
     out = x
     for l in self.layers:
       out = l.forward(out)
-
     return out
+
+  def backpropagation(self,gradLoss):
+    for l in reversed(self.layers):
+      gradLoss = l.backpropagation(gradLoss)
+    return gradLoss
+
+  def optimize(self):
+    for l in self.layers:
+      l.optimize()
+
 ###################################################################################################
 class NetTrain:
-  optim = opt.OptimizerAdam()
   loss_layer = None
   epochs = 100
   batch_size = 32
@@ -66,8 +77,8 @@ class NetTrain:
   def get_current_train_accuracy(self):
       return self.current_train_accuracy
 
-  def set_loss(self,layerloss):
-    self.loss_layer = layerloss
+  def set_loss(self,loss_name):
+    self.loss_layer = Loss.create(loss_name)
 
   def set_epochs(self,epochs):
     self.epochs=epochs
@@ -78,8 +89,8 @@ class NetTrain:
   def set_metrics(self,metrics):
     self.metrics=metrics
 
-  def set_optimizer(self, optim):
-    self.optim = optim
+  def set_optimizer(self, optimizer):
+    self.optimizer=optimizer
 
   def set_test_data(self,test_data,test_truth):
     self.test_data=test_data
@@ -91,21 +102,6 @@ class NetTrain:
   def set_epoch_callback(self,epoch_callback):
     self.epoch_callback=epoch_callback
 
-  def forward_then_backward(self,x,t):
-    #forward pass
-    out= self.n.predict(x)
-
-    # compute loss
-    self.loss_layer.set_truth(t)
-    online_loss = self.loss_layer.forward(out)
-
-	  #backward pass
-    grad = self.loss_layer.gradient()
-    for l in reversed(self.n.layers):
-      grad = l.backpropagation(grad)
-
-    return online_loss
-
   def fit(self,n,train_data,train_truth):
     
     #reshape truth to 2 ndim if 1D
@@ -114,26 +110,23 @@ class NetTrain:
 
     self.n = n
     self.best_net= copy.deepcopy(n)
-    nblayer = len(n.layers)
     nbsamples = len(train_data)
     self.epoch_loss = np.zeros((0,0),dtype=np.float32)
     self.epoch_train_accuracy = np.zeros((0,0),dtype=np.float32)
     self.epoch_valid_accuracy = np.zeros((0,0),dtype=np.float32)
 
-    #init states
+    #init states and optimizers
+    for l in n.layers:
+      l.set_optimizer(self.optimizer)
+      l.training=True
+       
     n.init()
-    optiml = []
-    for i in range(nblayer*2):
-      optiml.append(copy.copy(self.optim)) # reserve weight optimizer
-      optiml.append(copy.copy(self.optim)) # reserve bias optimizer
-
+    
     if self.batch_size == 0:
       self.batch_size = nbsamples
 
     #set layers in train mode
     self.loss_layer.training=True
-    for l in n.layers:
-      l.training=True
 
     #train!
     for epoch in range(self.epochs):
@@ -141,34 +134,32 @@ class NetTrain:
 
       #shuffle data
       perm = np.random.permutation(nbsamples)
-      s2 = train_data[perm,:]
-      t2 = train_truth[perm,:]
+      perm_input = train_data[perm,:]
+      perm_truth = train_truth[perm,:]
       sumloss = 0.
 
       batch_start = 0
       while batch_start < nbsamples:
         
-        #prepare batch data
+        #prepare batch input
         batch_end = min(batch_start + self.batch_size,nbsamples)
-        x_train = s2[batch_start:batch_end,:]
-        y_train = t2[batch_start:batch_end,:]
+        x_train = perm_input[batch_start:batch_end,:]
+        y_train = perm_truth[batch_start:batch_end,:]
         batch_start += self.batch_size
 
-        #forward pass and gradient computation
-        online_loss = self.forward_then_backward(x_train,y_train)
+        #forward pass
+        out= self.n.predict(x_train)
+        self.loss_layer.set_truth(y_train)
+        online_loss = self.loss_layer.forward(out)
+
+	      #backward pass
+        grad = self.loss_layer.gradient()
+        self.n.backpropagation(grad)
         
-        # weights and bias optimization
-        for i in range(len(n.layers)):
-          l = n.layers[i]
-          if l.learnWeight:
-            assert (l.weight.shape==l.dldw.shape),"Weight and Gradient weight should have the same shape"
-            l.weight = optiml[2*i].optimize(l.weight,l.dldw)
+        # optimization
+        self.n.optimize()
 
-          if l.learnBias:
-            assert (l.bias.shape==l.dldb.shape),"Bias and Gradient bias should have the same shape"
-            l.bias = optiml[2*i+1].optimize(l.bias,l.dldb)
-
-        #save stats
+        #save train statistics
         sumloss+=online_loss.sum()
 
       epoch_loss=sumloss / train_data.size
