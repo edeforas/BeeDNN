@@ -10,7 +10,7 @@
 #include "Initializers.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerBias::LayerBias(string sBiasInitializer) :
+LayerBias::LayerBias(const string& sBiasInitializer) :
     Layer("Bias")
 {
     set_bias_initializer(sBiasInitializer);

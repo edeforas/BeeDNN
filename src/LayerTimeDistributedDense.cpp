@@ -10,7 +10,7 @@
 #include "Initializers.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerTimeDistributedDense::LayerTimeDistributedDense(int iInFrameSize, int iOutFrameSize, string sWeightInitializer, string sBiasInitializer) :
+LayerTimeDistributedDense::LayerTimeDistributedDense(int iInFrameSize, int iOutFrameSize, const string& sWeightInitializer, const string& sBiasInitializer) :
     Layer("TimeDistributedDense")
 {
 	_iInFrameSize=iInFrameSize;

@@ -19,7 +19,7 @@ class CsvFileReader : public DataSource
 public:
     virtual bool load(const string& sFile) override;
 private:
-	void replace_last(string& s, string sOld, string sNew);
+	void replace_last(string& s, const string& sOld, const string& sNew);
 };
 
 #endif

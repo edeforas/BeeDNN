@@ -10,7 +10,7 @@
 #include "Initializers.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerChannelBias::LayerChannelBias(Index iNbRows,Index iNbCols,Index iNbChannels, string sBiasInitializer) :
+LayerChannelBias::LayerChannelBias(Index iNbRows,Index iNbCols,Index iNbChannels, const string& sBiasInitializer) :
     Layer("ChannelBias")
 {
 	_iNbRows=iNbRows;

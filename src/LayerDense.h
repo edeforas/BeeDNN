@@ -15,7 +15,7 @@
 class LayerDense : public Layer
 {
 public:
-    LayerDense(Index iInputSize,Index iOutputSize, string sWeightInitializer = "GlorotUniform", string sBiasInitializer = "Zeros");
+    LayerDense(Index iInputSize,Index iOutputSize, const string& sWeightInitializer = "GlorotUniform", const string& sBiasInitializer = "Zeros");
     virtual ~LayerDense() override;
 
 	Index input_size() const;

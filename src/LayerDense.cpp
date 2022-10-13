@@ -10,7 +10,7 @@
 #include "Initializers.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerDense::LayerDense(Index iInputSize, Index iOutputSize, string sWeightInitializer, string sBiasInitializer) :
+LayerDense::LayerDense(Index iInputSize, Index iOutputSize, const string& sWeightInitializer, const string& sBiasInitializer) :
     Layer( "Dense"),
 	_iInputSize(iInputSize),
 	_iOutputSize(iOutputSize)

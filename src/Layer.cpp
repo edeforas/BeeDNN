@@ -78,12 +78,12 @@ vector<MatrixFloat*> Layer::gradient_biases()
 	return v;
 }
 ///////////////////////////////////////////////////////////////
-void Layer::set_weight_initializer(string sWeightInitializer)
+void Layer::set_weight_initializer(const string& sWeightInitializer)
 {
 	_sWeightInitializer = sWeightInitializer;
 }
 ///////////////////////////////////////////////////////////////
-void Layer::set_bias_initializer(string sBiasInitializer)
+void Layer::set_bias_initializer(const string& sBiasInitializer)
 {
 	_sBiasInitializer = sBiasInitializer;
 }

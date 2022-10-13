@@ -10,7 +10,7 @@
 #include "Initializers.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerTimeDistributedDot::LayerTimeDistributedDot(int iInFrameSize, int iOutFrameSize, string sWeightInitializer) :
+LayerTimeDistributedDot::LayerTimeDistributedDot(int iInFrameSize, int iOutFrameSize, const string& sWeightInitializer) :
     Layer("TimeDistributedDot")
 {
 	_iInFrameSize=iInFrameSize;

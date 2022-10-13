@@ -15,7 +15,7 @@
 class LayerDot : public Layer
 {
 public:
-    LayerDot(Index iInputSize,Index iOutputSize, string sWeightInitializer = "GlorotUniform");
+    LayerDot(Index iInputSize,Index iOutputSize, const string& sWeightInitializer = "GlorotUniform");
     virtual ~LayerDot() override;
 
 	Index input_size() const;

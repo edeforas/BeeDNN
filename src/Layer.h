@@ -34,13 +34,13 @@ public:
 	
 	void set_train_mode(bool bTrainMode); //set to true to train, to false to test
 
-    void set_weight_initializer(string _sWeightInitializer);
+    void set_weight_initializer(const string& _sWeightInitializer);
     string weight_initializer() const;
     bool has_weights() const;
     vector<MatrixFloat*> weights();
     vector<MatrixFloat*> gradient_weights();
 
-    void set_bias_initializer(string _sBiasInitializer);
+    void set_bias_initializer(const string& _sBiasInitializer);
     string bias_initializer() const;
 	bool has_biases() const;
     vector<MatrixFloat*> biases();

@@ -18,20 +18,20 @@ public:
 
     void clear();
     string to_string();
-    void save(string sFile);
+    void save(const string& sFile);
 
-    void enter_section(string sSection);
+    void enter_section(const string& sSection);
     void leave_section();
 
-    void add(string sKey, string sVal);
-    void add(string sKey, int iVal);
-    void add(string sKey, float fVal);
-    void add(string sKey, bool bVal);
+    void add(const string& sKey, const string& sVal);
+    void add(const string& sKey, int iVal);
+    void add(const string& sKey, float fVal);
+    void add(const string& sKey, bool bVal);
 
-    void add_array(string sKey, int iSize, const float* pVal);
+    void add_array(const string& sKey, int iSize, const float* pVal);
 
 private:
-    void add_string(const string& sKey, string s);
+    void add_string(const string& sKey, const string& s);
     
     bool _bPendingComma;
     string _sSectionIndent;

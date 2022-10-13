@@ -11,7 +11,7 @@
 #include "Initializers.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerDot::LayerDot(Index iInputSize, Index iOutputSize, string sWeightInitializer) :
+LayerDot::LayerDot(Index iInputSize, Index iOutputSize,const string& sWeightInitializer) :
     Layer( "Dot"),
 	_iInputSize(iInputSize),
 	_iOutputSize(iOutputSize)

@@ -12,7 +12,7 @@
 using namespace std;
 
 ////////////////////////////////////////////////////////////////////////
-void CsvFileReader::replace_last(string& s, string sOld, string sNew)
+void CsvFileReader::replace_last(string& s, const string& sOld, const string& sNew)
 {
 	auto found = s.rfind(sOld);
 	if (found != std::string::npos)

@@ -15,7 +15,7 @@
 class LayerTimeDistributedDense : public Layer
 {
 public:
-    explicit LayerTimeDistributedDense(int iInFrameSize,int iOutFrameSize, string sWeightInitializer = "GlorotUniform", string sBiasInitializer = "Zeros");
+    explicit LayerTimeDistributedDense(int iInFrameSize,int iOutFrameSize, const string& sWeightInitializer = "GlorotUniform", const string& sBiasInitializer = "Zeros");
     virtual ~LayerTimeDistributedDense();
 
     virtual Layer* clone() const override;

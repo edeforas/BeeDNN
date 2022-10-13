@@ -30,7 +30,7 @@ string JsonFileWriter::to_string()
     return "{"+_sOut+"\n}";
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFileWriter::enter_section(string sSection)
+void JsonFileWriter::enter_section(const string& sSection)
 {
     if (_bPendingComma)
         _sOut += ",";
@@ -49,31 +49,31 @@ void JsonFileWriter::leave_section()
 	_bPendingComma=true;
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFileWriter::add(string sKey, string sVal)
+void JsonFileWriter::add(const string& sKey,const string& sVal)
 {
     add_string(sKey, "\"" + sVal + "\"");
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFileWriter::add(string sKey, int iVal)
+void JsonFileWriter::add(const string& sKey, int iVal)
 {
     stringstream ss;
     ss << iVal;
     add_string(sKey, ss.str());
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFileWriter::add(string sKey, float fVal)
+void JsonFileWriter::add(const string& sKey, float fVal)
 {
     stringstream ss;
     ss << fVal;
     add_string(sKey, ss.str());
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFileWriter::add(string sKey, bool bVal)
+void JsonFileWriter::add(const string& sKey, bool bVal)
 {
     add_string(sKey, (bVal ? "true" : "false"));
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFileWriter::add_array(string sKey, int iSize, const float* pVal)
+void JsonFileWriter::add_array(const string& sKey, int iSize, const float* pVal)
 {
     stringstream ss;
     for (int i = 0; i < iSize; i++)
@@ -86,7 +86,7 @@ void JsonFileWriter::add_array(string sKey, int iSize, const float* pVal)
     add_string(sKey, "[" + ss.str() +"]");
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFileWriter::add_string(const string&  sKey, string s)
+void JsonFileWriter::add_string(const string& sKey,const string& s)
 {
     if (_bPendingComma)
         _sOut += ",";
@@ -95,7 +95,7 @@ void JsonFileWriter::add_string(const string&  sKey, string s)
 	_bPendingComma=true;
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFileWriter::save(string sFile)
+void JsonFileWriter::save(const string& sFile)
 {
     std::ofstream f(sFile);
     f << this->to_string();

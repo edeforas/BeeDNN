@@ -46,7 +46,7 @@ using namespace std;
 
 namespace NetUtil {
 	/////////////////////////////////////////////////////////////////////////////////////////////////
-	void save(string sFile,const Net& net, const NetTrain& train)
+	void save(const string& sFile,const Net& net, const NetTrain& train)
 	{
 		// save trained model and train parameters
 		JsonFileWriter jf;

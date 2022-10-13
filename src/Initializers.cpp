@@ -82,7 +82,7 @@ void Initializers::Ones(MatrixFloat& m, Index iInputSize, Index iOutputSize)
     m.setOnes(iInputSize, iOutputSize);
 }
 ///////////////////////////////////////////////////////////////////////////////
-void Initializers::compute(string sInitializer, MatrixFloat& m, Index iInputSize, Index iOutputSize)
+void Initializers::compute(const string& sInitializer, MatrixFloat& m, Index iInputSize, Index iOutputSize)
 {
     // Todo , optimize, but not mandatory for now
 

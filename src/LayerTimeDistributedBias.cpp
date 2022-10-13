@@ -10,7 +10,7 @@
 #include "Initializers.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerTimeDistributedBias::LayerTimeDistributedBias(int iFrameSize,string sBiasInitializer ) :
+LayerTimeDistributedBias::LayerTimeDistributedBias(int iFrameSize,const string& sBiasInitializer ) :
     Layer("TimeDistributedBias")
 {
 	_iFrameSize=iFrameSize;
