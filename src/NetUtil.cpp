@@ -46,36 +46,36 @@ using namespace std;
 
 namespace NetUtil {
 	/////////////////////////////////////////////////////////////////////////////////////////////////
-	void save(const string& sFile,const Net& net, const NetTrain& train)
+	void save(const string& sFile,const Net& model, const NetTrain& trainParams)
 	{
 		// save trained model and train parameters
 		JsonFileWriter jf;
 
 		jf.add("Engine", string("BeeDNN"));
-		jf.add("Problem", string(net.is_classification_mode() ? "Classification" : "Regression"));
+		jf.add("Problem", string(model.is_classification_mode() ? "Classification" : "Regression"));
 
 		// write optimizer settings
 		jf.enter_section("Optimizer");
-		jf.add("Optimizer", train.get_optimizer());
-		jf.add("LearningRate", train.get_learningrate());
-		jf.add("Epochs", train.get_epochs());
-		jf.add("Decay", train.get_decay());
-		jf.add("Momentum", train.get_momentum());
-		jf.add("Patience", train.get_patience());
-		jf.add("BatchSize", (int)train.get_batchsize());
-		jf.add("Loss", train.get_loss());
-		jf.add("KeepBest", train.get_keepbest());
-		jf.add("ReboostEveryEpochs", train.get_reboost_every_epochs());
-		jf.add("ClassBalancingWeightLoss", train.get_classbalancing());
-		if (!train.get_regularizer().empty())
+		jf.add("Optimizer", trainParams.get_optimizer());
+		jf.add("LearningRate", trainParams.get_learningrate());
+		jf.add("Epochs", trainParams.get_epochs());
+		jf.add("Decay", trainParams.get_decay());
+		jf.add("Momentum", trainParams.get_momentum());
+		jf.add("Patience", trainParams.get_patience());
+		jf.add("BatchSize", (int)trainParams.get_batchsize());
+		jf.add("Loss", trainParams.get_loss());
+		jf.add("KeepBest", trainParams.get_keepbest());
+		jf.add("ReboostEveryEpochs", trainParams.get_reboost_every_epochs());
+		jf.add("ClassBalancingWeightLoss", trainParams.get_classbalancing());
+		if (!trainParams.get_regularizer().empty())
 		{
-			jf.add("Regularizer", train.get_regularizer());
-			jf.add("RegularizerParameter", train.get_regularizer_parameter());
+			jf.add("Regularizer", trainParams.get_regularizer());
+			jf.add("RegularizerParameter", trainParams.get_regularizer_parameter());
 		}
 		jf.leave_section();
 
 		// write layers
-		auto layers = net.layers();
+		auto layers = model.layers();
 
 		jf.add("NbLayers", (int)layers.size());
 

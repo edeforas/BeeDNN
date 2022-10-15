@@ -17,7 +17,7 @@ using namespace std;
 
 namespace NetUtil {
 
-    void save(const string& sFile, const Net& net, const NetTrain& train);
+    void save(const string& sFile, const Net& model, const NetTrain& trainParams);
 
     //void read(const string& s,Net& net);
     //void write(const NetTrain& train,string& s);
