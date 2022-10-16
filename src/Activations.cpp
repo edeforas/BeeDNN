@@ -1632,6 +1632,8 @@ public:
 //////////////////////////////////////////////////////////////////////////////
 Activation* get_activation(const string& sActivation)
 {
+    // Todo , optimize, but not mandatory for now
+
     if(sActivation=="Absolute")
         return new ActivationAbsolute;
 
@@ -1829,6 +1831,8 @@ Activation* get_activation(const string& sActivation)
 //////////////////////////////////////////////////////////////////////////////
 void list_activations_available(vector<string>& vsActivations)
 {
+    // Todo , optimize, but not mandatory for now
+
     vsActivations.clear();
 
     vsActivations.push_back("Absolute");

@@ -134,9 +134,9 @@ NetTrain& NetTrain::operator=(const NetTrain& other)
 	return *this;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void NetTrain::set_net(Net& net)
+void NetTrain::set_net(Net& model)
 {
-	_pNet = &net;
+	_pNet = &model;
 	assert(_pNet != 0);
 	_iNbLayers = (int)_pNet->layers().size();
 	if (_iNbLayers != 0)
@@ -156,7 +156,7 @@ void NetTrain::set_net(Net& net)
 	}
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-const Net& NetTrain::net() const
+const Net& NetTrain::model() const
 {
 	return *_pNet;
 }

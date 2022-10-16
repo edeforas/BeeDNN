@@ -31,10 +31,10 @@ int main()
 	cout << "The usecase is to learn a XOR gate" << endl;
 
 	//construct network, 2 input, 1 output
-    Net net;
-    net.add(new LayerDense(2,10));
-	net.add(new LayerActivation("Relu"));
-	net.add(new LayerDense(10, 1));
+    Net model;
+    model.add(new LayerDense(2,10));
+	model.add(new LayerActivation("Relu"));
+	model.add(new LayerDense(10, 1));
 
     //set the train data
     float dSamples[]={ 0,0 , 0,1 , 1,0 , 1,1 };
@@ -48,9 +48,9 @@ int main()
 	netFit.set_train_data(mSamples, mTruth);
 
 	//predict and show results
-	netFit.fit(net);
+	netFit.fit(model);
 	MatrixFloat mOut;
-	net.predict_classes(mSamples, mOut);
+	model.predict_classes(mSamples, mOut);
 	cout << "0_xor_0=" << mOut(0) << endl << "0_xor_1=" << mOut(1) << endl << "1_xor_0=" << mOut(2) << endl << "1_xor_1=" << mOut(3) << endl;
 
 	//simple testU code

@@ -28,7 +28,7 @@ void better_model_callback(NetTrain& train)
 	// save solution
 	ostringstream sFile;
 	sFile << "model_accuracy" << fixed << setprecision(2) << train.get_current_validation_accuracy() << ".json";
-	NetUtil::save(sFile.str(),train.net(),train); //save train parameters and net
+	NetUtil::save(sFile.str(),train.model(),train); //save train parameters and net
 }
 //////////////////////////////////////////////////////////////////////////////
 int main()
@@ -49,12 +49,12 @@ int main()
     }
 
 	//simple net for a quicker test
-	Net net;
-	net.add(new LayerDense(784, 64));
-	net.add(new LayerActivation("Relu"));
-	net.add(new LayerDropout(0.2f)); //reduce overfitting
-	net.add(new LayerDense(64, 10));
-	net.add(new LayerSoftmax());
+	Net model;
+	model.add(new LayerDense(784, 64));
+	model.add(new LayerActivation("Relu"));
+	model.add(new LayerDropout(0.2f)); //reduce overfitting
+	model.add(new LayerDense(64, 10));
+	model.add(new LayerSoftmax());
 
 	//set train settings
 	NetTrain netTrain;
@@ -80,7 +80,7 @@ int main()
 
 	cout << "Training with all CPU cores ..." << endl;
 	optim.set_train(netTrain);
-	optim.fit(net); // will use 100% CPU
+	optim.fit(model); // will use 100% CPU
 
 	// the end
 	cout << "End of test." << endl;

@@ -131,10 +131,10 @@ void MetaOptimizer::add_optimizer_variation(const string &sOptimizer, float fLea
 	_optimizerVariations.push_back(v);
 }
 ////////////////////////////////////////////////////////////////
-void MetaOptimizer::apply_variations(Net& net)
+void MetaOptimizer::apply_variations(Net& model)
 {
 	// set optional variation
-	for (size_t iL = 0; iL < net.size(); iL++)
+	for (size_t iL = 0; iL < model.size(); iL++)
 	{
 		//collect all variations for a layer, not optimized, but ok
 		vector<LayerVariation> vl;
@@ -150,7 +150,7 @@ void MetaOptimizer::apply_variations(Net& net)
 		{
 			const LayerVariation & v = vl[iVariation-1];
 
-			net.replace(iL, LayerFactory::create(v.sType,v.fArg1, v.fArg2, v.fArg3, v.fArg4, v.fArg5));
+			model.replace(iL, LayerFactory::create(v.sType,v.fArg1, v.fArg2, v.fArg3, v.fArg4, v.fArg5));
 		}
 	}
 

@@ -30,7 +30,7 @@ public:
 
     void clear();
 	
-	const Net& net() const;
+	const Net& model() const;
     void set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth);
 	void set_validation_data(const MatrixFloat& mSamplesValidation, const MatrixFloat& mTruthValidation);
 
@@ -105,7 +105,7 @@ protected:
 	size_t _iNbLayers;
 
 private:
-	void set_net(Net& net);
+	void set_net(Net& model);
 	void collect_all_weights_biases();
 	void update_class_weight(); // compute balanced class weight loss (if asked) and update loss
 	void clear_optimizers();

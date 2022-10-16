@@ -72,7 +72,7 @@ private:
 	int _iNRepeatAll;
 	float _fBestAccuracy;
 
-	void apply_variations(Net& net);
+	void apply_variations(Net& model);
 	vector< LayerVariation > _layerVariations;
 	vector< OptimizerVariation > _optimizerVariations;
 

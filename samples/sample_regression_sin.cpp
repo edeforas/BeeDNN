@@ -33,12 +33,12 @@ int main()
 	cout << "The problem here is to approximate a sinus function and to evaluate the model error" << endl;
 
 	//build net
-    Net net;
-	net.add(new LayerDense(1,10));
-	net.add(new LayerActivation("Tanh"));
-	net.add(new LayerDense(10,1));
+    Net model;
+	model.add(new LayerDense(1,10));
+	model.add(new LayerActivation("Tanh"));
+	model.add(new LayerDense(10,1));
 
-	net.set_classification_mode(false); //set regression mode
+	model.set_classification_mode(false); //set regression mode
 
     //set train data
     MatrixFloat mTruth(128,1);
@@ -55,11 +55,11 @@ int main()
 	NetTrain netfit;
 	netfit.set_epochs(2000);
 	netfit.set_train_data(mSamples, mTruth);
-	netfit.fit(net);
+	netfit.fit(model);
 
     //print truth and prediction
 	MatrixFloat mPredict;
-	net.predict(mSamples, mPredict);
+	model.predict(mSamples, mPredict);
 	for (int i = 0; i < mSamples.size(); i += 8)
 	{
 		cout << setprecision(4) << "x=" << mSamples(i, 0) << "\ttruth=" << mTruth(i, 0) << "\tpredict=" << mPredict(i, 0) << endl;

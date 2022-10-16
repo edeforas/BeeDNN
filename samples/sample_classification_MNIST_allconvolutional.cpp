@@ -56,26 +56,26 @@ int main()
     }
 
 	//create a all convolutional net:
-	Net net;
-	net.add(new LayerConvolution2D(28, 28, 1, 3, 3, 8));
-	net.add(new LayerChannelBias(26,26,8));
-	net.add(new LayerActivation("Relu"));
+	Net model;
+	model.add(new LayerConvolution2D(28, 28, 1, 3, 3, 8));
+	model.add(new LayerChannelBias(26,26,8));
+	model.add(new LayerActivation("Relu"));
 
-	net.add(new LayerConvolution2D(26, 26, 8, 3, 3, 8, 2, 2));
-	net.add(new LayerChannelBias(12,12,8));
-	net.add(new LayerActivation("Relu"));
-	net.add(new LayerDropout(0.3f));
+	model.add(new LayerConvolution2D(26, 26, 8, 3, 3, 8, 2, 2));
+	model.add(new LayerChannelBias(12,12,8));
+	model.add(new LayerActivation("Relu"));
+	model.add(new LayerDropout(0.3f));
 
-	net.add(new LayerConvolution2D(12, 12, 8, 3, 3, 16));
-	net.add(new LayerChannelBias(10,10,16));
-	net.add(new LayerActivation("Relu"));
-	net.add(new LayerDropout(0.3f));
+	model.add(new LayerConvolution2D(12, 12, 8, 3, 3, 16));
+	model.add(new LayerChannelBias(10,10,16));
+	model.add(new LayerActivation("Relu"));
+	model.add(new LayerDropout(0.3f));
 
-	net.add(new LayerDense(10 * 10 * 16, 256));
+	model.add(new LayerDense(10 * 10 * 16, 256));
 
-	net.add(new LayerActivation("Relu"));
-	net.add(new LayerDense(256, 10));
-	net.add(new LayerSoftmax());
+	model.add(new LayerActivation("Relu"));
+	model.add(new LayerDense(256, 10));
+	model.add(new LayerSoftmax());
 
 	//set train options
 	netTrain.set_epochs(20);
@@ -88,17 +88,17 @@ int main()
 	// train net
 	cout << "Training..." << endl << endl;
 	start = chrono::steady_clock::now();
-	netTrain.fit(net);
+	netTrain.fit(model);
 
 	// show train results
 	MatrixFloat mClassPredicted;
-	net.predict_classes(mr.train_data(), mClassPredicted);
+	model.predict_classes(mr.train_data(), mClassPredicted);
 	ConfusionMatrix cmRef;
 	ClassificationResult crRef = cmRef.compute(mr.train_truth(), mClassPredicted);
 	cout << "Ref accuracy: " << crRef.accuracy << " %" << endl;
 
 	MatrixFloat mClassVal;
-	net.predict_classes(mr.validation_data(), mClassVal);
+	model.predict_classes(mr.validation_data(), mClassVal);
 	ConfusionMatrix cmTest;
 	ClassificationResult crTest = cmTest.compute(mr.validation_truth(), mClassVal);
 	cout << "Val accuracy: " << crTest.accuracy << " %" << endl;

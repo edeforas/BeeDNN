@@ -16,7 +16,7 @@ using namespace std;
 #include "LayerDropout.h"
 #include "LayerSoftmax.h"
 
-Net net;
+Net model;
 NetTrain netTrain;
 int iEpoch;
 chrono::steady_clock::time_point start;
@@ -54,11 +54,11 @@ int main()
     }
   
 	//create simple net:
-	net.add(new LayerDense(784, 128));
-	net.add(new LayerActivation("Relu"));
-	net.add(new LayerDropout(0.2f)); //reduce overfitting
-	net.add(new LayerDense(128, 10));
-	net.add(new LayerSoftmax());
+	model.add(new LayerDense(784, 128));
+	model.add(new LayerActivation("Relu"));
+	model.add(new LayerDropout(0.2f)); //reduce overfitting
+	model.add(new LayerDense(128, 10));
+	model.add(new LayerSoftmax());
 
 	//setup train options
 	netTrain.set_epochs(15);
@@ -71,17 +71,17 @@ int main()
 	// train net
 	cout << "Training..." << endl << endl;
 	start = chrono::steady_clock::now();
-	netTrain.fit(net);
+	netTrain.fit(model);
 
 	// show train results
 	MatrixFloat mClassPredicted;
-	net.predict_classes(mr.train_data(), mClassPredicted);
+	model.predict_classes(mr.train_data(), mClassPredicted);
 	ConfusionMatrix cmRef;
 	ClassificationResult crRef = cmRef.compute(mr.train_truth(), mClassPredicted);
 	cout << "Train accuracy: " << crRef.accuracy << " %" << endl;
 
 	MatrixFloat mClassVal;
-	net.predict_classes(mr.validation_data(), mClassVal);
+	model.predict_classes(mr.validation_data(), mClassVal);
 	ConfusionMatrix cmVal;
 	ClassificationResult crVal = cmVal.compute(mr.validation_truth(), mClassVal);
 	cout << "Validation accuracy: " << crVal.accuracy << " %" << endl;
