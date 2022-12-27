@@ -8,6 +8,7 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+#include <sstream>
 using namespace std;
 
 #include "Net.h"
@@ -100,7 +101,7 @@ int main()
 	ConfusionMatrix cmRef;
 	ClassificationResult crRef = cmRef.compute(ds.train_truth(), mClassPredicted);
 	cout << "Train accuracy: " << crRef.accuracy << " %" << endl;
-	cout << "Train confusion matrix:" << endl << crRef.mConfMat << endl;
+	cout << "Train confusion matrix:" << endl << toString(crRef.mConfMat) << endl;
 
 	MatrixFloat mValClass;
 	model.predict_classes(ds.validation_data(), mValClass);

@@ -82,7 +82,7 @@ public:
         _data=new T[_iSize];
         _bIsView=false;
 
-        for( Index i=0;i<size();i++)
+        for( Index i=0;i< _iSize;i++)
             _data[i]=a(i);
         //todo use or merge with operator=()(a); ??
     }

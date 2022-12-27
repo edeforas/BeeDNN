@@ -117,7 +117,7 @@ void test_hyperbolic()
 {
 	cout << "test_tanh:" << endl;
 
-	MatrixXf m1(1000, 1000), m2(1000, 1000), m(1000, 1000);
+	MatrixFloat m1(1000, 1000), m2(1000, 1000), m(1000, 1000);
 	m.setRandom();
 
 	{
