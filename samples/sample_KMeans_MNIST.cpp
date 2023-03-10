@@ -7,7 +7,7 @@ using namespace std;
 #include "KMeans.h"
 #include "KMeansTrain.h"
 #include "MNISTReader.h"
-#include "ConfusionMatrix.h"
+#include "Metrics.h"
 
 KMeans km;
 KMeansTrain kmTrain;
@@ -66,16 +66,16 @@ int main()
 	// show train results
 	MatrixFloat mClassPredicted;
 	km.predict_classes(mr.train_data(), mClassPredicted);
-	ConfusionMatrix cmRef;
-	ClassificationResult crRef = cmRef.compute(mr.train_truth(), mClassPredicted);
-	cout << "Train accuracy: " << crRef.accuracy << " %" << endl;
+	Metrics metricsTrain;
+	metricsTrain.compute(mr.train_truth(), mClassPredicted);
+	cout << "Train accuracy: " << metricsTrain.accuracy() << " %" << endl;
 
 	MatrixFloat mClassTest;
 	km.predict_classes(mr.validation_data(), mClassTest);
-	ConfusionMatrix cmVal;
-	ClassificationResult crVal = cmVal.compute(mr.validation_truth(), mClassTest);
-	cout << "Validation accuracy: " << crVal.accuracy << " %" << endl;
-	cout << "Validation confusion matrix:" << endl << toString(crVal.mConfMat) << endl;
+	Metrics metricsVal;
+	metricsVal.compute(mr.validation_truth(), mClassTest);
+	cout << "Validation accuracy: " << metricsVal.accuracy() << " %" << endl;
+	cout << "Validation confusion matrix:" << endl << toString(metricsVal.confusion_matrix()) << endl;
 
     return 0;
 }

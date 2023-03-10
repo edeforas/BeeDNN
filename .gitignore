@@ -74,3 +74,11 @@ ui_*.h
 build
 *.exe
 *solution_accuracy*
+*.vcxproj
+*.depend
+*.stamp
+*.cmake
+/BeeDNN.sln
+/CMakeFiles*
+/CMakeCache.txt
+*.sln

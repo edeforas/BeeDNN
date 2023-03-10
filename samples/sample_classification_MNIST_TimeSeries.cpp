@@ -8,7 +8,7 @@ using namespace std;
 #include "Net.h"
 #include "NetTrain.h"
 #include "MNISTReader.h"
-#include "ConfusionMatrix.h"
+#include "Metrics.h"
 
 #include "LayerActivation.h"
 #include "LayerDense.h"
@@ -79,21 +79,21 @@ int main()
 	// show train results
 	MatrixFloat mClassPredicted;
 	model.predict_classes(mr.train_data(), mClassPredicted);
-	ConfusionMatrix cmRef;
-	ClassificationResult crRef = cmRef.compute(mr.train_truth(), mClassPredicted);
-	cout << "Train accuracy: " << crRef.accuracy << " %" << endl;
+	Metrics metricsTrain;
+	metricsTrain.compute(mr.train_truth(), mClassPredicted);
+	cout << "Train accuracy: " << metricsTrain.accuracy() << " %" << endl;
 
 	MatrixFloat mClassVal;
 	model.predict_classes(mr.validation_data(), mClassVal);
-	ConfusionMatrix cmVal;
-	ClassificationResult crVal = cmVal.compute(mr.validation_truth(), mClassVal);
-	cout << "Validation accuracy: " << crVal.accuracy << " %" << endl;
-	cout << "Validation confusion matrix:" << endl << toString(crVal.mConfMat) << endl;
+	Metrics metricsVal;
+	metricsVal.compute(mr.validation_truth(), mClassVal);
+	cout << "Validation accuracy: " << metricsVal.accuracy() << " %" << endl;
+	cout << "Validation confusion matrix:" << endl << toString(metricsVal.confusion_matrix()) << endl;
 
 	//testu function
-	if (crVal.accuracy < 97.f)
+	if (metricsVal.accuracy() < 97.f)
 	{
-		cout << "Test failed! accuracy=" << crVal.accuracy << endl;
+		cout << "Test failed! val accuracy=" << metricsVal.accuracy() << endl;
 		return -1;
 	}
 

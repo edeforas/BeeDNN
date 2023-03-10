@@ -22,6 +22,7 @@ Layers:
 - GlobalGain, GlobalBias, GlobalAffine, Gain, Bias, Affine
 - Softmax, Softmin
 - PRelu, RRelu, PELU, TERELU, CRelu
+- GLU, ReGLU, Bilinear, SwiGLU, GEGLU
 - Layers and activations are decoupled and can be in any order
 
 Time series:

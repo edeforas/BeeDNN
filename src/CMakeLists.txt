@@ -1,7 +1,7 @@
 set(BEEDNN_FILES
 	Activations.cpp Activations.h
 	CIFAR10Reader.cpp CIFAR10Reader.h
-	ConfusionMatrix.cpp ConfusionMatrix.h
+	Metrics.cpp Metrics.h
 	CsvFileReader.cpp CsvFileReader.h
 	DataSource.cpp DataSource.h
 	Initializers.cpp Initializers.h
@@ -13,6 +13,7 @@ set(BEEDNN_FILES
 	LayerAffine.cpp LayerAffine.h
 	LayerAveragePooling2D.cpp LayerAveragePooling2D.h
 	LayerBias.cpp LayerBias.h
+	LayerBilinear.cpp LayerBilinear.h
 	LayerChannelBias.cpp LayerChannelBias.h
 	LayerConvolution2D.cpp LayerConvolution2D.h
 	LayerCRelu.cpp LayerCRelu.h
@@ -23,21 +24,25 @@ set(BEEDNN_FILES
 	LayerGain.cpp LayerGain.h
 	LayerGaussianDropout.cpp LayerGaussianDropout.h
 	LayerGaussianNoise.cpp LayerGaussianNoise.h
+	LayerGEGLU.cpp LayerGEGLU.h
 	LayerGlobalAffine.cpp LayerGlobalAffine.h
 	LayerGlobalAveragePooling2D.cpp LayerGlobalAveragePooling2D.h
 	LayerGlobalBias.cpp LayerGlobalBias.h
 	LayerGlobalGain.cpp LayerGlobalGain.h
 	LayerGlobalMaxPool2D.cpp LayerGlobalMaxPool2D.h
+	LayerGLU.cpp LayerGLU.h
 	LayerMaxPool2D.cpp LayerMaxPool2D.h
 	LayerPELU.cpp LayerPELU.h
 	LayerPRelu.cpp LayerPRelu.h
 	LayerRandomFlip.cpp LayerRandomFlip.h
+	LayerReGLU.cpp LayerReGLU.h
 	LayerRNN.cpp LayerRNN.h
 	LayerRRelu.cpp LayerRRelu.h
 	LayerSimpleRNN.cpp LayerSimpleRNN.h
 	LayerSimplestRNN.cpp LayerSimplestRNN.h
 	LayerSoftmax.cpp LayerSoftmax.h
 	LayerSoftmin.cpp LayerSoftmin.h
+	LayerSwiGLU.cpp LayerSwiGLU.h
 	LayerTERELU.cpp LayerTERELU.h
 	LayerTimeDistributedBias.cpp LayerTimeDistributedBias.h
 	LayerTimeDistributedDense.cpp LayerTimeDistributedDense.h

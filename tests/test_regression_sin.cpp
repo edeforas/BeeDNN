@@ -1,5 +1,5 @@
-//This sample is a basic toy regression task.
-//The problem here is to approximate a sinus function and to evaluate the model error
+//This test a basic toy regression task.
+//The task is to approximate a sinus function and to evaluate the model error
 
 #include <iostream>
 #include <iomanip>
@@ -29,8 +29,8 @@ void test(bool bTest, const string & sMessage = "")
 
 int main()
 {
-	cout << "This sample is a basic toy regression task." << endl;
-	cout << "The problem is to approximate a sinus function and to evaluate the model error" << endl;
+	cout << "This test a basic toy regression task." << endl;
+	cout << "The task is to approximate a sinus function and to evaluate the model error" << endl;
 
 	//build net
     Net model;
@@ -63,12 +63,14 @@ int main()
 	for (int i = 0; i < mSamples.size(); i += 8)
 	{
 		cout << setprecision(4) << "x=" << mSamples(i, 0) << "\ttruth=" << mTruth(i, 0) << "\tpredict=" << mPredict(i, 0) << endl;
-		test(is_near(mTruth(i, 0), mPredict(i, 0), 0.005));
+		test(is_near(mTruth(i, 0), mPredict(i, 0), 0.01));
 	}
     //compute and print loss
     float fLoss=netfit.compute_loss_accuracy(mSamples,mTruth);
     cout << "Loss=" << fLoss << endl;
- 
+
+	test(fLoss<1.e-5,"Loss must be <1.e-5");
+
 	cout << "Test succeded." << endl;
     return 0;
 }

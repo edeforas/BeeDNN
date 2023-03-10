@@ -15,7 +15,7 @@ using namespace std;
 #include "NetTrain.h"
 #include "NetUtil.h"
 #include "CIFAR10Reader.h"
-#include "ConfusionMatrix.h"
+#include "Metrics.h"
 
 #include "LayerActivation.h"
 #include "LayerConvolution2D.h"
@@ -98,17 +98,17 @@ int main()
 	// show train and val confusion matrix results
 	MatrixFloat mClassPredicted;
 	model.predict_classes(ds.train_data(), mClassPredicted);
-	ConfusionMatrix cmRef;
-	ClassificationResult crRef = cmRef.compute(ds.train_truth(), mClassPredicted);
-	cout << "Train accuracy: " << crRef.accuracy << " %" << endl;
-	cout << "Train confusion matrix:" << endl << toString(crRef.mConfMat) << endl;
+	Metrics metricsTrain;
+	metricsTrain.compute(ds.train_truth(), mClassPredicted);
+	cout << "Train accuracy: " << metricsTrain.accuracy() << " %" << endl;
+	cout << "Train confusion matrix:" << endl << toString(metricsTrain.confusion_matrix()) << endl;
 
 	MatrixFloat mValClass;
 	model.predict_classes(ds.validation_data(), mValClass);
-	ConfusionMatrix cmValidation;
-	ClassificationResult crValidation = cmValidation.compute(ds.validation_truth(), mValClass);
-	cout << "Validation accuracy: " << crValidation.accuracy << " %" << endl;
-	cout << "Validation confusion matrix:" << endl << toString(crValidation.mConfMat) << endl;
+	Metrics metricsVal;
+	metricsVal.compute(ds.validation_truth(), mValClass);
+	cout << "Validation accuracy: " << metricsVal.accuracy() << " %" << endl;
+	cout << "Validation confusion matrix:" << endl << toString(metricsVal.confusion_matrix()) << endl;
 
     return 0;
 }

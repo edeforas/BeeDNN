@@ -93,7 +93,7 @@ namespace NetUtil {
 			{
 				jf.add("WeightInitializer", layer->weight_initializer());
 				vector<MatrixFloat*> pW = layer->weights();
-				for (int j = 0; j < pW.size(); j++)
+				for (size_t j = 0; j < pW.size(); j++)
 					jf.add_array("Weight_" + to_string(j), (int)pW[j]->size(), pW[j]->data());
 			}
 
@@ -101,7 +101,7 @@ namespace NetUtil {
 			{
 				jf.add("BiasInitializer", layer->bias_initializer());
 				vector<MatrixFloat*> pB = layer->biases();
-				for (int j = 0; j < pB.size(); j++)
+				for (size_t j = 0; j < pB.size(); j++)
 					jf.add_array("Bias_" + to_string(j), (int)pB[j]->size(), pB[j]->data());
 			}
 
