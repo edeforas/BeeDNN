@@ -345,6 +345,12 @@ public:
         return Matrix<T>(*this).operator*=(b);
     }
 
+
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+//////////////////////////////////////////////
     Matrix<T>& operator*=(const Matrix<T>& b) // slow function!
     {
         assert(cols()==b.rows());
@@ -352,6 +358,20 @@ public:
         Matrix<T> a(*this);
         resize(a._iRows,b._iColumns);
 
+
+		// RKC algorithm
+		Index kMax=a._iColumns;
+		setZero();
+
+		for (Index r = 0; r < _iRows; r++)
+			for (Index k = 0; k < kMax; k++)
+			{ 
+				auto af=a(r, k);
+				for (Index c = 0; c < _iColumns; c++)
+					operator()(r,c)+= af * b(k, c);
+			}
+/*
+		//RCK algorithm, slower
         for(Index r=0;r<_iRows;r++)
         {
             for(Index c=0;c<_iColumns;c++)
@@ -364,7 +384,7 @@ public:
                 operator()(r,c)=temp;
             }
         }
-
+	*/	
         return *this;
     }
 

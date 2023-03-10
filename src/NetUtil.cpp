@@ -49,7 +49,7 @@ namespace NetUtil {
 	void save(const string& sFile,const Net& model, const NetTrain& trainParams)
 	{
 		// save trained model and train parameters
-		JsonFileWriter jf;
+		JsonFile jf;
 
 		jf.add("Engine", string("BeeDNN"));
 		jf.add("Problem", string(model.is_classification_mode() ? "Classification" : "Regression"));
@@ -228,7 +228,7 @@ namespace NetUtil {
 			jf.leave_section();
 		}
 
-		jf.save(sFile);
+		jf.write(sFile);
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 }

@@ -13,67 +13,75 @@ using namespace std;
 #include "JsonFile.h"
 
 //////////////////////////////////////////////////////////////////////////////
-JsonFileWriter::JsonFileWriter()
+JsonFile::JsonFile()
 { 
     clear();
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFileWriter::clear()
-{
-    _sSectionIndent = "    ";
-    _sOut = "";
-    _bPendingComma = false;
-}
+void JsonFile::clear()
+{ }
 //////////////////////////////////////////////////////////////////////////////
-string JsonFileWriter::to_string()
+string JsonFile::to_string()
 {
-    return "{"+_sOut+"\n}";
-}
-//////////////////////////////////////////////////////////////////////////////
-void JsonFileWriter::enter_section(const string& sSection)
-{
-    if (_bPendingComma)
-        _sOut += ",";
+	string sOut;
 
-    _sOut += "\n" + _sSectionIndent + "\"" + sSection + "\":{";
+	vector<string> lastIdent;
 
-    _sSectionIndent += "    ";
-	_bPendingComma=false;
+	for (auto e = _vsItems.begin(); e < _vsItems.end(); e++)
+	{
+		const auto& vs = *e;
+		int iSize = (int)vs.size();
+		string sVal = vs[iSize-1];
+		string sKey = vs[iSize-2];
+		vector<string> newIdent(vs.begin(), vs.end() - 2);
+
+
+		sOut += sVal + "=" + sKey +"\n";
+	}
+	return sOut;
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFileWriter::leave_section()
+void JsonFile::from_string(const string& s)
 {
-    _sSectionIndent = _sSectionIndent.substr(4);
-
-    _sOut += "\n" + _sSectionIndent + "}";
-	_bPendingComma=true;
+	_vsItems.clear();
+	_vsSectionIndent.clear();
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFileWriter::add(const string& sKey,const string& sVal)
+void JsonFile::enter_section(const string& sSection)
+{
+	_vsSectionIndent.push_back(sSection);
+}
+//////////////////////////////////////////////////////////////////////////////
+void JsonFile::leave_section()
+{
+	_vsSectionIndent.pop_back();
+}
+//////////////////////////////////////////////////////////////////////////////
+void JsonFile::add(const string& sKey,const string& sVal)
 {
     add_string(sKey, "\"" + sVal + "\"");
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFileWriter::add(const string& sKey, int iVal)
+void JsonFile::add(const string& sKey, int iVal)
 {
     stringstream ss;
     ss << iVal;
     add_string(sKey, ss.str());
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFileWriter::add(const string& sKey, float fVal)
+void JsonFile::add(const string& sKey, float fVal)
 {
     stringstream ss;
     ss << fVal;
     add_string(sKey, ss.str());
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFileWriter::add(const string& sKey, bool bVal)
+void JsonFile::add(const string& sKey, bool bVal)
 {
     add_string(sKey, (bVal ? "true" : "false"));
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFileWriter::add_array(const string& sKey, int iSize, const float* pVal)
+void JsonFile::add_array(const string& sKey, int iSize, const float* pVal)
 {
     stringstream ss;
     for (int i = 0; i < iSize; i++)
@@ -86,55 +94,26 @@ void JsonFileWriter::add_array(const string& sKey, int iSize, const float* pVal)
     add_string(sKey, "[" + ss.str() +"]");
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFileWriter::add_string(const string& sKey,const string& s)
+void JsonFile::add_string(const string& sKey,const string& sVal)
 {
-    if (_bPendingComma)
-        _sOut += ",";
-	
-    _sOut += "\n" + _sSectionIndent + "\"" + sKey + "\":" + s;
-	_bPendingComma=true;
+	vector<string> vs = _vsSectionIndent;
+	vs.push_back(sKey);
+	vs.push_back(sVal);
+	_vsItems.push_back(vs);
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFileWriter::save(const string& sFile)
+void JsonFile::write(const string& sFile)
 {
     std::ofstream f(sFile);
     f << this->to_string();
 }
 //////////////////////////////////////////////////////////////////////////////
-
-
-/*string JsonFile::find_key(string s, string sKey)
+void JsonFile::read(const string& sFile)
 {
-    auto i = s.find(sKey + ":");
+	ifstream f(sFile);
+	stringstream buf;
+	buf << f.rdbuf();
 
-    if (i == string::npos)
-        return "";
-
-    i += sKey.size() + 1;
-
-    auto i2 = s.find("\n", i);
-
-    if (i2 == string::npos)
-        i2 = s.size();
-
-    string s2 = s.substr(i, i2 - i);
-
-    //trim right
-    auto i3 = s2.find_last_not_of(" \t\r\n");
-    if (i3 != string::npos)
-        return s2.substr(0, i3 + 1);
-    else
-        return s2;
+	this->from_string(buf.str());
 }
 //////////////////////////////////////////////////////////////////////////////
-void JsonFile::split(string s, vector<string>& vsItems, char cDelimiter)
-{
-    vsItems.clear();
-
-    istringstream f(s);
-    string sitem;
-    while (getline(f, sitem, cDelimiter))
-        vsItems.push_back(sitem);
-}
-//////////////////////////////////////////////////////////////////////////////
-*/

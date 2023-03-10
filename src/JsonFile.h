@@ -10,15 +10,19 @@
 #define JsonFile_
 
 #include <string>
+#include <vector>
 using namespace std;
 
-class JsonFileWriter {
+class JsonFile {
 public:
-    JsonFileWriter();
+    JsonFile();
 
-    void clear();
-    string to_string();
-    void save(const string& sFile);
+	void read(const string& sFile);
+	void write(const string& sFile);
+
+	string to_string();
+	void from_string(const string& s);
+	void clear();
 
     void enter_section(const string& sSection);
     void leave_section();
@@ -31,11 +35,10 @@ public:
     void add_array(const string& sKey, int iSize, const float* pVal);
 
 private:
-    void add_string(const string& sKey, const string& s);
+    void add_string(const string& sKey, const string& sVal);
     
-    bool _bPendingComma;
-    string _sSectionIndent;
-    string _sOut;
+	vector<vector<string>> _vsItems;
+	vector<string> _vsSectionIndent;
 };
 
 #endif

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <chrono>
 using namespace std;
-
+ 
 #include "Net.h"
 #include "NetTrain.h"
 #include "MNISTReader.h"
