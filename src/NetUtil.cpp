@@ -107,21 +107,21 @@ namespace NetUtil {
 
 			if (layer->type() == "Dense")
 			{
-				LayerDense* l = static_cast<LayerDense*>(layer);
+				auto l = static_cast<const LayerDense*>(layer);
 				jf.add("InputSize", (int)l->input_size());
 				jf.add("OutputSize", (int)l->output_size());
 			}
 
 			if (layer->type() == "Dot")
 			{
-				LayerDense* l = static_cast<LayerDense*>(layer);
+				auto l = static_cast<const LayerDense*>(layer);
 				jf.add("InputSize", (int)l->input_size());
 				jf.add("OutputSize", (int)l->output_size());
 			}
 
 			else if (layer->type() == "ChannelBias")
 			{
-				LayerChannelBias* l = static_cast<LayerChannelBias*>(layer);
+				auto l = static_cast<const LayerChannelBias*>(layer);
 
 				Index iRows, iCols, iChannels;
 				l->get_params(iRows, iCols, iChannels);
@@ -133,13 +133,13 @@ namespace NetUtil {
 
 			else if (layer->type() == "Dropout")
 			{
-				LayerDropout* l = static_cast<LayerDropout*>(layer);
+				auto l = static_cast<const LayerDropout*>(layer);
 				jf.add("Rate", l->get_rate());
 			}
 
 			else if (layer->type() == "RRelu")
 			{
-				LayerRRelu* l = static_cast<LayerRRelu*>(layer);
+				auto l = static_cast<const LayerRRelu*>(layer);
 				float alpha1, alpha2;
 				l->get_params(alpha1, alpha2);
 				jf.add("Alpha1", alpha1);
@@ -148,17 +148,17 @@ namespace NetUtil {
 
 			else if (layer->type() == "GaussianNoise")
 			{
-				LayerGaussianNoise* l = static_cast<LayerGaussianNoise*>(layer);
+				auto l = static_cast<const LayerGaussianNoise*>(layer);
 				jf.add("Noise", l->get_noise());
 			}
 			else if (layer->type() == "UniformNoise")
 			{
-				LayerUniformNoise* l = static_cast<LayerUniformNoise*>(layer);
+				auto l = static_cast<const LayerUniformNoise*>(layer);
 				jf.add("Noise", l->get_noise());
 			}
 			else if (layer->type() == "MaxPool2D")
 			{
-				LayerMaxPool2D* l = static_cast<LayerMaxPool2D*>(layer);
+				auto l = static_cast<const LayerMaxPool2D*>(layer);
 
 				Index inRows, inCols, iChannels, rowFactor, colFactor;
 				l->get_params(inRows, inCols, iChannels, rowFactor, colFactor);
@@ -172,7 +172,7 @@ namespace NetUtil {
 
 			else if (layer->type() == "GlobalMaxPool2D")
 			{
-				LayerGlobalMaxPool2D* l = static_cast<LayerGlobalMaxPool2D*>(layer);
+				auto l = static_cast<const LayerGlobalMaxPool2D*>(layer);
 
 				Index inRows, inCols, iChannels;
 				l->get_params(inRows, inCols, iChannels);
@@ -184,7 +184,7 @@ namespace NetUtil {
 
 			else if (layer->type() == "Convolution2D")
 			{
-				LayerConvolution2D* l = static_cast<LayerConvolution2D*>(layer);
+				auto l = static_cast<const LayerConvolution2D*>(layer);
 
 				Index inRows, inCols, inChannels, kernelRows, kernelCols, outChannels, rowStride, colStride;
 				l->get_params(inRows, inCols, inChannels, kernelRows, kernelCols, outChannels, rowStride, colStride);
@@ -201,20 +201,20 @@ namespace NetUtil {
 
 			else if (layer->type() == "TimeDistributedBias")
 			{
-				LayerTimeDistributedBias* l = static_cast<LayerTimeDistributedBias*>(layer);
+				auto l = static_cast<const LayerTimeDistributedBias*>(layer);
 				jf.add("FrameSize", l->frame_size());
 			}
 
 			else if (layer->type() == "TimeDistributedDot")
 			{
-				LayerTimeDistributedDot* l = static_cast<LayerTimeDistributedDot*>(layer);
+				auto l = static_cast<const LayerTimeDistributedDot*>(layer);
 				jf.add("InFrameSize", l->in_frame_size());
 				jf.add("OutFrameSize", l->out_frame_size());
 			}
 
 			else if (layer->type() == "TimeDistributedDense")
 			{
-				LayerTimeDistributedDense* l = static_cast<LayerTimeDistributedDense*>(layer);
+				auto l = static_cast<const LayerTimeDistributedDense*>(layer);
 				jf.add("InFrameSize", l->in_frame_size());
 				jf.add("OutFrameSize", l->out_frame_size());
 			}

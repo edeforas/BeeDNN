@@ -36,7 +36,7 @@ void LayerSwiGLU::init()
 ///////////////////////////////////////////////////////////////////////////////
 void LayerSwiGLU::forward(const MatrixFloat& mIn, MatrixFloat& mOut)
 {
-	assert( (mIn.cols() % 1) == 0); // mIn must have an even size
+	assert(((mIn.cols() & 1) == 0) && "mIn must have an even size");
 
 	Index iNbCols=mIn.cols();
 	Index iNbColsHalf= iNbCols/2;
