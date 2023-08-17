@@ -24,6 +24,7 @@ set(BEEDNN_FILES
 	LayerGain.cpp LayerGain.h
 	LayerGaussianDropout.cpp LayerGaussianDropout.h
 	LayerGaussianNoise.cpp LayerGaussianNoise.h
+	LayerGatedActivation.cpp LayerGatedActivation.h
 	LayerGEGLU.cpp LayerGEGLU.h
 	LayerGlobalAffine.cpp LayerGlobalAffine.h
 	LayerGlobalAveragePooling2D.cpp LayerGlobalAveragePooling2D.h
@@ -31,13 +32,15 @@ set(BEEDNN_FILES
 	LayerGlobalGain.cpp LayerGlobalGain.h
 	LayerGlobalMaxPool2D.cpp LayerGlobalMaxPool2D.h
 	LayerGLU.cpp LayerGLU.h
+	LayerGTU.cpp LayerGTU.h
 	LayerMaxPool2D.cpp LayerMaxPool2D.h
 	LayerPELU.cpp LayerPELU.h
 	LayerPRelu.cpp LayerPRelu.h
 	LayerRandomFlip.cpp LayerRandomFlip.h
-	LayerReGLU.cpp LayerReGLU.h
+	LayerReGLU.cpp LayerReGLU.h	
 	LayerRNN.cpp LayerRNN.h
 	LayerRRelu.cpp LayerRRelu.h
+	LayerSeGLU.cpp LayerSeGLU.h
 	LayerSimpleRNN.cpp LayerSimpleRNN.h
 	LayerSimplestRNN.cpp LayerSimplestRNN.h
 	LayerSoftmax.cpp LayerSoftmax.h

@@ -6,15 +6,14 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerBilinear_
-#define LayerBilinear_
+#ifndef LayerSeGLU_
+#define LayerSeGLU_
 
 #include "LayerGatedActivation.h"
 
-class LayerBilinear : public LayerGatedActivation
+class LayerSeGLU : public LayerGatedActivation
 {
 public:
-    explicit LayerBilinear();
+    explicit LayerSeGLU();
 };
-
 #endif

@@ -564,7 +564,7 @@ void NetTrain::train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth
 
 	//backward pass
 	for (int i = (int)_iNbLayers - 1; i >= 0; i--)
-		_pNet->layer(i).backpropagation(_inOut[i], _gradient[i + 1], _gradient[i]);
+		_pNet->layer(i).backpropagation(_inOut[i], _gradient[(size_t)i + 1], _gradient[i]);
 
 	// optimize weights and biases
 	Index iNbWeights = _pWeights.size();

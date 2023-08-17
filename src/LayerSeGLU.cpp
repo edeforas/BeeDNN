@@ -6,12 +6,12 @@
     in the LICENSE.txt file.
 */
 
-// ReGLU as in : https://kikaben.com/swiglu-2020/
+// SeGLU as in : https://github.com/pouyaardehkhani/ActTensor/
 
-#include "LayerReGLU.h"
+#include "LayerSeGLU.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-LayerReGLU::LayerReGLU() :
-    LayerGatedActivation("Identity", "Relu")
+LayerSeGLU::LayerSeGLU() :
+    LayerGatedActivation("Identity", "Selu")
 { }
 ///////////////////////////////////////////////////////////////////////////////

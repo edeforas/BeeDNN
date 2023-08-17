@@ -31,6 +31,6 @@ void MinMaxScaler::transform( MatrixFloat& m)
 {
 	for (Index i = 0; i < m.rows(); i++)
 		for (Index j = 0; j < m.cols(); j++)
-			m(i, j) = (m(i, j) - _mMin(j)) / (_mMax(j) - _mMin(j)); //todo optimise
+			m(i, j) = (m(i, j) - _mMin(j)) / (_mMax(j) - _mMin(j)); //todo optimize
 }
 ///////////////////////////////////////////////////////////////////////////////

@@ -9,27 +9,12 @@
 #ifndef LayerReGLU_
 #define LayerReGLU_
 
-#include "Layer.h"
-#include "Matrix.h"
+#include "LayerGatedActivation.h"
 
-class Activation;
-
-class LayerReGLU : public Layer
+class LayerReGLU : public LayerGatedActivation
 {
 public:
     explicit LayerReGLU();
-    virtual ~LayerReGLU() override;
-
-    virtual Layer* clone() const override;
-
-    virtual void init() override;
-	
-	virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
-	virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
-
-private:
-	Activation* _pActivation;
-
 };
 
 #endif
