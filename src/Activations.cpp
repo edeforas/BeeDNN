@@ -465,13 +465,15 @@ public:
 
     float apply(float x) const override
     {
-        return 0.5f*x*(1.f+tanhf(1.772454f*x*(1.f+0.044715f*x*x)));
+        //return x* sigmoid(1.702 * x) //coarse approx
+        //return 0.5f*x*(1.f+tanhf(0.7978845608f*x*(1.f+0.044715f*x*x)));// fine approx
+        return 0.5f * x * (1.f + erff(x / sqrt(2.f))); // exact formula
     }
 
     float derivation(float x) const override
     {
-        float fSech=1.f/coshf(1.772454f*x*(0.044715f*x*x+1.f));
-        return 0.5f*tanh(1.772454f*x*(0.044715f*x*x+1.f))+x*(0.118883f*x*x+0.886227f)*fSech*fSech+0.5f;
+        // derivation of exact formula
+        return 0.5f * (1.f + erff(x / sqrtf(2.f))) + x * expf(-x * x * 0.5f) / sqrtf(3.14159265359f * 2.f);
     }
 };
 //////////////////////////////////////////////////////////////////////////////
