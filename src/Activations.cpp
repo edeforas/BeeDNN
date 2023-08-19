@@ -454,7 +454,6 @@ public:
 // GELU from the paper: https://arxiv.org/pdf/1606.08415.pdf
 // or GAUSSIAN ERROR LINEAR UNITS (GELUS) ; Dan Hendrycks and Kevin Gimpel
 // and https://medium.com/@shoray.goel/gelu-gaussian-error-linear-unit-4ec59fb2e47c
-// approximation version and numbers rounded to 1.e-6
 class ActivationGELU: public Activation
 {
 public:
@@ -467,13 +466,13 @@ public:
     {
         //return x* sigmoid(1.702 * x) //coarse approx
         //return 0.5f*x*(1.f+tanhf(0.7978845608f*x*(1.f+0.044715f*x*x)));// fine approx
-        return 0.5f * x * (1.f + erff(x / sqrt(2.f))); // exact formula
+        return 0.5f * x * (1.f + erff(x / sqrt(2.f))); // exact formula todo optimize
     }
 
     float derivation(float x) const override
     {
         // derivation of exact formula
-        return 0.5f * (1.f + erff(x / sqrtf(2.f))) + x * expf(-x * x * 0.5f) / sqrtf(3.14159265359f * 2.f);
+        return 0.5f * (1.f + erff(x / sqrtf(2.f))) + x * expf(-x * x * 0.5f) / sqrtf(3.14159265359f * 2.f); // todo optimize
     }
 };
 //////////////////////////////////////////////////////////////////////////////
