@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef Activations_
-#define Activations_
+#pragma once
 
 #include <string>
 #include <vector>
@@ -27,4 +26,3 @@ public:
 Activation* get_activation(const string & sActivation);
 void list_activations_available(vector<string>& vsActivations);
 
-#endif

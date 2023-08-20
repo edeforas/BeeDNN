@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef MNISTReader_
-#define MNISTReader_
+#pragma once
 
 #include "Matrix.h"
 #include "DataSource.h"
@@ -25,4 +24,3 @@ private:
 	void swap_int(unsigned int &i);
 };
 
-#endif

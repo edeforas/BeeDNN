@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef StandardScaler_
-#define StandardScaler_
+#pragma once
 
 #include "Matrix.h"
 
@@ -23,4 +22,3 @@ private:
 	MatrixFloat _mMean, _mStd;
 };
 
-#endif

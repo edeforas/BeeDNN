@@ -6,8 +6,7 @@
 	in the LICENSE.txt file.
 */
 
-#ifndef LayerGatedActivation_
-#define LayerGatedActivation_
+#pragma once
 
 #include "Layer.h"
 #include "Matrix.h"
@@ -31,5 +30,3 @@ private:
 	Activation* _pActivation1;
 	Activation* _pActivation2;
 };
-
-#endif

@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerGTU_
-#define LayerGTU_
+#pragma once
 
 #include "LayerGatedActivation.h"
 
@@ -17,5 +16,4 @@ public:
     explicit LayerGTU();
 };
 
-#endif
 

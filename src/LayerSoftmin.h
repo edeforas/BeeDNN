@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerSoftmin_
-#define LayerSoftmin_
+#pragma once
 
 #include "Layer.h"
 #include "Matrix.h"
@@ -23,5 +22,3 @@ public:
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 };
-
-#endif

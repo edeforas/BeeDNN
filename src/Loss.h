@@ -5,9 +5,7 @@
     Use of this source code is governed by a MIT-style license that can be found
     in the LICENSE.txt file.
 */
-
-#ifndef Loss_
-#define Loss_
+#pragma once
 
 #include "Matrix.h"
 
@@ -40,5 +38,3 @@ protected:
 
 Loss* create_loss(const string & sLoss);
 void list_loss_available(vector<string>& vsLoss);
-
-#endif

@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef Matrix_
-#define Matrix_
+#pragma once
 
 #include <algorithm>
 #include <cassert>
@@ -734,4 +733,3 @@ const MatrixFloat fromFile(const string& sFile);
 const MatrixFloat fromString(const string& s);
 bool toFile(const string& sFile, const MatrixFloat & m);
 
-#endif

@@ -5,9 +5,7 @@
     Use of this source code is governed by a MIT-style license that can be found
     in the LICENSE.txt file.
 */
-
-#ifndef Regularizer_
-#define Regularizer_
+#pragma once
 
 #include "Matrix.h"
 
@@ -37,4 +35,3 @@ protected:
 Regularizer* create_regularizer(const string & sRegularizer);
 void list_regularizer_available(vector<string>& vsRegularizers);
 
-#endif

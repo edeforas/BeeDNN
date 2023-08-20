@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerGlobalMaxPool2D_
-#define LayerGlobalMaxPool2D_
+#pragma once
 
 #include "Layer.h"
 #include "Matrix.h"
@@ -35,4 +34,3 @@ private:
 	MatrixFloat _mMaxIndex;
 };
 
-#endif

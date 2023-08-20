@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef Optimizer_
-#define Optimizer_
+#pragma once
 
 #include "Matrix.h"
 
@@ -43,5 +42,3 @@ protected:
 
 Optimizer* create_optimizer(const string & sOptimizer);
 void list_optimizers_available(vector<string>& vsOptimizers);
-
-#endif

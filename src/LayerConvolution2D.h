@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerConvolution2D_
-#define LayerConvolution2D_
+#pragma once
 
 #include <vector>
 using namespace std;
@@ -66,5 +65,3 @@ public:
 	MatrixFloat _im2colT; // input image, im2col format
 	MatrixFloat _tempImg; // temporary image, to avoid malloc
 };
-
-#endif
