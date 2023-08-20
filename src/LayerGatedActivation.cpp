@@ -11,7 +11,7 @@
 
 #include "LayerGatedActivation.h"
 #include "Activations.h"
-
+namespace bee {
 ///////////////////////////////////////////////////////////////////////////////
 LayerGatedActivation::LayerGatedActivation(const string& sActivation1, const string& sActivation2) :
 	Layer("GatedActivation")
@@ -69,3 +69,4 @@ void LayerGatedActivation::backpropagation(const MatrixFloat& mIn, const MatrixF
 		}
 }
 ///////////////////////////////////////////////////////////////
+}

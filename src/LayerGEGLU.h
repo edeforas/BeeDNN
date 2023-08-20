@@ -9,7 +9,7 @@
 #ifndef LayerGEGLU_
 #define LayerGEGLU_
 
-#include "Layer.h"
+#include "LayerGatedActivation.h"
 #include "Matrix.h"
 
 namespace bee {

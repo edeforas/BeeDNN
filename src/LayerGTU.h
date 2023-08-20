@@ -10,12 +10,12 @@
 #define LayerGTU_
 
 #include "LayerGatedActivation.h"
-
+namespace bee {
 class LayerGTU : public LayerGatedActivation
 {
 public:
     explicit LayerGTU();
 };
-
+}
 #endif
 

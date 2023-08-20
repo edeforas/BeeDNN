@@ -9,7 +9,7 @@
 // GEGLU as in : https://kikaben.com/swiglu-2020/
 
 #include "LayerGEGLU.h"
-namespace bee{
+namespace bee {
 ///////////////////////////////////////////////////////////////////////////////
 LayerGEGLU::LayerGEGLU() :
     LayerGatedActivation("Identity", "GELU")

@@ -11,7 +11,7 @@
 
 #include "Layer.h"
 #include "Matrix.h"
-
+namespace bee {
 class Activation;
 
 class LayerGatedActivation : public Layer
@@ -31,5 +31,5 @@ private:
 	Activation* _pActivation1;
 	Activation* _pActivation2;
 };
-
+}
 #endif
