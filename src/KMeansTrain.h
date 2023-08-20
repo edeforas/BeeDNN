@@ -13,7 +13,6 @@
 
 #include <functional>
 #include <string>
-using namespace std;
 
 namespace bee {
 

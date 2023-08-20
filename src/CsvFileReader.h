@@ -10,16 +10,15 @@
 #define CsvFileReader_
 
 #include <string>
-using namespace std;
 
 #include "DataSource.h"
 namespace bee {
 class CsvFileReader : public DataSource
 {
 public:
-    virtual bool load(const string& sFile) override;
+    virtual bool load(const std::string& sFile) override;
 private:
-	void replace_last(string& s, const string& sOld, const string& sNew);
+	void replace_last(std::string& s, const std::string& sOld, const std::string& sNew);
 };
 }
 #endif

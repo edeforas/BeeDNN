@@ -42,6 +42,8 @@
 
 #include <string>
 #include <sstream>
+
+using namespace std;
 namespace bee {
 
 namespace NetUtil {

@@ -13,17 +13,16 @@
 #include "Matrix.h"
 
 #include <random>
-using namespace std;
 namespace bee {
 class Activation;
 
-class LayerGaussianDropout : public bee::Layer
+class LayerGaussianDropout : public Layer
 {
 public:
     explicit LayerGaussianDropout(float fProba);
     virtual ~LayerGaussianDropout() override;
 
-    virtual bee::Layer* clone() const override;
+    virtual Layer* clone() const override;
 
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
@@ -35,7 +34,7 @@ private:
 	float _fStdev;
 	MatrixFloat _mask;
 
-	normal_distribution<float> _distNormal;
+	std::normal_distribution<float> _distNormal;
 };
 }
 #endif

@@ -13,16 +13,15 @@
 #include "DataSource.h"
 
 #include <string>
-using namespace std;
 
 namespace bee {
 class MNISTReader: public DataSource
 {
 public:
-	virtual bool load(const string & sName) override;
+	virtual bool load(const std::string & sName) override;
 
 private:
-	bool read_Matrix(string sName, MatrixFloat& m);
+	bool read_Matrix(std::string sName, MatrixFloat& m);
 	void swap_int(unsigned int &i);
 };
 

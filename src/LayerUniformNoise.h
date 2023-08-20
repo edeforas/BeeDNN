@@ -13,7 +13,6 @@
 #include "Matrix.h"
 
 #include <random>
-using namespace std;
 namespace bee {
 class LayerUniformNoise : public Layer
 {
@@ -30,7 +29,7 @@ public:
 
 private:
     float _fNoise;
-	uniform_real_distribution<float> _distUniform;
+	std::uniform_real_distribution<float> _distUniform;
 
 };
 }

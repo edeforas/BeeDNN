@@ -10,6 +10,8 @@
 
 #include <cassert>
 #include <cmath>
+
+using namespace std;
 namespace bee {
 
 //////////////////////////////////////////////////////////

@@ -13,7 +13,6 @@
 
 #include <vector>
 #include <string>
-using namespace std;
 
 namespace bee {
 class Layer;
@@ -31,7 +30,7 @@ public:
 
 	void set_params(float fLearningRate = -1.f, float fDecay = -1.f, float fMomentum = -1.f);  //-1.f is for default params
 
-	virtual string name() const = 0;
+	virtual std::string name() const = 0;
 	virtual void init()=0;
 
     virtual void optimize(MatrixFloat& w, const MatrixFloat& dw) = 0;
@@ -42,7 +41,7 @@ protected:
     float _fDecay;
 };
 
-Optimizer* create_optimizer(const string & sOptimizer);
-void list_optimizers_available(vector<string>& vsOptimizers);
+Optimizer* create_optimizer(const std::string & sOptimizer);
+void list_optimizers_available(std::vector<std::string>& vsOptimizers);
 }
 #endif

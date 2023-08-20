@@ -11,6 +11,8 @@
 
 #include "LayerGatedActivation.h"
 #include "Activations.h"
+
+using namespace std;
 namespace bee {
 ///////////////////////////////////////////////////////////////////////////////
 LayerGatedActivation::LayerGatedActivation(const string& sActivation1, const string& sActivation2) :

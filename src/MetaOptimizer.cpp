@@ -5,6 +5,8 @@
 #include <iostream>
 #include <ctime>
 #include <thread>
+
+using namespace std;
 namespace bee {
 
 //////////////////////////////////////////////////////////////////////////////
