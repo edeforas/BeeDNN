@@ -12,7 +12,7 @@
 #include "LayerSoftmin.h"
 
 #include <cmath>
-namespace bee{
+namespace bee {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerSoftmin::LayerSoftmin():

@@ -8,8 +8,7 @@
 
 #include "LayerChannelBias.h"
 #include "Initializers.h"
-namespace bee{
-
+namespace bee {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerChannelBias::LayerChannelBias(Index iNbRows,Index iNbCols,Index iNbChannels, const string& sBiasInitializer) :

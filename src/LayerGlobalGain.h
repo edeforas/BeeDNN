@@ -12,13 +12,13 @@
 #include "Layer.h"
 #include "Matrix.h"
 namespace bee {
-class LayerGlobalGain : public bee::Layer
+class LayerGlobalGain : public Layer
 {
 public:
     explicit LayerGlobalGain();
     virtual ~LayerGlobalGain();
 
-    virtual bee::Layer* clone() const override;
+    virtual Layer* clone() const override;
 
     virtual void init() override;
 

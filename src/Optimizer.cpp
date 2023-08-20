@@ -10,7 +10,7 @@
 
 #include <cassert>
 #include <cmath>
-namespace bee{
+namespace bee {
 
 //////////////////////////////////////////////////////////
 Optimizer::Optimizer()

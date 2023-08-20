@@ -2,13 +2,15 @@
 // 92 % classification after 30 epochs, 100 centroids are used, 2s/epoch
 #include <iostream>
 #include <chrono>
-using namespace std;
 
 #include "KMeans.h"
 #include "KMeansTrain.h"
 #include "MNISTReader.h"
 #include "Metrics.h"
+
+using namespace std;
 using namespace bee;
+
 KMeans km;
 KMeansTrain kmTrain;
 

@@ -10,7 +10,7 @@
 #define Metrics_
 
 #include "Matrix.h"
-namespace bee{
+namespace bee {
 class Metrics
 {
 public:

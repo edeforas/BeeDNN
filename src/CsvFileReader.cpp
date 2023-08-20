@@ -10,7 +10,7 @@
 
 #include <fstream>
 using namespace std;
-namespace bee{
+namespace bee {
 
 ////////////////////////////////////////////////////////////////////////
 void CsvFileReader::replace_last(string& s, const string& sOld, const string& sNew)

@@ -7,7 +7,7 @@
 */
 
 #include "LayerRNN.h"
-namespace bee{
+namespace bee {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerRNN::LayerRNN(int iFrameSize, int iUnits) :

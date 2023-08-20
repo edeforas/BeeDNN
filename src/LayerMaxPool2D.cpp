@@ -7,7 +7,7 @@
 */
 
 #include "LayerMaxPool2D.h"
-namespace bee{
+namespace bee {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerMaxPool2D::LayerMaxPool2D(Index iInRows, Index iInCols, Index iInChannels, Index iRowFactor, Index iColFactor) :

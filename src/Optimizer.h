@@ -15,7 +15,7 @@
 #include <string>
 using namespace std;
 
-namespace bee{
+namespace bee {
 class Layer;
 
 class Optimizer

@@ -14,7 +14,7 @@
 
 #include <random>
 using namespace std;
-namespace bee{
+namespace bee {
 class LayerGaussianNoise : public Layer
 {
 public:

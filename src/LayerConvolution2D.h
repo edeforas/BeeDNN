@@ -40,12 +40,7 @@ public:
 	void col2im_LUT(const MatrixFloat & mCol, MatrixFloat & mIm);
 
 	bool fastLUT; //temporary
-	Index getOutputRows() const {
-		return _iOutRows;
-	}
-		Index getOutputCols() const {
-		return _iOutCols;
-	}
+
 private:
 	void reshape_to_out(MatrixFloat & mOut);
 	void reshape_from_out(MatrixFloat & mOut);

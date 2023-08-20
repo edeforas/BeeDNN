@@ -8,7 +8,7 @@
 
 #include "LayerTimeDistributedDot.h"
 #include "Initializers.h"
-namespace bee{
+namespace bee {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerTimeDistributedDot::LayerTimeDistributedDot(int iInFrameSize, int iOutFrameSize, const string& sWeightInitializer) :

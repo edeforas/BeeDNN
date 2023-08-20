@@ -5,7 +5,7 @@
 #include <iostream>
 #include <ctime>
 #include <thread>
-namespace bee{
+namespace bee {
 
 //////////////////////////////////////////////////////////////////////////////
 MetaOptimizer::MetaOptimizer():

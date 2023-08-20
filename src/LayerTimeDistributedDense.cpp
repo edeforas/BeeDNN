@@ -8,7 +8,7 @@
 
 #include "LayerTimeDistributedDense.h"
 #include "Initializers.h"
-namespace bee{
+namespace bee {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerTimeDistributedDense::LayerTimeDistributedDense(int iInFrameSize, int iOutFrameSize, const string& sWeightInitializer, const string& sBiasInitializer) :

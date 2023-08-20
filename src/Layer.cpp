@@ -7,7 +7,7 @@
 */
 
 #include "Layer.h"
-namespace bee{
+namespace bee {
 
 ////////////////////////////////////////////////////////////////
 Layer::Layer(const string& sType):

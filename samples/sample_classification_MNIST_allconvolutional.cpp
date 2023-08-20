@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include <chrono>
-using namespace std;
 
 #include "Net.h"
 #include "NetTrain.h"
@@ -18,7 +17,9 @@ using namespace std;
 #include "LayerDropout.h"
 #include "LayerSoftmax.h"
 
+using namespace std;
 using namespace bee;
+
 NetTrain netTrain;
 int iEpoch;
 chrono::steady_clock::time_point start;

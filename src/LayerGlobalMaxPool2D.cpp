@@ -7,7 +7,7 @@
 */
 
 #include "LayerGlobalMaxPool2D.h"
-namespace bee{
+namespace bee {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerGlobalMaxPool2D::LayerGlobalMaxPool2D(Index iInRows, Index iInCols, Index iInChannels) :

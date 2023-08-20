@@ -12,13 +12,13 @@
 #include "Layer.h"
 #include "Matrix.h"
 namespace bee {
-class LayerGlobalBias : public bee::Layer
+class LayerGlobalBias : public Layer
 {
 public:
     explicit LayerGlobalBias();
     virtual ~LayerGlobalBias();
 
-    virtual bee::Layer* clone() const override;
+    virtual Layer* clone() const override;
     virtual void init() override;
 
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;

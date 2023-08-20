@@ -12,13 +12,13 @@
 #include "Layer.h"
 #include "Matrix.h"
 namespace bee {
-class LayerPELU : public bee::Layer
+class LayerPELU : public Layer
 {
 public:
     explicit LayerPELU();
     virtual ~LayerPELU() override;
 
-    virtual bee::Layer* clone() const override;
+    virtual Layer* clone() const override;
 
     virtual void init() override;
 	

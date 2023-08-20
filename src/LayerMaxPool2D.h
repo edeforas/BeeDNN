@@ -11,7 +11,7 @@
 
 #include "Layer.h"
 #include "Matrix.h"
-namespace bee{
+namespace bee {
 class LayerMaxPool2D : public Layer
 {
 public:
@@ -24,12 +24,7 @@ public:
 
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
-	Index getOutputRows() const {
-		return _iOutRows;
-	}
-	Index getOutputCols() const {
-		return _iOutCols;
-	}
+
 private:
 	Index _iInRows;
 	Index _iInCols;

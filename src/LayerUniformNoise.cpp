@@ -7,7 +7,7 @@
 */
 
 #include "LayerUniformNoise.h"
-namespace bee{
+namespace bee {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerUniformNoise::LayerUniformNoise(float fNoise):

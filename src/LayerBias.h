@@ -13,13 +13,13 @@
 #include "Matrix.h"
 
 namespace bee {
-class LayerBias : public bee::Layer
+class LayerBias : public Layer
 {
 public:
     explicit LayerBias(const string& sBiasInitializer = "Zeros");
     virtual ~LayerBias();
 
-    virtual bee::Layer* clone() const override;
+    virtual Layer* clone() const override;
 
     virtual void init() override;
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;

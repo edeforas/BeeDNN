@@ -1,9 +1,10 @@
 #include <iostream>
 #include <cassert>
-using namespace std;
 
 #include "Matrix.h"
 #include "Metrics.h"
+
+using namespace std;
 using namespace bee;
 /////////////////////////////////////////////////////////////////////
 // for testU only

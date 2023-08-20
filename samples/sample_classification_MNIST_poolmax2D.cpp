@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include <chrono>
-using namespace std;
  
 #include "Net.h"
 #include "NetTrain.h"
@@ -16,7 +15,9 @@ using namespace std;
 #include "LayerMaxPool2D.h"
 #include "LayerSoftmax.h"
 
+using namespace std;
 using namespace bee;
+
 Net model;
 NetTrain netTrain;
 int iEpoch;

@@ -3,6 +3,7 @@
 #include <chrono>
 
 #include "Matrix.h"
+
 using namespace bee;
 /////////////////////////////////////////////////////////////////////
 // for testU only
@@ -66,7 +67,7 @@ void test_matrixView()
 
     // do we accept const?
 	float d[5]={ 0, 1 , 2 , 3 , 4 };
-    const MatrixFloatView mD=fromRawBufferConst(d,5,1);
+    const MatrixFloatView mD=fromRawBuffer(d,5,1);
     (void)mD;
 
 	//check matrix view is not copying the data, i.e. is a real view

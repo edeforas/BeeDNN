@@ -9,8 +9,7 @@
 // ReGLU as in : https://kikaben.com/swiglu-2020/
 
 #include "LayerReGLU.h"
-#include "Activations.h"
-namespace bee{
+namespace bee {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerReGLU::LayerReGLU() :

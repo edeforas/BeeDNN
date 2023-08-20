@@ -8,7 +8,7 @@
 
 #include "LayerBias.h"
 #include "Initializers.h"
-namespace bee{
+namespace bee {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerBias::LayerBias(const string& sBiasInitializer) :

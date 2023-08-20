@@ -8,9 +8,9 @@
 
 #include <cmath> // for sqrt
 #include "Initializers.h"
-#include <iostream>
+
 // from https://www.tensorflow.org/api_docs/python/tf/keras/initializers
-namespace bee{
+namespace bee {
 
 ///////////////////////////////////////////////////////////////////////////////
 void Initializers::GlorotUniform(MatrixFloat &m,Index iInputSize,Index iOutputSize)
@@ -86,6 +86,7 @@ void Initializers::Ones(MatrixFloat& m, Index iInputSize, Index iOutputSize)
 void Initializers::compute(const string& sInitializer, MatrixFloat& m, Index iInputSize, Index iOutputSize)
 {
     // Todo , optimize, but not mandatory for now
+
     if (sInitializer == "GlorotUniform")
         Initializers::GlorotUniform(m, iInputSize, iOutputSize);
 

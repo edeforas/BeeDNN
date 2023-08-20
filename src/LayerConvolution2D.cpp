@@ -11,7 +11,7 @@
 #include "LayerConvolution2D.h"
 
 #include <cmath> // for sqrt
-namespace bee{
+namespace bee {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerConvolution2D::LayerConvolution2D(Index iInRows, Index iInCols, Index iInChannels, Index iKernelRows, Index iKernelCols, Index iOutChannels, Index iRowStride, Index iColStride) :

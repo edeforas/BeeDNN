@@ -10,9 +10,10 @@
 
 #include <cassert>
 #include <cmath>
-namespace bee{
 
 using namespace std;
+
+namespace bee {
 ////////////////////////////////////////////////////////////////
 Loss::Loss()
 {

@@ -11,7 +11,7 @@
 
 #include "Layer.h"
 #include "Matrix.h"
-namespace bee{
+namespace bee {
 class LayerGain : public Layer
 {
 public:

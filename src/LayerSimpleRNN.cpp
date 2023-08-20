@@ -7,7 +7,7 @@
 */
 
 #include "LayerSimpleRNN.h"
-namespace bee{
+namespace bee {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerSimpleRNN::LayerSimpleRNN(int iSampleSize, int iUnits) :

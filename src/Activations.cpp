@@ -8,7 +8,7 @@
 
 #include "Activations.h"
 #include <cmath>
-namespace bee{
+namespace bee {
 Activation::Activation()
 { }
 

@@ -12,7 +12,7 @@
 #include "Matrix.h"
 
 #include <cmath>
-namespace bee{
+namespace bee {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 Net::Net()
@@ -70,15 +70,6 @@ void Net::predict(const MatrixFloat& mIn,MatrixFloat& mOut) const
     {
         _layers[i]->forward(mTemp,mOut);
         mTemp=mOut; //todo avoid resize
-    }
-}
-void Net::predict(const MatrixFloat& mIn,std::vector<MatrixFloat>& mOut) const
-{
-	//todo cut in mini batches so save memory
-    mOut.resize(_layers.size());
-    for(unsigned int i=0;i<_layers.size();i++)
-    {
-        _layers[i]->forward((i>0)?mOut[i-1]:mIn,mOut[i]);
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////

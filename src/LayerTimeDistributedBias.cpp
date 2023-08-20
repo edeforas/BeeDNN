@@ -8,7 +8,7 @@
 
 #include "LayerTimeDistributedBias.h"
 #include "Initializers.h"
-namespace bee{
+namespace bee {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerTimeDistributedBias::LayerTimeDistributedBias(int iFrameSize,const string& sBiasInitializer ) :

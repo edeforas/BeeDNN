@@ -10,7 +10,7 @@
 #define NetUtil_
 
 #include <string>
-namespace bee{
+namespace bee {
 class Net;
 class NetTrain;
 

@@ -21,8 +21,10 @@ using namespace std;
 #include "NetUtil.h" //for net saving
 
 #include <sstream>
+
 using namespace std;
 using namespace bee;
+
 //////////////////////////////////////////////////////////////////////////////
 void better_model_callback(NetTrain& train)
 {

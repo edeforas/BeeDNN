@@ -9,7 +9,7 @@
 // PRelu as in : https://arxiv.org/pdf/1502.01852.pdf
 
 #include "LayerPRelu.h"
-namespace bee{
+namespace bee {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerPRelu::LayerPRelu() :

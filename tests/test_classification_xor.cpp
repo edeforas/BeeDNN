@@ -10,6 +10,7 @@ using namespace std;
 #include "LayerDense.h"
 #include "LayerActivation.h"
 
+using namespace bee;
 /////////////////////////////////////////////////////////////////////
 // for testU only
 inline bool is_near(double a,double b, double tolerancis=0.001)
@@ -29,8 +30,7 @@ int main()
 {
 	cout << "Test a simple xor classification" << endl;
 	cout << "The usecase is to learn a XOR gate" << endl;
-
-using namespace bee;
+	
 	//construct network, 2 input, 1 output
     Net model;
     model.add(new LayerDense(2,10));

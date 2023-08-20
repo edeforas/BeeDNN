@@ -7,7 +7,7 @@
 */
 
 #include "LayerCRelu.h"
-namespace bee{
+namespace bee {
 
 
 // CRelu as in : https://arxiv.org/pdf/1603.05201.pdf

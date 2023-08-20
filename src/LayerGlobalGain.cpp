@@ -7,7 +7,7 @@
 */
 
 #include "LayerGlobalGain.h"
-namespace bee{
+namespace bee {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerGlobalGain::LayerGlobalGain():

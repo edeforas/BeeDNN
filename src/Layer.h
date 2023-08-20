@@ -13,14 +13,15 @@
 
 #include <string>
 #include <vector>
- namespace bee {
+
+namespace bee {
 class Layer
 {
 public:
     Layer(const std::string& sType);
     virtual ~Layer();
 
-    virtual bee::Layer* clone() const =0;
+    virtual Layer* clone() const =0;
     std::string type() const;
 	void set_first_layer(bool bFirstLayer);
 
@@ -53,5 +54,5 @@ private:
     std::string _sType;
     std::string _sWeightInitializer, _sBiasInitializer;
 };
- }
+}
 #endif

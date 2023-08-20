@@ -9,27 +9,12 @@
 #ifndef LayerSwiGLU_
 #define LayerSwiGLU_
 
-#include "Layer.h"
-#include "Matrix.h"
+#include "LayerGatedActivation.h"
 namespace bee {
-class Activation;
-
-class LayerSwiGLU : public Layer
+class LayerSwiGLU : public LayerGatedActivation
 {
 public:
     explicit LayerSwiGLU();
-    virtual ~LayerSwiGLU() override;
-
-    virtual bee::Layer* clone() const override;
-
-    virtual void init() override;
-	
-	virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
-	virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
-
-private:
-	Activation* _pActivation;
-
 };
 }
 #endif
