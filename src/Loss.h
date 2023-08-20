@@ -13,8 +13,7 @@
 
 #include <string>
 #include <vector>
-using namespace std;
-
+namespace bee{
 class Loss
 {
 public:
@@ -40,5 +39,5 @@ protected:
 
 Loss* create_loss(const string & sLoss);
 void list_loss_available(vector<string>& vsLoss);
-
+}
 #endif

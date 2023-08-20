@@ -13,7 +13,7 @@
 #include "Matrix.h"
 
 // GlobalMaxPool2D Layer as in :  https://keras.io/api/layers/pooling_layers/global_max_pooling2d/
-
+namespace bee{
 class LayerGlobalMaxPool2D : public Layer
 {
 public:
@@ -35,4 +35,5 @@ private:
 	MatrixFloat _mMaxIndex;
 };
 
+}
 #endif

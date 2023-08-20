@@ -10,7 +10,7 @@
 #define Metrics_
 
 #include "Matrix.h"
-
+namespace bee{
 class Metrics
 {
 public:
@@ -30,5 +30,5 @@ private:
     MatrixFloat _mConfusionMatrix; //raw count
     MatrixFloat _mConfusionMatrixNormalized; //in %
 };
-
+}
 #endif

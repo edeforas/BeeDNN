@@ -8,6 +8,7 @@
 
 #include "LayerBias.h"
 #include "Initializers.h"
+namespace bee{
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerBias::LayerBias(const string& sBiasInitializer) :
@@ -54,3 +55,4 @@ void LayerBias::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradi
     mGradientIn = mGradientOut;
 }
 ///////////////////////////////////////////////////////////////
+}

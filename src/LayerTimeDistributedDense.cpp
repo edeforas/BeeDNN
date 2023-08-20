@@ -8,6 +8,7 @@
 
 #include "LayerTimeDistributedDense.h"
 #include "Initializers.h"
+namespace bee{
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerTimeDistributedDense::LayerTimeDistributedDense(int iInFrameSize, int iOutFrameSize, const string& sWeightInitializer, const string& sBiasInitializer) :
@@ -82,3 +83,4 @@ void LayerTimeDistributedDense::backpropagation(const MatrixFloat &mIn,const Mat
 	}
 }
 ///////////////////////////////////////////////////////////////
+}

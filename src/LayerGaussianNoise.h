@@ -14,7 +14,7 @@
 
 #include <random>
 using namespace std;
-
+namespace bee{
 class LayerGaussianNoise : public Layer
 {
 public:
@@ -33,4 +33,5 @@ private:
 	normal_distribution<float> _distNormal;
 };
 
+}
 #endif

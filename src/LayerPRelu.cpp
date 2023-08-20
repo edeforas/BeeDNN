@@ -9,6 +9,7 @@
 // PRelu as in : https://arxiv.org/pdf/1502.01852.pdf
 
 #include "LayerPRelu.h"
+namespace bee{
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerPRelu::LayerPRelu() :
@@ -79,3 +80,4 @@ void LayerPRelu::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGrad
 		}
 }
 ///////////////////////////////////////////////////////////////
+}

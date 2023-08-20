@@ -11,7 +11,7 @@
 
 #include "Layer.h"
 #include "Matrix.h"
-
+namespace bee {
 class LayerChannelBias : public Layer
 {
 public:
@@ -28,5 +28,5 @@ public:
 private:
 	Index _iNbRows,_iNbCols,_iNbChannels;
 };
-
+}
 #endif

@@ -13,7 +13,7 @@
 using namespace std;
 
 #include "DataSource.h"
-
+namespace bee {
 class CsvFileReader : public DataSource
 {
 public:
@@ -21,5 +21,5 @@ public:
 private:
 	void replace_last(string& s, const string& sOld, const string& sNew);
 };
-
+}
 #endif

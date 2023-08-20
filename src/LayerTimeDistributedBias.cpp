@@ -8,6 +8,7 @@
 
 #include "LayerTimeDistributedBias.h"
 #include "Initializers.h"
+namespace bee{
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerTimeDistributedBias::LayerTimeDistributedBias(int iFrameSize,const string& sBiasInitializer ) :
@@ -62,3 +63,4 @@ void LayerTimeDistributedBias::backpropagation(const MatrixFloat &mIn,const Matr
     mGradientIn = mGradientOut;
 }
 ///////////////////////////////////////////////////////////////////////////////
+}

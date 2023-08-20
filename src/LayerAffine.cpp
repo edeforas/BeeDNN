@@ -7,6 +7,7 @@
 */
 
 #include "LayerAffine.h"
+namespace bee{
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerAffine::LayerAffine() :
@@ -68,3 +69,4 @@ void LayerAffine::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGra
 		}
 }
 ///////////////////////////////////////////////////////////////
+}

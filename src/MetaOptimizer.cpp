@@ -5,7 +5,7 @@
 #include <iostream>
 #include <ctime>
 #include <thread>
-using namespace std;
+namespace bee{
 
 //////////////////////////////////////////////////////////////////////////////
 MetaOptimizer::MetaOptimizer():
@@ -163,3 +163,4 @@ void MetaOptimizer::apply_variations(Net& model)
 	}
 }
 ////////////////////////////////////////////////////////////////
+}

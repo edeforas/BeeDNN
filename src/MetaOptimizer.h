@@ -6,7 +6,7 @@
 #include <functional>
 #include <vector>
 using namespace std;
-
+namespace bee {
 class LayerVariation
 {
 public:
@@ -50,7 +50,7 @@ public:
 	MetaOptimizer();
 	~MetaOptimizer();
 	
-	void set_train(NetTrain& train);
+	void set_train(bee::NetTrain& train);
 	void set_nb_thread(int iNbThread); // default: use max available or if iNbThread is zero
 	
 	void add_layer_variation(Index iLayer,const string&  sType, float fArg1 = 0.f, float fArg2 = 0.f, float fArg3 = 0.f, float fArg4 = 0.f, float fArg5 = 0.f);
@@ -58,24 +58,24 @@ public:
 
 	void set_repeat_all(int iNbRepeatAll);
 	
-	void fit(Net& rNet);
-	void set_better_model_callback(std::function<void(NetTrain& train)> betterSolutionCallBack);
+	void fit(bee::Net& rNet);
+	void set_better_model_callback(std::function<void(bee::NetTrain& train)> betterSolutionCallBack);
 
 private:
-	void new_epoch(NetTrain& trainT);
+	void new_epoch(bee::NetTrain& trainT);
 	static int run_thread(int iThread, MetaOptimizer* self);
-	std::function<void(NetTrain& train)> _betterSolutionCallBack;
+	std::function<void(bee::NetTrain& train)> _betterSolutionCallBack;
 	
-	NetTrain* _pTrain;
-	Net* _pNet;
+	bee::NetTrain* _pTrain;
+	bee::Net* _pNet;
 	int _iNbThread;
 	int _iNRepeatAll;
 	float _fBestAccuracy;
 
-	void apply_variations(Net& model);
+	void apply_variations(bee::Net& model);
 	vector< LayerVariation > _layerVariations;
 	vector< OptimizerVariation > _optimizerVariations;
 
 };
-
+}
 #endif

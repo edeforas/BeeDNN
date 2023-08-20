@@ -3,6 +3,7 @@
 using namespace std;
 
 #include "LayerConvolution2D.h"
+using namespace bee;
 
 void set_weight(Layer& l, MatrixFloat& m)
 {

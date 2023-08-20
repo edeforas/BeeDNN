@@ -10,6 +10,7 @@
 
 #include <cassert>
 #include <cmath>
+namespace bee{
 
 //////////////////////////////////////////////////////////
 Regularizer::Regularizer()
@@ -268,3 +269,4 @@ void list_regularizer_available(vector<string>& vsRegularizers)
 	vsRegularizers.push_back("GradientClipTanh");
 }
 //////////////////////////////////////////////////////////////////////////////
+}

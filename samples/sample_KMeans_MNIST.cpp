@@ -8,7 +8,7 @@ using namespace std;
 #include "KMeansTrain.h"
 #include "MNISTReader.h"
 #include "Metrics.h"
-
+using namespace bee;
 KMeans km;
 KMeansTrain kmTrain;
 

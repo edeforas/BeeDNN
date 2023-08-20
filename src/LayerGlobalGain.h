@@ -11,19 +11,19 @@
 
 #include "Layer.h"
 #include "Matrix.h"
-
-class LayerGlobalGain : public Layer
+namespace bee {
+class LayerGlobalGain : public bee::Layer
 {
 public:
     explicit LayerGlobalGain();
     virtual ~LayerGlobalGain();
 
-    virtual Layer* clone() const override;
+    virtual bee::Layer* clone() const override;
 
     virtual void init() override;
 
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 };
-
+}
 #endif

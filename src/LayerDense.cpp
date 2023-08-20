@@ -8,6 +8,7 @@
 
 #include "LayerDense.h"
 #include "Initializers.h"
+namespace bee{
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerDense::LayerDense(Index iInputSize, Index iOutputSize, const string& sWeightInitializer, const string& sBiasInitializer) :
@@ -79,5 +80,4 @@ Index LayerDense::output_size() const
 }
 ///////////////////////////////////////////////////////////////
 
-
-
+}

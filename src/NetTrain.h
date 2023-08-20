@@ -16,11 +16,13 @@
 #include <string>
 using namespace std;
 
+
+namespace bee{
+
 class Optimizer;
 class Loss;
-class Net;
 class Regularizer;
-
+class Net;
 class NetTrain
 {
 public:
@@ -62,8 +64,8 @@ public:
     void set_momentum( float fMomentum = -1.f); //" -1.f is for default settings
     float get_momentum() const;
 
-	void set_batchsize(Index iBatchSize); //32 by default
-	Index get_batchsize() const;
+	void set_batchsize(Eigen::Index iBatchSize); //32 by default
+	Eigen::Index get_batchsize() const;
 
 	void set_classbalancing(bool bBalancing); //true by default //use weight loss algorithm
 	bool get_classbalancing() const;
@@ -72,10 +74,13 @@ public:
 	bool get_keepbest() const;
 
 	void set_loss(const string&  sLoss); // "MeanSquareError" by default, ex "MeanSquareError" "CategoricalCrossEntropy"
+	void set_loss(Loss* loss){
+		_pLoss=loss;
+	}
 	string get_loss() const;
 
-	void set_validation_batchsize(Index iValBatchSize);
-	Index get_validation_batchsize() const;
+	void set_validation_batchsize(Eigen::Index iValBatchSize);
+	Eigen::Index get_validation_batchsize() const;
 
 	void fit(Net& rNet);
 
@@ -96,7 +101,7 @@ public:
 protected:
 	virtual void train_one_epoch(const MatrixFloat& mSampleShuffled, const MatrixFloat& mTruthShuffled);
 	void add_online_statistics(const MatrixFloat&mPredicted, const MatrixFloat&mTruth);	//online statistics, i.e. loss, accuracy ..
-	Index _iBatchSize,_iBatchSizeAdjusted;
+	Eigen::Index _iBatchSize,_iBatchSizeAdjusted;
 	Loss* _pLoss;
 	Regularizer* _pRegularizer;
 	vector<Optimizer*> _optimizers;
@@ -115,7 +120,7 @@ private:
 	float _fOnlineLoss;
 
 	bool _bKeepBest;
-	Index _iValidationBatchSize;
+	Eigen::Index _iValidationBatchSize;
 	int _iEpochs;
 	bool _bClassBalancingWeightLoss;
 	int _iReboostEveryEpochs;
@@ -152,5 +157,5 @@ private:
 	float _fValidationLoss;
 	float _fValidationAccuracy;
 };
-
+}
 #endif

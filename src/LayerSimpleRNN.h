@@ -14,7 +14,7 @@
 #include "LayerRNN.h"
 
 // Simple RNN algorithm as in : https://arxiv.org/abs/1610.02583
-
+namespace bee {
 class LayerSimpleRNN : public LayerRNN
 {
 public:
@@ -22,7 +22,7 @@ public:
     virtual ~LayerSimpleRNN();
     virtual void init() override;
 
-    virtual Layer* clone() const override;
+    virtual bee::Layer* clone() const override;
     virtual void forward_frame(const MatrixFloat& mIn, MatrixFloat& mOut) override;
 
     virtual void backpropagation_frame(const MatrixFloat& mInFrame, const MatrixFloat& mH, const MatrixFloat& mHm1, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn) override;
@@ -30,5 +30,5 @@ public:
 private:
     MatrixFloat _whh, _wxh, _bh;
 };
-
+}
 #endif

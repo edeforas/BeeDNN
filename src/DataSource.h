@@ -5,7 +5,7 @@
 using namespace std;
 
 #include "Matrix.h"
-
+namespace bee {
 class DataSource
 {
 public:
@@ -36,5 +36,5 @@ protected:
     bool _bHasTrainData;
 	bool _bHasValidationData;
 };
-
+}
 #endif

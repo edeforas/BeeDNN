@@ -7,6 +7,7 @@
 */
 
 #include "LayerGlobalGain.h"
+namespace bee{
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerGlobalGain::LayerGlobalGain():
@@ -50,3 +51,4 @@ void LayerGlobalGain::backpropagation(const MatrixFloat &mIn,const MatrixFloat &
     mGradientIn = mGradientOut * _weight(0);
 }
 ///////////////////////////////////////////////////////////////////////////////
+}

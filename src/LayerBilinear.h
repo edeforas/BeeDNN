@@ -11,10 +11,11 @@
 
 #include "LayerGatedActivation.h"
 
+namespace bee {
 class LayerBilinear : public LayerGatedActivation
 {
 public:
     explicit LayerBilinear();
 };
-
+}
 #endif

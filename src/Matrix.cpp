@@ -16,12 +16,22 @@
 #include <iomanip>
 
 #include "Matrix.h"
+
+namespace bee{
 ///////////////////////////////////////////////////////////////////////////
 //matrix view on another matrix, without malloc and copy
-const MatrixFloatView fromRawBuffer(const float *pBuffer,Index iRows,Index iCols)
+const MatrixFloatView fromRawBufferConst(MatrixFloat::Scalar* pBuffer,Index iRows,Index iCols)
 {
 #ifdef USE_EIGEN
-    return Eigen::Map<MatrixFloat>((float*)pBuffer,static_cast<Eigen::Index>(iRows),static_cast<Eigen::Index>(iCols));
+    return Eigen::Map<MatrixFloat>(pBuffer,static_cast<Eigen::Index>(iRows),static_cast<Eigen::Index>(iCols));
+#else
+    return MatrixFloat((float*)pBuffer,iRows,iCols);
+#endif
+}
+const MatrixFloatView fromRawBufferConst(const MatrixFloat::Scalar* pBuffer,Index iRows,Index iCols)
+{
+#ifdef USE_EIGEN
+    return Eigen::Map<MatrixFloat>(const_cast<MatrixFloat::Scalar*>(pBuffer),static_cast<Eigen::Index>(iRows),static_cast<Eigen::Index>(iCols));
 #else
     return MatrixFloat((float*)pBuffer,iRows,iCols);
 #endif
@@ -31,10 +41,10 @@ const MatrixFloatView viewResize(const MatrixFloat& m, Index iRows, Index iCols)
 {
 	assert(m.size() == iRows * iCols);
 
-	return fromRawBuffer(m.data(), iRows, iCols);
+	return Eigen::Map<MatrixFloat>(const_cast<MatrixFloat::Scalar*>(m.data()),static_cast<Eigen::Index>(iRows),static_cast<Eigen::Index>(iCols));
 }
 ///////////////////////////////////////////////////////////////////////////
-MatrixFloatView fromRawBuffer(float *pBuffer,Index iRows,Index iCols)
+MatrixFloatView fromRawBuffer(MatrixFloat::Scalar* pBuffer,Index iRows,Index iCols)
 {
 #ifdef USE_EIGEN
     return Eigen::Map<MatrixFloat>(pBuffer,static_cast<Eigen::Index>(iRows),static_cast<Eigen::Index>(iCols));
@@ -45,7 +55,7 @@ MatrixFloatView fromRawBuffer(float *pBuffer,Index iRows,Index iCols)
 ///////////////////////////////////////////////////////////////////////////
 MatrixFloatView createView(MatrixFloat & mRef)
 {
-	return fromRawBuffer(mRef.data(), mRef.rows(), mRef.cols());
+	return Eigen::Map<MatrixFloat>(mRef.data(),mRef.rows(),mRef.cols());
 }
 ///////////////////////////////////////////////////////////////////////////
 void copyInto(const MatrixFloat& mToCopy, MatrixFloat& m, Index iStartRow)
@@ -336,7 +346,7 @@ void rowsArgmax(const MatrixFloat& m, MatrixFloat& argM)
     argM.resize(iRows, 1);
 
     for (Index i = 0; i < iRows; i++)
-        argM(i) = (float)argmax(m.row(i));
+        argM(i) = (float)bee::argmax(m.row(i));
 }
 ///////////////////////////////////////////////////////////////////////////
 MatrixFloat decimate(const MatrixFloat& m, Index iRatio)
@@ -353,13 +363,13 @@ MatrixFloat decimate(const MatrixFloat& m, Index iRatio)
 ///////////////////////////////////////////////////////////////////////////
 string toString(const MatrixFloat& m)
 {
-    stringstream ss; ss << setprecision(4);
+    std::stringstream ss; ss << std::setprecision(4);
     for(Index iL=0;iL<m.rows();iL++)
     {
         for(Index iR=0;iR<m.cols();iR++)
             ss  << m(iL,iR) << " ";
         if(iL+1<m.rows())
-            ss << endl;
+            ss << std::endl;
     }
 
     return ss.str();
@@ -368,7 +378,7 @@ string toString(const MatrixFloat& m)
 const MatrixFloat fromFile(const string& sFile)
 {    
     vector<float> vf;
-    fstream f(sFile,ios::in);
+    std::fstream f(sFile,std::ios::in);
     Index iNbLine=0;
     while(!f.eof() && (!f.bad()) && (!f.fail()) )
     {
@@ -382,7 +392,7 @@ const MatrixFloat fromFile(const string& sFile)
 
         iNbLine++;
 
-        stringstream ss;
+        std::stringstream ss;
         ss.str(s);
         while(!ss.eof())
         {
@@ -404,7 +414,7 @@ const MatrixFloat fromString(const string& s)
 {
     MatrixFloat r;
     vector<float> vf;
-    stringstream ss(s);
+    std::stringstream ss(s);
     Index iNbCols=0,iNbLine=0;
 
     while( !ss.eof() )
@@ -424,12 +434,12 @@ const MatrixFloat fromString(const string& s)
 ///////////////////////////////////////////////////////////////////////////
 bool toFile(const string& sFile, const MatrixFloat & m)
 {
-    fstream f(sFile, ios::out);
+    std::fstream f(sFile, std::ios::out);
     for (Index iL = 0; iL < m.rows(); iL++)
     {
         for (Index iR = 0; iR < m.cols(); iR++)
             f << m(iL, iR) << " ";
-        f << endl;
+        f << std::endl;
     }
 
     return true;
@@ -441,7 +451,7 @@ const MatrixFloatView viewRow(const MatrixFloat& m, Index iStartRow, Index iEndR
     assert(iStartRow < iEndRow); //iEndRow not included
     assert(m.rows() >= iEndRow);
 
-    return fromRawBuffer(m.data() + iStartRow * m.cols(), iEndRow- iStartRow, (Index)m.cols());
+	return Eigen::Map<MatrixFloat>(const_cast<MatrixFloat::Scalar*>(m.data())+ iStartRow * m.cols(),iEndRow- iStartRow, (Index)m.cols());
 }
 ///////////////////////////////////////////////////////////////////////////
 const MatrixFloat colExtract(const MatrixFloat& m, Index iStartCol, Index iEndCol)
@@ -455,16 +465,11 @@ const MatrixFloat colExtract(const MatrixFloat& m, Index iStartCol, Index iEndCo
 
 	return mr;
 }
-///////////////////////////////////////////////////////////////////////////
-default_random_engine& randomEngine()
-{
-	static default_random_engine rng;
-	return rng;
-}
+
 ///////////////////////////////////////////////////////////////////////////
 void setRandomUniform(MatrixFloat& m, float fMin, float fMax)
 {
-	uniform_real_distribution<float> dis(fMin, fMax);
+	std::uniform_real_distribution<float> dis(fMin, fMax);
 
 	for (Index i = 0; i < m.size(); i++)
 		m(i) = dis(randomEngine());
@@ -472,7 +477,7 @@ void setRandomUniform(MatrixFloat& m, float fMin, float fMax)
 ///////////////////////////////////////////////////////////////////////////
 void setRandomNormal(MatrixFloat& m, float fMean, float fNormal)
 {
-	normal_distribution<float> dis(fMean, fNormal);
+	std::normal_distribution<float> dis(fMean, fNormal);
 
 	for (Index i = 0; i < m.size(); i++)
 		m(i) = dis(randomEngine());
@@ -563,3 +568,4 @@ void reverseData(float* pData, Index iSize)
 		*pData++ = *pDataEnd--;
 }
 ///////////////////////////////////////////////////////////////////////////
+}

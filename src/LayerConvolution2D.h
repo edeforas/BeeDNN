@@ -15,6 +15,7 @@ using namespace std;
 #include "Layer.h"
 #include "Matrix.h"
 
+namespace bee {
 class LayerConvolution2D : public Layer
 {
 public:
@@ -39,7 +40,12 @@ public:
 	void col2im_LUT(const MatrixFloat & mCol, MatrixFloat & mIm);
 
 	bool fastLUT; //temporary
-
+	Index getOutputRows() const {
+		return _iOutRows;
+	}
+		Index getOutputCols() const {
+		return _iOutCols;
+	}
 private:
 	void reshape_to_out(MatrixFloat & mOut);
 	void reshape_from_out(MatrixFloat & mOut);
@@ -66,5 +72,5 @@ public:
 	MatrixFloat _im2colT; // input image, im2col format
 	MatrixFloat _tempImg; // temporary image, to avoid malloc
 };
-
+}
 #endif

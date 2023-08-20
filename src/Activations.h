@@ -12,7 +12,7 @@
 #include <string>
 #include <vector>
 using namespace std;
-
+namespace bee {
 class Activation
 {
 public:
@@ -26,5 +26,5 @@ public:
 
 Activation* get_activation(const string & sActivation);
 void list_activations_available(vector<string>& vsActivations);
-
+}
 #endif

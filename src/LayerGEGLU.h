@@ -9,11 +9,14 @@
 #ifndef LayerGEGLU_
 #define LayerGEGLU_
 
-#include "LayerGatedActivation.h"
+#include "Layer.h"
+#include "Matrix.h"
 
+namespace bee {
 class LayerGEGLU : public LayerGatedActivation
 {
 public:
     explicit LayerGEGLU();
 };
+}
 #endif

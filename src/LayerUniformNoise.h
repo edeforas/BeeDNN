@@ -14,8 +14,7 @@
 
 #include <random>
 using namespace std;
-
-
+namespace bee {
 class LayerUniformNoise : public Layer
 {
 public:
@@ -34,5 +33,5 @@ private:
 	uniform_real_distribution<float> _distUniform;
 
 };
-
+}
 #endif

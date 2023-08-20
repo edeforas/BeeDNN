@@ -18,6 +18,7 @@
 
 #include <cmath>
 #include <cassert>
+namespace bee{
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 NetTrain::NetTrain():
@@ -545,9 +546,9 @@ void NetTrain::fit(Net& rNet)
             }
         }
     }
-
-	if(_bKeepBest)
+	if(_bKeepBest) {
 		(*_pNet).operator=(bestNet);
+	}
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth)
@@ -564,7 +565,7 @@ void NetTrain::train_batch(const MatrixFloat& mSample, const MatrixFloat& mTruth
 
 	//backward pass
 	for (int i = (int)_iNbLayers - 1; i >= 0; i--)
-		_pNet->layer(i).backpropagation(_inOut[i], _gradient[(size_t)i + 1], _gradient[i]);
+		_pNet->layer(i).backpropagation(_inOut[i], _gradient[i + 1], _gradient[i]);
 
 	// optimize weights and biases
 	Index iNbWeights = _pWeights.size();
@@ -654,7 +655,7 @@ void NetTrain::add_online_statistics(const MatrixFloat&mPredicted, const MatrixF
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-const vector<float>& NetTrain::get_train_loss() const
+const std::vector<float>& NetTrain::get_train_loss() const
 {
     return _trainLoss;
 }
@@ -664,12 +665,12 @@ float NetTrain::get_current_validation_loss() const
 	return _fValidationLoss;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-const vector<float>& NetTrain::get_validation_loss() const
+const std::vector<float>& NetTrain::get_validation_loss() const
 {
     return _validationLoss;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-const vector<float>& NetTrain::get_train_accuracy() const
+const std::vector<float>& NetTrain::get_train_accuracy() const
 {
     return _trainAccuracy;
 }
@@ -679,7 +680,7 @@ float NetTrain::get_current_validation_accuracy() const
 	return _fValidationAccuracy;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-const vector<float>& NetTrain::get_validation_accuracy() const
+const std::vector<float>& NetTrain::get_validation_accuracy() const
 {
     return _validationAccuracy;
 }
@@ -755,3 +756,4 @@ void NetTrain::train_one_epoch(const MatrixFloat& mSampleShuffled, const MatrixF
 	}
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
+}

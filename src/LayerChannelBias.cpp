@@ -8,6 +8,8 @@
 
 #include "LayerChannelBias.h"
 #include "Initializers.h"
+namespace bee{
+
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerChannelBias::LayerChannelBias(Index iNbRows,Index iNbCols,Index iNbChannels, const string& sBiasInitializer) :
@@ -62,3 +64,4 @@ void LayerChannelBias::backpropagation(const MatrixFloat &mIn,const MatrixFloat 
     mGradientIn = mGradientOut;
 }
 ///////////////////////////////////////////////////////////////////////////////
+}

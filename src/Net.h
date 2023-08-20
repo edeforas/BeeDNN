@@ -9,11 +9,12 @@
 #ifndef Net_
 #define Net_
 
-#include <vector>
-using namespace std;
-
-class Layer;
 #include "Matrix.h"
+#include <vector>
+
+namespace bee {
+using namespace std;
+class Layer;
 
 class Net
 {
@@ -40,6 +41,7 @@ public:
 	bool is_classification_mode() const;
 
 	void predict(const MatrixFloat& mIn, MatrixFloat& mOut) const;
+	void predict(const MatrixFloat& mIn, std::vector<MatrixFloat>& mOut) const;
 	void predict_classes(const MatrixFloat& mIn, MatrixFloat& mClass) const;
 
     void set_train_mode(bool bTrainMode); // set to true if training, set to false if testing (default)
@@ -49,5 +51,5 @@ private:
 	vector<Layer*> _layers;
 	bool _bClassificationMode;
 };
-
+}
 #endif

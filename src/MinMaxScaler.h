@@ -10,7 +10,7 @@
 #define MinMaxScaler_
 
 #include "Matrix.h"
-
+namespace bee {
 class MinMaxScaler
 {
 public:
@@ -22,5 +22,5 @@ public:
 private:
 	MatrixFloat _mMin, _mMax;
 };
-
+}
 #endif

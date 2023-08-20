@@ -7,6 +7,7 @@
 */
 
 #include "LayerGlobalMaxPool2D.h"
+namespace bee{
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerGlobalMaxPool2D::LayerGlobalMaxPool2D(Index iInRows, Index iInCols, Index iInChannels) :
@@ -82,3 +83,4 @@ void LayerGlobalMaxPool2D::backpropagation(const MatrixFloat &mIn,const MatrixFl
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////
+}

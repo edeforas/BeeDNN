@@ -12,7 +12,7 @@
 #include "Matrix.h"
 
 #include <cmath>
-using namespace std;
+namespace bee{
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 Net::Net()
@@ -72,6 +72,15 @@ void Net::predict(const MatrixFloat& mIn,MatrixFloat& mOut) const
         mTemp=mOut; //todo avoid resize
     }
 }
+void Net::predict(const MatrixFloat& mIn,std::vector<MatrixFloat>& mOut) const
+{
+	//todo cut in mini batches so save memory
+    mOut.resize(_layers.size());
+    for(unsigned int i=0;i<_layers.size();i++)
+    {
+        _layers[i]->forward((i>0)?mOut[i-1]:mIn,mOut[i]);
+    }
+}
 /////////////////////////////////////////////////////////////////////////////////////////////
 void Net::set_classification_mode(bool bClassificationMode)
 {
@@ -106,7 +115,7 @@ void Net::set_train_mode(bool bTrainMode)
         _layers[i]->set_train_mode(bTrainMode);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-const vector<Layer*> Net::layers() const
+const std::vector<Layer*> Net::layers() const
 {
     return _layers;
 }
@@ -132,3 +141,4 @@ void Net::init()
         _layers[i]->init();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
+}

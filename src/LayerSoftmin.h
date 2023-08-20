@@ -11,7 +11,7 @@
 
 #include "Layer.h"
 #include "Matrix.h"
-
+namespace bee {
 class LayerSoftmin : public Layer
 {
 public:
@@ -24,4 +24,5 @@ public:
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 };
 
+}
 #endif

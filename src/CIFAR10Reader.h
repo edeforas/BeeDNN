@@ -15,7 +15,7 @@
 using namespace std;
 
 #include "DataSource.h"
-
+namespace bee {
 class CIFAR10Reader : public DataSource
 {
 public:
@@ -25,5 +25,5 @@ private:
     bool read_from_folder(const string& sFolder,MatrixFloat& mRefImages,MatrixFloat& mRefLabels,MatrixFloat& mTestImages,MatrixFloat& mTestLabels);
     bool read_batch(string sName,MatrixFloat& mData,MatrixFloat& mTruth);
 };
-
+}
 #endif

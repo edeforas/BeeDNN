@@ -11,8 +11,8 @@
 
 #include "Layer.h"
 #include "Matrix.h"
-
-class LayerDense : public Layer
+namespace bee {
+class LayerDense : public bee::Layer
 {
 public:
     LayerDense(Index iInputSize,Index iOutputSize, const string& sWeightInitializer = "GlorotUniform", const string& sBiasInitializer = "Zeros");
@@ -21,7 +21,7 @@ public:
 	Index input_size() const;
 	Index output_size() const;
 
-    virtual Layer* clone() const override;
+    virtual bee::Layer* clone() const override;
 
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
 
@@ -31,5 +31,5 @@ public:
 private:
 	Index _iInputSize, _iOutputSize;
 };
-
+}
 #endif

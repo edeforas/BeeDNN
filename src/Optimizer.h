@@ -15,6 +15,7 @@
 #include <string>
 using namespace std;
 
+namespace bee{
 class Layer;
 
 class Optimizer
@@ -43,5 +44,5 @@ protected:
 
 Optimizer* create_optimizer(const string & sOptimizer);
 void list_optimizers_available(vector<string>& vsOptimizers);
-
+}
 #endif

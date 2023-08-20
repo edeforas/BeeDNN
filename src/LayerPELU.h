@@ -11,19 +11,19 @@
 
 #include "Layer.h"
 #include "Matrix.h"
-
-class LayerPELU : public Layer
+namespace bee {
+class LayerPELU : public bee::Layer
 {
 public:
     explicit LayerPELU();
     virtual ~LayerPELU() override;
 
-    virtual Layer* clone() const override;
+    virtual bee::Layer* clone() const override;
 
     virtual void init() override;
 	
 	virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
 	virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 };
-
+}
 #endif

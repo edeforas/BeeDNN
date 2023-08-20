@@ -13,10 +13,8 @@
 
 #include <vector>
 #include <string>
-using namespace std;
-
+namespace bee {
 class Layer;
-
 class Regularizer
 {
 public:
@@ -36,5 +34,5 @@ protected:
 
 Regularizer* create_regularizer(const string & sRegularizer);
 void list_regularizer_available(vector<string>& vsRegularizers);
-
+}
 #endif

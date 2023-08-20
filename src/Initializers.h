@@ -13,7 +13,7 @@
 #include "Matrix.h"
 
 // from https://www.tensorflow.org/api_docs/python/tf/keras/initializers
-
+namespace bee {
 
 class Initializers
 {
@@ -32,5 +32,5 @@ public:
 
     static void compute(const string& sInitializer, MatrixFloat& m, Index iInputSize, Index iOutputSize);
 };
-
+}
 #endif

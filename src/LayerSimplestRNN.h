@@ -15,7 +15,7 @@
 
 // Simplest possible RNN algorithm (removed the time distributed applied on the input)
 // this layer is simpler than the LayerSimpleRNN
-
+namespace bee {
 class LayerSimplestRNN : public LayerRNN
 {
 public:
@@ -23,10 +23,10 @@ public:
     virtual ~LayerSimplestRNN();
     virtual void init() override;
 
-    virtual Layer* clone() const override;
+    virtual bee::Layer* clone() const override;
     virtual void forward_frame(const MatrixFloat& mInFrame, MatrixFloat& mOut) override;
 
     virtual void backpropagation_frame(const MatrixFloat& mInFrame, const MatrixFloat& mH, const MatrixFloat& mHm1, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn) override;
 };
-
+}
 #endif

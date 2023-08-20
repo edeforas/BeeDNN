@@ -14,7 +14,7 @@
 #include "Layer.h"
 
 #include <vector>
-
+namespace bee {
 class LayerRNN : public Layer
 {
 public:
@@ -36,5 +36,5 @@ protected:
     int _iFrameSize;
     int _iUnits;
 };
-
+}
 #endif

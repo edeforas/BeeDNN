@@ -13,14 +13,14 @@
 #include "Matrix.h"
 
 #include <string>
-using namespace std;
 
+namespace bee {
 class Activation;
 
 class LayerActivation : public Layer
 {
 public:
-    explicit LayerActivation(const string& sActivation);
+    explicit LayerActivation(const std::string& sActivation);
     virtual ~LayerActivation() override;
 
     virtual Layer* clone() const override;
@@ -32,5 +32,5 @@ public:
 private:
     Activation * _pActivation;
 };
-
+}
 #endif

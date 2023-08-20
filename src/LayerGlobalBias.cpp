@@ -7,6 +7,7 @@
 */
 
 #include "LayerGlobalBias.h"
+namespace bee{
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerGlobalBias::LayerGlobalBias() :
@@ -50,3 +51,4 @@ void LayerGlobalBias::backpropagation(const MatrixFloat &mIn,const MatrixFloat &
     mGradientIn = mGradientOut;
 }
 ///////////////////////////////////////////////////////////////////////////////
+}

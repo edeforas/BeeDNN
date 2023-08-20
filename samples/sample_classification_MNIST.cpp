@@ -16,6 +16,7 @@ using namespace std;
 #include "LayerDropout.h"
 #include "LayerSoftmax.h"
 
+using namespace bee;
 Net model;
 NetTrain netTrain;
 int iEpoch;

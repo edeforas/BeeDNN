@@ -11,7 +11,7 @@
 
 #include "Layer.h"
 #include "Matrix.h"
-
+namespace bee {
 class LayerTimeDistributedDense : public Layer
 {
 public:
@@ -29,5 +29,5 @@ public:
 private:
 	int _iInFrameSize, _iOutFrameSize;
 };
-
+}
 #endif

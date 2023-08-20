@@ -4,7 +4,7 @@ using namespace std;
 
 #include "Matrix.h"
 #include "Metrics.h"
-
+using namespace bee;
 /////////////////////////////////////////////////////////////////////
 // for testU only
 inline bool is_near(double a, double b, double tolerancis = 1.e-10)

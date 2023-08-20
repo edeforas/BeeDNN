@@ -11,7 +11,7 @@
 
 #include "Layer.h"
 #include "Matrix.h"
-
+namespace bee {
 class LayerDot : public Layer
 {
 public:
@@ -31,5 +31,5 @@ public:
 private:
 	Index _iInputSize, _iOutputSize;
 };
-
+}
 #endif

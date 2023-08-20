@@ -11,7 +11,7 @@
 
 #include "Layer.h"
 #include "Matrix.h"
-
+namespace bee {
 class LayerTERELU : public Layer
 {
 public:
@@ -28,5 +28,5 @@ public:
 private:
     float _alpha, _mu;
 };
-
+}
 #endif

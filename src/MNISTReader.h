@@ -15,6 +15,7 @@
 #include <string>
 using namespace std;
 
+namespace bee {
 class MNISTReader: public DataSource
 {
 public:
@@ -25,4 +26,5 @@ private:
 	void swap_int(unsigned int &i);
 };
 
+}
 #endif

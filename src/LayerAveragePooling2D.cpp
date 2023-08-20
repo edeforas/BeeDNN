@@ -7,6 +7,8 @@
 */
 
 #include "LayerAveragePooling2D.h"
+namespace bee{
+
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerAveragePooling2D::LayerAveragePooling2D(Index iInRows, Index iInCols, Index iInChannels, Index iRowFactor, Index iColFactor) :
@@ -111,3 +113,4 @@ void LayerAveragePooling2D::backpropagation(const MatrixFloat &mIn,const MatrixF
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////
+}

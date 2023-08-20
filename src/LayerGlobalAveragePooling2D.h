@@ -11,8 +11,8 @@
 
 #include "Layer.h"
 #include "Matrix.h"
-
-class LayerGlobalAveragePooling2D : public Layer
+namespace bee {
+class LayerGlobalAveragePooling2D : public bee::Layer
 {
 public:
 	explicit LayerGlobalAveragePooling2D(Index iInRows, Index iInCols, Index iInChannels);
@@ -20,7 +20,7 @@ public:
 
 	void get_params(Index& iInRows, Index& iInCols, Index& iInChannels) const;
 
-    virtual Layer* clone() const override;
+    virtual bee::Layer* clone() const override;
 
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
@@ -33,5 +33,5 @@ private:
 
 	float _fInvKernelSize;
 };
-
+}
 #endif

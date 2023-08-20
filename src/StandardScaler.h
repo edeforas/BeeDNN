@@ -10,7 +10,7 @@
 #define StandardScaler_
 
 #include "Matrix.h"
-
+namespace bee {
 class StandardScaler
 {
 public:
@@ -22,5 +22,5 @@ public:
 private:
 	MatrixFloat _mMean, _mStd;
 };
-
+}
 #endif

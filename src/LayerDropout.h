@@ -11,7 +11,7 @@
 
 #include "Layer.h"
 #include "Matrix.h"
-
+namespace bee {
 class LayerDropout : public Layer
 {
 public:
@@ -29,5 +29,5 @@ private:
 	float _fRate;
 	MatrixFloat _mask;
 };
-
+}
 #endif

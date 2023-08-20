@@ -7,6 +7,7 @@
 */
 
 #include "Layer.h"
+namespace bee{
 
 ////////////////////////////////////////////////////////////////
 Layer::Layer(const string& sType):
@@ -98,3 +99,4 @@ string Layer::bias_initializer() const
 	return _sBiasInitializer;
 }
 ///////////////////////////////////////////////////////////////
+}

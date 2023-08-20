@@ -7,6 +7,7 @@
 */
 
 #include "LayerGlobalAffine.h"
+namespace bee{
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerGlobalAffine::LayerGlobalAffine():
@@ -56,3 +57,4 @@ void LayerGlobalAffine::backpropagation(const MatrixFloat &mIn,const MatrixFloat
     mGradientIn = mGradientOut * _weight(0);
 }
 ///////////////////////////////////////////////////////////////////////////////
+}

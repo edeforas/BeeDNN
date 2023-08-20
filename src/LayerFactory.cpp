@@ -33,6 +33,8 @@
 
 #include "LayerSoftmax.h"
 #include "LayerSoftmin.h"
+namespace bee{
+
 
 //////////////////////////////////////////////////////////////////////////////
 Layer* LayerFactory::create(const string& sLayer,float fArg1,float fArg2,float fArg3,float fArg4,float fArg5)
@@ -109,3 +111,4 @@ Layer* LayerFactory::create(const string& sLayer,float fArg1,float fArg2,float f
 	return new LayerActivation(sLayer);
 }
 //////////////////////////////////////////////////////////////////////////////
+}

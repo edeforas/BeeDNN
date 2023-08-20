@@ -11,6 +11,7 @@
 
 #include "Matrix.h"
 
+namespace bee {
 class Loss;
 
 class KMeans
@@ -38,5 +39,5 @@ private:
 	int _iNbRef;
 	int _iInputSize;
 };
-
+}
 #endif

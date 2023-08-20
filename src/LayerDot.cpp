@@ -9,6 +9,7 @@
 #include "LayerDot.h"
 
 #include "Initializers.h"
+namespace bee{
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerDot::LayerDot(Index iInputSize, Index iOutputSize,const string& sWeightInitializer) :
@@ -71,3 +72,4 @@ Index LayerDot::output_size() const
 	return _iOutputSize;
 }
 ///////////////////////////////////////////////////////////////
+}

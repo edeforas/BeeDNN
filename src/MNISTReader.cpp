@@ -10,14 +10,15 @@
 
 #include <fstream>
 using namespace std;
+namespace bee{
 
 ////////////////////////////////////////////////////////////////////////////////////
 bool MNISTReader::load(const string& sName)
 {
-	string sRefImages = "train-images.idx3-ubyte";
-	string sRefLabels = "train-labels.idx1-ubyte";
-	string sTestImages = "t10k-images.idx3-ubyte";
-	string sTestLabels = "t10k-labels.idx1-ubyte";
+	string sRefImages = sName+"/train-images.idx3-ubyte";
+	string sRefLabels = sName+"/train-labels.idx1-ubyte";
+	string sTestImages = sName+"/t10k-images.idx3-ubyte";
+	string sTestLabels = sName+"/t10k-labels.idx1-ubyte";
 
 	if (!read_Matrix(sRefImages, _mTrainData))
 		return false;
@@ -122,3 +123,4 @@ void MNISTReader::swap_int(unsigned int & i)
     i=(c1<<24)+(c2<<16)+(c3<<8)+c4;
 }
 ////////////////////////////////////////////////////////////////////////////////////
+}

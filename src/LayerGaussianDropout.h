@@ -14,16 +14,16 @@
 
 #include <random>
 using namespace std;
-
+namespace bee {
 class Activation;
 
-class LayerGaussianDropout : public Layer
+class LayerGaussianDropout : public bee::Layer
 {
 public:
     explicit LayerGaussianDropout(float fProba);
     virtual ~LayerGaussianDropout() override;
 
-    virtual Layer* clone() const override;
+    virtual bee::Layer* clone() const override;
 
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
@@ -37,5 +37,5 @@ private:
 
 	normal_distribution<float> _distNormal;
 };
-
+}
 #endif

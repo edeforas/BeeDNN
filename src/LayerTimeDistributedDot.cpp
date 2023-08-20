@@ -8,6 +8,7 @@
 
 #include "LayerTimeDistributedDot.h"
 #include "Initializers.h"
+namespace bee{
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerTimeDistributedDot::LayerTimeDistributedDot(int iInFrameSize, int iOutFrameSize, const string& sWeightInitializer) :
@@ -76,3 +77,4 @@ void LayerTimeDistributedDot::backpropagation(const MatrixFloat &mIn,const Matri
 	}
 }
 ///////////////////////////////////////////////////////////////
+}

@@ -26,6 +26,7 @@ using namespace std;
 #include "LayerMaxPool2D.h"
 #include "LayerConvolution2D.h"
 #include "LayerRandomFlip.h"
+using namespace bee;
 
 Net model;
 NetTrain netTrain;

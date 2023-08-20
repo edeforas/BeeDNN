@@ -7,6 +7,7 @@
 */
 
 #include "LayerGlobalAveragePooling2D.h"
+namespace bee{
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerGlobalAveragePooling2D::LayerGlobalAveragePooling2D(Index iInRows, Index iInCols, Index iInChannels) :
@@ -93,3 +94,4 @@ void LayerGlobalAveragePooling2D::backpropagation(const MatrixFloat &mIn,const M
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////
+}

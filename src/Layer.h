@@ -13,18 +13,15 @@
 
 #include <string>
 #include <vector>
-using namespace std;
-
+ namespace bee {
 class Layer
 {
 public:
-    Layer(const string& sType);
+    Layer(const std::string& sType);
     virtual ~Layer();
 
-    virtual Layer* clone() const =0;
-
-    string type() const;
-
+    virtual bee::Layer* clone() const =0;
+    std::string type() const;
 	void set_first_layer(bool bFirstLayer);
 
     virtual void forward(const MatrixFloat& mIn,MatrixFloat& mOut) =0;
@@ -34,17 +31,17 @@ public:
 	
 	void set_train_mode(bool bTrainMode); //set to true to train, to false to test
 
-    void set_weight_initializer(const string& _sWeightInitializer);
-    string weight_initializer() const;
+    void set_weight_initializer(const std::string& _sWeightInitializer);
+    std::string weight_initializer() const;
     bool has_weights() const;
-    vector<MatrixFloat*> weights();
-    vector<MatrixFloat*> gradient_weights();
+    std::vector<MatrixFloat*> weights();
+    std::vector<MatrixFloat*> gradient_weights();
 
-    void set_bias_initializer(const string& _sBiasInitializer);
-    string bias_initializer() const;
+    void set_bias_initializer(const std::string& _sBiasInitializer);
+    std::string bias_initializer() const;
 	bool has_biases() const;
-    vector<MatrixFloat*> biases();
-    vector<MatrixFloat*> gradient_biases();
+    std::vector<MatrixFloat*> biases();
+    std::vector<MatrixFloat*> gradient_biases();
 
 protected:
     MatrixFloat _weight,_gradientWeight;
@@ -53,8 +50,8 @@ protected:
 	bool _bFirstLayer;
 
 private:
-    string _sType;
-    string _sWeightInitializer, _sBiasInitializer;
+    std::string _sType;
+    std::string _sWeightInitializer, _sBiasInitializer;
 };
-
+ }
 #endif

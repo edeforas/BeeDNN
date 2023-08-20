@@ -31,7 +31,7 @@ int main()
 {
 	cout << "This sample is a basic toy regression task." << endl;
 	cout << "The problem is to approximate a sinus function and to evaluate the model error" << endl;
-
+	using namespace bee;
 	//build net
     Net model;
 	model.add(new LayerDense(1,10));
