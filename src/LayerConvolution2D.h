@@ -10,7 +10,6 @@
 #define LayerConvolution2D_
 
 #include <vector>
-using namespace std;
 
 #include "Layer.h"
 #include "Matrix.h"
@@ -47,7 +46,7 @@ private:
 	
 	// LUT algo
 	void create_im2col_LUT();
-	vector<Index> _im2ColLUT;
+	std::vector<Index> _im2ColLUT;
 
 	Index _iInRows;
 	Index _iInCols;

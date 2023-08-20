@@ -11,6 +11,8 @@
 #include "LayerConvolution2D.h"
 
 #include <cmath> // for sqrt
+
+using namespace std;
 namespace bee {
 
 ///////////////////////////////////////////////////////////////////////////////
