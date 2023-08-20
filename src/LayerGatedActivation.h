@@ -17,7 +17,7 @@ class Activation;
 class LayerGatedActivation : public Layer
 {
 public:
-	explicit LayerGatedActivation(const string& sActivation1, const string& sActivation2 = "Identity");
+	explicit LayerGatedActivation(const std::string& sActivation1, const std::string& sActivation2 = "Identity");
 	virtual ~LayerGatedActivation() override;
 
 	virtual Layer* clone() const override;

@@ -17,13 +17,14 @@
 
 #include "Matrix.h"
 
+using namespace std;
 namespace bee {
 ///////////////////////////////////////////////////////////////////////////
 //matrix view on another matrix, without malloc and copy
 const MatrixFloatView fromRawBuffer(const float *pBuffer,Index iRows,Index iCols)
 {
 #ifdef USE_EIGEN
-    return Eigen::Map<MatrixFloat>((float*)pBuffer,static_cast<Eigen::Index>(iRows),static_cast<Eigen::Index>(iCols));
+    return Eigen::Map<MatrixFloat>((float*)pBuffer,static_cast<Index>(iRows),static_cast<Index>(iCols));
 #else
     return MatrixFloat((float*)pBuffer,iRows,iCols);
 #endif
@@ -39,7 +40,7 @@ const MatrixFloatView viewResize(const MatrixFloat& m, Index iRows, Index iCols)
 MatrixFloatView fromRawBuffer(float *pBuffer,Index iRows,Index iCols)
 {
 #ifdef USE_EIGEN
-    return Eigen::Map<MatrixFloat>(pBuffer,static_cast<Eigen::Index>(iRows),static_cast<Eigen::Index>(iCols));
+    return Eigen::Map<MatrixFloat>(pBuffer,static_cast<Index>(iRows),static_cast<Index>(iCols));
 #else
     return MatrixFloat(pBuffer,iRows,iCols);
 #endif

@@ -30,7 +30,7 @@ public:
     static void Zeros(MatrixFloat &m,Index iInputSize,Index iOutputSize);
     static void Ones(MatrixFloat& m, Index iInputSize, Index iOutputSize);
 
-    static void compute(const string& sInitializer, MatrixFloat& m, Index iInputSize, Index iOutputSize);
+    static void compute(const std::string& sInitializer, MatrixFloat& m, Index iInputSize, Index iOutputSize);
 };
 }
 #endif

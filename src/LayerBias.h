@@ -16,7 +16,7 @@ namespace bee {
 class LayerBias : public Layer
 {
 public:
-    explicit LayerBias(const string& sBiasInitializer = "Zeros");
+    explicit LayerBias(const std::string& sBiasInitializer = "Zeros");
     virtual ~LayerBias();
 
     virtual Layer* clone() const override;

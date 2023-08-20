@@ -20,7 +20,7 @@ public:
     Loss();
     virtual ~Loss();
 
-    virtual string name() const =0 ;
+    virtual std::string name() const =0 ;
 
 	virtual void compute(const MatrixFloat& mPredicted, const MatrixFloat& mTarget, MatrixFloat& mLoss) const = 0;
 	virtual void compute_gradient(const MatrixFloat& mPredicted,const MatrixFloat& mTarget, MatrixFloat& mGradientLoss) const =0 ;
@@ -37,7 +37,7 @@ protected:
 	bool _bClassBalancing;
 };
 
-Loss* create_loss(const string & sLoss);
-void list_loss_available(vector<string>& vsLoss);
+Loss* create_loss(const std::string & sLoss);
+void list_loss_available(std::vector<std::string>& vsLoss);
 }
 #endif

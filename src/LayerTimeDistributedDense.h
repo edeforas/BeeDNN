@@ -15,7 +15,7 @@ namespace bee {
 class LayerTimeDistributedDense : public Layer
 {
 public:
-    explicit LayerTimeDistributedDense(int iInFrameSize,int iOutFrameSize, const string& sWeightInitializer = "GlorotUniform", const string& sBiasInitializer = "Zeros");
+    explicit LayerTimeDistributedDense(int iInFrameSize,int iOutFrameSize, const std::string& sWeightInitializer = "GlorotUniform", const std::string& sBiasInitializer = "Zeros");
     virtual ~LayerTimeDistributedDense();
 
     virtual Layer* clone() const override;

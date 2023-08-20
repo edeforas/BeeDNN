@@ -15,7 +15,7 @@ namespace bee {
 class LayerDense : public Layer
 {
 public:
-    LayerDense(Index iInputSize,Index iOutputSize, const string& sWeightInitializer = "GlorotUniform", const string& sBiasInitializer = "Zeros");
+    LayerDense(Index iInputSize,Index iOutputSize, const std::string& sWeightInitializer = "GlorotUniform", const std::string& sBiasInitializer = "Zeros");
     virtual ~LayerDense() override;
 
 	Index input_size() const;

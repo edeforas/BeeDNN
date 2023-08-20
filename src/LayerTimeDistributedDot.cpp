@@ -8,6 +8,8 @@
 
 #include "LayerTimeDistributedDot.h"
 #include "Initializers.h"
+
+using namespace std;
 namespace bee {
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -15,7 +15,7 @@ namespace bee {
 class LayerTimeDistributedBias : public Layer
 {
 public:
-    explicit LayerTimeDistributedBias(int iFrameSize, const string& sBiasInitializer = "Zeros");
+    explicit LayerTimeDistributedBias(int iFrameSize, const std::string& sBiasInitializer = "Zeros");
     virtual ~LayerTimeDistributedBias();
 
     virtual Layer* clone() const override;

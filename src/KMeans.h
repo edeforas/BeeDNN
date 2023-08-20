@@ -22,7 +22,7 @@ public:
     KMeans& operator=(const KMeans& other);
 
 	void set_sizes(int iInputSize,int iNbRef); //input size; total number of centroids, for now 
-	void set_loss(const string&  sLoss);
+	void set_loss(const std::string&  sLoss);
 
 	void predict_classes(const MatrixFloat& mIn, MatrixFloat& mClass) const;
 	float compute_dist(const MatrixFloat& m1, const MatrixFloat& m2) const;

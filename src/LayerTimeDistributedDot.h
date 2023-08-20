@@ -15,7 +15,7 @@ namespace bee {
 class LayerTimeDistributedDot : public Layer
 {
 public:
-    explicit LayerTimeDistributedDot(int iInFrameSize,int iOutFrameSize, const string& sWeightInitializer = "GlorotUniform");
+    explicit LayerTimeDistributedDot(int iInFrameSize,int iOutFrameSize, const std::string& sWeightInitializer = "GlorotUniform");
     virtual ~LayerTimeDistributedDot();
 
     virtual Layer* clone() const override;

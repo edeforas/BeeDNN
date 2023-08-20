@@ -4,6 +4,7 @@
 
 #include "Matrix.h"
 
+using namespace std;
 using namespace bee;
 /////////////////////////////////////////////////////////////////////
 // for testU only

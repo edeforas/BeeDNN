@@ -17,24 +17,19 @@
 #include <random>
 
 #ifdef USE_EIGEN
-
-#define EIGEN_DONT_PARALLELIZE // keep the cpu core for upper algorithms
-
-#include <Eigen/Core>
+    #define EIGEN_DONT_PARALLELIZE // keep the cpu core for upper algorithms
+    #include <Eigen/Core>
+#endif 
 
 namespace bee {
 
-using Index=Eigen::Index;
-using string=std::string;
-template<class T> using vector=std::vector<T>;
-//using namespace Eigen;
-typedef Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> MatrixFloat;
-typedef Eigen::Map<MatrixFloat> MatrixFloatView;
-
+#ifdef USE_EIGEN
+    using Index=Eigen::Index;
+    using MatrixFloat=Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+    using MatrixFloatView=Eigen::Map<MatrixFloat>;
 #else
 
-using ptrdiff_t=Eigen::Index;
-
+using Index=std::ptrdiff_t;
 template <class T>
 class Matrix
 {
@@ -721,7 +716,7 @@ void setRandomNormal(MatrixFloat& m, float fMean, float fNormal);
 void setQuickBernoulli(MatrixFloat& m, float fProba); //quick bernoulli is 6x faster than ref bernoulli, resolution proba is 1/65536 
 std::default_random_engine& randomEngine();
 std::vector<Index> randPerm(Index iSize); //create a vector of index shuffled
-void applyRowPermutation(const vector<Index>& vPermutation, const MatrixFloat & mIn, MatrixFloat & mPermuted);
+void applyRowPermutation(const std::vector<Index>& vPermutation, const MatrixFloat & mIn, MatrixFloat & mPermuted);
 MatrixFloat decimate(const MatrixFloat& m, Index iRatio);
 Index argmax(const MatrixFloat& m);
 void rowsArgmax(const MatrixFloat& m, MatrixFloat& argM); //compute the argmax row by row
