@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerDropout_
-#define LayerDropout_
+#pragma once
 
 #include "Layer.h"
 #include "Matrix.h"
@@ -30,4 +29,3 @@ private:
 	MatrixFloat _mask;
 };
 }
-#endif

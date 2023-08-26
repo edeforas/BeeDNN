@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerZeroPadding2D_
-#define LayerZeroPadding2D_
+#pragma once
 
 #include "Layer.h"
 #include "Matrix.h"
@@ -36,4 +35,3 @@ private:
 	Index _iBorder;
 };
 }
-#endif

@@ -5,9 +5,7 @@
     Use of this source code is governed by a MIT-style license that can be found
     in the LICENSE.txt file.
 */
-
-#ifndef LayerRRelu_
-#define LayerRRelu_
+#pragma once
 
 #include "Layer.h"
 #include "Matrix.h"
@@ -36,4 +34,3 @@ private:
 	float _invAlphaMean;	
 };
 }
-#endif

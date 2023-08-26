@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef NetUtil_
-#define NetUtil_
+#pragma once
 
 #include <string>
 namespace beednn {
@@ -25,4 +24,3 @@ namespace NetUtil {
     //void split(string s, vector<string>& vsItems, char cDelimiter=' ');
 }
 }
-#endif

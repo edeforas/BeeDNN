@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef MinMaxScaler_
-#define MinMaxScaler_
+#pragma once
 
 #include "Matrix.h"
 namespace beednn {
@@ -23,4 +22,3 @@ private:
 	MatrixFloat _mMin, _mMax;
 };
 }
-#endif

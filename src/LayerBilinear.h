@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerBilinear_
-#define LayerBilinear_
+#pragma once
 
 #include "LayerGatedActivation.h"
 
@@ -18,4 +17,3 @@ public:
     explicit LayerBilinear();
 };
 }
-#endif

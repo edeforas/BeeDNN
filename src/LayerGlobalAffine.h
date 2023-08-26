@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerGlobalAffine_
-#define LayerGlobalAffine_
+#pragma once
 
 #include "Layer.h"
 #include "Matrix.h"
@@ -26,4 +25,3 @@ public:
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 };
 }
-#endif

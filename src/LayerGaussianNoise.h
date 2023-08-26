@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerGaussianNoise_
-#define LayerGaussianNoise_
+#pragma once
 
 #include "Layer.h"
 #include "Matrix.h"
@@ -32,6 +31,4 @@ private:
     float _fNoise;
 	std::normal_distribution<float> _distNormal;
 };
-
 }
-#endif

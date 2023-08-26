@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef Metrics_
-#define Metrics_
+#pragma once
 
 #include "Matrix.h"
 namespace beednn {
@@ -31,4 +30,3 @@ private:
     MatrixFloat _mConfusionMatrixNormalized; //in %
 };
 }
-#endif

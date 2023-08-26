@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerGlobalAveragePooling2D_
-#define LayerGlobalAveragePooling2D_
+#pragma once
 
 #include "Layer.h"
 #include "Matrix.h"
@@ -34,4 +33,3 @@ private:
 	float _fInvKernelSize;
 };
 }
-#endif

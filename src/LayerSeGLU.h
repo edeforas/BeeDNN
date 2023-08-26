@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerSeGLU_
-#define LayerSeGLU_
+#pragma once
 
 #include "LayerGatedActivation.h"
 namespace beednn {
@@ -17,4 +16,3 @@ public:
     explicit LayerSeGLU();
 };
 }
-#endif

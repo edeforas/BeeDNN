@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerChannelBias_
-#define LayerChannelBias_
+#pragma once
 
 #include "Layer.h"
 #include "Matrix.h"
@@ -29,4 +28,3 @@ private:
 	Index _iNbRows,_iNbCols,_iNbChannels;
 };
 }
-#endif

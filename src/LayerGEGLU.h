@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerGEGLU_
-#define LayerGEGLU_
+#pragma once
 
 #include "LayerGatedActivation.h"
 #include "Matrix.h"
@@ -19,4 +18,3 @@ public:
     explicit LayerGEGLU();
 };
 }
-#endif

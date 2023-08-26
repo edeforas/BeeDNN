@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerSimplestRNN_
-#define LayerSimplestRNN_
+#pragma once
 
 #include "Layer.h"
 #include "Matrix.h"
@@ -29,4 +28,3 @@ public:
     virtual void backpropagation_frame(const MatrixFloat& mInFrame, const MatrixFloat& mH, const MatrixFloat& mHm1, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn) override;
 };
 }
-#endif

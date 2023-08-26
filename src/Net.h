@@ -5,9 +5,7 @@
     Use of this source code is governed by a MIT-style license that can be found
     in the LICENSE.txt file.
 */
-
-#ifndef Net_
-#define Net_
+#pragma once
 
 #include "Matrix.h"
 #include <vector>
@@ -50,4 +48,3 @@ private:
 	bool _bClassificationMode;
 };
 }
-#endif

@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef MNISTReader_
-#define MNISTReader_
+#pragma once
 
 #include "Matrix.h"
 #include "DataSource.h"
@@ -24,6 +23,4 @@ private:
 	bool read_Matrix(std::string sName, MatrixFloat& m);
 	void swap_int(unsigned int &i);
 };
-
 }
-#endif

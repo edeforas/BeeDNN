@@ -6,9 +6,6 @@
     in the LICENSE.txt file.
 */
 
-#ifndef JsonFile_
-#define JsonFile_
-
 #include <string>
 
 class JsonFileWriter {
@@ -37,4 +34,3 @@ private:
     std::string _sOut;
 };
 
-#endif

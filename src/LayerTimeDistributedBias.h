@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerTimeDistributedBias_
-#define LayerTimeDistributedBias_
+#pragma once
 
 #include "Layer.h"
 #include "Matrix.h"
@@ -28,4 +27,3 @@ private:
 	int _iFrameSize;
 };
 }
-#endif

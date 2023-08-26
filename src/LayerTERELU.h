@@ -6,9 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerTERELU_
-#define LayerTERELU_
-
+#pragma once
 #include "Layer.h"
 #include "Matrix.h"
 namespace beednn {
@@ -29,4 +27,3 @@ private:
     float _alpha, _mu;
 };
 }
-#endif

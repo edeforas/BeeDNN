@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerRNN_
-#define LayerRNN_
+#pragma once
 
 #include "Layer.h"
 #include "Matrix.h"
@@ -37,4 +36,3 @@ protected:
     int _iUnits;
 };
 }
-#endif

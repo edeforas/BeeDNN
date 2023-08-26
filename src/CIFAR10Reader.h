@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef CIFAR10Reader_
-#define CIFAR10Reader_
+#pragma once
 
 #include "Matrix.h"
 
@@ -25,4 +24,3 @@ private:
     bool read_batch(std::string sName,MatrixFloat& mData,MatrixFloat& mTruth);
 };
 }
-#endif

@@ -1,5 +1,4 @@
-#ifndef DataSource_
-#define DataSource_
+#pragma once
 
 #include <string>
 
@@ -36,4 +35,3 @@ protected:
 	bool _bHasValidationData;
 };
 }
-#endif

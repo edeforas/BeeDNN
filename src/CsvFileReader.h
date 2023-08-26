@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef CsvFileReader_
-#define CsvFileReader_
+#pragma once
 
 #include <string>
 
@@ -21,4 +20,4 @@ private:
 	void replace_last(std::string& s, const std::string& sOld, const std::string& sNew);
 };
 }
-#endif
+

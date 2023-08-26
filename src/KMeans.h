@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef KMeans_
-#define KMeans_
+#pragma once
 
 #include "Matrix.h"
 
@@ -40,4 +39,3 @@ private:
 	int _iInputSize;
 };
 }
-#endif

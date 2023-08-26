@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerActivation_
-#define LayerActivation_
+#pragma once
 
 #include "Layer.h"
 #include "Matrix.h"
@@ -33,4 +32,3 @@ private:
     Activation * _pActivation;
 };
 }
-#endif

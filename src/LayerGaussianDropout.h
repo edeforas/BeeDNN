@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerGaussianDropout_
-#define LayerGaussianDropout_
+#pragma once
 
 #include "Layer.h"
 #include "Matrix.h"
@@ -37,4 +36,3 @@ private:
 	std::normal_distribution<float> _distNormal;
 };
 }
-#endif
