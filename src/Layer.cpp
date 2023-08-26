@@ -8,6 +8,9 @@
 
 #include "Layer.h"
 
+using namespace std;
+namespace beednn {
+
 ////////////////////////////////////////////////////////////////
 Layer::Layer(const string& sType):
 _sType(sType)
@@ -98,3 +101,4 @@ string Layer::bias_initializer() const
 	return _sBiasInitializer;
 }
 ///////////////////////////////////////////////////////////////
+}

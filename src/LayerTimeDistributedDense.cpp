@@ -9,6 +9,9 @@
 #include "LayerTimeDistributedDense.h"
 #include "Initializers.h"
 
+using namespace std;
+namespace beednn {
+
 ///////////////////////////////////////////////////////////////////////////////
 LayerTimeDistributedDense::LayerTimeDistributedDense(int iInFrameSize, int iOutFrameSize, const string& sWeightInitializer, const string& sBiasInitializer) :
     Layer("TimeDistributedDense")
@@ -82,3 +85,4 @@ void LayerTimeDistributedDense::backpropagation(const MatrixFloat &mIn,const Mat
 	}
 }
 ///////////////////////////////////////////////////////////////
+}

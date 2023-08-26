@@ -12,8 +12,8 @@
 #include "Matrix.h"
 
 #include <random>
-using namespace std;
 
+namespace beednn {
 class LayerGaussianNoise : public Layer
 {
 public:
@@ -29,5 +29,6 @@ public:
 
 private:
     float _fNoise;
-	normal_distribution<float> _distNormal;
+	std::normal_distribution<float> _distNormal;
 };
+}

@@ -9,7 +9,7 @@
 #pragma once
 
 #include "Matrix.h"
-
+namespace beednn {
 class StandardScaler
 {
 public:
@@ -21,4 +21,4 @@ public:
 private:
 	MatrixFloat _mMean, _mStd;
 };
-
+}

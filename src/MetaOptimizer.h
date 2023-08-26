@@ -4,13 +4,12 @@
 
 #include <functional>
 #include <vector>
-using namespace std;
-
+namespace beednn {
 class LayerVariation
 {
 public:
 	Index iLayer;
-	string sType;
+	std::string sType;
 	float fArg1;
 	float fArg2;
 	float fArg3;
@@ -33,7 +32,7 @@ public:
 class OptimizerVariation
 {
 public:
-	string sOptimizer;
+	std::string sOptimizer;
 	float fLearningRate;
 
 	OptimizerVariation():
@@ -52,8 +51,8 @@ public:
 	void set_train(NetTrain& train);
 	void set_nb_thread(int iNbThread); // default: use max available or if iNbThread is zero
 	
-	void add_layer_variation(Index iLayer,const string&  sType, float fArg1 = 0.f, float fArg2 = 0.f, float fArg3 = 0.f, float fArg4 = 0.f, float fArg5 = 0.f);
-	void add_optimizer_variation(const string & sOptimizer,float fLearningRate=0.f);
+	void add_layer_variation(Index iLayer,const std::string&  sType, float fArg1 = 0.f, float fArg2 = 0.f, float fArg3 = 0.f, float fArg4 = 0.f, float fArg5 = 0.f);
+	void add_optimizer_variation(const std::string & sOptimizer,float fLearningRate=0.f);
 
 	void set_repeat_all(int iNbRepeatAll);
 	
@@ -72,7 +71,8 @@ private:
 	float _fBestAccuracy;
 
 	void apply_variations(Net& model);
-	vector< LayerVariation > _layerVariations;
-	vector< OptimizerVariation > _optimizerVariations;
+	std::vector< LayerVariation > _layerVariations;
+	std::vector< OptimizerVariation > _optimizerVariations;
 
 };
+}

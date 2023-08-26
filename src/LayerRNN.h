@@ -13,7 +13,7 @@
 #include "Layer.h"
 
 #include <vector>
-
+namespace beednn {
 class LayerRNN : public Layer
 {
 public:
@@ -35,4 +35,4 @@ protected:
     int _iFrameSize;
     int _iUnits;
 };
-
+}

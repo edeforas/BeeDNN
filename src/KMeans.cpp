@@ -11,8 +11,10 @@
 #include "Matrix.h"
 
 #include <cmath>
-using namespace std;
 #include "Loss.h"
+
+using namespace std;
+namespace beednn {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 KMeans::KMeans()
@@ -110,3 +112,4 @@ float KMeans::compute_dist(const MatrixFloat& m1, const MatrixFloat& m2) const
 	return mLoss.mean();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
+}

@@ -10,9 +10,10 @@
 
 #include "LayerGatedActivation.h"
 
+namespace beednn {
 class LayerBilinear : public LayerGatedActivation
 {
 public:
     explicit LayerBilinear();
 };
-
+}

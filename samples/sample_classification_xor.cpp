@@ -2,13 +2,15 @@
 // the usecase is to learn a XOR gate
 
 #include <iostream>
-using namespace std;
 
 #include "Net.h"
 #include "NetTrain.h"
 
 #include "LayerDense.h"
 #include "LayerActivation.h"
+
+using namespace std;
+using namespace beednn;
 
 /////////////////////////////////////////////////////////////////////
 // for testU only
@@ -29,7 +31,6 @@ int main()
 {
 	cout << "This sample shows how to do a simple classification" << endl;
 	cout << "The usecase is to learn a XOR gate" << endl;
-
 	//construct network, 2 input, 1 output
     Net model;
     model.add(new LayerDense(2,10));

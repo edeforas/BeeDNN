@@ -9,6 +9,7 @@
 #include "LayerRRelu.h"
 
 // as in : https://arxiv.org/pdf/1505.00853.pdf
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerRRelu::LayerRRelu(float alpha1, float alpha2) :
@@ -76,3 +77,4 @@ void LayerRRelu::get_params(float& alpha1, float& alpha2) const
 	alpha2 = _alpha2;
 }
 ///////////////////////////////////////////////////////////////
+}

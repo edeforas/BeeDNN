@@ -9,11 +9,11 @@
 
 #include "Layer.h"
 #include "Matrix.h"
-
+namespace beednn {
 class LayerTimeDistributedDot : public Layer
 {
 public:
-    explicit LayerTimeDistributedDot(int iInFrameSize,int iOutFrameSize, const string& sWeightInitializer = "GlorotUniform");
+    explicit LayerTimeDistributedDot(int iInFrameSize,int iOutFrameSize, const std::string& sWeightInitializer = "GlorotUniform");
     virtual ~LayerTimeDistributedDot();
 
     virtual Layer* clone() const override;
@@ -27,4 +27,4 @@ public:
 private:
 	int _iInFrameSize, _iOutFrameSize;
 };
-
+}

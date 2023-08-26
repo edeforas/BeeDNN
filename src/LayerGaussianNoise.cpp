@@ -9,6 +9,7 @@
 #include "LayerGaussianNoise.h"
 
 #include <random>
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerGaussianNoise::LayerGaussianNoise(float fNoise):
@@ -50,3 +51,4 @@ float LayerGaussianNoise::get_noise() const
     return _fNoise;
 }
 ///////////////////////////////////////////////////////////////////////////////
+}

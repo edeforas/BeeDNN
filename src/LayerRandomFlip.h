@@ -11,7 +11,7 @@
 #include "Layer.h"
 #include "Matrix.h"
 #include <vector>
-
+namespace beednn {
 // only left-right (horizontal) mode for now
 class LayerRandomFlip : public Layer
 {
@@ -31,4 +31,4 @@ private:
     Index _iPlaneSize;
     MatrixFloat _flipped;
 };
-
+}

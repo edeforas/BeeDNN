@@ -12,8 +12,7 @@
 #include "Matrix.h"
 
 #include <random>
-using namespace std;
-
+namespace beednn {
 class Activation;
 
 class LayerGaussianDropout : public Layer
@@ -34,6 +33,6 @@ private:
 	float _fStdev;
 	MatrixFloat _mask;
 
-	normal_distribution<float> _distNormal;
+	std::normal_distribution<float> _distNormal;
 };
-
+}

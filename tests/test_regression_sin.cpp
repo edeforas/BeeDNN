@@ -4,13 +4,15 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
-using namespace std;
 
 #include "Net.h"
 #include "NetTrain.h"
 
 #include "LayerDense.h"
 #include "LayerActivation.h"
+
+using namespace std;
+using namespace beednn;
 
 /////////////////////////////////////////////////////////////////////
 // for testU only

@@ -11,10 +11,8 @@
 
 #include <vector>
 #include <string>
-using namespace std;
-
+namespace beednn {
 class Layer;
-
 class Regularizer
 {
 public:
@@ -24,7 +22,7 @@ public:
 	virtual void set_parameter(float fParameter);
 	float get_parameter() const;
 
-	virtual string name() const = 0;
+	virtual std::string name() const = 0;
 
     virtual void apply(MatrixFloat& w,MatrixFloat& dw) = 0;
 
@@ -32,6 +30,7 @@ protected:
 	float _fParameter;
 };
 
-Regularizer* create_regularizer(const string & sRegularizer);
-void list_regularizer_available(vector<string>& vsRegularizers);
+Regularizer* create_regularizer(const std::string & sRegularizer);
+void list_regularizer_available(std::vector<std::string>& vsRegularizers);
+}
 

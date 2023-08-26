@@ -9,7 +9,9 @@
 #include "LayerActivation.h"
 
 #include "Activations.h"
+namespace beednn {
 
+using namespace std;
 ///////////////////////////////////////////////////////////////////////////////
 LayerActivation::LayerActivation(const string& sActivation):
     Layer(sActivation)
@@ -54,3 +56,4 @@ void LayerActivation::backpropagation(const MatrixFloat &mIn,const MatrixFloat &
     mGradientIn = mGradientIn.cwiseProduct(mGradientOut);
 }
 ///////////////////////////////////////////////////////////////////////////////
+}

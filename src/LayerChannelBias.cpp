@@ -9,6 +9,9 @@
 #include "LayerChannelBias.h"
 #include "Initializers.h"
 
+using namespace std;
+namespace beednn {
+
 ///////////////////////////////////////////////////////////////////////////////
 LayerChannelBias::LayerChannelBias(Index iNbRows,Index iNbCols,Index iNbChannels, const string& sBiasInitializer) :
     Layer("ChannelBias")
@@ -62,3 +65,4 @@ void LayerChannelBias::backpropagation(const MatrixFloat &mIn,const MatrixFloat 
     mGradientIn = mGradientOut;
 }
 ///////////////////////////////////////////////////////////////////////////////
+}

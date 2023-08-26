@@ -10,6 +10,7 @@
 
 #include <cmath>
 #include <cassert>
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 Metrics::Metrics()
@@ -72,3 +73,4 @@ void Metrics::compute(const MatrixFloat& mRef,const MatrixFloat& mTest, Index iN
 	_balancedAccuracy=_mConfusionMatrixNormalized.trace()/_mConfusionMatrixNormalized.rows();
 }
 ///////////////////////////////////////////////////////////////////////////////
+}

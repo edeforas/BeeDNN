@@ -11,10 +11,11 @@
 #include "Layer.h"
 #include "Matrix.h"
 
+namespace beednn {
 class LayerBias : public Layer
 {
 public:
-    explicit LayerBias(const string& sBiasInitializer = "Zeros");
+    explicit LayerBias(const std::string& sBiasInitializer = "Zeros");
     virtual ~LayerBias();
 
     virtual Layer* clone() const override;
@@ -23,3 +24,4 @@ public:
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 };
+}

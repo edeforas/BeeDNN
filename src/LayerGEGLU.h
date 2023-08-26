@@ -9,9 +9,12 @@
 #pragma once
 
 #include "LayerGatedActivation.h"
+#include "Matrix.h"
 
+namespace beednn {
 class LayerGEGLU : public LayerGatedActivation
 {
 public:
     explicit LayerGEGLU();
 };
+}

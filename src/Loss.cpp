@@ -11,6 +11,9 @@
 #include <cassert>
 #include <cmath>
 
+using namespace std;
+
+namespace beednn {
 ////////////////////////////////////////////////////////////////
 Loss::Loss()
 {
@@ -543,7 +546,7 @@ Loss* create_loss(const string& sLoss)
     return nullptr;
 }
 //////////////////////////////////////////////////////////////////////////////
-void list_loss_available(vector<string>& vsLoss)
+void list_loss_available(std::vector<std::string>& vsLoss)
 {
     vsLoss.clear();
 
@@ -561,3 +564,4 @@ void list_loss_available(vector<string>& vsLoss)
     vsLoss.push_back("BinaryCrossEntropy");
 }
 //////////////////////////////////////////////////////////////////////////////
+}

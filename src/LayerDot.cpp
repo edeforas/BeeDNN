@@ -10,6 +10,9 @@
 
 #include "Initializers.h"
 
+using namespace std;
+namespace beednn {
+
 ///////////////////////////////////////////////////////////////////////////////
 LayerDot::LayerDot(Index iInputSize, Index iOutputSize,const string& sWeightInitializer) :
     Layer( "Dot"),
@@ -71,3 +74,4 @@ Index LayerDot::output_size() const
 	return _iOutputSize;
 }
 ///////////////////////////////////////////////////////////////
+}

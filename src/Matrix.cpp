@@ -16,12 +16,15 @@
 #include <iomanip>
 
 #include "Matrix.h"
+
+using namespace std;
+namespace beednn {
 ///////////////////////////////////////////////////////////////////////////
 //matrix view on another matrix, without malloc and copy
 const MatrixFloatView fromRawBuffer(const float *pBuffer,Index iRows,Index iCols)
 {
 #ifdef USE_EIGEN
-    return Eigen::Map<MatrixFloat>((float*)pBuffer,static_cast<Eigen::Index>(iRows),static_cast<Eigen::Index>(iCols));
+    return Eigen::Map<MatrixFloat>((float*)pBuffer,static_cast<Index>(iRows),static_cast<Index>(iCols));
 #else
     return MatrixFloat((float*)pBuffer,iRows,iCols);
 #endif
@@ -37,7 +40,7 @@ const MatrixFloatView viewResize(const MatrixFloat& m, Index iRows, Index iCols)
 MatrixFloatView fromRawBuffer(float *pBuffer,Index iRows,Index iCols)
 {
 #ifdef USE_EIGEN
-    return Eigen::Map<MatrixFloat>(pBuffer,static_cast<Eigen::Index>(iRows),static_cast<Eigen::Index>(iCols));
+    return Eigen::Map<MatrixFloat>(pBuffer,static_cast<Index>(iRows),static_cast<Index>(iCols));
 #else
     return MatrixFloat(pBuffer,iRows,iCols);
 #endif
@@ -353,13 +356,13 @@ MatrixFloat decimate(const MatrixFloat& m, Index iRatio)
 ///////////////////////////////////////////////////////////////////////////
 string toString(const MatrixFloat& m)
 {
-    stringstream ss; ss << setprecision(4);
+    std::stringstream ss; ss << std::setprecision(4);
     for(Index iL=0;iL<m.rows();iL++)
     {
         for(Index iR=0;iR<m.cols();iR++)
             ss  << m(iL,iR) << " ";
         if(iL+1<m.rows())
-            ss << endl;
+            ss << std::endl;
     }
 
     return ss.str();
@@ -368,7 +371,7 @@ string toString(const MatrixFloat& m)
 const MatrixFloat fromFile(const string& sFile)
 {    
     vector<float> vf;
-    fstream f(sFile,ios::in);
+    std::fstream f(sFile,std::ios::in);
     Index iNbLine=0;
     while(!f.eof() && (!f.bad()) && (!f.fail()) )
     {
@@ -382,7 +385,7 @@ const MatrixFloat fromFile(const string& sFile)
 
         iNbLine++;
 
-        stringstream ss;
+        std::stringstream ss;
         ss.str(s);
         while(!ss.eof())
         {
@@ -404,7 +407,7 @@ const MatrixFloat fromString(const string& s)
 {
     MatrixFloat r;
     vector<float> vf;
-    stringstream ss(s);
+    std::stringstream ss(s);
     Index iNbCols=0,iNbLine=0;
 
     while( !ss.eof() )
@@ -424,12 +427,12 @@ const MatrixFloat fromString(const string& s)
 ///////////////////////////////////////////////////////////////////////////
 bool toFile(const string& sFile, const MatrixFloat & m)
 {
-    fstream f(sFile, ios::out);
+    std::fstream f(sFile, std::ios::out);
     for (Index iL = 0; iL < m.rows(); iL++)
     {
         for (Index iR = 0; iR < m.cols(); iR++)
             f << m(iL, iR) << " ";
-        f << endl;
+        f << std::endl;
     }
 
     return true;
@@ -456,15 +459,15 @@ const MatrixFloat colExtract(const MatrixFloat& m, Index iStartCol, Index iEndCo
 	return mr;
 }
 ///////////////////////////////////////////////////////////////////////////
-default_random_engine& randomEngine()
+std::default_random_engine& randomEngine()
 {
-	static default_random_engine rng;
+	static std::default_random_engine rng;
 	return rng;
 }
 ///////////////////////////////////////////////////////////////////////////
 void setRandomUniform(MatrixFloat& m, float fMin, float fMax)
 {
-	uniform_real_distribution<float> dis(fMin, fMax);
+	std::uniform_real_distribution<float> dis(fMin, fMax);
 
 	for (Index i = 0; i < m.size(); i++)
 		m(i) = dis(randomEngine());
@@ -472,7 +475,7 @@ void setRandomUniform(MatrixFloat& m, float fMin, float fMax)
 ///////////////////////////////////////////////////////////////////////////
 void setRandomNormal(MatrixFloat& m, float fMean, float fNormal)
 {
-	normal_distribution<float> dis(fMean, fNormal);
+	std::normal_distribution<float> dis(fMean, fNormal);
 
 	for (Index i = 0; i < m.size(); i++)
 		m(i) = dis(randomEngine());
@@ -563,3 +566,4 @@ void reverseData(float* pData, Index iSize)
 		*pData++ = *pDataEnd--;
 }
 ///////////////////////////////////////////////////////////////////////////
+}

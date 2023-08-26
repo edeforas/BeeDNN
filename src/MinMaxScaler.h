@@ -9,7 +9,7 @@
 #pragma once
 
 #include "Matrix.h"
-
+namespace beednn {
 class MinMaxScaler
 {
 public:
@@ -21,3 +21,4 @@ public:
 private:
 	MatrixFloat _mMin, _mMax;
 };
+}

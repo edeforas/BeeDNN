@@ -10,6 +10,7 @@
 
 #include <fstream>
 using namespace std;
+namespace beednn {
 
 // file format and data at: https://www.cs.toronto.edu/~kriz/cifar.html
 
@@ -103,3 +104,4 @@ bool CIFAR10Reader::read_batch(string sName,MatrixFloat& mData,MatrixFloat& mTru
 	return true;
 }
 ////////////////////////////////////////////////////////////////////////////////////
+}

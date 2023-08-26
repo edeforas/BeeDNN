@@ -11,6 +11,9 @@
 #include <cassert>
 #include <cmath>
 
+using namespace std;
+namespace beednn {
+
 //////////////////////////////////////////////////////////
 Optimizer::Optimizer()
 {
@@ -898,7 +901,7 @@ Optimizer* create_optimizer(const string& sOptimizer)
     return nullptr;
 }
 //////////////////////////////////////////////////////////////////////////////
-void list_optimizers_available(vector<string>& vsOptimizers)
+void list_optimizers_available(std::vector<std::string>& vsOptimizers)
 {
     vsOptimizers.clear();
 
@@ -919,3 +922,4 @@ void list_optimizers_available(vector<string>& vsOptimizers)
     vsOptimizers.push_back("Step");
 }
 //////////////////////////////////////////////////////////////////////////////
+}

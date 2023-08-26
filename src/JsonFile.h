@@ -7,31 +7,30 @@
 */
 
 #include <string>
-using namespace std;
 
 class JsonFileWriter {
 public:
     JsonFileWriter();
 
     void clear();
-    string to_string();
-    void save(const string& sFile);
+    std::string to_string();
+    void save(const std::string& sFile);
 
-    void enter_section(const string& sSection);
+    void enter_section(const std::string& sSection);
     void leave_section();
 
-    void add(const string& sKey, const string& sVal);
-    void add(const string& sKey, int iVal);
-    void add(const string& sKey, float fVal);
-    void add(const string& sKey, bool bVal);
+    void add(const std::string& sKey, const std::string& sVal);
+    void add(const std::string& sKey, int iVal);
+    void add(const std::string& sKey, float fVal);
+    void add(const std::string& sKey, bool bVal);
 
-    void add_array(const string& sKey, int iSize, const float* pVal);
+    void add_array(const std::string& sKey, int iSize, const float* pVal);
 
 private:
-    void add_string(const string& sKey, const string& s);
+    void add_string(const std::string& sKey, const std::string& s);
     
     bool _bPendingComma;
-    string _sSectionIndent;
-    string _sOut;
+    std::string _sSectionIndent;
+    std::string _sOut;
 };
 

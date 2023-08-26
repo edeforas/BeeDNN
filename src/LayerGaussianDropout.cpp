@@ -9,6 +9,7 @@
 // GaussianDropout as in: https://keras.io/layers/noise/
 
 #include "LayerGaussianDropout.h"
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerGaussianDropout::LayerGaussianDropout(float fProba):
@@ -57,3 +58,4 @@ float LayerGaussianDropout::get_proba() const
     return _fProba;
 }
 ///////////////////////////////////////////////////////////////////////////////
+}

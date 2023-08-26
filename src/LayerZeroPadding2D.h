@@ -14,7 +14,7 @@
 // ZeroPadding2D as in : https://www.tensorflow.org/api_docs/python/tf/keras/layers/ZeroPadding2D 
 // and
 // https://deeplizard.com/learn/video/qSTv_m-KFk0
-
+namespace beednn {
 class LayerZeroPadding2D : public Layer
 {
 public:
@@ -34,3 +34,4 @@ private:
 	Index _iInChannels;
 	Index _iBorder;
 };
+}

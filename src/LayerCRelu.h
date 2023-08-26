@@ -13,7 +13,7 @@
 
 // CRelu as in : https://arxiv.org/pdf/1603.05201.pdf
 // Warning: double the output size
-
+namespace beednn {
 class LayerCRelu : public Layer
 {
 public:
@@ -27,4 +27,4 @@ public:
 	virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
 	virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 };
-
+}

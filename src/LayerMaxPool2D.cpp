@@ -7,6 +7,7 @@
 */
 
 #include "LayerMaxPool2D.h"
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerMaxPool2D::LayerMaxPool2D(Index iInRows, Index iInCols, Index iInChannels, Index iRowFactor, Index iColFactor) :
@@ -109,3 +110,4 @@ void LayerMaxPool2D::backpropagation(const MatrixFloat &mIn,const MatrixFloat &m
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////
+}

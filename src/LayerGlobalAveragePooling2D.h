@@ -10,7 +10,7 @@
 
 #include "Layer.h"
 #include "Matrix.h"
-
+namespace beednn {
 class LayerGlobalAveragePooling2D : public Layer
 {
 public:
@@ -32,4 +32,4 @@ private:
 
 	float _fInvKernelSize;
 };
-
+}

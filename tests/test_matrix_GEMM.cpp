@@ -1,9 +1,12 @@
 #include <iostream>
 #include <cassert>
 #include <chrono>
-using namespace std;
 
 #include "Matrix.h"
+
+using namespace std;
+using namespace beednn;
+
 /////////////////////////////////////////////////////////////////////
 // for testU only
 inline bool is_near(double a, double b, double tolerancis = 1.e-4)
@@ -14,18 +17,18 @@ void test(bool bTest, const string& sMessage = "")
 {
 	if (bTest) return;
 
-	cout << "Test failed: " << sMessage << endl;
+	std::cout << "Test failed: " << sMessage << std::endl;
 	exit(-1);
 }
 ////////////////////////////////////////////////////////
 void disp(const MatrixFloat& m)
 {
-    cout << "rows=" << m.rows() << " columns=" << m.cols() << endl;
+    std::cout << "rows=" << m.rows() << " columns=" << m.cols() << std::endl;
     for( int r=0;r<m.rows();r++)
     {
         for( int c=0;c<m.cols();c++)
-            cout << m(r,c) << " ";
-        cout << endl;
+            std::cout << m(r,c) << " ";
+        std::cout << std::endl;
     }
 }
 
@@ -265,8 +268,9 @@ void GEMM_tiled_omp(const MatrixFloat& a, const MatrixFloat& b, MatrixFloat& ab)
 ////////////////////////////////////////////////////////
 void test_GEMM_order()
 {
-	cout << endl << "GEMM order test:" << endl;
-
+	using namespace std;
+	std::cout << endl << "GEMM order test:" << endl;
+	
 	chrono::steady_clock::time_point start, end;
 
 	// for this test, all sizes are multiples of 4
@@ -375,7 +379,7 @@ int main()
 {
 	test_GEMM_order();
 
-    cout << "Tests finished." << endl;
+    std::cout << "Tests finished." << std::endl;
     return 0;
 }
 ////////////////////////////////////////////////////////

@@ -9,6 +9,8 @@
 //inverse dropout as in: https://pgaleone.eu/deep-learning/regularization/2017/01/10/anaysis-of-dropout/
 
 #include "LayerDropout.h"
+namespace beednn {
+
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerDropout::LayerDropout(float fRate):
@@ -55,3 +57,4 @@ float LayerDropout::get_rate() const
     return _fRate;
 }
 ///////////////////////////////////////////////////////////////////////////////
+}

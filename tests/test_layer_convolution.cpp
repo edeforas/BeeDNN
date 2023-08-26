@@ -1,8 +1,10 @@
 #include <iostream>
 #include <chrono>
-using namespace std;
 
 #include "LayerConvolution2D.h"
+
+using namespace std;
+using namespace beednn;
 
 void set_weight(Layer& l, MatrixFloat& m)
 {

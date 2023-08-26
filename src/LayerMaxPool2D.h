@@ -10,7 +10,7 @@
 
 #include "Layer.h"
 #include "Matrix.h"
-
+namespace beednn {
 class LayerMaxPool2D : public Layer
 {
 public:
@@ -38,4 +38,4 @@ private:
 
 	MatrixFloat _mMaxIndex;
 };
-
+}

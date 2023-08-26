@@ -1,10 +1,11 @@
 #include <iostream>
 #include <cassert>
 #include <chrono>
-using namespace std;
 
 #include "Matrix.h"
 
+using namespace std;
+using namespace beednn;
 /////////////////////////////////////////////////////////////////////
 // for testU only
 inline bool is_near(double a, double b, double tolerancis = 1.e-10)
@@ -15,18 +16,18 @@ void test(bool bTest, const string& sMessage = "")
 {
 	if (bTest) return;
 
-	cout << "Test failed: " << sMessage << endl;
+	std::cout << "Test failed: " << sMessage << std::endl;
 	exit(-1);
 }
 ////////////////////////////////////////////////////////
 void disp(const MatrixFloat& m)
 {
-    cout << "rows=" << m.rows() << " columns=" << m.cols() << endl;
+    std::cout << "rows=" << m.rows() << " columns=" << m.cols() << std::endl;
     for( int r=0;r<m.rows();r++)
     {
         for( int c=0;c<m.cols();c++)
-            cout << m(r,c) << " ";
-        cout << endl;
+            std::cout << m(r,c) << " ";
+        std::cout << std::endl;
     }
 }
 ////////////////////////////////////////////////////////
@@ -39,25 +40,25 @@ void test_elementary()
 	const MatrixFloat mB = fromRawBuffer(b, 2, 1);
 
 	const MatrixFloat mAT = mA.transpose();
-	cout << "Transposed Matrix:" << endl;
+	std::cout << "Transposed Matrix:" << std::endl;
 	disp(mAT);
 
 	MatrixFloat prod = mA * mB;
-	cout << "Product Matrix:" << endl;
+	std::cout << "Product Matrix:" << std::endl;
 	disp(prod);
 
 	MatrixFloat mD = mA.diagonal();
-	cout << "Diagonal Matrix as vector:" << endl;
+	std::cout << "Diagonal Matrix as vector:" << std::endl;
 	disp(mD);
 
 	MatrixFloat mS = rowWiseSum(mA);
-	cout << "RowWiseSum:" << endl;
+	std::cout << "RowWiseSum:" << std::endl;
 	disp(mS);
 }
 ////////////////////////////////////////////////////////////
 void test_matrixView()
 {
-	cout << "check_matrixView:" << endl;
+	std::cout << "check_matrixView:" << std::endl;
 
     //check fromRawBuffer() is not copying the data, i.e. is a real view
     float c[5]={ 0, 1 , 2 , 3 , 4 };
@@ -66,7 +67,7 @@ void test_matrixView()
     assert( (mC(0,0)==333) && "fromRawBuffer() must not copy the data" );
 
     // do we accept const?
-    const float d[5]={ 0, 1 , 2 , 3 , 4 };
+	float d[5]={ 0, 1 , 2 , 3 , 4 };
     const MatrixFloatView mD=fromRawBuffer(d,5,1);
     (void)mD;
 
@@ -82,61 +83,61 @@ void test_matrixView()
 	test(is_near(mV2(2),2),"mV2 fromRawBuffer() must copy the data");
 	test(is_near(mV3(2), 2), "mV3 fromRawBuffer() must copy the data");
 
-	cout << "check_matrixView finished" << endl;
+	std::cout << "check_matrixView finished" << std::endl;
 }
 ////////////////////////////////////////////////////////
 void test_bernoulli()
 {
-	cout << "test_bernoulli:" << endl;
+	std::cout << "test_bernoulli:" << std::endl;
 	MatrixFloat m(1000, 1000);
 
-	chrono::steady_clock::time_point start = chrono::steady_clock::now();
+	std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 	for (int itest = 1; itest < 10; itest++)
 	{
-		bernoulli_distribution dis(0.3f);
+		std::bernoulli_distribution dis(0.3f);
 		for (Index i = 0; i < m.size(); i++)
 			m(i) = (float)(dis(randomEngine())); //slow 
 	}
 
-	chrono::steady_clock::time_point end = chrono::steady_clock::now();
-	auto delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-	cout << "Slow Bernoulli Time elapsed: " << delta << " ms. Mean= " << m.mean() << endl;
+	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+	auto delta = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+	std::cout << "Slow Bernoulli Time elapsed: " << delta << " ms. Mean= " << m.mean() << std::endl;
 	test(is_near(m.mean(),0.3f, 0.001),"Mean must be near 0.3f");
 
-	start = chrono::steady_clock::now();
+	start = std::chrono::steady_clock::now();
 	for(int i=1;i<10;i++)
 		setQuickBernoulli(m, 0.3f);
 
-	 end = chrono::steady_clock::now();
-	 delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-	cout << "Quick Bernoulli Time elapsed: " << delta << " ms. Mean= " << m.mean() << endl;
+	 end = std::chrono::steady_clock::now();
+	 delta = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+	std::cout << "Quick Bernoulli Time elapsed: " << delta << " ms. Mean= " << m.mean() << std::endl;
 	test(is_near(m.mean(), 0.3f, 0.001), "Mean must be near 0.3f");
 }
 ////////////////////////////////////////////////////////
 void test_hyperbolic()
 {
-	cout << "test_tanh:" << endl;
+	std::cout << "test_tanh:" << std::endl;
 
 	MatrixFloat m1(1000, 1000), m2(1000, 1000), m(1000, 1000);
 	m.setRandom();
 
 	{
-		auto start = chrono::steady_clock::now();
+		auto start = std::chrono::steady_clock::now();
 		for (int i = 0; i < 100; i++)
 			m1 = m.array().tanh();
-		auto end = chrono::steady_clock::now();
-		auto delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-		cout << "Tanh Time elapsed: " << delta << " ms. Mean= " << m1.mean() << endl;
+		auto end = std::chrono::steady_clock::now();
+		auto delta = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+		std::cout << "Tanh Time elapsed: " << delta << " ms. Mean= " << m1.mean() << std::endl;
 	}
 	
 	{	
-		auto start = chrono::steady_clock::now();
+		auto start = std::chrono::steady_clock::now();
 		for (int i = 0; i < 100; i++)
 			for (int j = 0; j < m.size(); j++)
 				m2(j) = tanh(m(j));
-		auto end = chrono::steady_clock::now();
-		auto delta = chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-		cout << "Tanh Time elapsed: " << delta << " ms. Mean= " << m2.mean() << endl;
+		auto end = std::chrono::steady_clock::now();
+		auto delta = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+		std::cout << "Tanh Time elapsed: " << delta << " ms. Mean= " << m2.mean() << std::endl;
 	}
 }
 ////////////////////////////////////////////////////////
@@ -147,7 +148,7 @@ int main()
 	test_bernoulli();
 	test_hyperbolic();
 
-    cout << "Tests finished." << endl;
+    std::cout << "Tests finished." << std::endl;
     return 0;
 }
 ////////////////////////////////////////////////////////

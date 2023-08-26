@@ -11,6 +11,9 @@
 #include <cassert>
 #include <cmath>
 
+using namespace std;
+namespace beednn {
+
 //////////////////////////////////////////////////////////
 Regularizer::Regularizer()
 {
@@ -268,3 +271,4 @@ void list_regularizer_available(vector<string>& vsRegularizers)
 	vsRegularizers.push_back("GradientClipTanh");
 }
 //////////////////////////////////////////////////////////////////////////////
+}

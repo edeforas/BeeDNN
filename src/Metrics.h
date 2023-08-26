@@ -9,7 +9,7 @@
 #pragma once
 
 #include "Matrix.h"
-
+namespace beednn {
 class Metrics
 {
 public:
@@ -29,3 +29,4 @@ private:
     MatrixFloat _mConfusionMatrix; //raw count
     MatrixFloat _mConfusionMatrixNormalized; //in %
 };
+}

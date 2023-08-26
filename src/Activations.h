@@ -10,19 +10,19 @@
 
 #include <string>
 #include <vector>
-using namespace std;
 
+namespace beednn {
 class Activation
 {
 public:
     Activation();
     virtual ~Activation();
-    virtual string name() const =0;
+    virtual std::string name() const =0;
 
     virtual float apply(float x) const =0;
     virtual float derivation(float x) const =0;
 };
 
-Activation* get_activation(const string & sActivation);
-void list_activations_available(vector<string>& vsActivations);
-
+Activation* get_activation(const std::string & sActivation);
+void list_activations_available(std::vector<std::string>& vsActivations);
+}

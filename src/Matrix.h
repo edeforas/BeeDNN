@@ -14,21 +14,21 @@
 #include <vector>
 #include <cmath>
 #include <random>
-using namespace std;
 
 #ifdef USE_EIGEN
+    #define EIGEN_DONT_PARALLELIZE // keep the cpu core for upper algorithms
+    #include <Eigen/Core>
+#endif 
 
-#define EIGEN_DONT_PARALLELIZE // keep the cpu core for upper algorithms
+namespace beednn {
 
-#include "Eigen/Core"
-using namespace Eigen;
-typedef Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> MatrixFloat;
-typedef Eigen::Map<MatrixFloat> MatrixFloatView;
-
+#ifdef USE_EIGEN
+    using Index=Eigen::Index;
+    using MatrixFloat=Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+    using MatrixFloatView=Eigen::Map<MatrixFloat>;
 #else
 
-typedef ptrdiff_t Index;
-
+using Index=std::ptrdiff_t;
 template <class T>
 class Matrix
 {
@@ -713,9 +713,9 @@ MatrixFloat colWiseMax(const MatrixFloat& m);
 void setRandomUniform(MatrixFloat& m, float fMin = -1.f, float fMax = 1.f);
 void setRandomNormal(MatrixFloat& m, float fMean, float fNormal);
 void setQuickBernoulli(MatrixFloat& m, float fProba); //quick bernoulli is 6x faster than ref bernoulli, resolution proba is 1/65536 
-default_random_engine& randomEngine();
-vector<Index> randPerm(Index iSize); //create a vector of index shuffled
-void applyRowPermutation(const vector<Index>& vPermutation, const MatrixFloat & mIn, MatrixFloat & mPermuted);
+std::default_random_engine& randomEngine();
+std::vector<Index> randPerm(Index iSize); //create a vector of index shuffled
+void applyRowPermutation(const std::vector<Index>& vPermutation, const MatrixFloat & mIn, MatrixFloat & mPermuted);
 MatrixFloat decimate(const MatrixFloat& m, Index iRatio);
 Index argmax(const MatrixFloat& m);
 void rowsArgmax(const MatrixFloat& m, MatrixFloat& argM); //compute the argmax row by row
@@ -728,8 +728,9 @@ void reverseData(float* pData, Index iSize);
 void channelWiseAdd(MatrixFloat& mIn,Index iNbSamples,Index iNbChannels,Index iNbRows,Index iNbCols,const MatrixFloat & weight);
 MatrixFloat channelWiseMean(const MatrixFloat& m, Index iNbSamples, Index iNbChannels, Index iNbRows, Index iNbCols);
 
-string toString(const MatrixFloat& m);
-const MatrixFloat fromFile(const string& sFile);
-const MatrixFloat fromString(const string& s);
-bool toFile(const string& sFile, const MatrixFloat & m);
+std::string toString(const MatrixFloat& m);
+const MatrixFloat fromFile(const std::string& sFile);
+const MatrixFloat fromString(const std::string& s);
+bool toFile(const std::string& sFile, const MatrixFloat & m);
 
+}

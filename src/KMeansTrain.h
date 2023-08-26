@@ -12,10 +12,10 @@
 
 #include <functional>
 #include <string>
-using namespace std;
+
+namespace beednn {
 
 class KMeans;
-
 class KMeansTrain
 {
 public:
@@ -66,3 +66,4 @@ private:
 	float _fTrainAccuracy;
 	float _fValidationAccuracy;
 };
+}

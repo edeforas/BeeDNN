@@ -10,6 +10,7 @@
 // 
 
 #include "LayerTERELU.h"
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerTERELU::LayerTERELU() :
@@ -86,3 +87,4 @@ void LayerTERELU::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGra
 		}
 }
 ///////////////////////////////////////////////////////////////
+}

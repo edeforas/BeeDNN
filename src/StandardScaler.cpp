@@ -10,6 +10,7 @@
 
 #include <cmath>
 #include <cassert>
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 void StandardScaler::fit(const MatrixFloat& m)
@@ -41,3 +42,4 @@ void StandardScaler::transform( MatrixFloat& m)
 			m(i, j) = (m(i, j) - _mMean(0, j)) / _mStd(0, j);
 }
 ///////////////////////////////////////////////////////////////////////////////
+}

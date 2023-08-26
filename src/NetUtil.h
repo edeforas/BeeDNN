@@ -8,19 +8,19 @@
 
 #pragma once
 
+#include <string>
+namespace beednn {
 class Net;
 class NetTrain;
 
-#include <string>
-using namespace std;
-
 namespace NetUtil {
 
-    void save(const string& sFile, const Net& model, const NetTrain& trainParams);
+    void save(const std::string& sFile, const beednn::Net& model, const beednn::NetTrain& trainParams);
 
     //void read(const string& s,Net& net);
     //void write(const NetTrain& train,string& s);
     //void read(const string& s,NetTrain& train);
     //string find_key(string s,string sKey);
     //void split(string s, vector<string>& vsItems, char cDelimiter=' ');
+}
 }

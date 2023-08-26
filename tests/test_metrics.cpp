@@ -1,10 +1,11 @@
 #include <iostream>
 #include <cassert>
-using namespace std;
 
 #include "Matrix.h"
 #include "Metrics.h"
 
+using namespace std;
+using namespace beednn;
 /////////////////////////////////////////////////////////////////////
 // for testU only
 inline bool is_near(double a, double b, double tolerancis = 1.e-10)

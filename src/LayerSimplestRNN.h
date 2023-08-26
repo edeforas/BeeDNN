@@ -14,7 +14,7 @@
 
 // Simplest possible RNN algorithm (removed the time distributed applied on the input)
 // this layer is simpler than the LayerSimpleRNN
-
+namespace beednn {
 class LayerSimplestRNN : public LayerRNN
 {
 public:
@@ -27,3 +27,4 @@ public:
 
     virtual void backpropagation_frame(const MatrixFloat& mInFrame, const MatrixFloat& mH, const MatrixFloat& mHm1, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn) override;
 };
+}

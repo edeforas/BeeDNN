@@ -9,6 +9,9 @@
 #include "LayerTimeDistributedDot.h"
 #include "Initializers.h"
 
+using namespace std;
+namespace beednn {
+
 ///////////////////////////////////////////////////////////////////////////////
 LayerTimeDistributedDot::LayerTimeDistributedDot(int iInFrameSize, int iOutFrameSize, const string& sWeightInitializer) :
     Layer("TimeDistributedDot")
@@ -76,3 +79,4 @@ void LayerTimeDistributedDot::backpropagation(const MatrixFloat &mIn,const Matri
 	}
 }
 ///////////////////////////////////////////////////////////////
+}

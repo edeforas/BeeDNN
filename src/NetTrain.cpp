@@ -19,6 +19,9 @@
 #include <cmath>
 #include <cassert>
 
+using namespace std;
+namespace beednn {
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 NetTrain::NetTrain():
     _sOptimizer("Adam"),
@@ -654,7 +657,7 @@ void NetTrain::add_online_statistics(const MatrixFloat&mPredicted, const MatrixF
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-const vector<float>& NetTrain::get_train_loss() const
+const std::vector<float>& NetTrain::get_train_loss() const
 {
     return _trainLoss;
 }
@@ -664,12 +667,12 @@ float NetTrain::get_current_validation_loss() const
 	return _fValidationLoss;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-const vector<float>& NetTrain::get_validation_loss() const
+const std::vector<float>& NetTrain::get_validation_loss() const
 {
     return _validationLoss;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-const vector<float>& NetTrain::get_train_accuracy() const
+const std::vector<float>& NetTrain::get_train_accuracy() const
 {
     return _trainAccuracy;
 }
@@ -679,7 +682,7 @@ float NetTrain::get_current_validation_accuracy() const
 	return _fValidationAccuracy;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-const vector<float>& NetTrain::get_validation_accuracy() const
+const std::vector<float>& NetTrain::get_validation_accuracy() const
 {
     return _validationAccuracy;
 }
@@ -755,3 +758,4 @@ void NetTrain::train_one_epoch(const MatrixFloat& mSampleShuffled, const MatrixF
 	}
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
+}

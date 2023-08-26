@@ -13,13 +13,13 @@
 #include <vector>
 #include <functional>
 #include <string>
-using namespace std;
+
+namespace beednn {
 
 class Optimizer;
 class Loss;
-class Net;
 class Regularizer;
-
+class Net;
 class NetTrain
 {
 public:
@@ -42,11 +42,11 @@ public:
 
 	void set_epoch_callback(std::function<void()> epochCallBack);
 
-    void set_optimizer(const string& sOptimizer); //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov" "iRPROP-" ...
-    string get_optimizer() const;
+    void set_optimizer(const std::string& sOptimizer); //"Adam by default, ex "SGD" "Adam" "Nadam" "Nesterov" "iRPROP-" ...
+    std::string get_optimizer() const;
 
-	void set_regularizer(const string& sRegularizer, float fParameter=-1.f); //"None" by default , -1 is default paremeter, can be also "L2" ...
-	string get_regularizer() const;
+	void set_regularizer(const std::string& sRegularizer, float fParameter=-1.f); //"None" by default , -1 is default paremeter, can be also "L2" ...
+	std::string get_regularizer() const;
 	float get_regularizer_parameter() const;
 
 	void set_learningrate(float fLearningRate=-1.f ); // -1.f is for default settings
@@ -70,8 +70,11 @@ public:
 	void set_keepbest(bool bKeepBest); //true by default: keep the best model of all epochs (evaluated on the test database)
 	bool get_keepbest() const;
 
-	void set_loss(const string&  sLoss); // "MeanSquareError" by default, ex "MeanSquareError" "CategoricalCrossEntropy"
-	string get_loss() const;
+	void set_loss(const std::string&  sLoss); // "MeanSquareError" by default, ex "MeanSquareError" "CategoricalCrossEntropy"
+	void set_loss(Loss* loss){
+		_pLoss=loss;
+	}
+	std::string get_loss() const;
 
 	void set_validation_batchsize(Index iValBatchSize);
 	Index get_validation_batchsize() const;
@@ -80,10 +83,10 @@ public:
 
 	float compute_loss_accuracy(const MatrixFloat & mSamples, const MatrixFloat& mTruth,float* pfAccuracy = nullptr) const;
 
-	const vector<float>& get_train_loss() const;
-	const vector<float>& get_validation_loss() const;
-	const vector<float>& get_train_accuracy() const;
-	const vector<float>& get_validation_accuracy() const;
+	const std::vector<float>& get_train_loss() const;
+	const std::vector<float>& get_validation_loss() const;
+	const std::vector<float>& get_train_accuracy() const;
+	const std::vector<float>& get_validation_accuracy() const;
 
 	float get_current_train_loss() const;
 	float get_current_train_accuracy() const;
@@ -98,9 +101,9 @@ protected:
 	Index _iBatchSize,_iBatchSizeAdjusted;
 	Loss* _pLoss;
 	Regularizer* _pRegularizer;
-	vector<Optimizer*> _optimizers;
-	vector<MatrixFloat> _inOut;
-	vector<MatrixFloat> _gradient;
+	std::vector<Optimizer*> _optimizers;
+	std::vector<MatrixFloat> _inOut;
+	std::vector<MatrixFloat> _gradient;
 	size_t _iNbLayers;
 
 private:
@@ -119,7 +122,7 @@ private:
 	bool _bClassBalancingWeightLoss;
 	int _iReboostEveryEpochs;
 
-    string _sOptimizer;
+    std::string _sOptimizer;
     float _fLearningRate;
 	float _fDecay;
 	float _fMomentum;
@@ -134,16 +137,16 @@ private:
 
 	std::function<void()> _epochCallBack;
 
-    vector<float> _trainLoss;
-    vector<float> _trainAccuracy;
+    std::vector<float> _trainLoss;
+    std::vector<float> _trainAccuracy;
 	
-	vector<float> _validationLoss;
-	vector<float> _validationAccuracy;
+	std::vector<float> _validationLoss;
+	std::vector<float> _validationAccuracy;
 
-	vector<MatrixFloat*> _pWeights;
-	vector<MatrixFloat*> _pGradWeights;
-	vector<MatrixFloat*> _pBiases;
-	vector<MatrixFloat*> _pGradBiases;
+	std::vector<MatrixFloat*> _pWeights;
+	std::vector<MatrixFloat*> _pGradWeights;
+	std::vector<MatrixFloat*> _pBiases;
+	std::vector<MatrixFloat*> _pGradBiases;
 
 	float _fTrainLoss;
 	float _fTrainAccuracy;
@@ -151,4 +154,4 @@ private:
 	float _fValidationLoss;
 	float _fValidationAccuracy;
 };
-
+}

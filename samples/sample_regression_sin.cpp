@@ -4,13 +4,14 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
-using namespace std;
-
 #include "Net.h"
 #include "NetTrain.h"
 
 #include "LayerDense.h"
 #include "LayerActivation.h"
+
+using namespace std;
+using namespace beednn;
 
 /////////////////////////////////////////////////////////////////////
 // for testU only
@@ -31,7 +32,6 @@ int main()
 {
 	cout << "This sample is a basic toy regression task." << endl;
 	cout << "The problem is to approximate a sinus function and to evaluate the model error" << endl;
-
 	//build net
     Net model;
 	model.add(new LayerDense(1,10));

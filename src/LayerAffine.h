@@ -11,6 +11,7 @@
 #include "Layer.h"
 #include "Matrix.h"
 
+namespace beednn {
 class LayerAffine : public Layer
 {
 public:
@@ -24,4 +25,4 @@ public:
     virtual void forward(const MatrixFloat& mIn, MatrixFloat &mOut) override;
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn) override;
 };
-
+}

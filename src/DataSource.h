@@ -1,17 +1,16 @@
 #pragma once
 
 #include <string>
-using namespace std;
 
 #include "Matrix.h"
-
+namespace beednn {
 class DataSource
 {
 public:
     DataSource();
     virtual ~DataSource();
 
-	virtual bool load(const string & sName) = 0;
+	virtual bool load(const std::string & sName) = 0;
 
     const MatrixFloat& train_data() const;
     const MatrixFloat& train_truth() const;
@@ -35,4 +34,4 @@ protected:
     bool _bHasTrainData;
 	bool _bHasValidationData;
 };
-
+}

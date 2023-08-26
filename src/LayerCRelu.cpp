@@ -7,6 +7,8 @@
 */
 
 #include "LayerCRelu.h"
+namespace beednn {
+
 
 // CRelu as in : https://arxiv.org/pdf/1603.05201.pdf
 // Warning: double the output size
@@ -63,3 +65,4 @@ void LayerCRelu::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGrad
 		}
 }
 ///////////////////////////////////////////////////////////////
+}

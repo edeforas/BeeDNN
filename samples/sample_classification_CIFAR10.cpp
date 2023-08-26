@@ -9,7 +9,6 @@
 #include <iomanip>
 #include <fstream>
 #include <sstream>
-using namespace std;
 
 #include "Net.h"
 #include "NetTrain.h"
@@ -26,6 +25,9 @@ using namespace std;
 #include "LayerMaxPool2D.h"
 #include "LayerConvolution2D.h"
 #include "LayerRandomFlip.h"
+
+using namespace std;
+using namespace beednn;
 
 Net model;
 NetTrain netTrain;

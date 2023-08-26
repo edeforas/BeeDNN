@@ -12,7 +12,7 @@
 #include "Matrix.h"
 
 #include <cmath>
-using namespace std;
+namespace beednn {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 Net::Net()
@@ -106,7 +106,7 @@ void Net::set_train_mode(bool bTrainMode)
         _layers[i]->set_train_mode(bTrainMode);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-const vector<Layer*> Net::layers() const
+const std::vector<Layer*> Net::layers() const
 {
     return _layers;
 }
@@ -132,3 +132,4 @@ void Net::init()
         _layers[i]->init();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
+}

@@ -9,7 +9,7 @@
 
 #include "Layer.h"
 #include "Matrix.h"
-
+namespace beednn {
 class LayerRRelu : public Layer
 {
 public:
@@ -33,3 +33,4 @@ private:
 	float _invAlpha2;
 	float _invAlphaMean;	
 };
+}

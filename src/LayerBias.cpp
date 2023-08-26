@@ -9,6 +9,9 @@
 #include "LayerBias.h"
 #include "Initializers.h"
 
+using namespace std;
+namespace beednn {
+
 ///////////////////////////////////////////////////////////////////////////////
 LayerBias::LayerBias(const string& sBiasInitializer) :
     Layer("Bias")
@@ -54,3 +57,4 @@ void LayerBias::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradi
     mGradientIn = mGradientOut;
 }
 ///////////////////////////////////////////////////////////////
+}

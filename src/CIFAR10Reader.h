@@ -11,16 +11,16 @@
 #include "Matrix.h"
 
 #include <string>
-using namespace std;
 
 #include "DataSource.h"
-
+namespace beednn {
 class CIFAR10Reader : public DataSource
 {
 public:
-    virtual bool load(const string& sFolder) override;
+    virtual bool load(const std::string& sFolder) override;
 
 private:
-    bool read_from_folder(const string& sFolder,MatrixFloat& mRefImages,MatrixFloat& mRefLabels,MatrixFloat& mTestImages,MatrixFloat& mTestLabels);
-    bool read_batch(string sName,MatrixFloat& mData,MatrixFloat& mTruth);
+    bool read_from_folder(const std::string& sFolder,MatrixFloat& mRefImages,MatrixFloat& mRefLabels,MatrixFloat& mTestImages,MatrixFloat& mTestLabels);
+    bool read_batch(std::string sName,MatrixFloat& mData,MatrixFloat& mTruth);
 };
+}

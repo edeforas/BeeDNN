@@ -10,7 +10,7 @@
 
 #include "Layer.h"
 #include "Matrix.h"
-
+namespace beednn {
 class LayerDropout : public Layer
 {
 public:
@@ -28,4 +28,4 @@ private:
 	float _fRate;
 	MatrixFloat _mask;
 };
-
+}

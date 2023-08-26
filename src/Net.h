@@ -7,11 +7,11 @@
 */
 #pragma once
 
-#include <vector>
-using namespace std;
-
-class Layer;
 #include "Matrix.h"
+#include <vector>
+
+namespace beednn {
+class Layer;
 
 class Net
 {
@@ -29,7 +29,7 @@ public:
 	// replace a layer, take the ownership of the layer
 	void replace(size_t iLayer,Layer* l);
 
-	const vector<Layer*> layers() const;
+	const std::vector<Layer*> layers() const;
     Layer& layer(size_t iLayer);
 	const Layer& layer(size_t iLayer) const;
 	size_t size() const;
@@ -44,6 +44,7 @@ public:
 
 private:
 	bool _bTrainMode;
-	vector<Layer*> _layers;
+	std::vector<Layer*> _layers;
 	bool _bClassificationMode;
 };
+}

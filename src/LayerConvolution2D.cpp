@@ -12,6 +12,9 @@
 
 #include <cmath> // for sqrt
 
+using namespace std;
+namespace beednn {
+
 ///////////////////////////////////////////////////////////////////////////////
 LayerConvolution2D::LayerConvolution2D(Index iInRows, Index iInCols, Index iInChannels, Index iKernelRows, Index iKernelCols, Index iOutChannels, Index iRowStride, Index iColStride) :
     Layer("Convolution2D")
@@ -355,3 +358,4 @@ void LayerConvolution2D::create_im2col_LUT()
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////
+}

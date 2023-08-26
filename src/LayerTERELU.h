@@ -9,7 +9,7 @@
 #pragma once
 #include "Layer.h"
 #include "Matrix.h"
-
+namespace beednn {
 class LayerTERELU : public Layer
 {
 public:
@@ -26,3 +26,4 @@ public:
 private:
     float _alpha, _mu;
 };
+}

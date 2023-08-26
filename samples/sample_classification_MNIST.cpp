@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include <chrono>
-using namespace std;
 
 #include "Net.h"
 #include "NetTrain.h"
@@ -15,6 +14,9 @@ using namespace std;
 #include "LayerDense.h"
 #include "LayerDropout.h"
 #include "LayerSoftmax.h"
+
+using namespace std;
+using namespace beednn;
 
 Net model;
 NetTrain netTrain;

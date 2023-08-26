@@ -9,11 +9,11 @@
 #pragma once
 
 #include <vector>
-using namespace std;
 
 #include "Layer.h"
 #include "Matrix.h"
 
+namespace beednn {
 class LayerConvolution2D : public Layer
 {
 public:
@@ -45,7 +45,7 @@ private:
 	
 	// LUT algo
 	void create_im2col_LUT();
-	vector<Index> _im2ColLUT;
+	std::vector<Index> _im2ColLUT;
 
 	Index _iInRows;
 	Index _iInCols;
@@ -65,3 +65,4 @@ public:
 	MatrixFloat _im2colT; // input image, im2col format
 	MatrixFloat _tempImg; // temporary image, to avoid malloc
 };
+}

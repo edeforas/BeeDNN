@@ -12,7 +12,7 @@
 #include "Matrix.h"
 
 // from https://www.tensorflow.org/api_docs/python/tf/keras/initializers
-
+namespace beednn {
 
 class Initializers
 {
@@ -29,5 +29,6 @@ public:
     static void Zeros(MatrixFloat &m,Index iInputSize,Index iOutputSize);
     static void Ones(MatrixFloat& m, Index iInputSize, Index iOutputSize);
 
-    static void compute(const string& sInitializer, MatrixFloat& m, Index iInputSize, Index iOutputSize);
+    static void compute(const std::string& sInitializer, MatrixFloat& m, Index iInputSize, Index iOutputSize);
 };
+}

@@ -9,6 +9,7 @@
 // PELU as in : https://arxiv.org/pdf/1605.09332.pdf
 
 #include "LayerPELU.h"
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerPELU::LayerPELU() :
@@ -103,3 +104,4 @@ void LayerPELU::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradi
 		}
 }
 ///////////////////////////////////////////////////////////////
+}

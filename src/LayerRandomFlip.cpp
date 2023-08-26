@@ -8,6 +8,7 @@
 
 // only left-right (horizontal) mode for now
 #include "LayerRandomFlip.h"
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerRandomFlip::LayerRandomFlip(Index iNbRows,Index iNbCols,Index iNbChannels) :
@@ -94,3 +95,4 @@ void LayerRandomFlip::backpropagation(const MatrixFloat &mIn,const MatrixFloat &
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////
+}

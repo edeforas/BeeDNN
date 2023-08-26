@@ -10,11 +10,11 @@
 
 #include "Layer.h"
 #include "Matrix.h"
-
+namespace beednn {
 class LayerChannelBias : public Layer
 {
 public:
-    explicit LayerChannelBias(Index iNbRows,Index iNbCols,Index iNbChannels, const string& sBiasInitializer = "Zeros");
+    explicit LayerChannelBias(Index iNbRows,Index iNbCols,Index iNbChannels, const std::string& sBiasInitializer = "Zeros");
     virtual ~LayerChannelBias();
 
     virtual Layer* clone() const override;
@@ -27,3 +27,4 @@ public:
 private:
 	Index _iNbRows,_iNbCols,_iNbChannels;
 };
+}

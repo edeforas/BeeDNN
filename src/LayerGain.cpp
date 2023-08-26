@@ -7,6 +7,8 @@
 */
 
 #include "LayerGain.h"
+namespace beednn {
+
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerGain::LayerGain() :
@@ -61,3 +63,4 @@ void LayerGain::backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradi
 		}
 }
 ///////////////////////////////////////////////////////////////
+}

@@ -10,11 +10,11 @@
 
 #include "Layer.h"
 #include "Matrix.h"
-
+namespace beednn {
 class LayerDot : public Layer
 {
 public:
-    LayerDot(Index iInputSize,Index iOutputSize, const string& sWeightInitializer = "GlorotUniform");
+    LayerDot(Index iInputSize,Index iOutputSize, const std::string& sWeightInitializer = "GlorotUniform");
     virtual ~LayerDot() override;
 
 	Index input_size() const;
@@ -30,4 +30,4 @@ public:
 private:
 	Index _iInputSize, _iOutputSize;
 };
-
+}

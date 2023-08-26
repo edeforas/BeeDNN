@@ -9,6 +9,8 @@
 #include "Activations.h"
 #include <cmath>
 
+using namespace std;
+namespace beednn {
 Activation::Activation()
 { }
 
@@ -1902,3 +1904,4 @@ void list_activations_available(vector<string>& vsActivations)
 	vsActivations.push_back("ThresholdedRelu");
 }
 //////////////////////////////////////////////////////////////////////////////
+}

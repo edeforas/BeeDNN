@@ -9,6 +9,9 @@
 #include "LayerDense.h"
 #include "Initializers.h"
 
+using namespace std;
+namespace beednn {
+
 ///////////////////////////////////////////////////////////////////////////////
 LayerDense::LayerDense(Index iInputSize, Index iOutputSize, const string& sWeightInitializer, const string& sBiasInitializer) :
     Layer( "Dense"),
@@ -79,5 +82,4 @@ Index LayerDense::output_size() const
 }
 ///////////////////////////////////////////////////////////////
 
-
-
+}

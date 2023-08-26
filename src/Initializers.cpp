@@ -10,6 +10,7 @@
 #include "Initializers.h"
 
 // from https://www.tensorflow.org/api_docs/python/tf/keras/initializers
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 void Initializers::GlorotUniform(MatrixFloat &m,Index iInputSize,Index iOutputSize)
@@ -82,7 +83,7 @@ void Initializers::Ones(MatrixFloat& m, Index iInputSize, Index iOutputSize)
     m.setOnes(iInputSize, iOutputSize);
 }
 ///////////////////////////////////////////////////////////////////////////////
-void Initializers::compute(const string& sInitializer, MatrixFloat& m, Index iInputSize, Index iOutputSize)
+void Initializers::compute(const std::string& sInitializer, MatrixFloat& m, Index iInputSize, Index iOutputSize)
 {
     // Todo , optimize, but not mandatory for now
 
@@ -119,3 +120,4 @@ void Initializers::compute(const string& sInitializer, MatrixFloat& m, Index iIn
     // todo : throw an error if here
 }
 ///////////////////////////////////////////////////////////////////////////////
+}
