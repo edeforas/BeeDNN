@@ -6,9 +6,6 @@
     in the LICENSE.txt file.
 */
 
-#ifndef JsonFile_
-#define JsonFile_
-
 #include <string>
 using namespace std;
 
@@ -38,4 +35,3 @@ private:
     string _sOut;
 };
 
-#endif

@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerUniformNoise_
-#define LayerUniformNoise_
+#pragma once
 
 #include "Layer.h"
 #include "Matrix.h"
@@ -34,5 +33,3 @@ private:
 	uniform_real_distribution<float> _distUniform;
 
 };
-
-#endif

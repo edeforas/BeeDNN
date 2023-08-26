@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef KMeansTrain_
-#define KMeansTrain_
+#pragma once
 
 #include "Matrix.h"
 
@@ -67,5 +66,3 @@ private:
 	float _fTrainAccuracy;
 	float _fValidationAccuracy;
 };
-
-#endif

@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef Layer_
-#define Layer_
+#pragma once
 
 #include "Matrix.h"
 
@@ -56,5 +55,3 @@ private:
     string _sType;
     string _sWeightInitializer, _sBiasInitializer;
 };
-
-#endif

@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef NetTrain_
-#define NetTrain_
+#pragma once
 
 #include "Matrix.h"
 
@@ -153,4 +152,3 @@ private:
 	float _fValidationAccuracy;
 };
 
-#endif

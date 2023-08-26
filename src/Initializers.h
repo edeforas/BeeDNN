@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef Initializers_
-#define Initializers_
+#pragma once
 
 #include "Layer.h"
 #include "Matrix.h"
@@ -32,5 +31,3 @@ public:
 
     static void compute(const string& sInitializer, MatrixFloat& m, Index iInputSize, Index iOutputSize);
 };
-
-#endif

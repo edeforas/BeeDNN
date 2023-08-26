@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerReGLU_
-#define LayerReGLU_
+#pragma once
 
 #include "LayerGatedActivation.h"
 
@@ -16,5 +15,3 @@ class LayerReGLU : public LayerGatedActivation
 public:
     explicit LayerReGLU();
 };
-
-#endif

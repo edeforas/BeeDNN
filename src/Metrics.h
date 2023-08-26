@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef Metrics_
-#define Metrics_
+#pragma once
 
 #include "Matrix.h"
 
@@ -30,5 +29,3 @@ private:
     MatrixFloat _mConfusionMatrix; //raw count
     MatrixFloat _mConfusionMatrixNormalized; //in %
 };
-
-#endif

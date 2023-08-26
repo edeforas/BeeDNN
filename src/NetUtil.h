@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef NetUtil_
-#define NetUtil_
+#pragma once
 
 class Net;
 class NetTrain;
@@ -25,4 +24,3 @@ namespace NetUtil {
     //string find_key(string s,string sKey);
     //void split(string s, vector<string>& vsItems, char cDelimiter=' ');
 }
-#endif

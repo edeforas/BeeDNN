@@ -1,5 +1,4 @@
-#ifndef MetaOptimizer_
-#define MetaOptimizer_
+#pragma once
 
 #include "NetTrain.h"
 
@@ -77,5 +76,3 @@ private:
 	vector< OptimizerVariation > _optimizerVariations;
 
 };
-
-#endif

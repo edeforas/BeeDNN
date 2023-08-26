@@ -1,5 +1,4 @@
-#ifndef DataSource_
-#define DataSource_
+#pragma once
 
 #include <string>
 using namespace std;
@@ -37,4 +36,3 @@ protected:
 	bool _bHasValidationData;
 };
 
-#endif

@@ -6,8 +6,7 @@
     in the LICENSE.txt file.
 */
 
-#ifndef LayerDot_
-#define LayerDot_
+#pragma once
 
 #include "Layer.h"
 #include "Matrix.h"
@@ -32,4 +31,3 @@ private:
 	Index _iInputSize, _iOutputSize;
 };
 
-#endif
