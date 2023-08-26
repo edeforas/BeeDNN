@@ -15,7 +15,7 @@
 
 // Simplest possible RNN algorithm (removed the time distributed applied on the input)
 // this layer is simpler than the LayerSimpleRNN
-namespace bee {
+namespace beednn {
 class LayerSimplestRNN : public LayerRNN
 {
 public:

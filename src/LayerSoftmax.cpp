@@ -9,7 +9,7 @@
 #include "LayerSoftmax.h"
 
 #include <cmath>
-namespace bee {
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerSoftmax::LayerSoftmax():

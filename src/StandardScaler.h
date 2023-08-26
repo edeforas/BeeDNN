@@ -10,7 +10,7 @@
 #define StandardScaler_
 
 #include "Matrix.h"
-namespace bee {
+namespace beednn {
 class StandardScaler
 {
 public:

@@ -11,7 +11,7 @@
 #include "Initializers.h"
 
 using namespace std;
-namespace bee {
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerDot::LayerDot(Index iInputSize, Index iOutputSize,const string& sWeightInitializer) :

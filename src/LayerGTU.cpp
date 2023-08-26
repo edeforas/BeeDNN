@@ -9,7 +9,7 @@
 // LayerGTU as in : https://arxiv.org/pdf/1612.08083.pdf
 
 #include "LayerGTU.h"
-namespace bee {
+namespace beednn {
 ///////////////////////////////////////////////////////////////////////////////
 LayerGTU::LayerGTU() :
 	LayerGatedActivation("Tanh", "Sigmoid")

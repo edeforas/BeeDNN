@@ -10,7 +10,7 @@
 #include "Initializers.h"
 
 using namespace std;
-namespace bee {
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerBias::LayerBias(const string& sBiasInitializer) :

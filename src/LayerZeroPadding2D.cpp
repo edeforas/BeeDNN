@@ -11,7 +11,7 @@
 // https://deeplizard.com/learn/video/qSTv_m-KFk0
 
 #include "LayerZeroPadding2D.h"
-namespace bee {
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerZeroPadding2D::LayerZeroPadding2D(Index iInRows, Index iInCols, Index iInChannels, Index iBorder) :

@@ -13,7 +13,7 @@
 
 #include <string>
 #include <vector>
-namespace bee {
+namespace beednn {
 class Loss
 {
 public:

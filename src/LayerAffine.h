@@ -12,7 +12,7 @@
 #include "Layer.h"
 #include "Matrix.h"
 
-namespace bee {
+namespace beednn {
 class LayerAffine : public Layer
 {
 public:

@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace bee {
+namespace beednn {
 class Layer;
 
 class LayerFactory

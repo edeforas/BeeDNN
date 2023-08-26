@@ -11,7 +11,7 @@
 #include "LayerActivation.h"
 
 using namespace std;
-using namespace bee;
+using namespace beednn;
 
 /////////////////////////////////////////////////////////////////////
 // for testU only

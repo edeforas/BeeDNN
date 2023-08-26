@@ -9,7 +9,7 @@
 #include "LayerGaussianNoise.h"
 
 #include <random>
-namespace bee {
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerGaussianNoise::LayerGaussianNoise(float fNoise):

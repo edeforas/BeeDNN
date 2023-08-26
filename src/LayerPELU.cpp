@@ -9,7 +9,7 @@
 // PELU as in : https://arxiv.org/pdf/1605.09332.pdf
 
 #include "LayerPELU.h"
-namespace bee {
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerPELU::LayerPELU() :

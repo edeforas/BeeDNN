@@ -14,7 +14,7 @@
 
 #include <string>
 
-namespace bee {
+namespace beednn {
 class MNISTReader: public DataSource
 {
 public:

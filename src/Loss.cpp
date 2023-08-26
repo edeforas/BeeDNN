@@ -13,7 +13,7 @@
 
 using namespace std;
 
-namespace bee {
+namespace beednn {
 ////////////////////////////////////////////////////////////////
 Loss::Loss()
 {

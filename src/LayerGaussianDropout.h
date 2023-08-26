@@ -13,7 +13,7 @@
 #include "Matrix.h"
 
 #include <random>
-namespace bee {
+namespace beednn {
 class Activation;
 
 class LayerGaussianDropout : public Layer

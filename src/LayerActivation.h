@@ -14,7 +14,7 @@
 
 #include <string>
 
-namespace bee {
+namespace beednn {
 class Activation;
 
 class LayerActivation : public Layer

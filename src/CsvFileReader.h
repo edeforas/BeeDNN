@@ -12,7 +12,7 @@
 #include <string>
 
 #include "DataSource.h"
-namespace bee {
+namespace beednn {
 class CsvFileReader : public DataSource
 {
 public:

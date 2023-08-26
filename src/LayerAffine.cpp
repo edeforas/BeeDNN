@@ -7,7 +7,7 @@
 */
 
 #include "LayerAffine.h"
-namespace bee {
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerAffine::LayerAffine() :

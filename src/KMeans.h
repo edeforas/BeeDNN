@@ -11,7 +11,7 @@
 
 #include "Matrix.h"
 
-namespace bee {
+namespace beednn {
 class Loss;
 
 class KMeans

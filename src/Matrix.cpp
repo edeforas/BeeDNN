@@ -18,7 +18,7 @@
 #include "Matrix.h"
 
 using namespace std;
-namespace bee {
+namespace beednn {
 ///////////////////////////////////////////////////////////////////////////
 //matrix view on another matrix, without malloc and copy
 const MatrixFloatView fromRawBuffer(const float *pBuffer,Index iRows,Index iCols)

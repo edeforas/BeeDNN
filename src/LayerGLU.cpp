@@ -9,7 +9,7 @@
 // GLU as in :https://arxiv.org/abs/1612.08083
 
 #include "LayerGLU.h"
-namespace bee {
+namespace beednn {
 ///////////////////////////////////////////////////////////////////////////////
 LayerGLU::LayerGLU() :
     LayerGatedActivation("Identity", "Sigmoid")

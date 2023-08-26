@@ -7,7 +7,7 @@
 */
 
 #include "LayerGlobalBias.h"
-namespace bee {
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerGlobalBias::LayerGlobalBias() :

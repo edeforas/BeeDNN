@@ -12,7 +12,7 @@
 #include <cmath>
 
 using namespace std;
-namespace bee {
+namespace beednn {
 
 //////////////////////////////////////////////////////////
 Optimizer::Optimizer()

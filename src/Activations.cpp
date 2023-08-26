@@ -10,7 +10,7 @@
 #include <cmath>
 
 using namespace std;
-namespace bee {
+namespace beednn {
 Activation::Activation()
 { }
 

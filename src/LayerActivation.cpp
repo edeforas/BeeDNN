@@ -9,7 +9,7 @@
 #include "LayerActivation.h"
 
 #include "Activations.h"
-namespace bee {
+namespace beednn {
 
 using namespace std;
 ///////////////////////////////////////////////////////////////////////////////

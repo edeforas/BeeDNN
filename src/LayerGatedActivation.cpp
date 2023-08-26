@@ -13,7 +13,7 @@
 #include "Activations.h"
 
 using namespace std;
-namespace bee {
+namespace beednn {
 ///////////////////////////////////////////////////////////////////////////////
 LayerGatedActivation::LayerGatedActivation(const string& sActivation1, const string& sActivation2) :
 	Layer("GatedActivation")

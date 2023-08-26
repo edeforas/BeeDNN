@@ -7,7 +7,7 @@
 */
 
 #include "LayerSimplestRNN.h"
-namespace bee {
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerSimplestRNN::LayerSimplestRNN(int iFrameSize) :

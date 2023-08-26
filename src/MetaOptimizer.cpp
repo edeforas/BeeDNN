@@ -7,7 +7,7 @@
 #include <thread>
 
 using namespace std;
-namespace bee {
+namespace beednn {
 
 //////////////////////////////////////////////////////////////////////////////
 MetaOptimizer::MetaOptimizer():

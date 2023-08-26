@@ -14,7 +14,7 @@
 #include <string>
 
 #include "DataSource.h"
-namespace bee {
+namespace beednn {
 class CIFAR10Reader : public DataSource
 {
 public:

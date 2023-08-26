@@ -9,7 +9,7 @@
 // SwiGLU as in : https://kikaben.com/swiglu-2020/
 
 #include "LayerSwiGLU.h"
-namespace bee {
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerSwiGLU::LayerSwiGLU() :

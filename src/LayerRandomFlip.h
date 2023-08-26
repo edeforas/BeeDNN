@@ -12,7 +12,7 @@
 #include "Layer.h"
 #include "Matrix.h"
 #include <vector>
-namespace bee {
+namespace beednn {
 // only left-right (horizontal) mode for now
 class LayerRandomFlip : public Layer
 {

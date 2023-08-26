@@ -21,7 +21,7 @@
     #include <Eigen/Core>
 #endif 
 
-namespace bee {
+namespace beednn {
 
 #ifdef USE_EIGEN
     using Index=Eigen::Index;

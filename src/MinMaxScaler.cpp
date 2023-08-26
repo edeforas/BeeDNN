@@ -10,7 +10,7 @@
 
 #include <cmath>
 #include <cassert>
-namespace bee {
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 void MinMaxScaler::fit(const MatrixFloat& m)

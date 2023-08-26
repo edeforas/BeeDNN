@@ -10,7 +10,7 @@
 
 #include <fstream>
 using namespace std;
-namespace bee {
+namespace beednn {
 
 // file format and data at: https://www.cs.toronto.edu/~kriz/cifar.html
 

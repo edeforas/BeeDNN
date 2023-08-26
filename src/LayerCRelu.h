@@ -14,7 +14,7 @@
 
 // CRelu as in : https://arxiv.org/pdf/1603.05201.pdf
 // Warning: double the output size
-namespace bee {
+namespace beednn {
 class LayerCRelu : public Layer
 {
 public:

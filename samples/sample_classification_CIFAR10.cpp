@@ -27,7 +27,7 @@
 #include "LayerRandomFlip.h"
 
 using namespace std;
-using namespace bee;
+using namespace beednn;
 
 Net model;
 NetTrain netTrain;

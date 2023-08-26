@@ -14,7 +14,7 @@
 #include <functional>
 #include <string>
 
-namespace bee {
+namespace beednn {
 
 class KMeans;
 class KMeansTrain

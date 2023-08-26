@@ -36,7 +36,7 @@
 
 using namespace std;
 
-namespace bee {
+namespace beednn {
 
 //////////////////////////////////////////////////////////////////////////////
 Layer* LayerFactory::create(const string& sLayer,float fArg1,float fArg2,float fArg3,float fArg4,float fArg5)

@@ -10,7 +10,7 @@ using namespace std;
 #include "LayerDense.h"
 #include "LayerActivation.h"
 
-using namespace bee;
+using namespace beednn;
 /////////////////////////////////////////////////////////////////////
 // for testU only
 inline bool is_near(double a,double b, double tolerancis=0.001)

@@ -12,7 +12,7 @@
 #include "Matrix.h"
 #include <vector>
 
-namespace bee {
+namespace beednn {
 class Layer;
 
 class Net

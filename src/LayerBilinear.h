@@ -11,7 +11,7 @@
 
 #include "LayerGatedActivation.h"
 
-namespace bee {
+namespace beednn {
 class LayerBilinear : public LayerGatedActivation
 {
 public:

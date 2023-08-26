@@ -14,7 +14,7 @@
 #include "LayerRNN.h"
 
 // Simple RNN algorithm as in : https://arxiv.org/abs/1610.02583
-namespace bee {
+namespace beednn {
 class LayerSimpleRNN : public LayerRNN
 {
 public:

@@ -14,7 +14,7 @@
 
 #include <random>
 
-namespace bee {
+namespace beednn {
 class LayerGaussianNoise : public Layer
 {
 public:

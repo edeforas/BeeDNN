@@ -15,7 +15,7 @@
 #include <functional>
 #include <string>
 
-namespace bee {
+namespace beednn {
 
 class Optimizer;
 class Loss;

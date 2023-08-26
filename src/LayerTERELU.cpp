@@ -10,7 +10,7 @@
 // 
 
 #include "LayerTERELU.h"
-namespace bee {
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerTERELU::LayerTERELU() :

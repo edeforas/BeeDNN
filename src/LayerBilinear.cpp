@@ -9,7 +9,7 @@
 // Bilinear as in : https://kikaben.com/swiglu-2020/
 
 #include "LayerBilinear.h"
-namespace bee {
+namespace beednn {
 
 
 ///////////////////////////////////////////////////////////////////////////////

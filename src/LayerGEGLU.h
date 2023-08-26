@@ -12,7 +12,7 @@
 #include "LayerGatedActivation.h"
 #include "Matrix.h"
 
-namespace bee {
+namespace beednn {
 class LayerGEGLU : public LayerGatedActivation
 {
 public:

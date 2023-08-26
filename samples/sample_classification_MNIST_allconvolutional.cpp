@@ -18,7 +18,7 @@
 #include "LayerSoftmax.h"
 
 using namespace std;
-using namespace bee;
+using namespace beednn;
 
 NetTrain netTrain;
 int iEpoch;

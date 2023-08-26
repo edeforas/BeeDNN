@@ -12,7 +12,7 @@
 #include <string>
 #include <vector>
 
-namespace bee {
+namespace beednn {
 class Activation
 {
 public:

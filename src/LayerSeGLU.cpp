@@ -9,7 +9,7 @@
 // SeGLU as in : https://github.com/pouyaardehkhani/ActTensor/
 
 #include "LayerSeGLU.h"
-namespace bee {
+namespace beednn {
 ///////////////////////////////////////////////////////////////////////////////
 LayerSeGLU::LayerSeGLU() :
     LayerGatedActivation("Identity", "Selu")

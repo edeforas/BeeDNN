@@ -10,7 +10,7 @@
 #include "Initializers.h"
 
 // from https://www.tensorflow.org/api_docs/python/tf/keras/initializers
-namespace bee {
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 void Initializers::GlorotUniform(MatrixFloat &m,Index iInputSize,Index iOutputSize)

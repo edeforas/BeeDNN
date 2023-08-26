@@ -1,5 +1,5 @@
 #include "DataSource.h"
-namespace bee {
+namespace beednn {
 
 ////////////////////////////////////////////////////////////////////////
 DataSource::DataSource()

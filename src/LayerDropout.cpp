@@ -9,7 +9,7 @@
 //inverse dropout as in: https://pgaleone.eu/deep-learning/regularization/2017/01/10/anaysis-of-dropout/
 
 #include "LayerDropout.h"
-namespace bee {
+namespace beednn {
 
 
 ///////////////////////////////////////////////////////////////////////////////

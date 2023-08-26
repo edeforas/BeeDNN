@@ -4,7 +4,7 @@
 #include <string>
 
 #include "Matrix.h"
-namespace bee {
+namespace beednn {
 class DataSource
 {
 public:

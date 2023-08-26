@@ -5,7 +5,7 @@
 
 #include <functional>
 #include <vector>
-namespace bee {
+namespace beednn {
 class LayerVariation
 {
 public:

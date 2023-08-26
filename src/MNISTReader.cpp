@@ -10,7 +10,7 @@
 
 #include <fstream>
 using namespace std;
-namespace bee {
+namespace beednn {
 
 ////////////////////////////////////////////////////////////////////////////////////
 bool MNISTReader::load(const string& sName)

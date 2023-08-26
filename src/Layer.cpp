@@ -9,7 +9,7 @@
 #include "Layer.h"
 
 using namespace std;
-namespace bee {
+namespace beednn {
 
 ////////////////////////////////////////////////////////////////
 Layer::Layer(const string& sType):

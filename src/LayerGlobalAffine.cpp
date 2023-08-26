@@ -7,7 +7,7 @@
 */
 
 #include "LayerGlobalAffine.h"
-namespace bee {
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerGlobalAffine::LayerGlobalAffine():

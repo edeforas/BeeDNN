@@ -14,7 +14,7 @@
 #include <vector>
 #include <string>
 
-namespace bee {
+namespace beednn {
 class Layer;
 
 class Optimizer

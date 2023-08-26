@@ -10,13 +10,13 @@
 #define NetUtil_
 
 #include <string>
-namespace bee {
+namespace beednn {
 class Net;
 class NetTrain;
 
 namespace NetUtil {
 
-    void save(const std::string& sFile, const bee::Net& model, const bee::NetTrain& trainParams);
+    void save(const std::string& sFile, const beednn::Net& model, const beednn::NetTrain& trainParams);
 
     //void read(const string& s,Net& net);
     //void write(const NetTrain& train,string& s);

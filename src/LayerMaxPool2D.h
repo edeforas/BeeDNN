@@ -11,7 +11,7 @@
 
 #include "Layer.h"
 #include "Matrix.h"
-namespace bee {
+namespace beednn {
 class LayerMaxPool2D : public Layer
 {
 public:

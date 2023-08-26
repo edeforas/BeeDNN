@@ -7,7 +7,7 @@
 */
 
 #include "LayerGlobalAveragePooling2D.h"
-namespace bee {
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerGlobalAveragePooling2D::LayerGlobalAveragePooling2D(Index iInRows, Index iInCols, Index iInChannels) :

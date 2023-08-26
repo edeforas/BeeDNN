@@ -9,7 +9,7 @@
 #include "Metrics.h"
 
 using namespace std;
-using namespace bee;
+using namespace beednn;
 
 KMeans km;
 KMeansTrain kmTrain;

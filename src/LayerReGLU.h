@@ -10,7 +10,7 @@
 #define LayerReGLU_
 
 #include "LayerGatedActivation.h"
-namespace bee {
+namespace beednn {
 class LayerReGLU : public LayerGatedActivation
 {
 public:

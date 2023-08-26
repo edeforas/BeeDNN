@@ -14,7 +14,7 @@
 #include "Layer.h"
 #include "Matrix.h"
 
-namespace bee {
+namespace beednn {
 class LayerConvolution2D : public Layer
 {
 public:

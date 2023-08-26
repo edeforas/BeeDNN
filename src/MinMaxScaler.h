@@ -10,7 +10,7 @@
 #define MinMaxScaler_
 
 #include "Matrix.h"
-namespace bee {
+namespace beednn {
 class MinMaxScaler
 {
 public:

@@ -14,7 +14,7 @@
 #include "Layer.h"
 
 #include <vector>
-namespace bee {
+namespace beednn {
 class LayerRNN : public Layer
 {
 public:

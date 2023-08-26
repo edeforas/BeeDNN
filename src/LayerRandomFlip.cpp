@@ -8,7 +8,7 @@
 
 // only left-right (horizontal) mode for now
 #include "LayerRandomFlip.h"
-namespace bee {
+namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
 LayerRandomFlip::LayerRandomFlip(Index iNbRows,Index iNbCols,Index iNbChannels) :
