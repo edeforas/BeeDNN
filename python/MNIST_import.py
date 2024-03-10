@@ -4,7 +4,7 @@ import numpy as np
 
 def load():
 
-	f = open('train-images.idx3-ubyte',mode='rb')
+	f = open('train-images.idx3-ubyte',mode='rb')	
 	f.read(16)
 	buf = f.read(28 * 28 * 60000)
 	train_data = np.frombuffer(buf, dtype=np.uint8).astype(np.float32)

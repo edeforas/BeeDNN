@@ -37,10 +37,10 @@ n=mta.best_net
 # compute and print confusion matrix
 predicted = n.predict(train_data)
 confmat,accuracy=nn.compute_confusion_matrix(train_truth,predicted,10)
-print("Train conf mat:\n",confmat)
+print("Train confusion matrix:\n",confmat)
 print("Final Train accuracy:",accuracy)
 
 predicted = n.predict(test_data)
 confmat,accuracy=nn.compute_confusion_matrix(test_truth,predicted,10)
-print("\nValid conf mat:\n",confmat)
+print("\nValid confusion matrix:\n",confmat)
 print("Final Valid accuracy:",accuracy)
