@@ -1,5 +1,5 @@
-//This test a basic toy regression task.
-//The task is to approximate a sinus function and to evaluate the model error
+//This is a regression task sample.
+//The goal is to approximate a sinus function and to evaluate the model error
 
 #include <iostream>
 #include <iomanip>
@@ -70,8 +70,11 @@ int main()
     //compute and print loss
     float fLoss=netfit.compute_loss_accuracy(mSamples,mTruth);
     cout << "Loss=" << fLoss << endl;
+	test(fLoss < 1.e-5, "Loss must be < 1.e-5");
 
-	test(fLoss<1.e-5,"Loss must be <1.e-5");
+	float fMaxError = (mPredict - mTruth).cwiseAbs().maxCoeff();
+	cout << "Max Error=" << fMaxError << endl;
+	test(fMaxError < 0.01, "Max Error must be < 0.01");
 
 	cout << "Test succeded." << endl;
     return 0;

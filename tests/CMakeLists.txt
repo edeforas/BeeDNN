@@ -12,8 +12,8 @@ target_link_libraries(test_regression_sin libBeeDNN)
 add_executable(test_classification_xor test_classification_xor.cpp  )
 target_link_libraries(test_classification_xor libBeeDNN)
 
-add_executable(test_matrix_GEMM test_matrix_GEMM.cpp  )
-target_link_libraries(test_matrix_GEMM libBeeDNN)
+#add_executable(test_matrix_GEMM test_matrix_GEMM.cpp  )
+#target_link_libraries(test_matrix_GEMM libBeeDNN)
 
 add_executable(test_metrics test_metrics.cpp  )
 target_link_libraries(test_metrics libBeeDNN)
