@@ -4,7 +4,7 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
-import BeeDNN as nn
+import BeeDNNLoader as nn
 
 nnTanh=nn.BeeDNN(1)
 nnTanh.add_layer('Tanh')

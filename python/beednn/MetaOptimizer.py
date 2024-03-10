@@ -10,7 +10,7 @@ import numpy as np
 import copy
 import multiprocessing
 import threading
-import BeeDNN as nn
+import beednn as nn
 import pickle
 
 ###################################################################################################
