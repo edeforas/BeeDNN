@@ -7,7 +7,7 @@
 """
 
 import numpy as np
-import Layer
+from . import Layer
 
 ###################################################################################################
 class LayerLoss(Layer.Layer):

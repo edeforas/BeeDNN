@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import BeeDNN as nn
-import Layer as layer
+from beednn import Model, Layer
 
 # simple xor classification and decision surface output
 
@@ -13,18 +12,18 @@ truth=np.zeros((4,1))
 truth[0,0]=0 ; truth[1,0]=1  ; truth[2,0]=1 ; truth[3,0]=0
 
 # build net
-n = nn.Net()
-n.append(layer.LayerDense(2,10))
-n.append(layer.LayerRELU())
-n.append(layer.LayerDense(10,1))
+m = Model.Model()
+m.append(Layer.LayerDense(2,10))
+m.append(Layer.LayerRELU())
+m.append(Layer.LayerDense(10,1))
 
 # train net
-train = nn.NetTrain()
+train = Model.NetTrain()
 train.set_epochs(100)
 train.set_batch_size(0) #if set to 0, use full batch
 train.set_optimizer("RPROPm")
 train.set_loss("MSE") # simple Mean Square Error
-train.fit(n,sample,truth)
+train.fit(m,sample,truth)
 
 # plot loss vs. epoch
 plt.plot(train.epoch_loss)
@@ -38,7 +37,7 @@ X,Y=np.meshgrid(x,y)
 Xr=np.atleast_2d(np.ravel(X)).transpose()
 Yr=np.atleast_2d(np.ravel(Y)).transpose()
 XY=np.concatenate((Xr,Yr),axis=1)
-Z=n.predict(XY)
+Z=m.predict(XY)
 
 #plot smooth decision
 Zflat=Z.reshape(X.shape)

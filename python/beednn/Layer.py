@@ -8,7 +8,8 @@
 
 import numpy as np
 import copy
-import Optimizer as opt
+
+from . import Optimizer as opt
 
 ################################################################################################### Layers
 class Layer:

@@ -1,7 +1,7 @@
 import ctypes as ct
 import numpy as np
 
-class BeeDNN:
+class BeeDNNLoader:
     c_float_p = ct.POINTER(ct.c_float)
     lib = ct.cdll.LoadLibrary("./BeeDNNLib") # .dll is added under windows, .so under linux
     lib.create.argtypes=[ct.c_int32]

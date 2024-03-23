@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import BeeDNN as nn
-import Layer
+from beednn import Model, Layer
 
 # simple XOR classification using softmax (see simple_xor.py for a xor classification without softmax)
 
@@ -19,19 +18,19 @@ truth[2]=1
 truth[3]=0
 
 # construct net
-n = nn.Net()
-n.append(Layer.LayerDense(2,3))
-n.append(Layer.LayerTanh())
-n.append(Layer.LayerDense(3,2))
-n.append(Layer.LayerSoftmax())
+m = Model.Model()
+m.append(Layer.LayerDense(2,3))
+m.append(Layer.LayerTanh())
+m.append(Layer.LayerDense(3,2))
+m.append(Layer.LayerSoftmax())
 
 # optimize net
-train = nn.NetTrain()
+train = Model.NetTrain()
 train.set_epochs(100)
 train.set_batch_size(0) # set to 0 for full batch
 train.set_optimizer("RPROPm") # work best with full batch size
 train.set_loss("SparseCategoricalCrossEntropy") # use this loss for the softmax and categorical truth
-train.fit(n,sample,truth)
+train.fit(m,sample,truth)
 
 # plot loss
 plt.plot(train.epoch_loss)

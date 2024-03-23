@@ -8,11 +8,9 @@
 
 import numpy as np
 import copy
-import Optimizer as opt
-import Layer as layer
-import Regularizer as regularizer
-import Optimizer as opt
-import Loss
+from . import Layer, Regularizer, Loss
+from . import Optimizer
+
 
 def compute_confusion_matrix(truth,predicted,nb_class=0):
   if nb_class==0:
@@ -32,7 +30,7 @@ def to_one_hot(label,nb_class):
   return train_label_one_hot
 
 ###################################################################################################
-class Net:
+class Model:
   def __init__(self):
     self.layers = []
 
