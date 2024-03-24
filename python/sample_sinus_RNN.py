@@ -11,13 +11,17 @@ batch_size = 1000
 
 #####################################################################################
 def create_sample_sin():
-    start_sin=random.random()*10-1. ;   end_sin=random.random()*2+1.
-    t=np.linspace(start_sin,start_sin+end_sin,nb_frame+1) ;   y=np.sin(t)
+    start_sin=random.random()*10-1.
+    end_sin=random.random()*2+1.
+
+    t=np.linspace(start_sin,start_sin+end_sin,nb_frame+1)
+    y=np.sin(t)
     x=y[0:-1] ;   y=y[1:]
-    x=np.expand_dims(x,0) ;   y=np.expand_dims(y,0)
+    x=np.expand_dims(x,0)
+    y=np.expand_dims(y,0)
     return x, y
 #####################################################################################
-def create_sample_sin_db():
+def create_sample_sin_dataset():
     x=None ;  y=None
     
     for i in range(nb_sample):
@@ -31,7 +35,7 @@ def create_sample_sin_db():
     return x,y
 #####################################################################################
 
-sample,truth=create_sample_sin_db()
+sample,truth=create_sample_sin_dataset()
  
 m = Model.Model()
 m.append(Layer.LayerTimeDistributedDense(1,3))
@@ -40,7 +44,7 @@ m.append(Layer.LayerRELU())
 m.append(Layer.LayerDense(3*nb_frame,nb_frame))
 
 # train net
-train = Model.NetTrain()
+train = Model.Train()
 train.set_epochs(nb_epochs)
 train.set_batch_size(batch_size)
 train.set_optimizer("Adam")

@@ -1,9 +1,9 @@
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
-from beednn import TfUtils
+from beednn import TFUtils
 
-#create datas (load, reshape and normalize)
+#create XOR data
 x_train=np.array([[0,0],[0,1],[1, 0],[1,1]])
 y_train=np.array([0,1,1,0])
 
@@ -34,4 +34,4 @@ plt.title('truth vs. pred')
 plt.show()
 
 #save for inspection
-TfUtils.save_tf_to_json(model,'saved_model_xor.json')
+TFUtils.save_tf_to_json(model,'saved_model_xor.json')

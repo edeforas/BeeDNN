@@ -16,7 +16,7 @@ m.append(Layer.LayerRELU())
 m.append(Layer.LayerDense(10,1))
 
 # train net
-train = Model.NetTrain()
+train = Model.Train()
 train.set_epochs(50)
 train.set_batch_size(32)
 train.set_optimizer("Nadam")

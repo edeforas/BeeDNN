@@ -2,7 +2,7 @@ import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 
-from beednn import TfUtils
+from beednn import TFUtils
 
 #create datas (load, reshape and normalize)
 sunspot="sunspot.txt"
@@ -39,4 +39,4 @@ plt.title('truth vs. pred')
 plt.show()
 
 #save for inspection
-TfUtils.save_tf_to_json(model,'saved_model_simplernn.json')
+TFUtils.save_tf_to_json(model,'saved_model_simplernn.json')

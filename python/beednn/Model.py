@@ -11,7 +11,6 @@ import copy
 from . import Layer, Regularizer, Loss
 from . import Optimizer
 
-
 def compute_confusion_matrix(truth,predicted,nb_class=0):
   if nb_class==0:
     nb_class=np.max(truth)+1
@@ -57,20 +56,22 @@ class Model:
       l.optimize()
 
 ###################################################################################################
-class NetTrain:
-  loss_layer = None
-  epochs = 100
-  batch_size = 32
-  test_data=None
-  test_truth=None
-  epoch_callback=None
-  current_train_accuracy=-1
-  metrics=""
+class Train:
+  def __init__(self):
+    self.loss_layer = None
+    self.epochs = 100
+    self.batch_size = 32
+    self.test_data=None
+    self.test_truth=None
+    self.epoch_callback=None
+    self.current_train_accuracy=-1
+    self.metrics=""
+    self.optimizer="Adam"
 
-  #keep best parameters
-  keep_best=True
-  best_net=None
-  best_accuracy=0
+    #keep best parameters
+    self.keep_best=True
+    self.best_net=None
+    self.best_accuracy=0
 
   def get_current_train_accuracy(self):
       return self.current_train_accuracy

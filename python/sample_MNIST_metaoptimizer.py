@@ -20,7 +20,7 @@ m.append(Layer.LayerDense(64,10))
 m.append(Layer.LayerSoftmax())
 
 # set optimizer
-train = Model.NetTrain()
+train = Model.Train()
 train.set_epochs(10)
 train.set_batch_size(128)
 train.set_test_data(test_data , test_truth)
