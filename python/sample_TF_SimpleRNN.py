@@ -20,7 +20,7 @@ model.add(tf.keras.layers.TimeDistributed(tf.keras.layers.Dense(1)))
 
 #train
 model.compile(loss='mse', optimizer='adam')
-history=model.fit(x_train, y_train, epochs=100)
+history=model.fit(x_train, y_train, epochs=50)
 loss_train=history.history["loss"]
 model.summary()
 
