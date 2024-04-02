@@ -29,7 +29,7 @@ public:
     virtual void init();
     virtual void backpropagation(const MatrixFloat &mIn,const MatrixFloat &mGradientOut, MatrixFloat &mGradientIn)=0;
 	
-	void set_train_mode(bool bTrainMode); //set to true to train, to false to test
+	void set_train_mode(bool bTrainMode); //set to true to train, to false to predict only
 
     void set_weight_initializer(const std::string& _sWeightInitializer);
     std::string weight_initializer() const;

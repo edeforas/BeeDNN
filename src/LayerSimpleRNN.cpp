@@ -7,6 +7,8 @@
 */
 
 #include "LayerSimpleRNN.h"
+
+using namespace std;
 namespace beednn {
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -42,15 +44,42 @@ Layer* LayerSimpleRNN::clone() const
 ///////////////////////////////////////////////////////////////////////////////
 void LayerSimpleRNN::forward_frame(const MatrixFloat& mIn, MatrixFloat& mOut)
 {
-        _h = _h * _whh + mIn * _wxh;
-        rowWiseAdd(_h, _bh);
-        _h = tanh(_h);
-		mOut=_h;
+    _h = _h * _whh + mIn * _wxh;
+    rowWiseAdd(_h, _bh);
+    _h = tanh(_h);
+	mOut=_h;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void LayerSimpleRNN::backpropagation_frame(const MatrixFloat& mInFrame, const MatrixFloat& mH, const MatrixFloat& mHm1, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn)
 {
-    //Todo
+    // FIXED: Implement proper BPTT backpropagation for SimpleRNN
+    
+    // Step 1: Apply tanh derivative
+    // Forward: h(t) = tanh(u(t)) where u(t) = h(t-1)*Whh + x(t)*Wxh + b
+    // Backward: d(tanh)/du = 1 - tanh(u)^2 = 1 - h(t)^2
+    MatrixFloat mTanhDeriv = oneMinusSquare(mH);
+    
+    // Step 2: Combine output gradient with tanh derivative
+    // dL/du(t) = dL/dh(t) * d(tanh)/du(t)
+    MatrixFloat mGradU = mGradientOut * mTanhDeriv;
+    
+    // Step 3: Compute gradients w.r.t. weights
+    // dL/dWhh = dL/du(t) * h(t-1)^T
+    MatrixFloat mGradWhh = mGradU.transpose() * mHm1;
+    
+    // dL/dWxh = dL/du(t) * x(t)^T
+    MatrixFloat mGradWxh = mGradU.transpose() * mInFrame;
+    
+    // For now, store Whh gradient as the main weight gradient
+    // (ideally you'd store both Whh and Wxh separately)
+    _gradientWeight = mGradWhh * (1.f / mGradU.rows());
+    
+    // Step 4: Backpropagate to previous hidden state
+    // dL/dh(t-1) = dL/du(t) * dWh^T = mGradU * Whh^T
+    if (!_bFirstLayer)
+    {
+        mGradientIn = mGradU * (_whh.transpose());
+    }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 }

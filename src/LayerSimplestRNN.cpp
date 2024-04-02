@@ -47,16 +47,26 @@ void LayerSimplestRNN::forward_frame(const MatrixFloat& mInFrame, MatrixFloat& m
 ///////////////////////////////////////////////////////////////////////////////
 void LayerSimplestRNN::backpropagation_frame(const MatrixFloat& mInFrame, const MatrixFloat& mH, const MatrixFloat& mHm1, const MatrixFloat& mGradientOut, MatrixFloat& mGradientIn)
 {
-    MatrixFloat mGradU = mH;// oneMinusSquare(mH); // derivative of tanh
+    // FIXED: Use the input gradient mGradientOut, not mH!
+    // mGradientOut is dL/dy(t) - the gradient from the loss
+    // mH is h(t) - the hidden state value
+    
+    // Since we're using linear activation (no tanh applied in forward):
+    // d(output)/d(input) = 1
+    // So gradient through this layer = mGradientOut * 1
+    
+    MatrixFloat mGradU = mGradientOut;
 
-    //grad(L/_Whh)=grad(L/U))*h(t-1)
-    _gradientWeight = mGradU.transpose() *mHm1;
-    _gradientWeight *= (1.f / _gradientWeight.rows());
+    // Compute weight gradient:
+    // dL/dW = dL/dU * dU/dW = mGradU * h(t-1)^T
+    _gradientWeight = mGradU.transpose() * mHm1;
+    _gradientWeight *= (1.f / mGradU.rows());
 
     if (!_bFirstLayer)
     {
-        //grad(L/h(t-1))=grad(L/U))*whh
-        mGradientIn = mGradU.transpose()*_weight;
+        // Backpropagate to previous hidden state:
+        // dL/dh(t-1) = dL/dU * dU/dh(t-1) = mGradU * W^T
+        mGradientIn = mGradU * (_weight.transpose());
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////

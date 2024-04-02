@@ -34,5 +34,19 @@ protected:
 
     int _iFrameSize;
     int _iUnits;
+    
+private:
+    // Helper function for gradient clipping
+    // Prevents exploding gradients during backpropagation through time
+    void clipGradients(MatrixFloat& mGradients, float fMaxValue)
+    {
+        for (Index i = 0; i < mGradients.size(); i++)
+        {
+            if (mGradients(i) > fMaxValue)
+                mGradients(i) = fMaxValue;
+            else if (mGradients(i) < -fMaxValue)
+                mGradients(i) = -fMaxValue;
+        }
+    }
 };
 }
