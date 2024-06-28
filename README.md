@@ -18,7 +18,8 @@ Initializers:
 - Zeros, Ones
 
 Layers:
-- Dense (with bias), Dot (without bias)
+- Dense, Dot
+- DotMAM, DenseMAM
 - GlobalGain, GlobalBias, GlobalAffine, Gain, Bias, Affine
 - Softmax, Softmin
 - PRelu, RRelu, PELU, TERELU, CRelu

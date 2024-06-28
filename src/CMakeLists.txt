@@ -19,6 +19,7 @@ set(BEEDNN_FILES
 	LayerCRelu.cpp LayerCRelu.h
 	LayerDense.cpp LayerDense.h
 	LayerDot.cpp LayerDot.h
+	LayerDotMAM.cpp LayerDotMAM.h
 	LayerDropout.cpp LayerDropout.h
 	LayerFactory.cpp LayerFactory.h
 	LayerGain.cpp LayerGain.h
