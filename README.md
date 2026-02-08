@@ -8,7 +8,7 @@ The API is clear and simple, the goal is that every C++ developer can contribute
 BeeDNN can run on small devices. It is even possible to learn directly on the device.
 
 Please see at: https://github.com/edeforas/BeeDNN/issues for contributing ideas.
-No dependencies needed, every algorithm rewritten in C++ from scratch.
+No dependencies needed, every algorithm rewritten in C++ from scratch, (and now some using the help of AI agents).
 To increase speed, ones can choose the Eigen library (http://eigen.tuxfamily.org), instead of the internal matrix library.
 
 Initializers:
@@ -18,8 +18,10 @@ Initializers:
 - Zeros, Ones
 
 Layers:
-- Dense (with bias), Dot (without bias)
+- Dense, Dot
+- DotMAM, DenseMAM
 - GlobalGain, GlobalBias, GlobalAffine, Gain, Bias, Affine
+- BatchNormalization
 - Softmax, Softmin
 - PRelu, RRelu, PELU, TERELU, CRelu
 - Gated activations: GLU, ReGLU, Bilinear, SwiGLU, GEGLU, GTU, SeGLU
@@ -29,10 +31,14 @@ Time series:
 - TimeDistributedBias
 - TimeDistributedDot
 - TimeDistributedDense
-- WIP
+- SimpleRNN
+- SimplestRNN
+- GRU
+- LSTM
 
 2D layers:
 - Convolution2D, ChannelBias
+- DepthwiseConvolution2D
 - MaxPool2D, GlobalMaxPool2D, 
 - AveragePooling2D, GlobalAveragePooling2D
 - ZeroPadding2D

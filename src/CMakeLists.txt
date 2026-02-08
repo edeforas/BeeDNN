@@ -1,5 +1,6 @@
 set(BEEDNN_FILES
 	Activations.cpp Activations.h
+	LayerBatchNormalization.cpp LayerBatchNormalization.h
 	CIFAR10Reader.cpp CIFAR10Reader.h
 	Metrics.cpp Metrics.h
 	CsvFileReader.cpp CsvFileReader.h
@@ -19,7 +20,9 @@ set(BEEDNN_FILES
 	LayerCRelu.cpp LayerCRelu.h
 	LayerDense.cpp LayerDense.h
 	LayerDot.cpp LayerDot.h
+	LayerDotMAM.cpp LayerDotMAM.h
 	LayerDropout.cpp LayerDropout.h
+	LayerDepthwiseConvolution2D.cpp LayerDepthwiseConvolution2D.h
 	LayerFactory.cpp LayerFactory.h
 	LayerGain.cpp LayerGain.h
 	LayerGaussianDropout.cpp LayerGaussianDropout.h
@@ -43,6 +46,8 @@ set(BEEDNN_FILES
 	LayerSeGLU.cpp LayerSeGLU.h
 	LayerSimpleRNN.cpp LayerSimpleRNN.h
 	LayerSimplestRNN.cpp LayerSimplestRNN.h
+	LayerGRU.cpp LayerGRU.h
+	LayerLSTM.cpp LayerLSTM.h
 	LayerSoftmax.cpp LayerSoftmax.h
 	LayerSoftmin.cpp LayerSoftmin.h
 	LayerSwiGLU.cpp LayerSwiGLU.h
