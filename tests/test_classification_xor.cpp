@@ -43,13 +43,13 @@ int main()
     const MatrixFloat mSamples=fromRawBuffer(dSamples,4,2);
     const MatrixFloat mTruth=fromRawBuffer(dTruths,4,1);
 
-    //optimize network
+    //train network
 	NetTrain netFit;
 	netFit.set_epochs(500);
 	netFit.set_train_data(mSamples, mTruth);
+	netFit.fit(model);
 
 	//predict and show results
-	netFit.fit(model);
 	MatrixFloat mOut;
 	model.predict_classes(mSamples, mOut);
 	cout << "0_xor_0=" << mOut(0) << endl << "0_xor_1=" << mOut(1) << endl << "1_xor_0=" << mOut(2) << endl << "1_xor_1=" << mOut(3) << endl;
