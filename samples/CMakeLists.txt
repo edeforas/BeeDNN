@@ -3,6 +3,12 @@ include_directories(../src)
 add_executable(sample_regression_sin sample_regression_sin.cpp  )
 target_link_libraries(sample_regression_sin libBeeDNN)
 
+add_executable(sample_classification_MNIST sample_classification_MNIST.cpp  )
+target_link_libraries(sample_classification_MNIST libBeeDNN)
+
+add_executable(sample_classification_BatchNorm_MNIST sample_classification_BatchNorm_MNIST.cpp  )
+target_link_libraries(sample_classification_BatchNorm_MNIST libBeeDNN)
+
 add_executable(sample_MetaOptimizer_MNIST sample_MetaOptimizer_MNIST.cpp  )
 target_link_libraries(sample_MetaOptimizer_MNIST libBeeDNN)
 
@@ -20,9 +26,6 @@ target_link_libraries(sample_classification_MNIST_poolmax2D libBeeDNN)
 
 add_executable(sample_classification_MNIST_allconvolutional sample_classification_MNIST_allconvolutional.cpp  )
 target_link_libraries(sample_classification_MNIST_allconvolutional libBeeDNN)
-
-add_executable(sample_classification_MNIST sample_classification_MNIST.cpp  )
-target_link_libraries(sample_classification_MNIST libBeeDNN)
 
 add_executable(sample_classification_CIFAR10 sample_classification_CIFAR10.cpp  )
 target_link_libraries(sample_classification_CIFAR10 libBeeDNN)
