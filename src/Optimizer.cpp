@@ -851,6 +851,59 @@ private:
 };
 
 //////////////////////////////////////////////////////////
+// Muon optimizer
+// Reference: "Muon: Family of Optimizers for General LLM Tasks"
+class OptimizerMuon : public Optimizer
+{
+public:
+    OptimizerMuon() :Optimizer()
+    {
+        _fMomentum = 0.95f;
+    }
+
+    ~OptimizerMuon() override
+    {}
+
+    Optimizer* clone() override
+    {
+        auto pOpt = new OptimizerMuon;
+        pOpt->_fLearningRate = _fLearningRate;
+        pOpt->_fMomentum = _fMomentum;
+        return pOpt;
+    }
+
+    string name() const override
+    {
+        return "Muon";
+    }
+
+    virtual void init() override
+    {
+        if (_fLearningRate == -1.f) _fLearningRate = 0.02f;
+        if (_fMomentum == -1.f) _fMomentum = 0.95f;
+
+        _m.resize(0, 0);
+    }
+
+    virtual void optimize(MatrixFloat& w, const MatrixFloat& dw) override
+    {
+        assert(w.rows() == dw.rows());
+        assert(w.cols() == dw.cols());
+
+        // init _m if needed
+        if (_m.size() == 0)
+            _m.setZero(w.rows(), w.cols());
+
+        // Muon update: accumulate momentum and apply sign-based updates
+        // m = momentum * m + dw
+        // w -= learning_rate * sign(m) * abs(dw)
+        _m = _m * _fMomentum + dw;
+        w -= _m.cwiseSign().cwiseProduct(dw.cwiseAbs()) * _fLearningRate;
+    }
+private:
+    MatrixFloat _m;
+};
+//////////////////////////////////////////////////////////
 Optimizer* create_optimizer(const string& sOptimizer)
 {
     if (sOptimizer == "None")
@@ -876,6 +929,9 @@ Optimizer* create_optimizer(const string& sOptimizer)
 
     if (sOptimizer == "MomentumNg")
         return new OptimizerMomentumNg;
+
+    if (sOptimizer == "Muon")
+        return new OptimizerMuon;
 
     if (sOptimizer == "Nesterov")
         return new OptimizerNesterov;
@@ -914,6 +970,7 @@ void list_optimizers_available(std::vector<std::string>& vsOptimizers)
     vsOptimizers.push_back("Adamax");
     vsOptimizers.push_back("Momentum");
     vsOptimizers.push_back("MomentumNg");
+    vsOptimizers.push_back("Muon");
     vsOptimizers.push_back("Nesterov");
     vsOptimizers.push_back("RMSProp");
     vsOptimizers.push_back("RPROP-");
