@@ -31,6 +31,7 @@
 #include "LayerAveragePooling2D.h"
 #include "LayerGlobalAveragePooling2D.h"
 #include "LayerZeroPadding2D.h"
+#include "LayerUpSampling2D.h"
 #include "LayerRandomFlip.h"
   
 #include "LayerSimplestRNN.h"
@@ -134,6 +135,10 @@ Layer* LayerFactory::create(const string& sLayer,float fArg1,float fArg2,float f
 	
 	if (sLayer == "ZeroPadding2D")
 		return new LayerZeroPadding2D((Index)fArg1, (Index)fArg2, (Index)fArg3, (Index)fArg4);
+
+	if (sLayer == "UpSampling2D")
+		return new LayerUpSampling2D((Index)fArg1, (Index)fArg2, (Index)fArg3,
+			(Index)(fArg4 == 0.f ? 2.f : fArg4), (Index)(fArg5 == 0.f ? 2.f : fArg5));
 
 	if (sLayer == "RandFlip")
 		return new LayerRandomFlip((Index)fArg1, (Index)fArg2, (Index)fArg3);

@@ -27,5 +27,8 @@ target_link_libraries(sample_classification_MNIST_poolmax2D libBeeDNN)
 add_executable(sample_classification_MNIST_allconvolutional sample_classification_MNIST_allconvolutional.cpp  )
 target_link_libraries(sample_classification_MNIST_allconvolutional libBeeDNN)
 
+add_executable(sample_autoencoder_MNIST sample_autoencoder_MNIST.cpp)
+target_link_libraries(sample_autoencoder_MNIST libBeeDNN)
+
 add_executable(sample_classification_CIFAR10 sample_classification_CIFAR10.cpp  )
 target_link_libraries(sample_classification_CIFAR10 libBeeDNN)

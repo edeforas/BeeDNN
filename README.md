@@ -42,6 +42,7 @@ Time series:
 - MaxPool2D, GlobalMaxPool2D, 
 - AveragePooling2D, GlobalAveragePooling2D
 - ZeroPadding2D
+- UpSampling2D
 
 Activations (in alphabetical order):
 - Absolute, Asinh, Atan
@@ -113,6 +114,7 @@ Commented samples:
 - MNIST using time serie (a time frame is an image row)
 - MNIST with poolmax2D
 - MNIST all convolutional
+- MNIST convolutional autoencoder
 - MNIST and Meta Optimizer: select best activation
 - CIFAR10 conv2D using poolmax2D
 - MNIST with kmeans and custom loss
