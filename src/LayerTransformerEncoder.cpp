@@ -78,18 +78,21 @@ void layer_norm_backward(const float* gradientOut, const vector<float>& normaliz
 }
 }
 
-LayerTransformerEncoder::LayerTransformerEncoder(Index iSequenceLength, Index iModelSize, Index iFeedForwardSize, Index iHeads) :
+LayerTransformerEncoder::LayerTransformerEncoder(Index iSequenceLength, Index iModelSize, Index iFeedForwardSize, Index iHeads, float fAttentionDropoutRate) :
 	Layer("TransformerEncoder"),
 	_iSequenceLength(iSequenceLength),
 	_iModelSize(iModelSize),
 	_iFeedForwardSize(iFeedForwardSize),
-	_iHeads(iHeads)
+	_iHeads(iHeads),
+	_fAttentionDropoutRate(fAttentionDropoutRate),
+	_bCausalMask(false)
 {
 	assert(_iSequenceLength > 0);
 	assert(_iModelSize > 0);
 	assert(_iFeedForwardSize > 0);
 	assert(_iHeads > 0);
 	assert(_iModelSize % _iHeads == 0);
+	assert(_fAttentionDropoutRate >= 0.f && _fAttentionDropoutRate < 1.f);
 
 	set_weight_initializer("GlorotUniform");
 	set_bias_initializer("Zeros");
@@ -101,10 +104,72 @@ LayerTransformerEncoder::~LayerTransformerEncoder()
 
 Layer* LayerTransformerEncoder::clone() const
 {
-	LayerTransformerEncoder* pLayer = new LayerTransformerEncoder(_iSequenceLength, _iModelSize, _iFeedForwardSize, _iHeads);
+	LayerTransformerEncoder* pLayer = new LayerTransformerEncoder(
+		_iSequenceLength, _iModelSize, _iFeedForwardSize, _iHeads, _fAttentionDropoutRate);
 	pLayer->_weight = _weight;
 	pLayer->_bias = _bias;
+	pLayer->_attentionMask = _attentionMask;
+	pLayer->_bCausalMask = _bCausalMask;
 	return pLayer;
+}
+
+void LayerTransformerEncoder::set_attention_dropout_rate(float fRate)
+{
+	assert(fRate >= 0.f && fRate < 1.f);
+	_fAttentionDropoutRate = fRate;
+}
+
+float LayerTransformerEncoder::attention_dropout_rate() const
+{
+	return _fAttentionDropoutRate;
+}
+
+void LayerTransformerEncoder::set_causal_mask(bool bEnabled)
+{
+	_bCausalMask = bEnabled;
+	validate_attention_mask();
+}
+
+bool LayerTransformerEncoder::causal_mask() const
+{
+	return _bCausalMask;
+}
+
+void LayerTransformerEncoder::set_attention_mask(const MatrixFloat& mAllowed)
+{
+	assert(mAllowed.rows() == _iSequenceLength);
+	assert(mAllowed.cols() == _iSequenceLength);
+	_attentionMask.resize(_iSequenceLength * _iSequenceLength);
+	for (Index query = 0; query < _iSequenceLength; query++)
+	{
+		for (Index key = 0; key < _iSequenceLength; key++)
+			_attentionMask[query * _iSequenceLength + key] = mAllowed(query, key) > 0.f ? 1 : 0;
+	}
+	validate_attention_mask();
+}
+
+void LayerTransformerEncoder::clear_attention_mask()
+{
+	_attentionMask.clear();
+}
+
+bool LayerTransformerEncoder::attention_allowed(Index iQueryToken, Index iKeyToken) const
+{
+	const bool allowedByCustomMask = _attentionMask.empty() ||
+		_attentionMask[iQueryToken * _iSequenceLength + iKeyToken] != 0;
+	const bool allowedByCausalMask = !_bCausalMask || iKeyToken <= iQueryToken;
+	return allowedByCustomMask && allowedByCausalMask;
+}
+
+void LayerTransformerEncoder::validate_attention_mask() const
+{
+	for (Index query = 0; query < _iSequenceLength; query++)
+	{
+		bool hasAllowedKey = false;
+		for (Index key = 0; key < _iSequenceLength; key++)
+			hasAllowedKey = hasAllowedKey || attention_allowed(query, key);
+		assert(hasAllowedKey);
+	}
 }
 
 void LayerTransformerEncoder::init()
@@ -137,7 +202,7 @@ void LayerTransformerEncoder::init()
 	Layer::init();
 }
 
-void LayerTransformerEncoder::forward_sample(const float* pIn, float* pOut, ForwardCache& cache) const
+void LayerTransformerEncoder::forward_sample(const float* pIn, float* pOut, const float* pDropoutMask, ForwardCache& cache) const
 {
 	const Index sequenceLength = _iSequenceLength;
 	const Index modelSize = _iModelSize;
@@ -163,8 +228,30 @@ void LayerTransformerEncoder::forward_sample(const float* pIn, float* pOut, Forw
 	cache.key.resize(sequenceLength * modelSize);
 	cache.value.resize(sequenceLength * modelSize);
 	cache.attention.resize(_iHeads * sequenceLength * sequenceLength);
+	cache.attentionDropoutMask.resize(_iHeads * sequenceLength * sequenceLength);
 	cache.context.assign(sequenceLength * modelSize, 0.f);
 	vector<float> residual1(sequenceLength * modelSize);
+
+	const Index attentionSize = _iHeads * sequenceLength * sequenceLength;
+	if (_bTrainMode && _fAttentionDropoutRate > 0.f)
+	{
+		if (pDropoutMask != nullptr)
+		{
+			copy(pDropoutMask, pDropoutMask + attentionSize, cache.attentionDropoutMask.begin());
+		}
+		else
+		{
+			uniform_real_distribution<float> distribution(0.f, 1.f);
+			default_random_engine& engine = randomEngine();
+			const float keepScale = 1.f / (1.f - _fAttentionDropoutRate);
+			for (Index i = 0; i < attentionSize; i++)
+				cache.attentionDropoutMask[i] = distribution(engine) >= _fAttentionDropoutRate ? keepScale : 0.f;
+		}
+	}
+	else
+	{
+		fill(cache.attentionDropoutMask.begin(), cache.attentionDropoutMask.end(), 1.f);
+	}
 
 	for (Index token = 0; token < sequenceLength; token++)
 	{
@@ -207,6 +294,12 @@ void LayerTransformerEncoder::forward_sample(const float* pIn, float* pOut, Forw
 			float maxScore = -1.e38f;
 			for (Index keyToken = 0; keyToken < sequenceLength; keyToken++)
 			{
+				if (!attention_allowed(queryToken, keyToken))
+				{
+					cache.attention[attentionRow + keyToken] = -1.e38f;
+					continue;
+				}
+
 				float score = 0.f;
 				for (Index feature = 0; feature < headSize; feature++)
 				{
@@ -222,7 +315,10 @@ void LayerTransformerEncoder::forward_sample(const float* pIn, float* pOut, Forw
 			for (Index keyToken = 0; keyToken < sequenceLength; keyToken++)
 			{
 				float& probability = cache.attention[attentionRow + keyToken];
-				probability = expf(probability - maxScore);
+				if (attention_allowed(queryToken, keyToken))
+					probability = expf(probability - maxScore);
+				else
+					probability = 0.f;
 				sum += probability;
 			}
 			for (Index keyToken = 0; keyToken < sequenceLength; keyToken++)
@@ -238,7 +334,8 @@ void LayerTransformerEncoder::forward_sample(const float* pIn, float* pOut, Forw
 			const Index attentionRow = (head * sequenceLength + queryToken) * sequenceLength;
 			for (Index keyToken = 0; keyToken < sequenceLength; keyToken++)
 			{
-				const float probability = cache.attention[attentionRow + keyToken];
+				const Index attentionIndex = attentionRow + keyToken;
+				const float probability = cache.attention[attentionIndex] * cache.attentionDropoutMask[attentionIndex];
 				for (Index feature = 0; feature < headSize; feature++)
 				{
 					cache.context[queryToken * modelSize + headOffset + feature] +=
@@ -304,10 +401,21 @@ void LayerTransformerEncoder::forward(const MatrixFloat& mIn, MatrixFloat& mOut)
 {
 	assert(mIn.cols() == _iSequenceLength * _iModelSize);
 	mOut.resizeLike(mIn);
+	const Index attentionSize = _iHeads * _iSequenceLength * _iSequenceLength;
+	if (_bTrainMode && _fAttentionDropoutRate > 0.f)
+		_mAttentionDropoutMask.resize(mIn.rows(), attentionSize);
+	else
+		_mAttentionDropoutMask.resize(0, 0);
+
 	for (Index sample = 0; sample < mIn.rows(); sample++)
 	{
 		ForwardCache cache;
-		forward_sample(mIn.row(sample).data(), mOut.row(sample).data(), cache);
+		forward_sample(mIn.row(sample).data(), mOut.row(sample).data(), nullptr, cache);
+		if (_bTrainMode && _fAttentionDropoutRate > 0.f)
+		{
+			copy(cache.attentionDropoutMask.begin(), cache.attentionDropoutMask.end(),
+				_mAttentionDropoutMask.row(sample).data());
+		}
 	}
 }
 
@@ -342,11 +450,18 @@ void LayerTransformerEncoder::backpropagation(const MatrixFloat& mIn, const Matr
 	_gradientWeight.setZero();
 	_gradientBias.setZero();
 	mGradientIn.setZero(mIn.rows(), mIn.cols());
+	if (_bTrainMode && _fAttentionDropoutRate > 0.f)
+	{
+		assert(_mAttentionDropoutMask.rows() == mIn.rows());
+		assert(_mAttentionDropoutMask.cols() == _iHeads * sequenceLength * sequenceLength);
+	}
 
 	for (Index sample = 0; sample < mIn.rows(); sample++)
 	{
 		ForwardCache cache;
-		forward_sample(mIn.row(sample).data(), nullptr, cache);
+		const float* pDropoutMask = (_bTrainMode && _fAttentionDropoutRate > 0.f) ?
+			_mAttentionDropoutMask.row(sample).data() : nullptr;
+		forward_sample(mIn.row(sample).data(), nullptr, pDropoutMask, cache);
 
 		vector<float> gradientResidual2(sequenceLength * modelSize);
 		layer_norm_backward(mGradientOut.row(sample).data(), cache.normalized2, cache.inverseStd2,
@@ -436,9 +551,11 @@ void LayerTransformerEncoder::backpropagation(const MatrixFloat& mIn, const Matr
 						const Index index = headOffset + feature;
 						gradient += gradientContext[queryToken * modelSize + index] *
 							cache.value[keyToken * modelSize + index];
-						gradientValue[keyToken * modelSize + index] += cache.attention[attentionRow + keyToken] *
+						gradientValue[keyToken * modelSize + index] +=
+							cache.attention[attentionRow + keyToken] * cache.attentionDropoutMask[attentionRow + keyToken] *
 							gradientContext[queryToken * modelSize + index];
 					}
+					gradient *= cache.attentionDropoutMask[attentionRow + keyToken];
 					gradientAttention[attentionRow + keyToken] = gradient;
 					softmaxDot += gradient * cache.attention[attentionRow + keyToken];
 				}

@@ -143,7 +143,7 @@ Layer* LayerFactory::create(const string& sLayer,float fArg1,float fArg2,float f
 
 	if (sLayer == "TransformerEncoder")
 		return new LayerTransformerEncoder((Index)fArg1, (Index)fArg2, (Index)fArg3,
-			(Index)(fArg4 == 0.f ? 1.f : fArg4));
+			(Index)(fArg4 == 0.f ? 1.f : fArg4), fArg5);
 
 	if (sLayer == "RandFlip")
 		return new LayerRandomFlip((Index)fArg1, (Index)fArg2, (Index)fArg3);

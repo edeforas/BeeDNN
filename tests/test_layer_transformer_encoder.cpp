@@ -92,6 +92,44 @@ int main()
 	const float numericalInput = (plusInput - minusInput) / (2.f * epsilon);
 	test(std::fabs(numericalInput - gradientIn(inputIndex)) < 2.e-2f, "input gradient matches finite differences");
 
+	MatrixFloat mask;
+	mask.setZero(3, 3);
+	for (Index token = 0; token < 3; token++)
+		mask(token, token) = 1.f;
+	LayerTransformerEncoder masked(3, 4, 5, 2);
+	masked.set_attention_mask(mask);
+	MatrixFloat maskedOutput, changedInput = input, changedOutput;
+	masked.forward(input, maskedOutput);
+	for (Index feature = 0; feature < 4; feature++)
+		changedInput(4 + feature) += 1.f;
+	masked.forward(changedInput, changedOutput);
+	for (Index feature = 0; feature < 4; feature++)
+		test(std::fabs(maskedOutput(feature) - changedOutput(feature)) < 1.e-6f,
+			"custom attention mask blocks other tokens");
+
+	LayerTransformerEncoder causal(3, 4, 5, 2);
+	causal.set_causal_mask(true);
+	test(causal.causal_mask(), "causal mask setting");
+	MatrixFloat causalOutput;
+	causal.forward(input, causalOutput);
+	causal.forward(changedInput, changedOutput);
+	for (Index feature = 0; feature < 4; feature++)
+		test(std::fabs(causalOutput(feature) - changedOutput(feature)) < 1.e-6f,
+			"causal attention blocks future tokens");
+
+	LayerTransformerEncoder regularized(3, 4, 5, 2, 0.5f);
+	regularized.set_train_mode(true);
+	regularized.forward(input, output);
+	regularized.backpropagation(input, gradientOut, gradientIn);
+	for (Index i = 0; i < output.size(); i++)
+		test(std::isfinite(output(i)) && std::isfinite(gradientIn(i)), "finite dropout forward and backward");
+	regularized.set_train_mode(false);
+	regularized.forward(input, output);
+	MatrixFloat outputAgain;
+	regularized.forward(input, outputAgain);
+	for (Index i = 0; i < output.size(); i++)
+		test(output(i) == outputAgain(i), "attention dropout disabled during inference");
+
 	Net model;
 	model.add(new LayerTransformerEncoder(3, 4, 5, 2));
 	model.add(new LayerDense(12, 2));

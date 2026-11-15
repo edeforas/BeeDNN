@@ -19,7 +19,7 @@ Initializers:
 
 Layers:
 - Dense, Dot
-- TransformerEncoder
+- TransformerEncoder with multi-head attention, attention dropout, and causal/custom masks
 - DotMAM, DenseMAM
 - GlobalGain, GlobalBias, GlobalAffine, Gain, Bias, Affine
 - BatchNormalization

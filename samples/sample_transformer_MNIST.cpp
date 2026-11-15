@@ -49,7 +49,7 @@ int main()
 
 	Net model;
 	model.add(new LayerTimeDistributedDense(28, 16));
-	model.add(new LayerTransformerEncoder(28, 16, 32, 4));
+	model.add(new LayerTransformerEncoder(28, 16, 32, 4, 0.1f));
 	model.add(new LayerDense(28 * 16, 128));
 	model.add(new LayerActivation("Relu"));
 	model.add(new LayerDropout(0.2f));
