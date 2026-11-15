@@ -347,7 +347,7 @@ float NetTrain::compute_loss_accuracy(const MatrixFloat &mSamples, const MatrixF
 		
 		_pNet->predict(mSamplesBatch, mOut);
 		_pLoss->compute(mOut, mTruthBatch,mLoss);
-		fLoss += mLoss.mean();
+		fLoss += mLoss.mean() * iBatchSize;
 
 		if (pfAccuracy)
 		{
@@ -377,7 +377,7 @@ float NetTrain::compute_loss_accuracy(const MatrixFloat &mSamples, const MatrixF
 	if(pfAccuracy)
 		*pfAccuracy = 100.f*iGood / iNbSamples;
 
-	return fLoss;
+	return fLoss / iNbSamples;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void NetTrain::set_train_data(const MatrixFloat& mSamples, const MatrixFloat& mTruth)
@@ -625,7 +625,7 @@ void NetTrain::add_online_statistics(const MatrixFloat&mPredicted, const MatrixF
     //update loss
 	MatrixFloat mLoss;
     _pLoss->compute(mPredicted, mTruth,mLoss);
-	_fOnlineLoss += mLoss.mean();
+	_fOnlineLoss += mLoss.mean() * mPredicted.rows();
 
     if (!_pNet->is_classification_mode())
         return;
