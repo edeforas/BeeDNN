@@ -55,6 +55,7 @@ set(BEEDNN_FILES
 	LayerTimeDistributedBias.cpp LayerTimeDistributedBias.h
 	LayerTimeDistributedDense.cpp LayerTimeDistributedDense.h
 	LayerTimeDistributedDot.cpp LayerTimeDistributedDot.h
+	LayerTransformerEncoder.cpp LayerTransformerEncoder.h
 	LayerUpSampling2D.cpp LayerUpSampling2D.h
 	LayerUniformNoise.cpp LayerUniformNoise.h
 	LayerZeroPadding2D.cpp LayerZeroPadding2D.h

@@ -19,6 +19,7 @@ Initializers:
 
 Layers:
 - Dense, Dot
+- TransformerEncoder
 - DotMAM, DenseMAM
 - GlobalGain, GlobalBias, GlobalAffine, Gain, Bias, Affine
 - BatchNormalization
@@ -115,6 +116,7 @@ Commented samples:
 - MNIST with poolmax2D
 - MNIST all convolutional
 - MNIST convolutional autoencoder
+- MNIST transformer encoder
 - MNIST and Meta Optimizer: select best activation
 - CIFAR10 conv2D using poolmax2D
 - MNIST with kmeans and custom loss

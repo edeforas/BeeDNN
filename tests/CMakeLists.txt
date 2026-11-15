@@ -6,6 +6,9 @@ target_link_libraries(test_layer_convolution libBeeDNN)
 add_executable(test_layer_upsampling2d test_layer_upsampling2d.cpp)
 target_link_libraries(test_layer_upsampling2d libBeeDNN)
 
+add_executable(test_layer_transformer_encoder test_layer_transformer_encoder.cpp)
+target_link_libraries(test_layer_transformer_encoder libBeeDNN)
+
 add_executable(test_matrix test_matrix.cpp  )
 target_link_libraries(test_matrix libBeeDNN)
 
@@ -25,4 +28,5 @@ add_test(test_regression_sin test_regression_sin)
 add_test(test_classification_xor test_classification_xor)
 add_test(test_metrics test_metrics)
 add_test(test_layer_upsampling2d test_layer_upsampling2d)
+add_test(test_layer_transformer_encoder test_layer_transformer_encoder)
 #add_test(test_matrix_GEMM test_matrix_GEMM)
