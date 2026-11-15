@@ -9,6 +9,7 @@
 #include "LayerActivation.h"
 #include "LayerDense.h"
 #include "LayerDropout.h"
+#include "LayerRandomAffine2D.h"
 #include "LayerSoftmax.h"
 #include "LayerTimeDistributedDense.h"
 #include "LayerTransformerEncoder.h"
@@ -48,6 +49,7 @@ int main()
 	}
 
 	Net model;
+	model.add(new LayerRandomAffine2D(28, 28, 1, 10.f, 2.f, 2.f));
 	model.add(new LayerTimeDistributedDense(28, 16));
 	model.add(new LayerTransformerEncoder(28, 16, 32, 4, 0.1f));
 	model.add(new LayerDense(28 * 16, 128));

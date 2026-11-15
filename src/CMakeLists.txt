@@ -40,6 +40,7 @@ set(BEEDNN_FILES
 	LayerPELU.cpp LayerPELU.h
 	LayerPRelu.cpp LayerPRelu.h
 	LayerRandomFlip.cpp LayerRandomFlip.h
+	LayerRandomAffine2D.cpp LayerRandomAffine2D.h
 	LayerReGLU.cpp LayerReGLU.h	
 	LayerRNN.cpp LayerRNN.h
 	LayerRRelu.cpp LayerRRelu.h

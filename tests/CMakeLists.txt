@@ -12,6 +12,9 @@ target_link_libraries(test_layer_transformer_encoder libBeeDNN)
 add_executable(test_nettrain_loss test_nettrain_loss.cpp)
 target_link_libraries(test_nettrain_loss libBeeDNN)
 
+add_executable(test_layer_random_affine2d test_layer_random_affine2d.cpp)
+target_link_libraries(test_layer_random_affine2d libBeeDNN)
+
 add_executable(test_matrix test_matrix.cpp  )
 target_link_libraries(test_matrix libBeeDNN)
 
@@ -33,4 +36,5 @@ add_test(test_metrics test_metrics)
 add_test(test_layer_upsampling2d test_layer_upsampling2d)
 add_test(test_layer_transformer_encoder test_layer_transformer_encoder)
 add_test(test_nettrain_loss test_nettrain_loss)
+add_test(test_layer_random_affine2d test_layer_random_affine2d)
 #add_test(test_matrix_GEMM test_matrix_GEMM)

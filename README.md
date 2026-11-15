@@ -79,6 +79,7 @@ Overfitting:
 
 Data augmentation
 - RandomFlip
+- RandomAffine2D (rotation and translation)
 
 Learning and optimization:
 - Classification or regression, test and/or learn
@@ -117,6 +118,7 @@ Commented samples:
 - MNIST all convolutional
 - MNIST convolutional autoencoder
 - MNIST transformer encoder
+- MNIST Conv2D with random affine augmentation
 - MNIST and Meta Optimizer: select best activation
 - CIFAR10 conv2D using poolmax2D
 - MNIST with kmeans and custom loss

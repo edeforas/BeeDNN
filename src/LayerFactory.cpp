@@ -32,6 +32,7 @@
 #include "LayerGlobalAveragePooling2D.h"
 #include "LayerZeroPadding2D.h"
 #include "LayerUpSampling2D.h"
+#include "LayerRandomAffine2D.h"
 #include "LayerRandomFlip.h"
 #include "LayerTransformerEncoder.h"
   
@@ -147,6 +148,9 @@ Layer* LayerFactory::create(const string& sLayer,float fArg1,float fArg2,float f
 
 	if (sLayer == "RandFlip")
 		return new LayerRandomFlip((Index)fArg1, (Index)fArg2, (Index)fArg3);
+
+	if (sLayer == "RandomAffine2D")
+		return new LayerRandomAffine2D((Index)fArg1, (Index)fArg2, (Index)fArg3, fArg4, fArg5, fArg6);
 
 	return new LayerActivation(sLayer);
 }
